@@ -1,0 +1,10 @@
+{
+    "name": "magento/adobe-stock-integration",
+    "description": "Adobe Stock integration",
+    "type": "metapackage",
+    "require": {
+        "magento/module-adobe-stock-image": "*",
+        "magento/module-adobe-stock-image-admin-ui": "*",
+        "magento/module-adobe-stock-image-api": "*"
+    }
+}
