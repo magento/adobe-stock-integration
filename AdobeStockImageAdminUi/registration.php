@@ -6,6 +6,6 @@
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'AdobeStockImageAdminUi',
+    'Magento_AdobeStockImageAdminUi',
     __DIR__
 );
