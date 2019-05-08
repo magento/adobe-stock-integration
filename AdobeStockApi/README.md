@@ -1,6 +1,6 @@
-# Magento_AdobeStockImage Module
+# Magento_AdobeStockApi Module
 
-The Magento_AdobeStockImage module responsible for the AdobeStockImageApi implementation
+The Magento_AdobeStockApi module responsible for the general Adobe Stock API declaration
 
 ## Structure
 
