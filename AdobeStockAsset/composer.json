@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-adobe-stock-api",
+    "name": "magento/module-adobe-stock-asset",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
@@ -15,7 +15,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\AdobeStockApi\\": ""
+            "Magento\\AdobeStockAsset\\": ""
         }
     }
 }
