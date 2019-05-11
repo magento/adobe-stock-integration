@@ -10,7 +10,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\Data\ImageInterfaceFactory;
 use Magento\Ui\DataProvider\SearchResultFactory;
-use Magento\AdobeStockApi\Api\ClientInterface;
+use Magento\AdobeStockAssetApi\Api\ClientInterface;
 
 /**
  * Class GetImageList

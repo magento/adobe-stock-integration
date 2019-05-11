@@ -1,5 +1,5 @@
-@import AdobeStock
-@import AdobeStockApi
+@import AdobeStockAsset
+@import AdobeStockAssetApi
 @import AdobeStockImage
 @import AdobeStockImageApi
 @import AdobeStockImageAdminUi
