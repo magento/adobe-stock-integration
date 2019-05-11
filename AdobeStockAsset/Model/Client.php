@@ -9,8 +9,8 @@ use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
-use Magento\AdobeStockApi\Api\ClientInterface;
-use Magento\AdobeStockApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\ClientInterface;
+use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
 
 /**
  * DataProvider for cms ui.

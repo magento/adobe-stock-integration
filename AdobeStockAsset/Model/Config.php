@@ -5,7 +5,7 @@
  */
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
