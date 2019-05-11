@@ -31,6 +31,9 @@ class Client implements ClientInterface
         $this->config = $config;
     }
 
+    /**
+     * @return mixed
+     */
     public function search()
     {
         // TODO THIS IS A STUB
@@ -65,6 +68,9 @@ class Client implements ClientInterface
         return $result;
     }
 
+    /**
+     * @return null
+     */
     private function getAccessToken()
     {
         return null;
