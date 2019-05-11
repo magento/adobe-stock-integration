@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockApi\Api;
+namespace Magento\AdobeStockAssetApi\Api;
 
 /**
  * Interface

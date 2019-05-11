@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdobeStock\Model;
+namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockApi\Api\Data\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;

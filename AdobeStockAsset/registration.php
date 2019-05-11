@@ -6,6 +6,6 @@
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Magento_AdobeStockApi',
+    'Magento_AdobeStockAsset',
     __DIR__
 );
