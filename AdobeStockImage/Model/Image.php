@@ -14,7 +14,7 @@ use Magento\AdobeStockImageApi\Api\Data\ImageInterface;
 class Image extends AbstractExtensibleObject implements ImageInterface
 {
     /**
-     * @return  integer
+     * @return int
      */
     public function getId()
     {
