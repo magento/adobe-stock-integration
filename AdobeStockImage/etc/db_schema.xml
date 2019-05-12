@@ -57,7 +57,7 @@
         <column xsi:type="int" name="width" nullable="false" comment="Width"/>
         <column xsi:type="int" name="height" nullable="false" comment="Height"/>
         <column xsi:type="varchar" name="country_name" nullable="false" comment="Country Name"/>
-        <column xsi:type="int" name="details_url" nullable="false" comment="Details Url"/>
+        <column xsi:type="varchat" name="details_url" nullable="false" comment="Details Url"/>
         <column xsi:type="varchar" name="vector_type" nullable="false" comment="Vector Type"/>
         <column xsi:type="varchar" name="content_type" nullable="false" comment="Content Type"/>
         <column xsi:type="datetime" name="creation_date" nullable="false" comment="Content Type"/>
