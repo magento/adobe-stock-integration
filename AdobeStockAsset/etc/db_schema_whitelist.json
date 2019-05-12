@@ -1,0 +1,130 @@
+{
+    "adobe_stock_license_request": {
+        "column": {
+            "id": true,
+            "admin_user_id": true,
+            "request_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADOBE_STOCK_LICENSE_REQUEST_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    },
+    "adobe_stock_user_profile": {
+        "column": {
+            "id": true,
+            "admin_user_id": true,
+            "display_name": true,
+            "preferred_languages": true,
+            "account_type": true,
+            "access_token": true,
+            "refresh_token": true,
+            "created_at": true,
+            "updated_at": true,
+            "adobe_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADOBE_STOCK_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    },
+    "adobe_stock_request": {
+        "column": {
+            "id": true,
+            "admin_user_id": true,
+            "request_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADOBE_STOCK_REQUEST_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    },
+    "adobe_stock_asset": {
+        "column": {
+            "id": true,
+            "media_type_id": true,
+            "category_id": true,
+            "creator_id": true,
+            "premium_level_id": true,
+            "path": true,
+            "adobe_id": true,
+            "stock_id": true,
+            "is_licensed": true,
+            "title": true,
+            "preview_url": true,
+            "preview_width": true,
+            "preview_height": true,
+            "width": true,
+            "height": true,
+            "url": true,
+            "country_name": true,
+            "details_url": true,
+            "vector_type": true,
+            "content_type": true,
+            "creation_date": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "adobe_stock_category": {
+        "column": {
+            "id": true,
+            "adobe_id": true,
+            "name": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "adobe_stock_asset_keyword": {
+        "column": {
+            "asset_id": true,
+            "keyword_id": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "adobe_stock_keyword": {
+        "column": {
+            "asset_id": true,
+            "keyword": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "adobe_stock_creator": {
+        "column": {
+            "id": true,
+            "adobe_id": true,
+            "creator_name": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "adobe_stock_media_type": {
+        "column": {
+            "id": true,
+            "adobe_id": true,
+            "name": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "adobe_stock_premium_level": {
+        "column": {
+            "id": true,
+            "adobe_id": true,
+            "name": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
