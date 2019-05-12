@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 
 /**
  * Dataprovider of customer addresses for customer address grid.
@@ -32,7 +33,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        GetImageList $getImageList,
+        GetImageListInterface $getImageList,
         array $meta = [],
         array $data = []
     ) {
