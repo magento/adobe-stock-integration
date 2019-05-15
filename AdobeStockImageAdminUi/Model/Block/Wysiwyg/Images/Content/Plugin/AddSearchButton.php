@@ -32,6 +32,7 @@ class AddSearchButton
      * Add Adobe Stock Search button to the toolbar
      *
      * @param Content $subject
+     * @return null
      */
     public function beforeSetLayout(Content $subject)
     {

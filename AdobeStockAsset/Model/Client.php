@@ -71,6 +71,9 @@ class Client implements ClientInterface
         return $result;
     }
 
+    /**
+     * @return null
+     */
     private function getAccessToken()
     {
         return null;
