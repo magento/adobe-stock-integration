@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImageApi\Api\Data;
-
+namespace Magento\AdobeStockAssetApi\Api\Data;
 
 interface RequestInterface
 {

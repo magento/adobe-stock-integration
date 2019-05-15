@@ -15,20 +15,20 @@ interface ConfigInterface
     /**
      * @return string
      */
-    public function getApiKey();
+    public function getApiKey() : string;
 
     /**
      * @return bool
      */
-    public function isEnabled();
+    public function isEnabled() : bool;
 
     /**
      * @return string
      */
-    public function getProductName();
+    public function getProductName() : string;
 
     /**
      * @return string
      */
-    public function getTargetEnvironment();
+    public function getTargetEnvironment() : string;
 }
