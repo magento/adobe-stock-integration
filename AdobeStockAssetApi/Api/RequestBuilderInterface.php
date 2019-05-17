@@ -47,10 +47,10 @@ interface RequestBuilderInterface
     /**
      * Bind value to placeholder
      *
-     * @param string $placeholder
+     * @param string $name
      * @param mixed $value
      */
-    public function bind(string $placeholder, $value) : void;
+    public function bind(string $name, $value) : void;
 
     /**
      * @return \Magento\AdobeStockAssetApi\Api\Data\RequestInterface

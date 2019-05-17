@@ -34,7 +34,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         Converter $converter,
         SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
-        $fileName = 'request.xml',
+        $fileName = 'adobe_stock_requests.xml',
         $idAttributes = [],
         $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'

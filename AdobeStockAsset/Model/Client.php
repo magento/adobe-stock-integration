@@ -53,6 +53,8 @@ class Client implements ClientInterface
         }
 
         $request = new SearchFilesRequest();
+
+        // TODO: Use backend locale for requests
         $request->setLocale('En_US');
         $request->setSearchParams($searchParams);
         $request->setResultColumns($resultColumnArray);

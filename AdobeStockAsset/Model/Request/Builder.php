@@ -15,6 +15,7 @@ use Magento\AdobeStockAssetApi\Api\Data\RequestInterfaceFactory;
 /**
  * Class Builder
  * @package Magento\AdobeStockAsset\Model\Request
+ * TODO: move constants to the request interface
  */
 class Builder implements RequestBuilderInterface
 {
@@ -89,9 +90,9 @@ class Builder implements RequestBuilderInterface
     /**
      * @inheritdoc
      */
-    public function bind(string $placeholder, $value): void
+    public function bind(string $name, $value): void
     {
-        $this->data['placeholder'][$placeholder] = $value;
+        $this->data['placeholder'][$name] = $value;
     }
 
     /**

@@ -6,7 +6,7 @@
  */
 -->
 <requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_AdobeStockAsset:etc/request.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_AdobeStockAsset:etc/adobe_stock_requests.xsd">
     <request name="adobe_stock_image_search">
         <filters>
             <filter name="words" field="words"/>

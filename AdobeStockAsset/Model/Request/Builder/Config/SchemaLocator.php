@@ -21,7 +21,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_AdobeStockAsset') . '/request.xsd';
+        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_AdobeStockAsset')
+            . '/adobe_stock_requests.xsd';
     }
 
     /**
