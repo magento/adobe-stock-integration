@@ -4,14 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImageApi\Api;
+namespace Magento\AdobeStockAssetApi\Api;
 
 /**
  * Interface RequestBuilderInterface
- * @package AdobeStockImageApi\Api
+ * @package Magento\AdobeStockAssetApi\Api
  */
 interface RequestBuilderInterface
 {
+    /**
+     * Set request name
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setName(string $name) : void;
+
     /**
      * Set page size for result
      *
@@ -39,13 +47,13 @@ interface RequestBuilderInterface
     /**
      * Bind value to placeholder
      *
-     * @param string $placeholder
+     * @param string $name
      * @param mixed $value
      */
-    public function bind(string $placeholder, $value) : void;
+    public function bind(string $name, $value) : void;
 
     /**
-     * @return \Magento\AdobeStockImageApi\Api\Data\RequestInterface
+     * @return \Magento\AdobeStockAssetApi\Api\Data\RequestInterface
      */
-    public function create();
+    public function create() : \Magento\AdobeStockAssetApi\Api\Data\RequestInterface;
 }

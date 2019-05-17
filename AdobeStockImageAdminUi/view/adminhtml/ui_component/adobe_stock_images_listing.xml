@@ -35,7 +35,7 @@
         <settings>
             <sticky>true</sticky>
         </settings>
-        <filterSearch name="fulltext"/>
+        <filterSearch name="words"/>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">

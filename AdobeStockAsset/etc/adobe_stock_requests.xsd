@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="requests">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="request">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="filters">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="filter" type="filter" maxOccurs="unbounded" minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="resultColumns">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="column" type="column" maxOccurs="unbounded" minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element type="xs:string" name="from"/>
+                            <xs:element type="xs:string" name="size"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="name"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="filter">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="field" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="column">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="field" use="required"/>
+    </xs:complexType>
+</xs:schema>
