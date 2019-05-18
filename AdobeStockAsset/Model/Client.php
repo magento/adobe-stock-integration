@@ -31,30 +31,38 @@ class Client implements ClientInterface
         $this->config = $config;
     }
 
-    public function search()
+    /**
+     * @param \Magento\AdobeStockAssetApi\Api\Data\RequestInterface $request
+     * @return array
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    public function execute(\Magento\AdobeStockAssetApi\Api\Data\RequestInterface $request)
     {
-        // TODO THIS IS A STUB
-        $results_columns = Constants::getResultColumns();
-        $search_params = new SearchParameters();
-        $search_params->setWords('tree')->setLimit(32)->setOffset(0);
+        // TODO: THIS IS A STUB. SHOULD BE REFACTORED
+        $words = $request->getData('filters')['words'] ?? 'image';
 
-        $result_column_array = [
-            $results_columns['COMP_URL'],
-            $results_columns['ID'],
-            $results_columns['NB_RESULTS'],
-        ];
+        $searchParams = new SearchParameters();
+        $searchParams->setWords($words);
+        $searchParams->setLimit($request->getData('size'));
+        $searchParams->setOffset($request->getData('offset'));
+
+        $resultsColumns = Constants::getResultColumns();
+        $resultColumnArray = [];
+        foreach ($request->getData('resultColumns') as $column) {
+            $resultColumnArray[] = $resultsColumns[$column['field']];
+        }
 
         $request = new SearchFilesRequest();
+
+        // TODO: Use backend locale for requests
         $request->setLocale('En_US');
-        $request->setSearchParams($search_params);
-        $request->setResultColumns($result_column_array);
+        $request->setSearchParams($searchParams);
+        $request->setResultColumns($resultColumnArray);
 
         $client = $this->getClient()->searchFilesInitialize($request, $this->getAccessToken());
-
         $response = $client->getNextResponse();
 
         $result = ['count' => $response->getNbResults()];
-
         foreach ($response->getFiles() as $file) {
             $result['items'][] = [
                 'id' => $file->id,
@@ -65,6 +73,9 @@ class Client implements ClientInterface
         return $result;
     }
 
+    /**
+     * @return null
+     */
     private function getAccessToken()
     {
         return null;
