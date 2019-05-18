@@ -33,33 +33,33 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return bool
+     * @{inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::XML_PATH_ENABLED);
     }
 
     /**
-     * @return string
+     * @{inheritdoc}
      */
-    public function getApiKey()
+    public function getApiKey() : string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_API_KEY);
     }
 
     /**
-     * @return string
+     * @{inheritdoc}
      */
-    public function getTargetEnvironment()
+    public function getTargetEnvironment() : string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_ENVIRONMENT);
     }
 
     /**
-     * @return string
+     * @{inheritdoc}
      */
-    public function getProductName()
+    public function getProductName() : string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME);
     }
