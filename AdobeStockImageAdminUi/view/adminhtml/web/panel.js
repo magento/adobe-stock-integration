@@ -5,11 +5,16 @@
 
 define([
     'jquery',
+    'mage/translate',
     'Magento_Ui/js/modal/modal'
-], function ($) {
+], function ($, $t) {
     'use strict';
 
     return function (config, element) {
-        $(element).modal({type: 'slide'}).applyBindings();
+        $(element).modal({
+            type: 'slide',
+            buttons: [],
+            title: $t('Adobe Stock')
+        }).applyBindings();
     }
 });
