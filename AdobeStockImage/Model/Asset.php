@@ -28,7 +28,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getMediaTypeId(): int
     {
-        return (int)$this->getData("media_type_id");
+        return (int)$this->getData(self::FIELD_MEDIA_TYPE_ID);
     }
 
     /**
@@ -37,7 +37,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setMediaTypeId(int $mediaTypeId)
     {
-        $this->setData("media_type_id", $mediaTypeId);
+        $this->setData(self::FIELD_MEDIA_TYPE_ID, $mediaTypeId);
     }
 
     /**
@@ -46,7 +46,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getCategoryId(): int
     {
-        return (int)$this->getData("category_id");
+        return (int)$this->getData(self::FIELD_CATEGORY_ID);
     }
 
     /**
@@ -55,7 +55,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setCategoryId(int $categoryId)
     {
-        $this->setData("category_id", $categoryId);
+        $this->setData(self::FIELD_CATEGORY_ID, $categoryId);
     }
 
     /**
@@ -64,7 +64,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getCreatorId(): int
     {
-        return (int)$this->getData("creator_id");
+        return (int)$this->getData(self::FIELD_CREATOR_ID);
     }
 
     /**
@@ -73,7 +73,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setCreatorId(int $creatorId)
     {
-        $this->setData("creator_id", $creatorId);
+        $this->setData(self::FIELD_CREATOR_ID, $creatorId);
     }
 
     /**
@@ -82,7 +82,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getPremiumLevelId(): int
     {
-        return (int)$this->getData("premium_level_id");
+        return (int)$this->getData(self::FIELD_PREMIUM_LEVEL_ID);
     }
 
     /**
@@ -91,7 +91,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setPremiumLevelId(int $premiumLevelId)
     {
-        $this->setData("premium_level_id", $premiumLevelId);
+        $this->setData(self::FIELD_PREMIUM_LEVEL_ID, $premiumLevelId);
     }
 
     /**
@@ -100,7 +100,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getPath(): string
     {
-        return (string)$this->getData("path");
+        return (string)$this->getData(self::FIELD_PATH);
     }
 
     /**
@@ -109,7 +109,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setPath(string $path)
     {
-        $this->setData("path", $path);
+        $this->setData(self::FIELD_PATH, $path);
     }
 
     /**
@@ -118,7 +118,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getAdobeId(): int
     {
-        return (int)$this->getData("adobe_id");
+        return (int)$this->getData(self::FIELD_ADOBE_ID);
     }
 
     /**
@@ -127,7 +127,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setAdobeId(int $adobeId)
     {
-        $this->setData("adobe_id", $adobeId);
+        $this->setData(self::FIELD_ADOBE_ID, $adobeId);
     }
 
     /**
@@ -136,7 +136,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getStockId(): int
     {
-        return (int)$this->getData("stock_id");
+        return (int)$this->getData(self::FIELD_STOCK_ID);
     }
 
     /**
@@ -145,7 +145,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setStockId(int $stockId)
     {
-        $this->setData("stock_id", $stockId);
+        $this->setData(self::FIELD_STOCK_ID, $stockId);
     }
 
     /**
@@ -154,7 +154,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function isLicensed(): int
     {
-        return (int)$this->getData("is_licensed");
+        return (int)$this->getData(self::FIELD_IS_LICENSED);
     }
 
     /**
@@ -163,7 +163,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setIsLicensed(int $isLicensed)
     {
-        $this->setData("is_licensed", $isLicensed);
+        $this->setData(self::FIELD_IS_LICENSED, $isLicensed);
     }
 
     /**
@@ -172,7 +172,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getTitle(): string
     {
-        return (string)$this->getData("title");
+        return (string)$this->getData(self::FIELD_TITLE);
     }
 
     /**
@@ -181,7 +181,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setTitle(string $title)
     {
-        $this->setData("title", $title);
+        $this->setData(self::FIELD_TITLE, $title);
     }
 
     /**
@@ -190,7 +190,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getPreviewUrl(): string
     {
-        return (string)$this->getData("preview_url");
+        return (string)$this->getData(self::FIELD_PREVIEW_URL);
     }
 
     /**
@@ -199,7 +199,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setPreviewUrl(string $previewUrl)
     {
-        $this->setData("preview_url", $previewUrl);
+        $this->setData(self::FIELD_PREVIEW_UR, $previewUrl);
     }
 
     /**
@@ -208,7 +208,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getPreviewWidth(): int
     {
-        return (int)$this->getData("preview_width");
+        return (int)$this->getData(self::FIELD_PREVIEW_WIDTH);
     }
 
     /**
@@ -217,7 +217,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setPreviewWidth(int $previewWidth)
     {
-        $this->setData("preview_width", $previewWidth);
+        $this->setData(self::FIELD_PREVIEW_WIDTH, $previewWidth);
     }
 
     /**
@@ -226,7 +226,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getPreviewHeight(): int
     {
-        return (int)$this->getData("preview_height");
+        return (int)$this->getData(self::FIELD_PREVIEW_HEIGHT);
     }
 
     /**
@@ -235,7 +235,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setPreviewHeight(int $previewHeight)
     {
-        $this->setData("preview_height", $previewHeight);
+        $this->setData(self::FIELD_PREVIEW_HEIGHT, $previewHeight);
     }
 
     /**
@@ -244,7 +244,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getUrl(): string
     {
-        return (string)$this->getData("url");
+        return (string)$this->getData(self::FIELD_URL);
     }
 
     /**
@@ -253,7 +253,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setUrl(string $url)
     {
-        $this->setData("url");
+        $this->setData(self::FIELD_URL, $url);
     }
 
     /**
@@ -262,7 +262,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getWidth(): int
     {
-        return (int)$this->getData("width");
+        return (int)$this->getData(self::FIELD_WIDTH);
     }
 
     /**
@@ -271,7 +271,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setWidth(int $width)
     {
-        $this->setData("width", $width);
+        $this->setData(self::FIELD_WIDTH, $width);
     }
 
     /**
@@ -280,7 +280,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getHeight(): int
     {
-        return (int)$this->getData("height");
+        return (int)$this->getData(self::FIELD_HEIGHT);
     }
 
     /**
@@ -289,7 +289,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setHeight(int $height)
     {
-        $this->setData("height", $height);
+        $this->setData(self::FIELD_HEIGHT, $height);
     }
 
     /**
@@ -298,7 +298,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getCountryName(): string
     {
-        return (string)$this->getData("country_name");
+        return (string)$this->getData(self::FIELD_COUNTRY_NAME);
     }
 
     /**
@@ -307,7 +307,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setCountryName(string $countryName)
     {
-        $this->setData("country_name", $countryName);
+        $this->setData(self::FIELD_COUNTRY_NAME, $countryName);
     }
 
     /**
@@ -316,7 +316,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getDetailsUrl(): string
     {
-        return (string)$this->getData("details_url");
+        return (string)$this->getData(self::FIELD_DETAILS_URL);
     }
 
     /**
@@ -325,7 +325,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setDetailsUrl(string $detailsUrl)
     {
-        $this->setData("details_url", $detailsUrl);
+        $this->setData(self::FIELD_DETAILS_URL, $detailsUrl);
     }
 
     /**
@@ -334,7 +334,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getVectorType(): string
     {
-        return (string)$this->getData("vector_type");
+        return (string)$this->getData(self::FIELD_VECTOR_TYPE);
     }
 
     /**
@@ -343,7 +343,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setVectorType(string $vectorType)
     {
-        $this->setData("vector_type", $vectorType);
+        $this->setData(self::FIELD_VECTOR_TYPE, $vectorType);
     }
 
     /**
@@ -352,7 +352,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getContentType(): string
     {
-        return (string)$this->getData("content_type");
+        return (string)$this->getData(self::FIELD_CONTENT_TYPE);
     }
 
     /**
@@ -361,7 +361,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setContentType(string $contentType)
     {
-        $this->setData("content_type", $contentType);
+        $this->setData(self::FIELD_CONTENT_TYPE, $contentType);
     }
 
     /**
@@ -370,7 +370,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getCreationDate(): string
     {
-        return (string)$this->getData("creation_date");
+        return (string)$this->getData(self::FIELD_CREATION_DATE);
     }
 
     /**
@@ -379,7 +379,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setCreationDate(string $creationDate)
     {
-        $this->setData("creation_date", $creationDate);
+        $this->setData(self::FIELD_CREATION_DATE, $creationDate);
     }
 
     /**
@@ -388,7 +388,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getCreatedAt(): string
     {
-        return (string)$this->getData("created_at");
+        return (string)$this->getData(self::FIELD_CREATED_AT);
     }
 
     /**
@@ -397,7 +397,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setCreatedAt(string $createdAt)
     {
-        $this->setData("created_at", $createdAt);
+        $this->setData(self::FIELD_CREATED_AT, $createdAt);
     }
 
     /**
@@ -406,7 +406,7 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function getUpdatedAt(): string
     {
-        return (string)$this->getData("updated_at");
+        return (string)$this->getData(self::FIELD_UPDATED_AT);
     }
 
     /**
@@ -415,7 +415,6 @@ class Asset extends AbstractModel implements AssetInterface
      */
     public function setUpdatedAt(string $updatedAt)
     {
-        $this->setData("updated_at", $updatedAt);
+        $this->setData(self::FIELD_UPDATED_AT, $updatedAt);
     }
-
 }

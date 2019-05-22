@@ -14,11 +14,15 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Interface AssetRepositoryInterface
+ * @package Magento\AdobeStockImage\Api
+ * @api
+ */
 interface AssetRepositoryInterface
 {
     /**
      * Save asset
-     * @api
      * @param AssetInterface $item
      * @return bool
      */
@@ -32,7 +36,6 @@ interface AssetRepositoryInterface
 
     /**
      * Delete asset
-     * @api
      * @param AssetInterface $item
      * @return bool
      */
@@ -40,7 +43,6 @@ interface AssetRepositoryInterface
 
     /**
      * Get a list of assets
-     * @api
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultsInterface
      */
@@ -48,7 +50,6 @@ interface AssetRepositoryInterface
 
     /**
      * Get asset by id
-     * @api
      * @param int $id
      * @return AssetInterface
      * @throws NoSuchEntityException
@@ -56,8 +57,10 @@ interface AssetRepositoryInterface
     public function getById(int $id) : AssetInterface;
 
     /**
-     * Clean asset metadata
-     * @param string $file
+     * Delete asset
+     * @param int $id
+     * @return bool|void
+     * @throws NoSuchEntityException
      */
-    public function cleanAssetMetadata(string $file);
+    public function deleteById(int $id);
 }

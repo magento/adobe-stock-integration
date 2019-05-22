@@ -21,6 +21,11 @@ use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class AssetRepository
+ * @package Magento\AdobeStockImage\Model
+ * @api
+ */
 class AssetRepository implements AssetRepositoryInterface
 {
     /**
@@ -72,7 +77,6 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Save asset
-     * @api
      * @param AssetInterface $item
      * @return bool
      */
@@ -97,7 +101,6 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Delete asset
-     * @api
      * @param AssetInterface $item
      * @return bool
      */
@@ -112,7 +115,6 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Get a list of assets
-     * @api
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultsInterface
      */
@@ -160,7 +162,6 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Get asset by id
-     * @api
      * @param int $id
      * @return AssetInterface
      * @throws NoSuchEntityException
@@ -176,21 +177,13 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * Clean asset metadata
-     * @param string $file
+     * Delete asset
+     * @param int $id
+     * @return bool|void
+     * @throws NoSuchEntityException
      */
-    public function cleanAssetMetadata(string $file)
+    public function deleteById(int $id)
     {
-        /**
-         * @var $items AssetCollection
-         * @var $item Asset
-         */
-        $items = $this->collectionFactory->create();
-        $items->addFieldToFilter("path", $file);
-        if ($items->count() > 0) {
-            foreach ($items as $item) {
-                $this->delete($item);
-            }
-        }
+        $this->delete($this->getById($id));
     }
 }

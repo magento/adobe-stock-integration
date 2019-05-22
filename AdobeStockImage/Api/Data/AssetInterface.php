@@ -11,6 +11,29 @@ namespace Magento\AdobeStockImage\Api\Data;
 
 interface AssetInterface
 {
+    const FIELD_MEDIA_TYPE_ID = "media_type_id";
+    const FIELD_CATEGORY_ID = "category_id";
+    const FIELD_CREATOR_ID = "creator_id";
+    const FIELD_PREMIUM_LEVEL_ID = "premium_level_id";
+    const FIELD_PATH = "path";
+    const FIELD_ADOBE_ID = "adobe_id";
+    const FIELD_STOCK_ID = "stock_id";
+    const FIELD_IS_LICENSED = "is_licensed";
+    const FIELD_TITLE = "title";
+    const FIELD_PREVIEW_URL = "preview_url";
+    const FIELD_PREVIEW_WIDTH = "preview_width";
+    const FIELD_PREVIEW_HEIGHT = "preview_height";
+    const FIELD_URL = "url";
+    const FIELD_WIDTH = "width";
+    const FIELD_HEIGHT = "height";
+    const FIELD_COUNTRY_NAME = "country_name";
+    const FIELD_DETAILS_URL = "details_url";
+    const FIELD_VECTOR_TYPE = "vector_type";
+    const FIELD_CONTENT_TYPE = "content_type";
+    const FIELD_CREATION_DATE = "creation_date";
+    const FIELD_CREATED_AT = "created_at";
+    const FIELD_UPDATED_AT = "updated_at";
+
     /**
      * Get media type id
      * @return int
