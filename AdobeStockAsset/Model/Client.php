@@ -11,6 +11,7 @@ use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * DataProvider for cms ui.
@@ -23,12 +24,20 @@ class Client implements ClientInterface
     private $config;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * Client constructor.
      * @param ConfigInterface $config
      */
-    public function __construct(ConfigInterface $config)
-    {
+    public function __construct(
+        ConfigInterface $config,
+        ResolverInterface $localeResolver
+    ) {
         $this->config = $config;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -54,8 +63,7 @@ class Client implements ClientInterface
 
         $request = new SearchFilesRequest();
 
-        // TODO: Use backend locale for requests
-        $request->setLocale('En_US');
+        $request->setLocale($this->locale());
         $request->setSearchParams($searchParams);
         $request->setResultColumns($resultColumnArray);
 
@@ -91,5 +99,10 @@ class Client implements ClientInterface
             $this->config->getProductName(),
             $this->config->getTargetEnvironment()
         );
+    }
+
+    private function locale(): string
+    {
+        return $this->localeResolver->getLocale();
     }
 }
