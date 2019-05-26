@@ -1,33 +1,4 @@
 {
-    "adobe_stock_license_request": {
-        "column": {
-            "id": true,
-            "admin_user_id": true,
-            "request_id": true
-        },
-        "constraint": {
-            "PRIMARY": true,
-            "ADOBE_STOCK_LICENSE_REQUEST_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
-        }
-    },
-    "adobe_stock_user_profile": {
-        "column": {
-            "id": true,
-            "admin_user_id": true,
-            "display_name": true,
-            "preferred_languages": true,
-            "account_type": true,
-            "access_token": true,
-            "refresh_token": true,
-            "created_at": true,
-            "updated_at": true,
-            "adobe_id": true
-        },
-        "constraint": {
-            "PRIMARY": true,
-            "ADOBE_STOCK_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
-        }
-    },
     "adobe_stock_request": {
         "column": {
             "id": true,
@@ -37,6 +8,43 @@
         "constraint": {
             "PRIMARY": true,
             "ADOBE_STOCK_REQUEST_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    },
+    "adobe_stock_language": {
+        "column": {
+            "language_id": true,
+            "language": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "adobe_stock_user_language": {
+        "column": {
+            "language_id": true,
+            "admin_user_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_CC85819E717B309C725653D7AB61E291": true,
+            "ADOBE_STOCK_USER_LANGUAGE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    },
+    "adobe_stock_user_profile": {
+        "column": {
+            "id": true,
+            "adobe_id": true,
+            "admin_user_id": true,
+            "display_name": true,
+            "account_type": true,
+            "access_token": true,
+            "refresh_token": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADOBE_STOCK_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
         }
     },
     "adobe_stock_asset": {
@@ -85,8 +93,8 @@
     },
     "adobe_stock_asset_keyword": {
         "column": {
-            "asset_id": true,
-            "keyword_id": true
+            "keyword_id": true,
+            "asset_id": true
         },
         "constraint": {
             "PRIMARY": true

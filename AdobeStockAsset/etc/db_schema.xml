@@ -15,19 +15,28 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="ADO_STO_LIC_REQ_ADM_USER_ID" table="adobe_stock_request" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
     </table>
-    <table name="adobe_stock_languages" resource="default" engine="innodb" comment="Adobe Stock Languages">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+    <table name="adobe_stock_language" resource="default" engine="innodb" comment="Adobe Stock Languages">
+        <column xsi:type="int" name="language_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="varchar" length="255" name="language" nullable="false" comment="Languages"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="id"/>
+            <column name="language_id"/>
         </constraint>
+    </table>
+    <table name="adobe_stock_user_language" resource="default" engine="innodb" comment="Adobe Stock User Language">
+        <column xsi:type="int" name="language_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Language ID"/>
+        <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="language_id"/>
+            <column name="admin_user_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_LAN_ADO_STO_LAN_ID" table="adobe_stock_user_language" column="language_id" referenceTable="adobe_stock_language" referenceColumn="language_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_LAN_ADM_USER_ID" table="adobe_stock_user_language" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
     </table>
     <table name="adobe_stock_user_profile" resource="default" engine="innodb" comment="Adobe Stock User Profile">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe Id"/>
         <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
         <column xsi:type="varchar" length="255" name="display_name" nullable="false" comment="Display Name"/>
-        <column xsi:type="varchar" length="255" name="preferred_languages" nullable="false" comment="Preferred Languages"/>
         <column xsi:type="varchar" length="255" name="account_type" nullable="true" comment="Account Type"/>
         <column xsi:type="varchar" length="255" name="access_token" nullable="true" comment="Access Token"/>
         <column xsi:type="varchar" length="255" name="refresh_token" nullable="true" comment="Refresh Token"/>
@@ -37,7 +46,6 @@
             <column name="id"/>
         </constraint>
         <constraint xsi:type="foreign" referenceId="ADO_STO_USR_PRO_ADM_USER_ID" table="adobe_stock_user_profile" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_PRO_ADO_STO_LAN_ID" table="adobe_stock_user_profile" column="admin_user_id" referenceTable="adobe_stock_languages" referenceColumn="id" onDelete="CASCADE"/>
     </table>
     <table name="adobe_stock_asset" resource="default" engine="innodb" comment="Adobe Stock Asset">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
