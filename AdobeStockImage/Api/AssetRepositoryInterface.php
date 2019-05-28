@@ -24,22 +24,16 @@ interface AssetRepositoryInterface
     /**
      * Save asset
      * @param AssetInterface $item
-     * @return bool
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function save(AssetInterface $item) : bool;
+    public function save(AssetInterface $item);
 
     /**
-     * Get new empty object
-     * @return AssetInterface
-     */
-    public function getNewEmptyModel() : AssetInterface;
-
-    /**
-     * Delete asset
+     * Delete item
      * @param AssetInterface $item
-     * @return bool
+     * @throws \Exception
      */
-    public function delete(AssetInterface $item): bool;
+    public function delete(AssetInterface $item);
 
     /**
      * Get a list of assets

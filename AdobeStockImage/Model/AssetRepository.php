@@ -78,39 +78,21 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * Save asset
      * @param AssetInterface $item
-     * @return bool
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function save(AssetInterface $item) : bool
+    public function save(AssetInterface $item)
     {
-        try {
-            $this->resource->save($item);
-            return true;
-        } catch (\Exception $ex) {
-            return false;
-        }
+        $this->resource->save($item);
     }
 
     /**
-     * Get new empty object
-     * @return AssetInterface
-     */
-    public function getNewEmptyModel() : AssetInterface
-    {
-        return $this->factory->create();
-    }
-
-    /**
-     * Delete asset
+     * Delete item
      * @param AssetInterface $item
-     * @return bool
+     * @throws \Exception
      */
-    public function delete(AssetInterface $item): bool
+    public function delete(AssetInterface $item)
     {
-        try {
-            $this->resource->delete($item);
-        } catch (\Exception $ex) {
-            return false;
-        }
+        $this->resource->delete($item);
     }
 
     /**
