@@ -26,7 +26,7 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "FK_CC85819E717B309C725653D7AB61E291": true,
+            "ADO_STO_USR_LAN_ADO_STO_LAN_ID": true,
             "ADOBE_STOCK_USER_LANGUAGE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
         }
     },

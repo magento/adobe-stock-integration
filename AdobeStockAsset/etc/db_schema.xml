@@ -23,7 +23,7 @@
         </constraint>
     </table>
     <table name="adobe_stock_user_language" resource="default" engine="innodb" comment="Adobe Stock User Language">
-        <column xsi:type="int" name="language_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Language ID"/>
+        <column xsi:type="int" name="language_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Language ID"/>
         <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="language_id"/>
@@ -40,7 +40,7 @@
         <column xsi:type="varchar" length="255" name="account_type" nullable="true" comment="Account Type"/>
         <column xsi:type="varchar" length="255" name="access_token" nullable="true" comment="Access Token"/>
         <column xsi:type="varchar" length="255" name="refresh_token" nullable="true" comment="Refresh Token"/>
-        <column xsi:type="timestamp" name="created_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -69,7 +69,7 @@
         <column xsi:type="varchar" length="255" name="vector_type" nullable="true" comment="Vector Type"/>
         <column xsi:type="varchar" length="255" name="content_type" nullable="true" comment="Content Type"/>
         <column xsi:type="varchar" length="255" name="creation_date" nullable="true" comment="Creation Date"/>
-        <column xsi:type="timestamp" name="created_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -88,7 +88,7 @@
         </constraint>
     </table>
     <table name="adobe_stock_asset_keyword" resource="default" engine="innodb" comment="Adobe Stock Asset Keyword">
-        <column xsi:type="int" name="keyword_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Keyword Id"/>
+        <column xsi:type="int" name="keyword_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Keyword Id"/>
         <column xsi:type="int" name="asset_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Asset ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="keyword_id"/>
