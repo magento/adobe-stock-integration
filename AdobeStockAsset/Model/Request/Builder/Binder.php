@@ -20,6 +20,7 @@ class Binder
             'offset' => (int) $requestData['offset'] ?? (int) $requestConfig['from'],
             'filters' => $this->buildFilters($requestData['placeholder'] ?? [] , $requestConfig['filters']),
             'resultColumns' => $requestData['resultColumns'] ?? $requestConfig['resultColumns'],
+            'locale' => (string) $requestData['locale'] ?? (string) $requestConfig['locale'],
         ];
     }
 
