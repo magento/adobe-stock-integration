@@ -97,7 +97,9 @@
             "asset_id": true
         },
         "constraint": {
-            "PRIMARY": true
+            "PRIMARY": true,
+            "ADO_STO_ASS_KEY_ID": true,
+            "ADOBE_STOCK_ASSET_KEYWORD_ASSET_ID_ADOBE_STOCK_ASSET_ID": true
         }
     },
     "adobe_stock_keyword": {
