@@ -45,6 +45,14 @@ interface RequestBuilderInterface
     public function setSort(array $sort) : void;
 
     /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return void
+     */
+    public function setLocale(string $locale) : void;
+
+    /**
      * Bind value to placeholder
      *
      * @param string $name

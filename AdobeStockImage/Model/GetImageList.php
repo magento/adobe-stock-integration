@@ -12,6 +12,7 @@ use Magento\AdobeStockImageApi\Api\Data\ImageInterfaceFactory;
 use Magento\Ui\DataProvider\SearchResultFactory;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\RequestBuilderInterface;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class GetImageList
@@ -39,6 +40,11 @@ class GetImageList implements GetImageListInterface
     private $requestBuilder;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * GetImageList constructor.
      * @param ClientInterface $client
      * @param ImageInterfaceFactory $imageFactory
@@ -49,12 +55,14 @@ class GetImageList implements GetImageListInterface
         ClientInterface $client,
         ImageInterfaceFactory $imageFactory,
         SearchResultFactory $searchResultFactory,
-        RequestBuilderInterface $requestBuilder
+        RequestBuilderInterface $requestBuilder,
+        ResolverInterface $localeResolver
     ) {
         $this->imageFactory = $imageFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -66,6 +74,7 @@ class GetImageList implements GetImageListInterface
         $this->requestBuilder->setName('adobe_stock_image_search');
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
         $this->requestBuilder->setOffset($searchCriteria->getCurrentPage());
+        $this->requestBuilder->setLocale($this->localeResolver->getLocale());
         $this->applyFilters($searchCriteria);
         $request = $this->requestBuilder->create();
 

@@ -90,6 +90,14 @@ class Builder implements RequestBuilderInterface
     /**
      * @inheritdoc
      */
+    public function setLocale(string $locale): void
+    {
+        $this->data['locale'] = $locale;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function bind(string $name, $value): void
     {
         $this->data['placeholder'][$name] = $value;

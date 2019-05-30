@@ -45,6 +45,7 @@ class Client implements ClientInterface
         $searchParams->setWords($words);
         $searchParams->setLimit($request->getData('size'));
         $searchParams->setOffset($request->getData('offset'));
+        $locale = $request->getData('locale');
 
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
@@ -54,8 +55,7 @@ class Client implements ClientInterface
 
         $request = new SearchFilesRequest();
 
-        // TODO: Use backend locale for requests
-        $request->setLocale('En_US');
+        $request->setLocale($locale);
         $request->setSearchParams($searchParams);
         $request->setResultColumns($resultColumnArray);
 
