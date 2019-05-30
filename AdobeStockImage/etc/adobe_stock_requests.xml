@@ -24,5 +24,6 @@
         </resultColumns>
         <from>0</from>
         <size>32</size>
+        <locale>En_en</locale>
     </request>
 </requests>

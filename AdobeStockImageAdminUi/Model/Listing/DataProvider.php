@@ -14,9 +14,10 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
- * Dataprovider of customer addresses for customer address grid.
+ * DataProvider of customer addresses for customer address grid.
  */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
@@ -25,6 +26,25 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      */
     private $getImageList;
 
+    /**
+     * @var SearchResultFactory
+     */
+    private $searchResultFactory;
+
+    /**
+     * DataProvider constructor.
+     * @param $name
+     * @param $primaryFieldName
+     * @param $requestFieldName
+     * @param ReportingInterface $reporting
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
+     * @param GetImageListInterface $getImageList
+     * @param SearchResultFactory $searchResultFactory
+     * @param array $meta
+     * @param array $data
+     */
     public function __construct(
         $name,
         $primaryFieldName,
@@ -34,10 +54,10 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
+        SearchResultFactory $searchResultFactory,
         array $meta = [],
         array $data = []
     ) {
-        $this->getImageList = $getImageList;
         parent::__construct(
             $name,
             $primaryFieldName,
@@ -49,6 +69,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $meta,
             $data
         );
+        $this->getImageList = $getImageList;
+        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
@@ -56,6 +78,12 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      */
     public function getSearchResult()
     {
-        return $this->getImageList->execute($this->getSearchCriteria());
+        $result = $this->getImageList->execute($this->getSearchCriteria());
+        return $this->searchResultFactory->create(
+            $result->getItems(),
+            $result->getTotalCount(),
+            $this->getSearchCriteria(),
+            'id'
+        );
     }
 }

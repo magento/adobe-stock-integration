@@ -131,7 +131,15 @@ class RequestBuilder implements SearchRequestBuilderInterface
      */
     private function convert(array $data) : \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface
     {
-        // TODO: Define request interface and refactor line below.
-        return $this->requestFactory->create(['data' => $data]);
+        return $this->requestFactory->create(
+            [
+                'name' => $this->data['requestName'],
+                'size' => $data['size'],
+                'offset' => $data['offset'],
+                'locale' => $data['locale'],
+                'filters' => $data['filters'],
+                'resultColumns' => $data['resultColumns'],
+            ]
+        );
     }
 }

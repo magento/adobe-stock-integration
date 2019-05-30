@@ -9,25 +9,105 @@ namespace Magento\AdobeStockAsset\Model\Search;
 class Request implements \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var int
+     */
+    private $size;
+
+    /**
+     * @var int
+     */
+    private $offset;
+
+    /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * @var array
      */
-    private $data;
+    private $filters;
+
+    /**
+     * @var array
+     */
+    private $resultColumns;
 
     /**
      * Request constructor.
-     * @param array $data
+     * @param string $name
+     * @param int $size
+     * @param int $offset
+     * @param string $locale
+     * @param array $filters
+     * @param array $resultColumns
      */
-    public function __construct(array $data)
-    {
-        $this->data = $data;
+    public function __construct(
+        string $name,
+        int $size,
+        int $offset,
+        string $locale,
+        array $filters,
+        array $resultColumns
+    ) {
+        $this->name = $name;
+        $this->size = $size;
+        $this->offset = $offset;
+        $this->locale = $locale;
+        $this->filters = $filters;
+        $this->resultColumns = $resultColumns;
     }
 
     /**
-     * @param string $key
-     * @return mixed|null
+     * @inheritDoc
      */
-    public function getData(string $key)
+    public function getName(): string
     {
-        return $this->data[$key] ?? null;
+        return $this->name;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOffset(): int
+    {
+        return $this->offset;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getResultColumns(): array
+    {
+        return $this->resultColumns;
     }
 }

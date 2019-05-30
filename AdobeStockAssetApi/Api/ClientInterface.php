@@ -7,14 +7,17 @@
 
 namespace Magento\AdobeStockAssetApi\Api;
 
+use Magento\AdobeStockAsset\Model\Search\Result;
+use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
+
 /**
  * Interface
  */
 interface ClientInterface
 {
     /**
-     * @param Data\SearchRequestInterface $request
-     * @return mixed
+     * @param SearchRequestInterface $request
+     * @return Result
      */
-    public function search(\Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface $request) : array;
+    public function search(SearchRequestInterface $request) : Result;
 }
