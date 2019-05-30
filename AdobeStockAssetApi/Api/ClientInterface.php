@@ -12,5 +12,9 @@ namespace Magento\AdobeStockAssetApi\Api;
  */
 interface ClientInterface
 {
-
+    /**
+     * @param Data\SearchRequestInterface $request
+     * @return mixed
+     */
+    public function search(\Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface $request) : array;
 }

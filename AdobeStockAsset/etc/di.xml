@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\AdobeStockAssetApi\Api\Data\ConfigInterface" type="Magento\AdobeStockAsset\Model\Config"/>
     <preference for="Magento\AdobeStockAssetApi\Api\ClientInterface" type="Magento\AdobeStockAsset\Model\Client"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\RequestBuilderInterface" type="Magento\AdobeStockAsset\Model\Request\Builder"/>
-    <preference for="Magento\AdobeStockAsset\Model\Request\Builder\ConfigInterface" type="Magento\AdobeStockAsset\Model\Request\Builder\Config"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\RequestInterface" type="Magento\AdobeStockAsset\Model\Request\Request"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\SearchRequestBuilderInterface" type="Magento\AdobeStockAsset\Model\Search\RequestBuilder"/>
+    <preference for="Magento\AdobeStockAsset\Model\Request\ConfigInterface" type="Magento\AdobeStockAsset\Model\Request\Config"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface" type="Magento\AdobeStockAsset\Model\Search\Request"/>
 </config>
 

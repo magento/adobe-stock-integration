@@ -32,11 +32,11 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param \Magento\AdobeStockAssetApi\Api\Data\RequestInterface $request
+     * @param \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface $request
      * @return array
      * @throws \AdobeStock\Api\Exception\StockApi
      */
-    public function execute(\Magento\AdobeStockAssetApi\Api\Data\RequestInterface $request)
+    public function search(\Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface $request) : array
     {
         // TODO: THIS IS A STUB. SHOULD BE REFACTORED
         $words = $request->getData('filters')['words'] ?? 'image';

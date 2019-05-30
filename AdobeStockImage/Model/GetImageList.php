@@ -11,7 +11,7 @@ use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\Data\ImageInterfaceFactory;
 use Magento\Ui\DataProvider\SearchResultFactory;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
-use Magento\AdobeStockAssetApi\Api\RequestBuilderInterface;
+use Magento\AdobeStockAssetApi\Api\SearchRequestBuilderInterface;
 use Magento\Framework\Locale\ResolverInterface;
 
 /**
@@ -35,7 +35,7 @@ class GetImageList implements GetImageListInterface
     private $client;
 
     /**
-     * @var RequestBuilderInterface
+     * @var SearchRequestBuilderInterface
      */
     private $requestBuilder;
 
@@ -49,13 +49,13 @@ class GetImageList implements GetImageListInterface
      * @param ClientInterface $client
      * @param ImageInterfaceFactory $imageFactory
      * @param SearchResultFactory $searchResultFactory
-     * @param RequestBuilderInterface $requestBuilder
+     * @param SearchRequestBuilderInterface $requestBuilder
      */
     public function __construct(
         ClientInterface $client,
         ImageInterfaceFactory $imageFactory,
         SearchResultFactory $searchResultFactory,
-        RequestBuilderInterface $requestBuilder,
+        SearchRequestBuilderInterface $requestBuilder,
         ResolverInterface $localeResolver
     ) {
         $this->imageFactory = $imageFactory;
@@ -78,7 +78,7 @@ class GetImageList implements GetImageListInterface
         $this->applyFilters($searchCriteria);
         $request = $this->requestBuilder->create();
 
-        $stubData = $this->client->execute($request);
+        $stubData = $this->client->search($request);
         $items = [];
         foreach ($stubData['items'] as $data) {
             $item = $this->imageFactory->create();

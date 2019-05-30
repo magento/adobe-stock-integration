@@ -6,7 +6,7 @@
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
-interface RequestInterface
+interface SearchRequestInterface
 {
 
 }

@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockAsset\Model\Request;
+namespace Magento\AdobeStockAsset\Model\Search;
 
-class Request implements \Magento\AdobeStockAssetApi\Api\Data\RequestInterface
+class Request implements \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface
 {
     /**
      * @var array

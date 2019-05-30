@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockAsset\Model\Request\Builder;
+namespace Magento\AdobeStockAsset\Model\Search\RequestBuilder;
 
 class Binder
 {
