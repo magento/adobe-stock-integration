@@ -29,7 +29,7 @@ interface SearchRequestInterface
     public function getLocale() : string;
 
     /**
-     * @return array
+     * @return \Magento\AdobeStockAsset\Model\Search\Filter[]
      */
     public function getFilters() : array;
 

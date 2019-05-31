@@ -6,8 +6,24 @@
 
 namespace Magento\AdobeStockAsset\Model\Search\RequestBuilder;
 
+use Magento\AdobeStockAsset\Model\Search\FilterFactory;
+
 class Binder
 {
+    /**
+     * @var FilterFactory
+     */
+    private $filterFactory;
+
+    /**
+     * Binder constructor.
+     * @param FilterFactory $filter
+     */
+    public function __construct(FilterFactory $filterFactory)
+    {
+        $this->filterFactory = $filterFactory;
+    }
+
     /**
      * @param array $requestConfig
      * @param array $requestData
@@ -34,7 +50,12 @@ class Binder
         $result = [];
         foreach ($filtersConfig as $filterConfig) {
             if (isset($requestData[$filterConfig['name']])) {
-                $result[$filterConfig['field']] = $requestData[$filterConfig['name']];
+                $result[] = $this->filterFactory->create(
+                    [
+                        'field' => $filterConfig['field'],
+                        'value' => $requestData[$filterConfig['name']]
+                    ]
+                );
             }
         }
         return $result;

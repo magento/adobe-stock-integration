@@ -61,9 +61,9 @@ class Client implements ClientInterface
     public function search(SearchRequestInterface $request) : Result
     {
         $searchParams = new SearchParameters();
-        $searchParams->setWords($request->getFilters()['words'] ?? 'image');
         $searchParams->setLimit($request->getSize());
         $searchParams->setOffset($request->getOffset());
+        $this->setUpFilters($request->getFilters(), $searchParams);
 
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
@@ -84,7 +84,7 @@ class Client implements ClientInterface
             /** @var AssetInterface $asset */
             $asset = $this->assetFactory->create();
             $asset->setId($file->id);
-            $asset->setUrl($file->comp_url);
+            $asset->setUrl($file->thumbnail_220_url);
             $items[] = $asset;
         }
 
@@ -94,6 +94,33 @@ class Client implements ClientInterface
                 'count' => $response->getNbResults()
             ]
         );
+    }
+
+    /**
+     * @param array $filters
+     * @param SearchParameters $searchParams
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    private function setUpFilters(array $filters, SearchParameters $searchParams)
+    {
+        //TODO: should be refactored
+        /** @var \Magento\AdobeStockAsset\Model\Search\Filter $filter */
+        foreach ($filters as $filter) {
+            if ($filter->getField() === 'words') {
+                $searchParams->setWords($filter->getValue());
+                continue;
+            }
+
+            $methodName = 'set' . ucfirst($filter->getField());
+            if (method_exists($searchParams, $methodName)) {
+                $searchParams->$methodName($filter->getValue());
+            }
+
+            $filterMethodName = 'setFilter' . ucfirst($filter->getField());
+            if (method_exists($searchParams, $filterMethodName)) {
+                $searchParams->$filterMethodName($filter->getValue());
+            }
+        }
     }
 
     /**
