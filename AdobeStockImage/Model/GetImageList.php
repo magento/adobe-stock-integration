@@ -58,6 +58,7 @@ class GetImageList implements GetImageListInterface
     }
 
     /**
+     * @api
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultsInterface
      */

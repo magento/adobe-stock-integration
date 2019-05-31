@@ -11,6 +11,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Adobe Stock test connection block
@@ -26,21 +27,28 @@ class TestConnection extends Field
      * @var Json
      */
     private $json;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * TestConnection constructor.
-     * @param Context $context
-     * @param Json    $json
-     * @param Config  $config
+     * @param Context               $context
+     * @param Json                  $json
+     * @param StoreManagerInterface $storeManager
+     * @param Config                $config
      */
     public function __construct(
         Context $context,
         Json $json,
+        StoreManagerInterface $storeManager,
         Config $config
     ) {
         $this->config = $config;
-        parent::__construct($context);
         $this->json = $json;
+        $this->storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
@@ -61,6 +69,7 @@ class TestConnection extends Field
      *
      * @param AbstractElement $element
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @since 100.1.0
      */
     protected function _getElementHtml(AbstractElement $element)
@@ -70,18 +79,28 @@ class TestConnection extends Field
             [
                 'button_label' => __($originalData['button_label']),
                 'html_id'      => $element->getHtmlId(),
-                'headers'      =>
-                    $this->json->serialize(
-                        [
-                            'x-api-key'                   => $this->config->getApiKey(),
-                            'X-Product'                   => $this->config->getProductName(),
-                            'Access-Control-Allow-Origin' => '*',
-                        ]
-                    ),
-                'ajax_url'     => 'https://stock.adobe.io/Rest/Media/1/Search/Files?locale=en_US&search_parameters[words]=tree&search_parameters[limit]=1',
+                'headers'      => $this->json->serialize(
+                    [
+                        'x-api-key'                   => $this->config->getApiKey(),
+                        'X-Product'                   => $this->config->getProductName(),
+                        'Access-Control-Allow-Origin' => '*',
+                    ]
+                ),
+                'ajax_url'     => $this->getAjaxUrl(),
             ]
         );
 
         return $this->_toHtml();
+    }
+
+    /**
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getAjaxUrl(): string
+    {
+        $restUrl = 'rest/V1/adobe-stock/image-list';
+        $unsecureUrl = str_replace('https', 'http', $this->getBaseUrl());
+        return $unsecureUrl . $restUrl . '?searchCriteria[pageSize]=1&searchCriteria[current_page]=1';
     }
 }
