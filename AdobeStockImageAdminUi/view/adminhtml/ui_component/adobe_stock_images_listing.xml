@@ -36,7 +36,13 @@
             <sticky>true</sticky>
         </settings>
         <filterSearch name="words"/>
-        <paging name="listing_paging"/>
+        <paging name="listing_paging">
+            <settings>
+                <sizesConfig>
+                    <component>Magento_AdobeStockImageAdminUi/js/components/images-grid-sizes</component>
+                </sizesConfig>
+            </settings>
+        </paging>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
         <column name="url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_Ui/js/grid/columns/thumbnail">
