@@ -5,23 +5,23 @@
  */
 namespace Magento\AdobeStockAsset\Model\Request;
 
+use Magento\Framework\Config\DataInterface;
 
 /**
  * Class Config
- * @package Magento\AdobeStockAsset\Model\Request\Builder\Config
  */
 class Config implements ConfigInterface
 {
     /**
-     * @var Config\Data
+     * @var DataInterface
      */
     private $dataStorage;
 
     /**
      * Config constructor.
-     * @param Config\Data $dataStorage
+     * @param DataInterface $dataStorage
      */
-    public function __construct(Config\Data $dataStorage)
+    public function __construct(DataInterface $dataStorage)
     {
         $this->dataStorage = $dataStorage;
     }
@@ -31,7 +31,6 @@ class Config implements ConfigInterface
      */
     public function getRequestConfig(string $name) : array
     {
-        $config = $this->dataStorage->get();
-        return $config[$name] ?? null;
+        return $this->dataStorage->get($name);
     }
 }
