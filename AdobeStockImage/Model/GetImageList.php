@@ -8,7 +8,6 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\AdobeStockImageApi\Api\Data\ImageInterfaceFactory;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\SearchRequestBuilderInterface;
@@ -19,11 +18,6 @@ use Magento\Framework\Locale\ResolverInterface;
  */
 class GetImageList implements GetImageListInterface
 {
-    /**
-     * @var ImageInterfaceFactory
-     */
-    private $imageFactory;
-
     /**
      * @var SearchResultsInterfaceFactory
      */
@@ -47,18 +41,16 @@ class GetImageList implements GetImageListInterface
     /**
      * GetImageList constructor.
      * @param ClientInterface $client
-     * @param ImageInterfaceFactory $imageFactory
      * @param SearchResultsInterfaceFactory $searchResultFactory
      * @param SearchRequestBuilderInterface $requestBuilder
+     * @param ResolverInterface $localeResolver
      */
     public function __construct(
         ClientInterface $client,
-        ImageInterfaceFactory $imageFactory,
         SearchResultsInterfaceFactory $searchResultFactory,
         SearchRequestBuilderInterface $requestBuilder,
         ResolverInterface $localeResolver
     ) {
-        $this->imageFactory = $imageFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
