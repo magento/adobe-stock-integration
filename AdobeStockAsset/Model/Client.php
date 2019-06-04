@@ -62,7 +62,7 @@ class Client implements ClientInterface
     {
         $searchParams = new SearchParameters();
         $searchParams->setLimit($request->getSize());
-        $searchParams->setOffset($request->getOffset());
+        $searchParams->setOffset($request->getOffset() * $request->getSize());
         $this->setUpFilters($request->getFilters(), $searchParams);
 
         $resultsColumns = Constants::getResultColumns();
