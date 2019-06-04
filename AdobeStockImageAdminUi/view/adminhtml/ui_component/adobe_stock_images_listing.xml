@@ -37,13 +37,21 @@
         </settings>
         <filterSearch name="words"/>
         <paging name="listing_paging"/>
+        <filters name="listing_filters"/>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
         <column name="url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_Ui/js/grid/columns/thumbnail">
             <settings>
-                <filter>text</filter>
                 <label translate="true">Image</label>
                 <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/cells/image</bodyTmpl>
+            </settings>
+        </column>
+        <column name="orientation_filter">
+            <settings>
+                <label translate="true">Orientation</label>
+                <filter>select</filter>
+                <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation\Options"/>
+                <dataType>select</dataType>
             </settings>
         </column>
     </columns>
