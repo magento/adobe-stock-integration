@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdobeStockAsset\Model\Request\Builder\Config;
+namespace Magento\AdobeStockAsset\Model\Request\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
@@ -20,7 +20,7 @@ class Data extends \Magento\Framework\Config\Data
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        \Magento\AdobeStockAsset\Model\Request\Builder\Config\Reader $reader,
+        \Magento\AdobeStockAsset\Model\Request\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'adobe_stock_request_config',
         SerializerInterface $serializer = null

@@ -3,15 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdobeStockImage\Model;
+namespace Magento\AdobeStockAsset\Model;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
-use Magento\AdobeStockImageApi\Api\Data\ImageInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 
 /**
  * Class Image
  */
-class Image extends AbstractExtensibleObject implements ImageInterface
+class Asset extends AbstractExtensibleObject implements AssetInterface
 {
     /**
      * @return int

@@ -9,8 +9,13 @@ use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use Magento\AdobeStockAsset\Model\Search\Result;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAsset\Model\Search\ResultFactory as SearchResultFactory;
+use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 
 /**
  * DataProvider for cms ui.
@@ -23,54 +28,99 @@ class Client implements ClientInterface
     private $config;
 
     /**
+     * @var AssetInterfaceFactory
+     */
+    private $assetFactory;
+
+    /**
+     * @var SearchResultFactory
+     */
+    private $searchResultFactory;
+
+    /**
      * Client constructor.
      * @param ConfigInterface $config
+     * @param AssetInterfaceFactory $assetFactory
+     * @param SearchResultFactory $searchResultFactory
      */
-    public function __construct(ConfigInterface $config)
-    {
+    public function __construct(
+        ConfigInterface $config,
+        AssetInterfaceFactory $assetFactory,
+        SearchResultFactory $searchResultFactory
+    ) {
         $this->config = $config;
+        $this->assetFactory = $assetFactory;
+        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
-     * @param \Magento\AdobeStockAssetApi\Api\Data\RequestInterface $request
-     * @return array
+     * @param SearchRequestInterface $request
+     * @return Result
      * @throws \AdobeStock\Api\Exception\StockApi
      */
-    public function execute(\Magento\AdobeStockAssetApi\Api\Data\RequestInterface $request)
+    public function search(SearchRequestInterface $request) : Result
     {
-        // TODO: THIS IS A STUB. SHOULD BE REFACTORED
-        $words = $request->getData('filters')['words'] ?? 'image';
-
         $searchParams = new SearchParameters();
-        $searchParams->setWords($words);
-        $searchParams->setLimit($request->getData('size'));
-        $searchParams->setOffset($request->getData('offset'));
-        $locale = $request->getData('locale');
+        $searchParams->setLimit($request->getSize());
+        $searchParams->setOffset($request->getOffset());
+        $this->setUpFilters($request->getFilters(), $searchParams);
 
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
-        foreach ($request->getData('resultColumns') as $column) {
+        foreach ($request->getResultColumns() as $column) {
             $resultColumnArray[] = $resultsColumns[$column['field']];
         }
 
-        $request = new SearchFilesRequest();
+        $searchRequest = new SearchFilesRequest();
+        $searchRequest->setLocale($request->getLocale());
+        $searchRequest->setSearchParams($searchParams);
+        $searchRequest->setResultColumns($resultColumnArray);
 
-        $request->setLocale($locale);
-        $request->setSearchParams($searchParams);
-        $request->setResultColumns($resultColumnArray);
-
-        $client = $this->getClient()->searchFilesInitialize($request, $this->getAccessToken());
+        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
         $response = $client->getNextResponse();
 
-        $result = ['count' => $response->getNbResults()];
+        $items = [];
         foreach ($response->getFiles() as $file) {
-            $result['items'][] = [
-                'id' => $file->id,
-                'url' => $file->comp_url
-            ];
+            /** @var AssetInterface $asset */
+            $asset = $this->assetFactory->create();
+            $asset->setId($file->id);
+            $asset->setUrl($file->thumbnail_220_url);
+            $items[] = $asset;
         }
 
-        return $result;
+        return $this->searchResultFactory->create(
+            [
+                'items' => $items,
+                'count' => $response->getNbResults()
+            ]
+        );
+    }
+
+    /**
+     * @param array $filters
+     * @param SearchParameters $searchParams
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    private function setUpFilters(array $filters, SearchParameters $searchParams)
+    {
+        //TODO: should be refactored
+        /** @var \Magento\AdobeStockAsset\Model\Search\Filter $filter */
+        foreach ($filters as $filter) {
+            if ($filter->getField() === 'words') {
+                $searchParams->setWords($filter->getValue());
+                continue;
+            }
+
+            $methodName = 'set' . ucfirst($filter->getField());
+            if (method_exists($searchParams, $methodName)) {
+                $searchParams->$methodName($filter->getValue());
+            }
+
+            $filterMethodName = 'setFilter' . ucfirst($filter->getField());
+            if (method_exists($searchParams, $filterMethodName)) {
+                $searchParams->$filterMethodName($filter->getValue());
+            }
+        }
     }
 
     /**
