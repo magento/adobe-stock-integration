@@ -4,20 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockAsset\Model\Request;
+namespace Magento\AdobeStockAsset\Model\Search;
 
-use Magento\AdobeStockAssetApi\Api\RequestBuilderInterface;
-use Magento\AdobeStockAsset\Model\Request\Builder\ConfigInterface;
+use Magento\AdobeStockAsset\Model\Search\RequestBuilder\Binder;
+use Magento\AdobeStockAssetApi\Api\SearchRequestBuilderInterface;
+use Magento\AdobeStockAsset\Model\Request\ConfigInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
-use Magento\AdobeStockAssetApi\Api\Data\RequestInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterfaceFactory;
 
 /**
  * Class Builder
  * @package Magento\AdobeStockAsset\Model\Request
  * TODO: move constants to the request interface
  */
-class Builder implements RequestBuilderInterface
+class RequestBuilder implements SearchRequestBuilderInterface
 {
     /**
      * @var ConfigInterface
@@ -30,25 +31,25 @@ class Builder implements RequestBuilderInterface
     private $data;
 
     /**
-     * @var Builder\Binder
+     * @var Binder
      */
     private $binder;
 
     /**
-     * @var RequestInterfaceFactory
+     * @var SearchRequestInterfaceFactory
      */
     private $requestFactory;
 
     /**
      * Builder constructor.
      * @param ConfigInterface $config
-     * @param Builder\Binder $binder
-     * @param RequestInterfaceFactory $requestFactory
+     * @param Binder $binder
+     * @param SearchRequestInterfaceFactory $requestFactory
      */
     public function __construct(
         ConfigInterface $config,
-        Builder\Binder $binder,
-        RequestInterfaceFactory $requestFactory
+        Binder $binder,
+        SearchRequestInterfaceFactory $requestFactory
     ) {
         $this->config = $config;
         $this->binder = $binder;
@@ -90,6 +91,14 @@ class Builder implements RequestBuilderInterface
     /**
      * @inheritdoc
      */
+    public function setLocale(string $locale): void
+    {
+        $this->data['locale'] = $locale;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function bind(string $name, $value): void
     {
         $this->data['placeholder'][$name] = $value;
@@ -98,7 +107,7 @@ class Builder implements RequestBuilderInterface
     /**
      * @inheritdoc
      */
-    public function create() : \Magento\AdobeStockAssetApi\Api\Data\RequestInterface
+    public function create() : \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface
     {
         if (!isset($this->data['requestName'])) {
             throw new \InvalidArgumentException("Request name not defined.");
@@ -118,11 +127,19 @@ class Builder implements RequestBuilderInterface
 
     /**
      * @param array $data
-     * @return \Magento\AdobeStockAssetApi\Api\Data\RequestInterface
+     * @return \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface
      */
-    private function convert(array $data) : \Magento\AdobeStockAssetApi\Api\Data\RequestInterface
+    private function convert(array $data) : \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface
     {
-        // TODO: Define request interface and refactor line below.
-        return $this->requestFactory->create(['data' => $data]);
+        return $this->requestFactory->create(
+            [
+                'name' => $this->data['requestName'],
+                'size' => $data['size'],
+                'offset' => $data['offset'],
+                'locale' => $data['locale'],
+                'filters' => $data['filters'],
+                'resultColumns' => $data['resultColumns'],
+            ]
+        );
     }
 }

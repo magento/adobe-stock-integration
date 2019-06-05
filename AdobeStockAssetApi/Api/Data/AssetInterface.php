@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImageApi\Api\Data;
+namespace Magento\AdobeStockAssetApi\Api\Data;
 
 /**
  * Interface
  */
-interface ImageInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
+interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -87,14 +87,14 @@ interface ImageInterface extends \Magento\Framework\Api\CustomAttributesDataInte
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdobeStockImageApi\Api\Data\ImageExtensionInterface|null
+     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\AdobeStockImageApi\Api\Data\ImageExtensionInterface $extensionAttributes
+     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(\Magento\AdobeStockImageApi\Api\Data\AssetExtensionInterface $extensionAttributes);

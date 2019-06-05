@@ -10,7 +10,7 @@ namespace Magento\AdobeStockAssetApi\Api;
  * Interface RequestBuilderInterface
  * @package Magento\AdobeStockAssetApi\Api
  */
-interface RequestBuilderInterface
+interface SearchRequestBuilderInterface
 {
     /**
      * Set request name
@@ -45,6 +45,14 @@ interface RequestBuilderInterface
     public function setSort(array $sort) : void;
 
     /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return void
+     */
+    public function setLocale(string $locale) : void;
+
+    /**
      * Bind value to placeholder
      *
      * @param string $name
@@ -53,7 +61,7 @@ interface RequestBuilderInterface
     public function bind(string $name, $value) : void;
 
     /**
-     * @return \Magento\AdobeStockAssetApi\Api\Data\RequestInterface
+     * @return \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface
      */
-    public function create() : \Magento\AdobeStockAssetApi\Api\Data\RequestInterface;
+    public function create() : \Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 }

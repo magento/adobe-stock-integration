@@ -8,10 +8,10 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\AdobeStockImageApi\Api\Data\ImageInterfaceFactory;
-use Magento\Ui\DataProvider\SearchResultFactory;
+use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
-use Magento\AdobeStockAssetApi\Api\RequestBuilderInterface;
+use Magento\AdobeStockAssetApi\Api\SearchRequestBuilderInterface;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class GetImageList
@@ -19,12 +19,7 @@ use Magento\AdobeStockAssetApi\Api\RequestBuilderInterface;
 class GetImageList implements GetImageListInterface
 {
     /**
-     * @var ImageInterfaceFactory
-     */
-    private $imageFactory;
-
-    /**
-     * @var SearchResultFactory
+     * @var SearchResultsInterfaceFactory
      */
     private $searchResultFactory;
 
@@ -34,27 +29,32 @@ class GetImageList implements GetImageListInterface
     private $client;
 
     /**
-     * @var RequestBuilderInterface
+     * @var SearchRequestBuilderInterface
      */
     private $requestBuilder;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * GetImageList constructor.
      * @param ClientInterface $client
-     * @param ImageInterfaceFactory $imageFactory
-     * @param SearchResultFactory $searchResultFactory
-     * @param RequestBuilderInterface $requestBuilder
+     * @param SearchResultsInterfaceFactory $searchResultFactory
+     * @param SearchRequestBuilderInterface $requestBuilder
+     * @param ResolverInterface $localeResolver
      */
     public function __construct(
         ClientInterface $client,
-        ImageInterfaceFactory $imageFactory,
-        SearchResultFactory $searchResultFactory,
-        RequestBuilderInterface $requestBuilder
+        SearchResultsInterfaceFactory $searchResultFactory,
+        SearchRequestBuilderInterface $requestBuilder,
+        ResolverInterface $localeResolver
     ) {
-        $this->imageFactory = $imageFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -67,25 +67,16 @@ class GetImageList implements GetImageListInterface
         $this->requestBuilder->setName('adobe_stock_image_search');
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
         $this->requestBuilder->setOffset($searchCriteria->getCurrentPage());
+        $this->requestBuilder->setLocale($this->localeResolver->getLocale());
         $this->applyFilters($searchCriteria);
-        $request = $this->requestBuilder->create();
 
-        $stubData = $this->client->execute($request);
-        $items = [];
-        foreach ($stubData['items'] as $data) {
-            $item = $this->imageFactory->create();
-            foreach ($data as $key => $value) {
-                $item->setData($key, $value);
-            }
-            $items[] = $item;
-        }
+        $response = $this->client->search($this->requestBuilder->create());
 
-        return $this->searchResultFactory->create(
-            $items,
-            $stubData['count'],
-            $searchCriteria,
-            'id'
-        );
+        $result = $this->searchResultFactory->create();
+        $result->setItems($response->getItems());
+        $result->setTotalCount($response->getCount());
+        $result->setSearchCriteria($searchCriteria);
+        return $result;
     }
 
     /**

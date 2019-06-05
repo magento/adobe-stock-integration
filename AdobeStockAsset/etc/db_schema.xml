@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="adobe_stock_request" resource="default" engine="innodb" comment="Adobe Stock License Request">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
+        <column xsi:type="varchar" length="255" name="request_id" nullable="false" comment="Request ID"/>
+        <index referenceId="ADB_STK_REQ" indexType="btree">
+            <column name="id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_LIC_REQ_ADM_USER_ID" table="adobe_stock_request" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+    </table>
+    <table name="adobe_stock_language" resource="default" engine="innodb" comment="Adobe Stock Languages">
+        <column xsi:type="int" name="language_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" length="255" name="language" nullable="false" comment="Languages"/>
+        <index referenceId="ADB_STK_LAN" indexType="btree">
+            <column name="language_id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="language_id"/>
+        </constraint>
+    </table>
+    <table name="adobe_stock_user_language" resource="default" engine="innodb" comment="Adobe Stock User Language">
+        <column xsi:type="int" name="language_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Language ID"/>
+        <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
+        <index referenceId="ADB_STK_USR_LAN_INDEX" indexType="btree">
+            <column name="language_id"/>
+        </index>
+        <index referenceId="ADB_STK_USR_LAN_ADM_USR_INDEX" indexType="btree">
+            <column name="admin_user_id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="language_id"/>
+            <column name="admin_user_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_LAN_ADO_STO_LAN_ID" table="adobe_stock_user_language" column="language_id" referenceTable="adobe_stock_language" referenceColumn="language_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_LAN_ADM_USER_ID" table="adobe_stock_user_language" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+    </table>
+    <table name="adobe_stock_user_profile" resource="default" engine="innodb" comment="Adobe Stock User Profile">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe Id"/>
+        <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
+        <column xsi:type="varchar" length="255" name="display_name" nullable="false" comment="Display Name"/>
+        <column xsi:type="varchar" length="255" name="account_type" nullable="true" comment="Account Type"/>
+        <column xsi:type="varchar" length="255" name="access_token" nullable="true" comment="Access Token"/>
+        <column xsi:type="varchar" length="255" name="refresh_token" nullable="true" comment="Refresh Token"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <index referenceId="ADB_STK_USR_PRO" indexType="btree">
+            <column name="id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_PRO_ADM_USER_ID" table="adobe_stock_user_profile" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+    </table>
+    <table name="adobe_stock_asset" resource="default" engine="innodb" comment="Adobe Stock Asset">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="media_type_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Media Type ID"/>
+        <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Category ID"/>
+        <column xsi:type="int" name="creator_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Creator ID"/>
+        <column xsi:type="int" name="premium_level_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Premium Level ID"/>
+        <column xsi:type="varchar" length="255" name="path" nullable="true" comment="Path"/>
+        <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe Id"/>
+        <column xsi:type="varchar" length="255" name="stock_id" nullable="true" comment="Stock Id"/>
+        <column xsi:type="int" name="is_licensed" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Is Licensed"/>
+        <column xsi:type="varchar" length="255" name="title" nullable="true" comment="Title"/>
+        <column xsi:type="varchar" length="255" name="preview_url" nullable="true" comment="Preview Url"/>
+        <column xsi:type="int" name="preview_width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Preview With"/>
+        <column xsi:type="int" name="preview_height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Preview Height"/>
+        <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
+        <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="varchar" name="url" length="255" nullable="true" comment="Url"/>
+        <column xsi:type="varchar" length="255" name="country_name" nullable="true" comment="Country Name"/>
+        <column xsi:type="varchar" length="255" name="details_url" nullable="true" comment="Details Url"/>
+        <column xsi:type="varchar" length="255" name="vector_type" nullable="true" comment="Vector Type"/>
+        <column xsi:type="varchar" length="255" name="content_type" nullable="true" comment="Content Type"/>
+        <column xsi:type="varchar" length="255" name="creation_date" nullable="true" comment="Creation Date"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <index referenceId="ADB_STK_AST" indexType="btree">
+            <column name="id"/>
+        </index>
+        <index referenceId="ADB_STK_MD_TP_ID_INDEX" indexType="btree">
+            <column name="media_type_id"/>
+        </index>
+        <index referenceId="ADB_STK_CT_ID_INDEX" indexType="btree">
+            <column name="category_id"/>
+        </index>
+        <index referenceId="ADB_STK_CRT_ID_INDEX" indexType="btree">
+            <column name="creator_id"/>
+        </index>
+        <index referenceId="ADB_STK_PRM_LVL_INDEX" indexType="btree">
+            <column name="premium_level_id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_MED_TYP_ID" table="adobe_stock_asset" column="media_type_id" referenceTable="adobe_stock_media_type" referenceColumn="id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_CAT_ID" table="adobe_stock_asset" column="category_id" referenceTable="adobe_stock_category" referenceColumn="id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_CRE_ID" table="adobe_stock_asset" column="creator_id" referenceTable="adobe_stock_creator" referenceColumn="id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_PRE_LEV_ID" table="adobe_stock_asset" column="premium_level_id" referenceTable="adobe_stock_premium_level" referenceColumn="id" onDelete="SET NULL"/>
+    </table>
+    <table name="adobe_stock_category" resource="default" engine="innodb" comment="Adobe Stock Category">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe Id"/>
+        <column xsi:type="varchar" length="255" name="name" nullable="true" comment="Name"/>
+        <index referenceId="ADB_STK_CT" indexType="btree">
+            <column name="id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="adobe_stock_asset_keyword" resource="default" engine="innodb" comment="Adobe Stock Asset Keyword">
+        <column xsi:type="int" name="keyword_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Keyword Id"/>
+        <column xsi:type="int" name="asset_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Asset ID"/>
+        <index referenceId="ADB_STK_AST_KWD_INDEX" indexType="btree">
+            <column name="asset_id"/>
+        </index>
+        <index referenceId="ADB_STK_PRM_LVL_INDEX" indexType="btree">
+            <column name="keyword_id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="keyword_id"/>
+            <column name="asset_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_KEY_ID" table="adobe_stock_asset_keyword" column="keyword_id" referenceTable="adobe_stock_keyword" referenceColumn="asset_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_ASS_ID" table="adobe_stock_asset_keyword" column="asset_id" referenceTable="adobe_stock_asset" referenceColumn="id" onDelete="CASCADE"/>
+    </table>
+    <table name="adobe_stock_keyword" resource="default" engine="innodb" comment="Adobe Stock Keyword">
+        <column xsi:type="int" name="asset_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Stock ID"/>
+        <column xsi:type="varchar" length="255" name="keyword" nullable="true" comment="Keyword"/>
+        <index referenceId="ADB_STK_KB_INDEX" indexType="btree">
+            <column name="asset_id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="asset_id"/>
+        </constraint>
+    </table>
+    <table name="adobe_stock_creator" resource="default" engine="innodb" comment="Adobe Stock Creator">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe Id"/>
+        <column xsi:type="varchar" length="255" name="creator_name" nullable="true" comment="Asset creator's name"/>
+        <index referenceId="ADB_STK_KB_INDEX" indexType="btree">
+            <column name="id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="adobe_stock_media_type" resource="default" engine="innodb" comment="Adobe Stock Creator">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary key"/>
+        <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe Assets Type"/>
+        <column xsi:type="varchar" length="255" name="name" nullable="true" comment="Assets Type Name"/>
+        <index referenceId="ADB_STK_MD_TP_INDEX" indexType="btree">
+            <column name="id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="adobe_stock_premium_level" resource="default" engine="innodb" comment="Adobe Stock Premium Level">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary key"/>
+        <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe ID"/>
+        <column xsi:type="varchar" length="255" name="name" nullable="true" comment="Premium Level Name"/>
+        <index referenceId="ADB_STK_PRM_LVL_INDEX" indexType="btree">
+            <column name="id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>
