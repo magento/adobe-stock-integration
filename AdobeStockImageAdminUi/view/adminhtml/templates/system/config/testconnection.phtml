@@ -3,21 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
 
 /** @var $block \Magento\AdobeStockImageAdminUi\Model\Block\Adminhtml\System\Config\TestConnection */
 ?>
-<button class="scalable" type="button" id="<?= $block->getData('html_id') ?>" data-mage-init='{"testConnection":{
+<button class="scalable" type="button" id="<?= $block->escapeUrl($block->getData('html_id')) ?>" data-mage-init='{"testConnection":{
     "url": "<?= /* @escapeNotVerified */ $block->getData('ajax_url') ?>",
-    "elementId": "<?= $block->getData('html_id') ?>",
-    "successText": "<?= /* @escapeNotVerified */ __('Successful! Test again?') ?>",
-    "headers": <?= $block->getData('headers') ?>,
+    "elementId": "<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>",
+    "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
     "fieldToCheck": "total_count",
-    "failedText": "<?= /* @escapeNotVerified */ __('Connection failed! Test again?') ?>",
-    "fieldMapping": "<?= /* @escapeNotVerified */ $block->getData('field_mapping') ?>"}, "validation": {}}'>
+    "failedText": "<?= $block->escapeHtmlAttr(__('Connection failed! Test again?')) ?>", "validation": {}}'>
     <span>
         <span>
-            <span id="<?= $block->getData('html_id') ?>_result">
+            <span id="<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>_result">
                 <?= $block->escapeHtml($block->getData('button_label')) ?>
             </span>
         </span>
