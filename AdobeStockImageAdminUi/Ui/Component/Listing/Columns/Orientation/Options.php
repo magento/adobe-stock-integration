@@ -31,10 +31,6 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
                 'label' => 'Square',
                 'value' => 'SQUARE'
             ],
-            [
-                'label' => 'All',
-                'value' => 'ALL'
-            ]
         ];
     }
 }
