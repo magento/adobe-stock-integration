@@ -85,6 +85,28 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setUrl($value);
 
     /**
+     * @param int $value
+     * @return $this
+     */
+    public function setHeight(int $value);
+
+    /**
+     * @return int
+     */
+    public function getHeight() : int;
+
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function setWidth(int $value);
+
+    /**
+     * @return int
+     */
+    public function getWidth() : int;
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null

@@ -55,10 +55,15 @@
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
-        <column name="url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_Ui/js/grid/columns/thumbnail">
+        <column name="url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_AdobeStockImageAdminUi/js/components/masonry">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
+                    <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
+                </item>
+            </argument>
             <settings>
                 <label translate="true">Image</label>
-                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/cells/image</bodyTmpl>
             </settings>
         </column>
     </columns>
