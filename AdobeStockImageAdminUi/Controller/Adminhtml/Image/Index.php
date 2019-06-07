@@ -20,6 +20,11 @@ use Magento\Framework\View\Result\PageFactory;
 class Index extends Action implements HttpGetActionInterface
 {
     /**
+     * ACL access resource name
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::access_adobe_stock';
+
+    /**
      * @var PageFactory
      */
     private $pageFactory;

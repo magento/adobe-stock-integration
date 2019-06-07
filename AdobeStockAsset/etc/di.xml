@@ -12,5 +12,7 @@
     <preference for="Magento\AdobeStockAsset\Model\Request\ConfigInterface" type="Magento\AdobeStockAsset\Model\Request\Config"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface" type="Magento\AdobeStockAsset\Model\Search\Request"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetInterface" type="Magento\AdobeStockAsset\Model\Asset"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\FilterInterface" type="Magento\AdobeStockAsset\Model\Search\Filter"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\SearchResultInterface" type="Magento\AdobeStockAsset\Model\Search\Result"/>
 </config>
 
