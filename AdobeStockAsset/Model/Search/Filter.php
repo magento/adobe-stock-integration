@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\Search;
 
-class Filter
+class Filter implements \Magento\AdobeStockAssetApi\Api\Data\FilterInterface
 {
     /**
      * @var string
