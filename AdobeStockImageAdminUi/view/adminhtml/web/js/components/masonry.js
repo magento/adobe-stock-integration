@@ -49,6 +49,12 @@ define([
             imageMargin: 20,
 
             /**
+             * Maximum image height value
+             * @param int
+             */
+            maxImageHeight: 240,
+
+            /**
              * Container styles
              * @param {Object}
              */
@@ -76,7 +82,10 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
+            this.images([]);
             if (!rows.length) {
+                this.totalHeight = 0;
+                this.setContainerHeight();
                 return;
             }
 
@@ -153,7 +162,8 @@ define([
                 translateY = 0,
                 ratio = 0,
                 imageWidth = 0,
-                rowHeight = 0;
+                rowHeight = 0,
+                calcHeight = 0;
 
             this.setMinRatio();
 
@@ -163,7 +173,8 @@ define([
 
                 if (ratio >= this.minRatio || index + 1 === this.images().length) {
                     ratio = Math.max(ratio, this.minRatio);
-                    rowHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
+                    calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
+                    rowHeight = (calcHeight < this.maxImageHeight) ? calcHeight : this.maxImageHeight;
 
                     row.forEach(function(img) {
                         imageWidth = rowHeight * img.ratio;
@@ -205,9 +216,9 @@ define([
             } else if (this.containerWidth <= 1280) {
                 this.minRatio = 4;
             } else if (this.containerWidth <= 1920) {
-                this.minRatio = 5;
-            } else {
                 this.minRatio = 6;
+            } else {
+                this.minRatio = 7;
             }
         }
     });
