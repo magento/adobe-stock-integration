@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdobeStockAsset\Model\Request;
+declare(strict_types=1);
 
+namespace Magento\AdobeStockAsset\Model\Request;
 
 /**
  * Class Config

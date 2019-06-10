@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
@@ -85,6 +86,28 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setUrl($value);
 
     /**
+     * @param int $value
+     * @return $this
+     */
+    public function setHeight(int $value);
+
+    /**
+     * @return int
+     */
+    public function getHeight() : int;
+
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function setWidth(int $value);
+
+    /**
+     * @return int
+     */
+    public function getWidth() : int;
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null
@@ -97,5 +120,5 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\AdobeStockImageApi\Api\Data\AssetExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(\Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes);
 }

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\AdobeStockAsset\Model;
 
@@ -10,12 +12,12 @@ use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
-use Magento\AdobeStockAsset\Model\Search\Result;
-use Magento\AdobeStockAsset\Model\Search\ResultFactory as SearchResultFactory;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterface;
+use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterfaceFactory as SearchResultFactory;
 use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 
 /**
@@ -56,14 +58,14 @@ class Client implements ClientInterface
 
     /**
      * @param SearchRequestInterface $request
-     * @return Result
+     * @return SearchResultInterface
      * @throws \AdobeStock\Api\Exception\StockApi
      */
-    public function search(SearchRequestInterface $request): Result
+    public function search(SearchRequestInterface $request): SearchResultInterface
     {
         $searchParams = new SearchParameters();
         $searchParams->setLimit($request->getSize());
-        $searchParams->setOffset($request->getOffset() * $request->getSize());
+        $searchParams->setOffset($request->getOffset());
         $this->setUpFilters($request->getFilters(), $searchParams);
 
         $resultsColumns = Constants::getResultColumns();
@@ -85,7 +87,9 @@ class Client implements ClientInterface
             /** @var AssetInterface $asset */
             $asset = $this->assetFactory->create();
             $asset->setId($file->id);
-            $asset->setUrl($file->thumbnail_220_url);
+            $asset->setUrl($file->thumbnail_500_url);
+            $asset->setHeight($file->height);
+            $asset->setWidth($file->width);
             $items[] = $asset;
         }
 

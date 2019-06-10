@@ -1,13 +1,12 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Model\Listing;
 
-use Magento\AdobeStockImage\Model\GetImageList;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -22,7 +21,7 @@ use Magento\Ui\DataProvider\SearchResultFactory;
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
-     * @var GetImageList
+     * @var GetImageListInterface
      */
     private $getImageList;
 
@@ -33,9 +32,9 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * DataProvider constructor.
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param ReportingInterface $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
@@ -46,9 +45,9 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param array $data
      */
     public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
+        string $name,
+        string $primaryFieldName,
+        string $requestFieldName,
         ReportingInterface $reporting,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,

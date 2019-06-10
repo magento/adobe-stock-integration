@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdobeStockImage\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -65,7 +67,7 @@ class GetImageList implements GetImageListInterface
     {
         $this->requestBuilder->setName('adobe_stock_image_search');
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
-        $this->requestBuilder->setOffset($searchCriteria->getCurrentPage());
+        $this->requestBuilder->setOffset(($searchCriteria->getCurrentPage() - 1) * $searchCriteria->getPageSize());
         $this->requestBuilder->setLocale($this->localeResolver->getLocale());
         $this->applyFilters($searchCriteria);
 

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdobeStockAsset\Model\Request\Config;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
