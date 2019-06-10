@@ -53,11 +53,11 @@
                     <dataScope>orientation_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="premium_filter" provider="${ $.parentName }">
+            <filterSelect name="premium_price_filter" provider="${ $.parentName }">
                 <settings>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Price\Options"/>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
                     <label translate="true">Price</label>
-                    <dataScope>premium_filter</dataScope>
+                    <dataScope>premium_price_filter</dataScope>
                 </settings>
             </filterSelect>
         </filters>

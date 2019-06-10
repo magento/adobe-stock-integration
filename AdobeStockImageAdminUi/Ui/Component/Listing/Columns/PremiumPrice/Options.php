@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Price;
+namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice;
 
 /**
  * Pricing filter options provider
