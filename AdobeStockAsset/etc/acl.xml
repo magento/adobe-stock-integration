@@ -12,9 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Config::advanced">
-                                <resource id="Magento_AdobeStockImageAdminUi::adobe_stock_integration" title="Adobe Stock Integration" sortOrder="10"/>
-                            </resource>
+                            <resource id="Magento_AdobeStockAsset::config" title="Adobe Stock Section" translate="title"/>
                         </resource>
                     </resource>
                 </resource>

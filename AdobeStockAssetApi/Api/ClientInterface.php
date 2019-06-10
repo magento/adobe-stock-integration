@@ -19,5 +19,7 @@ interface ClientInterface
      * @param SearchRequestInterface $request
      * @return Result
      */
-    public function search(SearchRequestInterface $request) : Result;
+    public function search(SearchRequestInterface $request): Result;
+
+    public function testConnection();
 }

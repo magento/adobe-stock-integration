@@ -4,19 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\System\Config;
+namespace Magento\AdobeStockAsset\Controller\Adminhtml\System\Config;
 
 use Exception;
-use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filter\StripTags;
 
 class TestConnection extends Action
@@ -26,7 +24,7 @@ class TestConnection extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::adobe_stock_integration';
+    const ADMIN_RESOURCE = 'Magento_AdobeStockAsset::config';
 
     /**
      * @var JsonFactory
@@ -39,48 +37,34 @@ class TestConnection extends Action
     private $tagFilter;
 
     /**
-     * @var GetImageListInterface
+     * @var ClientInterface
      */
-    private $getImageList;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private $client;
 
     /**
      * TestConnection constructor.
      *
-     * @param Context               $context
-     * @param GetImageListInterface $getImageList
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param JsonFactory           $resultJsonFactory
-     * @param StripTags             $tagFilter
+     * @param Context         $context
+     * @param ClientInterface $client
+     * @param JsonFactory     $resultJsonFactory
+     * @param StripTags       $tagFilter
      */
     public function __construct(
         Context $context,
-        GetImageListInterface $getImageList,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ClientInterface $client,
         JsonFactory $resultJsonFactory,
         StripTags $tagFilter
     ) {
         parent::__construct($context);
-        $this->getImageList = $getImageList;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->tagFilter = $tagFilter;
+        $this->client = $client;
     }
 
     /**
-     * Execute action based on request and return result
-     *
-     * @return ResultInterface|ResponseInterface
-     * @throws NotFoundException
-     */
-    /**
      * Check for connection to server
      *
-     * @return Json
+     * @return ResultInterface|ResponseInterface
      */
     public function execute()
     {
@@ -90,15 +74,15 @@ class TestConnection extends Action
         ];
 
         try {
-            $response = $this->getImageList->execute($this->getSearchCriteria());
+            $response = $this->client->testConnection();
 
-            if (!$response->getTotalCount()) {
+            if (!$response->nb_results) {
                 throw new LocalizedException(__('Invalid API Key.'));
             }
             $result['success'] = true;
-            $result['total_count'] = $response->getTotalCount();
+            $result['total_count'] = $response->nb_results;
         } catch (Exception $e) {
-            $message = __($e->getMessage());
+            $message = __('Invalid API Key.');
             $result['errorMessage'] = $this->tagFilter->filter($message);
         }
 
@@ -106,14 +90,5 @@ class TestConnection extends Action
         $resultJson = $this->resultJsonFactory->create();
 
         return $resultJson->setData($result);
-    }
-
-    private function getSearchCriteria()
-    {
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchCriteria->setPageSize(1);
-        $searchCriteria->setCurrentPage(1);
-
-        return $searchCriteria;
     }
 }

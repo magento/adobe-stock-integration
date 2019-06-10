@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\AdobeStockAsset\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
@@ -10,11 +11,11 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Magento\AdobeStockAsset\Model\Search\Result;
+use Magento\AdobeStockAsset\Model\Search\ResultFactory as SearchResultFactory;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeStockAsset\Model\Search\ResultFactory as SearchResultFactory;
+use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 
 /**
@@ -39,9 +40,9 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     * @param ConfigInterface $config
+     * @param ConfigInterface       $config
      * @param AssetInterfaceFactory $assetFactory
-     * @param SearchResultFactory $searchResultFactory
+     * @param SearchResultFactory   $searchResultFactory
      */
     public function __construct(
         ConfigInterface $config,
@@ -58,7 +59,7 @@ class Client implements ClientInterface
      * @return Result
      * @throws \AdobeStock\Api\Exception\StockApi
      */
-    public function search(SearchRequestInterface $request) : Result
+    public function search(SearchRequestInterface $request): Result
     {
         $searchParams = new SearchParameters();
         $searchParams->setLimit($request->getSize());
@@ -91,13 +92,13 @@ class Client implements ClientInterface
         return $this->searchResultFactory->create(
             [
                 'items' => $items,
-                'count' => $response->getNbResults()
+                'count' => $response->getNbResults(),
             ]
         );
     }
 
     /**
-     * @param array $filters
+     * @param array            $filters
      * @param SearchParameters $searchParams
      * @throws \AdobeStock\Api\Exception\StockApi
      */
@@ -141,5 +142,23 @@ class Client implements ClientInterface
             $this->config->getProductName(),
             $this->config->getTargetEnvironment()
         );
+    }
+
+    public function testConnection()
+    {
+        //TODO: should be refactored
+        $searchParams = new SearchParameters();
+        $searchRequest = new SearchFilesRequest();
+        $resultColumnArray = [];
+
+        $resultColumnArray[] = 'nb_results';
+
+        $searchRequest->setLocale('en_GB');
+        $searchRequest->setSearchParams($searchParams);
+        $searchRequest->setResultColumns($resultColumnArray);
+
+        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+
+        return $client->getNextResponse();
     }
 }

@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImageAdminUi\Model\Block\Adminhtml\System\Config;
+namespace Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Adobe Stock test connection block
- * @codeCoverageIgnore
  */
 class TestConnection extends Field
 {
@@ -24,7 +23,7 @@ class TestConnection extends Field
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->setTemplate('Magento_AdobeStockImageAdminUi::system/config/testconnection.phtml');
+        $this->setTemplate('Magento_AdobeStockAsset::system/config/testconnection.phtml');
         return $this;
     }
 

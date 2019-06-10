@@ -26,7 +26,7 @@
                 <field id="adobe_stock_test_connect_wizard" translate="button_label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label/>
                     <button_label>Test Connection</button_label>
-                    <frontend_model>Magento\AdobeStockImageAdminUi\Model\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                    <frontend_model>Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config\TestConnection</frontend_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
