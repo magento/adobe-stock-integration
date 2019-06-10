@@ -72,6 +72,40 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
+     * @param int $value
+     * @return Asset|AssetInterface
+     */
+    public function setHeight(int $value)
+    {
+        return $this->setData('height', $value);
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight() : int
+    {
+        return $this->_get('height');
+    }
+
+    /**
+     * @param int $value
+     * @return Asset|AssetInterface
+     */
+    public function setWidth(int $value)
+    {
+        return $this->setData('width', $value);
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth() : int
+    {
+        return $this->_get('width');
+    }
+
+    /**
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
      * @return $this
      */

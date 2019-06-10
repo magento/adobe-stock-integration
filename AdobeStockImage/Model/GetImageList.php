@@ -67,7 +67,7 @@ class GetImageList implements GetImageListInterface
     {
         $this->requestBuilder->setName('adobe_stock_image_search');
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
-        $this->requestBuilder->setOffset($searchCriteria->getCurrentPage());
+        $this->requestBuilder->setOffset(($searchCriteria->getCurrentPage() - 1) * $searchCriteria->getPageSize());
         $this->requestBuilder->setLocale($this->localeResolver->getLocale());
         $this->applyFilters($searchCriteria);
 

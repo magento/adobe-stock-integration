@@ -21,7 +21,9 @@
             <column name="nb_results" field="NB_RESULTS"/>
             <column name="id" field="ID"/>
             <column name="COMP_URL" field="COMP_URL"/>
-            <column name="THUMBNAIL_220_URL" field="THUMBNAIL_220_URL"/>
+            <column name="THUMBNAIL_500_URL" field="THUMBNAIL_500_URL"/>
+            <column name="WIDTH" field="WIDTH"/>
+            <column name="HEIGHT" field="HEIGHT"/>
         </resultColumns>
         <from>0</from>
         <size>32</size>

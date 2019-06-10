@@ -4,14 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="adobe-stock-image-grid" data-role="grid-wrapper">
-    <div class="adobe-stock-image-column">
-        <div repeat="foreach: rows, item: '$row'">
-            <div outerfasteach="data: getVisible(), as: '$col'"
-                css="getFieldClass($row())" click="getFieldHandler($row())" template="getBody()"/>
-        </div>
-        <div ifnot="hasData()">
-            <td attr="colspan: countVisible()" translate="'We couldn\'t find any records.'"/>
-        </div>
-    </div>
-</div>
+
+<!-- ko foreach: elems() -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->

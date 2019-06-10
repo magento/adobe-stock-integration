@@ -64,7 +64,7 @@ class Client implements ClientInterface
     {
         $searchParams = new SearchParameters();
         $searchParams->setLimit($request->getSize());
-        $searchParams->setOffset($request->getOffset() * $request->getSize());
+        $searchParams->setOffset($request->getOffset());
         $this->setUpFilters($request->getFilters(), $searchParams);
 
         $resultsColumns = Constants::getResultColumns();
@@ -86,7 +86,9 @@ class Client implements ClientInterface
             /** @var AssetInterface $asset */
             $asset = $this->assetFactory->create();
             $asset->setId($file->id);
-            $asset->setUrl($file->thumbnail_220_url);
+            $asset->setUrl($file->thumbnail_500_url);
+            $asset->setHeight($file->height);
+            $asset->setWidth($file->width);
             $items[] = $asset;
         }
 

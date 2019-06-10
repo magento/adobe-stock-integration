@@ -4,15 +4,23 @@
 //  */
 
 & when (@media-common = true) {
-  .adobe-stock-image-column > div {
-    display: inline-block;
-
-    .adobe-stock-image-cell {
-      margin: 10px;
-
-      img {
-        max-height: 200px;
-      }
+    .masonry-image-column {
+        position: relative;
+        margin: 20px 0 20px 0;
     }
-  }
+    .masonry-image-block {
+        background-color: #D5D5D5;
+        overflow: hidden;
+        left: 0;
+        position: absolute;
+        top: 0;
+        margin: 0;
+    }
+    .masonry-image-block img {
+        left: 0;
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+    }
 }
