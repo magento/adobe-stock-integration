@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\Search;
 
-class Result
+class Result implements \Magento\AdobeStockAssetApi\Api\Data\SearchResultInterface
 {
     /**
      * @var array
@@ -32,7 +33,7 @@ class Result
     /**
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetInterface[]
      */
-    public function getItems()
+    public function getItems() : array
     {
         return $this->items;
     }
@@ -40,7 +41,7 @@ class Result
     /**
      * @return int
      */
-    public function getCount()
+    public function getCount() : int
     {
         return $this->count;
     }

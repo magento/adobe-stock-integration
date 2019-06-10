@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdobeStockAsset\Model;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
@@ -104,10 +106,10 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @param \Magento\AdobeStockImageApi\Api\Data\AssetExtensionInterface $extensionAttributes
+     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\AdobeStockImageApi\Api\Data\AssetExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(\Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

@@ -1,13 +1,12 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Model\Listing;
 
-use Magento\AdobeStockImage\Model\GetImageList;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -22,7 +21,7 @@ use Magento\Ui\DataProvider\SearchResultFactory;
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
-     * @var GetImageList
+     * @var GetImageListInterface
      */
     private $getImageList;
 

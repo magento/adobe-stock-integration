@@ -41,8 +41,8 @@
             <column name="language_id"/>
             <column name="admin_user_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_LAN_ADO_STO_LAN_ID" table="adobe_stock_user_language" column="language_id" referenceTable="adobe_stock_language" referenceColumn="language_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_LAN_ADM_USER_ID" table="adobe_stock_user_language" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_CC85819E717B309C725653D7AB61E291" table="adobe_stock_user_language" column="language_id" referenceTable="adobe_stock_language" referenceColumn="language_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_LAN_USER_ID" table="adobe_stock_user_language" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
     </table>
     <table name="adobe_stock_user_profile" resource="default" engine="innodb" comment="Adobe Stock User Profile">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
@@ -133,7 +133,7 @@
             <column name="keyword_id"/>
             <column name="asset_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_KEY_ID" table="adobe_stock_asset_keyword" column="keyword_id" referenceTable="adobe_stock_keyword" referenceColumn="asset_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_C0CDEF8AFCED5E1BD956F363D9AF92B4" table="adobe_stock_asset_keyword" column="keyword_id" referenceTable="adobe_stock_keyword" referenceColumn="asset_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_ASS_ID" table="adobe_stock_asset_keyword" column="asset_id" referenceTable="adobe_stock_asset" referenceColumn="id" onDelete="CASCADE"/>
     </table>
     <table name="adobe_stock_keyword" resource="default" engine="innodb" comment="Adobe Stock Keyword">

@@ -4,10 +4,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
-use Magento\AdobeStockAsset\Model\Search\Result;
+use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterface;
 use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 
 /**
@@ -17,7 +18,7 @@ interface ClientInterface
 {
     /**
      * @param SearchRequestInterface $request
-     * @return Result
+     * @return SearchResultInterface
      */
-    public function search(SearchRequestInterface $request) : Result;
+    public function search(SearchRequestInterface $request) : SearchResultInterface;
 }
