@@ -55,6 +55,7 @@
             </filterSelect>
             <filterSelect name="premium_price_filter" provider="${ $.parentName }">
                 <settings>
+                    <caption translate="true">Select...</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
                     <label translate="true">Price</label>
                     <dataScope>premium_price_filter</dataScope>
