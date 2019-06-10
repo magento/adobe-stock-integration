@@ -15,7 +15,7 @@
             <filter name="isolated_filter" field="isolated"/>
             <filter name="orientation_filter" field="orientation"/>
             <filter name="colors_filter" field="colors"/>
-            <filter name="premium_filter" field="premium"/>
+            <filter name="premium_price_filter" field="premium"/>
         </filters>
         <resultColumns>
             <column name="nb_results" field="NB_RESULTS"/>
