@@ -5,16 +5,14 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
-namespace Magento\AdobeStockImage\Model\ResourceModel;
+namespace Magento\AdobeStockAsset\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-class Asset extends AbstractDb
+class Keyword extends AbstractDb
 {
     protected function _construct()
     {
-        $this->_init('adobe_stock_asset', 'id');
+        $this->_init('adobe_stock_keyword', 'id');
     }
 }

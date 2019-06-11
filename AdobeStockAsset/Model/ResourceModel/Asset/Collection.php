@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Model\ResourceModel\Asset;
+namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset;
 
 use Magento\AdobeStockImage\Model\Asset as Model;
 use Magento\AdobeStockImage\Model\ResourceModel\Asset as ResourceModel;

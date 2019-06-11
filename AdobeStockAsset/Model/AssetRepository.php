@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Model;
+namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockImage\Api\AssetRepositoryInterface;
 use Magento\AdobeStockImage\Api\Data\AssetInterface;

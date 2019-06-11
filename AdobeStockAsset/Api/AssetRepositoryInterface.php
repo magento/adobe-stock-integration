@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Api;
+namespace Magento\AdobeStockAsset\Api;
 
 use Magento\AdobeStockImage\Api\Data\AssetInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;

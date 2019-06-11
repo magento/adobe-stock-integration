@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Api\Data;
+namespace Magento\AdobeStockAsset\Api\Data;
 
 interface AssetInterface
 {
