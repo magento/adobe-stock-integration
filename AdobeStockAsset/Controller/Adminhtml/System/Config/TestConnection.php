@@ -6,7 +6,6 @@
 
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\System\Config;
 
-use Exception;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -81,7 +80,7 @@ class TestConnection extends Action
             }
             $result['success'] = true;
             $result['total_count'] = $response->nb_results;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $message = __('Invalid API Key.');
             $result['errorMessage'] = $this->tagFilter->filter($message);
         }
