@@ -73,13 +73,10 @@ class TestConnection extends Action
         ];
 
         try {
-            $response = $this->client->testConnection();
-
-            if (!$response->nb_results) {
+            if (!$this->client->testConnection()) {
                 throw new LocalizedException(__('Invalid API Key.'));
             }
             $result['success'] = true;
-            $result['total_count'] = $response->nb_results;
         } catch (\Exception $e) {
             $message = __('Invalid API Key.');
             $result['errorMessage'] = $this->tagFilter->filter($message);

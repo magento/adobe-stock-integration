@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\AdobeStockAsset\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
@@ -21,7 +20,7 @@ use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterfaceFactory as SearchRe
 use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 
 /**
- * DataProvider for cms ui.
+ * Client for communication to Adobe Stock API
  */
 class Client implements ClientInterface
 {
@@ -148,6 +147,9 @@ class Client implements ClientInterface
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     public function testConnection()
     {
         //TODO: should be refactored
@@ -163,6 +165,6 @@ class Client implements ClientInterface
 
         $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
-        return $client->getNextResponse();
+        return (bool) $client->getNextResponse()->nb_results;
     }
 }
