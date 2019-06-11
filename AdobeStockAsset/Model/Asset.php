@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Api\Data\CategoryInterface;
-use Magento\AdobeStockAsset\Api\Data\CreatorInterface;
-use Magento\AdobeStockAsset\Api\Data\KeywordInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetAPi\Api\Data\KeywordInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
 

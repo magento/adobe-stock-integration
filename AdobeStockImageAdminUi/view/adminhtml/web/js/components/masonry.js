@@ -212,13 +212,13 @@ define([
          */
         setMinRatio: function() {
             if (this.containerWidth <= 640) {
-                this.minRatio = 2;
+                this.minRatio = 3;
             } else if (this.containerWidth <= 1280) {
-                this.minRatio = 4;
+                this.minRatio = 5;
             } else if (this.containerWidth <= 1920) {
-                this.minRatio = 6;
+                this.minRatio = 8;
             } else {
-                this.minRatio = 7;
+                this.minRatio = 10;
             }
         }
     });
