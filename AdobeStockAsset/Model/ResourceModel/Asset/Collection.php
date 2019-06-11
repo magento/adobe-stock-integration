@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset;
 
-use Magento\AdobeStockImage\Model\Asset as Model;
-use Magento\AdobeStockImage\Model\ResourceModel\Asset as ResourceModel;
+use Magento\AdobeStockAsset\Model\Asset as Model;
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection

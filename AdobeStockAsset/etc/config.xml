@@ -10,7 +10,7 @@
         <adobe_stock>
             <integration>
                 <enabled>1</enabled>
-                <api_key></api_key>
+                <api_key/>
                 <environment>PROD</environment>
                 <product_name>magento-adobe-stock-integration</product_name>
             </integration>

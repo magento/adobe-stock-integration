@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_AdobeStockAsset:etc/adobe_stock_requests.xsd">
+    <request name="adobe_stock_image_search">
+        <filters>
+            <filter name="words" field="words"/>
+            <filter name="content_type_filter" field="content_type"/>
+            <filter name="offensive_filter" field="offensive"/>
+            <filter name="isolated_filter" field="isolated"/>
+            <filter name="orientation_filter" field="orientation"/>
+            <filter name="colors_filter" field="colors"/>
+            <filter name="premium_price_filter" field="premium"/>
+        </filters>
+        <resultColumns>
+            <column name="nb_results" field="NB_RESULTS"/>
+            <column name="id" field="ID"/>
+            <column name="COMP_URL" field="COMP_URL"/>
+            <column name="THUMBNAIL_500_URL" field="THUMBNAIL_500_URL"/>
+            <column name="WIDTH" field="WIDTH"/>
+            <column name="HEIGHT" field="HEIGHT"/>
+        </resultColumns>
+        <from>0</from>
+        <size>32</size>
+        <locale>En_en</locale>
+    </request>
+</requests>

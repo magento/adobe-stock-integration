@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,7 +10,23 @@ namespace Magento\AdobeStockAsset\Api\Data;
 
 interface KeywordInterface
 {
-    const FIELD_KEYWORD = "keyword";
+    const ID = "id";
+    const KEYWORD = "keyword";
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId() : int;
+
+    /**
+     * Set the id
+     *
+     * @param int $value
+     * @return void
+     */
+    public function setId(int $value): void;
 
     /**
      * Get the keyword

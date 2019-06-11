@@ -24,6 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_AdobeStockImageAdminUi::search</aclResource>
         <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider" name="adobe_stock_images_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -35,15 +36,43 @@
         <settings>
             <sticky>true</sticky>
         </settings>
-        <filterSearch name="fulltext"/>
-        <paging name="listing_paging"/>
+        <filterSearch name="words"/>
+        <paging name="listing_paging">
+            <settings>
+                <sizesConfig>
+                    <component>Magento_AdobeStockImageAdminUi/js/components/images-grid-sizes</component>
+                </sizesConfig>
+            </settings>
+        </paging>
+        <filters name="listing_filters">
+            <filterSelect name="orientation_filter" provider="${ $.parentName }">
+                <settings>
+                    <caption translate="true">Select...</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation\Options"/>
+                    <label translate="true">Orientation</label>
+                    <dataScope>orientation_filter</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="premium_price_filter" provider="${ $.parentName }">
+                <settings>
+                    <caption translate="true">Select...</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
+                    <label translate="true">Price</label>
+                    <dataScope>premium_price_filter</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
-        <column name="url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_Ui/js/grid/columns/thumbnail">
+        <column name="url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_AdobeStockImageAdminUi/js/components/masonry">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
+                    <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
+                </item>
+            </argument>
             <settings>
-                <filter>text</filter>
                 <label translate="true">Image</label>
-                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/cells/image</bodyTmpl>
             </settings>
         </column>
     </columns>

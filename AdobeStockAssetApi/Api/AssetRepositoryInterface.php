@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,11 +6,11 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Api;
+namespace Magento\AdobeStockAssetApi\Api;
 
-use Magento\AdobeStockImage\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -38,9 +37,9 @@ interface AssetRepositoryInterface
     /**
      * Get a list of assets
      * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultsInterface
+     * @return AssetSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria) : SearchResultsInterface;
+    public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface;
 
     /**
      * Get asset by id

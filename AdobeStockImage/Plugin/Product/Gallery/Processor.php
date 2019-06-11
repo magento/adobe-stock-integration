@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,10 +6,12 @@
 
 namespace Magento\AdobeStockImage\Plugin\Product\Gallery;
 
-use Magento\AdobeStockImage\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Processor as ProcessorSubject;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 
 class Processor
@@ -49,30 +50,33 @@ class Processor
     /**
      * Delete Adobe's stock asset after image was deleted
      * @param ProcessorSubject $subject
-     * @param $result
+     * @param ProcessorSubject $result
      * @param Product $product
-     * @param $file
+     * @param string $file
+     * @return ProcessorSubject
      */
     public function afterRemoveImage(ProcessorSubject $subject, $result, Product $product, $file)
     {
-        if (is_string($file)) {
-            $filters = [];
-            $filters[] = $this->filterBuilder
-                ->setField('path')
-                ->setConditionType('eq')
-                ->setValue($file)
-                ->create();
-            $criteriaAux = $this->searchCriteriaBuilderFactory->create();
-            $criteriaAux->addFilters($filters);
-            $criteria = $criteriaAux->create();
-            $search = $this->getList($criteria);
-            $items = $search->getItems();
-            if (count($items) > 0) {
-                foreach ($items as $item) {
-                    $id = (int)$item["id"];
-                    $this->assetRepository->deleteById($id);
-                }
-            }
+        if (!is_string($file)) {
+            return $result;
         }
+        $filters = [];
+        $filters[] = $this->filterBuilder
+            ->setField('path')
+            ->setConditionType('eq')
+            ->setValue($file)
+            ->create();
+
+        /** @var SearchCriteriaBuilder $criteriaBuilder */
+        $criteriaBuilder = $this->searchCriteriaBuilderFactory->create();
+        $criteriaBuilder->addFilters($filters);
+        $criteria = $criteriaBuilder->create();
+
+        /** @var AssetInterface $item */
+        foreach ($this->assetRepository->getList($criteria)->getItems() as $asset) {
+            $this->assetRepository->delete($asset);
+        }
+
+        return $result;
     }
 }

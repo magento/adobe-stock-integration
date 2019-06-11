@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
@@ -15,20 +16,20 @@ interface ConfigInterface
     /**
      * @return string
      */
-    public function getApiKey();
+    public function getApiKey() : string;
 
     /**
      * @return bool
      */
-    public function isEnabled();
+    public function isEnabled() : bool;
 
     /**
      * @return string
      */
-    public function getProductName();
+    public function getProductName() : string;
 
     /**
      * @return string
      */
-    public function getTargetEnvironment();
+    public function getTargetEnvironment() : string;
 }
