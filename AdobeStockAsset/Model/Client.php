@@ -20,7 +20,7 @@ use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterfaceFactory as SearchRe
 use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 
 /**
- * DataProvider for cms ui.
+ * Client for communication to Adobe Stock API
  */
 class Client implements ClientInterface
 {
@@ -41,9 +41,9 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     * @param ConfigInterface $config
+     * @param ConfigInterface       $config
      * @param AssetInterfaceFactory $assetFactory
-     * @param SearchResultFactory $searchResultFactory
+     * @param SearchResultFactory   $searchResultFactory
      */
     public function __construct(
         ConfigInterface $config,
@@ -60,7 +60,7 @@ class Client implements ClientInterface
      * @return SearchResultInterface
      * @throws \AdobeStock\Api\Exception\StockApi
      */
-    public function search(SearchRequestInterface $request) : SearchResultInterface
+    public function search(SearchRequestInterface $request): SearchResultInterface
     {
         $searchParams = new SearchParameters();
         $searchParams->setLimit($request->getSize());
@@ -95,13 +95,13 @@ class Client implements ClientInterface
         return $this->searchResultFactory->create(
             [
                 'items' => $items,
-                'count' => $response->getNbResults()
+                'count' => $response->getNbResults(),
             ]
         );
     }
 
     /**
-     * @param array $filters
+     * @param array            $filters
      * @param SearchParameters $searchParams
      * @throws \AdobeStock\Api\Exception\StockApi
      */
@@ -145,5 +145,26 @@ class Client implements ClientInterface
             $this->config->getProductName(),
             $this->config->getTargetEnvironment()
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function testConnection()
+    {
+        //TODO: should be refactored
+        $searchParams = new SearchParameters();
+        $searchRequest = new SearchFilesRequest();
+        $resultColumnArray = [];
+
+        $resultColumnArray[] = 'nb_results';
+
+        $searchRequest->setLocale('en_GB');
+        $searchRequest->setSearchParams($searchParams);
+        $searchRequest->setResultColumns($resultColumnArray);
+
+        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+
+        return (bool) $client->getNextResponse()->nb_results;
     }
 }

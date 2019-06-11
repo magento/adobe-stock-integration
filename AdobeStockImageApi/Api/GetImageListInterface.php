@@ -17,6 +17,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 interface GetImageListInterface
 {
     /**
+     * @api
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultsInterface
      */
