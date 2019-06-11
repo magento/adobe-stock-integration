@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Api\Data;
+namespace Magento\AdobeStockAssetApi\Api\Data;
 
 interface KeywordInterface
 {
