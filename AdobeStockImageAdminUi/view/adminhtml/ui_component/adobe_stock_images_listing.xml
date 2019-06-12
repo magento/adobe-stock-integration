@@ -61,6 +61,14 @@
                     <dataScope>premium_price_filter</dataScope>
                 </settings>
             </filterSelect>
+            <filterSelect name="offensive_filter" provider="${ $.parentName }">
+                <settings>
+                    <caption translate="true">Select...</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Offensive\Options"/>
+                    <label translate="true">Offensive</label>
+                    <dataScope>offensive_filter</dataScope>
+                </settings>
+            </filterSelect>
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
