@@ -61,6 +61,14 @@
                     <dataScope>premium_price_filter</dataScope>
                 </settings>
             </filterSelect>
+            <filterSelect name="isolated_filter" provider="${ $.parentName }">
+                <settings>
+                    <caption translate="true">Select...</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Isolated\Options"/>
+                    <label translate="true">Isolated images only</label>
+                    <dataScope>isolated_filter</dataScope>
+                </settings>
+            </filterSelect>
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
