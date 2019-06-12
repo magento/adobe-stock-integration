@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockImage\Api\Data\KeywordInterface;
-use Magento\AdobeStockImage\Model\ResourceModel\Keyword as ResourceModel;
-use Magento\Framework\Model\AbstractModel;
+use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
+use Magento\AdobeStockAsset\Model\ResourceModel\Keyword as ResourceModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
-class Keyword extends AbstractModel implements KeywordInterface
+class Keyword extends AbstractExtensibleModel implements KeywordInterface
 {
     /**
      * Construct
@@ -29,7 +29,7 @@ class Keyword extends AbstractModel implements KeywordInterface
      */
     public function getKeyword() : string
     {
-        return (string)$this->getData(self::FIELD_KEYWORD);
+        return (string)$this->getData(self::KEYWORD);
     }
 
     /**
@@ -38,6 +38,6 @@ class Keyword extends AbstractModel implements KeywordInterface
      */
     public function setKeyword(string $keyword)
     {
-        $this->setData(self::FIELD_KEYWORD, $keyword);
+        $this->setData(self::KEYWORD, $keyword);
     }
 }

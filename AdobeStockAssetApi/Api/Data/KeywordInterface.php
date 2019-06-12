@@ -18,7 +18,7 @@ interface KeywordInterface
      *
      * @return int
      */
-    public function getId() : int;
+    public function getId();
 
     /**
      * Set the id
@@ -26,7 +26,7 @@ interface KeywordInterface
      * @param int $value
      * @return void
      */
-    public function setId(int $value): void;
+    public function setId($value);
 
     /**
      * Get the keyword
