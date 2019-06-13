@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Model\Block\Wysiwyg\Images\Content\Plugin;
 
 use Magento\Backend\Block\Widget\Container;
-use Magento\AdobeStockAsset\Model\Config;
+use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\Framework\View\LayoutInterface;
 
 /**
@@ -17,15 +17,15 @@ use Magento\Framework\View\LayoutInterface;
 class AddSearchButton
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
     /**
      * AddSearchButton constructor.
-     * @param Config $config
+     * @param ConfigInterface $config
      */
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
     }

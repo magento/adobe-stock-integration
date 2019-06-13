@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model;
+namespace Magento\AdobeStockClient\Model;
 
-use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
@@ -26,18 +26,24 @@ class Config implements ConfigInterface
     private $scopeConfig;
 
     /**
+     * @var array
+     */
+    private $searchResultFields;
+
+    /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig, array $searchResultFields = [])
     {
         $this->scopeConfig = $scopeConfig;
+        $this->searchResultFields = $searchResultFields;
     }
 
     /**
      * @{inheritdoc}
      */
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return (bool) $this->scopeConfig->getValue(self::XML_PATH_ENABLED);
     }
@@ -45,7 +51,7 @@ class Config implements ConfigInterface
     /**
      * @{inheritdoc}
      */
-    public function getApiKey() : string
+    public function getApiKey(): string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_API_KEY);
     }
@@ -53,7 +59,7 @@ class Config implements ConfigInterface
     /**
      * @{inheritdoc}
      */
-    public function getTargetEnvironment() : string
+    public function getTargetEnvironment(): string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_ENVIRONMENT);
     }
@@ -61,8 +67,16 @@ class Config implements ConfigInterface
     /**
      * @{inheritdoc}
      */
-    public function getProductName() : string
+    public function getProductName(): string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME);
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getSearchResultFields(): array
+    {
+        return $this->searchResultFields;
     }
 }
