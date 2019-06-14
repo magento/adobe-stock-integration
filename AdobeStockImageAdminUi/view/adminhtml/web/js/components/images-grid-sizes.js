@@ -19,6 +19,10 @@ define([
                 value: 32,
                 label: 32
             },
+            '48': {
+                value: 48,
+                label: 48
+            },
             '64': {
                 value: 64,
                 label: 64
