@@ -17,7 +17,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\AdobeStockClinet\\": ""
+            "Magento\\AdobeStockClient\\": ""
         }
     },
     "repositories": {

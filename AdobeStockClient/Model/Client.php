@@ -13,13 +13,10 @@ use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchResultsInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
-use Magento\Framework\Api\Search\SearchResult;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
@@ -159,6 +156,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * TODO: Implement retriving of an access token
+     *
      * @return null
      */
     private function getAccessToken()
