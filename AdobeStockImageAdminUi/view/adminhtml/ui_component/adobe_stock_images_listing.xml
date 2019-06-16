@@ -77,15 +77,17 @@
                     <dataScope>isolated_filter</dataScope>
                 </settings>
             </filterSelect>
-            <colorPicker name="colors_filter" class="Magento\Ui\Component\Form\Element\ColorPicker" component="Magento_Ui/js/form/element/color-picker" template="ui/form/field" provider="${ $.parentName }">
-                <settings>
-                    <label translate="true">Color</label>
-                    <elementTmpl>ui/form/element/color-picker</elementTmpl>
-                    <colorFormat>HEX</colorFormat>
-                    <colorPickerMode>full</colorPickerMode>
-                    <dataScope>colors_filter</dataScope>
-                </settings>
-            </colorPicker>
+            <component name="colors_filter" class="Magento\Ui\Component\Form\Element\ColorPicker"  template="ui/form/element/color-picker" provider="${ $.parentName }">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Color</item>
+                        <item name="colorFormat" xsi:type="string">HEX</item>
+                        <item name="colorPickerMode" xsi:type="string">full</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/color-picker</item>
+                        <item name="dataScope" xsi:type="string">colors_filter</item>
+                    </item>
+                </argument>
+            </component>
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
