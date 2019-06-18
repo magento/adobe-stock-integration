@@ -77,7 +77,7 @@
                     <dataScope>isolated_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/template/grid/filter/color" provider="${ $.parentName }">
+            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/form/element/color-picker" provider="${ $.parentName }">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Color</item>
