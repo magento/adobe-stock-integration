@@ -21,15 +21,15 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
-                'label' => 'Horizontal',
+                'label' => __('Horizontal'),
                 'value' => 'HORIZONTAL'
             ],
             [
-                'label' => 'Vertical',
+                'label' => __('Vertical'),
                 'value' => 'VERTICAL'
             ],
             [
-                'label' => 'Square',
+                'label' => __('Square'),
                 'value' => 'SQUARE'
             ],
         ];
