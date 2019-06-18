@@ -9,8 +9,11 @@ namespace Magento\AdobeStockAsset\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
+use AdobeStock\Api\Exception\StockApi;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use Exception;
+use Magento\AdobeStockAsset\Model\Search\Filter;
 use Magento\AdobeStockAssetApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
@@ -19,6 +22,8 @@ use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterface;
 use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+use Magento\Framework\UrlInterface;
 
 /**
  * Client for communication to Adobe Stock API
@@ -39,23 +44,24 @@ class Client implements ClientInterface
      * @var SearchResultFactory
      */
     private $searchResultFactory;
+
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
      * Client constructor.
-     * @param ConfigInterface                 $config
-     * @param AssetInterfaceFactory           $assetFactory
-     * @param SearchResultFactory             $searchResultFactory
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param ConfigInterface       $config
+     * @param AssetInterfaceFactory $assetFactory
+     * @param SearchResultFactory   $searchResultFactory
+     * @param UrlInterface          $urlBuilder
      */
     public function __construct(
         ConfigInterface $config,
         AssetInterfaceFactory $assetFactory,
         SearchResultFactory $searchResultFactory,
-        \Magento\Framework\UrlInterface $urlBuilder
+        UrlInterface $urlBuilder
     ) {
         $this->config = $config;
         $this->assetFactory = $assetFactory;
@@ -66,7 +72,7 @@ class Client implements ClientInterface
     /**
      * @param SearchRequestInterface $request
      * @return SearchResultInterface
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @throws StockApi
      * @throws LocalizedException
      */
     public function search(SearchRequestInterface $request): SearchResultInterface
@@ -90,10 +96,9 @@ class Client implements ClientInterface
         $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
         try {
             $response = $client->getNextResponse();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (strpos($e->getMessage(), 'Api Key is invalid') !== false) {
-                $url = $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system');
-                throw new LocalizedException(__('Adobe Stock API not configured. Please, proceed to <a href="%1">Configuration → System → Adobe Stock Integration.</a>', $url));
+                $this->throwConfigException('Adobe Stock API Key in configuration is invalid.');
             }
             throw new LocalizedException(__($e->getMessage()));
         }
@@ -120,12 +125,12 @@ class Client implements ClientInterface
     /**
      * @param array            $filters
      * @param SearchParameters $searchParams
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @throws StockApi
      */
     private function setUpFilters(array $filters, SearchParameters $searchParams)
     {
         //TODO: should be refactored
-        /** @var \Magento\AdobeStockAsset\Model\Search\Filter $filter */
+        /** @var Filter $filter */
         foreach ($filters as $filter) {
             if ($filter->getField() === 'words') {
                 $searchParams->setWords($filter->getValue());
@@ -154,9 +159,13 @@ class Client implements ClientInterface
 
     /**
      * @return AdobeStock
+     * @throws LocalizedException
      */
     private function getClient()
     {
+        if ($this->config->getApiKey() === null) {
+            $this->throwConfigException('API Key has to be set before accessing Adobe Stock.');
+        }
         return new AdobeStock(
             $this->config->getApiKey(),
             $this->config->getProductName(),
@@ -166,6 +175,9 @@ class Client implements ClientInterface
 
     /**
      * @inheritDoc
+     * @return bool
+     * @throws LocalizedException
+     * @throws StockApi
      */
     public function testConnection()
     {
@@ -183,5 +195,27 @@ class Client implements ClientInterface
         $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
         return (bool)$client->getNextResponse()->nb_results;
+    }
+
+    /**
+     * @param string $message
+     * @throws LocalizedException
+     */
+    protected function throwConfigException($message): void
+    {
+        throw new LocalizedException(
+            __(
+                implode(
+                    ' ',
+                    [
+                        __($message),
+                        __(
+                            'Please, proceed to <a href="%1">Configuration → System → Adobe Stock Integration.</a>',
+                            $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system')
+                        )
+                    ]
+                )
+            )
+        );
     }
 }
