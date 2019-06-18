@@ -47,7 +47,7 @@ class Config implements ConfigInterface
      */
     public function getApiKey() : string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_API_KEY);
+        return $this->scopeConfig->getValue(self::XML_PATH_API_KEY) ?: '';
     }
 
     /**
@@ -55,7 +55,7 @@ class Config implements ConfigInterface
      */
     public function getTargetEnvironment() : string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_ENVIRONMENT);
+        return $this->scopeConfig->getValue(self::XML_PATH_ENVIRONMENT) ?: '';
     }
 
     /**
@@ -63,6 +63,6 @@ class Config implements ConfigInterface
      */
     public function getProductName() : string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME);
+        return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME) ?: '';
     }
 }
