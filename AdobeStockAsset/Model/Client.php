@@ -22,6 +22,7 @@ use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
 use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterface;
 use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -51,10 +52,10 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     * @param ConfigInterface                 $config
-     * @param AssetInterfaceFactory           $assetFactory
-     * @param SearchResultFactory             $searchResultFactory
-     * @param UrlInterface $urlBuilder
+     * @param ConfigInterface       $config
+     * @param AssetInterfaceFactory $assetFactory
+     * @param SearchResultFactory   $searchResultFactory
+     * @param UrlInterface          $urlBuilder
      */
     public function __construct(
         ConfigInterface $config,
@@ -97,8 +98,7 @@ class Client implements ClientInterface
             $response = $client->getNextResponse();
         } catch (Exception $e) {
             if (strpos($e->getMessage(), 'Api Key is invalid') !== false) {
-                $url = $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system');
-                throw new LocalizedException(__('Adobe Stock API not configured. Please, proceed to <a href="%1">Configuration → System → Adobe Stock Integration.</a>', $url));
+                $this->throwConfigException('Adobe Stock API Key in configuration is invalid.');
             }
             throw new LocalizedException(__($e->getMessage()));
         }
@@ -164,7 +164,7 @@ class Client implements ClientInterface
     private function getClient()
     {
         if ($this->config->getApiKey() === null) {
-            throw new LocalizedException(__('Api is not set'));
+            $this->throwConfigException('API Key has to be set before accessing Adobe Stock.');
         }
         return new AdobeStock(
             $this->config->getApiKey(),
@@ -195,5 +195,27 @@ class Client implements ClientInterface
         $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
         return (bool)$client->getNextResponse()->nb_results;
+    }
+
+    /**
+     * @param string $message
+     * @throws LocalizedException
+     */
+    protected function throwConfigException($message): void
+    {
+        throw new LocalizedException(
+            __(
+                implode(
+                    ' ',
+                    [
+                        __($message),
+                        __(
+                            'Please, proceed to <a href="%1">Configuration → System → Adobe Stock Integration.</a>',
+                            $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system')
+                        )
+                    ]
+                )
+            )
+        );
     }
 }
