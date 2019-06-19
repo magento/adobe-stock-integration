@@ -9,7 +9,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class Pagination implements SearchParameterProviderInterface
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {

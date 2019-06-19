@@ -178,7 +178,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function testConnection()
     {

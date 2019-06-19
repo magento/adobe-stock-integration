@@ -9,7 +9,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class Colors implements SearchParameterProviderInterface
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {

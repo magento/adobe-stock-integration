@@ -50,7 +50,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getCategory(): ?CategoryInterface
     {
@@ -58,7 +58,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setCategory(CategoryInterface $categoryId)
     {
