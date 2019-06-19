@@ -87,7 +87,7 @@ class GetImageList implements GetImageListInterface
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                $this->requestBuilder->bind($filter->getField(), $filter->getValue());
+                $this->requestBuilder->bind($filter->getField(), urlencode($filter->getValue()));
             }
         }
     }
