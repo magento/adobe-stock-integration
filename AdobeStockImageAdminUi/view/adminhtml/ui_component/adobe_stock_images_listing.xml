@@ -47,7 +47,7 @@
         <filters name="listing_filters">
             <filterSelect name="orientation_filter" provider="${ $.parentName }">
                 <settings>
-                    <caption translate="true">Select...</caption>
+                    <caption translate="true">All</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation\Options"/>
                     <label translate="true">Orientation</label>
                     <dataScope>orientation_filter</dataScope>
@@ -55,7 +55,7 @@
             </filterSelect>
             <filterSelect name="premium_price_filter" provider="${ $.parentName }">
                 <settings>
-                    <caption translate="true">Select...</caption>
+                    <caption translate="true">All</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
                     <label translate="true">Price</label>
                     <dataScope>premium_price_filter</dataScope>
@@ -63,7 +63,7 @@
             </filterSelect>
             <filterSelect name="offensive_filter" provider="${ $.parentName }">
                 <settings>
-                    <caption translate="true">Select...</caption>
+                    <caption translate="true">All</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Offensive\Options"/>
                     <label translate="true">Offensive</label>
                     <dataScope>offensive_filter</dataScope>
@@ -71,7 +71,7 @@
             </filterSelect>
             <filterSelect name="isolated_filter" provider="${ $.parentName }">
                 <settings>
-                    <caption translate="true">Select...</caption>
+                    <caption translate="true">No</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Isolated\Options"/>
                     <label translate="true">Isolated images only</label>
                     <dataScope>isolated_filter</dataScope>
