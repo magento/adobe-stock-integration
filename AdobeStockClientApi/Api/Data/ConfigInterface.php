@@ -13,9 +13,9 @@ namespace Magento\AdobeStockClientApi\Api\Data;
 interface ConfigInterface
 {
     /**
-     * @return string
+     * @return string|null
      */
-    public function getApiKey(): string;
+    public function getApiKey() : ?string;
 
     /**
      * @return bool
@@ -23,14 +23,14 @@ interface ConfigInterface
     public function isEnabled(): bool;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProductName(): string;
+    public function getProductName() : ?string;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTargetEnvironment(): string;
+    public function getTargetEnvironment() : ?string;
 
     /**
      * @return string[]
