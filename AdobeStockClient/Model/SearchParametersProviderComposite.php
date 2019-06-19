@@ -6,7 +6,7 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
-class SearchParametersProviderPool implements SearchParameterProviderInterface
+class SearchParametersProviderComposite implements SearchParameterProviderInterface
 {
     /**
      * @var SearchParameterProviderInterface[]
@@ -14,8 +14,8 @@ class SearchParametersProviderPool implements SearchParameterProviderInterface
     private $providers;
 
     /**
-     * SearchParametersProviderPool constructor.
-     * @param SearchParameterProviderInterface[] $providers
+     * SearchParametersProviderComposite constructor.
+     * @param array $providers
      */
     public function __construct(array $providers = [])
     {

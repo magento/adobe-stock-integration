@@ -82,7 +82,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param SearchRequestInterface $request
+     * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
      * @throws \AdobeStock\Api\Exception\StockApi
      */
