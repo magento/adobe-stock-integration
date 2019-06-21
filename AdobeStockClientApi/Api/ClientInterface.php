@@ -6,10 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAssetApi\Api;
+namespace Magento\AdobeStockClientApi\Api;
 
-use Magento\AdobeStockAssetApi\Api\Data\SearchRequestInterface;
-use Magento\AdobeStockAssetApi\Api\Data\SearchResultInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Client for communication to Adobe Stock API
@@ -19,10 +19,10 @@ interface ClientInterface
     /**
      * Perform a call to Adobe Stock API to perform assets search based on the search request
      *
-     * @param SearchRequestInterface $request
+     * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
      */
-    public function search(SearchRequestInterface $request): SearchResultInterface;
+    public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface;
 
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.
