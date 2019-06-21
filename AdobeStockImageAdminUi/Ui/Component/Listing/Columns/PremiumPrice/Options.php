@@ -21,10 +21,6 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
-                'label' => __('All'),
-                'value' => 'ALL'
-            ],
-            [
                 'label' => __('Standard'),
                 'value' => 'FALSE'
             ],
