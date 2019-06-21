@@ -19,6 +19,8 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        return [['value' => 1, 'label' => __('All')], ['value' => 0, 'label' => __('Only safe')]];
+        return [
+            ['value' => 0, 'label' => __('Only safe')]
+        ];
     }
 }
