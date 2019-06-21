@@ -8,9 +8,12 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchResultsInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory as SearchResultFactory;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 
 /**
  * Class GetImageList
@@ -23,21 +26,51 @@ class GetImageList implements GetImageListInterface
     private $client;
 
     /**
+     * @var AssetInterfaceFactory
+     */
+    private $assetFactory;
+
+    /**
+     * @var SearchResultFactory
+     */
+    private $searchResultFactory;
+
+    /**
      * GetImageList constructor.
      * @param ClientInterface $client
      */
     public function __construct(
-        ClientInterface $client
+        ClientInterface $client,
+        AssetInterfaceFactory $assetFactory,
+        SearchResultFactory $searchResultFactory
     ) {
         $this->client = $client;
+        $this->assetFactory = $assetFactory;
+        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultsInterface
+     * @inheritdoc
      */
-    public function execute(SearchCriteriaInterface $searchCriteria): SearchResultsInterface
+    public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
-        return $this->client->search($searchCriteria);
+        $searchResult = $this->client->search($searchCriteria);
+
+        $items = [];
+        foreach ($searchResult->getItems() as $item) {
+            /** @var AssetInterface $asset */
+            $asset = $this->assetFactory->create();
+            $asset->setId($item->getId());
+            $asset->setUrl($item->getCustomAttribute('url')->getValue());
+            $asset->setHeight($item->getCustomAttribute('height')->getValue());
+            $asset->setWidth($item->getCustomAttribute('width')->getValue());
+            $items[] = $asset;
+        }
+        return $this->searchResultFactory->create(
+            ['data' => [
+                'items' => $items,
+                'count' => $searchResult->getTotalCount()
+            ]]
+        );
     }
 }

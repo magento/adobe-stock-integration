@@ -77,6 +77,12 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      */
     public function getSearchResult()
     {
-        return $this->getImageList->execute($this->getSearchCriteria());
+        $result = $this->getImageList->execute($this->getSearchCriteria());
+        return $this->searchResultFactory->create(
+            $result->getItems(),
+            $result->getTotalCount(),
+            $this->getSearchCriteria(),
+            'id'
+        );
     }
 }
