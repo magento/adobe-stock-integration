@@ -16,7 +16,6 @@ use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
@@ -29,7 +28,7 @@ use \Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 class Client implements ClientInterface
 {
     /**
-     * @var ConfigInterface
+     * @var Config
      */
     private $config;
 
@@ -60,13 +59,13 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     * @param ConfigInterface $config
+     * @param Config $config
      * @param DocumentFactory $documentFactory
      * @param SearchResultFactory $searchResultFactory
      * @param AttributeValueFactory $attributeValueFactory
      */
     public function __construct(
-        ConfigInterface $config,
+        Config $config,
         DocumentFactory $documentFactory,
         SearchResultFactory $searchResultFactory,
         AttributeValueFactory $attributeValueFactory,

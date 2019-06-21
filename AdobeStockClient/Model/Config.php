@@ -7,15 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
 
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Config
  */
-class Config implements ConfigInterface
+class Config
 {
-    private const XML_PATH_ENABLED = 'adobe_stock/integration/enabled';
     private const XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
     private const XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
@@ -41,15 +39,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @{inheritdoc}
-     */
-    public function isEnabled(): bool
-    {
-        return (bool) $this->scopeConfig->getValue(self::XML_PATH_ENABLED);
-    }
-
-    /**
-     * @{inheritdoc}
+     * API key for integration
+     *
+     * @return string|null
      */
     public function getApiKey() : ?string
     {
@@ -57,7 +49,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @{inheritdoc}
+     * Environment configuration
+     *
+     * @return string|null
      */
     public function getTargetEnvironment() : ?string
     {
@@ -65,7 +59,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @{inheritdoc}
+     * Product name
+     *
+     * @return string|null
      */
     public function getProductName() : ?string
     {
@@ -73,6 +69,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Search result configuration
+     *
      * @return array|string[]
      */
     public function getSearchResultFields(): array
