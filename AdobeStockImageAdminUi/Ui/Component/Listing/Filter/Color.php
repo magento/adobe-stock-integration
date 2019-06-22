@@ -18,10 +18,14 @@ use Magento\Ui\Component\Form\Element\ColorPicker;
 use Magento\Ui\Component\Form\Element\Input as ElementInput;
 use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
+use Magento\Ui\Component\Filters\Type\Input;
 
 class Color extends AbstractFilter
 {
-    const COMPONENT = 'input';
+    /**
+     * @inheritdoc
+     */
+    const NAME = 'filter_input';
 
     /**
      * Wrapped component
@@ -39,13 +43,13 @@ class Color extends AbstractFilter
 
     /**
      * Color constructor.
-     * @param ContextInterface   $context
+     * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param FilterBuilder      $filterBuilder
-     * @param FilterModifier     $filterModifier
+     * @param FilterBuilder $filterBuilder
+     * @param FilterModifier $filterModifier
      * @param ColorModesProvider $modesProvider
-     * @param array              $components
-     * @param array              $data
+     * @param array $components
+     * @param array $data
      */
     public function __construct(
         ContextInterface $context,
@@ -77,7 +81,7 @@ class Color extends AbstractFilter
     {
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
-            static::COMPONENT,
+            Input::COMPONENT,
             ['context' => $this->getContext()]
         );
         $this->wrappedComponent->prepare();
@@ -104,15 +108,13 @@ class Color extends AbstractFilter
     }
 
     /**
-     * Initialize Color Picker Config
+     * Initialize color picker configuration
      */
-    private function initColorPickerConfig()
+    private function initColorPickerConfig(): void
     {
-        $modes = $this->modesProvider->getModes();
-        $colorPickerModeSetting = $this->getData('config/colorPickerMode');
-        $colorFormatSetting = $this->getData('config/colorFormat');
-        $colorPickerMode = $modes[$colorPickerModeSetting] ?? $modes[ColorPicker::DEFAULT_MODE];
-        $colorPickerMode['preferredFormat'] = $colorFormatSetting;
+        $mode = $this->getData('config/colorPickerMode') ?? ColorPicker::DEFAULT_MODE;
+        $colorPickerMode = $this->modesProvider->getModes()[$mode];
+        $colorPickerMode['preferredFormat'] = $this->getData('config/colorFormat');
         $this->_data['config']['colorPickerConfig'] = $colorPickerMode;
     }
 
@@ -121,15 +123,15 @@ class Color extends AbstractFilter
      *
      * @return void
      */
-    protected function applyFilter(): void
+    private function applyFilter(): void
     {
         if (isset($this->filterData[$this->getName()])) {
-            $value = str_replace(['%', '_'], ['\%', '\_'], $this->filterData[$this->getName()]);
+            $value = str_replace(['%', '_', '#'], ['\%', '\_', ''], $this->filterData[$this->getName()]);
 
             if ($value || $value === '0') {
                 $filter = $this->filterBuilder->setConditionType('like')
                     ->setField($this->getName())
-                    ->setValue(str_replace('#', '', urldecode($value)))
+                    ->setValue($value)
                     ->create();
 
                 $this->getContext()->getDataProvider()->addFilter($filter);

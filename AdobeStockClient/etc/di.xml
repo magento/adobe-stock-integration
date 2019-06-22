@@ -31,7 +31,6 @@
                 <item name="pagination" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Pagination</item>
                 <item name="content_type_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\ContentType</item>
                 <item name="isolated_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Isolated</item>
-                <item name="colors_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Colors</item>
                 <item name="offensive_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Offensive</item>
             </argument>
         </arguments>
@@ -42,6 +41,7 @@
                 <item name="premium_price_filter" xsi:type="string">setFilterPremium</item>
                 <item name="orientation_filter" xsi:type="string">setOrientation</item>
                 <item name="words" xsi:type="string">setWords</item>
+                <item name="colors_filter" xsi:type="string">setFilterColors</item>
             </argument>
         </arguments>
     </type>
