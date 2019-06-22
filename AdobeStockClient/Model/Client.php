@@ -97,7 +97,7 @@ class Client implements ClientInterface
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $response = $this->doSearchRequest($searchCriteria);
+        $response = $this->processSearchRequest($searchCriteria);
         $items = [];
         /** @var StockFile $file */
         foreach ($response->getFiles() as $file) {
@@ -124,7 +124,7 @@ class Client implements ClientInterface
      *
      * @return \AdobeStock\Api\Response\SearchFiles
      */
-    private function doSearchRequest(SearchCriteriaInterface $searchCriteria)
+    private function processSearchRequest(SearchCriteriaInterface $searchCriteria)
     {
         try {
             $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
