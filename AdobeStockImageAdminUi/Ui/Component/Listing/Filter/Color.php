@@ -5,20 +5,22 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter;
 
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\Component\Form\Element\ColorPicker;
 use Magento\Ui\Component\Form\Element\Input as ElementInput;
 use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
 
 class Color extends AbstractFilter
 {
-    const NAME = 'filter_input';
-
     const COMPONENT = 'input';
 
     /**
@@ -26,7 +28,7 @@ class Color extends AbstractFilter
      *
      * @var ElementInput
      */
-    protected $wrappedComponent;
+    private $wrappedComponent;
 
     /**
      * Provides color picker modes configuration
@@ -35,6 +37,16 @@ class Color extends AbstractFilter
      */
     private $modesProvider;
 
+    /**
+     * Color constructor.
+     * @param ContextInterface   $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param FilterBuilder      $filterBuilder
+     * @param FilterModifier     $filterModifier
+     * @param ColorModesProvider $modesProvider
+     * @param array              $components
+     * @param array              $data
+     */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
@@ -59,6 +71,7 @@ class Color extends AbstractFilter
      * Prepare component configuration
      *
      * @return void
+     * @throws LocalizedException
      */
     public function prepare(): void
     {
@@ -90,12 +103,15 @@ class Color extends AbstractFilter
         parent::prepare();
     }
 
+    /**
+     * Initialize Color Picker Config
+     */
     private function initColorPickerConfig()
     {
         $modes = $this->modesProvider->getModes();
         $colorPickerModeSetting = $this->getData('config/colorPickerMode');
         $colorFormatSetting = $this->getData('config/colorFormat');
-        $colorPickerMode = $modes[$colorPickerModeSetting] ?? $modes[\Magento\Ui\Component\Form\Element\ColorPicker::DEFAULT_MODE];
+        $colorPickerMode = $modes[$colorPickerModeSetting] ?? $modes[ColorPicker::DEFAULT_MODE];
         $colorPickerMode['preferredFormat'] = $colorFormatSetting;
         $this->_data['config']['colorPickerConfig'] = $colorPickerMode;
     }
