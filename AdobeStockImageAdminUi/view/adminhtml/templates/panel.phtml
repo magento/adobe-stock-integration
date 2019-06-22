@@ -5,17 +5,13 @@
  */
 ?>
 
-<div id="adobe-stock-images-search-modal"
-     data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= $block->escapeJs(__('Adobe Stock')) ?>",
-         "buttons":[]}}' class="no-display">
-    <div class="adobe-stock-images-search-modal-content">
-        <?php echo $block->getChildHtml(); ?>
-    </div>
-</div>
-
-<script>
-    require(['jquery', 'mage/apply/main'], function ($, main) {
-        main.apply();
-        $('#adobe-stock-images-search-modal').applyBindings();
-    })
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_AdobeStockImageAdminUi/js/panel": {
+                "ajaxUrl" : "<?= /* @noEscape */ $block->getAjaxUrl() ?>",
+                "modalWindowId" : "adobe-stock-images-search-modal"
+            }
+        }
+    }
 </script>
