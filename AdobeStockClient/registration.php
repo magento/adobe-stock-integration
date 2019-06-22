@@ -6,4 +6,4 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_AdobeStockImageAdminUi', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_AdobeStockClient', __DIR__);
