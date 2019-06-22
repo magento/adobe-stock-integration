@@ -1,3 +1,5 @@
+@import AdobeStockClient
+@import AdobeStockClientApi
 @import AdobeStockAsset
 @import AdobeStockAssetApi
 @import AdobeStockImage
