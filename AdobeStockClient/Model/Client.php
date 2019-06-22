@@ -12,6 +12,8 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use \Magento\AdobeStockClientApi\Api\ExceptionManagerInterface;
+use \Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -20,7 +22,6 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use \Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 
 /**
  * Client for communication to Adobe Stock API
@@ -58,11 +59,20 @@ class Client implements ClientInterface
     private $localeResolver;
 
     /**
+     * @var ExceptionManagerInterface
+     */
+    private $exceptionManager;
+
+    /**
      * Client constructor.
-     * @param Config $config
-     * @param DocumentFactory $documentFactory
-     * @param SearchResultFactory $searchResultFactory
-     * @param AttributeValueFactory $attributeValueFactory
+     *
+     * @param Config                           $config
+     * @param DocumentFactory                  $documentFactory
+     * @param SearchResultFactory              $searchResultFactory
+     * @param AttributeValueFactory            $attributeValueFactory
+     * @param SearchParameterProviderInterface $searchParametersProvider
+     * @param LocaleResolver                   $localeResolver
+     * @param ExceptionManagerInterface        $exceptionManager
      */
     public function __construct(
         Config $config,
@@ -70,7 +80,8 @@ class Client implements ClientInterface
         SearchResultFactory $searchResultFactory,
         AttributeValueFactory $attributeValueFactory,
         SearchParameterProviderInterface $searchParametersProvider,
-        LocaleResolver $localeResolver
+        LocaleResolver $localeResolver,
+        ExceptionManagerInterface $exceptionManager
     ) {
         $this->config = $config;
         $this->documentFactory = $documentFactory;
@@ -78,31 +89,15 @@ class Client implements ClientInterface
         $this->attributeValueFactory = $attributeValueFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
+        $this->exceptionManager = $exceptionManager;
     }
 
     /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultInterface
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @inheritdoc
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
-
-        $resultsColumns = Constants::getResultColumns();
-        $resultColumnArray = [];
-        foreach ($this->config->getSearchResultFields() as $field) {
-            $resultColumnArray[] = $resultsColumns[$field];
-        }
-
-        $searchRequest = new SearchFilesRequest();
-        $searchRequest->setLocale($this->localeResolver->getLocale());
-        $searchRequest->setSearchParams($searchParams);
-        $searchRequest->setResultColumns($resultColumnArray);
-
-        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
-        $response = $client->getNextResponse();
-
+        $response = $this->doSearchRequest($searchCriteria);
         $items = [];
         /** @var StockFile $file */
         foreach ($response->getFiles() as $file) {
@@ -122,6 +117,39 @@ class Client implements ClientInterface
         $searchResult->setItems($items);
         $searchResult->setTotalCount($response->getNbResults());
         return $searchResult;
+    }
+
+    /**
+     * @param SearchCriteriaInterface $searchCriteria
+     *
+     * @return \AdobeStock\Api\Response\SearchFiles
+     */
+    private function doSearchRequest(SearchCriteriaInterface $searchCriteria)
+    {
+        try {
+            $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
+
+            $resultsColumns = Constants::getResultColumns();
+            $resultColumnArray = [];
+            foreach ($this->config->getSearchResultFields() as $field) {
+                $resultColumnArray[] = $resultsColumns[$field];
+            }
+
+            $searchRequest = new SearchFilesRequest();
+            $searchRequest->setLocale($this->localeResolver->getLocale());
+            $searchRequest->setSearchParams($searchParams);
+            $searchRequest->setResultColumns($resultColumnArray);
+
+            $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+            $response = $client->getNextResponse();
+
+            return $response;
+        } catch (\Exception $exception) {
+            $this->exceptionManager->processException(
+                $exception,
+                ExceptionManagerInterface::FORBIDDEN_CONNECTION_ERROR_CODE
+            );
+        }
     }
 
     /**
