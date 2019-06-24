@@ -12,11 +12,7 @@
     "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
     "fieldToCheck": "success",
     "failedText": "<?= $block->escapeHtmlAttr(__('Connection failed! Test again?')) ?>", "validation": {}}}'>
-    <span>
-        <span>
-            <span id="<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>_result">
-                <?= $block->escapeHtml($block->getData('button_label')) ?>
-            </span>
-        </span>
+    <span id="<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>_result">
+        <?= $block->escapeHtml($block->getData('button_label')) ?>
     </span>
 </button>
