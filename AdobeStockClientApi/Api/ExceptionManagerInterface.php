@@ -8,6 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClientApi\Api;
 
+/**
+ * Interface ExceptionManagerInterface
+ * @api
+ */
 interface ExceptionManagerInterface
 {
     const DEFAULT_CLIENT_EXCEPTION_MESSAGE = 'Unknown error appeared during Adobe Stock client initialization.';
