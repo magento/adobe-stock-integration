@@ -44,7 +44,24 @@
                 </sizesConfig>
             </settings>
         </paging>
+        <container name="sorting" component="Magento_AdobeStockImageAdminUi/js/components/sorting">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
+                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns</item>
+                    </item>
+                </item>
+            </argument>
+        </container>
         <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
             <filterSelect name="orientation_filter" provider="${ $.parentName }">
                 <settings>
                     <caption translate="true">All</caption>
@@ -89,6 +106,41 @@
             </argument>
             <settings>
                 <label translate="true">Image</label>
+            </settings>
+        </column>
+        <column name="relevance">
+            <settings>
+                <label translate="true">Relevance</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="creation">
+            <settings>
+                <label translate="true">Creation</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="popularity">
+            <settings>
+                <label translate="true">Popularity</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="nb_downloads">
+            <settings>
+                <label translate="true">Downloads</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="undiscovered">
+            <settings>
+                <label translate="true">Undiscovered</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
             </settings>
         </column>
     </columns>

@@ -33,6 +33,7 @@
                 <item name="isolated_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Isolated</item>
                 <item name="colors_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Colors</item>
                 <item name="offensive_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Offensive</item>
+                <item name="sorting" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Sorting</item>
             </argument>
         </arguments>
     </type>
