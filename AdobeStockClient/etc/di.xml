@@ -13,7 +13,7 @@
                 <item name="0" xsi:type="string">ID</item>
                 <item name="1" xsi:type="string">NB_RESULTS</item>
                 <item name="2" xsi:type="string">COMP_URL</item>
-                <item name="3" xsi:type="string">THUMBNAIL_500_URL</item>
+                <item name="3" xsi:type="string">THUMBNAIL_240_URL</item>
                 <item name="4" xsi:type="string">WIDTH</item>
                 <item name="5" xsi:type="string">HEIGHT</item>
             </argument>
