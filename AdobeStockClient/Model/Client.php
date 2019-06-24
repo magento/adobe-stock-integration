@@ -16,6 +16,7 @@ use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockClientApi\Api\ConnectionAdapterInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
@@ -58,11 +59,19 @@ class Client implements ClientInterface
     private $localeResolver;
 
     /**
+     * @var ConnectionAdapterInterface
+     */
+    private $connectionAdapter;
+
+    /**
      * Client constructor.
-     * @param Config $config
-     * @param DocumentFactory $documentFactory
-     * @param SearchResultFactory $searchResultFactory
-     * @param AttributeValueFactory $attributeValueFactory
+     *
+     * @param Config                           $config
+     * @param DocumentFactory                  $documentFactory
+     * @param SearchResultFactory              $searchResultFactory
+     * @param AttributeValueFactory            $attributeValueFactory
+     * @param SearchParameterProviderInterface $searchParametersProvider
+     * @param LocaleResolver                   $localeResolver
      */
     public function __construct(
         Config $config,
@@ -70,7 +79,8 @@ class Client implements ClientInterface
         SearchResultFactory $searchResultFactory,
         AttributeValueFactory $attributeValueFactory,
         SearchParameterProviderInterface $searchParametersProvider,
-        LocaleResolver $localeResolver
+        LocaleResolver $localeResolver,
+        ConnectionAdapterInterface $connectionAdapter
     ) {
         $this->config = $config;
         $this->documentFactory = $documentFactory;
@@ -78,6 +88,7 @@ class Client implements ClientInterface
         $this->attributeValueFactory = $attributeValueFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
+        $this->connectionAdapter = $connectionAdapter;
     }
 
     /**
@@ -155,6 +166,19 @@ class Client implements ClientInterface
     }
 
     /**
+     * @return AdobeStock
+     */
+    private function getClient(): AdobeStock
+    {
+        $this->connectionAdapter->setApiKey($this->config->getApiKey());
+        $this->connectionAdapter->setProductName($this->config->getProductName());
+        $this->connectionAdapter->setTargetEnvironment($this->config->getTargetEnvironment());
+        $client = $this->connectionAdapter->initializeConnection();
+
+        return $client;
+    }
+
+    /**
      * TODO: Implement retriving of an access token
      *
      * @return null
@@ -162,18 +186,6 @@ class Client implements ClientInterface
     private function getAccessToken()
     {
         return null;
-    }
-
-    /**
-     * @return AdobeStock
-     */
-    private function getClient()
-    {
-        return new AdobeStock(
-            $this->config->getApiKey(),
-            $this->config->getProductName(),
-            $this->config->getTargetEnvironment()
-        );
     }
 
     /**
