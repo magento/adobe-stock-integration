@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation;
 
@@ -20,21 +21,17 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
-                'label' => 'Horizontal',
+                'label' => __('Horizontal'),
                 'value' => 'HORIZONTAL'
             ],
             [
-                'label' => 'Vertical',
+                'label' => __('Vertical'),
                 'value' => 'VERTICAL'
             ],
             [
-                'label' => 'Square',
+                'label' => __('Square'),
                 'value' => 'SQUARE'
             ],
-            [
-                'label' => 'All',
-                'value' => 'ALL'
-            ]
         ];
     }
 }

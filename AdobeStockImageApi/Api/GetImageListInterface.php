@@ -4,11 +4,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImageApi\Api;
 
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Interface
@@ -16,8 +17,9 @@ use Magento\Framework\Api\SearchResultsInterface;
 interface GetImageListInterface
 {
     /**
+     * @api
      * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultsInterface
+     * @return AssetSearchResultsInterface
      */
-    public function execute(SearchCriteriaInterface $searchCriteria): SearchResultsInterface;
+    public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface;
 }

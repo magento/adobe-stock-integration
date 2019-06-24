@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdobeStockImage\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchResultsInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\AdobeStockImageApi\Api\Data\ImageInterfaceFactory;
-use Magento\Framework\Api\SearchResultsInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\ClientInterface;
-use Magento\AdobeStockAssetApi\Api\SearchRequestBuilderInterface;
-use Magento\Framework\Locale\ResolverInterface;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory as SearchResultFactory;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 
 /**
  * Class GetImageList
@@ -20,81 +21,56 @@ use Magento\Framework\Locale\ResolverInterface;
 class GetImageList implements GetImageListInterface
 {
     /**
-     * @var ImageInterfaceFactory
-     */
-    private $imageFactory;
-
-    /**
-     * @var SearchResultsInterfaceFactory
-     */
-    private $searchResultFactory;
-
-    /**
      * @var ClientInterface
      */
     private $client;
 
     /**
-     * @var SearchRequestBuilderInterface
+     * @var AssetInterfaceFactory
      */
-    private $requestBuilder;
+    private $assetFactory;
 
     /**
-     * @var ResolverInterface
+     * @var SearchResultFactory
      */
-    private $localeResolver;
+    private $searchResultFactory;
 
     /**
      * GetImageList constructor.
      * @param ClientInterface $client
-     * @param ImageInterfaceFactory $imageFactory
-     * @param SearchResultsInterfaceFactory $searchResultFactory
-     * @param SearchRequestBuilderInterface $requestBuilder
      */
     public function __construct(
         ClientInterface $client,
-        ImageInterfaceFactory $imageFactory,
-        SearchResultsInterfaceFactory $searchResultFactory,
-        SearchRequestBuilderInterface $requestBuilder,
-        ResolverInterface $localeResolver
+        AssetInterfaceFactory $assetFactory,
+        SearchResultFactory $searchResultFactory
     ) {
-        $this->imageFactory = $imageFactory;
-        $this->searchResultFactory = $searchResultFactory;
         $this->client = $client;
-        $this->requestBuilder = $requestBuilder;
-        $this->localeResolver = $localeResolver;
+        $this->assetFactory = $assetFactory;
+        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultsInterface
+     * @inheritdoc
      */
-    public function execute(SearchCriteriaInterface $searchCriteria): SearchResultsInterface
+    public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
-        $this->requestBuilder->setName('adobe_stock_image_search');
-        $this->requestBuilder->setSize($searchCriteria->getPageSize());
-        $this->requestBuilder->setOffset($searchCriteria->getCurrentPage());
-        $this->requestBuilder->setLocale($this->localeResolver->getLocale());
-        $this->applyFilters($searchCriteria);
+        $searchResult = $this->client->search($searchCriteria);
 
-        $response = $this->client->search($this->requestBuilder->create());
-
-        $result = $this->searchResultFactory->create();
-        $result->setItems($response->getItems());
-        $result->setTotalCount($response->getCount());
-        $result->setSearchCriteria($searchCriteria);
-        return $result;
-    }
-
-    /**
-     * @param SearchCriteriaInterface $searchCriteria
-     */
-    private function applyFilters(SearchCriteriaInterface $searchCriteria)
-    {
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $this->requestBuilder->bind($filter->getField(), $filter->getValue());
-            }
+        $items = [];
+        foreach ($searchResult->getItems() as $item) {
+            /** @var AssetInterface $asset */
+            $asset = $this->assetFactory->create();
+            $asset->setId($item->getId());
+            $asset->setUrl($item->getCustomAttribute('url')->getValue());
+            $asset->setHeight($item->getCustomAttribute('height')->getValue());
+            $asset->setWidth($item->getCustomAttribute('width')->getValue());
+            $items[] = $asset;
         }
+        return $this->searchResultFactory->create(
+            ['data' => [
+                'items' => $items,
+                'count' => $searchResult->getTotalCount()
+            ]]
+        );
     }
 }

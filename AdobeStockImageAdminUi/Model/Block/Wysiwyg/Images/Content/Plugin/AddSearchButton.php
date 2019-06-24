@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Model\Block\Wysiwyg\Images\Content\Plugin;
 
-use Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 use Magento\AdobeStockAsset\Model\Config;
+use Magento\Backend\Block\Widget\Container;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Plugin for media gallery block adding button to the toolbar.
@@ -31,10 +33,12 @@ class AddSearchButton
     /**
      * Add Adobe Stock Search button to the toolbar
      *
-     * @param Content $subject
+     * @param Container $subject
      * @return null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSetLayout(Content $subject)
+    public function beforeSetLayout(Container $subject, LayoutInterface $layout)
     {
         if ($this->config->isEnabled()) {
             $subject->addButton(

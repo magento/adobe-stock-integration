@@ -16,5 +16,5 @@ define([
             buttons: [],
             title: $t('Adobe Stock')
         }).applyBindings();
-    }
+    };
 });

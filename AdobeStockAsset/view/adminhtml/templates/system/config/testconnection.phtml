@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config\TestConnection */
+?>
+<button class="scalable" type="button" id="<?= $block->escapeUrl($block->getData('html_id')) ?>" data-mage-init='{"testConnection":{
+    "url": "<?= /* @escapeNotVerified */ $block->getData('ajax_url') ?>",
+    "elementId": "<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>",
+    "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
+    "fieldToCheck": "success",
+    "failedText": "<?= $block->escapeHtmlAttr(__('Connection failed! Test again?')) ?>", "validation": {}}}'>
+    <span>
+        <span>
+            <span id="<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>_result">
+                <?= $block->escapeHtml($block->getData('button_label')) ?>
+            </span>
+        </span>
+    </span>
+</button>
