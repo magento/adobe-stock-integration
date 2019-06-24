@@ -32,6 +32,7 @@
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
+                    <comment><![CDATA[Works only for the saved value. Please, save API key before test.]]></comment>
                 </field>
             </group>
         </section>

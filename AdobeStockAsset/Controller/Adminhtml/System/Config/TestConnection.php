@@ -13,8 +13,6 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filter\StripTags;
 
 class TestConnection extends Action
 {
@@ -31,11 +29,6 @@ class TestConnection extends Action
     private $resultJsonFactory;
 
     /**
-     * @var StripTags
-     */
-    private $tagFilter;
-
-    /**
      * @var ClientInterface
      */
     private $client;
@@ -46,17 +39,14 @@ class TestConnection extends Action
      * @param Context         $context
      * @param ClientInterface $client
      * @param JsonFactory     $resultJsonFactory
-     * @param StripTags       $tagFilter
      */
     public function __construct(
         Context $context,
         ClientInterface $client,
-        JsonFactory $resultJsonFactory,
-        StripTags $tagFilter
+        JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->tagFilter = $tagFilter;
         $this->client = $client;
     }
 
@@ -67,24 +57,42 @@ class TestConnection extends Action
      */
     public function execute()
     {
-        $result = [
-            'success'      => false,
-            'errorMessage' => '',
-        ];
-
-        try {
-            if (!$this->client->testConnection()) {
-                throw new LocalizedException(__('Invalid API Key.'));
-            }
-            $result['success'] = true;
-        } catch (\Exception $e) {
-            $message = __('Invalid API Key.');
-            $result['errorMessage'] = $this->tagFilter->filter($message);
-        }
+        $isConnectionCreated = $this->isConnectionCreated();
+        $message = $this->getResultMessage($isConnectionCreated);
 
         /** @var Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData([
+            'success' => $isConnectionCreated,
+            'message' => $message,
+        ]);
+    }
 
-        return $resultJson->setData($result);
+    /**
+     * @return bool
+     */
+    private function isConnectionCreated(): bool
+    {
+        try {
+            $isConnectionCreated = $this->client->testConnection();
+        } catch (\Exception $e) {
+            $isConnectionCreated = false;
+        }
+
+        return $isConnectionCreated;
+    }
+
+    /**
+     * @param bool $isConnectionCreated
+     *
+     * @return string
+     */
+    private function getResultMessage(bool $isConnectionCreated): string
+    {
+        $message = $isConnectionCreated ?
+            __('API key is valid. Connection successfully established.')
+            : __('Invalid API Key. Connection refused.');
+
+        return $message;
     }
 }
