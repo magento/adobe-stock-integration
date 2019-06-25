@@ -24,7 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_AdobeStockImageAdminUi::search</aclResource>
+        <aclResource>Magento_AdobeStockImageAdminUi::save_preview_images</aclResource>
         <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider" name="adobe_stock_images_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
