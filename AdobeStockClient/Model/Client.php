@@ -9,6 +9,7 @@ namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
+use AdobeStock\Api\Exception\StockApi;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
@@ -144,7 +145,24 @@ class Client implements ClientInterface
             $response = $client->getNextResponse();
 
             return $response;
+        } catch (StockApi $exception) {
+            $this->exceptionManager->processException(
+                $exception,
+                $exception->getCode()
+            );
         } catch (\Exception $exception) {
+            $this->exceptionManager->processException(
+                $exception,
+                $exception->getCode()
+            );
+        }
+        finally {
+            $unknownException = 'An Unknown exception happened during search request.';
+            $exception = new \Exception(
+                $unknownException,
+                ExceptionManagerInterface::DEFAULT_CLIENT_EXCEPTION_CODE,
+                null
+            );
             $this->exceptionManager->processException(
                 $exception,
                 ExceptionManagerInterface::FORBIDDEN_CONNECTION_ERROR_CODE

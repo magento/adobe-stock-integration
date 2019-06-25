@@ -9,6 +9,7 @@ namespace Magento\AdobeStockClient\Model;
 
 use Magento\AdobeStockClientApi\Api\ExceptionManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\UrlInterface;
 
 class ExceptionManager implements ExceptionManagerInterface
@@ -19,6 +20,11 @@ class ExceptionManager implements ExceptionManagerInterface
     private $urlBuilder;
 
     /**
+     * @var ModuleManager
+     */
+    private $moduleManager;
+
+    /**
      * @var string
      */
     private $errorMessage = '';
@@ -26,11 +32,13 @@ class ExceptionManager implements ExceptionManagerInterface
     /**
      * ExceptionManager constructor.
      *
-     * @param UrlInterface $urlBuilder
+     * @param UrlInterface  $urlBuilder
+     * @param ModuleManager $moduleManager
      */
-    public function __construct(UrlInterface $urlBuilder)
+    public function __construct(UrlInterface $urlBuilder, ModuleManager $moduleManager)
     {
         $this->urlBuilder = $urlBuilder;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -59,11 +67,23 @@ class ExceptionManager implements ExceptionManagerInterface
 
     private function buildForbiddenConnectionMessage()
     {
-        $url = $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system');
-        $this->errorMessage = sprintf(
-            'Adobe Stock API not configured. Please, proceed to <a href="%s">Configuration → System → Adobe Stock Integration.</a>',
-            $url
-        );
+        if ($this->isAdminUIEnabled()) {
+            $url = $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system');
+            $this->errorMessage = sprintf(
+                'Adobe Stock API not configured. Please, proceed to <a href="%s">Configuration → System → Adobe Stock Integration.</a>',
+                $url
+            );
+        } else {
+            $this->errorMessage = 'Invalid API key. Connection refused.';
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isAdminUIEnabled(): bool
+    {
+        return $this->moduleManager->isEnabled('Magento_AdobeStockAsset');
     }
 
     private function buildDefaultErrorMessage()
