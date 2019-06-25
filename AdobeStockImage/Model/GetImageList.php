@@ -67,10 +67,12 @@ class GetImageList implements GetImageListInterface
             $items[] = $asset;
         }
         return $this->searchResultFactory->create(
-            ['data' => [
-                'items' => $items,
-                'count' => $searchResult->getTotalCount()
-            ]]
+            [
+                'data' => [
+                    'items' => $items,
+                    'total_count' => $searchResult->getTotalCount()
+                ]
+            ]
         );
     }
 }
