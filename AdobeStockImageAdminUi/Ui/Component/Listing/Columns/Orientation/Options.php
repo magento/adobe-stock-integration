@@ -32,6 +32,10 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
                 'label' => __('Square'),
                 'value' => 'SQUARE'
             ],
+            [
+                'label' => __('Panoramic'),
+                'value' => 'PANORAMIC'
+            ],
         ];
     }
 }
