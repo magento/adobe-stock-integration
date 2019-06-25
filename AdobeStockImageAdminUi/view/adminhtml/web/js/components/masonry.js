@@ -4,8 +4,9 @@
  */
 define([
     'uiElement',
-    'jquery'
-], function (Element, $) {
+    'jquery',
+    'knockout'
+], function (Element, $, ko) {
     'use strict';
 
     return Element.extend({
@@ -84,8 +85,6 @@ define([
         initComponent: function (rows) {
             this.images([]);
             if (!rows.length) {
-                this.totalHeight = 0;
-                this.setContainerHeight();
                 return;
             }
 
@@ -94,7 +93,6 @@ define([
 
             this.prepareImages(rows);
             this.setLayoutStyles();
-            this.setContainerHeight();
             this.setEventListener();
             return this;
         },
@@ -108,7 +106,14 @@ define([
                 return {
                     src: asset.url,
                     ratio: (asset.width / asset.height).toFixed(2),
-                    id: asset.id
+                    id: asset.id,
+                    width: asset.width,
+                    height: asset.height,
+                    preview_url: asset.preview_url || asset.url,
+                    firstInARow: ko.observable(false),
+                    lastInARow: ko.observable(false),
+                    firstRow: ko.observable(false),
+                    lastRow: ko.observable(false),
                 };
             }));
         },
@@ -121,7 +126,6 @@ define([
                 handler = function() {
                     this.containerWidth = window.innerWidth;
                     this.setLayoutStyles();
-                    this.setContainerHeight();
                 }.bind(this);
 
             window.addEventListener('resize', function () {
@@ -143,12 +147,13 @@ define([
         },
 
         /**
-         * Set optimal container height
+         * Set container styles
+         *
+         * @param new_styles
+         * @private
          */
-        setContainerHeight: function() {
-            var styles = this.containerStyles();
-
-            styles['height'] = this.totalHeight + 'px';
+        _setContainerStyles: function(new_styles){
+            var styles = $.extend(this.containerStyles(), new_styles);
             this.containerStyles(styles);
         },
 
@@ -158,37 +163,37 @@ define([
         setLayoutStyles: function() {
             var containerWidth = parseInt(this.container.clientWidth),
                 row = [],
-                translateX = 0,
-                translateY = 0,
                 ratio = 0,
                 imageWidth = 0,
                 rowHeight = 0,
-                calcHeight = 0;
+                calcHeight = 0,
+                isFirstRow = true;
 
             this.setMinRatio();
 
             this.images().forEach(function(image, index) {
                 ratio += parseFloat(image.ratio);
                 row.push(image);
+                image.firstRow(isFirstRow);
 
                 if (ratio >= this.minRatio || index + 1 === this.images().length) {
                     ratio = Math.max(ratio, this.minRatio);
                     calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
                     rowHeight = (calcHeight < this.maxImageHeight) ? calcHeight : this.maxImageHeight;
 
-                    row.forEach(function(img) {
+                    row.forEach(function(img, _index) {
                         imageWidth = rowHeight * img.ratio;
-                        this.setImageStyles(img.id, imageWidth, rowHeight, translateX, translateY);
-                        translateX += imageWidth + this.imageMargin;
+                        img.firstInARow(_index === 0);
+                        img.lastInARow(_index === row.length - 1);
+                        img.lastRow(!this.images()[index + 1]);
+                        this.setImageStyles(img.id, imageWidth, rowHeight);
                     }.bind(this));
 
                     row = [];
                     ratio = 0;
-                    translateY += parseInt(rowHeight) + this.imageMargin;
-                    translateX = 0;
+                    isFirstRow = false;
                 }
             }.bind(this));
-            this.totalHeight = translateY - this.imageMargin;
         },
 
         /**
@@ -197,14 +202,13 @@ define([
          * @param {Number} imageId
          * @param {Number} imageWidth
          * @param {Number} rowHeight
-         * @param {Number} translateX
-         * @param {Number} translateY
+         * @param {Number} marginBottom
          */
-        setImageStyles: function (imageId, imageWidth, rowHeight, translateX, translateY) {
-            $('[data-id="' + imageId + '"]')
-                .css('width', parseInt(imageWidth) + 'px')
-                .css('height', parseInt(rowHeight) + 'px')
-                .css('transform', ('translate3d(' + translateX + 'px,' + translateY + 'px, 0)'));
+        setImageStyles: function (imageId, imageWidth, rowHeight) {
+            $('[data-id="' + imageId + '"]').css({
+                width: parseInt(imageWidth) + 'px',
+                height: parseInt(rowHeight) + 'px',
+            });
         },
 
         /**
@@ -219,6 +223,26 @@ define([
                 this.minRatio = 8;
             } else {
                 this.minRatio = 10;
+            }
+        },
+
+        togglePreview: function(item, event){
+            var $target = $(event.currentTarget);
+            if(!$target.is('.last')) {
+                $target = $target.find('~ .last:eq(0)');
+            }
+
+            var $template = $('<div class="expand-preview"><img src="' + item.preview_url + '" /></div>').hide(),
+                $preview = $target.parent().find('.expand-preview');
+            if($preview.length) {
+                $preview.slideUp(400, function(){
+                    $preview.remove();
+                });
+                if($preview.find('img').attr('src') != item.preview_url) {
+                    $template.insertAfter($target).slideDown();
+                }
+            } else {
+                $template.insertAfter($target).slideDown();
             }
         }
     });

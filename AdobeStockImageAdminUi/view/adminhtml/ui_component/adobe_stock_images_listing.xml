@@ -105,5 +105,16 @@
                 <label translate="true">Image</label>
             </settings>
         </column>
+<!--        <column name="preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_AdobeStockImageAdminUi/js/components/preview">-->
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="config" xsi:type="array">-->
+<!--                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>-->
+<!--                    <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>-->
+<!--                </item>-->
+<!--            </argument>-->
+<!--            <settings>-->
+<!--                <label translate="true">Image</label>-->
+<!--            </settings>-->
+<!--        </column>-->
     </columns>
 </listing>

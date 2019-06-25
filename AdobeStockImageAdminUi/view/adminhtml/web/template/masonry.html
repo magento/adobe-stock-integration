@@ -7,8 +7,8 @@
 <div data-role="grid-wrapper" ko-style="containerStyles" attr="'data-id': containerId">
     <div class="masonry-image-column">
         <!-- ko foreach: { data: images, as: 'row' } -->
-            <div class="masonry-image-block" ko-style="row.styles" attr="'data-id': row.id">
-                <img attr="src: row.src">
+            <div class="masonry-image-block" ko-style="row.styles" attr="'data-id': row.id" css="'top': firstRow, 'bottom': lastRow,'first': firstInARow,'last': lastInARow" data-bind="click: $parent.togglePreview">
+                <img attr="src: row.src" />
             </div>
         <!-- /ko -->
         <div if="images().length === 0" class="a-center" translate="'We could not find any records.'"/>
