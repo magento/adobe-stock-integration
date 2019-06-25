@@ -10,8 +10,6 @@
     <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetInterface" type="Magento\AdobeStockAsset\Model\Asset"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface" type="Magento\AdobeStockAsset\Model\SearchResults" />
-    <type name="Magento\Config\Model\Config\Backend\Encrypted">
-        <plugin name="adobe_stock_api_before_save" type="Magento\AdobeStockAsset\Model\Config\Backend\AdobeStockApi" sortOrder="1" disabled="false"/>
-    </type>
+    <preference for="Magento\Config\Model\Config\Backend\Encrypted" type="Magento\AdobeStockAsset\Model\Config\Backend\AdobeStockApi" />
 </config>
 

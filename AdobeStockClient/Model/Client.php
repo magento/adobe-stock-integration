@@ -20,6 +20,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Magento\Framework\Exception\LocalizedException;
 use \Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 
 /**
@@ -100,7 +101,7 @@ class Client implements ClientInterface
         $searchRequest->setSearchParams($searchParams);
         $searchRequest->setResultColumns($resultColumnArray);
 
-        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+        $client = $this->getClient(null)->searchFilesInitialize($searchRequest, $this->getAccessToken());
         $response = $client->getNextResponse();
 
         $items = [];
@@ -167,10 +168,13 @@ class Client implements ClientInterface
     /**
      * @return AdobeStock
      */
-    private function getClient()
+    private function getClient($value)
     {
+        if(!$value) {
+            $value = $this->config->getApiKey();
+        }
         return new AdobeStock(
-            $this->config->getApiKey(),
+            $value,
             $this->config->getProductName(),
             $this->config->getTargetEnvironment()
         );
@@ -179,7 +183,7 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function testConnection()
+    public function testConnection($value)
     {
         //TODO: should be refactored
         $searchParams = new SearchParameters();
@@ -192,7 +196,15 @@ class Client implements ClientInterface
         $searchRequest->setSearchParams($searchParams);
         $searchRequest->setResultColumns($resultColumnArray);
 
-        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+        $client = $this->getClient($value)->searchFilesInitialize($searchRequest, $this->getAccessToken());
+
+        try {
+            $client->getNextResponse();
+        } catch ( \Exception $e) {
+            if (strpos($e->getMessage(), 'Api Key is invalid') !== false) {
+                throw new LocalizedException(__('Key is invalid. Try a different key'));
+            }
+        }
 
         return (bool) $client->getNextResponse()->nb_results;
     }

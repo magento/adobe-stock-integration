@@ -73,7 +73,7 @@ class TestConnection extends Action
         ];
 
         try {
-            if (!$this->client->testConnection()) {
+            if (!$this->client->testConnection(null)) {
                 throw new LocalizedException(__('Invalid API Key.'));
             }
             $result['success'] = true;
