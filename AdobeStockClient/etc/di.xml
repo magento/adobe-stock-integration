@@ -14,7 +14,7 @@
                 <item name="0" xsi:type="string">ID</item>
                 <item name="1" xsi:type="string">NB_RESULTS</item>
                 <item name="2" xsi:type="string">COMP_URL</item>
-                <item name="3" xsi:type="string">THUMBNAIL_500_URL</item>
+                <item name="3" xsi:type="string">THUMBNAIL_240_URL</item>
                 <item name="4" xsi:type="string">WIDTH</item>
                 <item name="5" xsi:type="string">HEIGHT</item>
             </argument>
@@ -32,8 +32,8 @@
                 <item name="pagination" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Pagination</item>
                 <item name="content_type_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\ContentType</item>
                 <item name="isolated_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Isolated</item>
-                <item name="colors_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Colors</item>
                 <item name="offensive_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Offensive</item>
+                <item name="orientation_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Orientation</item>
             </argument>
         </arguments>
     </type>
@@ -41,8 +41,8 @@
         <arguments>
             <argument name="filters" xsi:type="array">
                 <item name="premium_price_filter" xsi:type="string">setFilterPremium</item>
-                <item name="orientation_filter" xsi:type="string">setOrientation</item>
                 <item name="words" xsi:type="string">setWords</item>
+                <item name="colors_filter" xsi:type="string">setFilterColors</item>
             </argument>
         </arguments>
     </type>
