@@ -129,7 +129,7 @@ class Client implements ClientInterface
         /** @var StockFile $file */
         foreach ($response->getFiles() as $file) {
             $itemData = (array) $file;
-            $itemData['url'] = $itemData['thumbnail_500_url'];
+            $itemData['url'] = $itemData['thumbnail_240_url'];
             $itemId = $itemData['id'];
             $attributes = $this->createAttributes('id', $itemData);
 

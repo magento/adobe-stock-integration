@@ -24,7 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_AdobeStockImageAdminUi::search</aclResource>
+        <aclResource>Magento_AdobeStockImageAdminUi::save_preview_images</aclResource>
         <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider" name="adobe_stock_images_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -63,7 +63,7 @@
             </filterSelect>
             <filterSelect name="offensive_filter" provider="${ $.parentName }">
                 <settings>
-                    <caption translate="true">All</caption>
+                    <caption translate="true">Only safe</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Offensive\Options"/>
                     <label translate="true">Offensive</label>
                     <dataScope>offensive_filter</dataScope>
@@ -77,6 +77,20 @@
                     <dataScope>isolated_filter</dataScope>
                 </settings>
             </filterSelect>
+            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Color</item>
+                        <item name="colorFormat" xsi:type="string">HEX</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/color-picker</item>
+                        <item name="dataScope" xsi:type="string">colors_filter</item>
+                        <item name="placeholder" xsi:type="string">HEX color</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Color</label>
+                </settings>
+            </filterInput>
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
