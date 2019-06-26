@@ -12,16 +12,18 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use Magento\AdobeStockClient\Model\ConnectionFactory;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockClientApi\Api\ConnectionAdapterInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use \Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Client for communication to Adobe Stock API
@@ -59,9 +61,9 @@ class Client implements ClientInterface
     private $localeResolver;
 
     /**
-     * @var ConnectionAdapterInterface
+     * @var LoggerInterface
      */
-    private $connectionAdapter;
+    private $logger;
 
     /**
      * Client constructor.
@@ -72,6 +74,7 @@ class Client implements ClientInterface
      * @param AttributeValueFactory            $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver                   $localeResolver
+     * @param ConnectionFactory                $connectionFactory
      */
     public function __construct(
         Config $config,
@@ -80,7 +83,7 @@ class Client implements ClientInterface
         AttributeValueFactory $attributeValueFactory,
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
-        ConnectionAdapterInterface $connectionAdapter
+        LoggerInterface $logger
     ) {
         $this->config = $config;
         $this->documentFactory = $documentFactory;
@@ -88,12 +91,14 @@ class Client implements ClientInterface
         $this->attributeValueFactory = $attributeValueFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
-        $this->connectionAdapter = $connectionAdapter;
+        $this->logger = $logger;
     }
 
     /**
      * @param SearchCriteriaInterface $searchCriteria
+     *
      * @return SearchResultInterface
+     * @throws IntegrationException
      * @throws \AdobeStock\Api\Exception\StockApi
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
@@ -167,15 +172,27 @@ class Client implements ClientInterface
 
     /**
      * @return AdobeStock
+     * @throws IntegrationException
      */
     private function getClient(): AdobeStock
     {
-        $this->connectionAdapter->setApiKey($this->config->getApiKey());
-        $this->connectionAdapter->setProductName($this->config->getProductName());
-        $this->connectionAdapter->setTargetEnvironment($this->config->getTargetEnvironment());
-        $client = $this->connectionAdapter->initializeConnection();
+        try {
+            $apiKey = $this->config->getApiKey();
+            $productName = $this->config->getProductName();
+            $targetEnvironment = $this->config->getTargetEnvironment();
+            /** @var ConnectionFactory $connectionInstance */
+            $connectionInstance = new ConnectionFactory($apiKey, $productName, $targetEnvironment);
+            $client = $connectionInstance->createConnection();
 
-        return $client;
+            return $client;
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $message = __(
+                'An error occurred during Adobe Stock client initialization: %error_message',
+                ['error_message' => $exception->getMessage(),]
+            );
+            throw new IntegrationException($message, $exception);
+        }
     }
 
     /**
