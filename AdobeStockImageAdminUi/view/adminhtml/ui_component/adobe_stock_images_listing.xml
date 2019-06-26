@@ -77,20 +77,12 @@
                     <dataScope>isolated_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="content_type_filter_photo" provider="${ $.parentName }">
+            <filterSelect name="content_type_filter" provider="${ $.parentName }">
                 <settings>
-                    <caption translate="true">No</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Photo\Options"/>
-                    <label translate="true">Content Type Photo Only</label>
-                    <dataScope>content_type_filter_photo</dataScope>
-                </settings>
-            </filterSelect>
-            <filterSelect name="content_type_filter_illustrations" provider="${ $.parentName }">
-                <settings>
-                    <caption translate="true">No</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Illustrations\Options"/>
-                    <label translate="true">Content Type Illustrations Only</label>
-                    <dataScope>content_type_filter_illustrations</dataScope>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Options"/>
+                    <label translate="true">Content Type</label>
+                    <dataScope>content_type_filter</dataScope>
                 </settings>
             </filterSelect>
             <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }">

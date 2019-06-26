@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Photo;
+namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType;
 
 /**
  * Content Type Photo filter options provider
@@ -21,8 +21,12 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
-                'value' => 1,
-                'label' => __('Yes')
+                'value' => 'photo',
+                'label' => __('Photo')
+            ],
+            [
+                'value' => 'illustration',
+                'label' => __('Illustration')
             ]
         ];
     }
