@@ -61,6 +61,16 @@ class Client implements ClientInterface
     private $localeResolver;
 
     /**
+     * @var ConnectionFactory
+     */
+    private $connectionFactory;
+
+    /**
+     * @var AdobeStock
+     */
+    private $connection;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -83,6 +93,7 @@ class Client implements ClientInterface
         AttributeValueFactory $attributeValueFactory,
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
+        ConnectionFactory $connectionFactory,
         LoggerInterface $logger
     ) {
         $this->config = $config;
@@ -91,6 +102,7 @@ class Client implements ClientInterface
         $this->attributeValueFactory = $attributeValueFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
+        $this->connectionFactory = $connectionFactory;
         $this->logger = $logger;
     }
 
@@ -115,8 +127,7 @@ class Client implements ClientInterface
         $searchRequest->setLocale($this->localeResolver->getLocale());
         $searchRequest->setSearchParams($searchParams);
         $searchRequest->setResultColumns($resultColumnArray);
-
-        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+        $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
         $response = $client->getNextResponse();
 
         $items = [];
@@ -174,25 +185,29 @@ class Client implements ClientInterface
      * @return AdobeStock
      * @throws IntegrationException
      */
-    private function getClient(): AdobeStock
+    private function getConnection(): AdobeStock
     {
-        try {
-            $apiKey = $this->config->getApiKey();
-            $productName = $this->config->getProductName();
-            $targetEnvironment = $this->config->getTargetEnvironment();
-            /** @var ConnectionFactory $connectionInstance */
-            $connectionInstance = new ConnectionFactory($apiKey, $productName, $targetEnvironment);
-            $client = $connectionInstance->createConnection();
-
-            return $client;
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            $message = __(
-                'An error occurred during Adobe Stock client initialization: %error_message',
-                ['error_message' => $exception->getMessage(),]
-            );
-            throw new IntegrationException($message, $exception);
+        if (! $this->connection instanceof AdobeStock) {
+            try {
+                $apiKey = $this->config->getApiKey();
+                $productName = $this->config->getProductName();
+                $targetEnvironment = $this->config->getTargetEnvironment();
+                $this->connection = $this->connectionFactory->createConnection(
+                    $apiKey,
+                    $productName,
+                    $targetEnvironment
+                );
+            } catch (\Exception $exception) {
+                $this->logger->critical($exception);
+                $message = __(
+                    'An error occurred during Adobe Stock client initialization: %error_message',
+                    ['error_message' => $exception->getMessage(),]
+                );
+                throw new IntegrationException($message, $exception);
+            }
         }
+
+        return $this->connection;
     }
 
     /**
@@ -221,7 +236,7 @@ class Client implements ClientInterface
         $searchRequest->setSearchParams($searchParams);
         $searchRequest->setResultColumns($resultColumnArray);
 
-        $client = $this->getClient()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+        $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
         return (bool) $client->getNextResponse()->nb_results;
     }
