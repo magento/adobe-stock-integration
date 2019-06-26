@@ -21,7 +21,7 @@ class ConnectionFactory
      *
      * @return AdobeStock
      */
-    public function createConnection(string $apiKey, string $productName, string $targetEnvironment): AdobeStock
+    public function create(string $apiKey, string $productName, string $targetEnvironment): AdobeStock
     {
         return new AdobeStock($apiKey, $productName, $targetEnvironment);
     }

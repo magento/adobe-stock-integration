@@ -183,7 +183,7 @@ class Client implements ClientInterface
     private function getConnection(): AdobeStock
     {
         try {
-            return $this->connectionFactory->createConnection(
+            return $this->connectionFactory->create(
                 $this->config->getApiKey(),
                 $this->config->getProductName(),
                 $this->config->getTargetEnvironment()
