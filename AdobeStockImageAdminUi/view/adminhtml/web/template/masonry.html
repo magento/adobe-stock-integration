@@ -8,6 +8,7 @@
     <div class="masonry-image-column">
         <!-- ko foreach: { data: images, as: 'row' } -->
             <div class="masonry-image-block" ko-style="row.styles" attr="'data-id': row.id">
+                <div class="masonry-image-overlay">Hello</div>
                 <img attr="src: row.src">
             </div>
         <!-- /ko -->
