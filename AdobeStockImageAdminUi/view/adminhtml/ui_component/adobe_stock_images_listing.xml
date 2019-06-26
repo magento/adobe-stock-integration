@@ -32,7 +32,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <listingToolbar name="listing_top">
+    <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
         <settings>
             <sticky>true</sticky>
         </settings>
@@ -48,7 +48,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
-                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
+                    <item name="displayArea" xsi:type="string">sorting</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                     <item name="deps" xsi:type="array">
                         <item name="0" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns</item>
@@ -131,7 +131,7 @@
         </column>
         <column name="creation">
             <settings>
-                <label translate="true">Creation</label>
+                <label translate="true">Most Recent</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
