@@ -66,11 +66,6 @@ class Client implements ClientInterface
     private $connectionFactory;
 
     /**
-     * @var AdobeStock
-     */
-    private $connection;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -78,13 +73,13 @@ class Client implements ClientInterface
     /**
      * Client constructor.
      *
-     * @param Config                           $config
-     * @param DocumentFactory                  $documentFactory
-     * @param SearchResultFactory              $searchResultFactory
-     * @param AttributeValueFactory            $attributeValueFactory
+     * @param Config $config
+     * @param DocumentFactory $documentFactory
+     * @param SearchResultFactory $searchResultFactory
+     * @param AttributeValueFactory $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
-     * @param LocaleResolver                   $localeResolver
-     * @param ConnectionFactory                $connectionFactory
+     * @param LocaleResolver $localeResolver
+     * @param ConnectionFactory $connectionFactory
      */
     public function __construct(
         Config $config,
@@ -187,27 +182,20 @@ class Client implements ClientInterface
      */
     private function getConnection(): AdobeStock
     {
-        if (! $this->connection instanceof AdobeStock) {
-            try {
-                $apiKey = $this->config->getApiKey();
-                $productName = $this->config->getProductName();
-                $targetEnvironment = $this->config->getTargetEnvironment();
-                $this->connection = $this->connectionFactory->createConnection(
-                    $apiKey,
-                    $productName,
-                    $targetEnvironment
-                );
-            } catch (\Exception $exception) {
-                $this->logger->critical($exception);
-                $message = __(
-                    'An error occurred during Adobe Stock client initialization: %error_message',
-                    ['error_message' => $exception->getMessage(),]
-                );
-                throw new IntegrationException($message, $exception);
-            }
+        try {
+            return $this->connectionFactory->createConnection(
+                $this->config->getApiKey(),
+                $this->config->getProductName(),
+                $this->config->getTargetEnvironment()
+            );
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $message = __(
+                'An error occurred during Adobe Stock client initialization: %error_message',
+                ['error_message' => $exception->getMessage()]
+            );
+            throw new IntegrationException($message, $exception);
         }
-
-        return $this->connection;
     }
 
     /**
