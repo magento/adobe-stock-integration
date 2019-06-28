@@ -29,5 +29,5 @@ interface ClientInterface
      *
      * @return bool
      */
-    public function testConnection();
+    public function testConnection(): bool;
 }
