@@ -73,14 +73,14 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     *
      * @param Config $config
      * @param DocumentFactory $documentFactory
      * @param SearchResultFactory $searchResultFactory
      * @param AttributeValueFactory $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
-     * @param ConnectionFactory $connectionFactory
+     * @param \Magento\AdobeStockClient\Model\ConnectionFactory $connectionFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
@@ -103,8 +103,9 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param SearchCriteriaInterface $searchCriteria
+     * Search assets
      *
+     * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
      * @throws IntegrationException
      */
@@ -129,7 +130,7 @@ class Client implements ClientInterface
             $items = [];
             /** @var StockFile $file */
             foreach ($response->getFiles() as $file) {
-                $itemData = (array) $file;
+                $itemData = (array)$file;
                 $itemData['url'] = $itemData['thumbnail_240_url'];
                 $itemId = $itemData['id'];
                 $attributes = $this->createAttributes('id', $itemData);
@@ -156,9 +157,10 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param string $idFieldName
-     * @param array  $itemData
+     * Create custom attributes for columns returned by search
      *
+     * @param string $idFieldName
+     * @param array $itemData
      * @return AttributeValue[]
      * @throws IntegrationException
      */
@@ -196,6 +198,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * Get SDK connection
+     *
      * @return AdobeStock
      * @throws IntegrationException
      */
@@ -227,6 +231,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * Test connection to Adobe Stock API
+     *
      * @return bool
      * @throws IntegrationException
      */
@@ -246,7 +252,7 @@ class Client implements ClientInterface
 
             $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
-            return (bool) $client->getNextResponse()->nb_results;
+            return (bool)$client->getNextResponse()->nb_results;
         } catch (\Exception $exception) {
             $message = __(
                 'An error occurred during test API connection: %error_message',
@@ -257,9 +263,10 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param Phrase     $message
-     * @param \Exception $exception
+     * Handle SDK Exception and throw Magento exception instead
      *
+     * @param Phrase $message
+     * @param \Exception $exception
      * @throws IntegrationException
      */
     private function processException(Phrase $message, \Exception $exception)

@@ -6,6 +6,9 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * A class that keeping the list of providers responsible for filling SearchParamters based on search criteria
+ */
 class SearchParametersProviderComposite implements SearchParameterProviderInterface
 {
     /**
@@ -23,6 +26,8 @@ class SearchParametersProviderComposite implements SearchParameterProviderInterf
     }
 
     /**
+     * Apply search criteria to SearchParameters
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchParameters $searchParams
      * @return SearchParameters

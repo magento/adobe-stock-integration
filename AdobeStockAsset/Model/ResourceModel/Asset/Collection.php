@@ -13,6 +13,9 @@ use Magento\AdobeStockAsset\Model\Asset as Model;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
+/**
+ * Assets (metadata) collection
+ */
 class Collection extends AbstractCollection
 {
     /**

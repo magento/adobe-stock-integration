@@ -10,6 +10,9 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Filter for images orientation: landscape, square, vertical, etc.
+ */
 class Orientation implements SearchParameterProviderInterface
 {
     /**

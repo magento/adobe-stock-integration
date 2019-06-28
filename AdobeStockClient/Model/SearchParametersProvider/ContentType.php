@@ -9,6 +9,9 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Photo or illustration image type filter
+ */
 class ContentType implements SearchParameterProviderInterface
 {
     /**
