@@ -6,6 +6,9 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Plugin\Product\Gallery;
 
+/**
+ * Test for the Gallery Processor Plugin (ensures that metadata is remove from the database when image is deleted)
+ */
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**

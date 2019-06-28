@@ -6,6 +6,9 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Is image separated from (and by) background color
+ */
 class Isolated implements SearchParameterProviderInterface
 {
     /**

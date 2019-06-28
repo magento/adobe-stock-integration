@@ -6,6 +6,9 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Handles pagination of search results
+ */
 class Pagination implements SearchParameterProviderInterface
 {
     /**

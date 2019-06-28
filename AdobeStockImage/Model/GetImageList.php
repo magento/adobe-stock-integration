@@ -38,6 +38,8 @@ class GetImageList implements GetImageListInterface
     /**
      * GetImageList constructor.
      * @param ClientInterface $client
+     * @param AssetInterfaceFactory $assetFactory
+     * @param SearchResultFactory $searchResultFactory
      */
     public function __construct(
         ClientInterface $client,

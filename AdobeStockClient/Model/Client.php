@@ -72,14 +72,14 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     *
      * @param Config $config
      * @param DocumentFactory $documentFactory
      * @param SearchResultFactory $searchResultFactory
      * @param AttributeValueFactory $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
-     * @param ConnectionFactory $connectionFactory
+     * @param \Magento\AdobeStockClient\Model\ConnectionFactory $connectionFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
@@ -102,8 +102,9 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param SearchCriteriaInterface $searchCriteria
+     * Search assets
      *
+     * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
      * @throws IntegrationException
      * @throws \AdobeStock\Api\Exception\StockApi
@@ -147,6 +148,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * Create custom attributes for columns returned by search
+     *
      * @param string $idFieldName
      * @param array $itemData
      * @return AttributeValue[]
@@ -177,6 +180,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * Get SDK connection
+     *
      * @return AdobeStock
      * @throws IntegrationException
      */

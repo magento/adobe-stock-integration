@@ -5,6 +5,9 @@
  */
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
+/**
+ * Test for GetImageList service
+ */
 class GetImageListTestTest extends \PHPUnit\Framework\TestCase
 {
     /**

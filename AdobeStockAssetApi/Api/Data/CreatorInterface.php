@@ -8,6 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+/**
+ * Interface CreatorInterface
+ * @api
+ */
 interface CreatorInterface
 {
     const ID = "id";

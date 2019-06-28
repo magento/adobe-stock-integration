@@ -16,6 +16,9 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filter\StripTags;
 
+/**
+ * Controller used for testing connection to Adobe Stock API from stores configuration
+ */
 class TestConnection extends Action
 {
     /**

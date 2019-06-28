@@ -27,10 +27,11 @@ class Config
      * @var array
      */
     private $searchResultFields;
-
+    
     /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
+     * @param array $searchResultFields
      */
     public function __construct(ScopeConfigInterface $scopeConfig, array $searchResultFields = [])
     {
