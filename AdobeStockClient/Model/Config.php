@@ -27,7 +27,7 @@ class Config
      * @var array
      */
     private $searchResultFields;
-    
+
     /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
