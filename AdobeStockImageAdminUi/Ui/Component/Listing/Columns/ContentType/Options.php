@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Offensive;
+namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType;
 
 /**
- * Offensive filter options provider
+ * Content Type Photo filter options provider
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -20,7 +20,14 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray(): array
     {
         return [
-            ['value' => 1, 'label' => __('All')]
+            [
+                'value' => 'photo',
+                'label' => __('Photo')
+            ],
+            [
+                'value' => 'illustration',
+                'label' => __('Illustration')
+            ]
         ];
     }
 }

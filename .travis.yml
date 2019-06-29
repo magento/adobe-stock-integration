@@ -1,0 +1,25 @@
+language: php
+php:
+  - '7.2'
+install:
+  - mkdir -p ext/magento/adobe-stock-integration
+  - mv !(ext) ext/magento/adobe-stock-integration/
+  - composer config --global http-basic.repo.magento.com "$MAGENTO_USERNAME" "$MAGENTO_PASSWORD"
+  - git clone https://github.com/magento/magento2
+  - cd magento2
+  - composer install
+  - composer config minimum-stability dev
+  - composer config repositories.ext path "../ext/*/*/*"
+  - composer require magento/adobe-stock-integration
+before_script:
+  - echo "vendor/magento/module-adobe-stock-*" > dev/tests/static/testsuite/Magento/Test/Php/_files/whitelist/common.txt
+  - sed -i 's/name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/name="TESTCODESTYLE_IS_FULL_SCAN" value="1"/g' dev/tests/static/phpunit.xml.dist
+env:
+  matrix:
+    - TEST_CATEGORY=unit
+    - TEST_CATEGORY=static
+matrix:
+  fast_finish: true
+script:
+  - if [ $TEST_CATEGORY == 'unit' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-image; fi
+  - if [ $TEST_CATEGORY == 'static' ]; then vendor/bin/phpunit --configuration dev/tests/static/phpunit.xml.dist dev/tests/static/testsuite/Magento/Test/Php/LiveCodeTest.php; fi

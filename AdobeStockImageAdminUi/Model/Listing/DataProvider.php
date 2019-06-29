@@ -73,7 +73,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * @return SearchResultsInterface
+     * @inheritdoc
      */
     public function getSearchResult()
     {

@@ -14,6 +14,9 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * Controller used for testing connection to Adobe Stock API from stores configuration
+ */
 class TestConnection extends Action
 {
     /**

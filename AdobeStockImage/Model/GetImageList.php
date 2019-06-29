@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory as SearchResultFactory;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class GetImageList
@@ -37,7 +38,10 @@ class GetImageList implements GetImageListInterface
 
     /**
      * GetImageList constructor.
-     * @param ClientInterface $client
+     *
+     * @param ClientInterface       $client
+     * @param AssetInterfaceFactory $assetFactory
+     * @param SearchResultFactory   $searchResultFactory
      */
     public function __construct(
         ClientInterface $client,
@@ -54,23 +58,30 @@ class GetImageList implements GetImageListInterface
      */
     public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
-        $searchResult = $this->client->search($searchCriteria);
+        try {
+            $searchResult = $this->client->search($searchCriteria);
 
-        $items = [];
-        foreach ($searchResult->getItems() as $item) {
-            /** @var AssetInterface $asset */
-            $asset = $this->assetFactory->create();
-            $asset->setId($item->getId());
-            $asset->setUrl($item->getCustomAttribute('url')->getValue());
-            $asset->setHeight($item->getCustomAttribute('height')->getValue());
-            $asset->setWidth($item->getCustomAttribute('width')->getValue());
-            $items[] = $asset;
+            $items = [];
+            foreach ($searchResult->getItems() as $item) {
+                /** @var AssetInterface $asset */
+                $asset = $this->assetFactory->create();
+                $asset->setId($item->getId());
+                $asset->setUrl($item->getCustomAttribute('url')->getValue());
+                $asset->setHeight($item->getCustomAttribute('height')->getValue());
+                $asset->setWidth($item->getCustomAttribute('width')->getValue());
+                $items[] = $asset;
+            }
+            return $this->searchResultFactory->create(
+                [
+                    'data' => [
+                        'items' => $items,
+                        'total_count' => $searchResult->getTotalCount()
+                    ]
+                ]
+            );
+        } catch (\Exception $exception) {
+            $message = __('Get image list action failed.');
+            throw new LocalizedException($message, $exception);
         }
-        return $this->searchResultFactory->create(
-            ['data' => [
-                'items' => $items,
-                'count' => $searchResult->getTotalCount()
-            ]]
-        );
     }
 }

@@ -14,6 +14,9 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 
+/**
+ * Ensures that metadata is remove from the database when image is deleted
+ */
 class Processor
 {
     /**
@@ -49,6 +52,7 @@ class Processor
 
     /**
      * Delete Adobe's stock asset after image was deleted
+     *
      * @param ProcessorSubject $subject
      * @param ProcessorSubject $result
      * @param Product $product

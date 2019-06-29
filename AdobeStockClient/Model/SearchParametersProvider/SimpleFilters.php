@@ -10,6 +10,7 @@ namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Escaper;
 
 /**
  * Apply filters that do not require additional business logic to search parameters
@@ -17,16 +18,26 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class SimpleFilters implements SearchParameterProviderInterface
 {
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @var string[]
      */
     private $filters;
 
     /**
      * Filters constructor.
+     *
+     * @param Escaper $escaper
      * @param array $filters
      */
-    public function __construct(array $filters = [])
-    {
+    public function __construct(
+        Escaper $escaper,
+        array $filters = []
+    ) {
+        $this->escaper = $escaper;
         $this->filters = $filters;
     }
 
@@ -42,7 +53,9 @@ class SimpleFilters implements SearchParameterProviderInterface
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if (isset($this->filters[$filter->getField()])) {
-                    $searchParams->{$this->filters[$filter->getField()]}($filter->getValue());
+                    $searchParams->{$this->filters[$filter->getField()]}(
+                        $this->escaper->encodeUrlParam($filter->getValue())
+                    );
                 }
             }
         }
