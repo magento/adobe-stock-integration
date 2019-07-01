@@ -6,13 +6,23 @@
 
 /** @var $block \Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config\TestConnection */
 ?>
-<button class="scalable" type="button" id="<?= $block->escapeUrl($block->getData('html_id')) ?>" data-mage-init='{"testConnection":{
-    "url": "<?= $block->escapeHtmlAttr($block->getData('ajax_url')) ?>",
-    "elementId": "<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>",
-    "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
-    "fieldToCheck": "success",
-    "failedText": "<?= $block->escapeHtmlAttr(__('Connection failed! Test again?')) ?>", "validation": {}}}'>
-    <span id="<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>_result">
+<div id="<?= $block->escapeHtmlAttr($block->getApiKeyValidationResultContainerId()) ?>" class=""></div>
+<button class="scalable" type="button" id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
+    <span id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>_result">
         <?= $block->escapeHtml($block->getData('button_label')) ?>
     </span>
 </button>
+<script type="text/x-magento-init">
+    {
+        "#validation_api_connection_result": {
+            "Magento_AdobeStockAsset/js/validate-api-key": {
+                "requestValidationUrl": "<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>",
+                "testButtonId": "<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>",
+                "apiKeyInput": "<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>_api_key",
+                "validationResultContainerId": "<?= $block->escapeHtmlAttr($block->getApiKeyValidationResultContainerId()) ?>",
+                "defaultMessage": "<?= $block->escapeJs($block->escapeHtml(__('Test connection to the Adobe Stock integration failed.'))) ?>"
+
+            }
+        }
+    }
+</script>

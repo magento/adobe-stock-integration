@@ -233,10 +233,12 @@ class Client implements ClientInterface
     /**
      * Test connection to Adobe Stock API
      *
+     * @param AdobeStock|null $connectionInstance
+     *
      * @return bool
      * @throws IntegrationException
      */
-    public function testConnection(): bool
+    public function testConnection(AdobeStock $connectionInstance = null): bool
     {
         try {
             //TODO: should be refactored
@@ -250,7 +252,8 @@ class Client implements ClientInterface
             $searchRequest->setSearchParams($searchParams);
             $searchRequest->setResultColumns($resultColumnArray);
 
-            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+            $client = (null === $connectionInstance) ? $this->getConnection() : $connectionInstance;
+            $client->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
             return (bool)$client->getNextResponse()->nb_results;
         } catch (\Exception $exception) {

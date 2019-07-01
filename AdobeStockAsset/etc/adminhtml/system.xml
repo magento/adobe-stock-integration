@@ -35,7 +35,7 @@
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
-                    <comment><![CDATA[Works only for the saved value. Please, save API key before test.]]></comment>
+                    <comment><![CDATA[Check currently inserted value on the fly or already saved value if the API Key input value is not changed.]]></comment>
                 </field>
             </group>
         </section>

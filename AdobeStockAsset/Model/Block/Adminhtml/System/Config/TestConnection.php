@@ -37,7 +37,8 @@ class TestConnection extends Field
                     [
                         'form_key' => $this->getFormKey()
                     ]
-                )
+                ),
+                'api_key_validation_result_container_id' => 'validation_api_connection_result',
             ]
         );
 
