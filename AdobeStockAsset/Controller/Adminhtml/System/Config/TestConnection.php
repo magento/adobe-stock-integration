@@ -80,6 +80,8 @@ class TestConnection extends Action
     }
 
     /**
+     * Execute test API key value request.
+     *
      * @return ResponseInterface|Json|ResultInterface
      */
     public function execute()
@@ -105,8 +107,7 @@ class TestConnection extends Action
     }
 
     /**
-     * Initialize test connection to the Adobe Stock service with the api key data
-     * which is sent on validation.
+     * Initialize test connection to the Adobe Stock service with the api key data which is sent on validation.
      *
      * @param array $data
      *

@@ -111,9 +111,7 @@ class Encrypted extends \Magento\Config\Model\Config\Backend\Encrypted
     }
 
     /**
-     * Check is api key is valid or not. The api key is considered to be valid when
-     * connection to the Adobe Stock service can be established and Client object successfully
-     * executes test connection request.
+     * Check is api key is valid or not by establishing test connection and execute test request.
      *
      * @param string $value
      *
@@ -137,8 +135,7 @@ class Encrypted extends \Magento\Config\Model\Config\Backend\Encrypted
     }
 
     /**
-     * Generate Adobe Stock connection instance object with the test $apiKey received from the
-     * data which is going to be saved.
+     * Generate Adobe Stock connection instance object with the tested API key.
      *
      * @param string $apiKey
      *
