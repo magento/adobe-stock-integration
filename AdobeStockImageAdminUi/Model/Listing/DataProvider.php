@@ -10,7 +10,6 @@ namespace Magento\AdobeStockImageAdminUi\Model\Listing;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Ui\DataProvider\SearchResultFactory;
