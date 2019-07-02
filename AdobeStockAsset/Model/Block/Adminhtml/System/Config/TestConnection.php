@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
