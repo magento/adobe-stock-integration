@@ -24,7 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_AdobeStockImageAdminUi::search</aclResource>
+        <aclResource>Magento_AdobeStockImageAdminUi::save_preview_images</aclResource>
         <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider" name="adobe_stock_images_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -45,7 +45,15 @@
             </settings>
         </paging>
         <filters name="listing_filters">
-            <filterSelect name="orientation_filter" provider="${ $.parentName }">
+            <filterSelect name="content_type_filter" provider="${ $.parentName }" sortOrder="10">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Options"/>
+                    <label translate="true">Subcategory</label>
+                    <dataScope>content_type_filter</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="orientation_filter" provider="${ $.parentName }" sortOrder="20">
                 <settings>
                     <caption translate="true">All</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation\Options"/>
@@ -53,31 +61,7 @@
                     <dataScope>orientation_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="premium_price_filter" provider="${ $.parentName }">
-                <settings>
-                    <caption translate="true">All</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
-                    <label translate="true">Price</label>
-                    <dataScope>premium_price_filter</dataScope>
-                </settings>
-            </filterSelect>
-            <filterSelect name="offensive_filter" provider="${ $.parentName }">
-                <settings>
-                    <caption translate="true">Only safe</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Offensive\Options"/>
-                    <label translate="true">Offensive</label>
-                    <dataScope>offensive_filter</dataScope>
-                </settings>
-            </filterSelect>
-            <filterSelect name="isolated_filter" provider="${ $.parentName }">
-                <settings>
-                    <caption translate="true">No</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Isolated\Options"/>
-                    <label translate="true">Isolated images only</label>
-                    <dataScope>isolated_filter</dataScope>
-                </settings>
-            </filterSelect>
-            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }">
+            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }" sortOrder="30">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Color</item>
@@ -91,6 +75,30 @@
                     <label translate="true">Color</label>
                 </settings>
             </filterInput>
+            <filterSelect name="premium_price_filter" provider="${ $.parentName }" sortOrder="40">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
+                    <label translate="true">Price</label>
+                    <dataScope>premium_price_filter</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="offensive_filter" provider="${ $.parentName }" sortOrder="50">
+                <settings>
+                    <caption translate="true">Only safe</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Offensive\Options"/>
+                    <label translate="true">Safe search</label>
+                    <dataScope>offensive_filter</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="isolated_filter" provider="${ $.parentName }" sortOrder="60">
+                <settings>
+                    <caption translate="true">No</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Isolated\Options"/>
+                    <label translate="true">Isolated Assets</label>
+                    <dataScope>isolated_filter</dataScope>
+                </settings>
+            </filterSelect>
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">

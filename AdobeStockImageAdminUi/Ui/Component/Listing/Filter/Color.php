@@ -20,6 +20,9 @@ use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
 use Magento\Ui\Component\Filters\Type\Input;
 
+/**
+ * Color grid filter
+ */
 class Color extends AbstractFilter
 {
     /**
@@ -120,8 +123,6 @@ class Color extends AbstractFilter
 
     /**
      * Apply filter
-     *
-     * @return void
      */
     private function applyFilter(): void
     {

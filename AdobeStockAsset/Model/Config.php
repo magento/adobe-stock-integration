@@ -23,6 +23,7 @@ class Config
 
     /**
      * Config constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
@@ -31,7 +32,9 @@ class Config
     }
 
     /**
-     * @{inheritdoc}
+     * Is integration enabled
+     *
+     * @return bool
      */
     public function isEnabled(): bool
     {

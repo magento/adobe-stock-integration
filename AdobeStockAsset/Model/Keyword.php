@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,6 +12,9 @@ use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Keyword as ResourceModel;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
+/**
+ * Asset's Keyword
+ */
 class Keyword extends AbstractExtensibleModel implements KeywordInterface
 {
     /**
@@ -24,8 +26,7 @@ class Keyword extends AbstractExtensibleModel implements KeywordInterface
     }
 
     /**
-     * Get the keyword
-     * @return string
+     * @inheritdoc
      */
     public function getKeyword() : string
     {
@@ -33,8 +34,7 @@ class Keyword extends AbstractExtensibleModel implements KeywordInterface
     }
 
     /**
-     * Set the keyword
-     * @param string $keyword
+     * @inheritdoc
      */
     public function setKeyword(string $keyword)
     {

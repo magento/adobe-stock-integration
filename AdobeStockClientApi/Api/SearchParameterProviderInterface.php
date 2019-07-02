@@ -12,11 +12,13 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Client for communication to Adobe Stock API
+ * Class able to apply search criteria to SearchParameters completely or partially
  */
 interface SearchParameterProviderInterface
 {
     /**
+     * Apply search criteria to SearchParameters
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchParameters $searchParams
      * @return SearchParameters

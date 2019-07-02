@@ -9,14 +9,17 @@ namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetAPi\Api\Data\KeywordInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
 
+/**
+ * Adobe Stock Asset
+ */
 class Asset extends AbstractExtensibleObject implements AssetInterface
 {
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getId(): int
     {
@@ -24,7 +27,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function setId($value)
     {
@@ -32,8 +35,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get media type id
-     * @return int
+     * @inheritdoc
      */
     public function getMediaTypeId(): int
     {
@@ -41,8 +43,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set media type id
-     * @param int $mediaTypeId
+     * @inheritdoc
      */
     public function setMediaTypeId(int $mediaTypeId)
     {
@@ -66,8 +67,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Return the creator
-     * @return CreatorInterface
+     * @inheritdoc
      */
     public function getCreator(): ?CreatorInterface
     {
@@ -75,8 +75,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set the creator
-     * @param CreatorInterface $creator
+     * @inheritdoc
      */
     public function setCreator(CreatorInterface $creator)
     {
@@ -84,7 +83,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @return KeywordInterface[]
+     * @inheritdoc
      */
     public function getKeywords(): array
     {
@@ -92,7 +91,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @param KeywordInterface[] $keywords
+     * @inheritdoc
      */
     public function setKeywords(array $keywords)
     {
@@ -100,8 +99,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get premium level id
-     * @return int
+     * @inheritdoc
      */
     public function getPremiumLevelId(): int
     {
@@ -109,8 +107,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set premium level id
-     * @param int $premiumLevelId
+     * @inheritdoc
      */
     public function setPremiumLevelId(int $premiumLevelId)
     {
@@ -118,8 +115,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get path
-     * @return string
+     * @inheritdoc
      */
     public function getPath(): ?string
     {
@@ -127,8 +123,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set path
-     * @param string $path
+     * @inheritdoc
      */
     public function setPath(string $path)
     {
@@ -136,8 +131,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get adobe id
-     * @return int
+     * @inheritdoc
      */
     public function getAdobeId(): int
     {
@@ -145,8 +139,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set adobe id
-     * @param int $adobeId
+     * @inheritdoc
      */
     public function setAdobeId(int $adobeId)
     {
@@ -154,8 +147,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get the stock id
-     * @return int
+     * @inheritdoc
      */
     public function getStockId(): int
     {
@@ -163,8 +155,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set stock id
-     * @param int $stockId
+     * @inheritdoc
      */
     public function setStockId(int $stockId)
     {
@@ -172,8 +163,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Is licensed
-     * @return int
+     * @inheritdoc
      */
     public function isLicensed(): int
     {
@@ -181,8 +171,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set is licensed
-     * @param int $isLicensed
+     * @inheritdoc
      */
     public function setIsLicensed(int $isLicensed)
     {
@@ -190,8 +179,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get title
-     * @return string
+     * @inheritdoc
      */
     public function getTitle(): string
     {
@@ -199,8 +187,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set title
-     * @param string $title
+     * @inheritdoc
      */
     public function setTitle(string $title)
     {
@@ -208,8 +195,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get preview url
-     * @return string
+     * @inheritdoc
      */
     public function getPreviewUrl(): string
     {
@@ -217,8 +203,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set preview url
-     * @param string $previewUrl
+     * @inheritdoc
      */
     public function setPreviewUrl(string $previewUrl)
     {
@@ -226,8 +211,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get preview width
-     * @return int
+     * @inheritdoc
      */
     public function getPreviewWidth(): int
     {
@@ -235,8 +219,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set preview width
-     * @param int $previewWidth
+     * @inheritdoc
      */
     public function setPreviewWidth(int $previewWidth)
     {
@@ -244,8 +227,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get the preview height
-     * @return int
+     * @inheritdoc
      */
     public function getPreviewHeight(): int
     {
@@ -253,8 +235,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set preview height
-     * @param int $previewHeight
+     * @inheritdoc
      */
     public function setPreviewHeight(int $previewHeight)
     {
@@ -262,8 +243,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get url
-     * @return string
+     * @inheritdoc
      */
     public function getUrl(): string
     {
@@ -271,8 +251,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set url
-     * @param string $url
+     * @inheritdoc
      */
     public function setUrl(string $url)
     {
@@ -280,8 +259,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get width
-     * @return int
+     * @inheritdoc
      */
     public function getWidth(): int
     {
@@ -289,8 +267,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set width
-     * @param int $width
+     * @inheritdoc
      */
     public function setWidth(int $width)
     {
@@ -298,8 +275,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get height
-     * @return int
+     * @inheritdoc
      */
     public function getHeight(): int
     {
@@ -307,8 +283,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set height
-     * @param int $height
+     * @inheritdoc
      */
     public function setHeight(int $height)
     {
@@ -316,8 +291,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get country name
-     * @return string
+     * @inheritdoc
      */
     public function getCountryName(): string
     {
@@ -325,8 +299,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set country name
-     * @param string $countryName
+     * @inheritdoc
      */
     public function setCountryName(string $countryName)
     {
@@ -334,8 +307,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get details url
-     * @return string
+     * @inheritdoc
      */
     public function getDetailsUrl(): string
     {
@@ -343,8 +315,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set details url
-     * @param string $detailsUrl
+     * @inheritdoc
      */
     public function setDetailsUrl(string $detailsUrl)
     {
@@ -352,8 +323,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get vector types
-     * @return string
+     * @inheritdoc
      */
     public function getVectorType(): string
     {
@@ -361,8 +331,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set vector types
-     * @param string $vectorType
+     * @inheritdoc
      */
     public function setVectorType(string $vectorType)
     {
@@ -370,8 +339,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get content type
-     * @return string
+     * @inheritdoc
      */
     public function getContentType(): string
     {
@@ -379,8 +347,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set content type
-     * @param string $contentType
+     * @inheritdoc
      */
     public function setContentType(string $contentType)
     {
@@ -388,8 +355,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get creation date
-     * @return string
+     * @inheritdoc
      */
     public function getCreationDate(): string
     {
@@ -397,8 +363,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set creation date
-     * @param string $creationDate
+     * @inheritdoc
      */
     public function setCreationDate(string $creationDate)
     {
@@ -406,8 +371,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get created at
-     * @return string
+     * @inheritdoc
      */
     public function getCreatedAt(): string
     {
@@ -415,8 +379,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Set created at
-     * @param string $createdAt
+     * @inheritdoc
      */
     public function setCreatedAt(string $createdAt)
     {
@@ -424,8 +387,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Get updated at
-     * @return string
+     * @inheritdoc
      */
     public function getUpdatedAt(): string
     {
@@ -433,8 +395,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * Return updated at
-     * @param string $updatedAt
+     * @inheritdoc
      */
     public function setUpdatedAt(string $updatedAt)
     {
@@ -442,7 +403,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -450,10 +411,9 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     }
 
     /**
-     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritdoc
      */
-    public function setExtensionAttributes(\Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

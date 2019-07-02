@@ -9,6 +9,9 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * Asset's Keyword resource model
+ */
 class Keyword extends AbstractDb
 {
     /**

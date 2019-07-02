@@ -13,11 +13,14 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
  * Interface
+ *
+ * @api
  */
 interface GetImageListInterface
 {
     /**
-     * @api
+     * Search for images based on search criteria
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @return AssetSearchResultsInterface
      */

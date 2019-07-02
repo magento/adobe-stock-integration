@@ -10,6 +10,9 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Defines if offensive images should be excluded from the search results
+ */
 class Offensive implements SearchParameterProviderInterface
 {
     /**
