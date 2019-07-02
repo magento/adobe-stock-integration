@@ -102,6 +102,7 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Save asset
+     *
      * @param AssetInterface $item
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -112,6 +113,7 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Delete item
+     *
      * @param AssetInterface $item
      * @throws \Exception
      */
@@ -122,6 +124,7 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Get a list of assets
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @return AssetSearchResultsInterface
      */
@@ -146,6 +149,7 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Get asset by id
+     *
      * @param int $id
      * @return AssetInterface
      * @throws NoSuchEntityException
@@ -162,6 +166,7 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Delete asset
+     *
      * @param int $id
      * @return bool|void
      * @throws NoSuchEntityException
