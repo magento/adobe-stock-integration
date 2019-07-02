@@ -17,7 +17,6 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -81,10 +80,7 @@ class TestConnection extends Action
     }
 
     /**
-     * Check for connection to server
-     *
      * @return ResponseInterface|Json|ResultInterface
-     * @throws LocalizedException
      */
     public function execute()
     {
@@ -100,13 +96,18 @@ class TestConnection extends Action
 
         /** @var Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData([
-            'success' => $isConnectionEstablished,
-            'message' => $message,
-        ]);
+        return $resultJson->setData(
+            [
+                'success' => $isConnectionEstablished,
+                'message' => $message,
+            ]
+        );
     }
 
     /**
+     * Initialize test connection to the Adobe Stock service with the api key data
+     * which is sent on validation.
+     *
      * @param array $data
      *
      * @return AdobeStock
@@ -131,6 +132,8 @@ class TestConnection extends Action
     }
 
     /**
+     * Check whether test connection successfully established with the test api key or not.
+     *
      * @param AdobeStock $connectionInstance
      *
      * @return bool
@@ -147,6 +150,8 @@ class TestConnection extends Action
     }
 
     /**
+     * Generate test API key validation message.
+     *
      * @param bool $isConnectionEstablished
      *
      * @return string

@@ -93,6 +93,8 @@ class Encrypted extends \Magento\Config\Model\Config\Backend\Encrypted
     }
 
     /**
+     * Check is api key which is tried to be saved valid or not.
+     *
      * @throws IntegrationException
      */
     public function beforeSave()
@@ -109,6 +111,10 @@ class Encrypted extends \Magento\Config\Model\Config\Backend\Encrypted
     }
 
     /**
+     * Check is api key is valid or not. The api key is considered to be valid when
+     * connection to the Adobe Stock service can be established and Client object successfully
+     * executes test connection request.
+     *
      * @param string $value
      *
      * @return bool
@@ -131,6 +137,9 @@ class Encrypted extends \Magento\Config\Model\Config\Backend\Encrypted
     }
 
     /**
+     * Generate Adobe Stock connection instance object with the test $apiKey received from the
+     * data which is going to be saved.
+     *
      * @param string $apiKey
      *
      * @return AdobeStock
