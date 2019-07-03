@@ -26,8 +26,10 @@ class Isolated implements SearchParameterProviderInterface
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'isolated_filter') {
-                    $searchParams->setFilterIsolatedOn((bool)$filter->getValue());
-                    break;
+                    if ($filter->getValue() === 'Isolated Only') {
+                        $searchParams->setFilterIsolatedOn(true);
+                        break;
+                    }
                 }
             }
         }
