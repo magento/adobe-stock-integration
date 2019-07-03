@@ -20,8 +20,6 @@ use Magento\Ui\DataProvider\SearchResultFactory;
  */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
-    const FIELD_WORDS = 'words';
-
     /**
      * @var GetImageListInterface
      */
@@ -72,21 +70,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         );
         $this->getImageList = $getImageList;
         $this->searchResultFactory = $searchResultFactory;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addFilter(\Magento\Framework\Api\Filter $filter)
-    {
-        if (self::FIELD_WORDS === $filter->getField()) {
-            $value = str_replace(['"', '\\'], '', $filter->getValue());
-            $filter->setValue($value);
-        }
-
-        if (self::FIELD_WORDS !== $filter->getField() || $filter->getValue()) {
-            parent::addFilter($filter);
-        }
     }
 
     /**
