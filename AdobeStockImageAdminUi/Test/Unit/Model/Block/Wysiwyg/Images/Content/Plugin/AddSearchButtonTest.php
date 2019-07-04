@@ -53,9 +53,12 @@ class AddSearchButtonTest extends TestCase
             ->method('isEnabled')
             ->willReturn(true);
         /** @var AddSearchButton $addSearchButton */
-        $addSearchButton = $this->objectManager->getObject(AddSearchButton::class, [
-            'config' => $configMock,
-        ]);
+        $addSearchButton = $this->objectManager->getObject(
+            AddSearchButton::class,
+            [
+                'config' => $configMock,
+            ]
+        );
         /**
          * @var \Magento\Backend\Block\Widget\Container|\PHPUnit_Framework_MockObject_MockObject $containerMock
          */
@@ -82,9 +85,12 @@ class AddSearchButtonTest extends TestCase
             ->method('isEnabled')
             ->willReturn(false);
         /** @var AddSearchButton $addSearchButton */
-        $addSearchButton = $this->objectManager->getObject(AddSearchButton::class, [
-            'config' => $configMock,
-        ]);
+        $addSearchButton = $this->objectManager->getObject(
+            AddSearchButton::class,
+            [
+                'config' => $configMock,
+            ]
+        );
         /**
          * @var \Magento\Backend\Block\Widget\Container|\PHPUnit_Framework_MockObject_MockObject $containerMock
          */
