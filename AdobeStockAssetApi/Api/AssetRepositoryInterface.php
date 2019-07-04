@@ -22,6 +22,7 @@ interface AssetRepositoryInterface
 {
     /**
      * Save asset
+     *
      * @param AssetInterface $item
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -29,6 +30,7 @@ interface AssetRepositoryInterface
 
     /**
      * Delete item
+     *
      * @param AssetInterface $item
      * @throws \Exception
      */
@@ -36,6 +38,7 @@ interface AssetRepositoryInterface
 
     /**
      * Get a list of assets
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @return AssetSearchResultsInterface
      */
@@ -43,6 +46,7 @@ interface AssetRepositoryInterface
 
     /**
      * Get asset by id
+     *
      * @param int $id
      * @return AssetInterface
      * @throws NoSuchEntityException
@@ -51,6 +55,7 @@ interface AssetRepositoryInterface
 
     /**
      * Delete asset
+     *
      * @param int $id
      * @return bool|void
      * @throws NoSuchEntityException

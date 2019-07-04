@@ -3,34 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
-
 
 namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
+use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Is image separated from (and by) background color
+ * Apply selected sorting.
  */
-class Isolated implements SearchParameterProviderInterface
+class Sorting implements SearchParameterProviderInterface
 {
     /**
-     * @inheritdoc
+     * Apply sorting
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param SearchParameters $searchParams
+     * @return SearchParameters
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'isolated_filter') {
-                    $searchParams->setFilterIsolatedOn((bool)$filter->getValue());
-                    break;
-                }
+        $resultsOrders = Constants::getSearchParamsOrders();
+        foreach ($searchCriteria->getSortOrders() as $sortOrder) {
+            if (false !== ($sortOrderField = array_search($sortOrder->getField(), $resultsOrders))) {
+                $searchParams->setOrder($sortOrderField);
             }
         }
+
         return $searchParams;
     }
 }

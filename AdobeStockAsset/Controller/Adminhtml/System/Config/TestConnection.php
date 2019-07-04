@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\System\Config;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
@@ -16,6 +18,9 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filter\StripTags;
 
+/**
+ * Controller used for testing connection to Adobe Stock API from stores configuration
+ */
 class TestConnection extends Action
 {
     /**

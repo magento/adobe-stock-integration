@@ -8,6 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+/**
+ * Interface KeywordInterface
+ * @api
+ */
 interface KeywordInterface
 {
     const ID = "id";
@@ -30,12 +34,14 @@ interface KeywordInterface
 
     /**
      * Get the keyword
+     *
      * @return string
      */
     public function getKeyword() : string;
 
     /**
      * Set the keyword
+     *
      * @param string $keyword
      */
     public function setKeyword(string $keyword);

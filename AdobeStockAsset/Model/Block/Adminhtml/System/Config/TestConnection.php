@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
@@ -14,18 +16,10 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  */
 class TestConnection extends Field
 {
-
     /**
-     * Set template to itself
-     *
-     * @return TestConnection
+     * @inheritdoc
      */
-    protected function _prepareLayout()
-    {
-        parent::_prepareLayout();
-        $this->setTemplate('Magento_AdobeStockAsset::system/config/testconnection.phtml');
-        return $this;
-    }
+    protected $_template = 'Magento_AdobeStockAsset::system/config/testconnection.phtml';
 
     /**
      * Get the button and scripts contents
@@ -39,8 +33,13 @@ class TestConnection extends Field
         $this->addData(
             [
                 'button_label' => __($originalData['button_label']),
-                'html_id'      => $element->getHtmlId(),
-                'ajax_url'     => $this->_urlBuilder->getUrl('adobe_stock/system_config/testconnection') . 'form_key/' . $this->getFormKey(),
+                'html_id' => $element->getHtmlId(),
+                'ajax_url' => $this->_urlBuilder->getUrl(
+                    'adobe_stock/system_config/testconnection',
+                    [
+                        'form_key' => $this->getFormKey()
+                    ]
+                )
             ]
         );
 
