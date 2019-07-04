@@ -32,7 +32,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <listingToolbar name="listing_top">
+    <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
         <settings>
             <sticky>true</sticky>
         </settings>
@@ -44,7 +44,24 @@
                 </sizesConfig>
             </settings>
         </paging>
+        <container name="sorting" component="Magento_AdobeStockImageAdminUi/js/components/sorting">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
+                    <item name="displayArea" xsi:type="string">sorting</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns</item>
+                    </item>
+                </item>
+            </argument>
+        </container>
         <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
             <filterSelect name="content_type_filter" provider="${ $.parentName }" sortOrder="10">
                 <settings>
                     <caption translate="true">All</caption>
@@ -53,7 +70,7 @@
                     <dataScope>content_type_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="orientation_filter" provider="${ $.parentName }" sortOrder="20">
+            <filterSelect name="orientation_filter" provider="${ $.parentName }">
                 <settings>
                     <caption translate="true">All</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation\Options"/>
@@ -111,6 +128,41 @@
             </argument>
             <settings>
                 <label translate="true">Image</label>
+            </settings>
+        </column>
+        <column name="relevance">
+            <settings>
+                <label translate="true">Relevance</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="creation">
+            <settings>
+                <label translate="true">Most Recent</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="popularity">
+            <settings>
+                <label translate="true">Popularity</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="nb_downloads">
+            <settings>
+                <label translate="true">Downloads</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="undiscovered">
+            <settings>
+                <label translate="true">Undiscovered</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
             </settings>
         </column>
     </columns>

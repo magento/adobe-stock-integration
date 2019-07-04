@@ -6,5 +6,7 @@
 -->
 
 <!-- ko foreach: elems() -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- ko if: hasTemplate() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
 <!-- /ko -->
