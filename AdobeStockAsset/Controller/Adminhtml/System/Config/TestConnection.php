@@ -28,7 +28,7 @@ class TestConnection extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockAsset::config';
+    const ADMIN_RESOURCE = 'Magento_Config::config_system';
 
     /**
      * @var JsonFactory
