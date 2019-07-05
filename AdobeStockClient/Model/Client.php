@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
@@ -12,7 +13,7 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
-use Magento\AdobeStockClient\Model\ConnectionFactory;
+use Exception;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
@@ -73,14 +74,14 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     * @param Config $config
-     * @param DocumentFactory $documentFactory
-     * @param SearchResultFactory $searchResultFactory
-     * @param AttributeValueFactory $attributeValueFactory
+     * @param Config                           $config
+     * @param DocumentFactory                  $documentFactory
+     * @param SearchResultFactory              $searchResultFactory
+     * @param AttributeValueFactory            $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
-     * @param LocaleResolver $localeResolver
-     * @param \Magento\AdobeStockClient\Model\ConnectionFactory $connectionFactory
-     * @param LoggerInterface $logger
+     * @param LocaleResolver                   $localeResolver
+     * @param ConnectionFactory                $connectionFactory
+     * @param LoggerInterface                  $logger
      */
     public function __construct(
         Config $config,
@@ -147,7 +148,7 @@ class Client implements ClientInterface
             $searchResult->setTotalCount($response->getNbResults());
 
             return $searchResult;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $message = __(
                 'Adobe Stock search process failed: %error_message',
                 ['error_message' => $exception->getMessage()]
@@ -188,7 +189,7 @@ class Client implements ClientInterface
                 $attributes[$key] = $attribute;
             }
             return $attributes;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $message = __(
                 'Create attributes process failed: %error_message',
                 ['error_message' => $exception->getMessage()]
@@ -211,7 +212,7 @@ class Client implements ClientInterface
                 $this->config->getProductName(),
                 $this->config->getTargetEnvironment()
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $message = __(
                 'An error occurred during Adobe Stock connection initialization: %error_message',
                 ['error_message' => $exception->getMessage()]
@@ -221,7 +222,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: Implement retriving of an access token
+     * TODO: Implement retrieving of an access token
      *
      * @return null
      */
@@ -253,7 +254,7 @@ class Client implements ClientInterface
             $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
             return (bool)$client->getNextResponse()->nb_results;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $message = __(
                 'An error occurred during test API connection: %error_message',
                 ['error_message' => $exception->getMessage()]
@@ -266,10 +267,10 @@ class Client implements ClientInterface
      * Handle SDK Exception and throw Magento exception instead
      *
      * @param Phrase $message
-     * @param \Exception $exception
+     * @param Exception $exception
      * @throws IntegrationException
      */
-    private function processException(Phrase $message, \Exception $exception)
+    private function processException(Phrase $message, Exception $exception)
     {
         $this->logger->critical($message->render());
         throw new IntegrationException($message, $exception);
