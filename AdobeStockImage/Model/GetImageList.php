@@ -56,7 +56,6 @@ class GetImageList implements GetImageListInterface
 
     /**
      * @inheritdoc
-     * @throws LocalizedException
      */
     public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {

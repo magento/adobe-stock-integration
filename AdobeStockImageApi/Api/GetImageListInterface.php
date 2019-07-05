@@ -10,6 +10,7 @@ namespace Magento\AdobeStockImageApi\Api;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface
@@ -23,6 +24,7 @@ interface GetImageListInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return AssetSearchResultsInterface
+     * @throws LocalizedException
      */
     public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface;
 }
