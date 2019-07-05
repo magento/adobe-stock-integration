@@ -24,7 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_AdobeStockImageAdminUi::search</aclResource>
+        <aclResource>Magento_AdobeStockImageAdminUi::save_preview_images</aclResource>
         <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider" name="adobe_stock_images_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -32,7 +32,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <listingToolbar name="listing_top">
+    <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
         <settings>
             <sticky>true</sticky>
         </settings>
@@ -44,7 +44,32 @@
                 </sizesConfig>
             </settings>
         </paging>
+        <container name="sorting" component="Magento_AdobeStockImageAdminUi/js/components/sorting">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
+                    <item name="displayArea" xsi:type="string">sorting</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns</item>
+                    </item>
+                </item>
+            </argument>
+        </container>
         <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+            <filterSelect name="content_type_filter" provider="${ $.parentName }" sortOrder="10">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Options"/>
+                    <label translate="true">Subcategory</label>
+                    <dataScope>content_type_filter</dataScope>
+                </settings>
+            </filterSelect>
             <filterSelect name="orientation_filter" provider="${ $.parentName }">
                 <settings>
                     <caption translate="true">All</caption>
@@ -53,31 +78,7 @@
                     <dataScope>orientation_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="premium_price_filter" provider="${ $.parentName }">
-                <settings>
-                    <caption translate="true">All</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
-                    <label translate="true">Price</label>
-                    <dataScope>premium_price_filter</dataScope>
-                </settings>
-            </filterSelect>
-            <filterSelect name="offensive_filter" provider="${ $.parentName }">
-                <settings>
-                    <caption translate="true">Only safe</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Offensive\Options"/>
-                    <label translate="true">Offensive</label>
-                    <dataScope>offensive_filter</dataScope>
-                </settings>
-            </filterSelect>
-            <filterSelect name="isolated_filter" provider="${ $.parentName }">
-                <settings>
-                    <caption translate="true">No</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Isolated\Options"/>
-                    <label translate="true">Isolated images only</label>
-                    <dataScope>isolated_filter</dataScope>
-                </settings>
-            </filterSelect>
-            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }">
+            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }" sortOrder="30">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Color</item>
@@ -89,6 +90,46 @@
                 </argument>
                 <settings>
                     <label translate="true">Color</label>
+                </settings>
+            </filterInput>
+            <filterSelect name="premium_price_filter" provider="${ $.parentName }" sortOrder="40">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
+                    <label translate="true">Price</label>
+                    <dataScope>premium_price_filter</dataScope>
+                </settings>
+            </filterSelect>
+            <filterInput name="offensive_filter" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox" template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox" provider="${ $.parentName }" sortOrder="50">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Safe search</item>
+                        <item name="description" xsi:type="string" translate="true">Enabled</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
+                        <item name="dataScope" xsi:type="string">offensive_filter</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">Enabled</item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Safe search</label>
+                </settings>
+            </filterInput>
+            <filterInput name="isolated_filter" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox" template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox" provider="${ $.parentName }" sortOrder="60">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Isolated Assets</item>
+                        <item name="description" xsi:type="string" translate="true">Isolated Only</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
+                        <item name="dataScope" xsi:type="string">isolated_filter</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">Isolated Only</item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Isolated Assets</label>
                 </settings>
             </filterInput>
         </filters>
@@ -103,6 +144,41 @@
             </argument>
             <settings>
                 <label translate="true">Image</label>
+            </settings>
+        </column>
+        <column name="relevance">
+            <settings>
+                <label translate="true">Relevance</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="creation">
+            <settings>
+                <label translate="true">Most Recent</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="popularity">
+            <settings>
+                <label translate="true">Popularity</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="nb_downloads">
+            <settings>
+                <label translate="true">Downloads</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="undiscovered">
+            <settings>
+                <label translate="true">Undiscovered</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
             </settings>
         </column>
     </columns>

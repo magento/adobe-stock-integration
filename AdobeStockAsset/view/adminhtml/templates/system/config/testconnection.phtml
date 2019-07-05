@@ -7,7 +7,7 @@
 /** @var $block \Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config\TestConnection */
 ?>
 <button class="scalable" type="button" id="<?= $block->escapeUrl($block->getData('html_id')) ?>" data-mage-init='{"testConnection":{
-    "url": "<?= /* @escapeNotVerified */ $block->getData('ajax_url') ?>",
+    "url": "<?= $block->escapeHtmlAttr($block->getData('ajax_url')) ?>",
     "elementId": "<?= $block->escapeHtmlAttr($block->getData('html_id')) ?>",
     "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
     "fieldToCheck": "success",

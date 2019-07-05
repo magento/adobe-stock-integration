@@ -23,10 +23,24 @@
         height: 100%;
         width: 100%;
     }
-}
-
-.admin__form-field{
-    .colorpicker-input{
-        min-width: 18.83rem;
+    .admin__form-field {
+        .colorpicker-input {
+            min-width: 18.83rem;
+        }
+    }
+    .masonry-sorting {
+        display: inline-block;
+        select {
+            border: none;
+            background-image: url(../images/arrows-bg.svg);
+            padding-right: 2.2rem;
+            &:active {
+                background-image+: url('../images/arrows-bg.svg');
+            }
+        }
+    }
+    .masonry-results-number {
+        display: inline-block;
+        margin-right: 1.4rem;
     }
 }
