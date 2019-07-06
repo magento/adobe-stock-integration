@@ -36,7 +36,7 @@ class Keyword extends AbstractExtensibleModel implements KeywordInterface
     /**
      * @inheritdoc
      */
-    public function setKeyword(string $keyword)
+    public function setKeyword(string $keyword): void
     {
         $this->setData(self::KEYWORD, $keyword);
     }
