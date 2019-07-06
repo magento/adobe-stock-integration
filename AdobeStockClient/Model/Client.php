@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
@@ -12,7 +13,7 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
-use Magento\AdobeStockClient\Model\ConnectionFactory;
+use Exception;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
@@ -23,6 +24,7 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -72,14 +74,14 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     *
-     * @param Config $config
-     * @param DocumentFactory $documentFactory
-     * @param SearchResultFactory $searchResultFactory
-     * @param AttributeValueFactory $attributeValueFactory
+     * @param Config                           $config
+     * @param DocumentFactory                  $documentFactory
+     * @param SearchResultFactory              $searchResultFactory
+     * @param AttributeValueFactory            $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
-     * @param LocaleResolver $localeResolver
-     * @param ConnectionFactory $connectionFactory
+     * @param LocaleResolver                   $localeResolver
+     * @param ConnectionFactory                $connectionFactory
+     * @param LoggerInterface                  $logger
      */
     public function __construct(
         Config $config,
@@ -102,81 +104,103 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param SearchCriteriaInterface $searchCriteria
+     * Search assets
      *
+     * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
      * @throws IntegrationException
-     * @throws \AdobeStock\Api\Exception\StockApi
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
+        try {
+            $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
 
-        $resultsColumns = Constants::getResultColumns();
-        $resultColumnArray = [];
-        foreach ($this->config->getSearchResultFields() as $field) {
-            $resultColumnArray[] = $resultsColumns[$field];
+            $resultsColumns = Constants::getResultColumns();
+            $resultColumnArray = [];
+            foreach ($this->config->getSearchResultFields() as $field) {
+                $resultColumnArray[] = $resultsColumns[$field];
+            }
+
+            $searchRequest = new SearchFilesRequest();
+            $searchRequest->setLocale($this->localeResolver->getLocale());
+            $searchRequest->setSearchParams($searchParams);
+            $searchRequest->setResultColumns($resultColumnArray);
+            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+            $response = $client->getNextResponse();
+
+            $items = [];
+            /** @var StockFile $file */
+            foreach ($response->getFiles() as $file) {
+                $itemData = (array)$file;
+                $itemData['url'] = $itemData['thumbnail_240_url'];
+                $itemId = $itemData['id'];
+                $attributes = $this->createAttributes('id', $itemData);
+
+                $item = $this->documentFactory->create();
+                $item->setId($itemId);
+                $item->setCustomAttributes($attributes);
+                $items[] = $item;
+            }
+
+            $searchResult = $this->searchResultFactory->create();
+            $searchResult->setSearchCriteria($searchCriteria);
+            $searchResult->setItems($items);
+            $searchResult->setTotalCount($response->getNbResults());
+
+            return $searchResult;
+        } catch (Exception $exception) {
+            $message = __(
+                'Adobe Stock search process failed: %error_message',
+                ['error_message' => $exception->getMessage()]
+            );
+            $this->processException($message, $exception);
         }
-
-        $searchRequest = new SearchFilesRequest();
-        $searchRequest->setLocale($this->localeResolver->getLocale());
-        $searchRequest->setSearchParams($searchParams);
-        $searchRequest->setResultColumns($resultColumnArray);
-        $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
-        $response = $client->getNextResponse();
-
-        $items = [];
-        /** @var StockFile $file */
-        foreach ($response->getFiles() as $file) {
-            $itemData = (array) $file;
-            $itemData['url'] = $itemData['thumbnail_240_url'];
-            $itemId = $itemData['id'];
-            $attributes = $this->createAttributes('id', $itemData);
-
-            $item = $this->documentFactory->create();
-            $item->setId($itemId);
-            $item->setCustomAttributes($attributes);
-            $items[] = $item;
-        }
-
-        $searchResult = $this->searchResultFactory->create();
-        $searchResult->setSearchCriteria($searchCriteria);
-        $searchResult->setItems($items);
-        $searchResult->setTotalCount($response->getNbResults());
-        return $searchResult;
     }
 
     /**
+     * Create custom attributes for columns returned by search
+     *
      * @param string $idFieldName
      * @param array $itemData
      * @return AttributeValue[]
+     * @throws IntegrationException
      */
     private function createAttributes(string $idFieldName, array $itemData): array
     {
-        $attributes = [];
+        try {
+            $attributes = [];
 
-        $idFieldNameAttribute = $this->attributeValueFactory->create();
-        $idFieldNameAttribute->setAttributeCode('id_field_name');
-        $idFieldNameAttribute->setValue($idFieldName);
-        $attributes['id_field_name'] = $idFieldNameAttribute;
+            $idFieldNameAttribute = $this->attributeValueFactory->create();
+            $idFieldNameAttribute->setAttributeCode('id_field_name');
+            $idFieldNameAttribute->setValue($idFieldName);
+            $attributes['id_field_name'] = $idFieldNameAttribute;
 
-        foreach ($itemData as $key => $value) {
-            if ($value === null) {
-                continue;
+            foreach ($itemData as $key => $value) {
+                if ($value === null) {
+                    continue;
+                }
+                $attribute = $this->attributeValueFactory->create();
+                $attribute->setAttributeCode($key);
+                if (is_bool($value)) {
+                    // for proper work of form and grid (for example for Yes/No properties)
+                    $value = (string)(int)$value;
+                }
+                $attribute->setValue($value);
+                $attributes[$key] = $attribute;
             }
-            $attribute = $this->attributeValueFactory->create();
-            $attribute->setAttributeCode($key);
-            if (is_bool($value)) {
-                // for proper work of form and grid (for example for Yes/No properties)
-                $value = (string)(int)$value;
-            }
-            $attribute->setValue($value);
-            $attributes[$key] = $attribute;
+            return $attributes;
+        } catch (Exception $exception) {
+            $message = __(
+                'Create attributes process failed: %error_message',
+                ['error_message' => $exception->getMessage()]
+            );
+            $this->processException($message, $exception);
         }
-        return $attributes;
     }
 
     /**
+     * Get SDK connection
+     *
      * @return AdobeStock
      * @throws IntegrationException
      */
@@ -188,18 +212,17 @@ class Client implements ClientInterface
                 $this->config->getProductName(),
                 $this->config->getTargetEnvironment()
             );
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
+        } catch (Exception $exception) {
             $message = __(
-                'An error occurred during Adobe Stock client initialization: %error_message',
+                'An error occurred during Adobe Stock connection initialization: %error_message',
                 ['error_message' => $exception->getMessage()]
             );
-            throw new IntegrationException($message, $exception);
+            $this->processException($message, $exception);
         }
     }
 
     /**
-     * TODO: Implement retriving of an access token
+     * TODO: Implement retrieving of an access token
      *
      * @return null
      */
@@ -209,23 +232,47 @@ class Client implements ClientInterface
     }
 
     /**
-     * @inheritdoc
+     * Test connection to Adobe Stock API
+     *
+     * @return bool
+     * @throws IntegrationException
      */
-    public function testConnection()
+    public function testConnection(): bool
     {
-        //TODO: should be refactored
-        $searchParams = new SearchParameters();
-        $searchRequest = new SearchFilesRequest();
-        $resultColumnArray = [];
+        try {
+            //TODO: should be refactored
+            $searchParams = new SearchParameters();
+            $searchRequest = new SearchFilesRequest();
+            $resultColumnArray = [];
 
-        $resultColumnArray[] = 'nb_results';
+            $resultColumnArray[] = 'nb_results';
 
-        $searchRequest->setLocale('en_GB');
-        $searchRequest->setSearchParams($searchParams);
-        $searchRequest->setResultColumns($resultColumnArray);
+            $searchRequest->setLocale('en_GB');
+            $searchRequest->setSearchParams($searchParams);
+            $searchRequest->setResultColumns($resultColumnArray);
 
-        $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
-        return (bool) $client->getNextResponse()->nb_results;
+            return (bool)$client->getNextResponse()->nb_results;
+        } catch (Exception $exception) {
+            $message = __(
+                'An error occurred during test API connection: %error_message',
+                ['error_message' => $exception->getMessage()]
+            );
+            $this->processException($message, $exception);
+        }
+    }
+
+    /**
+     * Handle SDK Exception and throw Magento exception instead
+     *
+     * @param Phrase $message
+     * @param Exception $exception
+     * @throws IntegrationException
+     */
+    private function processException(Phrase $message, Exception $exception)
+    {
+        $this->logger->critical($message->render());
+        throw new IntegrationException($message, $exception);
     }
 }

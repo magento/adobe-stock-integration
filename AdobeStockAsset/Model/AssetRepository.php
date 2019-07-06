@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,20 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAsset\Model\AssetFactory;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
+use Exception;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
-use Magento\Framework\Api\SearchCriteriaBuilderFactory;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class AssetRepository
@@ -45,16 +44,6 @@ class AssetRepository implements AssetRepositoryInterface
     private $collectionFactory;
 
     /**
-     * @var SearchResultsInterface
-     */
-    private $searchResult;
-
-    /**
-     * @var SearchCriteriaBuilderFactory
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var JoinProcessorInterface
      */
     private $joinProcessor;
@@ -71,21 +60,17 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * AssetRepository constructor.
-     * @param ResourceModel $resource
-     * @param AssetCollectionFactory $collectionFactory
-     * @param \Magento\AdobeStockAsset\Model\AssetFactory $factory
-     * @param SearchResultsInterface $searchResult
-     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
-     * @param JoinProcessorInterface $joinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param ResourceModel                      $resource
+     * @param AssetCollectionFactory             $collectionFactory
+     * @param AssetFactory                       $factory
+     * @param JoinProcessorInterface             $joinProcessor
+     * @param CollectionProcessorInterface       $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
         ResourceModel $resource,
         AssetCollectionFactory $collectionFactory,
         AssetFactory $factory,
-        SearchResultsInterface $searchResult,
-        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         AssetSearchResultsInterfaceFactory $searchResultFactory
@@ -93,8 +78,6 @@ class AssetRepository implements AssetRepositoryInterface
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
         $this->factory = $factory;
-        $this->searchResult = $searchResult;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilderFactory;
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
@@ -102,8 +85,9 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Save asset
+     *
      * @param AssetInterface $item
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      */
     public function save(AssetInterface $item)
     {
@@ -112,8 +96,9 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Delete item
+     *
      * @param AssetInterface $item
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(AssetInterface $item)
     {
@@ -122,6 +107,7 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Get a list of assets
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @return AssetSearchResultsInterface
      */
@@ -146,6 +132,7 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Get asset by id
+     *
      * @param int $id
      * @return AssetInterface
      * @throws NoSuchEntityException
@@ -162,9 +149,11 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * Delete asset
+     *
      * @param int $id
      * @return bool|void
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public function deleteById(int $id)
     {

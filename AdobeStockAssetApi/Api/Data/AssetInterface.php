@@ -1,15 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
 /**
  * Interface
+ *
+ * @api
  */
 interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -90,35 +92,45 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setUrl(string $url);
 
     /**
+     * Set full licensed asset's height
+     *
      * @param int $value
      * @return $this
      */
     public function setHeight(int $value);
 
     /**
+     * Retrieve full licensed asset's height
+     *
      * @return int
      */
     public function getHeight() : int;
 
     /**
+     * Set full licensed asset's width
+     *
      * @param int $value
      * @return $this
      */
     public function setWidth(int $value);
 
     /**
+     * Retrieve full licensed asset's width
+     *
      * @return int
      */
     public function getWidth() : int;
 
     /**
      * Get media type id
+     *
      * @return int
      */
     public function getMediaTypeId(): int;
 
     /**
      * Set media type id
+     *
      * @param int $mediaTypeId
      * @return void
      */
@@ -126,12 +138,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get category
+     *
      * @return CategoryInterface|null
      */
     public function getCategory(): ?CategoryInterface;
 
     /**
      * Set category
+     *
      * @param CategoryInterface $categoryId
      * @return $this
      */
@@ -139,12 +153,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Return the creator
+     *
      * @return CreatorInterface|null
      */
     public function getCreator(): ?CreatorInterface;
 
     /**
      * Set the creator id
+     *
      * @param CreatorInterface $creatorId
      * @return $this
      */
@@ -152,12 +168,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get keywords
+     *
      * @return KeywordInterface[]
      */
     public function getKeywords(): array;
 
     /**
      * Set keywords
+     *
      * @param KeywordInterface[] $keywords
      * @return $this
      */
@@ -165,12 +183,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get premium level id
+     *
      * @return int
      */
     public function getPremiumLevelId(): int;
 
     /**
      * Set premium level id
+     *
      * @param int $premiumLevelId
      * @return $this
      */
@@ -178,12 +198,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get adobe id
+     *
      * @return int
      */
     public function getAdobeId(): int;
 
     /**
      * Set adobe id
+     *
      * @param int $adobeId
      * @return $this
      */
@@ -191,12 +213,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get the stock id
+     *
      * @return int
      */
     public function getStockId(): int;
 
     /**
      * Set stock id
+     *
      * @param int $stockId
      * @return $this
      */
@@ -204,12 +228,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Is licensed
+     *
      * @return int
      */
     public function isLicensed(): int;
 
     /**
      * Set is licensed
+     *
      * @param int $isLicensed
      * @return $this
      */
@@ -217,12 +243,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get title
+     *
      * @return string
      */
     public function getTitle(): string;
 
     /**
      * Set title
+     *
      * @param string $title
      * @return $this
      */
@@ -230,12 +258,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get preview url
+     *
      * @return string
      */
     public function getPreviewUrl(): string;
 
     /**
      * Set preview url
+     *
      * @param string $previewUrl
      * @return $this
      */
@@ -243,12 +273,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get preview width
+     *
      * @return int
      */
     public function getPreviewWidth(): int;
 
     /**
      * Set preview width
+     *
      * @param int $previewWidth
      * @return $this
      */
@@ -256,12 +288,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get the preview height
+     *
      * @return int
      */
     public function getPreviewHeight(): int;
 
     /**
      * Set preview height
+     *
      * @param int $previewHeight
      * @return $this
      */
@@ -269,12 +303,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get country name
+     *
      * @return string
      */
     public function getCountryName(): string;
 
     /**
      * Set country name
+     *
      * @param string $countryName
      * @return $this
      */
@@ -282,12 +318,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get details url
+     *
      * @return string
      */
     public function getDetailsUrl(): string;
 
     /**
      * Set details url
+     *
      * @param string $detailsUrl
      * @return $this
      */
@@ -295,12 +333,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get vector types
+     *
      * @return string
      */
     public function getVectorType(): string;
 
     /**
      * Set vector types
+     *
      * @param string $vectorType
      * @return $this
      */
@@ -308,12 +348,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get content type
+     *
      * @return string
      */
     public function getContentType(): string;
 
     /**
      * Set content type
+     *
      * @param string $contentType
      * @return $this
      */
@@ -321,12 +363,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get creation date
+     *
      * @return string
      */
     public function getCreationDate(): string;
 
     /**
      * Set creation date
+     *
      * @param string $creationDate
      * @return $this
      */
@@ -334,12 +378,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get created at
+     *
      * @return string
      */
     public function getCreatedAt(): string;
 
     /**
      * Set created at
+     *
      * @param string $createdAt
      * @return $this
      */
@@ -347,12 +393,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get updated at
+     *
      * @return string
      */
     public function getUpdatedAt(): string;
 
     /**
      * Return updated at
+     *
      * @param string $updatedAt
      * @return $this
      */
@@ -371,5 +419,5 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes);
 }

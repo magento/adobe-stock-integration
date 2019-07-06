@@ -4,12 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
 use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Defines if offensive images should be excluded from the search results
+ */
 class Offensive implements SearchParameterProviderInterface
 {
     /**
@@ -20,8 +25,10 @@ class Offensive implements SearchParameterProviderInterface
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'offensive_filter') {
-                    $searchParams->setFilterOffensive2((bool)$filter->getValue());
-                    break;
+                    if ($filter->getValue() === 'Enabled') {
+                        $searchParams->setFilterOffensive2(true);
+                        break;
+                    }
                 }
             }
         }

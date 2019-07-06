@@ -1,4 +1,4 @@
-// /**
+/**
 //  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
@@ -38,6 +38,26 @@
             text-align: right;
             color: #fff;
             z-index: 10;
+        }
+        .masonry-sorting {
+            display: inline-block;
+            select {
+                border: none;
+                background-image: url(../images/arrows-bg.svg);
+                padding-right: 2.2rem;
+                &:active {
+                    background-image+: url('../images/arrows-bg.svg');
+                }
+            }
+        }
+    }
+    .masonry-results-number {
+        display: inline-block;
+        margin-right: 1.4rem;
+    }
+    .admin__form-field {
+        .colorpicker-input {
+            min-width: 18.83rem;
         }
     }
 }
