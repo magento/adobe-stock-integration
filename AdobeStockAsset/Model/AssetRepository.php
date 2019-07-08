@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Exception;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
@@ -20,7 +19,6 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -84,32 +82,23 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * Save asset
-     *
-     * @param AssetInterface $item
-     * @throws AlreadyExistsException
+     * @inheritdoc
      */
-    public function save(AssetInterface $item)
+    public function save(AssetInterface $item): void
     {
         $this->resource->save($item);
     }
 
     /**
-     * Delete item
-     *
-     * @param AssetInterface $item
-     * @throws Exception
+     * @inheritdoc
      */
-    public function delete(AssetInterface $item)
+    public function delete(AssetInterface $item): void
     {
         $this->resource->delete($item);
     }
 
     /**
-     * Get a list of assets
-     *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return AssetSearchResultsInterface
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface
     {
@@ -131,11 +120,7 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * Get asset by id
-     *
-     * @param int $id
-     * @return AssetInterface
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function getById(int $id) : AssetInterface
     {
@@ -148,14 +133,9 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * Delete asset
-     *
-     * @param int $id
-     * @return bool|void
-     * @throws NoSuchEntityException
-     * @throws Exception
+     * @inheritdoc
      */
-    public function deleteById(int $id)
+    public function deleteById(int $id): void
     {
         $this->delete($this->getById($id));
     }
