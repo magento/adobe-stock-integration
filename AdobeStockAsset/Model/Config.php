@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Config
 {
     private const XML_PATH_ENABLED = 'adobe_stock/integration/enabled';
+    private const XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
 
     /**
      * @var ScopeConfigInterface
@@ -39,6 +40,26 @@ class Config
      */
     public function isEnabled(): bool
     {
-        return (bool) $this->scopeConfig->getValue(self::XML_PATH_ENABLED);
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_ENABLED);
+    }
+
+    /**
+     * Retrieve integration API key (Client ID)
+     *
+     * @return string
+     */
+    public function getApiKey(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_API_KEY);
+    }
+
+    /**
+     * Retrieve integration API private KEY (Client secret)
+     *
+     * @return string
+     */
+    public function getPrivateKey(): string
+    {
+        return (string)'';
     }
 }
