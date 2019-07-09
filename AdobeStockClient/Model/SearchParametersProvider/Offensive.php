@@ -25,7 +25,7 @@ class Offensive implements SearchParameterProviderInterface
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'offensive_filter') {
-                    if ($filter->getValue() === 'Enabled') {
+                    if ($filter->getValue() === 'Disabled') {
                         $searchParams->setFilterOffensive2(true);
                         break;
                     }
