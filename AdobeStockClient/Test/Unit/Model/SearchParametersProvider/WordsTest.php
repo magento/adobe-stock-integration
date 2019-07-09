@@ -59,9 +59,12 @@ class WordsTest extends TestCase
     /**
      * Check that quotes symbol will be deleted from request.
      *
+     * @param string $requestValue
+     * @param string $encodedValue
      * @throws StockApi
+     * @dataProvider requestValuesDataProvider
      */
-    public function testApplyWithQuotesSymbol()
+    public function testApplyWithRequestValue(string $requestValue, string $encodedValue)
     {
         /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
@@ -89,7 +92,7 @@ class WordsTest extends TestCase
             ->willReturn('words');
         $filter->expects($this->exactly(2))
             ->method('getValue')
-            ->willReturn('Test "query"');
+            ->willReturn($requestValue);
         $filterGroupMock->expects($this->once())
             ->method('getFilters')
             ->willReturn([$filter]);
@@ -99,103 +102,7 @@ class WordsTest extends TestCase
             ->willReturn('Test%20query');
         $searchParamsMock->expects($this->once())
             ->method('setWords')
-            ->with('Test%20query');
-        $methodResult = $this->words->apply($searchCriteriaMock, $searchParamsMock);
-        $this->assertInstanceOf(SearchParameters::class, $methodResult);
-    }
-
-    /**
-     * Check that slash symbol will be deleted from request.
-     *
-     * @throws StockApi
-     */
-    public function testApplyWithSlashSymbol()
-    {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParamsMock */
-        $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setWords'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $searchCriteriaMock->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroupMock]);
-        $filter = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filter->expects($this->once())
-            ->method('getField')
-            ->willReturn('words');
-        $filter->expects($this->exactly(2))
-            ->method('getValue')
-            ->willReturn('Test \query\\');
-        $filterGroupMock->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-        $this->escaperMock->expects($this->once())
-            ->method('encodeUrlParam')
-            ->with('Test query')
-            ->willReturn('Test%20query');
-        $searchParamsMock->expects($this->once())
-            ->method('setWords')
-            ->with('Test%20query');
-        $methodResult = $this->words->apply($searchCriteriaMock, $searchParamsMock);
-        $this->assertInstanceOf(SearchParameters::class, $methodResult);
-    }
-
-    /**
-     * Check that both unnecessary symbols will be deleted from request.
-     *
-     * @throws StockApi
-     */
-    public function testApplyWithBothUnnecessarySymbols()
-    {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParamsMock */
-        $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setWords'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $searchCriteriaMock->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroupMock]);
-        $filter = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filter->expects($this->once())
-            ->method('getField')
-            ->willReturn('words');
-        $filter->expects($this->exactly(2))
-            ->method('getValue')
-            ->willReturn('"Test \query\\"');
-        $filterGroupMock->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-        $this->escaperMock->expects($this->once())
-            ->method('encodeUrlParam')
-            ->with('Test query')
-            ->willReturn('Test%20query');
-        $searchParamsMock->expects($this->once())
-            ->method('setWords')
-            ->with('Test%20query');
+            ->with($encodedValue);
         $methodResult = $this->words->apply($searchCriteriaMock, $searchParamsMock);
         $this->assertInstanceOf(SearchParameters::class, $methodResult);
     }
@@ -335,5 +242,28 @@ class WordsTest extends TestCase
             ->method('setWords');
         $methodResult = $this->words->apply($searchCriteriaMock, $searchParamsMock);
         $this->assertInstanceOf(SearchParameters::class, $methodResult);
+    }
+
+    /**
+     * Request values.
+     *
+     * @return array
+     */
+    public function requestValuesDataProvider(): array
+    {
+        return [
+            [
+                'requestValue' => 'Test "query"',
+                'encodedValue' => 'Test%20query',
+            ],
+            [
+                'requestValue' => 'Test \query\\',
+                'encodedValue' => 'Test%20query',
+            ],
+            [
+                'requestValue' => '"Test \query\\"',
+                'encodedValue' => 'Test%20query',
+            ],
+        ];
     }
 }
