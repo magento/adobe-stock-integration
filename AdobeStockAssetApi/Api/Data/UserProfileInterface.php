@@ -8,8 +8,26 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+/**
+ * Interface UserProfileInterface
+ * @api
+ */
 interface UserProfileInterface
 {
+    /**#@+
+     * Constants for keys of data array. Identical to the name of the getter in snake case
+     */
+    const ID = 'id';
+    const ADOBE_ID = 'adobe_id';
+    const USER_ID = 'admin_user_id';
+    const NAME = 'display_name';
+    const ACCOUNT_TYPE = 'account_type';
+    const ACCESS_TOKEN = 'access_token';
+    const REFRESH_TOKEN = 'refresh_token';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+    /**#@-*/
+
     /**
      * Get ID
      *
