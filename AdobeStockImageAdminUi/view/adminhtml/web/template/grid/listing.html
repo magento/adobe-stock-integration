@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<!-- ko foreach: elems() -->
-    <!-- ko if: hasTemplate() -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    <!-- /ko -->
-<!-- /ko -->
+<div data-role="grid-wrapper" ko-style="containerStyles" attr="'data-id': containerId">
+    <div class="masonry-image-column" repeat="foreach: rows, item: '$row'">
+        <div outerfasteach="data: getVisible(), as: '$col'" template="getBody()"/>
+    </div>
+</div>
