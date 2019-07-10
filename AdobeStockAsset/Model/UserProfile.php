@@ -8,11 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeStockAsset\Model\ResourceModel\UserProfile as UserProfileResource;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class UserProfile extends AbstractModel implements UserProfileInterface
 {
+    /**
+     * @inheritDoc
+     */
+    protected function _construct()
+    {
+        $this->_init(UserProfileResource::class);
+    }
+
     /**
      * @inheritDoc
      */

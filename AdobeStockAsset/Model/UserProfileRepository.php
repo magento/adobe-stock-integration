@@ -63,4 +63,20 @@ class UserProfileRepository implements UserProfileRepositoryInterface
 
         return $this->loadedEntities[$entity->getId()] = $entity;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getByUserId(int $userId): UserProfileInterface
+    {
+        $entity = $this->entityFactory->create();
+
+        try {
+            $this->resource->load($entity, $userId, UserProfileInterface::USER_ID);
+        } catch (Exception $e) {
+            throw new NoSuchEntityException(__($e->getMessage()));
+        }
+
+        return $this->loadedEntities[$entity->getId()] = $entity;
+    }
 }

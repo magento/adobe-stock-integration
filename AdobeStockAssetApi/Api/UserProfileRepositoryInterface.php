@@ -31,4 +31,13 @@ interface UserProfileRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get(int $entityId): \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
+
+    /**
+     * Get user profile by user ID
+     *
+     * @param int $userId
+     * @return \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getByUserId(int $userId): \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 }

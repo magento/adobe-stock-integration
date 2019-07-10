@@ -6,11 +6,11 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\Auth;
+namespace Magento\AdobeStockAsset\Model\OAuth;
 
 use Magento\Framework\DataObject;
 
-class Response extends DataObject
+class TokenResponse extends DataObject
 {
     /**
      * Get access token
@@ -100,5 +100,15 @@ class Response extends DataObject
     public function getEmail(): string
     {
         return (string)$this->getData('email');
+    }
+
+    /**
+     * Get error code
+     *
+     * @return string
+     */
+    public function getError(): string
+    {
+        return (string)$this->getData('error');
     }
 }

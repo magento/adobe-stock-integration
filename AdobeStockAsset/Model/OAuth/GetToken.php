@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\Auth;
+namespace Magento\AdobeStockAsset\Model\OAuth;
 
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class Service
+class GetToken
 {
     /**
      * Token URI
@@ -24,28 +24,29 @@ class Service
     /** @var Json */
     private $json;
 
-    /** @var ResponseFactory */
-    private $responseFactory;
+    /** @var TokenResponseFactory */
+    private $tokenResponseFactory;
 
     public function __construct(
         CurlFactory $curlFactory,
         Json $json,
-        ResponseFactory $responseFactory
+        TokenResponseFactory $tokenResponseFactory
     ) {
         $this->curlFactory = $curlFactory;
         $this->json = $json;
-        $this->responseFactory = $responseFactory;
+        $this->tokenResponseFactory = $tokenResponseFactory;
     }
 
     /**
-     * Get access data from Adobe stock IMS
+     * Get access tokens from Adobe stock IMS
      *
      * @param string $apiKey
      * @param string $privateKey
      * @param string $code
-     * @return Response
+     * @return TokenResponse
+     * @throws OAuthException
      */
-    public function execute(string $apiKey, string $privateKey, string $code): Response
+    public function execute(string $apiKey, string $privateKey, string $code): TokenResponse
     {
         $curl = $this->curlFactory->create();
 
@@ -59,8 +60,16 @@ class Service
             'grant_type' => 'authorization_code'
         ]);
 
-        $response = $this->json->unserialize($curl->getBody());
-        return $this->responseFactory->create()
-            ->addData(is_array($response) ? $response : []);
+        $tokenResponse = $this->json->unserialize($curl->getBody());
+        $tokenResponse = $this->tokenResponseFactory->create()
+            ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => 'The response is empty.']);
+
+        if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
+            throw new OAuthException(
+                __('Authentication is failing. Error code: %1', $tokenResponse->getError())
+            );
+        }
+
+        return $tokenResponse;
     }
 }
