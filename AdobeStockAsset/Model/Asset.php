@@ -208,7 +208,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function setPreviewUrl(string $previewUrl): void
     {
-        $this->setData(self::PREVIEW_UR, $previewUrl);
+        $this->setData(self::PREVIEW_URL, $previewUrl);
     }
 
     /**
@@ -246,7 +246,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getUrl(): string
+    public function getThumbnailUrl(): string
     {
         return (string)$this->_get(self::URL);
     }
@@ -254,7 +254,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setUrl(string $url): void
+    public function setThumbnailUrl(string $url): void
     {
         $this->setData(self::URL, $url);
     }

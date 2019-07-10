@@ -8,6 +8,12 @@ define([
     'use strict';
 
     return Column.extend({
+        defaults: {
+            modules: {
+                previewComponent: '${ $.parentName }.preview'
+            }
+        },
+
         /**
          * Returns url to given record.
          *
@@ -15,7 +21,7 @@ define([
          * @returns {String}
          */
         getUrl: function (record) {
-            return record.url;
+            return record.thumbnail_url;
         },
 
         /**
@@ -39,6 +45,13 @@ define([
                 return record.styles;
             }
             return {};
+        },
+
+        /**
+         * Expand image preview
+         */
+        expandPreview: function (record) {
+            this.previewComponent().show(record._rowIndex);
         }
     });
 });
