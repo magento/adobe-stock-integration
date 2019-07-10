@@ -34,6 +34,7 @@
                 <item name="offensive_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Offensive</item>
                 <item name="sorting" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Sorting</item>
                 <item name="orientation_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Orientation</item>
+                <item name="words" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Words</item>
             </argument>
         </arguments>
     </type>
@@ -41,7 +42,6 @@
         <arguments>
             <argument name="filters" xsi:type="array">
                 <item name="premium_price_filter" xsi:type="string">setFilterPremium</item>
-                <item name="words" xsi:type="string">setWords</item>
                 <item name="colors_filter" xsi:type="string">setFilterColors</item>
             </argument>
         </arguments>
