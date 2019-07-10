@@ -8,6 +8,9 @@
         &-column {
             position: relative;
             margin: 20px 0 20px 0;
+            &:hover .masonry-image-overlay {
+                display: block;
+            }
         }
         &-block {
             background-color: #D5D5D5;
@@ -23,9 +26,6 @@
                 height: 100%;
                 width: 100%;
             }
-            &:hover .masonry-image-overlay {
-                display: block;
-            }
         }
         &-overlay {
             display: none;
@@ -34,10 +34,11 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(128,0,128, .5);
-            text-align: right;
             color: #fff;
             z-index: 10;
+            height: 3rem;
+            opacity: 0.6;
+            background-color: #D5D5D5;
         }
         .masonry-sorting {
             display: inline-block;
