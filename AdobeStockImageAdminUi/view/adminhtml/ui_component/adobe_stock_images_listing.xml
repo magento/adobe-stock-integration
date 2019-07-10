@@ -104,11 +104,11 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Safe search</item>
-                        <item name="description" xsi:type="string" translate="true">Enabled</item>
+                        <item name="description" xsi:type="string" translate="true">Disabled</item>
                         <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
                         <item name="dataScope" xsi:type="string">offensive_filter</item>
                         <item name="valueMap" xsi:type="array">
-                            <item name="true" xsi:type="string">Enabled</item>
+                            <item name="true" xsi:type="string">Disabled</item>
                         </item>
                     </item>
                 </argument>
@@ -134,16 +134,24 @@
             </filterInput>
         </filters>
     </listingToolbar>
-    <columns name="adobe_stock_images_columns" template="Magento_AdobeStockImageAdminUi/grid/listing">
-        <column name="url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_AdobeStockImageAdminUi/js/components/masonry">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
-                    <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
-                </item>
-            </argument>
+    <columns name="adobe_stock_images_columns" component="Magento_AdobeStockImageAdminUi/js/components/grid/masonry">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
+            </item>
+        </argument>
+        <column name="url" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image">
             <settings>
                 <label translate="true">Image</label>
+                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image</bodyTmpl>
+                <visible>true</visible>
+            </settings>
+        </column>
+        <column name="overlay" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/overlay">
+            <settings>
+                <label translate="true">Overlay</label>
+                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/overlay</bodyTmpl>
+                <visible>false</visible>
             </settings>
         </column>
         <column name="relevance">

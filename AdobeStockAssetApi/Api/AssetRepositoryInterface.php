@@ -24,17 +24,19 @@ interface AssetRepositoryInterface
      * Save asset
      *
      * @param AssetInterface $item
+     * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function save(AssetInterface $item);
+    public function save(AssetInterface $item): void;
 
     /**
      * Delete item
      *
      * @param AssetInterface $item
+     * @return void
      * @throws \Exception
      */
-    public function delete(AssetInterface $item);
+    public function delete(AssetInterface $item): void;
 
     /**
      * Get a list of assets
@@ -57,8 +59,8 @@ interface AssetRepositoryInterface
      * Delete asset
      *
      * @param int $id
-     * @return bool|void
-     * @throws NoSuchEntityException
+     * @return void
+     * @throws \Exception
      */
-    public function deleteById(int $id);
+    public function deleteById(int $id): void;
 }

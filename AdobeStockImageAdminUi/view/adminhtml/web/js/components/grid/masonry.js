@@ -3,26 +3,21 @@
  * See COPYING.txt for license details.
  */
 define([
-    'uiElement',
-    'jquery'
-], function (Element, $) {
+    'Magento_Ui/js/grid/listing',
+    'jquery',
+    'ko'
+], function (Element, $, ko) {
     'use strict';
 
     return Element.extend({
         defaults: {
-            template: 'Magento_AdobeStockImageAdminUi/masonry',
+            template: 'Magento_AdobeStockImageAdminUi/grid/masonry',
             imports: {
               rows: '${ $.provider }:data.items'
             },
             listens: {
                 'rows': 'initComponent'
             },
-
-            /**
-             * Images array
-             * @param array
-             */
-            images: [],
 
             /**
              * Images container id
@@ -82,7 +77,6 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
-            this.images([]);
             if (!rows.length) {
                 this.totalHeight = 0;
                 this.setContainerHeight();
@@ -92,25 +86,10 @@ define([
             this.imageMargin = parseInt(this.imageMargin);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
-            this.prepareImages(rows);
             this.setLayoutStyles();
             this.setContainerHeight();
             this.setEventListener();
             return this;
-        },
-
-        /**
-         * Prepare and assign images to observable var
-         * @param rows
-         */
-        prepareImages: function (rows) {
-            this.images(rows.map( (asset) => {
-                return {
-                    src: asset.url,
-                    ratio: (asset.width / asset.height).toFixed(2),
-                    id: asset.id
-                };
-            }));
         },
 
         /**
@@ -167,18 +146,18 @@ define([
 
             this.setMinRatio();
 
-            this.images().forEach(function(image, index) {
-                ratio += parseFloat(image.ratio);
+            this.rows().forEach(function(image, index) {
+                ratio += parseFloat((image.width / image.height).toFixed(2));
                 row.push(image);
 
-                if (ratio >= this.minRatio || index + 1 === this.images().length) {
+                if (ratio >= this.minRatio || index + 1 === this.rows().length) {
                     ratio = Math.max(ratio, this.minRatio);
                     calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
                     rowHeight = (calcHeight < this.maxImageHeight) ? calcHeight : this.maxImageHeight;
 
                     row.forEach(function(img) {
-                        imageWidth = rowHeight * img.ratio;
-                        this.setImageStyles(img.id, imageWidth, rowHeight, translateX, translateY);
+                        imageWidth = rowHeight * ((img.width / img.height).toFixed(2));
+                        this.setImageStyles(img, imageWidth, rowHeight, translateX, translateY);
                         translateX += imageWidth + this.imageMargin;
                     }.bind(this));
 
@@ -194,17 +173,22 @@ define([
         /**
          * Set styles for every image in layout
          *
-         * @param {Number} imageId
+         * @param {Object} img
          * @param {Number} imageWidth
          * @param {Number} rowHeight
          * @param {Number} translateX
          * @param {Number} translateY
          */
-        setImageStyles: function (imageId, imageWidth, rowHeight, translateX, translateY) {
-            $('[data-id="' + imageId + '"]')
-                .css('width', parseInt(imageWidth) + 'px')
-                .css('height', parseInt(rowHeight) + 'px')
-                .css('transform', ('translate3d(' + translateX + 'px,' + translateY + 'px, 0)'));
+        setImageStyles: function (img, imageWidth, rowHeight, translateX, translateY) {
+            var styles = {
+                width: parseInt(imageWidth) + 'px',
+                height: parseInt(rowHeight) + 'px',
+                transform: ('translate3d(' + translateX + 'px,' + translateY + 'px, 0)')
+            };
+            if (!img.styles) {
+                img.styles = ko.observable();
+            }
+            img.styles(styles)
         },
 
         /**

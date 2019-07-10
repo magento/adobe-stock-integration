@@ -28,7 +28,7 @@ interface KeywordInterface
      * Set the id
      *
      * @param int $value
-     * @return void
+     * @return $this
      */
     public function setId($value);
 
@@ -43,6 +43,7 @@ interface KeywordInterface
      * Set the keyword
      *
      * @param string $keyword
+     * @return void
      */
-    public function setKeyword(string $keyword);
+    public function setKeyword(string $keyword): void;
 }
