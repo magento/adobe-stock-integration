@@ -7,7 +7,7 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/adobestockimage/:searchCriteria" method="GET">
+    <route url="/V1/adobestock/search" method="GET">
         <service class="Magento\AdobeStockImageApi\Api\GetImageListInterface" method="execute"/>
         <resources>
             <resource ref="Magento_AdobeStockImage::actions_view"/>
