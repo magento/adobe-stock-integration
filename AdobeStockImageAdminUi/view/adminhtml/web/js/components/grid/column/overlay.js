@@ -8,10 +8,6 @@ define([
     'use strict';
 
     return Column.extend({
-        defaults: {
-            visible: true
-        },
-
         /**
          * Returns container styles to given record.
          *
