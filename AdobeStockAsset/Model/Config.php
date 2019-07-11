@@ -17,6 +17,7 @@ class Config
 {
     private const XML_PATH_ENABLED = 'adobe_stock/integration/enabled';
     private const XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
+    private const XML_PATH_PRIVATE_KEY = 'adobe_stock/integration/private_key';
 
     /**
      * @var ScopeConfigInterface
@@ -60,6 +61,6 @@ class Config
      */
     public function getPrivateKey(): string
     {
-        return (string)'';
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_PRIVATE_KEY);
     }
 }

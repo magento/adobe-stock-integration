@@ -15,6 +15,8 @@ use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
 
@@ -84,8 +86,13 @@ class Callback extends Action
             $this->getMessageManager()->addErrorMessage(__('Something went wrong.'));
         }
 
-        return $this->resultRedirectFactory->create()
-            ->setPath('*/admin/');
+        /**
+         * @todo Please update response if it needs for UI
+         */
+        /** @var Raw $resultRaw */
+        $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
+        $resultRaw->setContents('');
+        return $resultRaw;
     }
 
     /**

@@ -53,12 +53,14 @@ class UserProfileRepository implements UserProfileRepositoryInterface
      */
     public function get(int $entityId): UserProfileInterface
     {
-        $entity = $this->entityFactory->create();
+        if (isset($this->loadedEntities[$entityId])) {
+            return $this->loadedEntities[$entityId];
+        }
 
-        try {
-            $this->resource->load($entity, $entityId, UserProfileInterface::ID);
-        } catch (Exception $e) {
-            throw new NoSuchEntityException(__($e->getMessage()));
+        $entity = $this->entityFactory->create();
+        $this->resource->load($entity, $entityId, UserProfileInterface::ID);
+        if (!$entity->getId()) {
+            throw new NoSuchEntityException(__('The user profile wasn\'t found.'));
         }
 
         return $this->loadedEntities[$entity->getId()] = $entity;
@@ -70,11 +72,9 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     public function getByUserId(int $userId): UserProfileInterface
     {
         $entity = $this->entityFactory->create();
-
-        try {
-            $this->resource->load($entity, $userId, UserProfileInterface::USER_ID);
-        } catch (Exception $e) {
-            throw new NoSuchEntityException(__($e->getMessage()));
+        $this->resource->load($entity, $userId, UserProfileInterface::USER_ID);
+        if (!$entity->getId()) {
+            throw new NoSuchEntityException(__('The user profile wasn\'t found.'));
         }
 
         return $this->loadedEntities[$entity->getId()] = $entity;

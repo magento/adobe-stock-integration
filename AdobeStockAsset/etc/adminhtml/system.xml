@@ -17,7 +17,7 @@
                 </field>
                 <field id="api_key" translate="label" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Key</label>
-                    <comment><![CDATA[Configure an Adobe Stock account on the <a href="https://console.adobe.io/" target="_blank">Adobe.io</a> site to retrieve an API key.]]></comment>
+                    <comment><![CDATA[Configure an Adobe Stock account on the <a href="https://console.adobe.io/" target="_blank">Adobe.io</a> site to retrieve an API key (Client ID).]]></comment>
                     <config_path>adobe_stock/integration/api_key</config_path>
                     <validate>required-entry</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
@@ -29,6 +29,16 @@
                     <label/>
                     <button_label>Test Connection</button_label>
                     <frontend_model>Magento\AdobeStockAsset\Model\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="private_key" translate="label" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Private Key</label>
+                    <comment><![CDATA[Configure an Adobe Stock account on the <a href="https://console.adobe.io/" target="_blank">Adobe.io</a> site to retrieve an Private key (Client secret).]]></comment>
+                    <config_path>adobe_stock/integration/private_key</config_path>
+                    <validate>required-entry</validate>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
