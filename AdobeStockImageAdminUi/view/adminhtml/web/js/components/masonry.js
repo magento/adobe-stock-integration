@@ -5,8 +5,9 @@
 define([
     'uiElement',
     'jquery',
-    'knockout'
-], function (Element, $, ko) {
+    'knockout',
+    'Magento_AdobeStockImageAdminUi/js/components/preview'
+], function (Element, $, ko, preview) {
     'use strict';
 
     return Element.extend({
@@ -60,6 +61,12 @@ define([
              * @param {Object}
              */
             containerStyles: {},
+
+            /**
+             * Show preview image
+             * @param bool
+             */
+            showPreviewImage: true,
         },
 
         /**
@@ -110,12 +117,16 @@ define([
                     width: asset.width,
                     height: asset.height,
                     preview_url: asset.preview_url || asset.url,
+                    title: asset.title,
                     firstInARow: ko.observable(false),
                     lastInARow: ko.observable(false),
                     firstRow: ko.observable(false),
                     lastRow: ko.observable(false),
                 };
             }));
+            if(this.showPreviewImage) {
+                preview(this.images);
+            }
         },
 
         /**
@@ -144,17 +155,6 @@ define([
                     }
                 }
             });
-        },
-
-        /**
-         * Set container styles
-         *
-         * @param new_styles
-         * @private
-         */
-        _setContainerStyles: function(new_styles){
-            var styles = $.extend(this.containerStyles(), new_styles);
-            this.containerStyles(styles);
         },
 
         /**
@@ -227,7 +227,12 @@ define([
         },
 
         togglePreview: function(item, event){
-            var $target = $(event.currentTarget);
+            preview.image(item);
+
+            var $target = $(event.currentTarget),
+                $lastInARow = $target.is('.last')? $target: $target.find('~ .last:eq(0)');
+            $target.preview(item, $last);
+
             if(!$target.is('.last')) {
                 $target = $target.find('~ .last:eq(0)');
             }

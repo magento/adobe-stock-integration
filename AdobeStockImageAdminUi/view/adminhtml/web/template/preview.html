@@ -1,11 +1,27 @@
-<div class="expand-preview">
+<div class="expand-preview" data-bind="fadeVisible: visible">
     <div class="content">
         <div class="controls">
-            <i class="arrow-left"></i>
-            <i class="arrow-right"></i>
-            <i class="close"></i>
+            <i class="arrow-left" if="prevAvailable" click="prev" />
+            <i class="arrow-right" if="nextAvailable" click="next" />
+            <i class="close" click="hide" />
         </div>
-        <img src="" alt="" />
-
+        <figure>
+            <img attr="src: image.src, alt: image.title" />
+            <figurecaption if="showLabels">
+                <h4 translate="'Dimensions'" />
+                <h3 translate="image.dimensions" />
+                <h4 translate="'File type'" />
+                <h3 translate="image.file_type" />
+                <h4 translate="'Category'" if="image.category" />
+                <h3 text="image.category" if="image.category" />
+                <h4 translate="'File #'" />
+                <h3 translate="image.id" />
+            </figurecaption>
+        </figure>
+        <div class="info">
+            <h3 class="title" text="image.title" />
+            <div class="text" text="image.text" />
+            <button if="saveAvailable" type="button" class="action-default scalable save" translate="'Save preview.'" />
+        </div>
     </div>
 </div>
