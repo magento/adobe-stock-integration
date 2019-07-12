@@ -73,7 +73,7 @@ class OffensiveTest extends TestCase
             ->willReturn([$filterGroupItemMock]);
         $filterItemMock->expects($this->once())
             ->method('getValue')
-            ->willReturn('Enabled');
+            ->willReturn('Disabled');
         $searchParameters->expects($this->once())
             ->method('setFilterOffensive2')
             ->with(true);
