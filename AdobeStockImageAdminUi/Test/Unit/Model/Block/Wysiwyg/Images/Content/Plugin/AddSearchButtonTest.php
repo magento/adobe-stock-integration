@@ -14,6 +14,7 @@ use Magento\Backend\Block\Widget\Container;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use \Magento\Framework\AuthorizationInterface;
 
 /**
  * Test adding Adobe Stock Search button to the toolbar.
@@ -21,24 +22,48 @@ use PHPUnit\Framework\TestCase;
 class AddSearchButtonTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $layoutInterface;
+
+    /**
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $config;
+
+    /**
+     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $authorization;
+
+    /**
+     * @var AddSearchButton
+     */
+    private $addSearchButton;
 
     /**
      * Prepare test objects.
      */
     public function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
         $this->layoutInterface = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $this->config = $this->getMockBuilder(Config::class)
+            ->setMethods(['isEnabled'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
+
+        $this->addSearchButton = (new ObjectManager($this))->getObject(
+            AddSearchButton::class,
+            [
+                'config' => $this->config,
+                'authorization' => $this->authorization
+            ]
+        );
     }
 
     /**
@@ -46,20 +71,14 @@ class AddSearchButtonTest extends TestCase
      */
     public function testSearchButtonEnabled(): void
     {
-        $configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['isEnabled'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configMock->expects($this->once())
+        $this->authorization->expects($this->once())
+            ->method('isAllowed')
+            ->with('Magento_AdobeStockImageAdminUi::save_preview_images')
+            ->willReturn(true);
+        $this->config->expects($this->once())
             ->method('isEnabled')
             ->willReturn(true);
-        /** @var AddSearchButton $addSearchButton */
-        $addSearchButton = $this->objectManager->getObject(
-            AddSearchButton::class,
-            [
-                'config' => $configMock,
-            ]
-        );
+
         /**
          * @var \Magento\Backend\Block\Widget\Container|\PHPUnit_Framework_MockObject_MockObject $containerMock
          */
@@ -70,7 +89,8 @@ class AddSearchButtonTest extends TestCase
         $containerMock->expects($this->once())
             ->method('addButton')
             ->with(...$this->getButtonConfig());
-        $addSearchButton->beforeSetLayout($containerMock, $this->layoutInterface);
+
+        $this->addSearchButton->beforeSetLayout($containerMock, $this->layoutInterface);
     }
 
     /**
@@ -78,20 +98,14 @@ class AddSearchButtonTest extends TestCase
      */
     public function testSearchButtonDisabled(): void
     {
-        $configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['isEnabled'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configMock->expects($this->once())
+        $this->authorization->expects($this->once())
+            ->method('isAllowed')
+            ->with('Magento_AdobeStockImageAdminUi::save_preview_images')
+            ->willReturn(true);
+        $this->config->expects($this->once())
             ->method('isEnabled')
             ->willReturn(false);
-        /** @var AddSearchButton $addSearchButton */
-        $addSearchButton = $this->objectManager->getObject(
-            AddSearchButton::class,
-            [
-                'config' => $configMock,
-            ]
-        );
+
         /**
          * @var \Magento\Backend\Block\Widget\Container|\PHPUnit_Framework_MockObject_MockObject $containerMock
          */
@@ -99,10 +113,10 @@ class AddSearchButtonTest extends TestCase
             ->setMethods(['addButton'])
             ->disableOriginalConstructor()
             ->getMock();
-        $containerMock->expects($this->any())
-            ->method('addButton')
-            ->with(...$this->getButtonConfig());
-        $addSearchButton->beforeSetLayout($containerMock, $this->layoutInterface);
+        $containerMock->expects($this->never())
+            ->method('addButton');
+
+        $this->addSearchButton->beforeSetLayout($containerMock, $this->layoutInterface);
     }
 
     /**
