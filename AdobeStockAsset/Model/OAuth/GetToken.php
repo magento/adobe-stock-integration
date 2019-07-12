@@ -11,6 +11,9 @@ namespace Magento\AdobeStockAsset\Model\OAuth;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class GetToken
+ */
 class GetToken
 {
     /**

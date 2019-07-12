@@ -10,6 +10,9 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * Class UserProfile
+ */
 class UserProfile extends AbstractDb
 {
     /**

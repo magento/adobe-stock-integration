@@ -12,6 +12,9 @@ use Magento\AdobeStockAsset\Model\ResourceModel\UserProfile as UserProfileResour
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class UserProfile
+ */
 class UserProfile extends AbstractModel implements UserProfileInterface
 {
     /**

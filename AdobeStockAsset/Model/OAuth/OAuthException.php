@@ -10,6 +10,9 @@ namespace Magento\AdobeStockAsset\Model\OAuth;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class OAuthException
+ */
 class OAuthException extends LocalizedException
 {
 }

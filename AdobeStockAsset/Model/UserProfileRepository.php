@@ -15,6 +15,9 @@ use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class UserProfileRepository
+ */
 class UserProfileRepository implements UserProfileRepositoryInterface
 {
     /** @var ResourceModel\UserProfile */

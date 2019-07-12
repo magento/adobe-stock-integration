@@ -21,7 +21,9 @@ interface UserProfileRepositoryInterface
      * @return \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface $entity): \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
+    public function save(
+        \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface $entity
+    ): \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 
     /**
      * Get user profile

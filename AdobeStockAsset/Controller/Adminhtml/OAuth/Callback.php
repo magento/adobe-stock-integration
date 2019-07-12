@@ -20,6 +20,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class Callback
+ */
 class Callback extends Action
 {
     /**

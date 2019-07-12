@@ -12,6 +12,9 @@ use Magento\AdobeStockAsset\Model\ResourceModel\UserProfile as UserProfileResour
 use Magento\AdobeStockAsset\Model\UserProfile as UserProfileModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
+/**
+ * Class Collection
+ */
 class Collection extends AbstractCollection
 {
     /**

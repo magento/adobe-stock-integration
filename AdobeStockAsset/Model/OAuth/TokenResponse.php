@@ -10,6 +10,9 @@ namespace Magento\AdobeStockAsset\Model\OAuth;
 
 use Magento\Framework\DataObject;
 
+/**
+ * Class TokenResponse
+ */
 class TokenResponse extends DataObject
 {
     /**
