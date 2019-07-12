@@ -16,6 +16,7 @@
                 <item name="3" xsi:type="string">THUMBNAIL_240_URL</item>
                 <item name="4" xsi:type="string">WIDTH</item>
                 <item name="5" xsi:type="string">HEIGHT</item>
+                <item name="6" xsi:type="string">THUMBNAIL_500_URL</item>
             </argument>
         </arguments>
     </type>
