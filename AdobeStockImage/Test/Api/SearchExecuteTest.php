@@ -24,7 +24,8 @@ class SearchExecuteTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    public function testSearchExecute() {
+    public function testSearchExecute()
+    {
 
         $searchCriteria = $this->getSearchData();
 
@@ -51,7 +52,8 @@ class SearchExecuteTest extends WebapiAbstract
         $this->assertNotNull($response['items'][0]['url']);
     }
 
-    private function getSearchData() {
+    private function getSearchData()
+    {
         $searchCriteria = [
             'searchCriteria' => [
                 'sort_orders' => [
