@@ -5,6 +5,27 @@
  */
 -->
 <div class="masonry-image-preview" if="$col.isVisible($row())">
-    <img attr="src: $col.getUrl($row())">
-    <a href="#" data-bind="click: function () { $col.close($row()); }">Close</a>
+    <div class="container">
+        <div class="action-buttons">
+            <button class="action-previous" type="button" data-bind="click: function () { $col.prev($row()); }">
+                <span translate="'Previous'"/>
+            </button>
+            <button class="action-next" type="button" data-bind="click: function () { $col.next($row()); }">
+                <span translate="'Next'"/>
+            </button>
+            <button class="action-close" type="button" data-bind="click: function () { $col.close($row()); }">
+                <span translate="'Close'"/>
+            </button>
+        </div>
+        <img attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
+        <div class="info">
+            <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
+            <div class="author" if="$col.getAuthor($row())">
+                <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
+            </div>
+            <button class="action-save action-secondary action-default scalable" type="button" data-bind="click: function () { $col.save($row()); }">
+                <span translate="'Save Preview'"/>
+            </button>
+        </div>
+    </div>
 </div>

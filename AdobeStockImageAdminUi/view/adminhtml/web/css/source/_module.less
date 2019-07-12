@@ -2,30 +2,27 @@
 //  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
+@admin__adobe_stock_image__space: 20px;
 
 & when (@media-common = true) {
     .masonry-image {
-        &-column {
+        &-grid {
             position: relative;
-            margin: 20px 0 20px 0;
+            margin: @admin__adobe_stock_image__space/2 -(@admin__adobe_stock_image__space/2);
+            overflow: hidden;
             &:hover .masonry-image-overlay {
                 display: block;
             }
         }
-        &-block {
-            background-color: #D5D5D5;
+        &-column {
             overflow: hidden;
-            left: 0;
-            position: absolute;
-            top: 0;
-            margin: 0;
+            margin: @admin__adobe_stock_image__space/2;
+            float: left;
+            background-color: #D5D5D5;
             img {
-                left: 0;
-                position: absolute;
-                top: 0;
+                cursor: pointer;
                 height: 100%;
                 width: 100%;
-                cursor: pointer;
             }
         }
         &-overlay {
@@ -43,19 +40,56 @@
         }
         &-preview {
             position: absolute;
-            top: 10rem;
             left: 0;
             right: 0;
-            bottom: 0;
+            display: table;
             background-color: #ffffff;
-            height: 50rem;
             width: 100%;
-            z-index: 49;
-            img {
-                z-index: 50;
-                position: absolute;
-                top: 8rem;
-                left: 5rem;
+            padding: 0 0 30px;
+            .action-buttons {
+                text-align: right;
+                .action {
+                    &-close {
+                        position: static;
+                        padding: 3rem;
+                    }
+                    &-previous,
+                    &-next {
+                        background: transparent;
+                        border: none;
+                        margin: 0;
+                        white-space: nowrap;
+                    }
+                    &-close,
+                    &-previous,
+                    &-next {
+                        font-size: 2rem;
+                    }
+                }
+            }
+            .container {
+                max-width: 880px;
+                margin: auto;
+                img {
+                    max-width: 60%;
+                    max-height: 500px;
+                    margin: 0 30px 20px 0;
+                }
+                .info {
+                    width: ~"calc(40% - 30px)";
+                    float: right;
+                    text-align: left;
+                    .title {
+                        margin: 0 0 20px;
+                    }
+                    .author {
+                        margin: 0 0 30px;
+                    }
+                    .action-buttons {
+                        text-align: left;
+                        margin: 0 0 30px;
+                    }
+                }
             }
         }
         .masonry-sorting {

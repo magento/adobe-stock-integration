@@ -48,10 +48,23 @@ define([
         },
 
         /**
+         * Returns class list to given record.
+         *
+         * @param {Object} record - Data to be preprocessed.
+         * @returns {Object}
+         */
+        getClasses: function (record) {
+            if (record.css) {
+                return record.css;
+            }
+            return {};
+        },
+
+        /**
          * Expand image preview
          */
         expandPreview: function (record) {
-            this.previewComponent().show(record._rowIndex);
+            this.previewComponent().show(record);
         }
     });
 });
