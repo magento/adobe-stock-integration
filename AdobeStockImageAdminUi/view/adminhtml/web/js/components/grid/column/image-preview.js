@@ -109,7 +109,7 @@ define([
          *
          * @param {Object} record
          */
-        close: function (record) {
+        hide: function (record) {
             var visibility = this.visibility();
             visibility[record._rowIndex] = false;
             this.visibility(visibility);
