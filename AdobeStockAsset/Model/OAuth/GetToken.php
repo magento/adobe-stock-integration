@@ -30,6 +30,12 @@ class GetToken
     /** @var TokenResponseFactory */
     private $tokenResponseFactory;
 
+    /**
+     * GetToken constructor.
+     * @param CurlFactory $curlFactory
+     * @param Json $json
+     * @param TokenResponseFactory $tokenResponseFactory
+     */
     public function __construct(
         CurlFactory $curlFactory,
         Json $json,
@@ -56,12 +62,15 @@ class GetToken
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
         $curl->addHeader('cache-control', 'no-cache');
 
-        $curl->post(self::TOKEN_URI, [
-            'client_id' => $apiKey,
-            'client_secret' => $privateKey,
-            'code' => $code,
-            'grant_type' => 'authorization_code'
-        ]);
+        $curl->post(
+            self::TOKEN_URI,
+            [
+                'client_id' => $apiKey,
+                'client_secret' => $privateKey,
+                'code' => $code,
+                'grant_type' => 'authorization_code'
+            ]
+        );
 
         $tokenResponse = $this->json->unserialize($curl->getBody());
         $tokenResponse = $this->tokenResponseFactory->create()

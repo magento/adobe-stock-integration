@@ -29,6 +29,11 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     /** @var UserProfileInterface[] */
     private $loadedEntities = [];
 
+    /**
+     * UserProfileRepository constructor.
+     * @param ResourceModel\UserProfile $resource
+     * @param UserProfileInterfaceFactory $entityFactory
+     */
     public function __construct(
         ResourceModel\UserProfile $resource,
         UserProfileInterfaceFactory $entityFactory

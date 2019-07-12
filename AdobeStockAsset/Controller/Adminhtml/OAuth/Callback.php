@@ -45,6 +45,15 @@ class Callback extends Action
     /** @var LoggerInterface */
     private $logger;
 
+    /**
+     * Callback constructor.
+     * @param Action\Context $context
+     * @param UserProfileRepositoryInterface $userProfileRepository
+     * @param UserProfileInterfaceFactory $userProfileFactory
+     * @param OAuth\GetToken $getToken
+     * @param Config $config
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         Action\Context $context,
         UserProfileRepositoryInterface $userProfileRepository,
