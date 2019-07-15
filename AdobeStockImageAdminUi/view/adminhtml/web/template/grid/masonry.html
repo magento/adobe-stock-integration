@@ -1,0 +1,11 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div data-role="grid-wrapper" ko-style="containerStyles" attr="'data-id': containerId">
+    <div class="masonry-image-column" repeat="foreach: rows, item: '$row'">
+        <div outerfasteach="data: getVisible(), as: '$col'" template="getBody()"/>
+    </div>
+</div>

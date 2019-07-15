@@ -4,28 +4,59 @@
 //  */
 
 & when (@media-common = true) {
-    .masonry-image-column {
-        position: relative;
-        margin: 20px 0 20px 0;
-    }
-    .masonry-image-block {
-        background-color: #D5D5D5;
-        overflow: hidden;
-        left: 0;
-        position: absolute;
-        top: 0;
-        margin: 0;
-    }
-    .masonry-image-block img {
-        left: 0;
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: 100%;
-    }
-    .admin__form-field {
-        .colorpicker-input {
-            min-width: 18.83rem;
+    .masonry-image {
+        &-column {
+            position: relative;
+            margin: 20px 0 20px 0;
+            &:hover .masonry-image-overlay {
+                display: block;
+            }
+        }
+        &-block {
+            background-color: #D5D5D5;
+            overflow: hidden;
+            left: 0;
+            position: absolute;
+            top: 0;
+            margin: 0;
+            img {
+                left: 0;
+                position: absolute;
+                top: 0;
+                height: 100%;
+                width: 100%;
+                cursor: pointer;
+            }
+        }
+        &-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            color: #fff;
+            z-index: 10;
+            height: 3rem;
+            opacity: 0.6;
+            background-color: #D5D5D5;
+        }
+        &-preview {
+            position: absolute;
+            top: 10rem;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ffffff;
+            height: 50rem;
+            width: 100%;
+            z-index: 49;
+            img {
+                z-index: 50;
+                position: absolute;
+                top: 8rem;
+                left: 5rem;
+            }
         }
     }
     .masonry-sorting {
@@ -42,5 +73,10 @@
     .masonry-results-number {
         display: inline-block;
         margin-right: 1.4rem;
+    }
+    .admin__form-field {
+        .colorpicker-input {
+            min-width: 18.83rem;
+        }
     }
 }
