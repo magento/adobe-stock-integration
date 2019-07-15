@@ -11,7 +11,21 @@ define([
         defaults: {
             modules: {
                 previewComponent: '${ $.parentName }.preview'
-            }
+            },
+            selectedRowId: null,
+        },
+
+        /**
+         * Init observable variables
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'selectedRowId'
+                ]);
+
+            return this;
         },
 
         /**
@@ -41,7 +55,13 @@ define([
          * @returns {Object}
          */
         getStyles: function (record) {
-            if (record.styles) {
+            var styles = record.styles();
+
+            // TODO: replace hardcoded value with preview container height
+            styles['margin-bottom'] = this.selectedRowId() === record.currentRow ? '400px' : 0;
+            record.styles(styles);
+
+            if (record.styles()) {
                 return record.styles;
             }
             return {};
@@ -54,7 +74,7 @@ define([
          * @returns {Object}
          */
         getClasses: function (record) {
-            if (record.css) {
+            if (record.css()) {
                 return record.css;
             }
             return {};
@@ -64,6 +84,7 @@ define([
          * Expand image preview
          */
         expandPreview: function (record) {
+            this.selectedRowId(record.currentRow);
             this.previewComponent().show(record);
         }
     });

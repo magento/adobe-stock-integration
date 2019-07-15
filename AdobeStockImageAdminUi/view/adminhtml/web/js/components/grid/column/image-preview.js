@@ -12,6 +12,9 @@ define([
         defaults: {
             visibility: [],
             saveAvailable: true,
+            modules: {
+                thumbnailComponent: '${ $.parentName }.thumbnail_url'
+            },
         },
 
         /**
@@ -74,6 +77,7 @@ define([
          */
         next: function(record){
             this.show(record._rowIndex + 1);
+            this.thumbnailComponent().selectedRowId(record.lastInRow ? record.currentRow + 1 : record.currentRow);
         },
 
         /**
@@ -83,6 +87,7 @@ define([
          */
         prev: function(record){
             this.show(record._rowIndex - 1);
+            this.thumbnailComponent().selectedRowId(record.firstInRow ? record.currentRow - 1 : record.currentRow);
         },
 
         /**
@@ -113,10 +118,23 @@ define([
             var visibility = this.visibility();
             visibility[record._rowIndex] = false;
             this.visibility(visibility);
+            this.thumbnailComponent().selectedRowId(null);
         },
 
         _isInt: function(value) {
             return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+        },
+
+        /**
+         * @param record
+         * @return {Object}
+         */
+        getStyles: function(record) {
+            var visibility = this.visibility(),
+                isRowVisible = visibility[record._rowIndex] || false;
+
+            // TODO: replace hardcoded value with preview container height
+            return isRowVisible ? { 'margin-top': '-400px' } : {};
         }
     });
 });

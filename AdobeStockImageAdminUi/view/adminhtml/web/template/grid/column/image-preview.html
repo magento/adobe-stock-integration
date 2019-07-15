@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="masonry-image-preview" if="$col.isVisible($row())">
+<div class="masonry-image-preview" if="$col.isVisible($row())" ko-style="$col.getStyles($row());">
     <div class="container">
         <div class="action-buttons">
             <button class="action-previous" type="button" data-bind="click: function () { $col.prev($row()); }">

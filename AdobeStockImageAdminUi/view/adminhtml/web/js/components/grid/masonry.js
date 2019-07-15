@@ -120,7 +120,8 @@ define([
                 imageWidth = 0,
                 rowHeight = 0,
                 calcHeight = 0,
-                isBottom = false;
+                isBottom = false,
+                imageRowNumber = 1;
 
             this.setMinRatio();
 
@@ -134,16 +135,20 @@ define([
                     rowHeight = (calcHeight < this.maxImageHeight) ? calcHeight : this.maxImageHeight;
                     isBottom = index + 1 === this.rows().length;
 
-                    row.forEach(function(img) {
+                    row.forEach(function(img, indx) {
                         imageWidth = rowHeight * ((img.width / img.height).toFixed(2));
                         this.setImageStyles(img, imageWidth, rowHeight);
                         this.setImageClass(img, {
                             bottom: isBottom
-                        })
+                        });
+                        img.currentRow = imageRowNumber;
+                        img.lastInRow = (indx + 1 === row.length);
+                        img.firstInRow = (indx === 0);
                     }.bind(this));
 
                     row = [];
                     ratio = 0;
+                    imageRowNumber++;
                 }
             }.bind(this));
         },
