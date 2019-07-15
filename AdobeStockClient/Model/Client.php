@@ -126,27 +126,31 @@ class Client implements ClientInterface
             $searchRequest->setSearchParams($searchParams);
             $searchRequest->setResultColumns($resultColumnArray);
             $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
-            $response = $client->getNextResponse();
-
-            $items = [];
-            /** @var StockFile $file */
-            foreach ($response->getFiles() as $file) {
-                $itemData = (array)$file;
-                $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
-                $itemData['preview_url'] = $itemData['thumbnail_500_url'];
-                $itemId = $itemData['id'];
-                $attributes = $this->createAttributes('id', $itemData);
-
-                $item = $this->documentFactory->create();
-                $item->setId($itemId);
-                $item->setCustomAttributes($attributes);
-                $items[] = $item;
-            }
-
             $searchResult = $this->searchResultFactory->create();
             $searchResult->setSearchCriteria($searchCriteria);
-            $searchResult->setItems($items);
-            $searchResult->setTotalCount($response->getNbResults());
+
+            try {
+                $response = $client->getNextResponse();
+                $items = [];
+                /** @var StockFile $file */
+                foreach ($response->getFiles() as $file) {
+                    $itemData = (array)$file;
+                    $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
+                    $itemData['preview_url'] = $itemData['thumbnail_500_url'];
+                    $itemId = $itemData['id'];
+                    $attributes = $this->createAttributes('id', $itemData);
+
+                    $item = $this->documentFactory->create();
+                    $item->setId($itemId);
+                    $item->setCustomAttributes($attributes);
+                    $items[] = $item;
+                }
+                $searchResult->setItems($items);
+                $searchResult->setTotalCount($response->getNbResults());
+            } catch (Exception $e) {
+                $searchResult->setItems([]);
+                $searchResult->setTotalCount(0);
+            }
 
             return $searchResult;
         } catch (Exception $exception) {
