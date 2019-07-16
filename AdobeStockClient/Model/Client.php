@@ -108,13 +108,13 @@ class Client implements ClientInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
-     * @throws IntegrationException
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
+        $searchResult = $this->searchResultFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
         try {
             $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
-
             $resultsColumns = Constants::getResultColumns();
             $resultColumnArray = [];
             foreach ($this->config->getSearchResultFields() as $field) {
@@ -126,40 +126,34 @@ class Client implements ClientInterface
             $searchRequest->setSearchParams($searchParams);
             $searchRequest->setResultColumns($resultColumnArray);
             $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
-            $searchResult = $this->searchResultFactory->create();
-            $searchResult->setSearchCriteria($searchCriteria);
+            $response = $client->getNextResponse();
+            $items = [];
+            /** @var StockFile $file */
+            foreach ($response->getFiles() as $file) {
+                $itemData = (array)$file;
+                $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
+                $itemData['preview_url'] = $itemData['thumbnail_500_url'];
+                $itemId = $itemData['id'];
+                $attributes = $this->createAttributes('id', $itemData);
 
-            try {
-                $response = $client->getNextResponse();
-                $items = [];
-                /** @var StockFile $file */
-                foreach ($response->getFiles() as $file) {
-                    $itemData = (array)$file;
-                    $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
-                    $itemData['preview_url'] = $itemData['thumbnail_500_url'];
-                    $itemId = $itemData['id'];
-                    $attributes = $this->createAttributes('id', $itemData);
-
-                    $item = $this->documentFactory->create();
-                    $item->setId($itemId);
-                    $item->setCustomAttributes($attributes);
-                    $items[] = $item;
-                }
-                $searchResult->setItems($items);
-                $searchResult->setTotalCount($response->getNbResults());
-            } catch (Exception $e) {
-                $searchResult->setItems([]);
-                $searchResult->setTotalCount(0);
+                $item = $this->documentFactory->create();
+                $item->setId($itemId);
+                $item->setCustomAttributes($attributes);
+                $items[] = $item;
             }
-
-            return $searchResult;
+            $searchResult->setItems($items);
+            $searchResult->setTotalCount($response->getNbResults());
         } catch (Exception $exception) {
             $message = __(
                 'Adobe Stock search process failed: %error_message',
                 ['error_message' => $exception->getMessage()]
             );
-            $this->processException($message, $exception);
+            $this->logger->critical($message->render());
+            $searchResult->setItems([]);
+            $searchResult->setTotalCount(0);
         }
+
+        return $searchResult;
     }
 
     /**
