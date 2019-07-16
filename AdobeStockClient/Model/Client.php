@@ -312,6 +312,6 @@ class Client implements ClientInterface
     private function processException(Phrase $message, Exception $exception)
     {
         $this->logger->critical($message->render());
-        throw new IntegrationException($message, $exception);
+        throw new IntegrationException($message, $exception, $exception->getCode());
     }
 }
