@@ -129,7 +129,7 @@ class Client implements ClientInterface
             }
             $totalCount = $response->getNbResults();
         } catch (Exception $e) {
-            $this->logger->critical($exception->getMessage());
+            $this->logger->critical($e->getMessage());
         }
 
         $searchResult = $this->searchResultFactory->create();
@@ -145,6 +145,7 @@ class Client implements ClientInterface
      *
      * @param StockFile $file
      * @return DocumentInterface
+     * @throws IntegrationException
      */
     private function convertStockFileToDocument(StockFile $file): DocumentInterface
     {
@@ -166,6 +167,7 @@ class Client implements ClientInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchFilesRequest
+     * @throws \AdobeStock\Api\Exception\StockApi
      */
     private function getSearchRequest(SearchCriteriaInterface $searchCriteria): SearchFilesRequest
     {
