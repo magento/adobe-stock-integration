@@ -220,6 +220,38 @@ class Client implements ClientInterface
     }
 
     /**
+     * Test connection to Adobe Stock API
+     *
+     * @return bool
+     * @throws IntegrationException
+     */
+    public function testConnection(): bool
+    {
+        try {
+            //TODO: should be refactored
+            $searchParams = new SearchParameters();
+            $searchRequest = new SearchFilesRequest();
+            $resultColumnArray = [];
+
+            $resultColumnArray[] = 'nb_results';
+
+            $searchRequest->setLocale('en_GB');
+            $searchRequest->setSearchParams($searchParams);
+            $searchRequest->setResultColumns($resultColumnArray);
+
+            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+
+            return (bool)$client->getNextResponse()->nb_results;
+        } catch (Exception $exception) {
+            $message = __(
+                'An error occurred during test API connection: %error_message',
+                ['error_message' => $exception->getMessage()]
+            );
+            $this->processException($message, $exception);
+        }
+    }
+
+    /**
      * Create custom attributes for columns returned by search
      *
      * @param string $idFieldName
@@ -291,38 +323,6 @@ class Client implements ClientInterface
     private function getAccessToken()
     {
         return null;
-    }
-
-    /**
-     * Test connection to Adobe Stock API
-     *
-     * @return bool
-     * @throws IntegrationException
-     */
-    public function testConnection(): bool
-    {
-        try {
-            //TODO: should be refactored
-            $searchParams = new SearchParameters();
-            $searchRequest = new SearchFilesRequest();
-            $resultColumnArray = [];
-
-            $resultColumnArray[] = 'nb_results';
-
-            $searchRequest->setLocale('en_GB');
-            $searchRequest->setSearchParams($searchParams);
-            $searchRequest->setResultColumns($resultColumnArray);
-
-            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
-
-            return (bool)$client->getNextResponse()->nb_results;
-        } catch (Exception $exception) {
-            $message = __(
-                'An error occurred during test API connection: %error_message',
-                ['error_message' => $exception->getMessage()]
-            );
-            $this->processException($message, $exception);
-        }
     }
 
     /**
