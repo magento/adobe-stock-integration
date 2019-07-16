@@ -99,7 +99,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $message = __('Error with message: %1', $e->getMessage());
             if ($e->getCode() === 403) {
                 $message = __(
-                    'You have problem with API key, please check it on <a href="%url'
+                    'Please ensure the Adobe Stock API key is specified correctly on the <a href="%url'
                     . '#system_adobe_stock_integration-link"'
                     . '>Adobe Stock Integration configuration</a> page.',
                     ['url' => $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system')]
