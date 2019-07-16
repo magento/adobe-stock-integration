@@ -140,11 +140,12 @@
                 <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
             </item>
         </argument>
-        <column name="url" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image">
+        <column name="thumbnail_url" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image">
             <settings>
-                <label translate="true">Image</label>
+                <label translate="true">Thumbnail Image</label>
                 <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image</bodyTmpl>
                 <visible>true</visible>
+                <sortable>false</sortable>
             </settings>
         </column>
         <column name="overlay" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/overlay">
@@ -152,6 +153,15 @@
                 <label translate="true">Overlay</label>
                 <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/overlay</bodyTmpl>
                 <visible>false</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="preview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
+            <settings>
+                <label translate="true">Image Preview</label>
+                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image-preview</bodyTmpl>
+                <visible>true</visible>
+                <sortable>false</sortable>
             </settings>
         </column>
         <column name="relevance">

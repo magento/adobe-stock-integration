@@ -18,6 +18,7 @@ use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
@@ -112,49 +113,87 @@ class Client implements ClientInterface
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
+        $items = [];
+        $totalCount = 0;
+        $connection = $this->getConnection();
+
         try {
-            $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
-
-            $resultsColumns = Constants::getResultColumns();
-            $resultColumnArray = [];
-            foreach ($this->config->getSearchResultFields() as $field) {
-                $resultColumnArray[] = $resultsColumns[$field];
-            }
-
-            $searchRequest = new SearchFilesRequest();
-            $searchRequest->setLocale($this->localeResolver->getLocale());
-            $searchRequest->setSearchParams($searchParams);
-            $searchRequest->setResultColumns($resultColumnArray);
-            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
-            $response = $client->getNextResponse();
-
-            $items = [];
+            $connection->searchFilesInitialize(
+                $this->getSearchRequest($searchCriteria),
+                $this->getAccessToken()
+            );
+            $response = $connection->getNextResponse();
             /** @var StockFile $file */
             foreach ($response->getFiles() as $file) {
-                $itemData = (array)$file;
-                $itemData['url'] = $itemData['thumbnail_240_url'];
-                $itemId = $itemData['id'];
-                $attributes = $this->createAttributes('id', $itemData);
-
-                $item = $this->documentFactory->create();
-                $item->setId($itemId);
-                $item->setCustomAttributes($attributes);
-                $items[] = $item;
+                $items[] = $this->convertStockFileToDocument($file);
             }
-
-            $searchResult = $this->searchResultFactory->create();
-            $searchResult->setSearchCriteria($searchCriteria);
-            $searchResult->setItems($items);
-            $searchResult->setTotalCount($response->getNbResults());
-
-            return $searchResult;
-        } catch (Exception $exception) {
-            $message = __(
-                'Adobe Stock search process failed: %error_message',
-                ['error_message' => $exception->getMessage()]
-            );
-            $this->processException($message, $exception);
+            $totalCount = $response->getNbResults();
+        } catch (Exception $e) {
+            $this->logger->critical($e->getMessage());
         }
+
+        $searchResult = $this->searchResultFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($items);
+        $searchResult->setTotalCount($totalCount);
+
+        return $searchResult;
+    }
+
+    /**
+     * Convert a stock file object to a document object
+     *
+     * @param StockFile $file
+     * @return DocumentInterface
+     * @throws IntegrationException
+     */
+    private function convertStockFileToDocument(StockFile $file): DocumentInterface
+    {
+        $itemData = (array) $file;
+        $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
+        $itemData['preview_url'] = $itemData['thumbnail_500_url'];
+        $itemId = $itemData['id'];
+        $attributes = $this->createAttributes('id', $itemData);
+
+        $item = $this->documentFactory->create();
+        $item->setId($itemId);
+        $item->setCustomAttributes($attributes);
+
+        return $item;
+    }
+
+    /**
+     * Create and return search request based on search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchFilesRequest
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    private function getSearchRequest(SearchCriteriaInterface $searchCriteria): SearchFilesRequest
+    {
+        $searchRequest = new SearchFilesRequest();
+        $searchRequest->setLocale($this->localeResolver->getLocale());
+        $searchRequest->setSearchParams(
+            $this->searchParametersProvider->apply($searchCriteria, new SearchParameters())
+        );
+        $searchRequest->setResultColumns($this->getResultColumns());
+        
+        return $searchRequest;
+    }
+
+    /**
+     * Retrive array of columns to be requested
+     *
+     * @return array
+     */
+    private function getResultColumns(): array
+    {
+        $resultsColumns = Constants::getResultColumns();
+        $resultColumnArray = [];
+        foreach ($this->config->getSearchResultFields() as $field) {
+            $resultColumnArray[] = $resultsColumns[$field];
+        }
+        return $resultColumnArray;
     }
 
     /**
@@ -273,6 +312,6 @@ class Client implements ClientInterface
     private function processException(Phrase $message, Exception $exception)
     {
         $this->logger->critical($message->render());
-        throw new IntegrationException($message, $exception);
+        throw new IntegrationException($message, $exception, $exception->getCode());
     }
 }
