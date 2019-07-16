@@ -108,24 +108,33 @@ class Client implements ClientInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
+     * @throws IntegrationException
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $searchResult = $this->searchResultFactory->create();
-        $searchResult->setSearchCriteria($searchCriteria);
+        $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
+        $resultsColumns = Constants::getResultColumns();
+        $resultColumnArray = [];
+        foreach ($this->config->getSearchResultFields() as $field) {
+            $resultColumnArray[] = $resultsColumns[$field];
+        }
         try {
-            $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
-            $resultsColumns = Constants::getResultColumns();
-            $resultColumnArray = [];
-            foreach ($this->config->getSearchResultFields() as $field) {
-                $resultColumnArray[] = $resultsColumns[$field];
-            }
-
             $searchRequest = new SearchFilesRequest();
             $searchRequest->setLocale($this->localeResolver->getLocale());
             $searchRequest->setSearchParams($searchParams);
             $searchRequest->setResultColumns($resultColumnArray);
             $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+        } catch (Exception $exception) {
+            $message = __(
+                'Adobe Stock search process failed: %error_message',
+                ['error_message' => $exception->getMessage()]
+            );
+            $this->processException($message, $exception);
+        }
+        $searchResult = $this->searchResultFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+
+        try {
             $response = $client->getNextResponse();
             $items = [];
             /** @var StockFile $file */
@@ -143,12 +152,7 @@ class Client implements ClientInterface
             }
             $searchResult->setItems($items);
             $searchResult->setTotalCount($response->getNbResults());
-        } catch (Exception $exception) {
-            $message = __(
-                'Adobe Stock search process failed: %error_message',
-                ['error_message' => $exception->getMessage()]
-            );
-            $this->logger->critical($message->render());
+        } catch (Exception $e) {
             $searchResult->setItems([]);
             $searchResult->setTotalCount(0);
         }
