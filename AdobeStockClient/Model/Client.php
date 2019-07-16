@@ -18,6 +18,7 @@ use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
@@ -112,52 +113,85 @@ class Client implements ClientInterface
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $searchParams = $this->searchParametersProvider->apply($searchCriteria, new SearchParameters());
+        $items = [];
+        $totalCount = 0;
+        $connection = $this->getConnection();
+
+        try {
+            $connection->searchFilesInitialize(
+                $this->getSearchRequest($searchCriteria),
+                $this->getAccessToken()
+            );
+            $response = $connection->getNextResponse();
+            /** @var StockFile $file */
+            foreach ($response->getFiles() as $file) {
+                $items[] = $this->convertStockFileToDocument($file);
+            }
+            $totalCount = $response->getNbResults();
+        } catch (Exception $e) {
+            $this->logger->critical($exception->getMessage());
+        }
+
+        $searchResult = $this->searchResultFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($items);
+        $searchResult->setTotalCount($totalCount);
+
+        return $searchResult;
+    }
+
+    /**
+     * Convert a stock file object to a document object
+     *
+     * @param StockFile $file
+     * @return DocumentInterface
+     */
+    private function convertStockFileToDocument(StockFile $file): DocumentInterface
+    {
+        $itemData = (array) $file;
+        $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
+        $itemData['preview_url'] = $itemData['thumbnail_500_url'];
+        $itemId = $itemData['id'];
+        $attributes = $this->createAttributes('id', $itemData);
+
+        $item = $this->documentFactory->create();
+        $item->setId($itemId);
+        $item->setCustomAttributes($attributes);
+
+        return $item;
+    }
+
+    /**
+     * Create and return search request based on search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchFilesRequest
+     */
+    private function getSearchRequest(SearchCriteriaInterface $searchCriteria): SearchFilesRequest
+    {
+        $searchRequest = new SearchFilesRequest();
+        $searchRequest->setLocale($this->localeResolver->getLocale());
+        $searchRequest->setSearchParams(
+            $this->searchParametersProvider->apply($searchCriteria, new SearchParameters())
+        );
+        $searchRequest->setResultColumns($this->getResultColumns());
+        
+        return $searchRequest;
+    }
+
+    /**
+     * Retrive array of columns to be requested
+     *
+     * @return array
+     */
+    private function getResultColumns(): array
+    {
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
         foreach ($this->config->getSearchResultFields() as $field) {
             $resultColumnArray[] = $resultsColumns[$field];
         }
-        try {
-            $searchRequest = new SearchFilesRequest();
-            $searchRequest->setLocale($this->localeResolver->getLocale());
-            $searchRequest->setSearchParams($searchParams);
-            $searchRequest->setResultColumns($resultColumnArray);
-            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
-        } catch (Exception $exception) {
-            $message = __(
-                'Adobe Stock search process failed: %error_message',
-                ['error_message' => $exception->getMessage()]
-            );
-            $this->processException($message, $exception);
-        }
-        $searchResult = $this->searchResultFactory->create();
-        $searchResult->setSearchCriteria($searchCriteria);
-
-        try {
-            $response = $client->getNextResponse();
-            $items = [];
-            /** @var StockFile $file */
-            foreach ($response->getFiles() as $file) {
-                $itemData = (array)$file;
-                $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
-                $itemData['preview_url'] = $itemData['thumbnail_500_url'];
-                $itemId = $itemData['id'];
-                $attributes = $this->createAttributes('id', $itemData);
-
-                $item = $this->documentFactory->create();
-                $item->setId($itemId);
-                $item->setCustomAttributes($attributes);
-                $items[] = $item;
-            }
-            $searchResult->setItems($items);
-            $searchResult->setTotalCount($response->getNbResults());
-        } catch (Exception $e) {
-            $searchResult->setItems([]);
-            $searchResult->setTotalCount(0);
-        }
-
-        return $searchResult;
+        return $resultColumnArray;
     }
 
     /**
