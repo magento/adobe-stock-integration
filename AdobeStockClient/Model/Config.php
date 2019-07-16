@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Config
 {
     private const XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
+    private const XML_PATH_PRIVATE_KEY = 'adobe_stock/integration/private_key';
     private const XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
 
@@ -41,13 +42,23 @@ class Config
     }
 
     /**
-     * API key for integration
+     * Retrieve integration API key (Client ID)
      *
      * @return string|null
      */
-    public function getApiKey() : ?string
+    public function getApiKey():? string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_API_KEY);
+    }
+
+    /**
+     * Retrieve integration API private KEY (Client secret)
+     *
+     * @return string
+     */
+    public function getPrivateKey(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_PRIVATE_KEY);
     }
 
     /**

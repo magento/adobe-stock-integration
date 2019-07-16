@@ -45,15 +45,15 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function save(UserProfileInterface $entity): UserProfileInterface
+    public function save(UserProfileInterface $entity): void
     {
         try {
             $this->resource->save($entity);
+
+            $this->loadedEntities[$entity->getId()] = $entity;
         } catch (Exception $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
         }
-
-        return $this->loadedEntities[$entity->getId()] = $entity;
     }
 
     /**

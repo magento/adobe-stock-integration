@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\OAuth;
+namespace Magento\AdobeStockClient\Model\OAuth;
 
 use Magento\Framework\DataObject;
 

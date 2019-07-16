@@ -9,14 +9,14 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\OAuth;
 
 use Exception;
-use Magento\AdobeStockAsset\Model\Config;
-use Magento\AdobeStockAsset\Model\OAuth;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeStockClient\Model\Client;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
 
@@ -36,11 +36,8 @@ class Callback extends Action
     /** @var UserProfileInterfaceFactory */
     private $userProfileFactory;
 
-    /** @var GetToken */
-    private $getToken;
-
-    /** @var Config */
-    private $config;
+    /** @var Client */
+    private $client;
 
     /** @var LoggerInterface */
     private $logger;
@@ -50,24 +47,21 @@ class Callback extends Action
      * @param Action\Context $context
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserProfileInterfaceFactory $userProfileFactory
-     * @param OAuth\GetToken $getToken
-     * @param Config $config
+     * @param Client $client
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
         UserProfileRepositoryInterface $userProfileRepository,
         UserProfileInterfaceFactory $userProfileFactory,
-        OAuth\GetToken $getToken,
-        Config $config,
+        Client $client,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
         $this->userProfileRepository = $userProfileRepository;
         $this->userProfileFactory = $userProfileFactory;
-        $this->getToken = $getToken;
-        $this->config = $config;
+        $this->client = $client;
         $this->logger = $logger;
     }
 
@@ -77,9 +71,7 @@ class Callback extends Action
     public function execute()
     {
         try {
-            $tokenResponse = $this->getToken->execute(
-                $this->config->getApiKey(),
-                $this->config->getPrivateKey(),
+            $tokenResponse = $this->client->getToken(
                 (string)$this->getRequest()->getParam('code')
             );
 
@@ -91,7 +83,7 @@ class Callback extends Action
             $this->userProfileRepository->save($userProfile);
         } catch (CouldNotSaveException $e) {
             $this->getMessageManager()->addErrorMessage($e->getMessage());
-        } catch (OAuth\OAuthException $e) {
+        } catch (AuthorizationException $e) {
             $this->getMessageManager()->addErrorMessage($e->getMessage());
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
