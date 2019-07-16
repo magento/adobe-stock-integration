@@ -83,7 +83,7 @@ class GetImageList implements GetImageListInterface
             );
         } catch (\Exception $exception) {
             $message = __('Get image list action failed.');
-            throw new LocalizedException($message, $exception);
+            throw new LocalizedException($message, $exception, $exception->getCode());
         }
     }
 }
