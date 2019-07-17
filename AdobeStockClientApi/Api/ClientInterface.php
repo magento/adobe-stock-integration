@@ -19,11 +19,6 @@ use Magento\Framework\Exception\AuthorizationException;
 interface ClientInterface
 {
     /**
-     * Token URI
-     */
-    const TOKEN_URI = 'https://ims-na1.adobelogin.com/ims/token';
-
-    /**
      * Search for assets
      *
      * @param SearchCriteriaInterface $searchCriteria

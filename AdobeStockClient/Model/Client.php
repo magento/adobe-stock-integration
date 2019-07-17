@@ -197,7 +197,7 @@ class Client implements ClientInterface
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            self::TOKEN_URI,
+            $this->config->getTokenUrl(),
             [
                 'client_id' => $this->config->getApiKey(),
                 'client_secret' => $this->config->getPrivateKey(),

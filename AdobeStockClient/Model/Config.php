@@ -19,6 +19,7 @@ class Config
     private const XML_PATH_PRIVATE_KEY = 'adobe_stock/integration/private_key';
     private const XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
+    private const XML_PATH_TOKEN_URL = 'adobe_stock/integration/token_url';
 
     /**
      * @var ScopeConfigInterface
@@ -79,6 +80,16 @@ class Config
     public function getProductName() : ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME);
+    }
+
+    /**
+     * Retrieve token URL
+     *
+     * @return string
+     */
+    public function getTokenUrl(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_TOKEN_URL);
     }
 
     /**
