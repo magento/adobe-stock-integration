@@ -246,7 +246,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getUrl(): string
+    public function getThumbnailUrl(): string
     {
         return (string) $this->getData(self::URL);
     }
@@ -254,7 +254,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setUrl(string $url): void
+    public function setThumbnailUrl(string $url): void
     {
         $this->setData(self::URL, $url);
     }

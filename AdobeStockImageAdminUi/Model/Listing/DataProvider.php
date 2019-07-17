@@ -13,7 +13,9 @@ use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\DataProvider\SearchResultFactory;
+use \Magento\Framework\UrlInterface;
 
 /**
  * DataProvider of customer addresses for customer address grid.
@@ -31,6 +33,11 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     private $searchResultFactory;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
@@ -41,6 +48,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param FilterBuilder $filterBuilder
      * @param GetImageListInterface $getImageList
      * @param SearchResultFactory $searchResultFactory
+     * @param UrlInterface $urlBuilder
      * @param array $meta
      * @param array $data
      */
@@ -54,6 +62,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
         SearchResultFactory $searchResultFactory,
+        UrlInterface $urlBuilder,
         array $meta = [],
         array $data = []
     ) {
@@ -70,6 +79,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         );
         $this->getImageList = $getImageList;
         $this->searchResultFactory = $searchResultFactory;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -77,12 +87,25 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      */
     public function getSearchResult()
     {
-        $result = $this->getImageList->execute($this->getSearchCriteria());
-        return $this->searchResultFactory->create(
-            $result->getItems(),
-            $result->getTotalCount(),
-            $this->getSearchCriteria(),
-            'id'
-        );
+        try {
+            $result = $this->getImageList->execute($this->getSearchCriteria());
+            return $this->searchResultFactory->create(
+                $result->getItems(),
+                $result->getTotalCount(),
+                $this->getSearchCriteria(),
+                'id'
+            );
+        } catch (\Exception $e) {
+            $message = __('Error with message: %1', $e->getMessage());
+            if ($e->getCode() === 403) {
+                $message = __(
+                    'Please ensure the Adobe Stock API key is specified correctly on the <a href="%url'
+                    . '#system_adobe_stock_integration-link"'
+                    . '>Adobe Stock Integration configuration</a> page.',
+                    ['url' => $this->urlBuilder->getUrl('adminhtml/system_config/edit/section/system')]
+                );
+            }
+            throw new LocalizedException($message, $e, $e->getCode());
+        }
     }
 }

@@ -67,7 +67,8 @@ class GetImageList implements GetImageListInterface
                 /** @var AssetInterface $asset */
                 $asset = $this->assetFactory->create();
                 $asset->setId($item->getId());
-                $asset->setUrl($item->getCustomAttribute('url')->getValue());
+                $asset->setThumbnailUrl($item->getCustomAttribute('thumbnail_url')->getValue());
+                $asset->setPreviewUrl($item->getCustomAttribute('preview_url')->getValue());
                 $asset->setHeight($item->getCustomAttribute('height')->getValue());
                 $asset->setWidth($item->getCustomAttribute('width')->getValue());
                 $items[] = $asset;
@@ -82,7 +83,7 @@ class GetImageList implements GetImageListInterface
             );
         } catch (\Exception $exception) {
             $message = __('Get image list action failed.');
-            throw new LocalizedException($message, $exception);
+            throw new LocalizedException($message, $exception, $exception->getCode());
         }
     }
 }
