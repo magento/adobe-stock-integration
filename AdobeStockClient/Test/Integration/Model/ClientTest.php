@@ -21,6 +21,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Test client for communication to Adobe Stock API.
@@ -80,6 +81,42 @@ class ClientTest extends TestCase
                 'logger' => $this->loggerMock
             ]
         );
+    }
+
+    /**
+     * Test with error on create attribute.
+     *
+     * @throws IntegrationException
+     */
+    public function testSearchWithErrorOnCreateAttribute(): void
+    {
+        $filter = $this->filterBuilder->setConditionType('fulltext')
+            ->setField('keyword_search')
+            ->setValue('test_value')
+            ->create();
+        $this->searchCriteriaBuilder->addFilter($filter);
+        $this->setupConnectionMockWithErrorOnCreateAttribute();
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeValueFactoryMock->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception('Create attribute exception'));
+        $client = $this->objectManager->create(
+            Client::class,
+            [
+                'connectionFactory' => $this->connectionFactoryMock,
+                'logger' => $this->loggerMock,
+                'attributeValueFactory' => $attributeValueFactoryMock
+            ]
+        );
+        $searchResult = $client->search($searchCriteria);
+        $this->assertInstanceOf(SearchResultInterface::class, $searchResult);
+        $this->assertEquals($searchCriteria, $searchResult->getSearchCriteria());
+        $this->assertEquals([], $searchResult->getItems());
+        $this->assertEquals(0, $searchResult->getTotalCount());
     }
 
     /**
@@ -232,6 +269,33 @@ class ClientTest extends TestCase
     /**
      * Setup connection mock.
      */
+    private function setupConnectionMockWithErrorOnCreateAttribute(): void
+    {
+        $connectionMock = $this->getMockBuilder(AdobeStock::class)
+            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connectionMock->expects($this->once())
+            ->method('searchFilesInitialize');
+        $responseMock = $this->getMockBuilder(SearchFilesResponse::class)
+            ->setMethods(['getFiles'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connectionMock->expects($this->once())
+            ->method('getNextResponse')
+            ->willReturn($responseMock);
+        $responseMock->expects($this->once())
+            ->method('getFiles')
+            ->willReturn($this->getFoundFiles());
+        $this->connectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->with('', 'magento-adobe-stock-integration', 'PROD')
+            ->willReturn($connectionMock);
+    }
+
+    /**
+     * Setup connection mock.
+     */
     private function setupConnectionMock(): void
     {
         $connectionMock = $this->getMockBuilder(AdobeStock::class)
@@ -274,6 +338,8 @@ class ClientTest extends TestCase
                 'thumbnail_240_url' => 'https://test.url/1',
                 'width' => 110,
                 'height' => 210,
+                'some_bool_param' => false,
+                'some_nullable_param' => null,
             ],
             [
                 'id' => 2,
@@ -281,6 +347,8 @@ class ClientTest extends TestCase
                 'thumbnail_240_url' => 'https://test.url/2',
                 'width' => 120,
                 'height' => 220,
+                'some_bool_params' => false,
+                'some_nullable_param' => 1,
             ],
             [
                 'id' => 3,
@@ -288,6 +356,8 @@ class ClientTest extends TestCase
                 'thumbnail_240_url' => 'https://test.url/3',
                 'width' => 130,
                 'height' => 230,
+                'some_bool_params' => true,
+                'some_nullable_param' => 2,
             ],
         ];
 
