@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
@@ -29,9 +30,9 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setId($value)
+    public function setId($value): void
     {
-        return $this->setData(self::ID, $value);
+        $this->setData(self::ID, $value);
     }
 
     /**
@@ -45,7 +46,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setMediaTypeId(int $mediaTypeId)
+    public function setMediaTypeId(int $mediaTypeId): void
     {
         $this->setData(self::MEDIA_TYPE_ID, $mediaTypeId);
     }
@@ -61,7 +62,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCategory(CategoryInterface $categoryId)
+    public function setCategory(CategoryInterface $categoryId): void
     {
         $this->setData(self::CATEGORY, $categoryId);
     }
@@ -77,7 +78,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCreator(CreatorInterface $creator)
+    public function setCreator(CreatorInterface $creator): void
     {
         $this->setData(self::CREATOR, $creator);
     }
@@ -93,7 +94,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setKeywords(array $keywords)
+    public function setKeywords(array $keywords): void
     {
         $this->setData(self::KEYWORDS, $keywords);
     }
@@ -109,7 +110,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setPremiumLevelId(int $premiumLevelId)
+    public function setPremiumLevelId(int $premiumLevelId): void
     {
         $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevelId);
     }
@@ -125,7 +126,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setPath(string $path)
+    public function setPath(string $path): void
     {
         $this->setData(self::PATH, $path);
     }
@@ -141,7 +142,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setAdobeId(int $adobeId)
+    public function setAdobeId(int $adobeId): void
     {
         $this->setData(self::ADOBE_ID, $adobeId);
     }
@@ -157,7 +158,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setStockId(int $stockId)
+    public function setStockId(int $stockId): void
     {
         $this->setData(self::STOCK_ID, $stockId);
     }
@@ -173,7 +174,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setIsLicensed(int $isLicensed)
+    public function setIsLicensed(int $isLicensed): void
     {
         $this->setData(self::IS_LICENSED, $isLicensed);
     }
@@ -189,7 +190,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->setData(self::TITLE, $title);
     }
@@ -205,9 +206,9 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setPreviewUrl(string $previewUrl)
+    public function setPreviewUrl(string $previewUrl): void
     {
-        $this->setData(self::PREVIEW_UR, $previewUrl);
+        $this->setData(self::PREVIEW_URL, $previewUrl);
     }
 
     /**
@@ -221,7 +222,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setPreviewWidth(int $previewWidth)
+    public function setPreviewWidth(int $previewWidth): void
     {
         $this->setData(self::PREVIEW_WIDTH, $previewWidth);
     }
@@ -237,7 +238,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setPreviewHeight(int $previewHeight)
+    public function setPreviewHeight(int $previewHeight): void
     {
         $this->setData(self::PREVIEW_HEIGHT, $previewHeight);
     }
@@ -245,7 +246,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getUrl(): string
+    public function getThumbnailUrl(): string
     {
         return (string)$this->_get(self::URL);
     }
@@ -253,7 +254,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setUrl(string $url)
+    public function setThumbnailUrl(string $url): void
     {
         $this->setData(self::URL, $url);
     }
@@ -269,7 +270,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setWidth(int $width)
+    public function setWidth(int $width): void
     {
         $this->setData(self::WIDTH, $width);
     }
@@ -285,7 +286,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setHeight(int $height)
+    public function setHeight(int $height): void
     {
         $this->setData(self::HEIGHT, $height);
     }
@@ -301,7 +302,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCountryName(string $countryName)
+    public function setCountryName(string $countryName): void
     {
         $this->setData(self::COUNTRY_NAME, $countryName);
     }
@@ -317,7 +318,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setDetailsUrl(string $detailsUrl)
+    public function setDetailsUrl(string $detailsUrl): void
     {
         $this->setData(self::DETAILS_URL, $detailsUrl);
     }
@@ -333,7 +334,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setVectorType(string $vectorType)
+    public function setVectorType(string $vectorType): void
     {
         $this->setData(self::VECTOR_TYPE, $vectorType);
     }
@@ -349,7 +350,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setContentType(string $contentType)
+    public function setContentType(string $contentType): void
     {
         $this->setData(self::CONTENT_TYPE, $contentType);
     }
@@ -365,7 +366,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCreationDate(string $creationDate)
+    public function setCreationDate(string $creationDate): void
     {
         $this->setData(self::CREATION_DATE, $creationDate);
     }
@@ -381,7 +382,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCreatedAt(string $createdAt)
+    public function setCreatedAt(string $createdAt): void
     {
         $this->setData(self::CREATED_AT, $createdAt);
     }
@@ -397,7 +398,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setUpdatedAt(string $updatedAt)
+    public function setUpdatedAt(string $updatedAt): void
     {
         $this->setData(self::UPDATED_AT, $updatedAt);
     }
@@ -413,8 +414,8 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void
     {
-        return $this->_setExtensionAttributes($extensionAttributes);
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

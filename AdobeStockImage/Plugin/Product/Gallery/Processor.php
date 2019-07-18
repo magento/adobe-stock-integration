@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdobeStockImage\Plugin\Product\Gallery;
 
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;

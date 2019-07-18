@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\System\Config;
 
 use AdobeStock\Api\Client\AdobeStock;
@@ -29,7 +31,7 @@ class TestConnection extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockAsset::config';
+    const ADMIN_RESOURCE = 'Magento_Config::config_system';
 
     /**
      * @var JsonFactory

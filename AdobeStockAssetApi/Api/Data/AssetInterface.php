@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
-
-use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
 
 /**
  * Interface
@@ -58,9 +57,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set ID
      *
      * @param int $value
-     * @return $this
+     * @return void
      */
-    public function setId($value);
+    public function setId($value): void;
 
     /**
      * Get Path
@@ -73,32 +72,32 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set Path
      *
      * @param string $value
-     * @return $this
+     * @return void
      */
-    public function setPath(string $value);
+    public function setPath(string $value): void;
 
     /**
      * Get URL
      *
      * @return string|null
      */
-    public function getUrl(): ?string;
+    public function getThumbnailUrl(): ?string;
 
     /**
      * Set URL
      *
      * @param string $url
-     * @return $this
+     * @return void
      */
-    public function setUrl(string $url);
+    public function setThumbnailUrl(string $url): void;
 
     /**
      * Set full licensed asset's height
      *
      * @param int $value
-     * @return $this
+     * @return void
      */
-    public function setHeight(int $value);
+    public function setHeight(int $value): void;
 
     /**
      * Retrieve full licensed asset's height
@@ -111,9 +110,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set full licensed asset's width
      *
      * @param int $value
-     * @return $this
+     * @return void
      */
-    public function setWidth(int $value);
+    public function setWidth(int $value): void;
 
     /**
      * Retrieve full licensed asset's width
@@ -135,7 +134,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param int $mediaTypeId
      * @return void
      */
-    public function setMediaTypeId(int $mediaTypeId);
+    public function setMediaTypeId(int $mediaTypeId): void;
 
     /**
      * Get category
@@ -148,9 +147,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set category
      *
      * @param CategoryInterface $categoryId
-     * @return $this
+     * @return void
      */
-    public function setCategory(CategoryInterface $categoryId);
+    public function setCategory(CategoryInterface $categoryId): void;
 
     /**
      * Return the creator
@@ -163,9 +162,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set the creator id
      *
      * @param CreatorInterface $creatorId
-     * @return $this
+     * @return void
      */
-    public function setCreator(CreatorInterface $creatorId);
+    public function setCreator(CreatorInterface $creatorId): void;
 
     /**
      * Get keywords
@@ -178,9 +177,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set keywords
      *
      * @param KeywordInterface[] $keywords
-     * @return $this
+     * @return void
      */
-    public function setKeywords(array $keywords);
+    public function setKeywords(array $keywords): void;
 
     /**
      * Get premium level id
@@ -193,9 +192,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set premium level id
      *
      * @param int $premiumLevelId
-     * @return $this
+     * @return void
      */
-    public function setPremiumLevelId(int $premiumLevelId);
+    public function setPremiumLevelId(int $premiumLevelId): void;
 
     /**
      * Get adobe id
@@ -208,9 +207,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set adobe id
      *
      * @param int $adobeId
-     * @return $this
+     * @return void
      */
-    public function setAdobeId(int $adobeId);
+    public function setAdobeId(int $adobeId): void;
 
     /**
      * Get the stock id
@@ -223,9 +222,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set stock id
      *
      * @param int $stockId
-     * @return $this
+     * @return void
      */
-    public function setStockId(int $stockId);
+    public function setStockId(int $stockId): void;
 
     /**
      * Is licensed
@@ -238,9 +237,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set is licensed
      *
      * @param int $isLicensed
-     * @return $this
+     * @return void
      */
-    public function setIsLicensed(int $isLicensed);
+    public function setIsLicensed(int $isLicensed): void;
 
     /**
      * Get title
@@ -253,9 +252,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set title
      *
      * @param string $title
-     * @return $this
+     * @return void
      */
-    public function setTitle(string $title);
+    public function setTitle(string $title): void;
 
     /**
      * Get preview url
@@ -268,9 +267,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set preview url
      *
      * @param string $previewUrl
-     * @return $this
+     * @return void
      */
-    public function setPreviewUrl(string $previewUrl);
+    public function setPreviewUrl(string $previewUrl): void;
 
     /**
      * Get preview width
@@ -283,9 +282,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set preview width
      *
      * @param int $previewWidth
-     * @return $this
+     * @return void
      */
-    public function setPreviewWidth(int $previewWidth);
+    public function setPreviewWidth(int $previewWidth): void;
 
     /**
      * Get the preview height
@@ -298,9 +297,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set preview height
      *
      * @param int $previewHeight
-     * @return $this
+     * @return void
      */
-    public function setPreviewHeight(int $previewHeight);
+    public function setPreviewHeight(int $previewHeight): void;
 
     /**
      * Get country name
@@ -313,9 +312,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set country name
      *
      * @param string $countryName
-     * @return $this
+     * @return void
      */
-    public function setCountryName(string $countryName);
+    public function setCountryName(string $countryName): void;
 
     /**
      * Get details url
@@ -328,9 +327,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set details url
      *
      * @param string $detailsUrl
-     * @return $this
+     * @return void
      */
-    public function setDetailsUrl(string $detailsUrl);
+    public function setDetailsUrl(string $detailsUrl): void;
 
     /**
      * Get vector types
@@ -343,9 +342,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set vector types
      *
      * @param string $vectorType
-     * @return $this
+     * @return void
      */
-    public function setVectorType(string $vectorType);
+    public function setVectorType(string $vectorType): void;
 
     /**
      * Get content type
@@ -358,9 +357,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set content type
      *
      * @param string $contentType
-     * @return $this
+     * @return void
      */
-    public function setContentType(string $contentType);
+    public function setContentType(string $contentType): void;
 
     /**
      * Get creation date
@@ -373,9 +372,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set creation date
      *
      * @param string $creationDate
-     * @return $this
+     * @return void
      */
-    public function setCreationDate(string $creationDate);
+    public function setCreationDate(string $creationDate): void;
 
     /**
      * Get created at
@@ -388,9 +387,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set created at
      *
      * @param string $createdAt
-     * @return $this
+     * @return void
      */
-    public function setCreatedAt(string $createdAt);
+    public function setCreatedAt(string $createdAt): void;
 
     /**
      * Get updated at
@@ -403,9 +402,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Return updated at
      *
      * @param string $updatedAt
-     * @return $this
+     * @return void
      */
-    public function setUpdatedAt(string $updatedAt);
+    public function setUpdatedAt(string $updatedAt): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
@@ -418,7 +417,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set an extension attributes object.
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
-     * @return $this
+     * @return void
      */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
 }
