@@ -39,6 +39,6 @@ class Config
      */
     public function isEnabled(): bool
     {
-        return (bool) $this->scopeConfig->getValue(self::XML_PATH_ENABLED);
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_ENABLED);
     }
 }
