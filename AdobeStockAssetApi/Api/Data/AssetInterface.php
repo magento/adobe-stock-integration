@@ -81,7 +81,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return string|null
      */
-    public function getUrl(): ?string;
+    public function getThumbnailUrl(): ?string;
 
     /**
      * Set URL
@@ -89,7 +89,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param string $url
      * @return void
      */
-    public function setUrl(string $url): void;
+    public function setThumbnailUrl(string $url): void;
 
     /**
      * Set full licensed asset's height

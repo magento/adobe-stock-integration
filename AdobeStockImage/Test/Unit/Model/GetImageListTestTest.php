@@ -55,7 +55,8 @@ class GetImageListTestTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $id = 1;
-        $url = 'url.com/test/';
+        $thumbnailUrl = 'url.com/test/';
+        $previewUrl = 'url.com/test/';
         $height = 100;
         $width = 200;
 
@@ -67,8 +68,10 @@ class GetImageListTestTest extends \PHPUnit\Framework\TestCase
             ->with($searchCriteriaMock)
             ->willReturn($searchResultMock);
 
-        $urlAttr = $this->createMock(\Magento\Framework\Api\AttributeInterface::class);
-        $urlAttr->expects($this->once())->method('getValue')->willReturn($url);
+        $thumbnailUrlAttr = $this->createMock(\Magento\Framework\Api\AttributeInterface::class);
+        $thumbnailUrlAttr->expects($this->once())->method('getValue')->willReturn($thumbnailUrl);
+        $previewUrlAttr = $this->createMock(\Magento\Framework\Api\AttributeInterface::class);
+        $previewUrlAttr->expects($this->once())->method('getValue')->willReturn($previewUrl);
         $heightAttr = $this->createMock(\Magento\Framework\Api\AttributeInterface::class);
         $heightAttr->expects($this->once())->method('getValue')->willReturn($height);
         $widthAttr = $this->createMock(\Magento\Framework\Api\AttributeInterface::class);
@@ -76,9 +79,16 @@ class GetImageListTestTest extends \PHPUnit\Framework\TestCase
 
         $documentMock = $this->createMock(\Magento\Framework\Api\Search\DocumentInterface::class);
         $documentMock->expects($this->at(0))->method('getId')->willReturn($id);
-        $documentMock->expects($this->at(1))->method('getCustomAttribute')->with('url')->willReturn($urlAttr);
-        $documentMock->expects($this->at(2))->method('getCustomAttribute')->with('height')->willReturn($heightAttr);
-        $documentMock->expects($this->at(3))->method('getCustomAttribute')->with('width')->willReturn($widthAttr);
+        $documentMock->expects($this->at(1))
+            ->method('getCustomAttribute')
+            ->with('thumbnail_url')
+            ->willReturn($thumbnailUrlAttr);
+        $documentMock->expects($this->at(2))
+            ->method('getCustomAttribute')
+            ->with('preview_url')
+            ->willReturn($previewUrlAttr);
+        $documentMock->expects($this->at(3))->method('getCustomAttribute')->with('height')->willReturn($heightAttr);
+        $documentMock->expects($this->at(4))->method('getCustomAttribute')->with('width')->willReturn($widthAttr);
 
         $searchResultMock->expects($this->once())->method('getItems')->willReturn([$documentMock]);
         $searchResultMock->expects($this->once())->method('getTotalCount')->willReturn(1);
@@ -86,7 +96,8 @@ class GetImageListTestTest extends \PHPUnit\Framework\TestCase
         $assetMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
         $this->assetFactoryMock->expects($this->once())->method('create')->willReturn($assetMock);
         $assetMock->expects($this->once())->method('setId')->with($id)->willReturnSelf();
-        $assetMock->expects($this->once())->method('setUrl')->with($url)->willReturnSelf();
+        $assetMock->expects($this->once())->method('setThumbnailUrl')->with($thumbnailUrl)->willReturnSelf();
+        $assetMock->expects($this->once())->method('setPreviewUrl')->with($previewUrl)->willReturnSelf();
         $assetMock->expects($this->once())->method('setHeight')->with($height)->willReturnSelf();
         $assetMock->expects($this->once())->method('setWidth')->with($width)->willReturnSelf();
 
