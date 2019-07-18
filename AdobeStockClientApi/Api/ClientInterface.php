@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClientApi\Api;
 
-use AdobeStock\Api\Client\AdobeStock;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 
@@ -28,9 +27,9 @@ interface ClientInterface
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.
      *
-     * @param AdobeStock|null $adobeStock
+     * @param string|null $apiKey
      *
      * @return bool
      */
-    public function testConnection(AdobeStock $adobeStock = null): bool;
+    public function testConnection(string $apiKey = null): bool;
 }

@@ -238,16 +238,17 @@ class Client implements ClientInterface
     }
 
     /**
-     * Get SDK connection
+     * @param string $key
      *
      * @return AdobeStock
      * @throws IntegrationException
      */
-    private function getConnection(): AdobeStock
+    private function getConnection(string $key): AdobeStock
     {
         try {
+            $apiKey = empty($key) ? $key : $this->config->getApiKey();
             return $this->connectionFactory->create(
-                $this->config->getApiKey(),
+                $apiKey,
                 $this->config->getProductName(),
                 $this->config->getTargetEnvironment()
             );
@@ -273,12 +274,12 @@ class Client implements ClientInterface
     /**
      * Test connection to Adobe Stock API
      *
-     * @param AdobeStock|null $connectionInstance
+     * @param string $apiKey
      *
      * @return bool
      * @throws IntegrationException
      */
-    public function testConnection(AdobeStock $connectionInstance = null): bool
+    public function testConnection(string $apiKey = null): bool
     {
         try {
             //TODO: should be refactored
@@ -292,7 +293,7 @@ class Client implements ClientInterface
             $searchRequest->setSearchParams($searchParams);
             $searchRequest->setResultColumns($resultColumnArray);
 
-            $client = (null === $connectionInstance) ? $this->getConnection() : $connectionInstance;
+            $client = $this->getConnection($apiKey);
             $client->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
             return (bool)$client->getNextResponse()->nb_results;

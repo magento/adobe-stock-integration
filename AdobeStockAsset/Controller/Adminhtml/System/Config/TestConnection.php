@@ -8,9 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\System\Config;
 
-use AdobeStock\Api\Client\AdobeStock;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockClient\Model\ConnectionFactory;
 use Magento\AdobeStockClient\Model\Config;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -18,7 +16,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -44,15 +42,8 @@ class TestConnection extends Action
     private $client;
 
     /**
-     * @var Config
+     * @var LoggerInterface
      */
-    private $config;
-
-    /**
-     * @var ConnectionFactory
-     */
-    private $connectionFactory;
-
     private $logger;
 
     /**
@@ -61,8 +52,6 @@ class TestConnection extends Action
      * @param Context           $context
      * @param ClientInterface   $client
      * @param JsonFactory       $resultJsonFactory
-     * @param Config            $config
-     * @param ConnectionFactory $connectionFactory
      * @param LoggerInterface   $logger
      */
     public function __construct(
@@ -70,14 +59,11 @@ class TestConnection extends Action
         ClientInterface $client,
         JsonFactory $resultJsonFactory,
         Config $config,
-        ConnectionFactory $connectionFactory,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->client = $client;
-        $this->config = $config;
-        $this->connectionFactory = $connectionFactory;
         $this->logger = $logger;
     }
 
@@ -90,8 +76,7 @@ class TestConnection extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $connectionInstance = $this->initializeTestConnection($params);
-            $isConnectionEstablished = $this->isConnectionEstablished($connectionInstance);
+            $isConnectionEstablished = $this->isConnectionEstablished($params);
             $message = $this->getResultMessage($isConnectionEstablished);
         } catch (\Exception $exception) {
             $message = __('An error occurred during test Adobe Stock API connection');
@@ -103,49 +88,29 @@ class TestConnection extends Action
         return $resultJson->setData(
             [
                 'success' => $isConnectionEstablished,
-                'message' => $message,
+                'message' => $message->render(),
             ]
         );
     }
 
     /**
-     * Initialize test connection to the Adobe Stock service with the api key data which is sent on validation.
+     * Check whether test connection successfully established with the test api key or not.
      *
      * @param array $data
      *
-     * @return AdobeStock
-     * @throws IntegrationException
+     * @return bool
      */
-    private function initializeTestConnection(array $data): AdobeStock
+    private function isConnectionEstablished(array $data): bool
     {
         try {
-            return $this->connectionFactory->create(
-                $data['api_key'],
-                $this->config->getProductName(),
-                $this->config->getTargetEnvironment()
-            );
+            $apiKey = (string) $data['api_key'];
+            $isConnectionCreated = $this->client->testConnection($apiKey);
         } catch (\Exception $exception) {
             $message = __(
                 'Initialize test connection instance failed: %error_message',
                 ['error_message' => $exception]
             );
             $this->logger->critical($message->render());
-            throw new IntegrationException($message, $exception);
-        }
-    }
-
-    /**
-     * Check whether test connection successfully established with the test api key or not.
-     *
-     * @param AdobeStock $connectionInstance
-     *
-     * @return bool
-     */
-    private function isConnectionEstablished(AdobeStock $connectionInstance): bool
-    {
-        try {
-            $isConnectionCreated = $this->client->testConnection($connectionInstance);
-        } catch (\Exception $e) {
             $isConnectionCreated = false;
         }
 
@@ -157,13 +122,13 @@ class TestConnection extends Action
      *
      * @param bool $isConnectionEstablished
      *
-     * @return string
+     * @return Phrase
      */
-    private function getResultMessage(bool $isConnectionEstablished): string
+    private function getResultMessage(bool $isConnectionEstablished): Phrase
     {
         $message = $isConnectionEstablished ?
-            __('API key is valid. Connection successfully established.')
-            : __('Invalid API Key. Connection refused.');
+            __('Connection Successful!')
+            : __('Connection Failed!');
 
         return $message;
     }

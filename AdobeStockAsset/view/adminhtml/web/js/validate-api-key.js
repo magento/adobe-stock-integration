@@ -10,7 +10,7 @@ define([
     return function (config) {
         $('#' + config.testButtonId).bind( 'click', function() {
             let validationResultContainer = $('#' + config.validationResultContainerId);
-            let apiKey = document.getElementById('adobe_stock_integration_adobe_stock_integration_api_key').value;
+            let apiKey = document.getElementById(config.apiKeyInput).value;
             validationResultContainer.text('');
             validationResultContainer.removeAttr('class');
             $.ajax({
