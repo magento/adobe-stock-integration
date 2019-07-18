@@ -238,6 +238,8 @@ class Client implements ClientInterface
     }
 
     /**
+     * Initialize connection to the Adobe Stock service.
+     *
      * @param string $key
      *
      * @return AdobeStock

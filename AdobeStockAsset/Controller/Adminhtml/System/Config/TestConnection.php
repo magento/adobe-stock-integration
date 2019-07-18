@@ -58,7 +58,6 @@ class TestConnection extends Action
         Context $context,
         ClientInterface $client,
         JsonFactory $resultJsonFactory,
-        Config $config,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
