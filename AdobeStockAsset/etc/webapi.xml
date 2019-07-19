@@ -11,12 +11,6 @@
             <resource ref="Magento_AdobeStockAsset::actions_delete"/>
         </resources>
     </route>
-    <route url="/V1/adobestock/asset" method="DELETE">
-        <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="delete"/>
-        <resources>
-            <resource ref="Magento_AdobeStockAsset::actions_delete"/>
-        </resources>
-    </route>
     <route url="/V1/adobestock/asset/:id" method="PUT">
         <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="save"/>
         <resources>
