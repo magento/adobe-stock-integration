@@ -206,7 +206,7 @@ class Client implements ClientInterface
             $this->searchParametersProvider->apply($searchCriteria, new SearchParameters())
         );
         $searchRequest->setResultColumns($this->getResultColumns());
-        
+
         return $searchRequest;
     }
 
@@ -341,12 +341,10 @@ class Client implements ClientInterface
      * @param string $apiKey
      *
      * @return bool
-     * @throws IntegrationException
      */
     public function testConnection(string $apiKey = null): bool
     {
         try {
-            //TODO: should be refactored
             $searchParams = new SearchParameters();
             $searchRequest = new SearchFilesRequest();
             $resultColumnArray = [];
@@ -363,10 +361,11 @@ class Client implements ClientInterface
             return (bool)$client->getNextResponse()->nb_results;
         } catch (Exception $exception) {
             $message = __(
-                'An error occurred during test API connection: %error_message',
+                'An error occurred during Adobe Stock API connection test: %error_message',
                 ['error_message' => $exception->getMessage()]
             );
-            $this->processException($message, $exception);
+            $this->logger->notice($message->render());
+            return false;
         }
     }
 

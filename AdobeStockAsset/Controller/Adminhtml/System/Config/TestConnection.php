@@ -75,7 +75,7 @@ class TestConnection extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $isConnectionEstablished = $this->isConnectionEstablished($params);
+            $isConnectionEstablished = $this->client->testConnection((string) $params['api_key']);
             $message = $this->getResultMessage($isConnectionEstablished);
         } catch (\Exception $exception) {
             $message = __('An error occurred during test Adobe Stock API connection');
@@ -90,30 +90,6 @@ class TestConnection extends Action
                 'message' => $message->render(),
             ]
         );
-    }
-
-    /**
-     * Check whether test connection successfully established with the test api key or not.
-     *
-     * @param array $data
-     *
-     * @return bool
-     */
-    private function isConnectionEstablished(array $data): bool
-    {
-        try {
-            $apiKey = (string) $data['api_key'];
-            $isConnectionCreated = $this->client->testConnection($apiKey);
-        } catch (\Exception $exception) {
-            $message = __(
-                'Initialize test connection instance failed: %error_message',
-                ['error_message' => $exception]
-            );
-            $this->logger->critical($message->render());
-            $isConnectionCreated = false;
-        }
-
-        return $isConnectionCreated;
     }
 
     /**
