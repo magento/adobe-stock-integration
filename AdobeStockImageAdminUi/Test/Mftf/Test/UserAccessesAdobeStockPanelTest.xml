@@ -18,30 +18,20 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <waitForPageLoad stepKey="waitForContentTabExpanded" />
-        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImage" />
-        <waitForPageLoad stepKey="waitForImageDialogOpened" />
-        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse" />
-        <waitForPageLoad stepKey="waitForGalleryOpen" />
-        <see selector="{{AdobeStockSection.slideOutPanelButton}}" userInput="Search Adobe Stock" stepKey="seeAdobeStockSearchButton" />
-        <click selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel" />
-        <waitForPageLoad stepKey="waitForAdobeStockPanelOpen" />
-        <see selector="{{AdobeStockSection.panelTitle}}" userInput="Adobe Stock" stepKey="seeAdobeStockPanelTitle" />
-        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
-        <seeNumberOfElements selector="{{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32images"/>
+        <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openModal"/>
+
+        <see selector="{{AdobeStockSection.modal}} {{AdobeStockSection.panelTitle}}" userInput="{{AdobeStockModalData.title" stepKey="seeAdobeStockPanelTitle" />
+        <seeElement selector="{{AdobeStockSection.modal}} {{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
+        <seeNumberOfElements selector="{{AdobeStockSection.modal}} {{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32images"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="checkCurrentPage" />
         <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPage" />
+        <seeNumberOfElements selector="{{AdobeStockSection.modal}} {{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32imagesOnTheSecondPage"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="checkSecondPage" />
-        <seeNumberOfElements selector="{{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32imagesOnTheSecondPage"/>
-        <click selector="{{AdobeStockSection.panelCloseButton}}" stepKey="closeAdobeStockPanel" />
+        <click selector="{{AdobeStockSection.modal}}{{AdminSlideOutDialogSection.closeButton}}" stepKey="closeAdobeStockPanel" />
     </test>
 </tests>
