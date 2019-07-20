@@ -19,13 +19,27 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Enable adobe stock -->
+            <actionGroup ref="AdminAdobeStockGoToConfigurationPageActionGroup" stepKey="goToAdobeStockConfigurationPage"/>
+            <actionGroup ref="AdminAdobeStockFillConfigurationActionGroup" stepKey="fillConfigurationFields"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
         </before>
         <after>
+            <!-- Disable adobe stock -->
+            <actionGroup ref="AdminAdobeStockGoToConfigurationPageActionGroup" stepKey="goToAdobeStockConfigurationPage"/>
+            <actionGroup ref="AdminAdobeStockFillConfigurationActionGroup" stepKey="fillConfigurationFields">
+                <!-- Empty not allowed by validation rules -->
+                <argument name="apiKey" value="WRONG"/>
+                <argument name="privateKey" value="WRONG"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openModal"/>
 
-        <see selector="{{AdobeStockSection.modal}} {{AdobeStockSection.panelTitle}}" userInput="{{AdobeStockModalData.title" stepKey="seeAdobeStockPanelTitle" />
+        <see selector="{{AdobeStockSection.modal}} {{AdobeStockSection.panelTitle}}" userInput="{{AdobeStockModalData.title}}" stepKey="seeAdobeStockPanelTitle" />
         <seeElement selector="{{AdobeStockSection.modal}} {{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
         <seeNumberOfElements selector="{{AdobeStockSection.modal}} {{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32images"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="checkCurrentPage" />

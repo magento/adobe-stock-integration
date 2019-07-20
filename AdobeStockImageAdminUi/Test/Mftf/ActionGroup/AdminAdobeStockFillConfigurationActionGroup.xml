@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAdobeStockFillConfigurationActionGroup">
+        <arguments>
+            <argument name="apiKey" type="string" defaultValue="{{AdobeStockConfigurationData.apiKey}}"/>
+            <argument name="privateKey" type="string" defaultValue="{{AdobeStockConfigurationData.privateKey}}"/>
+            <argument name="enabled" type="string" defaultValue="Yes"/>
+        </arguments>
+
+        <scrollTo stepKey="scrollToConfiguration" selector="{{AdminAdobeStockConfigurationSection.fieldsetTitle}}"/>
+        <conditionalClick selector="{{AdminAdobeStockConfigurationSection.fieldsetTitle}}" dependentSelector="{{AdminAdobeStockConfigurationSection.fieldsetOpened}}" visible="false" stepKey="expandTab"/>
+        <selectOption selector="{{AdminAdobeStockConfigurationSection.enabledField}}" userInput="{{enabled}}" stepKey="selectEnableValue"/>
+        <fillField selector="{{AdminAdobeStockConfigurationSection.apiKeyField}}" userInput="{{apiKey}}" stepKey="fillApiKey"/>
+        <fillField selector="{{AdminAdobeStockConfigurationSection.privateKeyField}}" userInput="{{privateKey}}" stepKey="fillPrivateKey"/>
+    </actionGroup>
+</actionGroups>
