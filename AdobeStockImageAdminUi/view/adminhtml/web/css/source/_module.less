@@ -24,6 +24,11 @@
                 height: 100%;
                 width: 100%;
             }
+            &:first-child .masonry-image-preview .action-previous ,
+            &:last-child .masonry-image-preview .action-next {
+                opacity: .5;
+                pointer-events: none;
+            }
         }
         &-overlay {
             display: none;
@@ -74,6 +79,7 @@
                     max-width: 60%;
                     max-height: 500px;
                     margin: 0 30px 20px 0;
+                    width: auto;
                 }
                 .info {
                     width: ~"calc(40% - 30px)";

@@ -70,6 +70,7 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
+            console.log(rows);
             if (!rows.length) {
                 return;
             }
@@ -135,17 +136,17 @@ define([
                     rowHeight = (calcHeight < this.maxImageHeight) ? calcHeight : this.maxImageHeight;
                     isBottom = index + 1 === this.rows().length;
 
-                    row.forEach(function(img, indx) {
+                    row.forEach(function(img) {
                         imageWidth = rowHeight * ((img.width / img.height).toFixed(2));
                         this.setImageStyles(img, imageWidth, rowHeight);
                         this.setImageClass(img, {
                             bottom: isBottom
                         });
                         img.currentRow = imageRowNumber;
-                        img.lastInRow = (indx + 1 === row.length);
-                        img.firstInRow = (indx === 0);
                     }.bind(this));
 
+                    row[0].firstInRow = true;
+                    row[row.length - 1].lastInRow = true;
                     row = [];
                     ratio = 0;
                     imageRowNumber++;
