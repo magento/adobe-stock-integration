@@ -38,7 +38,9 @@ interface ClientInterface
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.
      *
+     * @param string|null $apiKey
+     *
      * @return bool
      */
-    public function testConnection(): bool;
+    public function testConnection(string $apiKey = null): bool;
 }
