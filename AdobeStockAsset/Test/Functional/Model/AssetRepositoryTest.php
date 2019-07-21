@@ -93,7 +93,7 @@ class AssetRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ['asset' => [AssetInterface::ID => $assetId]];
+        $requestData = ['item' => [AssetInterface::ID => $assetId]];
 
         return $this->_webApiCall($serviceInfo, $requestData, null);
     }
