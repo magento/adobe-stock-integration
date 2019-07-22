@@ -15,7 +15,9 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory as Se
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class GetImageList
@@ -38,20 +40,28 @@ class GetImageList implements GetImageListInterface
     private $searchResultFactory;
 
     /**
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
      * GetImageList constructor.
      *
-     * @param ClientInterface       $client
+     * @param ClientInterface $client
      * @param AssetInterfaceFactory $assetFactory
-     * @param SearchResultFactory   $searchResultFactory
+     * @param SearchResultFactory $searchResultFactory
+     * @param UrlInterface $url
      */
     public function __construct(
         ClientInterface $client,
         AssetInterfaceFactory $assetFactory,
-        SearchResultFactory $searchResultFactory
+        SearchResultFactory $searchResultFactory,
+        UrlInterface $url
     ) {
         $this->client = $client;
         $this->assetFactory = $assetFactory;
         $this->searchResultFactory = $searchResultFactory;
+        $this->url = $url;
     }
 
     /**
@@ -80,6 +90,14 @@ class GetImageList implements GetImageListInterface
                         'total_count' => $searchResult->getTotalCount()
                     ]
                 ]
+            );
+        } catch (AuthenticationException $exception) {
+            throw new LocalizedException(
+                __(
+                    'Failed to authenticate to Adobe Stock API. Please correct the API credentials in '
+                    . '<a href="%1">Configuration → System → Adobe Stock Integration.</a>',
+                    $this->url->getUrl('adminhtml/system_config/edit/section/system')
+                )
             );
         } catch (\Exception $exception) {
             $message = __('Get image list action failed.');
