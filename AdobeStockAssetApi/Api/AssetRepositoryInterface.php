@@ -11,11 +11,9 @@ namespace Magento\AdobeStockAssetApi\Api;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Interface AssetRepositoryInterface
- * @package Magento\AdobeStockImage\Api
  * @api
  */
 interface AssetRepositoryInterface
@@ -23,7 +21,7 @@ interface AssetRepositoryInterface
     /**
      * Save asset
      *
-     * @param AssetInterface $item
+     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $item
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -41,8 +39,8 @@ interface AssetRepositoryInterface
     /**
      * Get a list of assets
      *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return AssetSearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface;
 
@@ -50,8 +48,8 @@ interface AssetRepositoryInterface
      * Get asset by id
      *
      * @param int $id
-     * @return AssetInterface
-     * @throws NoSuchEntityException
+     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById(int $id) : AssetInterface;
 
