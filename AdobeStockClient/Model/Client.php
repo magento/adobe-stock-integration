@@ -25,6 +25,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
