@@ -14,18 +14,23 @@ use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Exception;
+use Magento\AdobeStockAsset\Model\OAuth\OAuthException;
+use Magento\AdobeStockAsset\Model\OAuth\TokenResponse;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -69,20 +74,38 @@ class Client implements ClientInterface
     private $connectionFactory;
 
     /**
+     * @var CurlFactory
+     */
+    private $curlFactory;
+
+    /**
+     * @var OAuth\TokenResponseFactory
+     */
+    private $tokenResponseFactory;
+
+    /**
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
      * Client constructor.
-     * @param Config                           $config
-     * @param DocumentFactory                  $documentFactory
-     * @param SearchResultFactory              $searchResultFactory
-     * @param AttributeValueFactory            $attributeValueFactory
+     * @param Config $config
+     * @param DocumentFactory $documentFactory
+     * @param SearchResultFactory $searchResultFactory
+     * @param AttributeValueFactory $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
-     * @param LocaleResolver                   $localeResolver
-     * @param ConnectionFactory                $connectionFactory
-     * @param LoggerInterface                  $logger
+     * @param LocaleResolver $localeResolver
+     * @param ConnectionFactory $connectionFactory
+     * @param CurlFactory $curlFactory
+     * @param OAuth\TokenResponseFactory $tokenResponseFactory
+     * @param Json $json
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
@@ -92,6 +115,9 @@ class Client implements ClientInterface
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
         ConnectionFactory $connectionFactory,
+        CurlFactory $curlFactory,
+        OAuth\TokenResponseFactory $tokenResponseFactory,
+        Json $json,
         LoggerInterface $logger
     ) {
         $this->config = $config;
@@ -101,6 +127,9 @@ class Client implements ClientInterface
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
         $this->connectionFactory = $connectionFactory;
+        $this->curlFactory = $curlFactory;
+        $this->tokenResponseFactory = $tokenResponseFactory;
+        $this->json = $json;
         $this->logger = $logger;
     }
 
@@ -177,7 +206,7 @@ class Client implements ClientInterface
             $this->searchParametersProvider->apply($searchCriteria, new SearchParameters())
         );
         $searchRequest->setResultColumns($this->getResultColumns());
-        
+
         return $searchRequest;
     }
 
@@ -194,6 +223,39 @@ class Client implements ClientInterface
             $resultColumnArray[] = $resultsColumns[$field];
         }
         return $resultColumnArray;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getToken(string $code): OAuth\TokenResponse
+    {
+        $curl = $this->curlFactory->create();
+
+        $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $curl->addHeader('cache-control', 'no-cache');
+
+        $curl->post(
+            $this->config->getTokenUrl(),
+            [
+                'client_id' => $this->config->getApiKey(),
+                'client_secret' => $this->config->getPrivateKey(),
+                'code' => $code,
+                'grant_type' => 'authorization_code'
+            ]
+        );
+
+        $tokenResponse = $this->json->unserialize($curl->getBody());
+        $tokenResponse = $this->tokenResponseFactory->create()
+            ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => 'The response is empty.']);
+
+        if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
+            throw new AuthorizationException(
+                __('Authentication is failing. Error code: %1', $tokenResponse->getError())
+            );
+        }
+
+        return $tokenResponse;
     }
 
     /**
@@ -238,16 +300,19 @@ class Client implements ClientInterface
     }
 
     /**
-     * Get SDK connection
+     * Initialize connection to the Adobe Stock service.
+     *
+     * @param string $key
      *
      * @return AdobeStock
      * @throws IntegrationException
      */
-    private function getConnection(): AdobeStock
+    private function getConnection(string $key = null): AdobeStock
     {
         try {
+            $apiKey = !empty($key) ? $key : $this->config->getApiKey();
             return $this->connectionFactory->create(
-                $this->config->getApiKey(),
+                $apiKey,
                 $this->config->getProductName(),
                 $this->config->getTargetEnvironment()
             );
@@ -273,13 +338,13 @@ class Client implements ClientInterface
     /**
      * Test connection to Adobe Stock API
      *
+     * @param string $apiKey
+     *
      * @return bool
-     * @throws IntegrationException
      */
-    public function testConnection(): bool
+    public function testConnection(string $apiKey = null): bool
     {
         try {
-            //TODO: should be refactored
             $searchParams = new SearchParameters();
             $searchRequest = new SearchFilesRequest();
             $resultColumnArray = [];
@@ -290,15 +355,17 @@ class Client implements ClientInterface
             $searchRequest->setSearchParams($searchParams);
             $searchRequest->setResultColumns($resultColumnArray);
 
-            $client = $this->getConnection()->searchFilesInitialize($searchRequest, $this->getAccessToken());
+            $client = $this->getConnection($apiKey);
+            $client->searchFilesInitialize($searchRequest, $this->getAccessToken());
 
             return (bool)$client->getNextResponse()->nb_results;
         } catch (Exception $exception) {
             $message = __(
-                'An error occurred during test API connection: %error_message',
+                'An error occurred during Adobe Stock API connection test: %error_message',
                 ['error_message' => $exception->getMessage()]
             );
-            $this->processException($message, $exception);
+            $this->logger->notice($message->render());
+            return false;
         }
     }
 
