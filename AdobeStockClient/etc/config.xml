@@ -11,8 +11,10 @@
             <integration>
                 <enabled>1</enabled>
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <environment>PROD</environment>
                 <product_name>magento-adobe-stock-integration</product_name>
+                <token_url>https://ims-na1.adobelogin.com/ims/token</token_url>
             </integration>
         </adobe_stock>
     </default>

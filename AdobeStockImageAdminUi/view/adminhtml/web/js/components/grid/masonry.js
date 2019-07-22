@@ -3,10 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
+    'mage/url',
     'Magento_Ui/js/grid/listing',
     'jquery',
     'ko'
-], function (Element, $, ko) {
+], function (url, Element, $, ko) {
     'use strict';
 
     return Element.extend({
@@ -70,7 +71,11 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
-            console.log(rows);
+
+            if (typeof rows === 'undefined') {
+                window.location.replace(url.build('*/*'));
+            }
+
             if (!rows.length) {
                 return;
             }
