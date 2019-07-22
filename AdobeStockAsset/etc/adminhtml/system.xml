@@ -32,6 +32,7 @@
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
+                    <comment><![CDATA[Check currently inserted value on the fly or already saved value if the API Key input value is not changed.]]></comment>
                 </field>
                 <field id="private_key" translate="label" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Private Key</label>
