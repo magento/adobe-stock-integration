@@ -206,5 +206,20 @@ define([
             // close adobe panel
             $("#adobe-stock-images-search-modal").trigger('closeModal');
         },
+
+        /**
+         * License and Save image
+         *
+         * @param {Object} record
+         */
+        license: function (record) {
+            var adobePopup = window.open(
+                this.auth.url,
+                this.auth.title,
+                'width=' + this.auth.width + ',height=' + this.auth.height
+            );
+
+            window.adobePopup = adobePopup;
+        }
     });
 });

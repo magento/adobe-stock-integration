@@ -26,6 +26,9 @@
             <button class="action-secondary" type="button" data-bind="click: function(){ $col.save($row()) }">
                 <span translate="'Save Preview'"/>
             </button>
+            <button class="action-default primary" type="button" attr="title: $t('License and Save')" data-bind="click: function () { $col.license($row()); }">
+                <span data-bind="i18n: 'License and Save'"></span>
+            </button>
         </div>
     </div>
 </div>
