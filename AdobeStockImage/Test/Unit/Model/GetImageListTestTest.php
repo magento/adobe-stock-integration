@@ -134,12 +134,14 @@ class GetImageListTestTest extends TestCase
         $documentMock->expects($this->once())->method('getId')->willReturn($id);
         $documentMock->expects($this->any())
             ->method('getCustomAttribute')
-            ->willReturnMap([
-                ['thumbnail_url', $this->getAttribute($thumbnailUrl)],
-                ['preview_url', $this->getAttribute($previewUrl)],
-                ['height', $this->getAttribute($height)],
-                ['width', $this->getAttribute($width)],
-            ]);
+            ->willReturnMap(
+                [
+                    ['thumbnail_url', $this->getAttribute($thumbnailUrl)],
+                    ['preview_url', $this->getAttribute($previewUrl)],
+                    ['height', $this->getAttribute($height)],
+                    ['width', $this->getAttribute($width)],
+                ]
+            );
 
         return $documentMock;
     }
