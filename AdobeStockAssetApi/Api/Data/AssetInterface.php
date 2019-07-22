@@ -139,14 +139,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get category
      *
-     * @return CategoryInterface|null
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface|null
      */
     public function getCategory(): ?CategoryInterface;
 
     /**
      * Set category
      *
-     * @param CategoryInterface $categoryId
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $categoryId
      * @return void
      */
     public function setCategory(CategoryInterface $categoryId): void;
@@ -154,14 +154,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Return the creator
      *
-     * @return CreatorInterface|null
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface|null
      */
     public function getCreator(): ?CreatorInterface;
 
     /**
      * Set the creator id
      *
-     * @param CreatorInterface $creatorId
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface $creatorId
      * @return void
      */
     public function setCreator(CreatorInterface $creatorId): void;
@@ -169,14 +169,14 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get keywords
      *
-     * @return KeywordInterface[]
+     * @return \Magento\AdobeStockAssetApi\Api\Data\KeywordInterface[]
      */
     public function getKeywords(): array;
 
     /**
      * Set keywords
      *
-     * @param KeywordInterface[] $keywords
+     * @param \Magento\AdobeStockAssetApi\Api\Data\KeywordInterface[] $keywords
      * @return void
      */
     public function setKeywords(array $keywords): void;
