@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
@@ -22,9 +23,23 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getId(): int
+    protected function _construct()
     {
-        return (int) $this->getData(self::ID);
+        $this->_init(AssetResourceModel::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId(): ?int
+    {
+        $id = $this->getData(self::ID);
+
+        if (!$id) {
+            return null;
+        }
+
+        return (int) $id;
     }
 
     /**
