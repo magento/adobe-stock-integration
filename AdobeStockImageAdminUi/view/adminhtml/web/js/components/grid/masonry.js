@@ -201,6 +201,15 @@ define([
             } else {
                 this.minRatio = 10;
             }
-        }
+        },
+
+        /**
+         * Checks if grid has data.
+         *
+         * @returns {Boolean}
+         */
+        hasData: function () {
+            return !!this.rows() && !!this.rows().length;
+        },
     });
 });
