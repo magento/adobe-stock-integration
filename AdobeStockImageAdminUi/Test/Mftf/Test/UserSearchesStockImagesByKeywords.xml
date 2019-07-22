@@ -18,75 +18,75 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockGoToConfigurationPageActionGroup" stepKey="goToAdobeStockConfigurationPage"/>
+            <actionGroup ref="AdminAdobeStockFillConfigurationActionGroup" stepKey="fillConfigurationFields"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminAdobeStockGoToConfigurationPageActionGroup" stepKey="goToAdobeStockConfigurationPage"/>
+            <actionGroup ref="AdminAdobeStockFillConfigurationActionGroup" stepKey="fillConfigurationFields">
+                <argument name="apiKey" value="WRONG"/>
+                <argument name="privateKey" value="WRONG"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <waitForPageLoad stepKey="waitForContentTabExpanded"/>
-        <click selector="{{TinyMCESection.InsertImageBtn}}" stepKey="clickInsertImage"/>
-        <waitForPageLoad stepKey="waitForImageDialogOpened"/>
-        <click selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel"/>
-        <waitForPageLoad stepKey="waitForAdobeStockPanelOpen" />
+        <actionGroup ref="AdminOpenAdobeStockSearchModalViaGalleryButtonActionGroup" stepKey="openSearchModal"/>
+
         <grabAttributeFrom selector="div[class='masonry-image-column'][data-repeat-index='0'] img" userInput="src" stepKey="getUrlFromFirstImageWithoutSearch"/>
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="popular" stepKey="searchForPopular"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithPopular"/>
-        <waitForPageLoad stepKey="waitForSearchWithPopular"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
+            <argument name="query" value="popular"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageWithoutSearch}']" stepKey="checkFirstImageNotFoundAfterSearch"/>
 
         <grabAttributeFrom selector="div[class='masonry-image-column'][data-repeat-index='0'] img" userInput="src" stepKey="getUrlFromFirstImageAfterSearchPopular"/>
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="" stepKey="searchForZero"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithZero"/>
-        <waitForPageLoad stepKey="waitForSearchWithZero"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForEmptyQuery"/>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageAfterSearchPopular}']" stepKey="checkFirstPopularImageNotFoundAfterSearchZero"/>
 
         <grabAttributeFrom selector="div[class='masonry-image-column'][data-repeat-index='0'] img" userInput="src" stepKey="getUrlFromFirstImageAfterSearchZero"/>
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="}:->" stepKey="searchForFirstSymbols"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithFirstSymbols"/>
-        <waitForPageLoad stepKey="waitForSearchWithFirstSymbols"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForFirstSymbols">
+            <argument name="query" value="}:->"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageAfterSearchZero}']" stepKey="checkFirstPopularImageNotFoundAfterSearchFirstSymbols"/>
         <dontSeeElement selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']" stepKey="errorModalIsAbsentAfterSearchFirstSymbols"/>
         <dontSeeElement selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']" stepKey="spinnerIsAbsentAfterSearchFirstSymbols"/>
 
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="bluetooth true wireless headphones" stepKey="searchForHeadphones"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithHeadphones"/>
-        <waitForPageLoad stepKey="waitForSearchWithHeadphones"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForHeadphones">
+            <argument name="query" value="bluetooth true wireless headphones"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageWithoutSearch}']" stepKey="checkFirstImageNotFoundAfterSearchHeadphones"/>
 
         <grabAttributeFrom selector="div[class='masonry-image-column'][data-repeat-index='0'] img" userInput="src" stepKey="getUrlFromFirstImageAfterSearchHeadphones"/>
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="} { ] [ ) ( ~ ! @ # $ % ^ &amp; ` | \ : &quot; ; ' &lt; &gt; ? , . ⁄ -+" stepKey="searchForSecondSymbols"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithSecondSymbols"/>
-        <waitForPageLoad stepKey="waitForSearchWithSecondSymbols"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForSecondSymbols">
+            <argument name="query" value="} { ] [ ) ( ~ ! @ # $ % ^ &amp; ` | \ : &quot; ; ' &lt; &gt; ? , . ⁄ -+"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageAfterSearchHeadphones}']" stepKey="checkFirstPopularImageNotFoundAfterSearchHeadphones"/>
         <dontSeeElement selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']" stepKey="errorModalIsAbsentAfterSearchSecondSymbols"/>
         <dontSeeElement selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']" stepKey="spinnerIsAbsentAfterSearchSecondSymbols"/>
 
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="top secret" stepKey="searchForTopSecret"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithTopSecret"/>
-        <waitForPageLoad stepKey="waitForSearchWithTopSecret"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForTopSecret">
+            <argument name="query" value="top secret"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageWithoutSearch}']" stepKey="checkFirstImageNotFoundAfterSearchTopSecret"/>
 
         <grabAttributeFrom selector="div[class='masonry-image-column'][data-repeat-index='0'] img" userInput="src" stepKey="getUrlFromFirstImageAfterSearchTopSecret"/>
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="%0F" stepKey="searchForThirdSymbols"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithThirdSymbols"/>
-        <waitForPageLoad stepKey="waitForSearchWithThirdSymbols"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForThirdSymbols">
+            <argument name="query" value="%0F"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageAfterSearchTopSecret}']" stepKey="checkFirstPopularImageNotFoundAfterSearchTopSecret"/>
         <dontSeeElement selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']" stepKey="errorModalIsAbsentAfterSearchThirdSymbols"/>
         <dontSeeElement selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']" stepKey="spinnerIsAbsentAfterSearchThirdSymbols"/>
 
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="chest band heart rate" stepKey="searchForChestBand"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithChestBand"/>
-        <waitForPageLoad stepKey="waitForSearchWithChestBand"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForChestBand">
+            <argument name="query" value="chest band heart rate"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageWithoutSearch}']" stepKey="checkFirstImageNotFoundAfterSearchChestBand"/>
 
         <grabAttributeFrom selector="div[class='masonry-image-column'][data-repeat-index='0'] img" userInput="src" stepKey="getUrlFromFirstImageAfterSearchChestBand"/>
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="mi band heart rate" stepKey="searchForMiBand"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearchWithMiBand"/>
-        <waitForPageLoad stepKey="waitForSearchWithMiBand"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForMiBand">
+            <argument name="query" value="mi band heart rate"/>
+        </actionGroup>
         <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{$getUrlFromFirstImageAfterSearchChestBand}']" stepKey="checkFirstImageNotFoundAfterSearchMiBand"/>
         <dontSeeElement selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']" stepKey="errorModalIsAbsentAfterSearchChestBand"/>
         <dontSeeElement selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']" stepKey="spinnerIsAbsentAfterSearchChestBand"/>
