@@ -120,11 +120,17 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Isolated Assets</item>
+                        <item name="additionalClasses" xsi:type="array">
+                            <item name="class" xsi:type="string">admin__isolated_filter</item>
+                        </item>
                         <item name="description" xsi:type="string" translate="true">Isolated Only</item>
                         <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
                         <item name="dataScope" xsi:type="string">isolated_filter</item>
                         <item name="valueMap" xsi:type="array">
                             <item name="true" xsi:type="string">Isolated Only</item>
+                        </item>
+                        <item name="tooltip" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Isolated assets have subjects appear alone on a solid background.</item>
                         </item>
                     </item>
                 </argument>

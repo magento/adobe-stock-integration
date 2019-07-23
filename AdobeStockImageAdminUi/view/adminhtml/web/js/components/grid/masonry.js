@@ -49,12 +49,6 @@ define([
              * @param int
              */
             maxImageHeight: 240,
-
-            /**
-             * Container styles
-             * @param {Object}
-             */
-            containerStyles: {},
         },
 
         /**
@@ -65,8 +59,7 @@ define([
             this._super()
                 .observe([
                     'rows',
-                    'images',
-                    'containerStyles'
+                    'images'
                 ]);
 
             return this;
@@ -84,8 +77,6 @@ define([
             }
 
             if (!rows.length) {
-                this.totalHeight = 0;
-                this.setContainerHeight();
                 return;
             }
 
@@ -93,7 +84,6 @@ define([
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
             this.setLayoutStyles();
-            this.setContainerHeight();
             this.setEventListener();
             return this;
         },
@@ -106,7 +96,6 @@ define([
                 handler = function() {
                     this.containerWidth = window.innerWidth;
                     this.setLayoutStyles();
-                    this.setContainerHeight();
                 }.bind(this);
 
             window.addEventListener('resize', function () {
@@ -128,27 +117,17 @@ define([
         },
 
         /**
-         * Set optimal container height
-         */
-        setContainerHeight: function() {
-            var styles = this.containerStyles();
-
-            styles['height'] = this.totalHeight + 'px';
-            this.containerStyles(styles);
-        },
-
-        /**
          * Set layout styles inside the container
          */
         setLayoutStyles: function() {
-            var containerWidth = parseInt(this.container.clientWidth),
+            var containerWidth = parseInt(this.container.clientWidth) - this.imageMargin,
                 row = [],
-                translateX = 0,
-                translateY = 0,
                 ratio = 0,
                 imageWidth = 0,
                 rowHeight = 0,
-                calcHeight = 0;
+                calcHeight = 0,
+                isBottom = false,
+                imageRowNumber = 1;
 
             this.setMinRatio();
 
@@ -160,20 +139,24 @@ define([
                     ratio = Math.max(ratio, this.minRatio);
                     calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
                     rowHeight = (calcHeight < this.maxImageHeight) ? calcHeight : this.maxImageHeight;
+                    isBottom = index + 1 === this.rows().length;
 
                     row.forEach(function(img) {
                         imageWidth = rowHeight * ((img.width / img.height).toFixed(2));
-                        this.setImageStyles(img, imageWidth, rowHeight, translateX, translateY);
-                        translateX += imageWidth + this.imageMargin;
+                        this.setImageStyles(img, imageWidth, rowHeight);
+                        this.setImageClass(img, {
+                            bottom: isBottom
+                        });
+                        img.currentRow = imageRowNumber;
                     }.bind(this));
 
+                    row[0].firstInRow = true;
+                    row[row.length - 1].lastInRow = true;
                     row = [];
                     ratio = 0;
-                    translateY += parseInt(rowHeight) + this.imageMargin;
-                    translateX = 0;
+                    imageRowNumber++;
                 }
             }.bind(this));
-            this.totalHeight = translateY - this.imageMargin;
         },
 
         /**
@@ -182,19 +165,27 @@ define([
          * @param {Object} img
          * @param {Number} imageWidth
          * @param {Number} rowHeight
-         * @param {Number} translateX
-         * @param {Number} translateY
          */
-        setImageStyles: function (img, imageWidth, rowHeight, translateX, translateY) {
-            var styles = {
-                width: parseInt(imageWidth) + 'px',
-                height: parseInt(rowHeight) + 'px',
-                transform: ('translate3d(' + translateX + 'px,' + translateY + 'px, 0)')
-            };
+        setImageStyles: function (img, imageWidth, rowHeight) {
             if (!img.styles) {
                 img.styles = ko.observable();
             }
-            img.styles(styles)
+            img.styles({
+                width: parseInt(imageWidth) + 'px',
+                height: parseInt(rowHeight) + 'px'
+            });
+        },
+
+        /**
+         *
+         * @param {Object} img
+         * @param {Object} classes
+         */
+        setImageClass: function(img, classes){
+            if (!img.css) {
+                img.css = ko.observable(classes);
+            }
+            img.css(classes);
         },
 
         /**
@@ -210,6 +201,15 @@ define([
             } else {
                 this.minRatio = 10;
             }
-        }
+        },
+
+        /**
+         * Checks if grid has data.
+         *
+         * @returns {Boolean}
+         */
+        hasData: function () {
+            return !!this.rows() && !!this.rows().length;
+        },
     });
 });
