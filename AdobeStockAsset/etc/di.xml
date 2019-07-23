@@ -6,17 +6,28 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface"
-                type="Magento\AdobeStockAsset\Model\AssetRepository"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetInterface"
-                type="Magento\AdobeStockAsset\Model\Asset"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface"
-                type="Magento\AdobeStockAsset\Model\Keyword"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface"
-                type="Magento\AdobeStockAsset\Model\SearchResults"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface"
-                type="Magento\AdobeStockAsset\Model\UserProfile"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface"
-                type="Magento\AdobeStockAsset\Model\UserProfileRepository"/>
-</config>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetInterface" type="Magento\AdobeStockAsset\Model\Asset"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" type="Magento\AdobeStockAsset\Model\AssetRepository"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface" type="Magento\AdobeStockAsset\Model\SearchResults"/>
 
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\CategoryInterface" type="Magento\AdobeStockAsset\Model\Category"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface" type="Magento\AdobeStockAsset\Model\CategoryRepository"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface" type="Magento\AdobeStockAsset\Model\CategorySearchResults"/>
+
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\CreatorInterface" type="Magento\AdobeStockAsset\Model\Creator"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface" type="Magento\AdobeStockAsset\Model\CreatorRepository"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface" type="Magento\AdobeStockAsset\Model\CreatorSearchResults"/>
+
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\MediaTypeInterface" type="Magento\AdobeStockAsset\Model\MediaType"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\MediaTypeRepositoryInterface" type="Magento\AdobeStockAsset\Model\MediaTypeRepository"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\MediaTypeSearchResultsInterface" type="Magento\AdobeStockAsset\Model\MediaTypeSearchResults"/>
+
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface" type="Magento\AdobeStockAsset\Model\PremiumLevel"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\PremiumLevelRepositoryInterface" type="Magento\AdobeStockAsset\Model\PremiumLevelRepository"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\PremiumLevelSearchResultsInterface" type="Magento\AdobeStockAsset\Model\PremiumLevelSearchResults"/>
+
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
+
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface" type="Magento\AdobeStockAsset\Model\UserProfile"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface" type="Magento\AdobeStockAsset\Model\UserProfileRepository"/>
+</config>

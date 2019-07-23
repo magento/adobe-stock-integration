@@ -8,22 +8,22 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator as ResourceModel;
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Collection as CreatorCollection;
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
+use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class AssetRepository
+ * Class CreatorRepository
  */
-class AssetRepository implements AssetRepositoryInterface
+class CreatorRepository implements CreatorRepositoryInterface
 {
     /**
      * @var ResourceModel
@@ -31,12 +31,12 @@ class AssetRepository implements AssetRepositoryInterface
     private $resource;
 
     /**
-     * @var AssetFactory
+     * @var CreatorFactory
      */
     private $factory;
 
     /**
-     * @var AssetCollectionFactory
+     * @var CreatorCollectionFactory
      */
     private $collectionFactory;
 
@@ -51,27 +51,27 @@ class AssetRepository implements AssetRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @var AssetSearchResultsInterfaceFactory
+     * @var CreatorSearchResultsInterfaceFactory
      */
     private $searchResultFactory;
 
     /**
-     * AssetRepository constructor.
+     * CreatorRepository constructor.
      *
-     * @param ResourceModel                      $resource
-     * @param AssetCollectionFactory             $collectionFactory
-     * @param AssetFactory                       $factory
-     * @param JoinProcessorInterface             $joinProcessor
-     * @param CollectionProcessorInterface       $collectionProcessor
-     * @param AssetSearchResultsInterfaceFactory $searchResultFactory
+     * @param ResourceModel                         $resource
+     * @param CreatorCollectionFactory             $collectionFactory
+     * @param CreatorFactory                       $factory
+     * @param JoinProcessorInterface                $joinProcessor
+     * @param CollectionProcessorInterface          $collectionProcessor
+     * @param CreatorSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
         ResourceModel $resource,
-        AssetCollectionFactory $collectionFactory,
-        AssetFactory $factory,
+        CreatorCollectionFactory $collectionFactory,
+        CreatorFactory $factory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        AssetSearchResultsInterfaceFactory $searchResultFactory
+        CreatorSearchResultsInterfaceFactory $searchResultFactory
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -84,15 +84,17 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(AssetInterface $item): void
+    public function save(CreatorInterface $item): CreatorInterface
     {
         $this->resource->save($item);
+
+        return $item;
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(AssetInterface $item): void
+    public function delete(CreatorInterface $item): void
     {
         $this->resource->delete($item);
     }
@@ -100,18 +102,18 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria) : CreatorSearchResultsInterface
     {
-        /** @var AssetCollection $collection */
+        /** @var CreatorCollection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process(
             $collection,
-            AssetInterface::class
+            CreatorInterface::class
         );
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var AssetSearchResultsInterface $searchResults */
+        /** @var CreatorSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultFactory->create();
         $searchResults->setItems($collection->getItems());
         $searchResults->setSearchCriteria($searchCriteria);
@@ -122,7 +124,7 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getById(int $id) : AssetInterface
+    public function getById(int $id) : CreatorInterface
     {
         $item = $this->factory->create();
         $this->resource->load($item, $id);

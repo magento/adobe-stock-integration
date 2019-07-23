@@ -9,24 +9,35 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
 /**
- * Interface CreatorInterface
+ * Interface MediaTypeInterface
  * @api
  */
-interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface MediaTypeInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**
+     * Media type entity id
+     */
     const ID = 'id';
+
+    /**
+     * Adobe media id
+     */
     const ADOBE_ID = 'adobe_id';
+
+    /**
+     * Media type name.
+     */
     const NAME = 'name';
 
     /**
-     * Get the id
+     * Get ID
      *
      * @return int|null
      */
-    public function getId() : ?int;
+    public function getId(): ?int;
 
     /**
-     * Set the id
+     * Set ID
      *
      * @param int $value
      * @return void
@@ -34,47 +45,45 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setId($value): void;
 
     /**
-     * Get the adobe id
+     * Get media type adobe id.
      *
      * @return int
      */
     public function getAdobeId(): int;
 
     /**
-     * Set the adobe id
+     * Set the media type adobe id.
      *
-     * @param int $value
-     * @return void
+     * @param int $adobeId
      */
-    public function setAdobeId(int $value): void;
+    public function setAdobeId(int $adobeId): void;
 
     /**
-     * Get the creator name
+     * Get the adobe media type name.
      *
      * @return string|null
      */
     public function getName(): ?string;
 
     /**
-     * Set the creator name
+     * Set the media type adobe id.
      *
-     * @param string $value
-     * @return void
+     * @param string $name
      */
-    public function setName(string $value): void;
+    public function setName(string $name): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface|null
+     * @return \Magento\AdobeStockAssetApi\Api\Data\MediaTypeExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface $extensionAttributes
+     * @param \Magento\AdobeStockAssetApi\Api\Data\MediaTypeExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(CreatorExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(MediaTypeExtensionInterface $extensionAttributes): void;
 }

@@ -12,7 +12,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Interface
+ * GetImageListInterface
  *
  * @api
  */

@@ -8,22 +8,22 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\PremiumLevel as ResourceModel;
+use Magento\AdobeStockAsset\Model\ResourceModel\PremiumLevel\Collection as PremiumLevelCollection;
+use Magento\AdobeStockAsset\Model\ResourceModel\PremiumLevel\CollectionFactory as PremiumLevelCollectionFactory;
+use Magento\AdobeStockAssetApi\Api\PremiumLevelRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface;
+use Magento\AdobeStockAssetApi\Api\Data\PremiumLevelSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\PremiumLevelSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class AssetRepository
+ * Class PremiumLevelRepository
  */
-class AssetRepository implements AssetRepositoryInterface
+class PremiumLevelRepository implements PremiumLevelRepositoryInterface
 {
     /**
      * @var ResourceModel
@@ -31,12 +31,12 @@ class AssetRepository implements AssetRepositoryInterface
     private $resource;
 
     /**
-     * @var AssetFactory
+     * @var PremiumLevelFactory
      */
     private $factory;
 
     /**
-     * @var AssetCollectionFactory
+     * @var PremiumLevelCollectionFactory
      */
     private $collectionFactory;
 
@@ -51,27 +51,27 @@ class AssetRepository implements AssetRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @var AssetSearchResultsInterfaceFactory
+     * @var PremiumLevelSearchResultsInterfaceFactory
      */
     private $searchResultFactory;
 
     /**
-     * AssetRepository constructor.
+     * PremiumLevelRepository constructor.
      *
-     * @param ResourceModel                      $resource
-     * @param AssetCollectionFactory             $collectionFactory
-     * @param AssetFactory                       $factory
-     * @param JoinProcessorInterface             $joinProcessor
-     * @param CollectionProcessorInterface       $collectionProcessor
-     * @param AssetSearchResultsInterfaceFactory $searchResultFactory
+     * @param ResourceModel                         $resource
+     * @param PremiumLevelCollectionFactory             $collectionFactory
+     * @param PremiumLevelFactory                       $factory
+     * @param JoinProcessorInterface                $joinProcessor
+     * @param CollectionProcessorInterface          $collectionProcessor
+     * @param PremiumLevelSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
         ResourceModel $resource,
-        AssetCollectionFactory $collectionFactory,
-        AssetFactory $factory,
+        PremiumLevelCollectionFactory $collectionFactory,
+        PremiumLevelFactory $factory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        AssetSearchResultsInterfaceFactory $searchResultFactory
+        PremiumLevelSearchResultsInterfaceFactory $searchResultFactory
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -84,15 +84,17 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(AssetInterface $item): void
+    public function save(PremiumLevelInterface $item): PremiumLevelInterface
     {
         $this->resource->save($item);
+
+        return $item;
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(AssetInterface $item): void
+    public function delete(PremiumLevelInterface $item): void
     {
         $this->resource->delete($item);
     }
@@ -100,18 +102,18 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria) : PremiumLevelSearchResultsInterface
     {
-        /** @var AssetCollection $collection */
+        /** @var PremiumLevelCollection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process(
             $collection,
-            AssetInterface::class
+            PremiumLevelInterface::class
         );
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var AssetSearchResultsInterface $searchResults */
+        /** @var PremiumLevelSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultFactory->create();
         $searchResults->setItems($collection->getItems());
         $searchResults->setSearchCriteria($searchCriteria);
@@ -122,7 +124,7 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getById(int $id) : AssetInterface
+    public function getById(int $id) : PremiumLevelInterface
     {
         $item = $this->factory->create();
         $this->resource->load($item, $id);

@@ -17,6 +17,17 @@
                 <item name="4" xsi:type="string">WIDTH</item>
                 <item name="5" xsi:type="string">HEIGHT</item>
                 <item name="6" xsi:type="string">THUMBNAIL_500_URL</item>
+                <item name="7" xsi:type="string">TITLE</item>
+                <item name="8" xsi:type="string">CREATOR_ID</item>
+                <item name="9" xsi:type="string">CREATOR_NAME</item>
+                <item name="10" xsi:type="string">CREATION_DATE</item>
+                <item name="11" xsi:type="string">COUNTRY_NAME</item>
+                <item name="13" xsi:type="string">CATEGORY</item>
+                <item name="14" xsi:type="string">KEYWORDS</item>
+                <item name="15" xsi:type="string">MEDIA_TYPE_ID</item>
+                <item name="16" xsi:type="string">CONTENT_TYPE</item>
+                <item name="17" xsi:type="string">DETAILS_URL</item>
+                <item name="18" xsi:type="string">PREMIUM_LEVEL_ID</item>
             </argument>
         </arguments>
     </type>
@@ -36,6 +47,7 @@
                 <item name="sorting" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Sorting</item>
                 <item name="orientation_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Orientation</item>
                 <item name="words" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Words</item>
+                <item name="media_id" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\MediaId</item>
             </argument>
         </arguments>
     </type>

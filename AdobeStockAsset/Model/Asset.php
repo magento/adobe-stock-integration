@@ -13,6 +13,8 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\MediaTypeInterface;
+use Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -53,17 +55,17 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getMediaTypeId(): int
+    public function getMediaType(): ?MediaTypeInterface
     {
-        return (int) $this->getData(self::MEDIA_TYPE_ID);
+        return $this->getData(self::MEDIA_TYPE);
     }
 
     /**
      * @inheritdoc
      */
-    public function setMediaTypeId(int $mediaTypeId): void
+    public function setMediaType(MediaTypeInterface $mediaType): void
     {
-        $this->setData(self::MEDIA_TYPE_ID, $mediaTypeId);
+        $this->setData(self::MEDIA_TYPE, $mediaType);
     }
 
     /**
@@ -77,9 +79,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCategory(CategoryInterface $categoryId): void
+    public function setCategory(CategoryInterface $category): void
     {
-        $this->setData(self::CATEGORY, $categoryId);
+        $this->setData(self::CATEGORY, $category);
     }
 
     /**
@@ -117,17 +119,17 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getPremiumLevelId(): int
+    public function getPremiumLevel(): PremiumLevelInterface
     {
-        return (int) $this->getData(self::PREMIUM_LEVEL_ID);
+        return $this->getData(self::PREMIUM_LEVEL);
     }
 
     /**
      * @inheritdoc
      */
-    public function setPremiumLevelId(int $premiumLevelId): void
+    public function setPremiumLevel(PremiumLevelInterface $premiumLevel): void
     {
-        $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevelId);
+        $this->setData(self::PREMIUM_LEVEL, $premiumLevel);
     }
 
     /**
