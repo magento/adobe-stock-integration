@@ -95,7 +95,7 @@ class Callback extends Action
          */
         /** @var Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
-        $resultRaw->setContents('');
+        $resultRaw->setContents('123123123');
         return $resultRaw;
     }
 

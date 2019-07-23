@@ -8,7 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 
+use Exception;
+use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClient\Model\Config;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -22,6 +25,16 @@ class ImagePreview extends Column
     const POPUP_HEIGHT = '300';
 
     /**
+     * @var UserProfileRepositoryInterface
+     */
+    private $userProfileRepository;
+
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * @var Config
      */
     private $config;
@@ -30,6 +43,8 @@ class ImagePreview extends Column
      * ImagePreview constructor.
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
+     * @param UserContextInterface $userContext
+     * @param UserProfileRepositoryInterface $userProfileRepository
      * @param Config $config
      * @param array $components
      * @param array $data
@@ -37,12 +52,16 @@ class ImagePreview extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
+        UserContextInterface $userContext,
+        UserProfileRepositoryInterface $userProfileRepository,
         Config $config,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
 
+        $this->userContext = $userContext;
+        $this->userProfileRepository = $userProfileRepository;
         $this->config = $config;
     }
 
@@ -57,15 +76,18 @@ class ImagePreview extends Column
             'config',
             array_replace_recursive(
                 [
-                    'auth' => [
-                        'width' => self::POPUP_WIDTH,
-                        'height' => self::POPUP_HEIGHT
+                    'authConfig' => [
+                        'windowParams' => [
+                            'width' => self::POPUP_WIDTH,
+                            'height' => self::POPUP_HEIGHT
+                        ]
                     ]
                 ],
                 (array)$this->getData('config'),
                 [
-                    'auth' => [
-                        'url' => $this->getAuthUrl()
+                    'authConfig' => [
+                        'url' => $this->getAuthUrl(),
+                        'isAuthorized' => $this->isAuthorized()
                     ]
                 ]
             )
@@ -77,7 +99,7 @@ class ImagePreview extends Column
      *
      * @return string
      */
-    private function getAuthUrl()
+    private function getAuthUrl(): string
     {
         return str_replace(
             [
@@ -92,5 +114,25 @@ class ImagePreview extends Column
             ],
             $this->config->getAuthUrlPattern()
         );
+    }
+
+    /**
+     * Is authorized a user
+     *
+     * @return bool
+     */
+    private function isAuthorized(): bool
+    {
+        try {
+            $userProfile = $this->userProfileRepository->getByUserId(
+                (int)$this->userContext->getUserId()
+            );
+
+            $isAuthorized = !empty($userProfile->getId()) && !empty($userProfile->getAccessToken());
+        } catch (Exception $e) {
+            $isAuthorized = false;
+        }
+
+        return $isAuthorized;
     }
 }

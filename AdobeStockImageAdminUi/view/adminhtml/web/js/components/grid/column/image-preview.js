@@ -3,11 +3,13 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/grid/columns/column',
     'underscore',
     'jquery',
-    'knockout'
-], function (Column, _, $, ko) {
+    'knockout',
+    'Magento_Ui/js/grid/columns/column',
+    'Magento_AdobeStockImageAdminUi/js/action/authorization',
+    'mage/translate'
+], function (_, $, ko, Column, authorizationAction) {
     'use strict';
 
     return Column.extend({
@@ -18,6 +20,14 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            authConfig: {
+                url: '',
+                isAuthorized: false,
+                windowParams: {
+                    width: 500,
+                    height: 600
+                },
+            }
         },
 
         /**
@@ -208,18 +218,42 @@ define([
         },
 
         /**
-         * License and Save image
+         * License and save image
          *
          * @param {Object} record
          */
-        license: function (record) {
-            var adobePopup = window.open(
-                this.auth.url,
-                this.auth.title,
-                'width=' + this.auth.width + ',height=' + this.auth.height
-            );
+        licenseAndSave: function (record) {
+            /** @todo add license functionality */
+            console.warn('add license functionality');
+            console.dir(record);
+        },
 
-            window.adobePopup = adobePopup;
+        /**
+         * Process of license
+         *
+         * @param {Object} record
+         */
+        licenseProcess: function (record) {
+            if (this.authConfig.isAuthorized) {
+                this.licenseAndSave(record);
+
+                return;
+            }
+
+            /**
+             * Opens authorization window of Adobe Stock
+             * then starts the authorization process
+             */
+            authorizationAction(this.authConfig)
+                .then(
+                    function (authConfig) {
+                        this.authConfig = _.extend(this.authConfig, authConfig);
+                        this.licenseProcess(record);
+                    }.bind(this)
+                )
+                .catch(function (error) {
+                    console.error(error);
+                });
         }
     });
 });
