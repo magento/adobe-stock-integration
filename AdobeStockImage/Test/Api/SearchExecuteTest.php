@@ -49,7 +49,7 @@ class SearchExecuteTest extends WebapiAbstract
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
-        $this->assertNotNull($response['items'][0]['url']);
+        $this->assertNotNull($response['items'][0]['id']);
     }
 
     private function getSearchData()
@@ -58,7 +58,7 @@ class SearchExecuteTest extends WebapiAbstract
             'searchCriteria' => [
                 'sort_orders' => [
                     [
-                        'field' => 'url',
+                        'field' => 'id',
                         'direction' => 'DESC'
                     ]
                 ],
