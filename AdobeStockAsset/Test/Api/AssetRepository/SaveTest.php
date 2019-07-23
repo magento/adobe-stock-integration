@@ -16,6 +16,9 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Testing save asset web api
+ */
 class SaveTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'adobeStockAssetRepositoryV1';
@@ -70,7 +73,6 @@ class SaveTest extends WebapiAbstract
                     AssetInterface::HEIGHT => '800',
                     AssetInterface::PREVIEW_WIDTH => '500',
                     AssetInterface::PREVIEW_HEIGHT => '400',
-                    AssetInterface::URL => uniqid('url'),
                     AssetInterface::PREVIEW_URL => uniqid('preview-url'),
                     AssetInterface::DETAILS_URL => uniqid('details-url'),
                 ]
@@ -102,6 +104,10 @@ class SaveTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, $requestData, null);
     }
 
+    /**
+     * @param string $adobeId
+     * @return AssetInterface
+     */
     private function getSavedAsset(string $adobeId): AssetInterface
     {
         /** @var Collection $collection */

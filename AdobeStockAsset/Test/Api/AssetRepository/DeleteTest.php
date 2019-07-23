@@ -15,6 +15,9 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Testing delete asset web api
+ */
 class DeleteTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'adobeStockAssetRepositoryV1';
