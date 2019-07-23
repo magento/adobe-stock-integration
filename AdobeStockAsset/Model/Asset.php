@@ -8,23 +8,38 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
+use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\Framework\Api\AbstractExtensibleObject;
-use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Adobe Stock Asset
  */
-class Asset extends AbstractExtensibleObject implements AssetInterface
+class Asset extends AbstractExtensibleModel implements AssetInterface
 {
     /**
      * @inheritdoc
      */
-    public function getId(): int
+    protected function _construct()
     {
-        return (int) $this->_get(self::ID);
+        $this->_init(AssetResourceModel::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId(): ?int
+    {
+        $id = $this->getData(self::ID);
+
+        if (!$id) {
+            return null;
+        }
+
+        return (int) $id;
     }
 
     /**
@@ -40,7 +55,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getMediaTypeId(): int
     {
-        return (int)$this->_get(self::MEDIA_TYPE_ID);
+        return (int) $this->getData(self::MEDIA_TYPE_ID);
     }
 
     /**
@@ -56,7 +71,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getCategory(): ?CategoryInterface
     {
-        return $this->_get(self::CATEGORY);
+        return $this->getData(self::CATEGORY);
     }
 
     /**
@@ -72,7 +87,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getCreator(): ?CreatorInterface
     {
-        return $this->_get(self::CREATOR);
+        return $this->getData(self::CREATOR);
     }
 
     /**
@@ -88,7 +103,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getKeywords(): array
     {
-        return $this->_get(self::KEYWORDS) ?? [];
+        return $this->getData(self::KEYWORDS) ?? [];
     }
 
     /**
@@ -104,7 +119,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getPremiumLevelId(): int
     {
-        return (int)$this->_get(self::PREMIUM_LEVEL_ID);
+        return (int) $this->getData(self::PREMIUM_LEVEL_ID);
     }
 
     /**
@@ -120,7 +135,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getPath(): ?string
     {
-        return (string)$this->_get(self::PATH);
+        return (string) $this->getData(self::PATH);
     }
 
     /**
@@ -136,7 +151,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getAdobeId(): int
     {
-        return (int)$this->_get(self::ADOBE_ID);
+        return (int) $this->getData(self::ADOBE_ID);
     }
 
     /**
@@ -152,7 +167,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getStockId(): int
     {
-        return (int)$this->_get(self::STOCK_ID);
+        return (int) $this->getData(self::STOCK_ID);
     }
 
     /**
@@ -168,7 +183,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function isLicensed(): int
     {
-        return (int)$this->_get(self::IS_LICENSED);
+        return (int) $this->getData(self::IS_LICENSED);
     }
 
     /**
@@ -184,7 +199,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getTitle(): string
     {
-        return (string)$this->_get(self::TITLE);
+        return (string) $this->getData(self::TITLE);
     }
 
     /**
@@ -200,7 +215,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getPreviewUrl(): string
     {
-        return (string)$this->_get(self::PREVIEW_URL);
+        return (string) $this->getData(self::PREVIEW_URL);
     }
 
     /**
@@ -216,7 +231,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getPreviewWidth(): int
     {
-        return (int)$this->_get(self::PREVIEW_WIDTH);
+        return (int) $this->getData(self::PREVIEW_WIDTH);
     }
 
     /**
@@ -232,7 +247,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getPreviewHeight(): int
     {
-        return (int)$this->_get(self::PREVIEW_HEIGHT);
+        return (int) $this->getData(self::PREVIEW_HEIGHT);
     }
 
     /**
@@ -248,7 +263,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getThumbnailUrl(): string
     {
-        return (string)$this->_get(self::URL);
+        return (string) $this->getData(self::URL);
     }
 
     /**
@@ -264,7 +279,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getWidth(): int
     {
-        return (int)$this->_get(self::WIDTH);
+        return (int) $this->getData(self::WIDTH);
     }
 
     /**
@@ -280,7 +295,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getHeight(): int
     {
-        return (int)$this->_get(self::HEIGHT);
+        return (int) $this->getData(self::HEIGHT);
     }
 
     /**
@@ -296,7 +311,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getCountryName(): string
     {
-        return (string)$this->_get(self::COUNTRY_NAME);
+        return (string) $this->getData(self::COUNTRY_NAME);
     }
 
     /**
@@ -312,7 +327,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getDetailsUrl(): string
     {
-        return (string)$this->_get(self::DETAILS_URL);
+        return (string) $this->getData(self::DETAILS_URL);
     }
 
     /**
@@ -328,7 +343,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getVectorType(): string
     {
-        return (string)$this->_get(self::VECTOR_TYPE);
+        return (string) $this->getData(self::VECTOR_TYPE);
     }
 
     /**
@@ -344,7 +359,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getContentType(): string
     {
-        return (string)$this->_get(self::CONTENT_TYPE);
+        return (string) $this->getData(self::CONTENT_TYPE);
     }
 
     /**
@@ -360,7 +375,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getCreationDate(): string
     {
-        return (string)$this->_get(self::CREATION_DATE);
+        return (string) $this->getData(self::CREATION_DATE);
     }
 
     /**
@@ -376,7 +391,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getCreatedAt(): string
     {
-        return (string)$this->_get(self::CREATED_AT);
+        return (string) $this->getData(self::CREATED_AT);
     }
 
     /**
@@ -392,7 +407,7 @@ class Asset extends AbstractExtensibleObject implements AssetInterface
      */
     public function getUpdatedAt(): string
     {
-        return (string)$this->_get(self::UPDATED_AT);
+        return (string) $this->getData(self::UPDATED_AT);
     }
 
     /**

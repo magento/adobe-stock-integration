@@ -22,6 +22,18 @@ class TestConnection extends Field
     protected $_template = 'Magento_AdobeStockAsset::system/config/testconnection.phtml';
 
     /**
+     * Remove element scope and render form element as HTML
+     *
+     * @param AbstractElement $element
+     * @return string
+     */
+    public function render(AbstractElement $element)
+    {
+        $element->setData('scope', null);
+        return parent::render($element);
+    }
+
+    /**
      * Get the button and scripts contents
      *
      * @param AbstractElement $element
@@ -39,7 +51,8 @@ class TestConnection extends Field
                     [
                         'form_key' => $this->getFormKey()
                     ]
-                )
+                ),
+                'api_key_validation_result_container_id' => 'validation_api_connection_result',
             ]
         );
 
