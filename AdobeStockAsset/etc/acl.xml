@@ -15,6 +15,7 @@
                             <resource id="Magento_AdobeStockAsset::actions_delete" title="Delete" translate="title"/>
                             <resource id="Magento_AdobeStockAsset::actions_save" title="Save" translate="title"/>
                             <resource id="Magento_AdobeStockAsset::actions_view" title="View" translate="title"/>
+                            <resource id="Magento_AdobeStockAsset::actions_get" title="Get" translate="title" />
                         </resource>
                     </resource>
                 </resource>

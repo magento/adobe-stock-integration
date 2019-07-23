@@ -23,4 +23,10 @@
             <resource ref="Magento_AdobeStockAsset::actions_save"/>
         </resources>
     </route>
+    <route url="/V1/adobestock/asset/:id" method="GET">
+        <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Magento_AdobeStockAsset::actions_get"/>
+        </resources>
+    </route>
 </routes>
