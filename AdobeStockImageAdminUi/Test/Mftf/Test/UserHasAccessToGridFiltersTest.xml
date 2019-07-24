@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UserHasAccessToGridFiltersTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="User has access to Adobe Stock Images filters"/>
+            <title value="User has access to Adobe Stock Images filters"/>
+            <description value="User is able to see the available adobe images filters"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{AdobeStockEnabledConfigData.path}} {{AdobeStockEnabledConfigData.value}}" stepKey="enableAdobeStock"/>
+            <!-- Saving the API key as locked encrypted value in config.php -->
+            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} {{AdobeStockApiKeyConfigData.value}} -c" stepKey="setAdobeStockApiKey"/>
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage"/>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} '' -c" stepKey="removeAdobeStockApiKey"/>
+            <magentoCLI command="config:set {{AdobeStockDisabledConfigData.path}} {{AdobeStockDisabledConfigData.value}}" stepKey="disableAdobeStock"/>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="navigateToCreatedCMSPage" stepKey="goToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandContentFieldsetActionGroup" stepKey="expandContentFieldset"/>
+        <actionGroup ref="AdminOpenCMSMediaGalleryPopupActionGroup" stepKey="openMediaGalleryPopup"/>
+        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
+        <actionGroup ref="AdminOpenAdobeStockFiltersActionGroup" stepKey="openFilters"/>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSubcategoryFilter">
+            <argument name="filterName" value="Subcategory"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
+            <argument name="filterName" value="Orientation"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkColorFilter">
+            <argument name="filterName" value="Color"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
+            <argument name="filterName" value="Price"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSafeSearchFilter">
+            <argument name="filterName" value="Safe search"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkIsolatedAssetsFilter">
+            <argument name="filterName" value="Isolated Assets"/>
+        </actionGroup>
+    </test>
+</tests>
