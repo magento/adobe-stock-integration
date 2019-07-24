@@ -10,6 +10,9 @@ namespace Magento\AdobeStockAsset\Test\Api\AssetRepository;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Testing search asset web api
+ */
 class AssetListTest extends WebapiAbstract
 {
     /**
