@@ -8,9 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Io\File;
@@ -42,10 +45,16 @@ class Storage
     private $log;
 
     /**
-     * File constructor
-     * @param Filesystem $filesystem
-     * @param Https      $driver
-     * @param File       $fileSystemIo
+     * @var WriteInterface
+     */
+    private $mediaDirectory;
+
+    /**
+     * Constructor
+     * @param Filesystem      $filesystem
+     * @param Https           $driver
+     * @param File            $fileSystemIo
+     * @param LoggerInterface $log
      */
     public function __construct(
         Filesystem $filesystem,
@@ -69,17 +78,16 @@ class Storage
      */
     public function save(string $imageUrl, string $destinationDirectoryPath = ''): string
     {
-        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $destinationPath = $destinationDirectoryPath . $this->getFileName($imageUrl);
 
         $bytes = false;
 
         try {
-            $bytes = $mediaDirectory->writeFile(
+            $bytes = $this->mediaDirectory()->writeFile(
                 $destinationPath,
                 $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl))
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->log->critical("Failed to save the image. Exception: \n" . $exception);
         }
 
@@ -110,5 +118,19 @@ class Storage
     private function getUrlWithoutProtocol($imageUrl): string
     {
         return str_replace('https://', '', $imageUrl);
+    }
+
+    /**
+     * Create an instance of pub/media with write permissions
+     *
+     * @return WriteInterface
+     * @throws FileSystemException
+     */
+    private function mediaDirectory()
+    {
+        if ($this->mediaDirectory === null) {
+            $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        }
+        return $this->mediaDirectory;
     }
 }
