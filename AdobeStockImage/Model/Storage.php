@@ -14,10 +14,10 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Io\File;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class Preview
- * Todo: Refactor to use Media Storage
+ * Class Storage
  */
 class Storage
 {
@@ -37,6 +37,11 @@ class Storage
     private $fileSystemIo;
 
     /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
      * File constructor
      * @param Filesystem $filesystem
      * @param Https      $driver
@@ -45,32 +50,49 @@ class Storage
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        File $fileSystemIo
+        File $fileSystemIo,
+        LoggerInterface $log
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->fileSystemIo = $fileSystemIo;
+        $this->log = $log;
     }
 
     /**
-     * @param string      $imageUrl
-     * @param null|string $destinationPath
-     * @return string       $destinationPath
+     * Save file from the URL to destination directory relative to media directory
+     *
+     * @param string $imageUrl
+     * @param string $destinationDirectoryPath
+     * @return string
      * @throws LocalizedException
      */
-    public function savePreview($imageUrl, $destinationPath = null)
+    public function save(string $imageUrl, string $destinationDirectoryPath = ''): string
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $destinationPath = $mediaDirectory->getAbsolutePath($destinationPath) . $this->getFileName($imageUrl);
+        $destinationPath = $destinationDirectoryPath . $this->getFileName($imageUrl);
 
-        if ($mediaDirectory->writeFile($destinationPath, $this->driver->fileGetContents($this->getPath($imageUrl)))) {
-            return $destinationPath;
+        $bytes = false;
+
+        try {
+            $bytes = $mediaDirectory->writeFile(
+                $destinationPath,
+                $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl))
+            );
+        } catch (\Exception $exception) {
+            $this->log->critical("Failed to save the image. Exception: \n" . $exception);
         }
 
-        throw new LocalizedException(__('We can\'t save the preview file right now.'));
+        if (!$bytes) {
+            throw new LocalizedException(__('Failed to save the image.'));
+        }
+
+        return $destinationPath;
     }
 
     /**
+     * Get file basename
+     *
      * @param string $imageUrl
      * @return string
      */
@@ -80,10 +102,12 @@ class Storage
     }
 
     /**
+     * Remove the protocol from the url to use it for DriverInterface::fileGetContents
+     *
      * @param string $imageUrl
      * @return string
      */
-    private function getPath($imageUrl): string
+    private function getUrlWithoutProtocol($imageUrl): string
     {
         return str_replace('https://', '', $imageUrl);
     }
