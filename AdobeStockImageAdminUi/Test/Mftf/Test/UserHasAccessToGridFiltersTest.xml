@@ -20,7 +20,7 @@
         <before>
             <magentoCLI command="config:set {{AdobeStockEnabledConfigData.path}} {{AdobeStockEnabledConfigData.value}}" stepKey="enableAdobeStock"/>
             <!-- Saving the API key as locked encrypted value in config.php -->
-            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} {{AdobeStockApiKeyConfigData.value}} -c" stepKey="setAdobeStockApiKey"/>
+            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} {{AdobeStockApiKeyConfigData.value}} --lock-config" stepKey="setAdobeStockApiKey"/>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage">
                 <field key="title">Mid-Year Sale</field>
                 <field key="content_heading">Mid-Year Sale</field>
@@ -29,7 +29,7 @@
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} '' -c" stepKey="removeAdobeStockApiKey"/>
+            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} '' --lock-config" stepKey="removeAdobeStockApiKey"/>
             <magentoCLI command="config:set {{AdobeStockDisabledConfigData.path}} {{AdobeStockDisabledConfigData.value}}" stepKey="disableAdobeStock"/>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
             <actionGroup ref="logout" stepKey="logout"/>
