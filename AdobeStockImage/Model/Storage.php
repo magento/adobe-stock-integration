@@ -83,7 +83,7 @@ class Storage
         $bytes = false;
 
         try {
-            $bytes = $this->mediaDirectory()->writeFile(
+            $bytes = $this->getMediaDirectory()->writeFile(
                 $destinationPath,
                 $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl))
             );
@@ -126,7 +126,7 @@ class Storage
      * @return WriteInterface
      * @throws FileSystemException
      */
-    private function mediaDirectory()
+    private function getMediaDirectory(): WriteInterface
     {
         if ($this->mediaDirectory === null) {
             $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
