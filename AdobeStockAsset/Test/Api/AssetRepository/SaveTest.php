@@ -96,7 +96,6 @@ class SaveTest extends WebapiAbstract
                         AssetInterface::HEIGHT => '800',
                         AssetInterface::PREVIEW_WIDTH => '500',
                         AssetInterface::PREVIEW_HEIGHT => '400',
-                        AssetInterface::URL => uniqid('url'),
                         AssetInterface::PREVIEW_URL => uniqid('preview-url'),
                         AssetInterface::DETAILS_URL => uniqid('details-url'),
                     ]
