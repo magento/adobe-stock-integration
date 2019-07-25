@@ -247,7 +247,7 @@ class Client implements ClientInterface
 
         $tokenResponse = $this->json->unserialize($curl->getBody());
         $tokenResponse = $this->tokenResponseFactory->create()
-            ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => 'The response is empty.']);
+            ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')]);
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(

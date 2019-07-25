@@ -152,4 +152,20 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     {
         $this->setData(self::UPDATED_AT, $value);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExpiresIn(): int
+    {
+        return $this->getData(self::EXPIRES_IN);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExpiresIn(int $value): void
+    {
+        $this->setData(self::EXPIRES_IN, $value);
+    }
 }

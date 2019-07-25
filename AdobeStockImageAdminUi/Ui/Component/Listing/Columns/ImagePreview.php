@@ -16,14 +16,11 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
+/**
+ * Class ImagePreview
+ */
 class ImagePreview extends Column
 {
-    /**
-     * Settings of authentication popup
-     */
-    const POPUP_WIDTH = '500';
-    const POPUP_HEIGHT = '300';
-
     /**
      * @var UserProfileRepositoryInterface
      */
@@ -75,44 +72,14 @@ class ImagePreview extends Column
         $this->setData(
             'config',
             array_replace_recursive(
-                [
-                    'authConfig' => [
-                        'windowParams' => [
-                            'width' => self::POPUP_WIDTH,
-                            'height' => self::POPUP_HEIGHT
-                        ]
-                    ]
-                ],
                 (array)$this->getData('config'),
                 [
                     'authConfig' => [
-                        'url' => $this->getAuthUrl(),
+                        'url' => $this->config->getAuthUrl(),
                         'isAuthorized' => $this->isAuthorized()
                     ]
                 ]
             )
-        );
-    }
-
-    /**
-     * Get auth URL
-     *
-     * @return string
-     */
-    private function getAuthUrl(): string
-    {
-        return str_replace(
-            [
-                '#{client_id}',
-                '#{scope}',
-                '#{response_type}'
-            ],
-            [
-                $this->config->getApiKey(),
-                'openid',
-                'code'
-            ],
-            $this->config->getAuthUrlPattern()
         );
     }
 

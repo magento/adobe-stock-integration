@@ -30,6 +30,11 @@ class Callback extends Action
      */
     const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
+    /**
+     * Template of response
+     */
+    const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
+
     /** @var UserProfileRepositoryInterface */
     private $userProfileRepository;
 
@@ -79,23 +84,24 @@ class Callback extends Action
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
+            $userProfile->setExpiresIn($tokenResponse->getExpiresIn());
 
             $this->userProfileRepository->save($userProfile);
-        } catch (CouldNotSaveException $e) {
-            $this->getMessageManager()->addErrorMessage($e->getMessage());
+
+            $response = sprintf(self::RESPONSE_TEMPLATE, 'success', __('Authorization was successful'));
         } catch (AuthorizationException $e) {
-            $this->getMessageManager()->addErrorMessage($e->getMessage());
+            $response = sprintf(self::RESPONSE_TEMPLATE, 'error', $e->getMessage());
+        } catch (CouldNotSaveException $e) {
+            $response = sprintf(self::RESPONSE_TEMPLATE, 'error', $e->getMessage());
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
-            $this->getMessageManager()->addErrorMessage(__('Something went wrong.'));
+            $response = sprintf(self::RESPONSE_TEMPLATE, 'error', __('Something went wrong.'));
         }
 
-        /**
-         * @todo Please update response if it needs for UI
-         */
         /** @var Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
-        $resultRaw->setContents('123123123');
+        $resultRaw->setContents($response);
+
         return $resultRaw;
     }
 

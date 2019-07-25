@@ -94,13 +94,17 @@ class Config
     }
 
     /**
-     * Retrieve auth URL pattern
+     * Retrieve auth URL
      *
      * @return string
      */
-    public function getAuthUrlPattern(): string
+    public function getAuthUrl(): string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN);
+        return str_replace(
+            '#{client_id}',
+            $this->getApiKey(),
+            $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
+        );
     }
 
     /**

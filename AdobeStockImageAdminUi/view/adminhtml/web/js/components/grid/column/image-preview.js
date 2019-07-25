@@ -8,8 +8,9 @@ define([
     'knockout',
     'Magento_Ui/js/grid/columns/column',
     'Magento_AdobeStockImageAdminUi/js/action/authorization',
+    'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate'
-], function (_, $, ko, Column, authorizationAction) {
+], function (_, $, ko, Column, authorizationAction, messages) {
     'use strict';
 
     return Column.extend({
@@ -25,8 +26,10 @@ define([
                 isAuthorized: false,
                 windowParams: {
                     width: 500,
-                    height: 600
-                },
+                    height: 600,
+                    top: 100,
+                    left: 300,
+                }
             }
         },
 
@@ -218,6 +221,15 @@ define([
         },
 
         /**
+         * Get messages
+         *
+         * @return {Array}
+         */
+        getMessages: function() {
+            return messages.get();
+        },
+
+        /**
          * License and save image
          *
          * @param {Object} record
@@ -249,10 +261,16 @@ define([
                     function (authConfig) {
                         this.authConfig = _.extend(this.authConfig, authConfig);
                         this.licenseProcess(record);
+                        messages.add('success', authConfig.lastAuthSuccessMessage);
                     }.bind(this)
                 )
-                .catch(function (error) {
-                    console.error(error);
+                .catch(
+                    function (error) {
+                        messages.add('error', error.message);
+                    }.bind(this)
+                )
+                .finally(function () {
+                    messages.scheduleCleanup(5);
                 });
         }
     });

@@ -4,16 +4,26 @@
  */
 define([], function () {
     'use strict';
-    var buildWindowParams,
-        authorizationProcess;
+    /**
+     * Consts of response
+     *
+     * RESPONSE_PATTERN - pattern of response
+     * RESPONSE_CODE_INDEX index of response code
+     * RESPONSE_MESSAGE_INDEX index of response message
+     * RESPONSE_SUCCESS_CODE success code
+     */
+    var RESPONSE_PATTERN = /auth\[code=(success|error);message=(.+)\]/,
+        RESPONSE_CODE_INDEX = 1,
+        RESPONSE_MESSAGE_INDEX = 2,
+        RESPONSE_SUCCESS_CODE = 'success';
 
     /**
      * Build window params
      *
      * @param {Object} windowParams
-     * @returns {string}
+     * @returns {String}
      */
-    buildWindowParams = function (windowParams) {
+    function buildWindowParams (windowParams) {
         var output = '',
             paramName,
             paramValue;
@@ -32,13 +42,13 @@ define([], function () {
      * @param {Object} authConfig
      * @return {Promise}
      */
-    authorizationProcess = function (authConfig) {
+    function authorizationProcess (authConfig) {
         var authWindow;
 
         /**
          * If user have access tokens then reject authorization request
          */
-        if (true === authConfig.isAuthorized) {
+        if (authConfig.isAuthorized) {
             return new Promise(function (resolve, reject) {
                 reject(new Error('You are authorized.'));
             });
@@ -55,44 +65,45 @@ define([], function () {
 
         return new Promise(function (resolve, reject) {
             var watcherId,
-                stopWatcherId,
-                startHandle,
-                stopHandle;
+                stopWatcherId;
 
             /**
              * Stop handle
              */
-            stopHandle = function () {
+             function stopHandle () {
                 // Clear timers
                 clearTimeout(stopWatcherId);
                 clearInterval(watcherId);
 
                 // Close window
                 authWindow.close();
-
-                reject(new Error('Time\'s up.'));
             };
 
             /**
              * Start handle
              */
-            startHandle = function () {
-                if (-1 !== (authWindow.origin || '').indexOf(window.location.host)) {
+            function startHandle () {
+                var responseData;
+                if (-1 !== String(authWindow.origin).indexOf(window.location.host)) {
                     /**
-                     * If within 10 seconds the result is not received, then reject the request.
+                     * If within 10 seconds the result is not received, then reject the request
                      */
-                    stopWatcherId = setTimeout(stopHandle, 10000);
+                    stopWatcherId = setTimeout(function () {
+                        stopHandle();
+                        reject(new Error('Time\'s up.'));
+                    }, 10000);
 
-                    if (-1 !== authWindow.document.body.innerText.indexOf('123123123')) {
-                        // Clear timers
-                        clearTimeout(stopWatcherId);
-                        clearInterval(watcherId);
+                    if (responseData = authWindow.document.body.innerText.match(RESPONSE_PATTERN)) {
+                        stopHandle();
 
-                        // Close window
-                        authWindow.close();
-
-                        // Return new authorization configuration
-                        resolve({isAuthorized: true});
+                        if (responseData[RESPONSE_CODE_INDEX] === RESPONSE_SUCCESS_CODE) {
+                            resolve({
+                                isAuthorized: true,
+                                lastAuthSuccessMessage: responseData[RESPONSE_MESSAGE_INDEX]
+                            });
+                        } else {
+                            reject(new Error(responseData[RESPONSE_MESSAGE_INDEX]));
+                        }
                     }
                 }
             };
