@@ -18,24 +18,16 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
-            <!-- Enable adobe stock -->
-            <actionGroup ref="AdminAdobeStockGoToConfigurationPageActionGroup" stepKey="goToAdobeStockConfigurationPage"/>
-            <actionGroup ref="AdminAdobeStockFillConfigurationActionGroup" stepKey="fillConfigurationFields"/>
-            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
         </before>
         <after>
-            <!-- Disable adobe stock -->
-            <actionGroup ref="AdminAdobeStockGoToConfigurationPageActionGroup" stepKey="goToAdobeStockConfigurationPage"/>
-            <actionGroup ref="AdminAdobeStockFillConfigurationActionGroup" stepKey="fillConfigurationFields">
-                <!-- Empty not allowed by validation rules -->
-                <argument name="apiKey" value="WRONG"/>
-                <argument name="privateKey" value="WRONG"/>
-            </actionGroup>
-            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
-
             <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="apiKey" value=""/>
+                <argument name="privateKey" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openModal"/>
 
