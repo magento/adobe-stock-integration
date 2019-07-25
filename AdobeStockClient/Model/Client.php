@@ -25,6 +25,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
@@ -138,6 +139,7 @@ class Client implements ClientInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
+     * @throws AuthenticationException
      * @throws IntegrationException
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
@@ -158,6 +160,9 @@ class Client implements ClientInterface
             }
             $totalCount = $response->getNbResults();
         } catch (Exception $e) {
+            if (strpos($e->getMessage(), 'Api Key is invalid') !== false) {
+                throw new AuthenticationException(__($e->getMessage()), $e, $e->getCode());
+            }
             $this->logger->critical($e->getMessage());
         }
 

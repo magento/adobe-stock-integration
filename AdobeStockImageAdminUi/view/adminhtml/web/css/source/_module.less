@@ -13,6 +13,11 @@
             &:hover .masonry-image-overlay {
                 display: block;
             }
+            .no-data-message-container {
+                font-size: @data-grid__no-records__font-size;
+                padding: @data-grid__no-records__padding;
+                text-align: center;
+            }
         }
         &-column {
             overflow: hidden;
@@ -117,6 +122,16 @@
     .admin__form-field {
         .colorpicker-input {
             min-width: 70%;
+        }
+    }
+    .admin__adobe-stock-image-checkbox {
+        .admin__field-control._with-tooltip {
+            .admin__form-field-label {
+                display: inline-block;
+            }
+            .admin__field-tooltip {
+                margin: -5px 0 0 5px;
+            }
         }
     }
 }
