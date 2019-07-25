@@ -12,6 +12,7 @@ use Exception;
 use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClient\Model\Config;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -95,7 +96,9 @@ class ImagePreview extends Column
                 (int)$this->userContext->getUserId()
             );
 
-            $isAuthorized = !empty($userProfile->getId()) && !empty($userProfile->getAccessToken());
+            $isAuthorized = !empty($userProfile->getId())
+                && !empty($userProfile->getAccessToken())
+                && strtotime($userProfile->getExpiresAt()) >= strtotime('now');
         } catch (Exception $e) {
             $isAuthorized = false;
         }

@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\OAuth;
 
+use DateInterval;
+use DateTime;
 use Exception;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterfaceFactory;
@@ -84,7 +86,9 @@ class Callback extends Action
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
-            $userProfile->setExpiresIn($tokenResponse->getExpiresIn());
+            $userProfile->setExpiresAt(
+                $this->getExpiresTime($tokenResponse->getExpiresIn())
+            );
 
             $this->userProfileRepository->save($userProfile);
 
@@ -119,5 +123,19 @@ class Callback extends Action
         } catch (Exception $e) {
             return $this->userProfileFactory->create();
         }
+    }
+
+    /**
+     * Retrieve token expires date
+     *
+     * @param int $expiresIn
+     * @return string
+     * @throws Exception
+     */
+    private function getExpiresTime(int $expiresIn): string
+    {
+        $dateTime = new DateTime();
+        $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn/1000)));
+        return $dateTime->format('Y-m-d H:i:s');
     }
 }

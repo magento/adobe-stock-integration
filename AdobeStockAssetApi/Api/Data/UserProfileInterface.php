@@ -26,7 +26,7 @@ interface UserProfileInterface
     const REFRESH_TOKEN = 'refresh_token';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    const EXPIRES_IN = 'expires_in';
+    const EXPIRES_AT = 'expires_at';
     /**#@-*/
 
     /**
@@ -167,15 +167,15 @@ interface UserProfileInterface
     /**
      * Get expires time
      *
-     * @return int
+     * @return string
      */
-    public function getExpiresIn(): int;
+    public function getExpiresAt(): string;
 
     /**
      * Set expires time
      *
-     * @param int $value
+     * @param string $value
      * @return void
      */
-    public function setExpiresIn(int $value): void;
+    public function setExpiresAt(string $value): void;
 }

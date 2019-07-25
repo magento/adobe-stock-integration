@@ -23,10 +23,9 @@
             <div class="author" if="$col.getAuthor($row())">
                 <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
             </div>
-            <!-- ko if: console.log($col.getMessages()) --><!-- /ko -->
             <ul class="messages" if="$col.getMessages().length > 0">
                 <!-- ko foreach: $col.getMessages() -->
-                <li attr="class code">
+                <li attr="class: code">
                     <span data-bind="html: message"></span>
                 </li>
                 <!-- /ko -->
