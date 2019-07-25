@@ -25,12 +25,14 @@ define([], function () {
      */
     function buildWindowParams (windowParams) {
         var output = '',
+            coma = '',
             paramName,
             paramValue;
 
         for (paramName in windowParams) {
             paramValue = windowParams[paramName];
-            output += paramName + '=' + paramValue;
+            output += coma + paramName + '=' + paramValue;
+            coma = ',';
         }
 
         return output;
