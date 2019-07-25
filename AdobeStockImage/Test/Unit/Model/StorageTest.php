@@ -10,6 +10,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for Storage Model
+ */
 class StorageTest extends TestCase
 {
     /**
@@ -85,7 +88,6 @@ class StorageTest extends TestCase
             ->method('getDirectoryWrite')
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
             ->willReturn($mediaDirectoryMock);
-
 
         $this->httpsDriverMock->expects($this->once())
             ->method('fileGetContents')
