@@ -124,17 +124,17 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get media type id
      *
-     * @return int
+     * @return int|null
      */
-    public function getMediaTypeId(): int;
+    public function getMediaTypeId(): ?int;
 
     /**
      * Set media type id
      *
-     * @param int $mediaTypeId
+     * @param int|null $mediaTypeId
      * @return void
      */
-    public function setMediaTypeId(int $mediaTypeId): void;
+    public function setMediaTypeId(int $mediaTypeId = null): void;
 
     /**
      * Get category
@@ -184,17 +184,17 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get premium level id
      *
-     * @return int
+     * @return int|null
      */
-    public function getPremiumLevelId(): int;
+    public function getPremiumLevelId(): ?int;
 
     /**
      * Set premium level id
      *
-     * @param int $premiumLevelId
+     * @param int|null $premiumLevelId
      * @return void
      */
-    public function setPremiumLevelId(int $premiumLevelId): void;
+    public function setPremiumLevelId(int $premiumLevelId = null): void;
 
     /**
      * Get adobe id

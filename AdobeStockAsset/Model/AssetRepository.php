@@ -82,15 +82,15 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function save(AssetInterface $item): void
+    public function save(AssetInterface $asset): void
     {
-        $this->resource->save($item);
+        $this->resource->save($asset);
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function delete(AssetInterface $item): void
     {
@@ -98,7 +98,7 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface
     {
@@ -120,7 +120,7 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getById(int $id) : AssetInterface
     {
@@ -133,7 +133,7 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function deleteById(int $id): void
     {

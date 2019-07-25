@@ -11,6 +11,7 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -20,9 +21,25 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class DeleteTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'adobeStockAssetRepositoryV1';
+    /**
+     * Service name
+     */
+    const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
+
+    /**
+     * Service version
+     */
     const SERVICE_VERSION = 'V1';
+
+    /**
+     * Resource path
+     */
     const RESOURCE_PATH = '/V1/adobestock/asset';
+
+    /**
+     * Service operation
+     */
+    const SERVICE_OPERATION = 'DeleteById';
 
     /**
      * @var ObjectManagerInterface
@@ -51,7 +68,37 @@ class DeleteTest extends WebapiAbstract
     public function testDelete()
     {
         $response = $this->deleteAsset($this->getAssetId());
-        $this->assertSame([], $response);
+
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            $this->assertSame([], $response);
+        } else {
+            $this->assertNull($response);
+        }
+    }
+
+    /**
+     * Test delete assert with exception
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function testDeleteWithException()
+    {
+        try {
+            $notExistedAssetId = -1;
+            $this->deleteAsset($notExistedAssetId);
+            $this->fail('Expected throwing exception');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+                $errorData = $this->processRestExceptionResult($e);
+                self::assertEquals($notExistedAssetId, $errorData['parameters'][0]);
+                self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -68,17 +115,22 @@ class DeleteTest extends WebapiAbstract
                 'httpMethod'   => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
-                'service'        => self::SERVICE_NAME,
+                'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'opertion'       => self::SERVICE_NAME . 'DeleteById',
+                'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION
             ],
         ];
 
         return (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfo, [[AssetInterface::ID => $assetId]])
+            $this->_webApiCall($serviceInfo, [AssetInterface::ID => $assetId])
             : $this->_webApiCall($serviceInfo);
     }
 
+    /**
+     * Asset fixture provider
+     *
+     * @return void
+     */
     public static function assetFixtureProvider()
     {
         require __DIR__ . '/../../_files/asset.php';
