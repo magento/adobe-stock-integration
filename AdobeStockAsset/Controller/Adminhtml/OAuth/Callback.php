@@ -43,7 +43,7 @@ class Callback extends Action
      * RESPONSE_ERROR_CODE error code
      */
     const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
-    const RESPONSE_REGEXP_PATTERN = '/auth\[code=(success|error);message=(.+)\]/';
+    const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
     const RESPONSE_CODE_INDEX = 1;
     const RESPONSE_MESSAGE_INDEX = 2;
     const RESPONSE_SUCCESS_CODE = 'success';
