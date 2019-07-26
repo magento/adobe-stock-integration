@@ -10,4 +10,9 @@
     <type name="Magento\Catalog\Model\Product\Gallery\Processor">
         <plugin name="adobe_stock_image_remove_metadata" type="Magento\AdobeStockImage\Plugin\Product\Gallery\Processor" sortOrder="10" disabled="false" />
     </type>
+    <type name="Magento\AdobeStockImage\Model\Storage">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\Https</argument>
+        </arguments>
+    </type>
 </config>
