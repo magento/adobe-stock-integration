@@ -98,7 +98,7 @@ class Callback extends Action
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
-            $userProfile->setExpiresAt(
+            $userProfile->setAccessTokenExpiresAt(
                 $this->getExpiresTime($tokenResponse->getExpiresIn())
             );
 
