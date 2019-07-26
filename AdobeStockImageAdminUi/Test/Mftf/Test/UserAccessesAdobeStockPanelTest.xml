@@ -40,6 +40,6 @@
         <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
             <argument name="pageNumber" value="2"/>
         </actionGroup>
-        <click selector="{{AdobeStockSection.modal}}{{AdminSlideOutDialogSection.closeButton}}" stepKey="closeAdobeStockPanel" />
+        <actionGroup ref="AdminAdobeStockCloseSearchModalActionGroup" stepKey="closeAdobeStockPanel"/>
     </test>
 </tests>
