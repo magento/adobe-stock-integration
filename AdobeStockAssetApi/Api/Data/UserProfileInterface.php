@@ -107,9 +107,9 @@ interface UserProfileInterface
     /**
      * Get access token
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccessToken(): string;
+    public function getAccessToken(): ?string;
 
     /**
      * Set access token
@@ -122,9 +122,9 @@ interface UserProfileInterface
     /**
      * Get refresh token
      *
-     * @return string
+     * @return string|null
      */
-    public function getRefreshToken(): string;
+    public function getRefreshToken(): ?string;
 
     /**
      * Set refresh token
@@ -167,9 +167,9 @@ interface UserProfileInterface
     /**
      * Get expires time of token
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccessTokenExpiresAt(): string;
+    public function getAccessTokenExpiresAt(): ?string;
 
     /**
      * Set expires time of token

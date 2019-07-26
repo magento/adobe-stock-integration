@@ -32,11 +32,13 @@ define([
                     top: 100,
                     left: 300,
                 },
-                RESPONSE_REGEXP_PATTERN: /auth\[code=(success|error);message=(.+)\]/,
-                RESPONSE_CODE_INDEX: 1,
-                RESPONSE_MESSAGE_INDEX: 2,
-                RESPONSE_SUCCESS_CODE: 'success',
-                RESPONSE_ERROR_CODE: 'error'
+                response: {
+                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
+                    codeIndex: 1,
+                    messageIndex: 2,
+                    successCode: 'success',
+                    errorCode: 'error'
+                }
             }
         },
 

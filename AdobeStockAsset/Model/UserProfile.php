@@ -92,7 +92,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     /**
      * @inheritDoc
      */
-    public function getAccessToken(): string
+    public function getAccessToken(): ?string
     {
         return $this->getData(self::ACCESS_TOKEN);
     }
@@ -108,7 +108,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     /**
      * @inheritDoc
      */
-    public function getRefreshToken(): string
+    public function getRefreshToken(): ?string
     {
         return $this->getData(self::REFRESH_TOKEN);
     }
@@ -156,7 +156,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     /**
      * @inheritDoc
      */
-    public function getAccessTokenExpiresAt(): string
+    public function getAccessTokenExpiresAt(): ?string
     {
         return $this->getData(self::ACCESS_TOKEN_EXPIRES_AT);
     }

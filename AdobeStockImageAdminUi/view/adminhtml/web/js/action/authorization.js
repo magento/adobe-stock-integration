@@ -76,16 +76,16 @@ define([], function () {
                         reject(new Error('Time\'s up.'));
                     }, authConfig.stopHandleTimeout || 10000);
 
-                    if (responseData = authWindow.document.body.innerText.match(authConfig.RESPONSE_REGEXP_PATTERN)) {
+                    if (responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern)) {
                         stopHandle();
 
-                        if (responseData[authConfig.RESPONSE_CODE_INDEX] === authConfig.RESPONSE_SUCCESS_CODE) {
+                        if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
                             resolve({
                                 isAuthorized: true,
-                                lastAuthSuccessMessage: responseData[authConfig.RESPONSE_MESSAGE_INDEX]
+                                lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
                             });
                         } else {
-                            reject(new Error(responseData[authConfig.RESPONSE_MESSAGE_INDEX]));
+                            reject(new Error(responseData[authConfig.response.messageIndex]));
                         }
                     }
                 }
