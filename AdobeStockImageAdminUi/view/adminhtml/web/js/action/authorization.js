@@ -5,19 +5,6 @@
 define([], function () {
     'use strict';
     /**
-     * Consts of response
-     *
-     * RESPONSE_PATTERN - pattern of response
-     * RESPONSE_CODE_INDEX index of response code
-     * RESPONSE_MESSAGE_INDEX index of response message
-     * RESPONSE_SUCCESS_CODE success code
-     */
-    var RESPONSE_PATTERN = /auth\[code=(success|error);message=(.+)\]/,
-        RESPONSE_CODE_INDEX = 1,
-        RESPONSE_MESSAGE_INDEX = 2,
-        RESPONSE_SUCCESS_CODE = 'success';
-
-    /**
      * Build window params
      *
      * @param {Object} windowParams
@@ -38,13 +25,7 @@ define([], function () {
         return output;
     };
 
-    /**
-     * Authorization process
-     *
-     * @param {Object} authConfig
-     * @return {Promise}
-     */
-    function authorizationProcess (authConfig) {
+    return function (authConfig) {
         var authWindow;
 
         /**
@@ -93,18 +74,18 @@ define([], function () {
                     stopWatcherId = setTimeout(function () {
                         stopHandle();
                         reject(new Error('Time\'s up.'));
-                    }, 10000);
+                    }, authConfig.stopHandleTimeout || 10000);
 
-                    if (responseData = authWindow.document.body.innerText.match(RESPONSE_PATTERN)) {
+                    if (responseData = authWindow.document.body.innerText.match(authConfig.RESPONSE_REGEXP_PATTERN)) {
                         stopHandle();
 
-                        if (responseData[RESPONSE_CODE_INDEX] === RESPONSE_SUCCESS_CODE) {
+                        if (responseData[authConfig.RESPONSE_CODE_INDEX] === authConfig.RESPONSE_SUCCESS_CODE) {
                             resolve({
                                 isAuthorized: true,
-                                lastAuthSuccessMessage: responseData[RESPONSE_MESSAGE_INDEX]
+                                lastAuthSuccessMessage: responseData[authConfig.RESPONSE_MESSAGE_INDEX]
                             });
                         } else {
-                            reject(new Error(responseData[RESPONSE_MESSAGE_INDEX]));
+                            reject(new Error(responseData[authConfig.RESPONSE_MESSAGE_INDEX]));
                         }
                     }
                 }
@@ -116,6 +97,4 @@ define([], function () {
             watcherId = setInterval(startHandle, 1000);
         });
     };
-
-    return authorizationProcess;
 });

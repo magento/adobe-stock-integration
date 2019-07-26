@@ -26,7 +26,7 @@ interface UserProfileInterface
     const REFRESH_TOKEN = 'refresh_token';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    const EXPIRES_AT = 'expires_at';
+    const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
     /**#@-*/
 
     /**
@@ -165,17 +165,17 @@ interface UserProfileInterface
     public function setUpdatedAt(string $value): void;
 
     /**
-     * Get expires time
+     * Get expires time of token
      *
      * @return string
      */
-    public function getExpiresAt(): string;
+    public function getAccessTokenExpiresAt(): string;
 
     /**
-     * Set expires time
+     * Set expires time of token
      *
      * @param string $value
      * @return void
      */
-    public function setExpiresAt(string $value): void;
+    public function setAccessTokenExpiresAt(string $value): void;
 }

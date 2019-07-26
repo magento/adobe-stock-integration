@@ -21,15 +21,22 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            messageDelay: 5,
             authConfig: {
                 url: '',
                 isAuthorized: false,
+                stopHandleTimeout: 10000,
                 windowParams: {
                     width: 500,
                     height: 600,
                     top: 100,
                     left: 300,
-                }
+                },
+                RESPONSE_REGEXP_PATTERN: /auth\[code=(success|error);message=(.+)\]/,
+                RESPONSE_CODE_INDEX: 1,
+                RESPONSE_MESSAGE_INDEX: 2,
+                RESPONSE_SUCCESS_CODE: 'success',
+                RESPONSE_ERROR_CODE: 'error'
             }
         },
 
@@ -269,9 +276,9 @@ define([
                         messages.add('error', error.message);
                     }.bind(this)
                 )
-                .finally(function () {
-                    messages.scheduleCleanup(5);
-                });
+                .finally((function () {
+                    messages.scheduleCleanup(this.messageDelay);
+                }).bind(this));
         }
     });
 });

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 
 use Exception;
+use Magento\AdobeStockAsset\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClient\Model\Config;
 use Magento\Authorization\Model\UserContextInterface;
@@ -77,7 +78,13 @@ class ImagePreview extends Column
                 [
                     'authConfig' => [
                         'url' => $this->config->getAuthUrl(),
-                        'isAuthorized' => $this->isAuthorized()
+                        'isAuthorized' => $this->isAuthorized(),
+                        'RESPONSE_TEMPLATE' => Callback::RESPONSE_TEMPLATE,
+                        'RESPONSE_REGEXP_PATTERN' => Callback::RESPONSE_REGEXP_PATTERN,
+                        'RESPONSE_CODE_INDEX' => Callback::RESPONSE_CODE_INDEX,
+                        'RESPONSE_MESSAGE_INDEX' => Callback::RESPONSE_MESSAGE_INDEX,
+                        'RESPONSE_SUCCESS_CODE' => Callback::RESPONSE_SUCCESS_CODE,
+                        'RESPONSE_ERROR_CODE' => Callback::RESPONSE_ERROR_CODE
                     ]
                 ]
             )

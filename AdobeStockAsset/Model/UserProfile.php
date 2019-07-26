@@ -156,16 +156,16 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     /**
      * @inheritDoc
      */
-    public function getExpiresAt(): string
+    public function getAccessTokenExpiresAt(): string
     {
-        return $this->getData(self::EXPIRES_AT);
+        return $this->getData(self::ACCESS_TOKEN_EXPIRES_AT);
     }
 
     /**
      * @inheritDoc
      */
-    public function setExpiresAt(string $value): void
+    public function setAccessTokenExpiresAt(string $value): void
     {
-        $this->setData(self::EXPIRES_AT, $value);
+        $this->setData(self::ACCESS_TOKEN_EXPIRES_AT, $value);
     }
 }
