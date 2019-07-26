@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UserFiltersImagesByImageColor">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="User filters images by image color"/>
+            <title value="Admin should be able to filters images by image color"/>
+            <description value="Admin should be able to filters images by image color"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <!--Create new category under Default Category-->
+            <createData entity="ApiCategory" stepKey="simpleCategory">
+                <field key="name">Sales category</field>
+            </createData>
+            <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete category-->
+            <deleteData stepKey="deleteRootCategory" createDataKey="simpleCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCategoryUploadMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
+        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <see selector="{{AdobeStockFilterSection.colorFilter}}" userInput="" stepKey="seeAdobeStockColorFilter"/>
+        <actionGroup ref="AdminApplyColorFilterValue" stepKey="userChoseAndApplyColorFilter">
+            <argument name="color" value="#000000"/>
+        </actionGroup>
+        <!--Verify that filter is applied -->
+        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+            <argument name="resultValue" value="#000000"/>
+        </actionGroup>
+        <!--Verify message returns zero results if images was not found -->
+        <actionGroup ref="AdminApplyNonValidColorValueToFilterActionGroup" stepKey="userChoseAndApplyNonValidFilter">
+            <argument name="color" value="none"/>
+        </actionGroup>
+        <see selector="{{AdobeStockFilterSection.emptyText}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
+    </test>
+</tests>
