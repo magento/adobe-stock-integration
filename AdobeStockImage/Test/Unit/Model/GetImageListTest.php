@@ -8,25 +8,25 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\AdobeStockImage\Model\GetImageList;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockImage\Model\GetImageList;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for GetImageList service
  */
-class GetImageListTestTest extends TestCase
+class GetImageListTest extends TestCase
 {
     /**
      * @var GetImageList
@@ -66,16 +66,17 @@ class GetImageListTestTest extends TestCase
         $this->model = (new ObjectManager($this))->getObject(
             GetImageList::class,
             [
-                'client' => $this->clientMock,
-                'assetFactory' => $this->assetFactoryMock,
+                'client'              => $this->clientMock,
+                'assetFactory'        => $this->assetFactoryMock,
                 'searchResultFactory' => $this->searchResultFactoryMock,
-                'url' => $this->urlMock
+                'url'                 => $this->urlMock,
             ]
         );
     }
 
     /**
      * Test execute method
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testExecute()
     {
@@ -108,9 +109,9 @@ class GetImageListTestTest extends TestCase
             ->with(
                 [
                     'data' => [
-                        'items' => [$assetMock],
-                        'total_count' => 1
-                    ]
+                        'items'       => [$assetMock],
+                        'total_count' => 1,
+                    ],
                 ]
             )
             ->willReturn($searchResultsMock);
@@ -118,12 +119,12 @@ class GetImageListTestTest extends TestCase
     }
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $thumbnailUrl
      * @param string $previewUrl
-     * @param int $height
-     * @param int $width
-     * @return DocumentInterface
+     * @param int    $height
+     * @param int    $width
+     * @return DocumentInterface|MockObject
      */
     private function getDocument(
         int $id,
@@ -134,8 +135,7 @@ class GetImageListTestTest extends TestCase
     ): DocumentInterface {
         $documentMock = $this->createMock(DocumentInterface::class);
         $documentMock->expects($this->once())->method('getId')->willReturn($id);
-        $documentMock->expects($this->any())
-            ->method('getCustomAttribute')
+        $documentMock->method('getCustomAttribute')
             ->willReturnMap(
                 [
                     ['thumbnail_url', $this->getAttribute($thumbnailUrl)],
@@ -150,7 +150,7 @@ class GetImageListTestTest extends TestCase
 
     /**
      * @param mixed $value
-     * @return AttributeInterface
+     * @return AttributeInterface|MockObject
      */
     private function getAttribute($value): AttributeInterface
     {
@@ -160,12 +160,12 @@ class GetImageListTestTest extends TestCase
     }
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $thumbnailUrl
      * @param string $previewUrl
-     * @param int $height
-     * @param int $width
-     * @return AssetInterface
+     * @param int    $height
+     * @param int    $width
+     * @return AssetInterface|MockObject
      */
     private function getAsset(
         int $id,

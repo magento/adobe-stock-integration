@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
 /**
- * Interface AssetRepositoryInterface
+ * Interface AssetSearchResultsInterface
  * @api
  */
 interface AssetSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface

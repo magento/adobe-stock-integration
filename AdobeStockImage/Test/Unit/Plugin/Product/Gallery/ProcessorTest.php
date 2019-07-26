@@ -8,6 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Plugin\Product\Gallery;
 
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
+
 /**
  * Test for the Gallery Processor Plugin (ensures that metadata is remove from the database when image is deleted)
  */
@@ -23,15 +28,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $assetRepositoryMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    private $filterBuilderMock;
+    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    protected $searchCriteriaBuilderMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    private $searchCriteriaBuilderMock;
+    /** @var  LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $loggerMock;
 
     /**
      * @inheritdoc
@@ -39,18 +40,29 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->assetRepositoryMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface::class);
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
-        $this->searchCriteriaBuilderMock = $this->createMock(
-            \Magento\Framework\Api\SearchCriteriaBuilderFactory::class
+        $this->assetRepositoryMock = $this->createMock(
+            AssetRepositoryInterface::class
         );
+        $this->searchCriteriaBuilderMock = $this->createMock(
+            SearchCriteriaBuilderFactory::class
+        );
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->setMethods(['critical'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->model = new \Magento\AdobeStockImage\Plugin\Product\Gallery\Processor(
             $this->assetRepositoryMock,
-            $this->filterBuilderMock,
-            $this->searchCriteriaBuilderMock
+            $this->searchCriteriaBuilderMock,
+            $this->loggerMock
         );
     }
 
+    /**
+     * Test afterRemoveImage if file path is null.
+     *
+     * @throws \ReflectionException
+     */
     public function testAfterRemoveImageIfPathIsNull()
     {
         $resultMock = $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class);
@@ -64,38 +76,17 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $resultMock);
     }
 
-    public function testAfterRemoveImage()
+    /**
+     * Test successful afterRemoveImage method.
+     *
+     * @throws \ReflectionException
+     */
+    public function testSuccessfulAfterRemoveImage()
     {
         $filePath = 'file/path';
+        $this->setupSuccessAssetSearchAndDelete();
         $resultMock = $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-
-        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-        $this->filterBuilderMock->method('setField')->with('path')->willReturnSelf();
-        $this->filterBuilderMock->method('setConditionType')->with('eq')->willReturnSelf();
-        $this->filterBuilderMock->method('setValue')->with($filePath)->willReturnSelf();
-        $this->filterBuilderMock->method('create')->willReturn($filterMock);
-
-        $searchCriteriaBuilder = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
-        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaBuilder);
-        $searchCriteriaBuilder->expects($this->once())->method('addFilters')->with([$filterMock])->willReturnSelf();
-
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
-
-        $assetMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
-        $searchResultMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface::class);
-        $searchResultMock->expects($this->once())->method('getItems')->willReturn([$assetMock]);
-
-        $this->assetRepositoryMock->expects($this->once())
-            ->method('getList')
-            ->with($searchCriteriaMock)
-            ->willReturn($searchResultMock);
-
-        $this->assetRepositoryMock->expects($this->once())
-            ->method('delete')
-            ->with($assetMock);
-
         $result = $this->model->afterRemoveImage(
             $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class),
             $resultMock,
@@ -104,5 +95,84 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals($result, $resultMock);
+    }
+
+    /**
+     * Test failed getList AssertRepository scenario.
+     *
+     * @throws \ReflectionException
+     */
+    public function testFailedAfterRemoveImage()
+    {
+        $filePath = 'file/path';
+        $this->setupFailedAssetSearchAndDelete();
+        $resultMock = $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $result = $this->model->afterRemoveImage(
+            $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class),
+            $resultMock,
+            $productMock,
+            $filePath
+        );
+
+        $this->assertEquals($result, $resultMock);
+    }
+
+    /**
+     * Setup the successful asset search and delete mock.
+     *
+     * @throws \ReflectionException
+     */
+    private function setupSuccessAssetSearchAndDelete(): void
+    {
+        $searchCriteriaMock = $this->getSearchCriteriaMock();
+        $assetMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
+        $searchResultMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface::class);
+        $searchResultMock->expects($this->once())->method('getItems')->willReturn([$assetMock]);
+        $this->assetRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn($searchResultMock);
+
+        $this->assetRepositoryMock->expects($this->once())
+            ->method('delete')
+            ->with($assetMock);
+    }
+
+    /**
+     * Setup the failed asset search and delete mock.
+     *
+     * @throws \ReflectionException
+     */
+    private function setupFailedAssetSearchAndDelete(): void
+    {
+        $searchCriteriaMock = $this->getSearchCriteriaMock();
+        $this->assetRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willThrowException(new \Exception('Test error text'));
+    }
+
+    /**
+     * Get search criteria mock object.
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @throws \ReflectionException
+     */
+    private function getSearchCriteriaMock()
+    {
+        $filePath = 'file/path';
+        $searchCriteriaBuilder = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaBuilder);
+
+        $searchCriteriaBuilder->expects($this->once())
+            ->method('addFilter')
+            ->with('path', $filePath)
+            ->willReturnSelf();
+
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
+
+        return $searchCriteriaMock;
     }
 }
