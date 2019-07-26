@@ -33,10 +33,10 @@
 
         <see selector="{{AdobeStockSection.modal}} {{AdobeStockSection.panelTitle}}" userInput="{{AdobeStockModalData.title}}" stepKey="seeAdobeStockPanelTitle" />
         <seeElement selector="{{AdobeStockSection.modal}} {{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
-        <seeNumberOfElements selector="{{AdobeStockSection.modal}} {{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32images"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32images"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="checkCurrentPage" />
         <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPage" />
-        <seeNumberOfElements selector="{{AdobeStockSection.modal}} {{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32imagesOnTheSecondPage"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="checkSecondPage" />
         <click selector="{{AdobeStockSection.modal}}{{AdminSlideOutDialogSection.closeButton}}" stepKey="closeAdobeStockPanel" />
     </test>

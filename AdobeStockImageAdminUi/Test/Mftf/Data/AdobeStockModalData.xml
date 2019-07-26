@@ -11,5 +11,6 @@
     <entity name="AdobeStockModalData">
         <data key="openModal">Search Adobe Stock</data>
         <data key="title">Adobe Stock</data>
+        <data key="thumbnailsNumber">32</data>
     </entity>
 </entities>
