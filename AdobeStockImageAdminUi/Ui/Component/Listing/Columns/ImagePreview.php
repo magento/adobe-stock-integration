@@ -105,7 +105,7 @@ class ImagePreview extends Column
 
             $isAuthorized = !empty($userProfile->getId())
                 && !empty($userProfile->getAccessToken())
-                && strtotime($userProfile->getExpiresAt()) >= strtotime('now');
+                && strtotime($userProfile->getAccessTokenExpiresAt()) >= strtotime('now');
         } catch (Exception $e) {
             $isAuthorized = false;
         }
