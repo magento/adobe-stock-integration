@@ -29,13 +29,10 @@
                 <argument name="privateKey" value=""/>
             </actionGroup>
         </after>
-        <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openModal"/>
-
-        <see selector="{{AdobeStockSection.modal}} {{AdobeStockSection.panelTitle}}" userInput="{{AdobeStockModalData.title}}" stepKey="seeAdobeStockPanelTitle" />
-        <seeElement selector="{{AdobeStockSection.modal}} {{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPanel"/>
         <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32images"/>
         <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeFirstPage"/>
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPage" />
+        <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
         <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32imagesOnTheSecondPage"/>
         <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
             <argument name="pageNumber" value="2"/>

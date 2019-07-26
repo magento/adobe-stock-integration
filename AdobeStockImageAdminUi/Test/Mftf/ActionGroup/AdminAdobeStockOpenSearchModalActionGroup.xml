@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenAdobeStockSearchModalActionGroup">
+    <actionGroup name="AdminAdobeStockOpenSearchModalActionGroup">
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
@@ -21,5 +21,7 @@
         <see selector="{{AdobeStockSection.slideOutPanelButton}}" userInput="{{AdobeStockModalData.openModal}}" stepKey="seeAdobeStockSearchButton" />
         <click selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel" />
         <waitForPageLoad stepKey="waitForAdobeStockPanelOpen" />
+        <see selector="{{AdobeStockSection.modal}} {{AdobeStockSection.panelTitle}}" userInput="{{AdobeStockModalData.title}}" stepKey="seeAdobeStockPanelTitle" />
+        <seeElement selector="{{AdobeStockSection.modal}} {{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
     </actionGroup>
 </actionGroups>
