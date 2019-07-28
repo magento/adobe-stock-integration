@@ -17,36 +17,77 @@ use Magento\AdobeStockAsset\Model\PremiumLevelRepository;
  */
 interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
     const ID = 'id';
+
     const PATH = 'path';
+
     const ADOBE_ID = "adobe_id";
+
     const CREATED_AT = 'created_at';
+
     const UPDATED_AT = 'updated_at';
+
     const MEDIA_TYPE = 'media_type';
+
     const CATEGORY = 'category';
+
     const CREATOR = 'creator';
+
     const PREMIUM_LEVEL = 'premium_level';
+
     const STOCK_ID = 'stock_id';
+
     const IS_LICENSED = 'is_licensed';
+
     const TITLE = 'title';
+
     const PREVIEW_URL = 'preview_url';
+
     const PREVIEW_WIDTH = 'preview_width';
+
     const PREVIEW_HEIGHT = 'preview_height';
+
     const URL = 'url';
+
     const WIDTH = 'width';
+
     const HEIGHT = 'height';
+
     const COUNTRY_NAME = 'country_name';
+
     const DETAILS_URL = 'details_url';
+
     const VECTOR_TYPE = 'vector_type';
+
     const CONTENT_TYPE = 'content_type';
+
     const CREATION_DATE = 'creation_date';
+
     const KEYWORDS = 'keywords';
-    const FIELD_CREATED_AT = "created_at";
-    const FIELD_UPDATED_AT = "updated_at";
-    /**#@-*/
+
+    const FIELD_CREATED_AT = 'created_at';
+
+    const FIELD_UPDATED_AT = 'updated_at';
+
+    /**
+     * Category id is an id of a category entry related to the asset
+     */
+    const CATEGORY_ID = 'category_id';
+
+    /**
+     * Creator id is an id of a category entry related to the asset
+     */
+    const CREATOR_ID = 'creator_id';
+
+    /**
+     * Media type is an id of a media type entry related to the asset
+     */
+    const MEDIA_TYPE_ID = 'media_type_id';
+
+    /**
+     * Premium level id is an id of a media type entry related to the asset
+     */
+    const PREMIUM_LEVEL_ID = 'media_type_id';
 
     /**
      * Get ID

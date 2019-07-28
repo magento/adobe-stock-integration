@@ -55,6 +55,7 @@ interface PremiumLevelInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Set the premium level adobe id.
      *
      * @param int $adobeId
+     * @return void
      */
     public function setAdobeId(int $adobeId): void;
 
@@ -69,6 +70,7 @@ interface PremiumLevelInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Set the premium level adobe id.
      *
      * @param string $name
+     * @return void
      */
     public function setName(string $name): void;
 

@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\System\Config;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockClient\Model\Config;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;

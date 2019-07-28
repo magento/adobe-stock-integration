@@ -15,6 +15,7 @@ define([
             visibility: [],
             height: 0,
             saveAvailable: true,
+            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
@@ -206,5 +207,20 @@ define([
             // close adobe panel
             $("#adobe-stock-images-search-modal").trigger('closeModal');
         },
+
+        download: function (record) {
+                $.ajax({
+                           type: "POST",
+                           url: this.downloadImagePreviewUrl,
+                           dataType: 'json',
+                           data: { 'api_key': record.id},
+                           success: function(response) {
+
+                           },
+                           error: function(response) {
+
+                           }
+                       });
+        }
     });
 });

@@ -70,7 +70,7 @@ class SavePreviewImageAssetStrategy
     }
 
     /**
-     * Execute save asset process.
+     * Execute save asset process. At first save asset components data, then set related info to the asset object.
      *
      * @param AssetInterface $asset
      *
@@ -84,19 +84,13 @@ class SavePreviewImageAssetStrategy
             $mediaTypeAssetComponent = $this->saveMediaTypeAssetComponent->execute($asset->getMediaType());
             $premiumLevelAssetComponent = $this->savePremiumLevelAssetComponent->execute($asset->getPremiumLevel());
 
-            $asset->setCategory($categoryAssetComponent);
-            $asset->setCreator($creatorAssetComponent);
-            $asset->setMediaType($mediaTypeAssetComponent);
-
             $asset->setAdobeId($asset->getId());
             $asset->setId(null);
-            $asset->setData('category_id', $categoryAssetComponent->getId());
-            $asset->setData('creator_id', $creatorAssetComponent->getId());
-            $asset->setData('media_type_id', $mediaTypeAssetComponent->getId());
-            $asset->setData('premium_level_id', $premiumLevelAssetComponent->getId());
+            $asset->setData(AssetInterface::CATEGORY_ID, $categoryAssetComponent->getId());
+            $asset->setData(AssetInterface::CREATOR_ID, $creatorAssetComponent->getId());
+            $asset->setData(AssetInterface::MEDIA_TYPE_ID, $mediaTypeAssetComponent->getId());
+            $asset->setData(AssetInterface::MEDIA_TYPE_ID, $premiumLevelAssetComponent->getId());
             $this->assetRepository->save($asset);
-
-            //@TODO save keywords for newly added asset
 
             return $asset;
         } catch (AlreadyExistsException $exception) {

@@ -60,7 +60,7 @@ class SaveCreatorAssetComponent
             /** @var CategorySearchResultsInterface $creatorList */
             $creatorList = $this->creatorRepository->getList($searchCriteria);
 
-            if (0 === $creatorList->getItems()) {
+            if (0 === $creatorList->getTotalCount()) {
                 $creator = $this->creatorRepository->save($creator);
             } else {
                 $creatorListItems = $creatorList->getItems();

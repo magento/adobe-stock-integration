@@ -35,6 +35,11 @@ class SaveImagePreview implements SaveImagePreviewInterface
     private $savePreviewImageAssetStrategy;
 
     /**
+     * @var Storage
+     */
+    private $storage;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -42,20 +47,23 @@ class SaveImagePreview implements SaveImagePreviewInterface
     /**
      * SaveImagePreview constructor.
      *
-     * @param GetImage                    $getImage
-     * @param IsImageExistsConditionChain $isMediaExistsConditionChain
-     * @param SavePreviewImageAssetStrategy    $savePreviewImageAssetStrategy
-     * @param LoggerInterface             $logger
+     * @param GetImage                      $getImage
+     * @param IsImageExistsConditionChain   $isMediaExistsConditionChain
+     * @param SavePreviewImageAssetStrategy $savePreviewImageAssetStrategy
+     * @param Storage                       $storage
+     * @param LoggerInterface               $logger
      */
     public function __construct(
         GetImage $getImage,
         IsImageExistsConditionChain $isMediaExistsConditionChain,
         SavePreviewImageAssetStrategy $savePreviewImageAssetStrategy,
+        Storage $storage,
         LoggerInterface $logger
     ) {
         $this->getImage = $getImage;
         $this->isMediaExistsConditionChain = $isMediaExistsConditionChain;
         $this->savePreviewImageAssetStrategy = $savePreviewImageAssetStrategy;
+        $this->storage = $storage;
         $this->logger = $logger;
     }
 
@@ -72,9 +80,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
             $items = $searchResult->getItems();
             /** @var AssetInterface $item */
             $asset = reset($items);
-            //@TODO replace with the save image file class call (or move it to save asset processor when it will be merged into develop.
-            $imagePath = '';
-            $asset->setPath($imagePath);
+            $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
+            $asset->setPath($path);
             $this->savePreviewImageAssetStrategy->execute($asset);
 
             return true;
