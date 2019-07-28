@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class Config
@@ -33,13 +34,24 @@ class Config
     private $searchResultFields;
 
     /**
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
+     * @param UrlInterface $url
      * @param array $searchResultFields
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, array $searchResultFields = [])
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        UrlInterface $url,
+        array $searchResultFields = []
+    )
     {
         $this->scopeConfig = $scopeConfig;
+        $this->url = $url;
         $this->searchResultFields = $searchResultFields;
     }
 
@@ -103,7 +115,11 @@ class Config
         return str_replace(
             '#{client_id}',
             $this->getApiKey(),
-            $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
+            str_replace(
+                '#{redirect_uri}',
+                $this->getCallBackUrl(),
+                $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
+            )
         );
     }
 
@@ -115,5 +131,15 @@ class Config
     public function getSearchResultFields(): array
     {
         return $this->searchResultFields;
+    }
+
+    /**
+     * Retrieve Callback URL
+     *
+     * @return string
+     */
+    public function getCallBackUrl(): string
+    {
+        return $this->url->getUrl('adobe_stock/oauth/callback');
     }
 }

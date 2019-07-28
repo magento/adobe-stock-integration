@@ -15,7 +15,7 @@
                 <environment>PROD</environment>
                 <product_name>magento-adobe-stock-integration</product_name>
                 <token_url>https://ims-na1.adobelogin.com/ims/token</token_url>
-                <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize?client_id=#{client_id}&scope=openid&response_type=code]]></auth_url_pattern>
+                <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=en_US&scope=openid&response_type=code]]></auth_url_pattern>
             </integration>
         </adobe_stock>
     </default>
