@@ -48,8 +48,7 @@ class Config
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
         array $searchResultFields = []
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
         $this->searchResultFields = $searchResultFields;
