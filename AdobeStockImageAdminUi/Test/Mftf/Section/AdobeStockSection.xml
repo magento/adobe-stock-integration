@@ -14,5 +14,6 @@
         <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
         <element name="searchInput" type="input" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//input[@id='words'][1]"/>
         <element name="imagesThumbnails" type="text" selector=".masonry-image-block img"/>
+        <element name="searchButton" type="button" selector="//div[contains(@data-role, 'masonry-main-toolbar')]//button[contains(@class, 'action-submit')]"/>
     </section>
 </sections>
