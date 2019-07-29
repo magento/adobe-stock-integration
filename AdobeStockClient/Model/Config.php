@@ -112,13 +112,9 @@ class Config
     public function getAuthUrl(): string
     {
         return str_replace(
-            '#{client_id}',
-            $this->getApiKey(),
-            str_replace(
-                '#{redirect_uri}',
-                $this->getCallBackUrl(),
-                $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
-            )
+            ['#{client_id}', '#{redirect_uri}'],
+            [$this->getApiKey(), $this->getCallBackUrl()],
+            $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
         );
     }
 
