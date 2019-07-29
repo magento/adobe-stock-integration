@@ -38,11 +38,6 @@ class GetByIdTest extends WebapiAbstract
     const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
 
     /**
-     * Service operation
-     */
-    const SERVICE_OPERATION = 'GetById';
-
-    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -80,7 +75,7 @@ class GetByIdTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION
+                'operation' => self::SERVICE_NAME . 'GetById'
             ],
         ];
 
@@ -126,7 +121,7 @@ class GetByIdTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION,
+                'operation' => self::SERVICE_NAME . 'GetById',
             ],
         ];
 

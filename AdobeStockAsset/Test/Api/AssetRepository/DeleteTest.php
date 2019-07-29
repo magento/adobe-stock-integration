@@ -37,11 +37,6 @@ class DeleteTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/adobestock/asset';
 
     /**
-     * Service operation
-     */
-    const SERVICE_OPERATION = 'DeleteById';
-
-    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -112,12 +107,12 @@ class DeleteTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . DIRECTORY_SEPARATOR . $assetId,
-                'httpMethod'   => Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION
+                'operation' => self::SERVICE_NAME . 'DeleteById'
             ],
         ];
 
