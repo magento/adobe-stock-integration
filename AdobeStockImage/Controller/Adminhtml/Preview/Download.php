@@ -10,8 +10,8 @@ namespace Magento\AdobeStockImage\Controller\Adminhtml\Preview;
 
 use Magento\AdobeStockImage\Model\SaveImagePreview;
 use Magento\Backend\App\Action;
-use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,6 +19,21 @@ use Psr\Log\LoggerInterface;
  */
 class Download extends Action
 {
+    /**
+     * Successful image download result code.
+     */
+    const HTTP_OK = 200;
+
+    /**
+     * Download image failed response code.
+     */
+    const HTTP_BAD_REQUEST = 400;
+
+    /**
+     * Internal server error response code.
+     */
+    const HTTP_INTERNAL_ERROR = 500;
+
     /**
      * @see _isAllowed()
      */
@@ -55,18 +70,38 @@ class Download extends Action
      */
     public function execute()
     {
-        //@TODO make it compatible with the best practices: add response message format according to the PSR
-        // with the message code and handle exception
         try {
-            /** @var Page $result */
-            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
             $params = $params = $this->getRequest()->getParams();
             $mediaId = (int) $params['media_id'];
-            $this->saveImagePreview->execute($mediaId, '');
+            $destinationPath = (string) $params['destination_path'];
+            $this->saveImagePreview->execute($mediaId, $destinationPath);
 
-            return $resultJson;
-        } catch (\Exception $e) {
-            //@TODO process exception
+            $responseCode = self::HTTP_OK;
+            $responseContent = [
+                'success' => true,
+                'message' => __('You have successfully downloaded the image.'),
+            ];
+        } catch (NotFoundException $exception) {
+            $responseCode = self::HTTP_BAD_REQUEST;
+            $responseContent = [
+                'success' => false,
+                'error_message' => __('Image not found. Could not be saved.'),
+            ];
+        } catch (\Exception $exception) {
+            $responseCode = self::HTTP_INTERNAL_ERROR;
+            $logMessage = __('An error occurred during image download: %1', $exception->getMessage());
+            $this->logger->critical($logMessage);
+            $responseContent = [
+                'success' => false,
+                'error_message' => __('An error occurred while image download. Contact support.'),
+            ];
         }
+
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setHttpResponseCode($responseCode);
+        $resultJson->setData($responseContent);
+
+        return $resultJson;
     }
 }

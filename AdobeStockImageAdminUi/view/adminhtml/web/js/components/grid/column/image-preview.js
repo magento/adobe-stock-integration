@@ -39,6 +39,16 @@ define([
         },
 
         /**
+         * Return id of the row.
+         *
+         * @param record
+         * @returns {*}
+         */
+        getId: function (record) {
+            return record.id;
+        },
+
+        /**
          * Returns url to given record.
          *
          * @param {Object} record - Data to be preprocessed.
@@ -209,18 +219,31 @@ define([
         },
 
         download: function (record) {
-                $.ajax({
-                           type: "POST",
-                           url: this.downloadImagePreviewUrl,
-                           dataType: 'json',
-                           data: { 'api_key': record.id},
-                           success: function(response) {
-
-                           },
-                           error: function(response) {
-
-                           }
-                       });
+            //@TODO add a logic for getting the target path
+            var destinationPath = '';
+            var postData = {
+                'media_id': record.id,
+                'destination_path': destinationPath
+            };
+            $('#' + record.id).text('');
+            $.ajax({
+                       type: "POST",
+                       url: this.downloadImagePreviewUrl,
+                       dataType: 'json',
+                       data: postData,
+                       success: function (response) {
+                           var successMessage = '<div class="messages"><div class="message message-success success">' +
+                                                response.message +
+                                         '<div data-ui-id="messages-message-success"></div></div></div>';
+                           $('#' + record.id).append(successMessage);
+                       },
+                       error: function (response) {
+                           var errorMessage = '<div class="messages"><div class="message message-error error">' +
+                                              response.responseJSON.error_message +
+                                         '<div data-ui-id="messages-message-error"></div></div></div>';
+                           $('#' + record.id).append(errorMessage);
+                       }
+                   });
         }
     });
 });

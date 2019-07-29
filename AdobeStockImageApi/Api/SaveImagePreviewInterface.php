@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageApi\Api;
 
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * SaveImagePreviewInterface
@@ -26,6 +26,7 @@ interface SaveImagePreviewInterface
      *
      * @return bool
      * @throws CouldNotSaveException
+     * @throws NotFoundException
      */
     public function execute(int $mediaId, string $destinationPath): bool;
 }

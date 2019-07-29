@@ -223,19 +223,17 @@ class Client implements ClientInterface
      * Retrieve array of columns to be requested
      *
      * @return array
-     * @throws IntegrationException
      */
     private function getResultColumns(): array
     {
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
-        try {
-            foreach ($this->config->getSearchResultFields() as $field) {
-                $resultColumnArray[] = $resultsColumns[$field];
+        foreach ($this->config->getSearchResultFields() as $field) {
+            if (!isset($resultsColumns[$field])) {
+                $message = __('Cannot retrieve the field %1. It\'s not available in Adobe Stock SDK', $field);
+                $this->logger->critical($message);
             }
-        } catch (Exception $exception) {
-            $message = __('An error occurred during result fields matching: %1', $exception->getMessage());
-            $this->processException($message, $exception);
+            $resultColumnArray[] = $resultsColumns[$field];
         }
 
         return $resultColumnArray;

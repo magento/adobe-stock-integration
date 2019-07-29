@@ -12,6 +12,10 @@ use Magento\AdobeStockAsset\Model\SavePreviewImageAssetStrategy;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImage\Model\IsImageValidToSaveCondition\IsImageExistsConditionChain;
 use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -72,11 +76,14 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     public function execute(int $mediaId, string $destinationPath): bool
     {
+        $searchResult = $this->getImage->execute($mediaId);
+        if (!$this->isMediaExistsConditionChain->execute($searchResult)) {
+            $message = __('Requested image doesn\'t exists');
+            $this->logger->critical($message);
+            throw new NotFoundException($message);
+        }
+
         try {
-            $searchResult = $this->getImage->execute($mediaId);
-            if (!$this->isMediaExistsConditionChain->execute($searchResult)) {
-                return false;
-            }
             $items = $searchResult->getItems();
             /** @var AssetInterface $item */
             $asset = reset($items);
@@ -84,11 +91,11 @@ class SaveImagePreview implements SaveImagePreviewInterface
             $asset->setPath($path);
             $this->savePreviewImageAssetStrategy->execute($asset);
 
-            return true;
+            return  true;
         } catch (\Exception $exception) {
             $message = __('Image was not saved: %1', $exception->getMessage());
             $this->logger->critical($message);
-            return false;
+            throw new CouldNotSaveException($message);
         }
     }
 }

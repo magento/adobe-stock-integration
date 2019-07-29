@@ -19,6 +19,7 @@
         </div>
         <img attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
         <div class="info">
+            <div data-bind="attr: { id: $col.getId($row()) }" visibility="false"></div>
             <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
             <div class="author" if="$col.getAuthor($row())">
                 <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
