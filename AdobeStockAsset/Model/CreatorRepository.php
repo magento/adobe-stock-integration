@@ -58,11 +58,11 @@ class CreatorRepository implements CreatorRepositoryInterface
     /**
      * CreatorRepository constructor.
      *
-     * @param ResourceModel                         $resource
+     * @param ResourceModel                        $resource
      * @param CreatorCollectionFactory             $collectionFactory
      * @param CreatorFactory                       $factory
-     * @param JoinProcessorInterface                $joinProcessor
-     * @param CollectionProcessorInterface          $collectionProcessor
+     * @param JoinProcessorInterface               $joinProcessor
+     * @param CollectionProcessorInterface         $collectionProcessor
      * @param CreatorSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(

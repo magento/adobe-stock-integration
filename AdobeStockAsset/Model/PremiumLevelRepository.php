@@ -58,11 +58,11 @@ class PremiumLevelRepository implements PremiumLevelRepositoryInterface
     /**
      * PremiumLevelRepository constructor.
      *
-     * @param ResourceModel                         $resource
+     * @param ResourceModel                             $resource
      * @param PremiumLevelCollectionFactory             $collectionFactory
      * @param PremiumLevelFactory                       $factory
-     * @param JoinProcessorInterface                $joinProcessor
-     * @param CollectionProcessorInterface          $collectionProcessor
+     * @param JoinProcessorInterface                    $joinProcessor
+     * @param CollectionProcessorInterface              $collectionProcessor
      * @param PremiumLevelSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(

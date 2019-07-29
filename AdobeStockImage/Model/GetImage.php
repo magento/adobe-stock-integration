@@ -43,6 +43,8 @@ class GetImage
     }
 
     /**
+     * Get image by media id.
+     *
      * @param int $mediaId
      *
      * @return AssetSearchResultsInterface

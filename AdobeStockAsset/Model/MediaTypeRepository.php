@@ -58,11 +58,11 @@ class MediaTypeRepository implements MediaTypeRepositoryInterface
     /**
      * MediaTypeRepository constructor.
      *
-     * @param ResourceModel                         $resource
+     * @param ResourceModel                          $resource
      * @param MediaTypeCollectionFactory             $collectionFactory
      * @param MediaTypeFactory                       $factory
-     * @param JoinProcessorInterface                $joinProcessor
-     * @param CollectionProcessorInterface          $collectionProcessor
+     * @param JoinProcessorInterface                 $joinProcessor
+     * @param CollectionProcessorInterface           $collectionProcessor
      * @param MediaTypeSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
