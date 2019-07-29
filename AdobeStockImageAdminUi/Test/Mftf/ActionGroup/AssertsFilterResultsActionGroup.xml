@@ -12,6 +12,6 @@
             <argument name="resultValue" type="string"/>
         </arguments>
         <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFiltersToCheckAppliedColor"/>
-        <see selector="{{AdobeStockFilterSection.colorActiveFilter}}" userInput="{{resultValue}}" stepKey="verifyAppliedColor"/>
+        <see selector="{{AdobeStockFilterSection.colorActiveFilter(resultValue)}}" userInput="{{resultValue}}" stepKey="verifyAppliedColor"/>
     </actionGroup>
 </actionGroups>

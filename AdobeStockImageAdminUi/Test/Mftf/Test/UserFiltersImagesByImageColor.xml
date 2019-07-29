@@ -18,6 +18,7 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
+           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <!--Create new category under Default Category-->
             <createData entity="ApiCategory" stepKey="simpleCategory">
                 <field key="name">Sales category</field>
@@ -25,6 +26,11 @@
             <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
+           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="apiKey" value=""/>
+                <argument name="privateKey" value=""/>
+            </actionGroup>
             <!--Delete category-->
             <deleteData stepKey="deleteRootCategory" createDataKey="simpleCategory"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>

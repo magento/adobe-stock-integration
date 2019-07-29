@@ -14,7 +14,7 @@
     <element name="colorButton" type="button" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='sp-preview']"/>
     <element name="colorApply" type="button" selector="//*[@id='html-body']//div[@class='sp-picker-container']//button[@class='sp-choose']"/>
     <element name="selectColor" type="button" selector="//*[@id='html-body']//span[@title='{{color}}']" parameterized="true"/>
-    <element name="colorActiveFilter" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='admin__current-filters-list-wrap']//span[@data-bind='text: preview']"/>
+    <element name="colorActiveFilter" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='admin__current-filters-list-wrap']//span[contains( ., '{{color}}')]" parameterized="true"/>
     <element name="applyFilters" type="button" selector=".adobe-stock-images-search-modal-content button[data-action='grid-filter-apply']" timeout="30"/>
     <element name="clearAll" type="button" selector=".admin__data-grid-header .admin__data-grid-filters-current._show .action-clear" timeout="30"/>
     <element name="filterType" type="text" selector="//div[@class='adobe-stock-images-search-modal-content']//span[text()='{{filterName}}']" parameterized="true"/>
