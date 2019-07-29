@@ -37,6 +37,11 @@ class SaveTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/adobestock/asset';
 
     /**
+     * Service operation
+     */
+    const SERVICE_OPERATION = 'Save';
+
+    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -143,7 +148,7 @@ class SaveTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
+                'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION,
             ],
         ];
         $requestData = ['asset' => $data];
