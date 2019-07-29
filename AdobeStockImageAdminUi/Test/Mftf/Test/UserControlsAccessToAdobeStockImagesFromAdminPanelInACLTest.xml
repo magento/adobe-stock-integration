@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UserControlsAccessToAdobeStockImagesFromAdminPanelInACLTest">
+        <annotations>
+            <stories value="Controls access to Adobe Stock images from Admin Panel in ACL"/>
+            <title value="Admin should be able to controls access to Adobe Stock images from Admin Panel in ACL"/>
+            <description value="Test to cover scenario: User controls access to Adobe Stock images from Admin Panel in ACL"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="apiKey" value=""/>
+                <argument name="privateKey" value=""/>
+            </actionGroup>
+            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
+            <waitForPageLoad stepKey="waitForRolesGridLoad" />
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
+            <waitForPageLoad stepKey="waitForUsersGridLoad" />
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <!--Create user role-->
+        <actionGroup ref="AdminFillUserRoleRequiredData" stepKey="fillUserRoleRequiredData">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Adobe Stock"/>
+        </actionGroup>
+        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab" />
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleAdobeStockPreview">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Adobe Stock"/>
+        </actionGroup>
+        <scrollTo selector="{{AdobeStockSection.systemAclActions}}"  x="0" y="-100" stepKey="scrollToResourceElement"/>
+        <click stepKey="clickAdobeSystemActions" selector="{{AdobeStockSection.systemAclActions}}"/>
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleAddEditNewPages">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Pages"/>
+        </actionGroup>
+        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
+        <see userInput="You saved the role." stepKey="seeUserRoleSavedMessage"/>
+        <!--Create user and assign role to it-->
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="adminRole"/>
+            <argument name="User" value="admin2"/>
+        </actionGroup>
+        <!--Log out of admin and login with newly created user-->
+        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
+            <argument name="adminUser" value="admin2"/>
+        </actionGroup>
+        <!-- verify that user can access to adobe stock image -->
+        <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openSearchModal"/>
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlFromFirstImageWithoutSearch"/>
+    </test>
+</tests>
