@@ -3,11 +3,14 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/grid/columns/column',
     'underscore',
     'jquery',
-    'knockout'
-], function (Column, _, $, ko) {
+    'knockout',
+    'Magento_Ui/js/grid/columns/column',
+    'Magento_AdobeStockImageAdminUi/js/action/authorization',
+    'Magento_AdobeStockImageAdminUi/js/model/messages',
+    'mage/translate'
+], function (_, $, ko, Column, authorizationAction, messages) {
     'use strict';
 
     return Column.extend({
@@ -19,6 +22,25 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            messageDelay: 5,
+            authConfig: {
+                url: '',
+                isAuthorized: false,
+                stopHandleTimeout: 10000,
+                windowParams: {
+                    width: 500,
+                    height: 600,
+                    top: 100,
+                    left: 300,
+                },
+                response: {
+                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
+                    codeIndex: 1,
+                    messageIndex: 2,
+                    successCode: 'success',
+                    errorCode: 'error'
+                }
+            }
         },
 
         /**
@@ -218,6 +240,7 @@ define([
             $("#adobe-stock-images-search-modal").trigger('closeModal');
         },
 
+
         download: function (record) {
             //@TODO add a logic for getting the target path
             var destinationPath = '';
@@ -244,6 +267,60 @@ define([
                            $('#' + record.id).append(errorMessage);
                        }
                    });
+        },
+
+        /**
+         * Get messages
+         *
+         * @return {Array}
+         */
+        getMessages: function() {
+            return messages.get();
+        },
+
+        /**
+         * License and save image
+         *
+         * @param {Object} record
+         */
+        licenseAndSave: function (record) {
+            /** @todo add license functionality */
+            console.warn('add license functionality');
+            console.dir(record);
+        },
+
+        /**
+         * Process of license
+         *
+         * @param {Object} record
+         */
+        licenseProcess: function (record) {
+            if (this.authConfig.isAuthorized) {
+                this.licenseAndSave(record);
+
+                return;
+            }
+
+            /**
+             * Opens authorization window of Adobe Stock
+             * then starts the authorization process
+             */
+            authorizationAction(this.authConfig)
+                .then(
+                    function (authConfig) {
+                        this.authConfig = _.extend(this.authConfig, authConfig);
+                        this.licenseProcess(record);
+                        messages.add('success', authConfig.lastAuthSuccessMessage);
+                    }.bind(this)
+                )
+                .catch(
+                    function (error) {
+                        messages.add('error', error.message);
+                    }.bind(this)
+                )
+                .finally((function () {
+                    messages.scheduleCleanup(this.messageDelay);
+                }).bind(this));
         }
     });
 });
