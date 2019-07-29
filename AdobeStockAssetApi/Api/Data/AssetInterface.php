@@ -134,7 +134,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param int|null $mediaTypeId
      * @return void
      */
-    public function setMediaTypeId(int $mediaTypeId = null): void;
+    public function setMediaTypeId(?int $mediaTypeId): void;
 
     /**
      * Get category
@@ -194,7 +194,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param int|null $premiumLevelId
      * @return void
      */
-    public function setPremiumLevelId(int $premiumLevelId = null): void;
+    public function setPremiumLevelId(?int $premiumLevelId): void;
 
     /**
      * Get adobe id

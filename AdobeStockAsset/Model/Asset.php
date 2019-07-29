@@ -55,19 +55,13 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getMediaTypeId(): ?int
     {
-        $mediaTypeId = $this->getData(self::MEDIA_TYPE_ID);
-
-        if (!$mediaTypeId) {
-            return null;
-        }
-
-        return (int) $mediaTypeId;
+        return $this->hasData(self::MEDIA_TYPE_ID) ? (int) $this->getData(self::MEDIA_TYPE_ID) : null;
     }
 
     /**
      * @inheritdoc
      */
-    public function setMediaTypeId(int $mediaTypeId = null): void
+    public function setMediaTypeId(?int $mediaTypeId): void
     {
         $this->setData(self::MEDIA_TYPE_ID, $mediaTypeId);
     }
@@ -125,19 +119,13 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getPremiumLevelId(): ?int
     {
-        $premiumLevelId = $this->getData(self::PREMIUM_LEVEL_ID);
-
-        if (!$premiumLevelId) {
-            return null;
-        }
-
-        return (int) $premiumLevelId;
+        return $this->hasData(self::PREMIUM_LEVEL_ID) ? (int) $this->getData(self::PREMIUM_LEVEL_ID) : null;
     }
 
     /**
      * @inheritdoc
      */
-    public function setPremiumLevelId(int $premiumLevelId = null): void
+    public function setPremiumLevelId(?int $premiumLevelId): void
     {
         $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevelId);
     }
