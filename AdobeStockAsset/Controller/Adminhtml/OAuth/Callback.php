@@ -49,16 +49,24 @@ class Callback extends Action
     const RESPONSE_SUCCESS_CODE = 'success';
     const RESPONSE_ERROR_CODE = 'error';
 
-    /** @var UserProfileRepositoryInterface */
+    /**
+     * @var UserProfileRepositoryInterface
+     */
     private $userProfileRepository;
 
-    /** @var UserProfileInterfaceFactory */
+    /**
+     * @var UserProfileInterfaceFactory
+     */
     private $userProfileFactory;
 
-    /** @var Client */
+    /**
+     * @var Client
+     */
     private $client;
 
-    /** @var LoggerInterface */
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
     /**
@@ -85,9 +93,9 @@ class Callback extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function execute()
+    public function execute() : \Magento\Framework\Controller\ResultInterface
     {
         try {
             $tokenResponse = $this->client->getToken(
@@ -134,7 +142,7 @@ class Callback extends Action
      *
      * @return UserProfileInterface
      */
-    private function getUserProfile()
+    private function getUserProfile() : UserProfileInterface
     {
         try {
             return $this->userProfileRepository->getByUserId(
@@ -152,7 +160,7 @@ class Callback extends Action
      * @return string
      * @throws Exception
      */
-    private function getExpiresTime(int $expiresIn): string
+    private function getExpiresTime(int $expiresIn) : string
     {
         $dateTime = new DateTime();
         $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn/1000)));

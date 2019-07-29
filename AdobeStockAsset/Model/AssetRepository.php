@@ -57,11 +57,11 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * AssetRepository constructor.
-     * @param ResourceModel                      $resource
-     * @param AssetCollectionFactory             $collectionFactory
-     * @param AssetFactory                       $factory
-     * @param JoinProcessorInterface             $joinProcessor
-     * @param CollectionProcessorInterface       $collectionProcessor
+     * @param ResourceModel $resource
+     * @param AssetCollectionFactory $collectionFactory
+     * @param AssetFactory $factory
+     * @param JoinProcessorInterface $joinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
@@ -119,7 +119,8 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @throws NoSuchEntityException
      */
     public function getById(int $id) : AssetInterface
     {

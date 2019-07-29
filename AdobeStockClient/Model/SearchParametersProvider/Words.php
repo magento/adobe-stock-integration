@@ -17,7 +17,7 @@ use Magento\Framework\Escaper;
  */
 class Words implements SearchParameterProviderInterface
 {
-    const FIELD_WORDS = 'words';
+    private const FIELD_WORDS = 'words';
 
     /**
      * @var Escaper
@@ -34,13 +34,13 @@ class Words implements SearchParameterProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @throws \AdobeStock\Api\Exception\StockApi
      */
     public function apply(
         SearchCriteriaInterface $searchCriteria,
         SearchParameters $searchParams
-    ): SearchParameters {
+    ) : SearchParameters {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if (self::FIELD_WORDS === $filter->getField() && $filter->getValue()) {
