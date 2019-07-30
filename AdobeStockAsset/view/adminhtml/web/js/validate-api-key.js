@@ -24,7 +24,7 @@ define([
                            validationContainerClass = (response.success === 1) ?
                                'message-validation message message-success success'
                                : 'message-validation message message-error error';
-                           validationResultContainer.acddClass(validationContainerClass).text(response.message);
+                           validationResultContainer.addClass(validationContainerClass).text(response.message);
                        },
                        error: function(response) {
                            validationResultContainer.text(config.defaultMessage).
