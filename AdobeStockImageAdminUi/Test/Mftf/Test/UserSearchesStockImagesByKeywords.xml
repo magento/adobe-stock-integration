@@ -18,7 +18,7 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>-->
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -29,7 +29,7 @@
                 <argument name="privateKey" value=""/>
             </actionGroup>
         </after>
-        <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openSearchModal"/>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">

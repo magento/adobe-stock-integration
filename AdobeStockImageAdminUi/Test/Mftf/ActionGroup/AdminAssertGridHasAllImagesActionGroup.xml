@@ -14,6 +14,6 @@
         </arguments>
         <grabMultiple selector="{{AdobeStockSection.countGridImages}}" stepKey="grabShowedImages" />
         <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) use ($I) {
-		    $I->assertEquals({{count}}, count($I->grabMultiple('//div[@class=\'masonry-image-grid\']/div[contains(.,data-repeat-index)]')), 'Images in grid should be equal count 33');}" stepKey="executeInSelenium"/>
+		    $I->assertEquals({{count}}, count($I->grabMultiple('//div[@class=\'masonry-image-grid\']/div[contains(.,data-repeat-index)]')), 'Images in grid should be equal count {{count}}');}" stepKey="executeInSelenium"/>
     </actionGroup>
 </actionGroups>
