@@ -89,7 +89,7 @@ class SavePreviewImageAssetStrategy
             $asset->setData(AssetInterface::CATEGORY_ID, $categoryAssetComponent->getId());
             $asset->setData(AssetInterface::CREATOR_ID, $creatorAssetComponent->getId());
             $asset->setData(AssetInterface::MEDIA_TYPE_ID, $mediaTypeAssetComponent->getId());
-            $asset->setData(AssetInterface::MEDIA_TYPE_ID, $premiumLevelAssetComponent->getId());
+            $asset->setData(AssetInterface::PREMIUM_LEVEL_ID, $premiumLevelAssetComponent->getId());
             $this->assetRepository->save($asset);
 
             return $asset;
