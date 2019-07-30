@@ -87,7 +87,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Premium level id is an id of a media type entry related to the asset
      */
-    const PREMIUM_LEVEL_ID = 'media_type_id';
+    const PREMIUM_LEVEL_ID = 'premium_level_id';
 
     /**
      * Get ID
