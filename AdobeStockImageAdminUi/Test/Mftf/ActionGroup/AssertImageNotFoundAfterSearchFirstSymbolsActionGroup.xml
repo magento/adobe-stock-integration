@@ -12,8 +12,8 @@
         <arguments>
             <argument name="src" type="string" defaultValue=""/>
         </arguments>
-        <dontSeeElement selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" stepKey="checkFirstPopularImageNotFoundAfterSearchFirstSymbols"/>
-        <dontSeeElement selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']" stepKey="errorModalIsAbsentAfterSearchFirstSymbols"/>
-        <dontSeeElement selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']" stepKey="spinnerIsAbsentAfterSearchFirstSymbols"/>
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc(src)}}" stepKey="checkFirstPopularImageNotFoundAfterSearchFirstSymbols"/>
+        <dontSeeElement selector="{{AdobeStockSection.modalError}}" stepKey="errorModalIsAbsentAfterSearchFirstSymbols"/>
+        <dontSeeElement selector="{{AdobeStockSection.gridSpinner}}" stepKey="spinnerIsAbsentAfterSearchFirstSymbols"/>
     </actionGroup>
 </actionGroups>

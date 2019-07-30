@@ -17,5 +17,8 @@
         <element name="searchButton" type="button" selector="//div[contains(@data-role, 'masonry-main-toolbar')]//button[contains(@class, 'action-submit')]"/>
         <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" parameterized="true"/>
         <element name="firstImageAfterSearch" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] img"/>
+        <element name="gridSpinner" type="text" selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']"/>
+        <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
+        <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
     </section>
 </sections>

@@ -18,12 +18,12 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
                 <argument name="enabled" value="0"/>
                 <argument name="apiKey" value=""/>
                 <argument name="privateKey" value=""/>
@@ -38,6 +38,10 @@
         <!-- Assert that User searches for "popular" using keyboard input and mouse navigation and sees "that grid was updated by new images"-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearch"/>
+        <actionGroup ref="AdminAssertGridHasAllImagesActionGroup" stepKey="assertImagesInGrid">
+            <argument name="count" value="33"/>
+        </actionGroup>
+
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchPopular"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForEmptyQuery"/>
@@ -56,7 +60,9 @@
         </actionGroup>
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearchHeadphones"/>
-
+        <actionGroup ref="AdminAssertGridHasAllImagesActionGroup" stepKey="assertImagesInGridAfterSearchHeadphones">
+            <argument name="count" value="32"/>
+        </actionGroup>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchHeadphones"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForSecondSymbols">
@@ -74,7 +80,9 @@
         </actionGroup>
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearchTopSecret"/>
-
+        <actionGroup ref="AdminAssertGridHasAllImagesActionGroup" stepKey="assertImagesInGridAfterSearchTopSecret">
+            <argument name="count" value="33"/>
+        </actionGroup>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchTopSecret"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForThirdSymbols">
@@ -90,6 +98,9 @@
         <!-- Assert searches using clipboard input and mouse navigation and sees "that grid was updated by new images"-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearchChestBand"/>
+        <actionGroup ref="AdminAssertGridHasAllImagesActionGroup" stepKey="assertImagesInGridAfterSerchChestBand">
+            <argument name="count" value="6"/>
+        </actionGroup>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchChestBand"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForMiBand">
@@ -98,6 +109,9 @@
         <actionGroup ref="AssertImageNotFoundAfterSearchFirstSymbols"
                      stepKey="assertFirstImageNotFoundAfterSearchMiBand">
             <argument name="src" value="{$getUrlFromFirstImageAfterSearchChestBand}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertGridHasAllImagesActionGroup" stepKey="assertImagesInGridAfterMiBandSearch">
+            <argument name="count" value="17"/>
         </actionGroup>
     </test>
 </tests>
