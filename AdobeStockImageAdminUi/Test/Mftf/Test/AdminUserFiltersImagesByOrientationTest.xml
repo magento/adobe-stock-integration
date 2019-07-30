@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserFiltersImagesByOrientationTest">
+        <annotations>
+            <stories value="Cover scenario: User filters images by orientation"/>
+            <title value="Admin should be able to filters images by orientation"/>
+            <description value="Admin should be able to filters images by orientation"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <!--Create new category under Default Category-->
+            <createData entity="ApiCategory" stepKey="simpleCategory">
+                <field key="name">Sales category</field>
+            </createData>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="apiKey" value=""/>
+                <argument name="privateKey" value=""/>
+            </actionGroup>
+            <!--Delete category-->
+            <deleteData stepKey="deleteRootCategory" createDataKey="simpleCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCategoryUploadMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlWithoutFilters"/>
+        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
+            <argument name="filterName" value="Orientation"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterByOrientationActionGroup" stepKey="setOrientationFilterToHorizontal">
+            <argument name="type" value="Horizontal"/>
+        </actionGroup>
+        <!-- Assert that filter are applied and grid updated -->
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
+        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+            <argument name="resultValue" value="Horizontal"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdobeStockFilterSection">
+        <element name="filters" type="button" selector=".adobe-stock-images-search-modal-content button[data-action='grid-filter-expand']"/>
+        <element name="filterType" type="text" selector="//div[@class='adobe-stock-images-search-modal-content']//span[text()='{{filterName}}']" parameterized="true"/>
+        <element name="orientationFilter" type="select" selector="//select[@name='orientation_filter']"/>
+        <element name="orientationFilterAllOption" type="select" selector="//select[@name='orientation_filter']/option[contains(.,'All')]"/>
+        <element name="orientationFilterOption" type="button" selector="//select[@name='orientation_filter']/option[@data-title='{{type}}']" parameterized="true"/>
+        <element name="applyFilters" type="button" selector=".adobe-stock-images-search-modal-content button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" parameterized="true"/>
+        <element name="activeFilter" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='admin__current-filters-list-wrap']//span[contains( ., '{{color}}')]" parameterized="true"/>
+    </section>
+</sections>
