@@ -6,8 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="UserAccessesAdobeStockPanelTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
@@ -18,30 +17,25 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="apiKey" value=""/>
+                <argument name="privateKey" value=""/>
+            </actionGroup>
         </after>
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <waitForPageLoad stepKey="waitForContentTabExpanded" />
-        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImage" />
-        <waitForPageLoad stepKey="waitForImageDialogOpened" />
-        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse" />
-        <waitForPageLoad stepKey="waitForGalleryOpen" />
-        <see selector="{{AdobeStockSection.slideOutPanelButton}}" userInput="Search Adobe Stock" stepKey="seeAdobeStockSearchButton" />
-        <click selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel" />
-        <waitForPageLoad stepKey="waitForAdobeStockPanelOpen" />
-        <see selector="{{AdobeStockSection.panelTitle}}" userInput="Adobe Stock" stepKey="seeAdobeStockPanelTitle" />
-        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
-        <seeNumberOfElements selector="{{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32images"/>
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="checkCurrentPage" />
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPage" />
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="checkSecondPage" />
-        <seeNumberOfElements selector="{{AdobeStockSection.imagesThumbnails}}" userInput="32" stepKey="see32imagesOnTheSecondPage"/>
-        <click selector="{{AdobeStockSection.panelCloseButton}}" stepKey="closeAdobeStockPanel" />
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPanel"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32images"/>
+        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeFirstPage"/>
+        <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
+            <argument name="pageNumber" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockCloseSearchModalActionGroup" stepKey="closeAdobeStockPanel"/>
     </test>
 </tests>
