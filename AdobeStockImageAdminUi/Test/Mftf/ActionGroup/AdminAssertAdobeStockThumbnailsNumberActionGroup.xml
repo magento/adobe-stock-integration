@@ -11,7 +11,6 @@
         <arguments>
             <argument name="thumbnailsNumber" type="string" defaultValue="{{AdobeStockModalData.thumbnailsNumber}}"/>
         </arguments>
-
         <seeNumberOfElements selector="{{AdobeStockSection.modal}} {{AdobeStockSection.imagesThumbnails}}" userInput="{{thumbnailsNumber}}" stepKey="seeCorrectThumbnailsNumber"/>
     </actionGroup>
 </actionGroups>
