@@ -15,9 +15,12 @@ define([
          * @returns {Object}
          */
         getStyles: function (record) {
+            var styles;
+
             if (record.styles) {
-                var styles = record.styles();
+                styles = record.styles();
                 delete styles.height;
+
                 return styles;
             }
             return {};

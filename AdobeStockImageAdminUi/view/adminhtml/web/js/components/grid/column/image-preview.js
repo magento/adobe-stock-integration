@@ -30,7 +30,7 @@ define([
                     width: 500,
                     height: 600,
                     top: 100,
-                    left: 300,
+                    left: 300
                 },
                 response: {
                     regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
@@ -120,7 +120,7 @@ define([
          *
          * @param record
          */
-        next: function(record){
+        next: function (record){
             this._selectRow(record.lastInRow ? record.currentRow + 1 : record.currentRow);
             this.show(record._rowIndex + 1);
         },
@@ -130,7 +130,7 @@ define([
          *
          * @param record
          */
-        prev: function(record){
+        prev: function (record){
             this._selectRow(record.firstInRow ? record.currentRow - 1 : record.currentRow);
             this.show(record._rowIndex - 1);
         },
@@ -142,7 +142,7 @@ define([
          * @param {Number} [height]
          * @private
          */
-        _selectRow(rowId, height){
+        _selectRow: function (rowId, height){
             this.thumbnailComponent().previewRowId(rowId);
         },
 
@@ -152,7 +152,9 @@ define([
          * @param {Object|Number} record
          */
         show: function (record) {
-            var visibility = this.visibility();
+            var visibility = this.visibility(),
+                img;
+
             if(~visibility.indexOf(true)) {// hide any preview
                 if(!Array.prototype.fill) {
                     visibility = _.times(visibility.length, _.constant(false));
@@ -168,11 +170,11 @@ define([
             }
             this.visibility(visibility);
 
-            var $img = $('[data-image-preview] img');
-            if($img.get(0).complete) {
+            img = $('[data-image-preview] img');
+            if(img.get(0).complete) {
                 this._updateHeight();
             } else {
-                $img.load(this._updateHeight.bind(this));
+                img.load(this._updateHeight.bind(this));
             }
         },
 
@@ -182,9 +184,11 @@ define([
          */
         _updateHeight: function (){
             var $preview = $('[data-image-preview]');
+
             this.height($preview.height() + 'px');// set height
             this.visibility(this.visibility());// rerender
-            $preview.get(0).scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});// update scroll if needed
+            // update scroll if needed
+            $preview.get(0).scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
         },
 
         /**
@@ -207,7 +211,7 @@ define([
          * @returns {boolean}
          * @private
          */
-        _isInt: function(value) {
+        _isInt: function (value) {
             return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
         },
 
@@ -216,10 +220,12 @@ define([
          *
          * @param record
          */
-        save: function(record) {
+        save: function (record) {
             // update modal with an image url
             var image_url = record.preview_url;
-            var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)').data('mageMediabrowser').getTargetElement();
+            var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)')
+                .data('mageMediabrowser')
+                .getTargetElement();
             targetEl.val(image_url).trigger('change');
             // close insert image panel
             window.MediabrowserUtility.closeDialog();
@@ -234,7 +240,7 @@ define([
          *
          * @return {Array}
          */
-        getMessages: function() {
+        getMessages: function () {
             return messages.get();
         },
 

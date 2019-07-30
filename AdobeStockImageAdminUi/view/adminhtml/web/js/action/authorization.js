@@ -2,11 +2,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([], function () {
     'use strict';
+
     /**
      * Build window params
-     *
      * @param {Object} windowParams
      * @returns {String}
      */
@@ -17,13 +18,15 @@ define([], function () {
             paramValue;
 
         for (paramName in windowParams) {
-            paramValue = windowParams[paramName];
-            output += coma + paramName + '=' + paramValue;
-            coma = ',';
+            if (windowParams[paramName]) {
+                paramValue = windowParams[paramName];
+                output += coma + paramName + '=' + paramValue;
+                coma = ',';
+            }
         }
 
         return output;
-    };
+    }
 
     return function (authConfig) {
         var authWindow;
@@ -32,7 +35,7 @@ define([], function () {
          * If user have access tokens then reject authorization request
          */
         if (authConfig.isAuthorized) {
-            return new Promise(function (resolve, reject) {
+            return new window.Promise(function (resolve, reject) {
                 reject(new Error('You are authorized.'));
             });
         }
@@ -46,7 +49,7 @@ define([], function () {
             buildWindowParams(authConfig.windowParams || {width: 500, height: 300})
         );
 
-        return new Promise(function (resolve, reject) {
+        return new window.Promise(function (resolve, reject) {
             var watcherId,
                 stopWatcherId;
 
@@ -60,13 +63,14 @@ define([], function () {
 
                 // Close window
                 authWindow.close();
-            };
+            }
 
             /**
              * Start handle
              */
             function startHandle () {
                 var responseData;
+
                 if (-1 !== String(authWindow.origin).indexOf(window.location.host)) {
                     /**
                      * If within 10 seconds the result is not received, then reject the request
@@ -76,20 +80,21 @@ define([], function () {
                         reject(new Error('Time\'s up.'));
                     }, authConfig.stopHandleTimeout || 10000);
 
-                    if (responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern)) {
+                    responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern)
+                    if (responseData &&
+                        responseData[authConfig.response.codeIndex] === authConfig.response.successCode
+                    ) {
                         stopHandle();
-
-                        if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
-                            resolve({
-                                isAuthorized: true,
-                                lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
-                            });
-                        } else {
-                            reject(new Error(responseData[authConfig.response.messageIndex]));
-                        }
+                        resolve({
+                            isAuthorized: true,
+                            lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
+                        });
+                    } else {
+                        stopHandle();
+                        reject(new Error(responseData[authConfig.response.messageIndex]));
                     }
                 }
-            };
+            }
 
             /**
              * Watch a result 1 time per second

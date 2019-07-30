@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeStockAssetApi\Api\Data\KeywordExtensionInterface;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Keyword as ResourceModel;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -39,5 +40,22 @@ class Keyword extends AbstractExtensibleModel implements KeywordInterface
     public function setKeyword(string $keyword): void
     {
         $this->setData(self::KEYWORD, $keyword);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(KeywordExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
