@@ -22,6 +22,7 @@ class Config
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
     private const XML_PATH_TOKEN_URL = 'adobe_stock/integration/token_url';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_stock/integration/auth_url_pattern';
+    private const XML_PATH_LOCALE = 'general/locale/code';
 
     /**
      * @var ScopeConfigInterface
@@ -112,8 +113,8 @@ class Config
     public function getAuthUrl(): string
     {
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}'],
-            [$this->getApiKey(), $this->getCallBackUrl()],
+            ['#{client_id}', '#{redirect_uri}', '#{locale}'],
+            [$this->getApiKey(), $this->getCallBackUrl(), $this->getLocale()],
             $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
         );
     }
@@ -136,5 +137,15 @@ class Config
     public function getCallBackUrl(): string
     {
         return $this->url->getUrl('adobe_stock/oauth/callback');
+    }
+
+    /**
+     * Retrieve token URL
+     *
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_LOCALE);
     }
 }
