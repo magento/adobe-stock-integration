@@ -33,6 +33,7 @@
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlWithoutFilters"/>
         <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersOpen"/>
         <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
             <argument name="filterName" value="Orientation"/>
         </actionGroup>
