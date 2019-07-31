@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+use Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface;
+
 /**
  * Interface CreatorInterface
  * @api
@@ -66,15 +68,14 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface|null
+     * @return CreatorExtensionInterface
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): CreatorExtensionInterface;
 
     /**
-     * Set an extension attributes object.
+     * Set extension attributes
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface $extensionAttributes
-     * @return void
      */
     public function setExtensionAttributes(CreatorExtensionInterface $extensionAttributes): void;
 }

@@ -74,7 +74,7 @@ class ImagePreview extends Column
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function prepare()
     {

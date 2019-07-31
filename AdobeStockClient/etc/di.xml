@@ -48,13 +48,13 @@
                 <item name="orientation_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Orientation</item>
                 <item name="words" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Words</item>
                 <item name="media_id" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\MediaId</item>
+                <item name="premium_price_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Premium</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\AdobeStockClient\Model\SearchParametersProvider\SimpleFilters">
         <arguments>
             <argument name="filters" xsi:type="array">
-                <item name="premium_price_filter" xsi:type="string">setFilterPremium</item>
                 <item name="colors_filter" xsi:type="string">setFilterColors</item>
             </argument>
         </arguments>

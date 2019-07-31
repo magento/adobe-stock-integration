@@ -11,11 +11,9 @@ namespace Magento\AdobeStockAsset\Controller\Adminhtml\System\Config;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,11 +45,10 @@ class TestConnection extends Action
 
     /**
      * TestConnection constructor.
-     *
-     * @param Context           $context
-     * @param ClientInterface   $client
-     * @param JsonFactory       $resultJsonFactory
-     * @param LoggerInterface   $logger
+     * @param Context $context
+     * @param ClientInterface $client
+     * @param JsonFactory $resultJsonFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
@@ -68,14 +65,14 @@ class TestConnection extends Action
     /**
      * Execute test API key value request.
      *
-     * @return ResponseInterface|Json|ResultInterface
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute() : ResultInterface
     {
         try {
             $params = $this->getRequest()->getParams();
             $isConnectionEstablished = $this->client->testConnection((string) $params['api_key']);
-            $message = $this->getResultMessage($isConnectionEstablished);
+            $message = $isConnectionEstablished ? __('Connection Successful!') : __('Connection Failed!');
         } catch (\Exception $exception) {
             $message = __('An error occurred during test Adobe Stock API connection');
             $isConnectionEstablished = false;
@@ -89,21 +86,5 @@ class TestConnection extends Action
                 'message' => $message->render(),
             ]
         );
-    }
-
-    /**
-     * Generate test API key validation message.
-     *
-     * @param bool $isConnectionEstablished
-     *
-     * @return Phrase
-     */
-    private function getResultMessage(bool $isConnectionEstablished): Phrase
-    {
-        $message = $isConnectionEstablished ?
-            __('Connection Successful!')
-            : __('Connection Failed!');
-
-        return $message;
     }
 }

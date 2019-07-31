@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+use Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface;
+
 /**
  * Interface CategoryInterface
  * @api
@@ -66,15 +68,14 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface|null
+     * @return CategoryExtensionInterface
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): CategoryExtensionInterface;
 
     /**
-     * Set an extension attributes object.
+     * Set extension attributes
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface $extensionAttributes
-     * @return void
      */
     public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void;
 }

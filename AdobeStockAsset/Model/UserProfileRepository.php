@@ -20,13 +20,19 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class UserProfileRepository implements UserProfileRepositoryInterface
 {
-    /** @var ResourceModel\UserProfile */
+    /**
+     * @var ResourceModel\UserProfile
+     */
     private $resource;
 
-    /** @var UserProfileInterfaceFactory */
+    /**
+     * @var UserProfileInterfaceFactory
+     */
     private $entityFactory;
 
-    /** @var UserProfileInterface[] */
+    /**
+     * @var array
+     */
     private $loadedEntities = [];
 
     /**
@@ -43,7 +49,7 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function save(UserProfileInterface $entity): void
     {
@@ -57,7 +63,7 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function get(int $entityId): UserProfileInterface
     {
@@ -75,7 +81,7 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getByUserId(int $userId): UserProfileInterface
     {

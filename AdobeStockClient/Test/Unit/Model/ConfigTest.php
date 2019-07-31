@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace AdobeStockClient\Test\Unit\Model;
+namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use Magento\AdobeStockClient\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;

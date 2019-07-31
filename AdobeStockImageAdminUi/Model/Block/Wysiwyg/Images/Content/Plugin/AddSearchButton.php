@@ -18,6 +18,9 @@ use Magento\Framework\AuthorizationInterface;
  */
 class AddSearchButton
 {
+    /**
+     * Acl for images preview
+     */
     private const ACL_SAVE_PREVIEW_IMAGES = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
