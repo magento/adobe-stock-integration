@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/adobestock/asset/:id" method="DELETE">
+        <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Magento_AdobeStockAsset::actions_delete"/>
+        </resources>
+    </route>
+    <route url="/V1/adobestock/asset/:id" method="PUT">
+        <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_AdobeStockAsset::actions_save"/>
+        </resources>
+    </route>
+    <route url="/V1/adobestock/asset" method="POST">
+        <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_AdobeStockAsset::actions_save"/>
+        </resources>
+    </route>
+    <route url="/V1/adobestock/asset/:id" method="GET">
+        <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Magento_AdobeStockAsset::actions_get"/>
+        </resources>
+    </route>
+    <route url="/V1/adobestock/asset/search" method="GET">
+        <service class="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_AdobeStockImage::actions_view"/>
+        </resources>
+    </route>
+</routes>

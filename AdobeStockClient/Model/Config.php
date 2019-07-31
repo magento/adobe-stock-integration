@@ -20,6 +20,7 @@ class Config
     private const XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
     private const XML_PATH_TOKEN_URL = 'adobe_stock/integration/token_url';
+    private const XML_PATH_AUTH_URL_PATTERN = 'adobe_stock/integration/auth_url_pattern';
 
     /**
      * @var ScopeConfigInterface
@@ -90,6 +91,20 @@ class Config
     public function getTokenUrl(): string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_TOKEN_URL);
+    }
+
+    /**
+     * Retrieve auth URL
+     *
+     * @return string
+     */
+    public function getAuthUrl(): string
+    {
+        return str_replace(
+            '#{client_id}',
+            $this->getApiKey(),
+            $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
+        );
     }
 
     /**
