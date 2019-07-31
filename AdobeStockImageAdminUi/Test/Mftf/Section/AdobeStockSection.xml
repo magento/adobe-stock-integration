@@ -9,10 +9,17 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockSection">
-        <element name="slideOutPanelButton" type="button" selector="#search_adobe_stock"/>
-        <element name="panelTitle" type="text" selector="//aside[@role='dialog']/div/header/h1[@class='modal-title']"/>
+        <element name="slideOutPanelButton" type="button" selector="[data-ui-id=wysiwyg-images-content-search-adobe-stock-button]"/>
+        <element name="modal" type="block" selector="aside.adobe-stock-modal"/>
+        <element name="panelTitle" type="block" selector="[data-role=title]"/>
+        <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
+        <element name="imagesThumbnails" type="block" selector="[data-role=grid-wrapper] img[data-role=thumbnail]"/>
+        <element name="searchButton" type="button" selector="//div[contains(@data-role, 'masonry-main-toolbar')]//button[contains(@class, 'action-submit')]"/>
+        <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" parameterized="true"/>
+        <element name="firstImageAfterSearch" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] img"/>
+        <element name="gridSpinner" type="text" selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']"/>
+        <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
+        <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
         <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
-        <element name="searchInput" type="input" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//input[@id='words'][1]"/>
-        <element name="imagesThumbnails" type="text" selector=".masonry-image-block img"/>
     </section>
 </sections>
