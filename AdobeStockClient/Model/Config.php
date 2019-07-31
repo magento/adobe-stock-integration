@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 
 /**
  * Class Config
@@ -33,13 +35,23 @@ class Config
     private $searchResultFields;
 
     /**
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
+     * @param UrlInterface $url
      * @param array $searchResultFields
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, array $searchResultFields = [])
-    {
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        UrlInterface $url,
+        array $searchResultFields = []
+    ) {
         $this->scopeConfig = $scopeConfig;
+        $this->url = $url;
         $this->searchResultFields = $searchResultFields;
     }
 
@@ -101,8 +113,8 @@ class Config
     public function getAuthUrl(): string
     {
         return str_replace(
-            '#{client_id}',
-            $this->getApiKey(),
+            ['#{client_id}', '#{redirect_uri}', '#{locale}'],
+            [$this->getApiKey(), $this->getCallBackUrl(), $this->getLocale()],
             $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
         );
     }
@@ -115,5 +127,25 @@ class Config
     public function getSearchResultFields(): array
     {
         return $this->searchResultFields;
+    }
+
+    /**
+     * Retrieve Callback URL
+     *
+     * @return string
+     */
+    public function getCallBackUrl(): string
+    {
+        return $this->url->getUrl('adobe_stock/oauth/callback');
+    }
+
+    /**
+     * Retrieve token URL
+     *
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
     }
 }
