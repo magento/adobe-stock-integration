@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+use Magento\AdobeStockAssetApi\Api\Data\KeywordExtensionInterface;
+
 /**
  * Interface KeywordInterface
  * @api
@@ -46,4 +48,14 @@ interface KeywordInterface
      * @return void
      */
     public function setKeyword(string $keyword): void;
+
+    /**
+     * @return \Magento\AdobeStockAssetApi\Api\Data\KeywordExtensionInterface
+     */
+    public function getExtensionAttributes(): KeywordExtensionInterface;
+
+    /**
+     * @param \Magento\AdobeStockAssetApi\Api\Data\KeywordExtensionInterface $extensionAttributes
+     */
+    public function setExtensionAttributes(KeywordExtensionInterface $extensionAttributes): void;
 }

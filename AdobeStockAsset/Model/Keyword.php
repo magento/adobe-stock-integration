@@ -43,10 +43,9 @@ class Keyword extends AbstractExtensibleModel implements KeywordInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
+     * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): KeywordExtensionInterface
     {
         return $this->_getExtensionAttributes();
     }

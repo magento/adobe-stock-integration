@@ -81,17 +81,17 @@ define([], function () {
                     }, authConfig.stopHandleTimeout || 10000);
 
                     responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern)
-                    if (responseData &&
-                        responseData[authConfig.response.codeIndex] === authConfig.response.successCode
-                    ) {
+
+                    if (responseData) {
                         stopHandle();
-                        resolve({
-                            isAuthorized: true,
-                            lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
-                        });
-                    } else {
-                        stopHandle();
-                        reject(new Error(responseData[authConfig.response.messageIndex]));
+                        if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
+                            resolve({
+                                isAuthorized: true,
+                                lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
+                            });
+                        } else {
+                            reject(new Error(responseData[authConfig.response.messageIndex]));
+                        }
                     }
                 }
             }
