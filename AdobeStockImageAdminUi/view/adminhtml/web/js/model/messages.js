@@ -15,7 +15,7 @@ define([
          *
          * @return {Array}
          */
-        get: function() {
+        get: function () {
             return this.messages();
         },
 
@@ -25,7 +25,7 @@ define([
          * @param {String} type
          * @param {String} message
          */
-        add: function(type, message) {
+        add: function (type, message) {
             this.messages.push({
                 code: type,
                 message: message
@@ -35,7 +35,7 @@ define([
         /**
          * Clear messages
          */
-        clear: function() {
+        clear: function () {
             this.messages([]);
         },
 
@@ -44,15 +44,15 @@ define([
          *
          * @param {Number} delay in seconds
          */
-        scheduleCleanup: function(delay) {
+        scheduleCleanup: function (delay) {
             var timerId;
 
             delay = delay || 3;
 
-            timerId = setTimeout((function () {
+            timerId = setTimeout(function () {
                 clearTimeout(timerId);
                 this.clear();
-            }).bind(this), Number(delay) * 1000);
+            }.bind(this), Number(delay) * 1000);
         }
-    }
+    };
 });
