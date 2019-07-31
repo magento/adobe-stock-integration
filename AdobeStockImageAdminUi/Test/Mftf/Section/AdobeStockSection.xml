@@ -15,6 +15,6 @@
         <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
         <element name="imagesThumbnails" type="block" selector="[data-role=grid-wrapper] img[data-role=thumbnail]"/>
         <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
-        <element name="searchButton" type="button" selector="//div[contains(@data-role, 'masonry-main-toolbar')]//button[contains(@class, 'action-submit')]"/>
+        <element name="searchButton" type="button" selector="//div[@class='data-grid-search-control-wrap']/button[@class='action-submit']"/>
     </section>
 </sections>
