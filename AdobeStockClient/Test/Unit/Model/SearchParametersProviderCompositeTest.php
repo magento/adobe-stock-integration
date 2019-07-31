@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace AdobeStockClient\Test\Unit\Model;
+namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

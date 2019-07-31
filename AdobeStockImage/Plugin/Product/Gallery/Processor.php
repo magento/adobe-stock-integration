@@ -57,9 +57,8 @@ class Processor
      *
      * @param ProcessorSubject $subject
      * @param ProcessorSubject $result
-     * @param Product          $product
-     * @param string           $file
-     *
+     * @param Product $product
+     * @param string $file
      * @return mixed
      * @throws \Exception
      */

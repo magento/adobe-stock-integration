@@ -16,7 +16,7 @@ define([
             buttons: [],
             modalClass: 'adobe-stock-modal',
             title: $t('Adobe Stock')
-        }).on('openModal', function(){
+        }).on('openModal', function () {
             window.dispatchEvent(new Event('resize'));
         }).applyBindings();
     };
