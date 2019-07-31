@@ -173,7 +173,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): UserProfileExtensionInterface
     {
         return $this->_getExtensionAttributes();
     }
@@ -181,7 +181,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(UserProfileExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(UserProfileExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

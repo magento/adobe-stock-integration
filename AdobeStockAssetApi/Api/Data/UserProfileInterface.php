@@ -184,15 +184,14 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return UserProfileExtensionInterface|null
+     * @return UserProfileExtensionInterface
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): UserProfileExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\UserProfileExtensionInterface $extensionAttributes
-     * @return mixed
+     * @param UserProfileExtensionInterface $extensionAttributes
      */
-    public function setExtensionAttributes(UserProfileExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(UserProfileExtensionInterface $extensionAttributes): void;
 }

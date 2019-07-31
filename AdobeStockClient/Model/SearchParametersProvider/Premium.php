@@ -10,6 +10,9 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Asset premium level parameter provider
+ */
 class Premium implements SearchParameterProviderInterface
 {
     /**

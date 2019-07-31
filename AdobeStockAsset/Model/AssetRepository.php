@@ -119,8 +119,7 @@ class AssetRepository implements AssetRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function getById(int $id) : AssetInterface
     {

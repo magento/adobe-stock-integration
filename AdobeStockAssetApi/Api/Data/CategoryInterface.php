@@ -68,15 +68,14 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return CategoryExtensionInterface|null
+     * @return CategoryExtensionInterface
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): CategoryExtensionInterface;
 
     /**
      * Set extension attributes
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface $extensionAttributes
-     * @return mixed
      */
-    public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void;
 }

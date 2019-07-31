@@ -34,8 +34,7 @@ class Words implements SearchParameterProviderInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @inheritdoc
      */
     public function apply(
         SearchCriteriaInterface $searchCriteria,
@@ -45,7 +44,7 @@ class Words implements SearchParameterProviderInterface
             foreach ($filterGroup->getFilters() as $filter) {
                 if (self::FIELD_WORDS === $filter->getField() && $filter->getValue()) {
                     $value = str_replace(['"', '\\'], '', $filter->getValue());
-                    if ($value) {
+                    if (!empty($value)) {
                         $searchParams->setWords($this->escaper->encodeUrlParam($value));
                     }
                 }
