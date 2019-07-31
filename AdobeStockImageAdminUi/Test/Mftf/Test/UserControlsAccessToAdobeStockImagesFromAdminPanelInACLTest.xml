@@ -21,7 +21,7 @@
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
                 <argument name="enabled" value="0"/>
                 <argument name="apiKey" value=""/>
                 <argument name="privateKey" value=""/>
