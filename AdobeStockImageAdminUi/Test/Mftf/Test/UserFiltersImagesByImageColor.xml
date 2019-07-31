@@ -27,9 +27,11 @@
         </before>
         <after>
            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
-                <argument name="enabled" value="0"/>
-                <argument name="apiKey" value=""/>
-                <argument name="privateKey" value=""/>
+               <argument name="enabled" value="0"/>
+               <argument name="wysiwygEnabled" value="disabled"/>
+<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+<!--                <argument name="apiKey" value=""/>-->
+<!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
             <!--Delete category-->
             <deleteData stepKey="deleteRootCategory" createDataKey="simpleCategory"/>
@@ -41,8 +43,11 @@
         <actionGroup ref="AdminOpenCategoryUploadMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
+
         <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
-        <see selector="{{AdobeStockFilterSection.colorFilter}}" userInput="" stepKey="seeAdobeStockColorFilter"/>
+        <waitForPageLoad stepKey="waitForFiltersOpen"/>
+        <seeElement selector="{{AdobeStockFilterSection.colorFilter}}" stepKey="seeAdobeStockColorFilter"/>
+
         <actionGroup ref="AdminApplyColorFilterValue" stepKey="userChoseAndApplyColorFilter">
             <argument name="color" value="#000000"/>
         </actionGroup>
