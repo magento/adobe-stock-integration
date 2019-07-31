@@ -20,4 +20,3 @@
         <data key="value">{{_ENV.ADOBE_STOCK_PRIVATE_KEY}}</data>
     </entity>
 </entities>
-

@@ -36,7 +36,7 @@
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
         <!-- verify that user can search adobe stock image in ru_RU locale -->
-        <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openSearchModal"/>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
             <argument name="query" value="Автомобили"/>
         </actionGroup>
