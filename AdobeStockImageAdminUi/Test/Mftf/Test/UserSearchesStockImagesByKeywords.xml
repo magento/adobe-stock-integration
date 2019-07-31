@@ -25,8 +25,10 @@
             <actionGroup ref="logout" stepKey="logout"/>
             <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
                 <argument name="enabled" value="0"/>
-                <argument name="apiKey" value=""/>
-                <argument name="privateKey" value=""/>
+                <argument name="wysiwygEnabled" value="disabled"/>
+<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+<!--                <argument name="apiKey" value=""/>-->
+<!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
         </after>
         <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
@@ -39,9 +41,7 @@
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearch"/>
         <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup"
-                     stepKey="assertImagesInGridAfterPopularSearch">
-            <argument name="thumbnailsNumber" value="33"/>
-        </actionGroup>
+                     stepKey="assertImagesInGridAfterPopularSearch"/>
 
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchPopular"/>
@@ -83,9 +83,8 @@
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearchTopSecret"/>
         <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup"
-                     stepKey="assertImagesInGridAfterTopSecretSearch">
-            <argument name="thumbnailsNumber" value="33"/>
-        </actionGroup>
+                     stepKey="assertImagesInGridAfterTopSecretSearch"/>
+
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchTopSecret"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForThirdSymbols">
@@ -96,26 +95,14 @@
         </actionGroup>
 
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForChestBand">
-            <argument name="query" value="chest band heart rate"/>
+            <argument name="query" value="watch"/>
         </actionGroup>
         <!-- Assert searches using clipboard input and mouse navigation and sees "that grid was updated by new images"-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearchChestBand"/>
-        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="assertImagesInGridAfterChestBand">
-            <argument name="thumbnailsNumber" value="6"/>
-        </actionGroup>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="assertImagesInGridAfterChestBand"/>
+
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchChestBand"/>
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForMiBand">
-            <argument name="query" value="mi band heart rate"/>
-        </actionGroup>
-        <actionGroup ref="AssertImageNotFoundAfterSearchFirstSymbols"
-                     stepKey="assertFirstImageNotFoundAfterSearchMiBand">
-            <argument name="src" value="{$getUrlFromFirstImageAfterSearchChestBand}"/>
-        </actionGroup>
-        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup"
-                     stepKey="assertImagesInGridAfterMiBandSearch">
-            <argument name="thumbnailsNumber" value="17"/>
-        </actionGroup>
     </test>
 </tests>
