@@ -10,6 +10,7 @@ namespace Magento\AdobeStockClient\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 
 /**
  * Class Config
@@ -22,7 +23,6 @@ class Config
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
     private const XML_PATH_TOKEN_URL = 'adobe_stock/integration/token_url';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_stock/integration/auth_url_pattern';
-    private const XML_PATH_LOCALE = 'general/locale/code';
 
     /**
      * @var ScopeConfigInterface
@@ -146,6 +146,6 @@ class Config
      */
     public function getLocale(): string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_LOCALE);
+        return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
     }
 }
