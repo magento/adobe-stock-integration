@@ -14,5 +14,8 @@
         <element name="panelTitle" type="block" selector="[data-role=title]"/>
         <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
         <element name="imagesThumbnails" type="block" selector="[data-role=grid-wrapper] img[data-role=thumbnail]"/>
+        <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
+        <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
+        <element name="categoryPreviewImage" type="block" selector="//div[@class='file-uploader-summary']//img[@class='preview-image']"/>
     </section>
 </sections>

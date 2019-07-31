@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserSavesImagePreviewTest">
+        <annotations>
+            <stories value="Admin User can saves image preview"/>
+            <title value="Admin should be able to saves image preview"/>
+            <description value="Admin should be able to saves image preview "/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage">
+                <field key="title">Thank You for Subscribing</field>
+            </createData>
+            <!--Create new category under Default Category-->
+            <createData entity="ApiCategory" stepKey="simpleCategory">
+                <field key="name">Sales category</field>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
+            <deleteData stepKey="deleteRootCategory" createDataKey="simpleCategory"/>
+           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="apiKey" value=""/>
+                <argument name="privateKey" value=""/>
+            </actionGroup>
+        </after>
+        <!-- Assert that User can save image preview in the context of CEP  -->
+        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCategoryUploadMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
+        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnails"/>
+        <actionGroup ref="AdminSaveImagePreviewActionGroup" stepKey="saveImagePreview"/>
+        <!-- TODO assert that image saved into DB
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
+       <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+       <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/> -->
+
+        <!-- Assert that User can save image preview in the context of CmsEP  -->
+        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <click selector="{{TinyMCESection.InsertImageBtn}}" stepKey="clickInsertImage" />
+        <waitForPageLoad stepKey="waitForPopupLoad"/>
+        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopupFromCmsPage"/>
+        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <actionGroup ref="AdminSaveImagePreviewActionGroup" stepKey="saveImagePreviewFromCmsPage"/>
+    </test>
+</tests>
