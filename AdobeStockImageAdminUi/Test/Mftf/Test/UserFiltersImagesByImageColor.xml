@@ -18,11 +18,7 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
-            <!--Create new category under Default Category-->
-            <createData entity="ApiCategory" stepKey="simpleCategory">
-                <field key="name">Sales category</field>
-            </createData>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
@@ -33,16 +29,10 @@
 <!--                <argument name="apiKey" value=""/>-->
 <!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
-            <!--Delete category-->
-            <deleteData stepKey="deleteRootCategory" createDataKey="simpleCategory"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
-        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
-            <argument name="Category" value="$$simpleCategory$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminOpenCategoryUploadMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>
 
         <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
         <waitForPageLoad stepKey="waitForFiltersOpen"/>
