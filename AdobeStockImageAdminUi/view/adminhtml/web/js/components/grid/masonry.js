@@ -72,11 +72,7 @@ define([
          */
         initComponent: function (rows) {
 
-            if (typeof rows === 'undefined') {
-                window.location.replace(url.build('*/*'));
-            }
-
-            if (!rows.length) {
+            if (!rows || !rows.length) {
                 return;
             }
 

@@ -10,10 +10,11 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockSection">
         <element name="slideOutPanelButton" type="button" selector="#search_adobe_stock"/>
+        <element name="modal" type="block" selector="aside.adobe-stock-modal"/>
         <element name="panelTitle" type="text" selector="//aside[@role='dialog']/div/header/h1[@class='modal-title']"/>
-        <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
-        <element name="searchInput" type="input" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//input[@id='words'][1]"/>
+        <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
         <element name="imagesThumbnails" type="text" selector=".masonry-image-block img"/>
+        <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
         <element name="searchButton" type="button" selector="//div[contains(@data-role, 'masonry-main-toolbar')]//button[contains(@class, 'action-submit')]"/>
     </section>
 </sections>

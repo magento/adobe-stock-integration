@@ -14,9 +14,9 @@
             <argument name="privateKey" type="string" defaultValue="{{AdobeStockConfigDataPrivateKey.value}}"/>
             <argument name="enabled" type="string" defaultValue="{{AdobeStockConfigDataEnabled.value}}"/>
         </arguments>
-
         <magentoCLI command="config:set {{AdobeStockConfigDataEnabled.path}} {{enabled}}" stepKey="setModuleEnabled"/>
         <magentoCLI command="config:sensitive:set {{AdobeStockConfigDataApiKey.path}} {{apiKey}}" stepKey="setModuleApiKey"/>
         <magentoCLI command="config:sensitive:set {{AdobeStockConfigDataPrivateKey.path}} {{privateKey}}" stepKey="setModulePrivateKey"/>
     </actionGroup>
 </actionGroups>
+
