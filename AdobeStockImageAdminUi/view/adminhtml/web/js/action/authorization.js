@@ -71,27 +71,29 @@ define([], function () {
             function startHandle () {
                 var responseData;
 
-                if (-1 !== String(authWindow.origin).indexOf(window.location.host)) {
-                    /**
-                     * If within 10 seconds the result is not received, then reject the request
-                     */
-                    stopWatcherId = setTimeout(function () {
-                        stopHandle();
-                        reject(new Error('Time\'s up.'));
-                    }, authConfig.stopHandleTimeout || 10000);
+                if (-1 === String(authWindow.origin).indexOf(window.location.host)) {
+                    return;
+                }
 
-                    responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern)
+                /**
+                 * If within 10 seconds the result is not received, then reject the request
+                 */
+                stopWatcherId = setTimeout(function () {
+                    stopHandle();
+                    reject(new Error('Time\'s up.'));
+                }, authConfig.stopHandleTimeout || 10000);
 
-                    if (responseData) {
-                        stopHandle();
-                        if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
-                            resolve({
-                                isAuthorized: true,
-                                lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
-                            });
-                        } else {
-                            reject(new Error(responseData[authConfig.response.messageIndex]));
-                        }
+                responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern)
+                if (responseData) {
+                    stopHandle();
+
+                    if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
+                        resolve({
+                            isAuthorized: true,
+                            lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
+                        });
+                    } else {
+                        reject(new Error(responseData[authConfig.response.messageIndex]));
                     }
                 }
             }
