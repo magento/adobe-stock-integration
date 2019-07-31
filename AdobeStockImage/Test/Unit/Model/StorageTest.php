@@ -9,6 +9,7 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\AdobeStockImage\Model\Storage;
 
 /**
  * Test for Storage Model
