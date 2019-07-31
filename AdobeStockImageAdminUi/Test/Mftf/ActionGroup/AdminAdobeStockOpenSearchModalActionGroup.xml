@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAdobeStockOpenSearchModalActionGroup">
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <waitForPageLoad stepKey="waitForContentTabExpanded" />
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImage" />
+        <waitForPageLoad stepKey="waitForImageDialogOpened" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse" />
+        <waitForPageLoad stepKey="waitForGalleryOpen" />
+        <see selector="{{AdobeStockSection.slideOutPanelButton}}" userInput="{{AdobeStockModalData.openModal}}" stepKey="seeAdobeStockSearchButton" />
+        <click selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel" />
+        <waitForPageLoad stepKey="waitForAdobeStockPanelOpen" />
+        <see selector="{{AdobeStockSection.modal}} {{AdobeStockSection.panelTitle}}" userInput="{{AdobeStockModalData.title}}" stepKey="seeAdobeStockPanelTitle" />
+        <seeElement selector="{{AdobeStockSection.modal}} {{AdobeStockSection.searchInput}}" stepKey="seeAdobeStockSearchInput" />
+    </actionGroup>
+</actionGroups>
