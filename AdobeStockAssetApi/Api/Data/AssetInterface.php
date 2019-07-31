@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
-use Magento\AdobeStockAsset\Model\PremiumLevelRepository;
-
 /**
  * Interface
  *
@@ -27,13 +25,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const UPDATED_AT = 'updated_at';
 
-    const MEDIA_TYPE = 'media_type';
-
     const CATEGORY = 'category';
 
     const CREATOR = 'creator';
-
-    const PREMIUM_LEVEL = 'premium_level';
 
     const STOCK_ID = 'stock_id';
 
@@ -167,17 +161,17 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get media type
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\MediaTypeInterface|null
+     * @return int|null
      */
-    public function getMediaType(): ?MediaTypeInterface;
+    public function getMediaTypeId(): ?int;
 
     /**
      * Set media type
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\MediaTypeInterface $mediaType
+     * @param int $mediaType
      * @return void
      */
-    public function setMediaType(MediaTypeInterface $mediaType): void;
+    public function setMediaTypeId(int $mediaType): void;
 
     /**
      * Get category
@@ -227,17 +221,17 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Return the premium level
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface|null
+     * @return int|null
      */
-    public function getPremiumLevel(): ?PremiumLevelInterface;
+    public function getPremiumLevelId(): ?int;
 
     /**
      * Set the premium level
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface $premiumLevel
+     * @param int $premiumLevel
      * @return void
      */
-    public function setPremiumLevel(PremiumLevelInterface $premiumLevel): void;
+    public function setPremiumLevelId(int $premiumLevel): void;
 
     /**
      * Get adobe id

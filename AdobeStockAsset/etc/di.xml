@@ -18,14 +18,6 @@
     <preference for="Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface" type="Magento\AdobeStockAsset\Model\CreatorRepository"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface" type="Magento\AdobeStockAsset\Model\CreatorSearchResults"/>
 
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\MediaTypeInterface" type="Magento\AdobeStockAsset\Model\MediaType"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\MediaTypeRepositoryInterface" type="Magento\AdobeStockAsset\Model\MediaTypeRepository"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\MediaTypeSearchResultsInterface" type="Magento\AdobeStockAsset\Model\MediaTypeSearchResults"/>
-
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface" type="Magento\AdobeStockAsset\Model\PremiumLevel"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\PremiumLevelRepositoryInterface" type="Magento\AdobeStockAsset\Model\PremiumLevelRepository"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\PremiumLevelSearchResultsInterface" type="Magento\AdobeStockAsset\Model\PremiumLevelSearchResults"/>
-
     <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
 
     <type name="Magento\Config\Model\Config\TypePool">

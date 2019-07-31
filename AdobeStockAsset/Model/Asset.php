@@ -13,8 +13,6 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\MediaTypeInterface;
-use Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -55,17 +53,17 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getMediaType(): ?MediaTypeInterface
+    public function getMediaTypeId(): ?int
     {
-        return $this->getData(self::MEDIA_TYPE);
+        return $this->getData(self::MEDIA_TYPE_ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setMediaType(MediaTypeInterface $mediaType): void
+    public function setMediaTypeId(int $mediaType): void
     {
-        $this->setData(self::MEDIA_TYPE, $mediaType);
+        $this->setData(self::MEDIA_TYPE_ID, $mediaType);
     }
 
     /**
@@ -119,17 +117,17 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getPremiumLevel(): PremiumLevelInterface
+    public function getPremiumLevelId(): int
     {
-        return $this->getData(self::PREMIUM_LEVEL);
+        return $this->getData(self::PREMIUM_LEVEL_ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setPremiumLevel(PremiumLevelInterface $premiumLevel): void
+    public function setPremiumLevelId(int $premiumLevel): void
     {
-        $this->setData(self::PREMIUM_LEVEL, $premiumLevel);
+        $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevel);
     }
 
     /**

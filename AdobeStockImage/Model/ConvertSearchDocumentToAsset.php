@@ -14,10 +14,6 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAsset\Model\Components\CategoryComponentFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAsset\Model\Components\CreatorComponentFactory;
-use Magento\AdobeStockAssetApi\Api\Data\MediaTypeInterface;
-use Magento\AdobeStockAsset\Model\Components\MediaTypeComponentFactory;
-use Magento\AdobeStockAssetApi\Api\Data\PremiumLevelInterface;
-use Magento\AdobeStockAsset\Model\Components\PremiumLevelComponentFactory;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Payment\Gateway\Http\ConverterException;
@@ -43,36 +39,20 @@ class ConvertSearchDocumentToAsset
     private $creatorComponentFactory;
 
     /**
-     * @var MediaTypeComponentFactory
-     */
-    private $mediaTypeComponentFactory;
-
-    /**
-     * @var PremiumLevelComponentFactory
-     */
-    private $premiumLevelComponentFactory;
-
-    /**
      * ConvertSearchDocumentToAsset constructor.
      *
      * @param AssetInterfaceFactory        $assetFactory
      * @param CategoryComponentFactory     $categoryComponentFactory
      * @param CreatorComponentFactory      $creatorComponentFactory
-     * @param MediaTypeComponentFactory    $mediaTypeComponentFactory
-     * @param PremiumLevelComponentFactory $premiumLevelComponentFactory
      */
     public function __construct(
         AssetInterfaceFactory $assetFactory,
         CategoryComponentFactory $categoryComponentFactory,
-        CreatorComponentFactory $creatorComponentFactory,
-        MediaTypeComponentFactory $mediaTypeComponentFactory,
-        PremiumLevelComponentFactory $premiumLevelComponentFactory
+        CreatorComponentFactory $creatorComponentFactory
     ) {
         $this->assetFactory = $assetFactory;
         $this->categoryComponentFactory = $categoryComponentFactory;
         $this->creatorComponentFactory = $creatorComponentFactory;
-        $this->mediaTypeComponentFactory = $mediaTypeComponentFactory;
-        $this->premiumLevelComponentFactory = $premiumLevelComponentFactory;
     }
 
     /**
@@ -93,10 +73,8 @@ class ConvertSearchDocumentToAsset
             $asset->setCategory($categoryAssetComponent);
             $creatorAssetComponent = $this->hydrateCreatorComponentData($document);
             $asset->setCreator($creatorAssetComponent);
-            $mediaTypeAssetComponent = $this->hydrateMediaTypeComponentData($document);
-            $asset->setMediaType($mediaTypeAssetComponent);
-            $premiumLevelAssetComponent = $this->hydratePremiumLevelComponentData($document);
-            $asset->setPremiumLevel($premiumLevelAssetComponent);
+            $asset->setMediaTypeId($document->getCustomAttribute(AssetInterface::MEDIA_TYPE_ID)->getValue());
+            $asset->setPremiumLevelId($document->getCustomAttribute(AssetInterface::PREMIUM_LEVEL_ID)->getValue());
 
             $asset->setId($document->getId());
             $asset->setPreviewUrl($document->getCustomAttribute(AssetInterface::PREVIEW_URL)->getValue());
@@ -157,44 +135,6 @@ class ConvertSearchDocumentToAsset
         );
 
         return $creatorComponent;
-    }
-
-    /**
-     * Hydrate asset media type component data from search document.
-     *
-     * @param Document $document
-     *
-     * @return MediaTypeInterface
-     * @throws IntegrationException
-     */
-    private function hydrateMediaTypeComponentData(Document $document): MediaTypeInterface
-    {
-        /** @var MediaTypeInterface $mediaTypeComponent */
-        $mediaTypeComponent = $this->mediaTypeComponentFactory->create(
-            $document->getCustomAttribute('creator_id')->getValue(),
-            ''
-        );
-
-        return $mediaTypeComponent;
-    }
-
-    /**
-     * Hydrate asset premium level component data from search document.
-     *
-     * @param Document $document
-     *
-     * @return PremiumLevelInterface
-     * @throws IntegrationException
-     */
-    private function hydratePremiumLevelComponentData(Document $document): PremiumLevelInterface
-    {
-        /** @var PremiumLevelInterface $mediaTypeComponent */
-        $premiumLevelComponent = $this->premiumLevelComponentFactory->create(
-            $document->getCustomAttribute('premium_level_id')->getValue(),
-            ''
-        );
-
-        return $premiumLevelComponent;
     }
 
     /**
