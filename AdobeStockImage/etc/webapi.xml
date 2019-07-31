@@ -10,7 +10,7 @@
     <route url="/V1/adobestock/search" method="GET">
         <service class="Magento\AdobeStockImageApi\Api\GetImageListInterface" method="execute"/>
         <resources>
-            <resource ref="Magento_AdobeStockImage::actions_view"/>
+            <resource ref="Magento_AdobeStockAsset::actions_view"/>
         </resources>
     </route>
 </routes>
