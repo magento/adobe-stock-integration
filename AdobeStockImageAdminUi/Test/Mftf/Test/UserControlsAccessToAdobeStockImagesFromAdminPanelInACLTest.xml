@@ -26,6 +26,7 @@
                 <argument name="apiKey" value=""/>
                 <argument name="privateKey" value=""/>
             </actionGroup>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
             <waitForPageLoad stepKey="waitForRolesGridLoad" />
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
@@ -67,8 +68,9 @@
             <argument name="adminUser" value="admin2"/>
         </actionGroup>
         <!-- verify that user can access to adobe stock image -->
-        <actionGroup ref="AdminOpenAdobeStockSearchModalActionGroup" stepKey="openSearchModal"/>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
+        <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
     </test>
 </tests>
