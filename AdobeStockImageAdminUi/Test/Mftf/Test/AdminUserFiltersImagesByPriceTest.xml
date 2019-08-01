@@ -23,6 +23,7 @@
         <after>
             <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
                 <argument name="enabled" value="0"/>
+                <argument name="wysiwygEnabled" value="disabled"/>
                 <!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
                 <!--                <argument name="apiKey" value=""/>-->
                 <!--                <argument name="privateKey" value=""/>-->
