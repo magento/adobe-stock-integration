@@ -38,7 +38,7 @@
         <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Price"/>
         </actionGroup>
-        <actionGroup ref="AdminFilterByOrientationActionGroup" stepKey="setPriceFilterToPremium">
+        <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToPremium">
             <argument name="type" value="Premium"/>
             <argument name="filter" value="{{AdobeStockFilterSection.premiumPriceFilter}}"/>
             <argument name="filterOption" value="premium_price_filter"/>

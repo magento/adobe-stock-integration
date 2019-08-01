@@ -7,14 +7,14 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminFilterByOrientationActionGroup">
+    <actionGroup name="AdminFilterResultsActionGroup">
         <arguments>
-            <argument name="type" type="string" defaultValue="{{AdobeStockFilterSection.orientationFilterAllOption}}"/>
-            <argument name="filter" type="string" defaultValue="{{AdobeStockFilterSection.orientationFilter}}"/>
-            <argument name="filterOption" type="string" defaultValue="orientation_filter"/>
+            <argument name="type" type="string"/>
+            <argument name="filter" type="string"/>
+            <argument name="filterOption" type="string"/>
         </arguments>
         <click selector="{{filter}}" stepKey="clickOnFilter"/>
-        <click selector="{{AdobeStockFilterSection.orientationFilterOption(filterOption, type)}}" stepKey="openAdobeStockPanel"/>
+        <click selector="{{AdobeStockFilterSection.filterOption(filterOption, type)}}" stepKey="selectFilter"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>

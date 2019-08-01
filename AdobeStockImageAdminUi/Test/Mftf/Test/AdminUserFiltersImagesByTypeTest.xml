@@ -37,7 +37,7 @@
         <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Subcategory"/>
         </actionGroup>
-        <actionGroup ref="AdminFilterByOrientationActionGroup" stepKey="setPriceFilterToPremium">
+        <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToPremium">
             <argument name="type" value="Photo"/>
             <argument name="filter" value="{{AdobeStockFilterSection.filterByType}}"/>
             <argument name="filterOption" value="content_type_filter"/>
