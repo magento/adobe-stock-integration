@@ -50,10 +50,10 @@ class Storage
     private $mediaDirectory;
 
     /**
-     * Constructor
-     * @param Filesystem      $filesystem
-     * @param Https           $driver
-     * @param File            $fileSystemIo
+     * Storage constructor.
+     * @param Filesystem $filesystem
+     * @param Https $driver
+     * @param File $fileSystemIo
      * @param LoggerInterface $log
      */
     public function __construct(
@@ -76,7 +76,7 @@ class Storage
      * @return string
      * @throws LocalizedException
      */
-    public function save(string $imageUrl, string $destinationDirectoryPath = ''): string
+    public function save(string $imageUrl, string $destinationDirectoryPath = '') : string
     {
         $destinationPath = $destinationDirectoryPath . $this->getFileName($imageUrl);
 
@@ -104,7 +104,7 @@ class Storage
      * @param string $imageUrl
      * @return string
      */
-    private function getFileName($imageUrl): string
+    private function getFileName(string $imageUrl): string
     {
         return $this->fileSystemIo->getPathInfo($imageUrl)['basename'];
     }
@@ -115,7 +115,7 @@ class Storage
      * @param string $imageUrl
      * @return string
      */
-    private function getUrlWithoutProtocol($imageUrl): string
+    private function getUrlWithoutProtocol(string $imageUrl): string
     {
         return str_replace('https://', '', $imageUrl);
     }

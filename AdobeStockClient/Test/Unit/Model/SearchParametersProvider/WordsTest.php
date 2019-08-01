@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace AdobeStockClient\Test\Unit\Model\SearchParametersProvider;
+namespace Magento\AdobeStockClient\Test\Unit\Model\SearchParametersProvider;
 
 use AdobeStock\Api\Exception\StockApi;
 use AdobeStock\Api\Models\SearchParameters;
