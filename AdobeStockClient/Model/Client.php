@@ -186,9 +186,13 @@ class Client implements ClientInterface
     private function convertStockFileToDocument(StockFile $file): DocumentInterface
     {
         $itemData = (array) $file;
-        $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
-        $itemData['preview_url'] = $itemData['thumbnail_500_url'];
         $itemId = $itemData['id'];
+
+        $category = (array) $itemData['category'];
+
+        $itemData['category_id'] = $category['id'];
+        $itemData['category_name'] = $category['name'];
+
         $attributes = $this->createAttributes('id', $itemData);
 
         $item = $this->documentFactory->create();

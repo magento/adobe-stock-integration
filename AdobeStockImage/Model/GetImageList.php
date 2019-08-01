@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory as SearchResultFactory;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
@@ -18,6 +17,8 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\UrlInterface;
+use Magento\AdobeStockAsset\Model\DocumentToAsset;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GetImageList
@@ -35,9 +36,9 @@ class GetImageList implements GetImageListInterface
     private $searchResultFactory;
 
     /**
-     * @var ConvertSearchDocumentToAsset
+     * @var DocumentToAsset
      */
-    private $convertSearchDocumentToAsset;
+    private $documentToAsset;
 
     /**
      * @var UrlInterface
@@ -45,23 +46,30 @@ class GetImageList implements GetImageListInterface
     private $url;
 
     /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
      * GetImageList constructor.
-     *
-     * @param ClientInterface              $client
-     * @param SearchResultFactory          $searchResultFactory
-     * @param ConvertSearchDocumentToAsset $convertSearchDocumentToAsset
-     * @param UrlInterface                 $url
+     * @param ClientInterface $client
+     * @param SearchResultFactory $searchResultFactory
+     * @param DocumentToAsset $documentToAsset
+     * @param UrlInterface $url
+     * @param LoggerInterface $log
      */
     public function __construct(
         ClientInterface $client,
         SearchResultFactory $searchResultFactory,
-        ConvertSearchDocumentToAsset $convertSearchDocumentToAsset,
-        UrlInterface $url
+        DocumentToAsset $documentToAsset,
+        UrlInterface $url,
+        LoggerInterface $log
     ) {
         $this->client = $client;
         $this->searchResultFactory = $searchResultFactory;
-        $this->convertSearchDocumentToAsset = $convertSearchDocumentToAsset;
+        $this->documentToAsset = $documentToAsset;
         $this->url = $url;
+        $this->log = $log;
     }
 
     /**
@@ -75,9 +83,7 @@ class GetImageList implements GetImageListInterface
             $items = [];
             /** @var Document $item */
             foreach ($searchResult->getItems() as $item) {
-                /** @var AssetInterface $asset */
-                $asset = $this->convertSearchDocumentToAsset->execute($item);
-                $items[] = $asset;
+                $items[] = $this->documentToAsset->convert($item);
             }
 
             return $this->searchResultFactory->create(
@@ -98,6 +104,7 @@ class GetImageList implements GetImageListInterface
             );
         } catch (\Exception $exception) {
             $message = __('Get image list action failed.');
+            $this->log->critical($exception);
             throw new LocalizedException($message, $exception, $exception->getCode());
         }
     }

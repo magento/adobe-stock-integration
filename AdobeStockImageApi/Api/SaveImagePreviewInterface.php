@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageApi\Api;
 
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
@@ -21,12 +22,13 @@ interface SaveImagePreviewInterface
     /**
      * Runs the save image process.
      *
-     * @param int    $mediaId
+     * @param int    $adobeId
      * @param string $destinationPath
      *
      * @return bool
      * @throws CouldNotSaveException
      * @throws NotFoundException
+     * @throws LocalizedException
      */
-    public function execute(int $mediaId, string $destinationPath): bool;
+    public function execute(int $adobeId, string $destinationPath): void;
 }

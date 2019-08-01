@@ -61,9 +61,25 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setMediaTypeId(int $mediaType): void
+    public function setMediaTypeId(int $mediaTypeId): void
     {
-        $this->setData(self::MEDIA_TYPE_ID, $mediaType);
+        $this->setData(self::MEDIA_TYPE_ID, $mediaTypeId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCategoryId(): ?int
+    {
+        return $this->getData(self::CATEGORY_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCategoryId(int $categoryId): void
+    {
+        $this->setData(self::CATEGORY_ID, $categoryId);
     }
 
     /**
@@ -80,6 +96,22 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setCategory(CategoryInterface $category): void
     {
         $this->setData(self::CATEGORY, $category);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCreatorId(): ?int
+    {
+        return $this->getData(self::CREATOR_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCreatorId(int $creatorId): void
+    {
+        $this->setData(self::CREATOR_ID, $creatorId);
     }
 
     /**
@@ -125,9 +157,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setPremiumLevelId(int $premiumLevel): void
+    public function setPremiumLevelId(int $premiumLevelId): void
     {
-        $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevel);
+        $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevelId);
     }
 
     /**
@@ -144,22 +176,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setPath(string $path): void
     {
         $this->setData(self::PATH, $path);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAdobeId(): int
-    {
-        return (int) $this->getData(self::ADOBE_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setAdobeId(int $adobeId): void
-    {
-        $this->setData(self::ADOBE_ID, $adobeId);
     }
 
     /**
@@ -261,7 +277,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getThumbnailUrl(): string
+    public function getUrl(): string
     {
         return (string) $this->getData(self::URL);
     }
@@ -269,9 +285,25 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setThumbnailUrl(string $url): void
+    public function setUrl(string $url): void
     {
         $this->setData(self::URL, $url);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getThumbnailUrl(): string
+    {
+        return (string) $this->getData(self::THUMBNAIL_URL);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setThumbnailUrl(string $url): void
+    {
+        $this->setData(self::THUMBNAIL_URL, $url);
     }
 
     /**
@@ -421,7 +453,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): AssetExtensionInterface
     {
         return $this->_getExtensionAttributes();
     }

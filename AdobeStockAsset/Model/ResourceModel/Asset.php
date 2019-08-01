@@ -16,6 +16,11 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Asset extends AbstractDb
 {
     /**
+     * @var bool
+     */
+    protected $_useIsObjectNew = true;
+
+    /**
      * Initialize with table name and primary field
      */
     protected function _construct()

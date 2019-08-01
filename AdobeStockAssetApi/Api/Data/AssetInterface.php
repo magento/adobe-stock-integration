@@ -19,8 +19,6 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const PATH = 'path';
 
-    const ADOBE_ID = "adobe_id";
-
     const CREATED_AT = 'created_at';
 
     const UPDATED_AT = 'updated_at';
@@ -36,6 +34,8 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     const TITLE = 'title';
 
     const PREVIEW_URL = 'preview_url';
+
+    const THUMBNAIL_URL = 'thumbnail_url';
 
     const PREVIEW_WIDTH = 'preview_width';
 
@@ -168,10 +168,25 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Set media type
      *
-     * @param int $mediaType
+     * @param int $mediaTypeId
      * @return void
      */
-    public function setMediaTypeId(int $mediaType): void;
+    public function setMediaTypeId(int $mediaTypeId): void;
+
+    /**
+     * Get category
+     *
+     * @return int|null
+     */
+    public function getCategoryId(): ?int;
+
+    /**
+     * Set category
+     *
+     * @param int $categoryId
+     * @return void
+     */
+    public function setCategoryId(int $categoryId): void;
 
     /**
      * Get category
@@ -187,6 +202,21 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return void
      */
     public function setCategory(CategoryInterface $category): void;
+
+    /**
+     * Return the creator
+     *
+     * @return int|null
+     */
+    public function getCreatorId(): ?int;
+
+    /**
+     * Set the creator
+     *
+     * @param int $creatorId
+     * @return void
+     */
+    public function setCreatorId(int $creatorId): void;
 
     /**
      * Return the creator
@@ -228,25 +258,10 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Set the premium level
      *
-     * @param int $premiumLevel
+     * @param int $premiumLevelId
      * @return void
      */
-    public function setPremiumLevelId(int $premiumLevel): void;
-
-    /**
-     * Get adobe id
-     *
-     * @return int
-     */
-    public function getAdobeId(): int;
-
-    /**
-     * Set adobe id
-     *
-     * @param int $adobeId
-     * @return void
-     */
-    public function setAdobeId(int $adobeId): void;
+    public function setPremiumLevelId(int $premiumLevelId): void;
 
     /**
      * Get the stock id
@@ -448,7 +463,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): AssetExtensionInterface;
 
     /**
      * Set an extension attributes object.
