@@ -16,7 +16,12 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Asset extends AbstractDb
 {
     /**
-     * @var bool
+     * @inheritdoc
+     */
+    protected $_isPkAutoIncrement = false;
+
+    /**
+     * @inheritdoc
      */
     protected $_useIsObjectNew = true;
 
