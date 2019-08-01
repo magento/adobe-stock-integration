@@ -14,8 +14,10 @@
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
         <waitForPageLoad stepKey="waitForContentTabExpanded" />
-        <click selector="{{TinyMCESection.InsertImageBtn}}" stepKey="clickInsertImage" />
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImage" />
         <waitForPageLoad stepKey="waitForImageDialogOpened" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse" />
+        <waitForPageLoad stepKey="waitForGalleryOpen" />
         <see selector="{{AdobeStockSection.slideOutPanelButton}}" userInput="{{AdobeStockModalData.openModal}}" stepKey="seeAdobeStockSearchButton" />
         <click selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel" />
         <waitForPageLoad stepKey="waitForAdobeStockPanelOpen" />

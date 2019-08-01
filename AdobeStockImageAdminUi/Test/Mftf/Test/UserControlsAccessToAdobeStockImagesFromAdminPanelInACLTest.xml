@@ -21,10 +21,12 @@
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
                 <argument name="enabled" value="0"/>
-                <argument name="apiKey" value=""/>
-                <argument name="privateKey" value=""/>
+                <argument name="wysiwygEnabled" value="disabled"/>
+                <!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+                <!--                <argument name="apiKey" value=""/>-->
+                <!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
@@ -68,7 +70,7 @@
             <argument name="adminUser" value="admin2"/>
         </actionGroup>
         <!-- verify that user can access to adobe stock image -->
-        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
         <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
