@@ -6,18 +6,17 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUserFiltersImagesByOrientationTest">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserFiltersImagesByTypeTest">
         <annotations>
-            <stories value="Cover scenario: User filters images by orientation"/>
-            <title value="Admin should be able to filters images by orientation"/>
-            <description value="Admin should be able to filters images by orientation"/>
+            <stories value="Cover scenario: User filters images by type"/>
+            <title value="Admin should be able to filters images by type"/>
+            <description value="Admin should be able to filters images by type"/>
             <severity value="CRITICAL"/>
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
@@ -35,18 +34,17 @@
                            stepKey="getUrlWithoutFilters"/>
         <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
         <waitForPageLoad stepKey="waitForFiltersOpen"/>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
-            <argument name="filterName" value="Orientation"/>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
+            <argument name="filterName" value="Subcategory"/>
         </actionGroup>
-        <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setOrientationFilterToHorizontal">
-            <argument name="type" value="Horizontal"/>
-            <argument name="filter" value="{{AdobeStockFilterSection.orientationFilter}}"/>
-            <argument name="filterOption" value="orientation_filter"/>
+        <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToPremium">
+            <argument name="type" value="Photo"/>
+            <argument name="filter" value="{{AdobeStockFilterSection.filterByType}}"/>
+            <argument name="filterOption" value="content_type_filter"/>
         </actionGroup>
-        <!-- Assert that filter are applied and grid updated -->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
-            <argument name="resultValue" value="Horizontal"/>
+            <argument name="resultValue" value="Photo"/>
         </actionGroup>
     </test>
 </tests>
