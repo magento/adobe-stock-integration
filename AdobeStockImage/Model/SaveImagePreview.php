@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAsset\Model\SavePreviewImageAssetStrategy;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
@@ -20,7 +19,6 @@ use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
@@ -68,11 +66,14 @@ class SaveImagePreview implements SaveImagePreviewInterface
 
     /**
      * SaveImagePreview constructor.
-     * @param AssetRepositoryInterface $assetRepository
-     * @param Storage $storage
-     * @param LoggerInterface $logger
-     * @param GetImageListInterface $getImageList
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     *
+     * @param AssetRepositoryInterface    $assetRepository
+     * @param CreatorRepositoryInterface  $creatorRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param Storage                     $storage
+     * @param LoggerInterface             $logger
+     * @param GetImageListInterface       $getImageList
+     * @param SearchCriteriaBuilder       $searchCriteriaBuilder
      */
     public function __construct(
         AssetRepositoryInterface $assetRepository,
@@ -120,10 +121,13 @@ class SaveImagePreview implements SaveImagePreviewInterface
     }
 
     /**
+     * Save asset.
+     *
      * @param AssetInterface $asset
+     *
      * @throws AlreadyExistsException
      */
-    private function saveAsset(AssetInterface $asset)
+    private function saveAsset(AssetInterface $asset): void
     {
         $category = $this->saveCategory($asset->getCategory());
         $creator = $this->saveCreator($asset->getCreator());
@@ -133,10 +137,12 @@ class SaveImagePreview implements SaveImagePreviewInterface
     }
 
     /**
+     * Save category.
+     *
      * @param CategoryInterface $category
-     * @return CategoryInterface|mixed
+     * @return CategoryInterface
      */
-    private function saveCategory(CategoryInterface $category)
+    private function saveCategory(CategoryInterface $category): CategoryInterface
     {
         try {
             $searchCriteria = $this->searchCriteriaBuilder
@@ -157,10 +163,13 @@ class SaveImagePreview implements SaveImagePreviewInterface
     }
 
     /**
+     * Save creator.
+     *
      * @param CreatorInterface $creator
-     * @return CreatorInterface|mixed
+     *
+     * @return CreatorInterface
      */
-    private function saveCreator(CreatorInterface $creator)
+    private function saveCreator(CreatorInterface $creator): CreatorInterface
     {
         try {
             $searchCriteria = $this->searchCriteriaBuilder
@@ -183,6 +192,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
     }
 
     /**
+     * Get image by adobe id.
+     *
      * @param int $adobeId
      * @return AssetSearchResultsInterface
      * @throws LocalizedException

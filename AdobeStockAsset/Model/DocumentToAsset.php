@@ -38,6 +38,8 @@ class DocumentToAsset
     }
 
     /**
+     * Convert search document to the asset object
+     *
      * @param Document $document
      * @return AssetInterface
      * @throws ConverterException
