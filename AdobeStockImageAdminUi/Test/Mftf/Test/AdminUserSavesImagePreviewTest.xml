@@ -20,44 +20,27 @@
             <createData entity="simpleCmsPage" stepKey="createCMSPage">
                 <field key="title">Thank You for Subscribing</field>
             </createData>
-            <!--Create new category under Default Category-->
-            <createData entity="ApiCategory" stepKey="simpleCategory">
-                <field key="name">Sales category</field>
-            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
-            <deleteData stepKey="deleteRootCategory" createDataKey="simpleCategory"/>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
                 <argument name="enabled" value="0"/>
-                <argument name="apiKey" value=""/>
-                <argument name="privateKey" value=""/>
+                <argument name="wysiwygEnabled" value="disabled"/>
+                <!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+                <!--                <argument name="apiKey" value=""/>-->
+                <!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
         </after>
-        <!-- Assert that User can save image preview in the context of CEP  -->
-        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
-            <argument name="Category" value="$$simpleCategory$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminOpenCategoryUploadMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnails"/>
-        <actionGroup ref="AdminSaveImagePreviewActionGroup" stepKey="saveImagePreview"/>
-        <!-- TODO assert that image saved into DB
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-       <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
-       <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/> -->
-
         <!-- Assert that User can save image preview in the context of CmsEP  -->
         <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
-        <click selector="{{TinyMCESection.InsertImageBtn}}" stepKey="clickInsertImage" />
         <waitForPageLoad stepKey="waitForPopupLoad"/>
+        <actionGroup ref="AdminOpenAdobeStockModalFromCreatedCmsPageActionGroup" stepKey="openAdobeStockFromCreatedCmsPage"/>
         <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopupFromCmsPage"/>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
-        <actionGroup ref="AdminSaveImagePreviewActionGroup" stepKey="saveImagePreviewFromCmsPage"/>
+        <actionGroup ref="AdminSaveCmsPageAndAssertImagePreviewActionGroup" stepKey="saveImagePreviews"/>
+        <!-- TODO: Assert that following image attributes associated with the stock image are saved into Magento DB  -->
     </test>
 </tests>

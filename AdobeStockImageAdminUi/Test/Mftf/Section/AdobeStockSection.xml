@@ -21,6 +21,5 @@
         <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
         <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
         <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
-        <element name="categoryPreviewImage" type="block" selector="//div[@class='file-uploader-summary']//img[@class='preview-image']"/>
     </section>
 </sections>
