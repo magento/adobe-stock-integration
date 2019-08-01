@@ -13,9 +13,12 @@
             <argument name="apiKey" type="string" defaultValue="{{AdobeStockConfigDataApiKey.value}}"/>
             <argument name="privateKey" type="string" defaultValue="{{AdobeStockConfigDataPrivateKey.value}}"/>
             <argument name="enabled" type="string" defaultValue="{{AdobeStockConfigDataEnabled.value}}"/>
+            <argument name="wysiwygEnabled" type="string" defaultValue="{{AdobeStockConfigDataWysiwygEnabled.value}}"/>
         </arguments>
         <magentoCLI command="config:set {{AdobeStockConfigDataEnabled.path}} {{enabled}}" stepKey="setModuleEnabled"/>
-        <magentoCLI command="config:sensitive:set {{AdobeStockConfigDataApiKey.path}} {{apiKey}}" stepKey="setModuleApiKey"/>
-        <magentoCLI command="config:sensitive:set {{AdobeStockConfigDataPrivateKey.path}} {{privateKey}}" stepKey="setModulePrivateKey"/>
+        <magentoCLI command="config:set {{AdobeStockConfigDataWysiwygEnabled.path}} {{wysiwygEnabled}}" stepKey="enableWYSIWYG"/>
+<!--        TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+<!--        <magentoCLI command="config:sensitive:set {{AdobeStockConfigDataApiKey.path}} {{apiKey}}" stepKey="setModuleApiKey"/>-->
+<!--        <magentoCLI command="config:sensitive:set {{AdobeStockConfigDataPrivateKey.path}} {{privateKey}}" stepKey="setModulePrivateKey"/>-->
     </actionGroup>
 </actionGroups>

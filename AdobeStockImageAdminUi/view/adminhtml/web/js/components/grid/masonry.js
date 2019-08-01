@@ -3,18 +3,17 @@
  * See COPYING.txt for license details.
  */
 define([
-    'mage/url',
     'Magento_Ui/js/grid/listing',
     'jquery',
     'ko'
-], function (url, Element, $, ko) {
+], function (Element, $, ko) {
     'use strict';
 
     return Element.extend({
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/masonry',
             imports: {
-              rows: '${ $.provider }:data.items'
+                rows: '${ $.provider }:data.items'
             },
             listens: {
                 'rows': 'initComponent'
@@ -76,7 +75,7 @@ define([
                 return;
             }
 
-            this.imageMargin = parseInt(this.imageMargin);
+            this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
             this.setLayoutStyles();
@@ -116,7 +115,7 @@ define([
          * Set layout styles inside the container
          */
         setLayoutStyles: function() {
-            var containerWidth = parseInt(this.container.clientWidth) - this.imageMargin,
+            var containerWidth = parseInt(this.container.clientWidth, 10) - this.imageMargin,
                 row = [],
                 ratio = 0,
                 imageWidth = 0,
@@ -134,11 +133,11 @@ define([
                 if (ratio >= this.minRatio || index + 1 === this.rows().length) {
                     ratio = Math.max(ratio, this.minRatio);
                     calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
-                    rowHeight = (calcHeight < this.maxImageHeight) ? calcHeight : this.maxImageHeight;
+                    rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
                     isBottom = index + 1 === this.rows().length;
 
                     row.forEach(function(img) {
-                        imageWidth = rowHeight * ((img.width / img.height).toFixed(2));
+                        imageWidth = rowHeight * (img.width / img.height).toFixed(2);
                         this.setImageStyles(img, imageWidth, rowHeight);
                         this.setImageClass(img, {
                             bottom: isBottom
@@ -167,8 +166,8 @@ define([
                 img.styles = ko.observable();
             }
             img.styles({
-                width: parseInt(imageWidth) + 'px',
-                height: parseInt(rowHeight) + 'px'
+                width: parseInt(imageWidth, 10) + 'px',
+                height: parseInt(rowHeight, 10) + 'px'
             });
         },
 
