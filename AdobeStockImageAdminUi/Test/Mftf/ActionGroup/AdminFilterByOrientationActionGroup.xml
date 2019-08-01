@@ -10,9 +10,11 @@
     <actionGroup name="AdminFilterByOrientationActionGroup">
         <arguments>
             <argument name="type" type="string" defaultValue="{{AdobeStockFilterSection.orientationFilterAllOption}}"/>
+            <argument name="filter" type="string" defaultValue="{{AdobeStockFilterSection.orientationFilter}}"/>
+            <argument name="filterOption" type="string" defaultValue="orientation_filter"/>
         </arguments>
-        <click selector="{{AdobeStockFilterSection.orientationFilter}}" stepKey="clickOnFilter"/>
-        <click selector="{{AdobeStockFilterSection.orientationFilterOption(type)}}" stepKey="openAdobeStockPanel"/>
+        <click selector="{{filter}}" stepKey="clickOnFilter"/>
+        <click selector="{{AdobeStockFilterSection.orientationFilterOption(filterOption, type)}}" stepKey="openAdobeStockPanel"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>
