@@ -20,6 +20,5 @@
         <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
         <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
         <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
-        <element name="searchButton" type="button" selector="//div[@class='data-grid-search-control-wrap']/button[@class='action-submit']"/>
     </section>
 </sections>

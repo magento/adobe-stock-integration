@@ -25,10 +25,12 @@
             </actionGroup>
         </before>
         <after>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
                 <argument name="enabled" value="0"/>
-                <argument name="apiKey" value=""/>
-                <argument name="privateKey" value=""/>
+                <argument name="wysiwygEnabled" value="disabled"/>
+                <!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+                <!--                <argument name="apiKey" value=""/>-->
+                <!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
                 <argument name="InterfaceLocaleByValue" value="en_US"/>
