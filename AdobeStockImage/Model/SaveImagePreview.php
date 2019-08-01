@@ -20,6 +20,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -111,7 +112,6 @@ class SaveImagePreview implements SaveImagePreviewInterface
             $asset = reset($items);
             $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
             $asset->setPath($path);
-            $asset->isObjectNew(true);
             $this->saveAsset($asset);
         } catch (\Exception $exception) {
             $message = __('Image was not saved: %1', $exception->getMessage());
@@ -129,11 +129,31 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     private function saveAsset(AssetInterface $asset): void
     {
+        if (!$this->isAssetAlreadyExists($asset)) {
+            $asset->isObjectNew(true);
+        }
         $category = $this->saveCategory($asset->getCategory());
         $creator = $this->saveCreator($asset->getCreator());
         $asset->setCategoryId($category->getId());
         $asset->setCreatorId($creator->getId());
         $this->assetRepository->save($asset);
+    }
+
+    /**
+     * Is asset already exists.
+     *
+     * @param AssetInterface $asset
+     *
+     * @return bool
+     */
+    private function isAssetAlreadyExists(AssetInterface $asset): bool
+    {
+        try {
+            $asset = $this->assetRepository->getById($asset->getId());
+            return ($asset instanceof AssetInterface);
+        } catch (NoSuchEntityException $exception) {
+            return false;
+        }
     }
 
     /**
