@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigSystemSection">
+        <element name="adobeStockIntegration" type="select" selector="#system_adobe_stock_integration-head"/>
+        <element name="CheckIfTabExpand" type="button" selector="#system_adobe_stock_integration-head:not(.open)"/>
+        <element name="expandedTab" type="button" selector="#system_adobe_stock_integration-head.open"/>
+        <element name="adobeStockApiKey" type="input" selector="#system_adobe_stock_integration_api_key"/>
+        <element name="testConnection" type="button" selector="#system_adobe_stock_integration_adobe_stock_test_connect_wizard" timeout="30"/>
+        <element name="apivalidation" type="text" selector="#validation_api_connection_result"/>
+        <element name="saveConfigSuccessMessage" type="text" selector=".message-success"/>
+        <element name="errorLabel" type="text" selector="label.mage-error"/>
+        <element name="saveConfig" type="button" selector="#save"/>
+    </section>
+</sections>
