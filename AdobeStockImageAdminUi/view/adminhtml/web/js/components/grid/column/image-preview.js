@@ -15,13 +15,22 @@ define([
 
     return Column.extend({
         defaults: {
-            visibility: [],
-            height: 0,
-            saveAvailable: true,
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            visibility: [],
+            height: 0,
+            saveAvailable: true,
+            statefull: {
+                visible: true,
+                sorting: true,
+                lastOpenedImage: true
+            },
+            tracks: {
+                lastOpenedImage: true,
+            },
             messageDelay: 5,
+            lastOpenedImage: null,
             authConfig: {
                 url: '',
                 isAuthorized: false,
@@ -96,6 +105,9 @@ define([
          * @return {*|boolean}
          */
         isVisible: function (record) {
+            if (this.lastOpenedImage === record._rowIndex) {
+                this.show(record);
+            }
             return this.visibility()[record._rowIndex] || false;
         },
 
@@ -175,6 +187,7 @@ define([
                 this._updateHeight();
             } else {
                 img.load(this._updateHeight.bind(this));
+                this.lastOpenedImage = record._rowIndex;
             }
         },
 
@@ -193,12 +206,12 @@ define([
 
         /**
          * Close image preview
-         *
-         * @param {Object} record
          */
-        hide: function (record) {
+        hide: function () {
             var visibility = this.visibility();
-            visibility[record._rowIndex] = false;
+
+            this.lastOpenedImage = null;
+            visibility.fill(false);
             this.visibility(visibility);
             this.height(0);
             this._selectRow(null, 0);
