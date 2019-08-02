@@ -11,15 +11,14 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Asset (metadata) resource model
+ * Category (metadata) resource model
  */
-class Asset extends AbstractDb
+class Category extends AbstractDb
 {
     /**
      * @inheritdoc
      */
     protected $_isPkAutoIncrement = false;
-
     /**
      * @inheritdoc
      */
@@ -30,6 +29,6 @@ class Asset extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('adobe_stock_asset', 'id');
+        $this->_init('adobe_stock_category', 'id');
     }
 }

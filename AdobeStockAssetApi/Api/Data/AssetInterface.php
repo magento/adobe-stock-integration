@@ -15,36 +15,73 @@ namespace Magento\AdobeStockAssetApi\Api\Data;
  */
 interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
     const ID = 'id';
+
     const PATH = 'path';
-    const ADOBE_ID = "adobe_id";
+
     const CREATED_AT = 'created_at';
+
     const UPDATED_AT = 'updated_at';
-    const MEDIA_TYPE_ID = 'media_type_id';
+
     const CATEGORY = 'category';
+
     const CREATOR = 'creator';
-    const PREMIUM_LEVEL_ID = 'premium_level_id';
+
     const STOCK_ID = 'stock_id';
+
     const IS_LICENSED = 'is_licensed';
+
     const TITLE = 'title';
+
     const PREVIEW_URL = 'preview_url';
+
+    const THUMBNAIL_URL = 'thumbnail_url';
+
     const PREVIEW_WIDTH = 'preview_width';
+
     const PREVIEW_HEIGHT = 'preview_height';
+
     const URL = 'url';
+
     const WIDTH = 'width';
+
     const HEIGHT = 'height';
+
     const COUNTRY_NAME = 'country_name';
+
     const DETAILS_URL = 'details_url';
+
     const VECTOR_TYPE = 'vector_type';
+
     const CONTENT_TYPE = 'content_type';
+
     const CREATION_DATE = 'creation_date';
+
     const KEYWORDS = 'keywords';
-    const FIELD_CREATED_AT = "created_at";
-    const FIELD_UPDATED_AT = "updated_at";
-    /**#@-*/
+
+    const FIELD_CREATED_AT = 'created_at';
+
+    const FIELD_UPDATED_AT = 'updated_at';
+
+    /**
+     * Category id is an id of a category entry related to the asset
+     */
+    const CATEGORY_ID = 'category_id';
+
+    /**
+     * Creator id is an id of a category entry related to the asset
+     */
+    const CREATOR_ID = 'creator_id';
+
+    /**
+     * Media type is an id of a media type entry related to the asset
+     */
+    const MEDIA_TYPE_ID = 'media_type_id';
+
+    /**
+     * Premium level id is an id of a media type entry related to the asset
+     */
+    const PREMIUM_LEVEL_ID = 'premium_level_id';
 
     /**
      * Get ID
@@ -122,19 +159,34 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getWidth() : int;
 
     /**
-     * Get media type id
+     * Get media type
      *
      * @return int|null
      */
     public function getMediaTypeId(): ?int;
 
     /**
-     * Set media type id
+     * Set media type
      *
      * @param int|null $mediaTypeId
      * @return void
      */
-    public function setMediaTypeId(?int $mediaTypeId): void;
+    public function setMediaTypeId(int $mediaTypeId): void;
+
+    /**
+     * Get category
+     *
+     * @return int|null
+     */
+    public function getCategoryId(): ?int;
+
+    /**
+     * Set category
+     *
+     * @param int $categoryId
+     * @return void
+     */
+    public function setCategoryId(int $categoryId): void;
 
     /**
      * Get category
@@ -146,10 +198,25 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Set category
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $categoryId
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $category
      * @return void
      */
-    public function setCategory(CategoryInterface $categoryId): void;
+    public function setCategory(CategoryInterface $category): void;
+
+    /**
+     * Return the creator
+     *
+     * @return int|null
+     */
+    public function getCreatorId(): ?int;
+
+    /**
+     * Set the creator
+     *
+     * @param int $creatorId
+     * @return void
+     */
+    public function setCreatorId(int $creatorId): void;
 
     /**
      * Return the creator
@@ -159,12 +226,12 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getCreator(): ?CreatorInterface;
 
     /**
-     * Set the creator id
+     * Set the creator
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface $creatorId
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface $creator
      * @return void
      */
-    public function setCreator(CreatorInterface $creatorId): void;
+    public function setCreator(CreatorInterface $creator): void;
 
     /**
      * Get keywords
@@ -182,34 +249,19 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setKeywords(array $keywords): void;
 
     /**
-     * Get premium level id
+     * Return the premium level
      *
      * @return int|null
      */
     public function getPremiumLevelId(): ?int;
 
     /**
-     * Set premium level id
+     * Set the premium level
      *
      * @param int|null $premiumLevelId
      * @return void
      */
-    public function setPremiumLevelId(?int $premiumLevelId): void;
-
-    /**
-     * Get adobe id
-     *
-     * @return int
-     */
-    public function getAdobeId(): int;
-
-    /**
-     * Set adobe id
-     *
-     * @param int $adobeId
-     * @return void
-     */
-    public function setAdobeId(int $adobeId): void;
+    public function setPremiumLevelId(int $premiumLevelId): void;
 
     /**
      * Get the stock id
@@ -411,7 +463,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): AssetExtensionInterface;
 
     /**
      * Set an extension attributes object.

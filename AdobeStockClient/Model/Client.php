@@ -159,11 +159,11 @@ class Client implements ClientInterface
                 $items[] = $this->convertStockFileToDocument($file);
             }
             $totalCount = $response->getNbResults();
-        } catch (Exception $e) {
-            if (strpos($e->getMessage(), 'Api Key is invalid') !== false) {
-                throw new AuthenticationException(__($e->getMessage()), $e, $e->getCode());
+        } catch (Exception $exception) {
+            if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
+                throw new AuthenticationException(__($exception->getMessage()), $exception, $exception->getCode());
             }
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical($exception->getMessage());
         }
 
         $searchResult = $this->searchResultFactory->create();
@@ -184,9 +184,13 @@ class Client implements ClientInterface
     private function convertStockFileToDocument(StockFile $file): DocumentInterface
     {
         $itemData = (array) $file;
-        $itemData['thumbnail_url'] = $itemData['thumbnail_240_url'];
-        $itemData['preview_url'] = $itemData['thumbnail_500_url'];
         $itemId = $itemData['id'];
+
+        $category = (array) $itemData['category'];
+
+        $itemData['category_id'] = $category['id'];
+        $itemData['category_name'] = $category['name'];
+
         $attributes = $this->createAttributes('id', $itemData);
 
         $item = $this->documentFactory->create();
@@ -200,7 +204,9 @@ class Client implements ClientInterface
      * Create and return search request based on search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
+     *
      * @return SearchFilesRequest
+     * @throws IntegrationException
      * @throws \AdobeStock\Api\Exception\StockApi
      */
     private function getSearchRequest(SearchCriteriaInterface $searchCriteria): SearchFilesRequest
@@ -216,7 +222,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Retrive array of columns to be requested
+     * Retrieve array of columns to be requested
      *
      * @return array
      */
@@ -225,8 +231,13 @@ class Client implements ClientInterface
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
         foreach ($this->config->getSearchResultFields() as $field) {
+            if (!isset($resultsColumns[$field])) {
+                $message = __('Cannot retrieve the field %1. It\'s not available in Adobe Stock SDK', $field);
+                $this->logger->critical($message);
+            }
             $resultColumnArray[] = $resultsColumns[$field];
         }
+
         return $resultColumnArray;
     }
 
