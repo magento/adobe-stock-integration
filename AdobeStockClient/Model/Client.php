@@ -162,10 +162,8 @@ class Client implements ClientInterface
         } catch (Exception $exception) {
             if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
                 throw new AuthenticationException(__($exception->getMessage()), $exception, $exception->getCode());
-            } else {
-                $message = __('Search failed: %1', $exception->getMessage());
-                $this->processException($message, $exception);
             }
+            $this->logger->critical($exception->getMessage());
         }
 
         $searchResult = $this->searchResultFactory->create();

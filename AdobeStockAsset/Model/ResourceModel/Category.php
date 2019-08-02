@@ -16,6 +16,15 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Category extends AbstractDb
 {
     /**
+     * @inheritdoc
+     */
+    protected $_isPkAutoIncrement = false;
+    /**
+     * @inheritdoc
+     */
+    protected $_useIsObjectNew = true;
+
+    /**
      * Initialize with table name and primary field
      */
     protected function _construct()

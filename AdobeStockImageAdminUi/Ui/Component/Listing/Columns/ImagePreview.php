@@ -79,43 +79,13 @@ class ImagePreview extends Column
     public function prepare()
     {
         parent::prepare();
-        $this->setAuthenticationData();
-        $this->setDownloadUrlData();
-    }
 
-    /**
-     * Is authorized a user
-     *
-     * @return bool
-     */
-    private function isAuthorized(): bool
-    {
-        try {
-            $userProfile = $this->userProfileRepository->getByUserId(
-                (int)$this->userContext->getUserId()
-            );
-
-            $isAuthorized = !empty($userProfile->getId())
-                && !empty($userProfile->getAccessToken())
-                && !empty($userProfile->getAccessTokenExpiresAt())
-                && strtotime($userProfile->getAccessTokenExpiresAt()) >= strtotime('now');
-        } catch (Exception $e) {
-            $isAuthorized = false;
-        }
-
-        return $isAuthorized;
-    }
-
-    /**
-     * Set auth config data.
-     */
-    private function setAuthenticationData()
-    {
         $this->setData(
             'config',
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
+                    'downloadImagePreviewUrl' => $this->urlBuilder->getUrl('adobe_stock_image/preview/download'),
                     'authConfig' => [
                         'url' => $this->config->getAuthUrl(),
                         'isAuthorized' => $this->isAuthorized(),
@@ -133,22 +103,23 @@ class ImagePreview extends Column
     }
 
     /**
-     * Set download url to config.
-     */
-    private function setDownloadUrlData()
-    {
-        $config = $this->getData('config');
-        $config['downloadImagePreviewUrl'] = $this->buildDownloadPreviewUrl();
-        $this->setData('config', $config);
-    }
-
-    /**
-     * Build the preview image download.
+     * Is authorized a user
      *
-     * @return string
+     * @return bool
      */
-    private function buildDownloadPreviewUrl(): string
+    private function isAuthorized(): bool
     {
-        return $this->urlBuilder->getUrl('adobe_stock_image/preview/download');
+        try {
+            $userProfile = $this->userProfileRepository->getByUserId(
+                (int)$this->userContext->getUserId()
+            );
+
+            return !empty($userProfile->getId())
+                && !empty($userProfile->getAccessToken())
+                && !empty($userProfile->getAccessTokenExpiresAt())
+                && strtotime($userProfile->getAccessTokenExpiresAt()) >= strtotime('now');
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

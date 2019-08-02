@@ -9,13 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
-use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Payment\Gateway\Http\ConverterException;
 
 /**
@@ -40,11 +34,11 @@ class DocumentToAsset
     /**
      * Convert search document to the asset object
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return AssetInterface
      * @throws ConverterException
      */
-    public function convert(Document $document): AssetInterface
+    public function convert(DocumentInterface $document): AssetInterface
     {
         try {
             $attributes = $document->getCustomAttributes();
@@ -70,10 +64,15 @@ class DocumentToAsset
 
     /**
      * Create asset data entity in recursive loop.
+     *
+     * @param array $data
+     * @param object $factory
+     * @param array $fields
+     * @param array $children
+     * @return array
      */
-    private function createEntity(&$data, $factory, $fields = [], $children = [])
+    private function createEntity(array &$data, $factory, array $fields = [], array $children = [])
     {
-        $data = (array) $data;
         $entity = $factory->create();
 
         foreach ($children as $childName => $childMapping) {
@@ -92,6 +91,7 @@ class DocumentToAsset
             if (is_array($assetField) && is_array($data[$documentField])) {
                 $items = [];
                 foreach ($data[$documentField] as $itemData) {
+                    $itemData = (array) $itemData;
                     $items[] = $this->createEntity($itemData, $factory, $assetField, $children);
                 }
                 return $items;

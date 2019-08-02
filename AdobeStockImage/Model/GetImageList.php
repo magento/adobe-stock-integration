@@ -91,7 +91,7 @@ class GetImageList implements GetImageListInterface
                     'data' => [
                         'items' => $items,
                         'total_count' => $searchResult->getTotalCount(),
-                    ],
+                    ]
                 ]
             );
         } catch (AuthenticationException $exception) {
