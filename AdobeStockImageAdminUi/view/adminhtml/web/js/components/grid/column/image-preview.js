@@ -3,11 +3,14 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/grid/columns/column',
     'underscore',
     'jquery',
-    'knockout'
-], function (Column, _, $, ko) {
+    'knockout',
+    'Magento_Ui/js/grid/columns/column',
+    'Magento_AdobeStockImageAdminUi/js/action/authorization',
+    'Magento_AdobeStockImageAdminUi/js/model/messages',
+    'mage/translate'
+], function (_, $, ko, Column, authorizationAction, messages) {
     'use strict';
 
     return Column.extend({
@@ -18,6 +21,25 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            messageDelay: 5,
+            authConfig: {
+                url: '',
+                isAuthorized: false,
+                stopHandleTimeout: 10000,
+                windowParams: {
+                    width: 500,
+                    height: 600,
+                    top: 100,
+                    left: 300
+                },
+                response: {
+                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
+                    codeIndex: 1,
+                    messageIndex: 2,
+                    successCode: 'success',
+                    errorCode: 'error'
+                }
+            }
         },
 
         /**
@@ -98,7 +120,7 @@ define([
          *
          * @param record
          */
-        next: function(record){
+        next: function (record){
             this._selectRow(record.lastInRow ? record.currentRow + 1 : record.currentRow);
             this.show(record._rowIndex + 1);
         },
@@ -108,7 +130,7 @@ define([
          *
          * @param record
          */
-        prev: function(record){
+        prev: function (record){
             this._selectRow(record.firstInRow ? record.currentRow - 1 : record.currentRow);
             this.show(record._rowIndex - 1);
         },
@@ -120,7 +142,7 @@ define([
          * @param {Number} [height]
          * @private
          */
-        _selectRow(rowId, height){
+        _selectRow: function (rowId, height){
             this.thumbnailComponent().previewRowId(rowId);
         },
 
@@ -130,7 +152,9 @@ define([
          * @param {Object|Number} record
          */
         show: function (record) {
-            var visibility = this.visibility();
+            var visibility = this.visibility(),
+                img;
+
             if(~visibility.indexOf(true)) {// hide any preview
                 if(!Array.prototype.fill) {
                     visibility = _.times(visibility.length, _.constant(false));
@@ -146,11 +170,11 @@ define([
             }
             this.visibility(visibility);
 
-            var $img = $('[data-image-preview] img');
-            if($img.get(0).complete) {
+            img = $('[data-image-preview] img');
+            if(img.get(0).complete) {
                 this._updateHeight();
             } else {
-                $img.load(this._updateHeight.bind(this));
+                img.load(this._updateHeight.bind(this));
             }
         },
 
@@ -160,9 +184,11 @@ define([
          */
         _updateHeight: function (){
             var $preview = $('[data-image-preview]');
+
             this.height($preview.height() + 'px');// set height
             this.visibility(this.visibility());// rerender
-            $preview.get(0).scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});// update scroll if needed
+            // update scroll if needed
+            $preview.get(0).scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
         },
 
         /**
@@ -185,7 +211,7 @@ define([
          * @returns {boolean}
          * @private
          */
-        _isInt: function(value) {
+        _isInt: function (value) {
             return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
         },
 
@@ -194,10 +220,12 @@ define([
          *
          * @param record
          */
-        save: function(record) {
+        save: function (record) {
             // update modal with an image url
             var image_url = record.preview_url;
-            var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)').data('mageMediabrowser').getTargetElement();
+            var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)')
+                .data('mageMediabrowser')
+                .getTargetElement();
             targetEl.val(image_url).trigger('change');
             // close insert image panel
             window.MediabrowserUtility.closeDialog();
@@ -206,5 +234,59 @@ define([
             // close adobe panel
             $("#adobe-stock-images-search-modal").trigger('closeModal');
         },
+
+        /**
+         * Get messages
+         *
+         * @return {Array}
+         */
+        getMessages: function () {
+            return messages.get();
+        },
+
+        /**
+         * License and save image
+         *
+         * @param {Object} record
+         */
+        licenseAndSave: function (record) {
+            /** @todo add license functionality */
+            console.warn('add license functionality');
+            console.dir(record);
+        },
+
+        /**
+         * Process of license
+         *
+         * @param {Object} record
+         */
+        licenseProcess: function (record) {
+            if (this.authConfig.isAuthorized) {
+                this.licenseAndSave(record);
+
+                return;
+            }
+
+            /**
+             * Opens authorization window of Adobe Stock
+             * then starts the authorization process
+             */
+            authorizationAction(this.authConfig)
+                .then(
+                    function (authConfig) {
+                        this.authConfig = _.extend(this.authConfig, authConfig);
+                        this.licenseProcess(record);
+                        messages.add('success', authConfig.lastAuthSuccessMessage);
+                    }.bind(this)
+                )
+                .catch(
+                    function (error) {
+                        messages.add('error', error.message);
+                    }.bind(this)
+                )
+                .finally((function () {
+                    messages.scheduleCleanup(this.messageDelay);
+                }).bind(this));
+        }
     });
 });

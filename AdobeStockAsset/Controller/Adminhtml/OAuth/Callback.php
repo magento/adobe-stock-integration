@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Controller\Adminhtml\OAuth;
 
+use DateInterval;
+use DateTime;
 use Exception;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterfaceFactory;
@@ -30,16 +32,41 @@ class Callback extends Action
      */
     const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
-    /** @var UserProfileRepositoryInterface */
+    /**
+     * Consts of response
+     *
+     * RESPONSE_TEMPLATE - template of response
+     * RESPONSE_REGEXP_PATTERN - RegExp pattern of response (JavaScript)
+     * RESPONSE_CODE_INDEX index of response code
+     * RESPONSE_MESSAGE_INDEX index of response message
+     * RESPONSE_SUCCESS_CODE success code
+     * RESPONSE_ERROR_CODE error code
+     */
+    const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
+    const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
+    const RESPONSE_CODE_INDEX = 1;
+    const RESPONSE_MESSAGE_INDEX = 2;
+    const RESPONSE_SUCCESS_CODE = 'success';
+    const RESPONSE_ERROR_CODE = 'error';
+
+    /**
+     * @var UserProfileRepositoryInterface
+     */
     private $userProfileRepository;
 
-    /** @var UserProfileInterfaceFactory */
+    /**
+     * @var UserProfileInterfaceFactory
+     */
     private $userProfileFactory;
 
-    /** @var Client */
+    /**
+     * @var Client
+     */
     private $client;
 
-    /** @var LoggerInterface */
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
     /**
@@ -66,9 +93,9 @@ class Callback extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function execute()
+    public function execute() : \Magento\Framework\Controller\ResultInterface
     {
         try {
             $tokenResponse = $this->client->getToken(
@@ -79,23 +106,34 @@ class Callback extends Action
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
+            $userProfile->setAccessTokenExpiresAt(
+                $this->getExpiresTime($tokenResponse->getExpiresIn())
+            );
 
             $this->userProfileRepository->save($userProfile);
-        } catch (CouldNotSaveException $e) {
-            $this->getMessageManager()->addErrorMessage($e->getMessage());
+
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_SUCCESS_CODE,
+                __('Authorization was successful')
+            );
         } catch (AuthorizationException $e) {
-            $this->getMessageManager()->addErrorMessage($e->getMessage());
+            $response = sprintf(self::RESPONSE_TEMPLATE, self::RESPONSE_ERROR_CODE, $e->getMessage());
+        } catch (CouldNotSaveException $e) {
+            $response = sprintf(self::RESPONSE_TEMPLATE, self::RESPONSE_ERROR_CODE, $e->getMessage());
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
-            $this->getMessageManager()->addErrorMessage(__('Something went wrong.'));
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                __('Something went wrong.')
+            );
         }
 
-        /**
-         * @todo Please update response if it needs for UI
-         */
         /** @var Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
-        $resultRaw->setContents('');
+        $resultRaw->setContents($response);
+
         return $resultRaw;
     }
 
@@ -104,7 +142,7 @@ class Callback extends Action
      *
      * @return UserProfileInterface
      */
-    private function getUserProfile()
+    private function getUserProfile() : UserProfileInterface
     {
         try {
             return $this->userProfileRepository->getByUserId(
@@ -113,5 +151,19 @@ class Callback extends Action
         } catch (Exception $e) {
             return $this->userProfileFactory->create();
         }
+    }
+
+    /**
+     * Retrieve token expires date
+     *
+     * @param int $expiresIn
+     * @return string
+     * @throws Exception
+     */
+    private function getExpiresTime(int $expiresIn) : string
+    {
+        $dateTime = new DateTime();
+        $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn/1000)));
+        return $dateTime->format('Y-m-d H:i:s');
     }
 }

@@ -10,15 +10,16 @@ namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAsset\Model\ResourceModel\UserProfile as UserProfileResource;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\AdobeStockAssetApi\Api\Data\UserProfileExtensionInterface;
 
 /**
  * Class UserProfile
  */
-class UserProfile extends AbstractModel implements UserProfileInterface
+class UserProfile extends AbstractExtensibleModel implements UserProfileInterface
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -26,7 +27,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getAdobeId(): int
     {
@@ -34,7 +35,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setAdobeId(int $value): void
     {
@@ -42,7 +43,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getUserId(): int
     {
@@ -50,7 +51,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUserId(int $value): void
     {
@@ -58,7 +59,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getName(): string
     {
@@ -66,7 +67,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setName(string $value): void
     {
@@ -74,7 +75,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getAccountType(): string
     {
@@ -82,7 +83,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setAccountType(string $value): void
     {
@@ -90,15 +91,15 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getAccessToken(): string
+    public function getAccessToken(): ?string
     {
         return $this->getData(self::ACCESS_TOKEN);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setAccessToken(string $value): void
     {
@@ -106,15 +107,15 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getRefreshToken(): string
+    public function getRefreshToken(): ?string
     {
         return $this->getData(self::REFRESH_TOKEN);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setRefreshToken(string $value): void
     {
@@ -122,7 +123,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getCreatedAt(): string
     {
@@ -130,7 +131,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setCreatedAt(string $value): void
     {
@@ -138,7 +139,7 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getUpdatedAt(): string
     {
@@ -146,10 +147,42 @@ class UserProfile extends AbstractModel implements UserProfileInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUpdatedAt(string $value): void
     {
         $this->setData(self::UPDATED_AT, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAccessTokenExpiresAt(): ?string
+    {
+        return $this->getData(self::ACCESS_TOKEN_EXPIRES_AT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAccessTokenExpiresAt(string $value): void
+    {
+        $this->setData(self::ACCESS_TOKEN_EXPIRES_AT, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes(): UserProfileExtensionInterface
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(UserProfileExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

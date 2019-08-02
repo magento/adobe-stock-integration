@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class Config
 {
+    /**
+     * Path to enable/disable adobe stock integration in the system settings.
+     */
     private const XML_PATH_ENABLED = 'adobe_stock/integration/enabled';
 
     /**
@@ -37,8 +40,8 @@ class Config
      *
      * @return bool
      */
-    public function isEnabled(): bool
+    public function isEnabled() : bool
     {
-        return (bool)$this->scopeConfig->getValue(self::XML_PATH_ENABLED);
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED);
     }
 }

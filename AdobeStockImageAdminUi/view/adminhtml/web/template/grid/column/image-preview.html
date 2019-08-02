@@ -23,8 +23,21 @@
             <div class="author" if="$col.getAuthor($row())">
                 <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
             </div>
+            <ul class="messages" if="$col.getMessages().length > 0">
+                <!-- ko foreach: $col.getMessages() -->
+                <li attr="class: code">
+                    <span data-bind="html: message"></span>
+                </li>
+                <!-- /ko -->
+            </ul>
             <button class="action-secondary" type="button" data-bind="click: function(){ $col.save($row()) }">
                 <span translate="'Save Preview'"/>
+            </button>
+            <button class="action-default primary"
+                    type="button"
+                    attr="title: $t('License and Save')"
+                    data-bind="click: function () { $col.licenseProcess($row()); }">
+                <span data-bind="i18n: 'License and Save'"></span>
             </button>
         </div>
     </div>

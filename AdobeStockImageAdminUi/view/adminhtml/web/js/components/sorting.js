@@ -19,7 +19,7 @@ define([
             },
             exports: {
                 applied: '${ $.provider }:params.sorting'
-            },
+            }
         },
 
         /**
@@ -40,15 +40,16 @@ define([
          */
         preparedOptions: function () {
             var columns = uiRegistry.get('index = adobe_stock_images_columns');
+
             if (columns && columns.elems().length > 0) {
-                columns.elems().map((function (column) {
+                columns.elems().map(function (column) {
                     if (true === column.sortable) {
                         this.options.push({
                             value: column.index,
                             label: column.label
                         });
                     }
-                }).bind(this));
+                }).bind(this);
             }
         },
 
