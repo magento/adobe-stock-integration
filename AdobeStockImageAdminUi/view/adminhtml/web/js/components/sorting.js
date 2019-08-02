@@ -49,7 +49,7 @@ define([
                             label: column.label
                         });
                     }
-                }).bind(this);
+                }.bind(this))
             }
         },
 
