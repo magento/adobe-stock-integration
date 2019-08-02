@@ -24,22 +24,22 @@ class DeleteTest extends WebapiAbstract
     /**
      * Service name
      */
-    const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
+    private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
 
     /**
      * Service version
      */
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
     /**
      * Resource path
      */
-    const RESOURCE_PATH = '/V1/adobestock/asset';
+    private const RESOURCE_PATH = '/V1/adobestock/asset';
 
     /**
      * Service operation
      */
-    const SERVICE_OPERATION = 'DeleteById';
+    private const SERVICE_OPERATION = 'DeleteById';
 
     /**
      * @var ObjectManagerInterface
