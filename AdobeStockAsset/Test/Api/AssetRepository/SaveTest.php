@@ -106,7 +106,7 @@ class SaveTest extends WebapiAbstract
         return [
             [
                 [
-                    AssetInterface::ADOBE_ID => (string) mt_rand(9999, 99999),
+                    AssetInterface::ADOBE_ID => (string) random_int(9999, 99999),
                     AssetInterface::PATH => uniqid() . '/file-path.png',
                     AssetInterface::WIDTH => '1000',
                     AssetInterface::HEIGHT => '800',

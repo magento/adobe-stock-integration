@@ -18,5 +18,14 @@
                 type="Magento\AdobeStockAsset\Model\UserProfile"/>
     <preference for="Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface"
                 type="Magento\AdobeStockAsset\Model\UserProfileRepository"/>
+
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="adobe_stock/integration/api_key" xsi:type="string">1</item>
+                <item name="adobe_stock/integration/private_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
 
