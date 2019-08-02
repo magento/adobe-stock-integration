@@ -18,7 +18,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Adobe Stock Asset
  */
-class Asset extends AbstractExtensibleModel implements AssetInterface
+class Asset extends AbstractExtensibleModel implements AssetIntexrface
 {
     /**
      * @inheritdoc
@@ -149,7 +149,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getPremiumLevelId(): int
+    public function getPremiumLevelId(): ?int
     {
         return $this->getData(self::PREMIUM_LEVEL_ID);
     }

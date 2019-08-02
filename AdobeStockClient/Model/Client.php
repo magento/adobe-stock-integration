@@ -242,7 +242,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getToken(string $code): OAuth\TokenResponse
     {

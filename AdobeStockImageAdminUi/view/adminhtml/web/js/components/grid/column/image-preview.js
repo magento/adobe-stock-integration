@@ -15,13 +15,22 @@ define([
 
     return Column.extend({
         defaults: {
-            visibility: [],
-            height: 0,
-            saveAvailable: true,
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            visibility: [],
+            height: 0,
+            saveAvailable: true,
+            statefull: {
+                visible: true,
+                sorting: true,
+                lastOpenedImage: true
+            },
+            tracks: {
+                lastOpenedImage: true,
+            },
+            lastOpenedImage: null,
+            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             messageDelay: 5,
             authConfig: {
                 url: '',
@@ -107,6 +116,9 @@ define([
          * @return {*|boolean}
          */
         isVisible: function (record) {
+            if (this.lastOpenedImage === record._rowIndex) {
+                this.show(record);
+            }
             return this.visibility()[record._rowIndex] || false;
         },
 
@@ -166,6 +178,7 @@ define([
             var visibility = this.visibility(),
                 img;
 
+            this.lastOpenedImage = null;
             if(~visibility.indexOf(true)) {// hide any preview
                 if(!Array.prototype.fill) {
                     visibility = _.times(visibility.length, _.constant(false));
@@ -186,6 +199,7 @@ define([
                 this._updateHeight();
             } else {
                 img.load(this._updateHeight.bind(this));
+                this.lastOpenedImage = record._rowIndex;
             }
         },
 
@@ -204,12 +218,12 @@ define([
 
         /**
          * Close image preview
-         *
-         * @param {Object} record
          */
-        hide: function (record) {
+        hide: function () {
             var visibility = this.visibility();
-            visibility[record._rowIndex] = false;
+
+            this.lastOpenedImage = null;
+            visibility.fill(false);
             this.visibility(visibility);
             this.height(0);
             this._selectRow(null, 0);

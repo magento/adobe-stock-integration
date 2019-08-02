@@ -168,7 +168,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Set media type
      *
-     * @param int $mediaTypeId
+     * @param int|null $mediaTypeId
      * @return void
      */
     public function setMediaTypeId(int $mediaTypeId): void;
@@ -258,7 +258,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Set the premium level
      *
-     * @param int $premiumLevelId
+     * @param int|null $premiumLevelId
      * @return void
      */
     public function setPremiumLevelId(int $premiumLevelId): void;
