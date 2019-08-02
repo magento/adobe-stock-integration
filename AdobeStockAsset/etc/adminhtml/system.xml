@@ -36,9 +36,7 @@
                 </field>
                 <field id="private_key" translate="label" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Private Key</label>
-                    <comment><![CDATA[Configure an Adobe Stock account on the <a href="https://console.adobe.io/" target="_blank">Adobe.io</a> site to retrieve an Private key (Client secret).</br>
-                                In order to create an integration in console.adobe.com Magento admin needs to enter Redirect URL and Redirect URL pattern.]]>
-                    </comment>
+                    <comment model="Magento\AdobeStockAsset\Model\System\Config\Comment" />
                     <config_path>adobe_stock/integration/private_key</config_path>
                     <validate>required-entry</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
