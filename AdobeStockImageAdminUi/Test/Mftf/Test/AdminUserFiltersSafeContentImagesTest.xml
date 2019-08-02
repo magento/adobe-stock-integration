@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserFiltersSafeContentImagesTest">
+    <test name="AdminUserFiltersSafeContentImagesTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="Filter safe content images via Admin"/>
