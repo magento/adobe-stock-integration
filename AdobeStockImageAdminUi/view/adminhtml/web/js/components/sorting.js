@@ -23,7 +23,7 @@ define([
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initObservable: function () {
             this.preparedOptions();

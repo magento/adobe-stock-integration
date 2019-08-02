@@ -21,9 +21,25 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class SaveTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'adobeStockAssetRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/adobestock/asset';
+    /**
+     * Service name
+     */
+    private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
+
+    /**
+     * Service version
+     */
+    private const SERVICE_VERSION = 'V1';
+
+    /**
+     * Resource path
+     */
+    private const RESOURCE_PATH = '/V1/adobestock/asset';
+
+    /**
+     * Service operation
+     */
+    private const SERVICE_OPERATION = 'Save';
 
     /**
      * @var ObjectManagerInterface
@@ -55,8 +71,14 @@ class SaveTest extends WebapiAbstract
         $this->saveAsset($data);
         /** @var Asset $asset */
         $asset = $this->getSavedAsset($data[AssetInterface::ADOBE_ID]);
+        $uniqueData = [
+            AssetInterface::ADOBE_ID => $data[AssetInterface::ADOBE_ID],
+            AssetInterface::PATH => $data[AssetInterface::PATH],
+            AssetInterface::PREVIEW_URL => $data[AssetInterface::PREVIEW_URL],
+            AssetInterface::DETAILS_URL => $data[AssetInterface::DETAILS_URL]
+        ];
 
-        $this->assertArraySubset($data, $asset->getData());
+        $this->assertArraySubset($uniqueData, $asset->getData());
     }
 
     /**
@@ -64,6 +86,23 @@ class SaveTest extends WebapiAbstract
      */
     public function assetDataProvider()
     {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            return [
+                [
+                    [
+                        AssetInterface::ADOBE_ID => (string) mt_rand(9999, 99999),
+                        AssetInterface::PATH => uniqid() . '/file-path.png',
+                        AssetInterface::WIDTH => '1000',
+                        AssetInterface::HEIGHT => '800',
+                        AssetInterface::PREVIEW_WIDTH => '500',
+                        AssetInterface::PREVIEW_HEIGHT => '400',
+                        AssetInterface::PREVIEW_URL => uniqid('preview-url'),
+                        AssetInterface::DETAILS_URL => uniqid('details-url'),
+                    ]
+                ]
+            ];
+        }
+
         return [
             [
                 [
@@ -73,8 +112,22 @@ class SaveTest extends WebapiAbstract
                     AssetInterface::HEIGHT => '800',
                     AssetInterface::PREVIEW_WIDTH => '500',
                     AssetInterface::PREVIEW_HEIGHT => '400',
+                    AssetInterface::MEDIA_TYPE_ID => null,
+                    AssetInterface::KEYWORDS => [],
+                    AssetInterface::PREMIUM_LEVEL_ID => null,
+                    AssetInterface::STOCK_ID => 1,
+                    AssetInterface::TITLE => 'Title',
+                    AssetInterface::URL => uniqid('preview-url'),
+                    AssetInterface::COUNTRY_NAME => '',
+                    AssetInterface::VECTOR_TYPE => '',
+                    AssetInterface::CONTENT_TYPE => '',
+                    AssetInterface::CREATION_DATE => '',
+                    AssetInterface::CREATED_AT => '',
+                    AssetInterface::UPDATED_AT => '',
                     AssetInterface::PREVIEW_URL => uniqid('preview-url'),
                     AssetInterface::DETAILS_URL => uniqid('details-url'),
+                    AssetInterface::IS_LICENSED => 1,
+                    'licensed' => 1,
                 ]
             ]
         ];
@@ -95,13 +148,12 @@ class SaveTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'save',
+                'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION,
             ],
         ];
+        $requestData = ['asset' => $data];
 
-        $requestData = ['item' => $data];
-
-        return $this->_webApiCall($serviceInfo, $requestData, null);
+        return $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**
