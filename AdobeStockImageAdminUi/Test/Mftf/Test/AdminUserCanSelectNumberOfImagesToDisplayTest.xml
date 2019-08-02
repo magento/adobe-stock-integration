@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUserSortsTheOrderOfImagesInTheGridTest">
+    <test name="AdminUserCanSelectNumberOfImagesToDisplayTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="Access Adobe Stock Image panel via the Admin"/>
@@ -38,7 +38,14 @@
         <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see64imagesOnTheSecondPage">
             <argument name="thumbnailsNumber" value="64"/>
         </actionGroup>
-<!-- assert custom page size -->
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select48rderPerPage">
+            <argument name="perPage" value="48"/>
+        </actionGroup>
+        <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="48" stepKey="see48PerPageValueInDropDown"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see48imagesOnTheSecondPage">
+            <argument name="thumbnailsNumber" value="48"/>
+        </actionGroup>
+        <!-- assert custom page size -->
         <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="selectCustomPerPage">
             <argument name="perPage" value="23"/>
         </actionGroup>
