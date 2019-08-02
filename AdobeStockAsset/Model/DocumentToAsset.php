@@ -68,6 +68,9 @@ class DocumentToAsset
         }
     }
 
+    /**
+     * Create asset data entity in recursive loop.
+     */
     private function createEntity(&$data, $factory, $fields = [], $children = [])
     {
         $data = (array) $data;
