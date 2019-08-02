@@ -19,5 +19,6 @@
         <element name="gridSpinner" type="text" selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']"/>
         <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
         <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
+        <element name="recordsFound" type="text" selector="//*[@id='adobe-stock-images-search-modal']//*[text()='records found']/parent::div"/>
     </section>
 </sections>
