@@ -139,7 +139,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
         }
         $asset->setCategoryId($category->getId());
 
-        $creator = $asset->getCategory();
+        $creator = $asset->getCreator();
         if (!$this->isCreatorSaved($creator->getId())) {
             $creator->isObjectNew(true);
             $creator = $this->creatorRepository->save($creator);

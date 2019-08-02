@@ -18,7 +18,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Adobe Stock Asset
  */
-class Asset extends AbstractExtensibleModel implements AssetIntexrface
+class Asset extends AbstractExtensibleModel implements AssetInterface
 {
     /**
      * @inheritdoc
