@@ -167,6 +167,7 @@ define([
             var visibility = this.visibility(),
                 img;
 
+            this.lastOpenedImage = null;
             if(~visibility.indexOf(true)) {// hide any preview
                 if(!Array.prototype.fill) {
                     visibility = _.times(visibility.length, _.constant(false));
