@@ -129,85 +129,74 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     private function saveAsset(AssetInterface $asset): void
     {
-        if (!$this->isAssetAlreadyExists($asset)) {
+        if (!$this->isAssetSaved($asset->getId())) {
             $asset->isObjectNew(true);
         }
-        $category = $this->saveCategory($asset->getCategory());
-        $creator = $this->saveCreator($asset->getCreator());
+        $category = $asset->getCategory();
+        if (!$this->isCategorySaved($category->getId())) {
+            $category->isObjectNew(true);
+            $category = $this->categoryRepository->save($category);
+        }
         $asset->setCategoryId($category->getId());
+
+        $creator = $asset->getCategory();
+        if (!$this->isCreatorSaved($creator->getId())) {
+            $creator->isObjectNew(true);
+            $creator = $this->creatorRepository->save($creator);
+        }
         $asset->setCreatorId($creator->getId());
+
         $this->assetRepository->save($asset);
     }
 
     /**
      * Is asset already exists.
      *
-     * @param AssetInterface $asset
+     * @param int $id
      *
      * @return bool
      */
-    private function isAssetAlreadyExists(AssetInterface $asset): bool
+    private function isAssetSaved(int $id): bool
     {
         try {
-            $asset = $this->assetRepository->getById($asset->getId());
-            return ($asset instanceof AssetInterface);
+            $asset = $this->assetRepository->getById($id);
+            return $asset->getId() !== null;
         } catch (NoSuchEntityException $exception) {
             return false;
         }
     }
 
     /**
-     * Save category.
+     * Is asset already exists.
      *
-     * @param CategoryInterface $category
-     * @return CategoryInterface
+     * @param int $id
+     *
+     * @return bool
      */
-    private function saveCategory(CategoryInterface $category): CategoryInterface
+    private function isCategorySaved(int $id): bool
     {
         try {
-            $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter(CategoryInterface::ADOBE_ID, $category->getAdobeId())
-                ->create();
-
-            $categoryList = $this->categoryRepository->getList($searchCriteria);
-            if (0 === $categoryList->getTotalCount()) {
-                $category = $this->categoryRepository->save($category);
-            } else {
-                $categoryItems = $categoryList->getItems();
-                $category = reset($categoryItems);
-            }
-            return $category;
-        } catch (AlreadyExistsException $exception) {
-            return $category;
+            $category = $this->categoryRepository->getById($id);
+            return $category->getId() !== null;
+        } catch (NoSuchEntityException $exception) {
+            return false;
         }
     }
 
     /**
-     * Save creator.
+     * Is asset already exists.
      *
-     * @param CreatorInterface $creator
+     * @param int $id
      *
-     * @return CreatorInterface
+     * @return bool
      */
-    private function saveCreator(CreatorInterface $creator): CreatorInterface
+    private function isCreatorSaved(int $id): bool
     {
         try {
-            $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter(CreatorInterface::ADOBE_ID, $creator->getAdobeId())
-                ->create();
-
-            $creatorList = $this->creatorRepository->getList($searchCriteria);
-
-            if (0 === $creatorList->getTotalCount()) {
-                $creator = $this->creatorRepository->save($creator);
-            } else {
-                $creatorListItems = $creatorList->getItems();
-                $creator = reset($creatorListItems);
-            }
-
-            return $creator;
-        } catch (AlreadyExistsException $exception) {
-            return $creator;
+            $creator = $this->creatorRepository->getById($id);
+            return $creator->getId() !== null;
+        } catch (NoSuchEntityException $exception) {
+            return false;
         }
     }
 

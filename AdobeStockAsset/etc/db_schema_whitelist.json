@@ -101,7 +101,6 @@
     "adobe_stock_category": {
         "column": {
             "id": true,
-            "adobe_id": true,
             "name": true
         },
         "index": {
@@ -141,7 +140,6 @@
     "adobe_stock_creator": {
         "column": {
             "id": true,
-            "adobe_id": true,
             "creator_name": true
         },
         "index": {

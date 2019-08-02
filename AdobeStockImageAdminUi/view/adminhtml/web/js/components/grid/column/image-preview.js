@@ -245,7 +245,6 @@ define([
                        dataType: 'json',
                        data: postData,
                        success: function (response) {
-                           console.log(response)
                            var successMessage = '<div class="messages"><div class="message message-success success">' +
                                                 response.message +
                                                 '<div data-ui-id="messages-message-success"></div></div></div>';

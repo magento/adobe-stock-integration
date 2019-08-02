@@ -69,7 +69,7 @@ class DocumentToAsset
      * @param object $factory
      * @param array $fields
      * @param array $children
-     * @return array
+     * @return object
      */
     private function createEntity(array &$data, $factory, array $fields = [], array $children = [])
     {

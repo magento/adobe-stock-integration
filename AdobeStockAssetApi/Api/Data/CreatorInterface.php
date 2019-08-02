@@ -36,21 +36,6 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setId($value): void;
 
     /**
-     * Get the adobe id
-     *
-     * @return int
-     */
-    public function getAdobeId(): int;
-
-    /**
-     * Set the adobe id
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setAdobeId(int $value): void;
-
-    /**
      * Get the creator name
      *
      * @return string|null

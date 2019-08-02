@@ -51,22 +51,6 @@ class Category extends AbstractExtensibleModel implements CategoryInterface
     /**
      * @inheritdoc
      */
-    public function getAdobeId(): int
-    {
-        return (int) $this->getData(self::ADOBE_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setAdobeId(int $value): void
-    {
-        $this->setData(self::ADOBE_ID, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getName(): string
     {
         return (string) $this->getData(self::NAME);
