@@ -21,7 +21,7 @@ define([
                        dataType: 'json',
                        data: { 'api_key': apiKey },
                        success: function(response) {
-                           validationContainerClass = (response.success === 1) ?
+                           validationContainerClass = (response.success === true) ?
                                'message-validation message message-success success'
                                : 'message-validation message message-error error';
                            validationResultContainer.addClass(validationContainerClass).text(response.message);
