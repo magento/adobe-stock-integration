@@ -232,22 +232,6 @@ define([
          * @param record
          */
         save: function (record) {
-            // update modal with an image url
-            var image_url = record.preview_url;
-            var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)')
-                .data('mageMediabrowser')
-                .getTargetElement();
-            targetEl.val(image_url).trigger('change');
-            // close insert image panel
-            window.MediabrowserUtility.closeDialog();
-            targetEl.focus();
-            $(targetEl).change();
-            // close adobe panel
-            $("#adobe-stock-images-search-modal").trigger('closeModal');
-        },
-
-
-        download: function (record) {
             //@TODO add a logic for getting the target path
             var destinationPath = '';
             var postData = {
@@ -263,13 +247,26 @@ define([
                        success: function (response) {
                            var successMessage = '<div class="messages"><div class="message message-success success">' +
                                                 response.message +
-                                         '<div data-ui-id="messages-message-success"></div></div></div>';
+                                                '<div data-ui-id="messages-message-success"></div></div></div>';
                            $('#' + record.id).append(successMessage);
+
+                           // update modal with an image url
+                           var image_url = record.preview_url;
+                           var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)')
+                           .data('mageMediabrowser')
+                           .getTargetElement();
+                           targetEl.val(image_url).trigger('change');
+                           // close insert image panel
+                           window.MediabrowserUtility.closeDialog();
+                           targetEl.focus();
+                           $(targetEl).change();
+                           // close adobe panel
+                           $("#adobe-stock-images-search-modal").trigger('closeModal');
                        },
                        error: function (response) {
                            var errorMessage = '<div class="messages"><div class="message message-error error">' +
                                               response.responseJSON.error_message +
-                                         '<div data-ui-id="messages-message-error"></div></div></div>';
+                                              '<div data-ui-id="messages-message-error"></div></div></div>';
                            $('#' + record.id).append(errorMessage);
                        }
                    });
