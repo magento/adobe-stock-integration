@@ -36,6 +36,7 @@
         <settings>
             <sticky>true</sticky>
         </settings>
+        <bookmark name="bookmarks"/>
         <filterSearch name="words"/>
         <paging name="listing_paging">
             <settings>

@@ -24,5 +24,6 @@
     <element name="filterByType" type="select" selector="//select[@name='content_type_filter']"/>
     <element name="filterOption" type="button" selector="//select[@name='{{filter}}']/option[@data-title='{{type}}']" parameterized="true"/>
     <element name="activeFilter" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='admin__current-filters-list-wrap']//span[contains( ., '{{color}}')]" parameterized="true"/>
+    <element name="safeSearchFilterCheckbox" type="select" selector="//*[@id='adobe-stock-images-search-modal']//input[@name='offensive_filter']"/>
 </section>
 </sections>
