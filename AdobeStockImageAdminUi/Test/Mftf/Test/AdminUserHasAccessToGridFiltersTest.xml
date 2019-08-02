@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserHasAccessToGridFiltersTest">
+    <test name="AdminUserHasAccessToGridFiltersTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="User has access to Adobe Stock Images filters"/>
@@ -18,29 +18,24 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{AdobeStockEnabledConfigData.path}} {{AdobeStockEnabledConfigData.value}}" stepKey="enableAdobeStock"/>
-            <!-- Saving the API key as locked encrypted value in config.php -->
-            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} {{AdobeStockApiKeyConfigData.value}} --lock-config" stepKey="setAdobeStockApiKey"/>
-            <createData entity="_defaultCmsPage" stepKey="createCMSPage">
-                <field key="title">Mid-Year Sale</field>
-                <field key="content_heading">Mid-Year Sale</field>
-                <field key="identifier">mid-year-sale-</field>
-            </createData>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{AdobeStockApiKeyConfigData.path}} '' --lock-config" stepKey="removeAdobeStockApiKey"/>
-            <magentoCLI command="config:set {{AdobeStockDisabledConfigData.path}} {{AdobeStockDisabledConfigData.value}}" stepKey="disableAdobeStock"/>
-            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="wysiwygEnabled" value="disabled"/>
+<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+<!--                <argument name="apiKey" value=""/>-->
+<!--                <argument name="privateKey" value=""/>-->
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="goToCreatedCMSPage">
-            <argument name="CMSPage" value="$$createCMSPage$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminExpandContentFieldsetActionGroup" stepKey="expandContentFieldset"/>
-        <actionGroup ref="AdminOpenCMSMediaGalleryPopupActionGroup" stepKey="openMediaGalleryPopup"/>
-        <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopup"/>
-        <actionGroup ref="AdminOpenAdobeStockFiltersActionGroup" stepKey="openFilters"/>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlWithoutFilters"/>
+        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersOpen"/>
         <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSubcategoryFilter">
             <argument name="filterName" value="Subcategory"/>
         </actionGroup>
