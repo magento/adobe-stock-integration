@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserNavigatesToNextPreviousImageFromTheCurrentlyViewedTest">
+    <test name="AdminUserNavigatesBetweenImagesOnThePreviewTest">
         <annotations>
             <stories value="User navigates to next previous image"/>
             <title value="Admin should be able to navigates to next previous image from the currently viewed"/>
