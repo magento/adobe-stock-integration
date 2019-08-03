@@ -473,11 +473,4 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      */
     public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
 
-    /**
-     * Set object as new
-     *
-     * @param bool $true
-     * @return void
-     */
-    public function isObjectNew(bool $true): void;
 }

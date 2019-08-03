@@ -64,12 +64,5 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return void
      */
     public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void;
-
-    /**
-     * Set object as new
-     *
-     * @param bool $true
-     * @return void
-     */
-    public function isObjectNew(bool $true): void;
+    
 }
