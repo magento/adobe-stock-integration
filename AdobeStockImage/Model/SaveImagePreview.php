@@ -12,8 +12,6 @@ use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -133,14 +131,14 @@ class SaveImagePreview implements SaveImagePreviewInterface
             $asset->isObjectNew(true);
         }
         $category = $asset->getCategory();
-        if (!$this->isCategorySaved($category->getId())) {
+        if ($category !== null && !$this->isCategorySaved($category->getId())) {
             $category->isObjectNew(true);
             $category = $this->categoryRepository->save($category);
         }
         $asset->setCategoryId($category->getId());
 
         $creator = $asset->getCreator();
-        if (!$this->isCreatorSaved($creator->getId())) {
+        if ($creator !== null && !$this->isCreatorSaved($creator->getId())) {
             $creator->isObjectNew(true);
             $creator = $this->creatorRepository->save($creator);
         }

@@ -64,4 +64,12 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return void
      */
     public function setExtensionAttributes(CreatorExtensionInterface $extensionAttributes): void;
+
+    /**
+     * Set object as new
+     *
+     * @param bool $true
+     * @return void
+     */
+    public function isObjectNew(bool $true): void;
 }

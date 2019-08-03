@@ -19,6 +19,7 @@ class Category extends AbstractDb
      * @inheritdoc
      */
     protected $_isPkAutoIncrement = false;
+
     /**
      * @inheritdoc
      */
