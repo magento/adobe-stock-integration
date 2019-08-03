@@ -44,10 +44,9 @@ class Comment implements CommentInterface
     {
         $redirectUrl = $this->url->getUrl('adobe_stock/oauth/callback');
         $redirectUrlPattern = str_replace('.', '\\.', $redirectUrl);
-        $commentText = sprintf(
-            "Configure an Adobe Stock account on the <a href=\"https://console.adobe.io/\" target=\"_blank\">Adobe.io</a> site to retrieve an Private key (Client secret).</br>
-        Note: the Default redirect URI is %s and the redirect URI pattern is %s.", $redirectUrl, $redirectUrlPattern
-        );
+        $commentText = "Configure an Adobe Stock account on the <a href=\"https://console.adobe.io/\" target=\"_blank\">Adobe.io</a> 
+        site to retrieve an Private key (Client secret).</br> 
+        Note: the Default redirect URI is {$redirectUrl} and the redirect URI pattern is {$redirectUrlPattern}.";
         return $commentText;
     }
 }
