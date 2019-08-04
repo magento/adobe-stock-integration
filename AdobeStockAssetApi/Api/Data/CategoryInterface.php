@@ -64,5 +64,4 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return void
      */
     public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void;
-    
 }

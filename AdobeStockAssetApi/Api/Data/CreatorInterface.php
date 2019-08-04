@@ -64,5 +64,4 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return void
      */
     public function setExtensionAttributes(CreatorExtensionInterface $extensionAttributes): void;
-
 }

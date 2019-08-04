@@ -472,5 +472,4 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return void
      */
     public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
-
 }
