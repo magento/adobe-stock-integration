@@ -22,14 +22,15 @@
             <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
-               <argument name="enabled" value="0"/>
-               <argument name="wysiwygEnabled" value="disabled"/>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="wysiwygEnabled" value="disabled"/>
 <!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
 <!--                <argument name="apiKey" value=""/>-->
 <!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>
@@ -50,6 +51,5 @@
             <argument name="color" value="none"/>
         </actionGroup>
         <see selector="{{AdobeStockFilterSection.emptyText}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
-        <actionGroup ref="AdminUserClearSearchFiltersActionGroup" stepKey="ClearFilters"/>
     </test>
 </tests>
