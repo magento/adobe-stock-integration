@@ -29,7 +29,7 @@ class Sorting implements SearchParameterProviderInterface
     {
         $resultsOrders = Constants::getSearchParamsOrders();
         foreach ($searchCriteria->getSortOrders() as $sortOrder) {
-            if (false !== ($sortOrderField = array_search($sortOrder->getField(), $resultsOrders, null))) {
+            if (false !== ($sortOrderField = array_search($sortOrder->getField(), $resultsOrders, false))) {
                 $searchParams->setOrder($sortOrderField);
             }
         }
