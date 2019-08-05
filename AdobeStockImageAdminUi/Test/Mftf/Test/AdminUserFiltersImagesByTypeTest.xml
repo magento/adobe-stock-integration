@@ -46,5 +46,6 @@
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Photo"/>
         </actionGroup>
+        <actionGroup ref="AdminUserClearSearchFiltersActionGroup" stepKey="ClearFilters"/>
     </test>
 </tests>
