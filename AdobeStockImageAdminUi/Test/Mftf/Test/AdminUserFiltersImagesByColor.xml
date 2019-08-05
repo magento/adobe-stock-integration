@@ -50,5 +50,6 @@
             <argument name="color" value="none"/>
         </actionGroup>
         <see selector="{{AdobeStockFilterSection.emptyText}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
+        <actionGroup ref="AdminUserClearSearchFiltersActionGroup" stepKey="ClearFilters"/>
     </test>
 </tests>

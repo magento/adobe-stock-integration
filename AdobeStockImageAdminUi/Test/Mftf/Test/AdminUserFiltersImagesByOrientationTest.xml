@@ -48,5 +48,6 @@
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Horizontal"/>
         </actionGroup>
+        <actionGroup ref="AdminUserClearSearchFiltersActionGroup" stepKey="ClearFilters"/>
     </test>
 </tests>
