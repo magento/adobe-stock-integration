@@ -96,7 +96,8 @@ class DocumentToAsset
                 }
                 return $items;
             } else {
-                $entity->setData($assetField, $data[$documentField]);
+                $filedValue = isset($data[$documentField]) ? $data[$documentField] : null;
+                $entity->setData($assetField, $filedValue);
             }
             unset($data[$documentField]);
         }
