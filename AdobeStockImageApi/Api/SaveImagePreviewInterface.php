@@ -25,10 +25,10 @@ interface SaveImagePreviewInterface
      * @param int    $adobeId
      * @param string $destinationPath
      *
-     * @return bool
+     * @return bool|string
      * @throws CouldNotSaveException
      * @throws NotFoundException
      * @throws LocalizedException
      */
-    public function execute(int $adobeId, string $destinationPath): void;
+    public function execute(int $adobeId, string $destinationPath): ?string;
 }

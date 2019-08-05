@@ -12,8 +12,6 @@ use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -68,13 +66,13 @@ class SaveImagePreview implements SaveImagePreviewInterface
     /**
      * SaveImagePreview constructor.
      *
-     * @param AssetRepositoryInterface    $assetRepository
-     * @param CreatorRepositoryInterface  $creatorRepository
+     * @param AssetRepositoryInterface $assetRepository
+     * @param CreatorRepositoryInterface $creatorRepository
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param Storage                     $storage
-     * @param LoggerInterface             $logger
-     * @param GetImageListInterface       $getImageList
-     * @param SearchCriteriaBuilder       $searchCriteriaBuilder
+     * @param Storage $storage
+     * @param LoggerInterface $logger
+     * @param GetImageListInterface $getImageList
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         AssetRepositoryInterface $assetRepository,
@@ -97,10 +95,9 @@ class SaveImagePreview implements SaveImagePreviewInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adobeId, string $destinationPath): void
+    public function execute(int $adobeId, string $destinationPath): ?string
     {
         $searchResult = $this->getImagesByAdobeId($adobeId);
-
         if (1 < $searchResult->getTotalCount()) {
             $message = __('Requested image doesn\'t exists');
             $this->logger->critical($message);
@@ -113,11 +110,13 @@ class SaveImagePreview implements SaveImagePreviewInterface
             $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);
+            return $asset->getThumbnailUrl();
         } catch (\Exception $exception) {
             $message = __('Image was not saved: %1', $exception->getMessage());
             $this->logger->critical($message);
             throw new CouldNotSaveException($message);
         }
+        return false;
     }
 
     /**

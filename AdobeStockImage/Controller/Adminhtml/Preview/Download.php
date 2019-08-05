@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockImage\Model\SaveImagePreview;
+use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
@@ -43,7 +43,7 @@ class Download extends Action
     private $logger;
 
     /**
-     * @var SaveImagePreview
+     * @var SaveImagePreviewInterface
      */
     private $saveImagePreview;
 
@@ -51,12 +51,12 @@ class Download extends Action
      * Download constructor.
      *
      * @param Action\Context   $context
-     * @param SaveImagePreview $saveImagePreview
+     * @param SaveImagePreviewInterface $saveImagePreview
      * @param LoggerInterface  $logger
      */
     public function __construct(
         Action\Context $context,
-        SaveImagePreview $saveImagePreview,
+        SaveImagePreviewInterface $saveImagePreview,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
