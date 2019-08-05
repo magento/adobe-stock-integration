@@ -41,5 +41,6 @@
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Disabled"/>
         </actionGroup>
+        <actionGroup ref="AdminUserClearSearchFiltersActionGroup" stepKey="ClearFilters"/>
     </test>
 </tests>

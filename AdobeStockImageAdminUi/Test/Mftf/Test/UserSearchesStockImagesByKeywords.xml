@@ -104,5 +104,6 @@
 
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchChestBand"/>
+        <actionGroup ref="AdminUserClearSearchFiltersActionGroup" stepKey="ClearFilters"/>
     </test>
 </tests>
