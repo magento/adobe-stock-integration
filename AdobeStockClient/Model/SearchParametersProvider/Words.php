@@ -17,7 +17,7 @@ use Magento\Framework\Escaper;
  */
 class Words implements SearchParameterProviderInterface
 {
-    const FIELD_WORDS = 'words';
+    private const FIELD_WORDS = 'words';
 
     /**
      * @var Escaper
@@ -40,12 +40,12 @@ class Words implements SearchParameterProviderInterface
     public function apply(
         SearchCriteriaInterface $searchCriteria,
         SearchParameters $searchParams
-    ): SearchParameters {
+    ) : SearchParameters {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if (self::FIELD_WORDS === $filter->getField() && $filter->getValue()) {
                     $value = str_replace(['"', '\\'], '', $filter->getValue());
-                    if ($value) {
+                    if (!empty($value)) {
                         $searchParams->setWords($this->escaper->encodeUrlParam($value));
                     }
                 }

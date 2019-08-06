@@ -12,7 +12,7 @@ namespace Magento\AdobeStockAssetApi\Api\Data;
  * Interface UserProfileInterface
  * @api
  */
-interface UserProfileInterface
+interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -178,4 +178,19 @@ interface UserProfileInterface
      * @return void
      */
     public function setAccessTokenExpiresAt(string $value): void;
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\AdobeStockAssetApi\Api\Data\UserProfileExtensionInterface
+     */
+    public function getExtensionAttributes(): UserProfileExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\AdobeStockAssetApi\Api\Data\UserProfileExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(UserProfileExtensionInterface $extensionAttributes): void;
 }

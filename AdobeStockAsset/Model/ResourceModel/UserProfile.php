@@ -16,7 +16,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class UserProfile extends AbstractDb
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function _construct()
     {

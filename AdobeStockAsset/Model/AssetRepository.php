@@ -57,11 +57,11 @@ class AssetRepository implements AssetRepositoryInterface
 
     /**
      * AssetRepository constructor.
-     * @param ResourceModel                      $resource
-     * @param AssetCollectionFactory             $collectionFactory
-     * @param AssetFactory                       $factory
-     * @param JoinProcessorInterface             $joinProcessor
-     * @param CollectionProcessorInterface       $collectionProcessor
+     * @param ResourceModel $resource
+     * @param AssetCollectionFactory $collectionFactory
+     * @param AssetFactory $factory
+     * @param JoinProcessorInterface $joinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
@@ -83,9 +83,9 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(AssetInterface $item): void
+    public function save(AssetInterface $asset): void
     {
-        $this->resource->save($item);
+        $this->resource->save($asset);
     }
 
     /**

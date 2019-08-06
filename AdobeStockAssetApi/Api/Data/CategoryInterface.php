@@ -8,22 +8,24 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+use Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface;
+
 /**
  * Interface CategoryInterface
  * @api
  */
-interface CategoryInterface
+interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    const ID = "id";
-    const ADOBE_ID = "id";
-    const NAME = "name";
+    const ID = 'id';
+    const ADOBE_ID = 'adobe_id';
+    const NAME = 'name';
 
     /**
      * Get the id
      *
-     * @return int
+     * @return int|null
      */
-    public function getId() : int;
+    public function getId() : ?int;
 
     /**
      * Set the id
@@ -31,35 +33,35 @@ interface CategoryInterface
      * @param int $value
      * @return void
      */
-    public function setId(int $value): void;
+    public function setId($value): void;
 
     /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getAdobeId(): int;
-
-    /**
-     * Set the id
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setAdobeId(int $value): void;
-
-    /**
-     * Get the name
+     * Get the category name
      *
      * @return string
      */
-    public function getName(): string;
+    public function getName(): ?string;
 
     /**
-     * Set the name
+     * Set the category name
      *
      * @param string $value
      * @return void
      */
     public function setName(string $value): void;
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface
+     */
+    public function getExtensionAttributes(): CategoryExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void;
 }

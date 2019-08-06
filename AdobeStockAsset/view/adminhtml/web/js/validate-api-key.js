@@ -8,9 +8,11 @@ define([
     'use strict';
 
     return function (config) {
-        $('#' + config.testButtonId).bind( 'click', function() {
-            let validationResultContainer = $('#' + config.validationResultContainerId);
-            let apiKey = document.getElementById(config.apiKeyInput).value;
+        $('#' + config.testButtonId).bind('click', function() {
+            var validationResultContainer = $('#' + config.validationResultContainerId),
+                apiKey = document.getElementById(config.apiKeyInput).value,
+                validationContainerClass;
+
             validationResultContainer.text('');
             validationResultContainer.removeAttr('class');
             $.ajax({
@@ -19,7 +21,7 @@ define([
                        dataType: 'json',
                        data: { 'api_key': apiKey },
                        success: function(response) {
-                           let validationContainerClass = (response.success == 1) ?
+                           validationContainerClass = (response.success === true) ?
                                'message-validation message message-success success'
                                : 'message-validation message message-error error';
                            validationResultContainer.addClass(validationContainerClass).text(response.message);
