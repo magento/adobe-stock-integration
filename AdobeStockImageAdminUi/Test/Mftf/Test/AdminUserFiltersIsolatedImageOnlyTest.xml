@@ -7,12 +7,12 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUserFiltersSafeContentImagesTest">
+    <test name="AdminUserFiltersIsolatedImageOnlyTest">
         <annotations>
+            <title value="Isolated Images Filter Test"/>
+            <stories value="User filters images in Adobe Stock image grid by isolated images"/>
             <features value="AdobeStockImagePanel"/>
-            <stories value="Filter safe content images via Admin"/>
-            <title value="Admin should be able to filters safe content images"/>
-            <description value="Admin should be able to filters safe content images"/>
+            <description value="Admin should be able to filter images by Isolated images"/>
             <severity value="CRITICAL"/>
             <group value="AdobeStockIntegration"/>
         </annotations>
@@ -33,14 +33,14 @@
         </after>
         <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithoutSafeFilter"/>
-        <actionGroup ref="AdminUserApplySafeSearchFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AdminUserApplyIsolatedAssetsFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
         <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutSafeFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
         </assertNotContains>
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
-            <argument name="resultValue" value="Disabled"/>
+            <argument name="resultValue" value="Isolated Only"/>
         </actionGroup>
     </test>
 </tests>

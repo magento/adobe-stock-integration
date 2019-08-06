@@ -25,7 +25,7 @@ interface SaveImagePreviewInterface
      * @param int    $adobeId
      * @param string $destinationPath
      *
-     * @return bool
+     * @return void
      * @throws CouldNotSaveException
      * @throws NotFoundException
      * @throws LocalizedException

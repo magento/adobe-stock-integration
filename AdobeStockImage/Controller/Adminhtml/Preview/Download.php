@@ -85,7 +85,7 @@ class Download extends Action
             $responseCode = self::HTTP_BAD_REQUEST;
             $responseContent = [
                 'success' => false,
-                'error_message' => __('Image not found. Could not be saved.'),
+                'message' => __('Image not found. Could not be saved.'),
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
@@ -93,7 +93,7 @@ class Download extends Action
             $this->logger->critical($logMessage);
             $responseContent = [
                 'success' => false,
-                'error_message' => __('An error occurred while image download. Contact support.'),
+                'message' => __('An error occurred while image download. Contact support.'),
             ];
         }
 
