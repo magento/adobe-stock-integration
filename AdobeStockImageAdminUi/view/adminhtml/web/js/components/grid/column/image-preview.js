@@ -66,7 +66,7 @@ define([
                     'height'
                 ]);
 
-            this.height.subscribe(function(){
+            this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
             return this;
@@ -131,8 +131,8 @@ define([
          * @param {Object} record
          * @returns {Object}
          */
-        getStyles: function (record){
-            if(!record.previewStyles) {
+        getStyles: function (record) {
+            if (!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }
             record.previewStyles({
@@ -146,7 +146,7 @@ define([
          *
          * @param record
          */
-        next: function (record){
+        next: function (record) {
             this._selectRow(record.lastInRow ? record.currentRow + 1 : record.currentRow);
             this.show(record._rowIndex + 1);
         },
@@ -156,7 +156,7 @@ define([
          *
          * @param record
          */
-        prev: function (record){
+        prev: function (record) {
             this._selectRow(record.firstInRow ? record.currentRow - 1 : record.currentRow);
             this.show(record._rowIndex - 1);
         },
@@ -168,7 +168,7 @@ define([
          * @param {Number} [height]
          * @private
          */
-        _selectRow: function (rowId, height){
+        _selectRow: function (rowId, height) {
             this.thumbnailComponent().previewRowId(rowId);
         },
 
@@ -182,14 +182,14 @@ define([
                 img;
 
             this.lastOpenedImage = null;
-            if(~visibility.indexOf(true)) {// hide any preview
-                if(!Array.prototype.fill) {
+            if (~visibility.indexOf(true)) {// hide any preview
+                if (!Array.prototype.fill) {
                     visibility = _.times(visibility.length, _.constant(false));
                 } else {
                     visibility.fill(false);
                 }
             }
-            if(this._isInt(record)) {
+            if (this._isInt(record)) {
                 visibility[record] = true;
             } else {
                 this._selectRow(record.currentRow);
@@ -198,7 +198,7 @@ define([
             this.visibility(visibility);
 
             img = $('[data-image-preview] img');
-            if(img.get(0).complete) {
+            if (img.get(0).complete) {
                 this._updateHeight();
             } else {
                 img.load(this._updateHeight.bind(this));
@@ -210,7 +210,7 @@ define([
          *
          * @private
          */
-        _updateHeight: function (){
+        _updateHeight: function () {
             var $preview = $('[data-image-preview]');
 
             this.height($preview.height() + 'px');// set height
@@ -240,7 +240,9 @@ define([
          * @private
          */
         _isInt: function (value) {
-            return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+            return !isNaN(value) && (function (x) {
+                return (x | 0) === x;
+            })(parseFloat(value))
         },
 
         /**
@@ -254,18 +256,19 @@ define([
                     adobeId: record.id,
                     destinationPath: mediaBrowser.activeNode.path || ''
                 });
+           $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
                     type: 'POST',
                     url: this.previewImageServiceUrl,
                     contentType: 'application/json; charset=utf-8',
                     data: data,
-                    beforeSend: function(xhr){
+                    beforeSend: function (xhr) {
                         //Empty to remove magento's default handler
                     },
-                    success: function (response) {
-                        messages.add('success', response.message);
-                        messages.scheduleCleanup(3);
+                    context: this,
+                    success: function () {
+                        $(this.adobeStockModalSelector).trigger('processStop');
                         $(this.adobeStockModalSelector).trigger('closeModal');
                         mediaBrowser.reload(true);
                     },
@@ -275,8 +278,6 @@ define([
                     }
                 }
             );
-
-
         },
 
         /**
