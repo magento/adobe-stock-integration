@@ -39,6 +39,7 @@ class SaveMultiplyAndAssignToAsset
      *
      * @param ResourceConnection $resourceConnection
      * @param SaveMultiple       $saveMultiple
+     * @param LoggerInterface    $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -124,17 +125,21 @@ class SaveMultiplyAndAssignToAsset
         }
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
-            ->from([
-                    'adobe_stock_keyword' => $this->resourceConnection->getTableName(
-                        KeywordResourceModel::ADOBE_STOCK_KEYWORD_TABLE_NAME
-                    ),
-                ])
-            ->join([
-                'adobe_stock_asset_keyword' => $this->resourceConnection->getTableName(
-                    KeywordResourceModel::ADOBE_STOCK_ASSET_KEYWORD_TABLE_NAME
-                ),
-            ], 'adobe_stock_asset_keyword.' . KeywordInterface::ASSET_KEYWORD_KEYWORD_ID . '
-                = adobe_stock_keyword.' . KeywordInterface::ID, [])
+            ->from(
+                [
+                    'adobe_stock_keyword' => $this->resourceConnection
+                        ->getTableName(KeywordResourceModel::ADOBE_STOCK_KEYWORD_TABLE_NAME),
+                ]
+            )
+            ->join(
+                [
+                    'adobe_stock_asset_keyword' => $this->resourceConnection
+                        ->getTableName(KeywordResourceModel::ADOBE_STOCK_ASSET_KEYWORD_TABLE_NAME),
+                ],
+                'adobe_stock_asset_keyword.' . KeywordInterface::ASSET_KEYWORD_KEYWORD_ID . '
+                = adobe_stock_keyword.' . KeywordInterface::ID,
+                []
+            )
             ->where('adobe_stock_keyword.' . KeywordInterface::KEYWORD . ' in (?)', $keywordNames);
 
         $result = $connection->fetchAll($select);

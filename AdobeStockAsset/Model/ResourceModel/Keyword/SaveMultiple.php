@@ -22,6 +22,8 @@ class SaveMultiple
     private $resourceConnection;
 
     /**
+     * SaveMultiple constructor.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
@@ -58,6 +60,8 @@ class SaveMultiple
     }
 
     /**
+     * Build columns save keyword sql request part.
+     *
      * @param array $columns
      * @return string
      */
@@ -93,9 +97,7 @@ class SaveMultiple
     {
         $bind = [];
         foreach ($keywords as $keyword) {
-            $bind = array_merge($bind, [
-                $keyword->getKeyword(),
-            ]);
+            $bind[] = $keyword->getKeyword();
         }
 
         return $bind;

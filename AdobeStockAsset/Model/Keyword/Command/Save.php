@@ -27,6 +27,12 @@ class Save implements SaveInterface
      */
     private $logger;
 
+    /**
+     * Save constructor.
+     *
+     * @param KeywordResourceModel $keywordResource
+     * @param LoggerInterface      $logger
+     */
     public function __construct(
         KeywordResourceModel $keywordResource,
         LoggerInterface $logger
