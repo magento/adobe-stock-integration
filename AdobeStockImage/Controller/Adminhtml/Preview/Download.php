@@ -79,7 +79,7 @@ class Download extends Action
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have sucscessfully downloaded the image.'),
+                'message' => __('You have successfully downloaded the image.'),
             ];
         } catch (NotFoundException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
