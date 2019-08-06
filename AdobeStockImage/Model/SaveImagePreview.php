@@ -95,7 +95,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adobeId, string $destinationPath): ?string
+    public function execute(int $adobeId, string $destinationPath): void
     {
         $searchResult = $this->getImagesByAdobeId($adobeId);
         if (1 < $searchResult->getTotalCount()) {
@@ -110,13 +110,11 @@ class SaveImagePreview implements SaveImagePreviewInterface
             $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);
-            return $asset->getThumbnailUrl();
         } catch (\Exception $exception) {
             $message = __('Image was not saved: %1', $exception->getMessage());
             $this->logger->critical($message);
             throw new CouldNotSaveException($message);
         }
-        return false;
     }
 
     /**
@@ -132,14 +130,14 @@ class SaveImagePreview implements SaveImagePreviewInterface
             $asset->isObjectNew(true);
         }
         $category = $asset->getCategory();
-        if (!$this->isCategorySaved($category->getId())) {
+        if ($category !== null && !$this->isCategorySaved($category->getId())) {
             $category->isObjectNew(true);
             $category = $this->categoryRepository->save($category);
         }
         $asset->setCategoryId($category->getId());
 
         $creator = $asset->getCreator();
-        if (!$this->isCreatorSaved($creator->getId())) {
+        if ($creator !== null && !$this->isCreatorSaved($creator->getId())) {
             $creator->isObjectNew(true);
             $creator = $this->creatorRepository->save($creator);
         }
