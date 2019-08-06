@@ -16,7 +16,7 @@
     <route url="/V1/adobestock/saveImagePreview" method="POST">
         <service class="Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface" method="execute"/>
         <resources>
-            <resource ref="Magento_AdobeStockAsset::actions_save"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
 </routes>

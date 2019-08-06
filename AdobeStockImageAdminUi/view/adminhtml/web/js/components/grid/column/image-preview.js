@@ -9,12 +9,15 @@ define([
     'Magento_Ui/js/grid/columns/column',
     'Magento_AdobeStockImageAdminUi/js/action/authorization',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
-    'mage/translate'
-], function (_, $, ko, Column, authorizationAction, messages) {
+    'mage/translate',
+    'mage/url'
+], function (_, $, ko, Column, authorizationAction, messages, translate, url) {
     'use strict';
 
     return Column.extend({
         defaults: {
+            mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
+            adobeStockModalSelector: '#adobe-stock-images-search-modal',
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
@@ -30,7 +33,7 @@ define([
                 lastOpenedImage: true,
             },
             lastOpenedImage: null,
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            previewImageServiceUrl: '/rest/V1/adobestock/saveImagePreview',
             messageDelay: 5,
             authConfig: {
                 url: '',
@@ -246,44 +249,34 @@ define([
          * @param record
          */
         save: function (record) {
-            //@TODO add a logic for getting the target path
-            var destinationPath = '';
-            var postData = {
-                'media_id': record.id,
-                'destination_path': destinationPath
-            };
-            $('#' + record.id).text('');
-            $.ajax({
-                       type: "POST",
-                       url: this.downloadImagePreviewUrl,
-                       dataType: 'json',
-                       data: postData,
-                       success: function (response) {
-                           var successMessage = '<div class="messages"><div class="message message-success success">' +
-                                                response.message +
-                                                '<div data-ui-id="messages-message-success"></div></div></div>';
-                           $('#' + record.id).append(successMessage);
+            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser'),
+                data = JSON.stringify({
+                    adobeId: record.id,
+                    destinationPath: mediaBrowser.activeNode.path || ''
+                });
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: this.previewImageServiceUrl,
+                    contentType: 'application/json; charset=utf-8',
+                    data: data,
+                    beforeSend: function(xhr){
+                        //Empty to remove magento's default handler
+                    },
+                    success: function (response) {
+                        messages.add('success', response.message);
+                        messages.scheduleCleanup(3);
+                        $(this.adobeStockModalSelector).trigger('closeModal');
+                        mediaBrowser.reload(true);
+                    },
+                    error: function (response) {
+                        messages.add('error', response.responseJSON.message);
+                        messages.scheduleCleanup(3);
+                    }
+                }
+            );
 
-                           // update modal with an image url
-                           var image_url = record.preview_url;
-                           var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)')
-                           .data('mageMediabrowser')
-                           .getTargetElement();
-                           targetEl.val(image_url).trigger('change');
-                           // close insert image panel
-                           window.MediabrowserUtility.closeDialog();
-                           targetEl.focus();
-                           $(targetEl).change();
-                           // close adobe panel
-                           $("#adobe-stock-images-search-modal").trigger('closeModal');
-                       },
-                       error: function (response) {
-                           var errorMessage = '<div class="messages"><div class="message message-error error">' +
-                                              response.responseJSON.error_message +
-                                              '<div data-ui-id="messages-message-error"></div></div></div>';
-                           $('#' + record.id).append(errorMessage);
-                       }
-                   });
+
         },
 
         /**
