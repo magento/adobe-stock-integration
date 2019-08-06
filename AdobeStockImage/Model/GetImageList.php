@@ -12,6 +12,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory as SearchResultFactory;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
@@ -19,6 +20,7 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\UrlInterface;
 use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Api\FilterBuilder;
 
 /**
  * Class GetImageList
@@ -51,25 +53,43 @@ class GetImageList implements GetImageListInterface
     private $log;
 
     /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var FilterGroupBuilder
+     */
+    private $filterGroupBuilder;
+
+    /**
      * GetImageList constructor.
      * @param ClientInterface $client
      * @param SearchResultFactory $searchResultFactory
      * @param DocumentToAsset $documentToAsset
      * @param UrlInterface $url
      * @param LoggerInterface $log
+     * @param FilterBuilder $filterBuilder
+     * @param FilterGroupBuilder $filterGroupBuilder
      */
     public function __construct(
         ClientInterface $client,
         SearchResultFactory $searchResultFactory,
         DocumentToAsset $documentToAsset,
         UrlInterface $url,
-        LoggerInterface $log
-    ) {
+        LoggerInterface $log,
+        FilterBuilder $filterBuilder,
+        FilterGroupBuilder $filterGroupBuilder
+
+    )
+    {
         $this->client = $client;
         $this->searchResultFactory = $searchResultFactory;
         $this->documentToAsset = $documentToAsset;
         $this->url = $url;
         $this->log = $log;
+        $this->filterBuilder = $filterBuilder;
+        $this->filterGroupBuilder = $filterGroupBuilder;
     }
 
     /**
@@ -78,8 +98,9 @@ class GetImageList implements GetImageListInterface
     public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
         try {
-            $searchResult = $this->client->search($searchCriteria);
+           $searchCriteria = $this->setDefaultFilters($searchCriteria);
 
+            $searchResult = $this->client->search($searchCriteria);
             $items = [];
             /** @var Document $item */
             foreach ($searchResult->getItems() as $item) {
@@ -107,5 +128,34 @@ class GetImageList implements GetImageListInterface
             $this->log->critical($exception);
             throw new LocalizedException($message, $exception, $exception->getCode());
         }
+    }
+
+    /**
+     * Setting the default filter states for SDK:
+     *
+     * @param  SearchCriteriaInterface $searchCriteria
+     * @return SearchCriteriaInterface
+     */
+    private function setDefaultFilters($searchCriteria)
+    {
+        if (!$searchCriteria->getFilterGroups()) {
+            $filterPhoto = $this->filterBuilder
+                ->setField('content_type_filter')
+                ->setConditionType('or')
+                ->setValue('illustration')
+                ->create();
+            $filterIllustration = $this->filterBuilder
+                ->setField('content_type_filter')
+                ->setConditionType('or')
+                ->setValue('photo')
+                ->create();
+            $searchCriteria->setFilterGroups([
+                $this->filterGroupBuilder
+                    ->addFilter($filterIllustration)
+                    ->addFilter($filterPhoto)
+                    ->create()
+            ]);
+        }
+        return $searchCriteria;
     }
 }
