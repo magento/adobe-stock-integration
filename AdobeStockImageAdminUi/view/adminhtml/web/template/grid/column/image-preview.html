@@ -25,9 +25,13 @@
             </div>
             <ul class="messages" if="$col.getMessages().length > 0">
                 <!-- ko foreach: $col.getMessages() -->
-                <li attr="class: code">
-                    <span data-bind="html: message"></span>
-                </li>
+                <div class="messages">
+                    <div attr="class: 'message message-'+code">
+                        <div data-ui-id="messages-message-error">
+                            <span data-bind="html: message"></span>
+                        </div>
+                    </div>
+                </div>
                 <!-- /ko -->
             </ul>
             <button class="action-secondary" type="button" data-bind="click: function(){ $col.save($row()) }">
