@@ -7,10 +7,11 @@ define([
     'jquery',
     'knockout',
     'Magento_Ui/js/grid/columns/column',
+    'Magento_Ui/js/lib/spinner',
     'Magento_AdobeStockImageAdminUi/js/action/authorization',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate'
-], function (_, $, ko, Column, authorizationAction, messages) {
+], function (_, $, ko, Column, loader, authorizationAction, messages) {
     'use strict';
 
     return Column.extend({
@@ -249,25 +250,27 @@ define([
          */
         save: function (record) {
             var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
+            $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
-                   type: 'POST',
-                   url: this.downloadImagePreviewUrl,
-                   dataType: 'json',
-                   data: {
+                    type: 'POST',
+                    url: this.downloadImagePreviewUrl,
+                    dataType: 'json',
+                    data: {
                        'media_id': record.id,
                        'destination_path': mediaBrowser.activeNode.path || ''
-                   },
-                   success: function (response) {
-                       messages.add('success', response.message);
-                       messages.scheduleCleanup(3);
-                       $(this.adobeStockModalSelector).trigger('closeModal');
-                       mediaBrowser.reload(true);
-                   },
-                   error: function (response) {
-                       messages.add('error', response.responseJSON.error_message);
-                       messages.scheduleCleanup(3);
-                   }
+                    },
+                    context: this,
+                    success: function () {
+                        $(this.adobeStockModalSelector).trigger('processStop');
+                        $(this.adobeStockModalSelector).trigger('closeModal');
+                        mediaBrowser.reload(true);
+                    },
+                    error: function (response) {
+                        $(this.adobeStockModalSelector).trigger('processStop');
+                        messages.add('error', response.responseJSON.message);
+                        messages.scheduleCleanup(3);
+                    }
                }
            );
         },
