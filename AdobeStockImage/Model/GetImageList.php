@@ -80,9 +80,7 @@ class GetImageList implements GetImageListInterface
         LoggerInterface $log,
         FilterBuilder $filterBuilder,
         FilterGroupBuilder $filterGroupBuilder
-
-    )
-    {
+    ) {
         $this->client = $client;
         $this->searchResultFactory = $searchResultFactory;
         $this->documentToAsset = $documentToAsset;
@@ -98,7 +96,7 @@ class GetImageList implements GetImageListInterface
     public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
         try {
-           $searchCriteria = $this->setDefaultFilters($searchCriteria);
+            $searchCriteria = $this->setDefaultFilters($searchCriteria);
 
             $searchResult = $this->client->search($searchCriteria);
             $items = [];
@@ -149,12 +147,14 @@ class GetImageList implements GetImageListInterface
                 ->setConditionType('or')
                 ->setValue('photo')
                 ->create();
-            $searchCriteria->setFilterGroups([
+            $searchCriteria->setFilterGroups(
+                [
                 $this->filterGroupBuilder
                     ->addFilter($filterIllustration)
                     ->addFilter($filterPhoto)
                     ->create()
-            ]);
+                ]
+            );
         }
         return $searchCriteria;
     }
