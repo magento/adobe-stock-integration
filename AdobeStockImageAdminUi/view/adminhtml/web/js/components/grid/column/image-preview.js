@@ -7,11 +7,10 @@ define([
     'jquery',
     'knockout',
     'Magento_Ui/js/grid/columns/column',
-    'Magento_Ui/js/lib/spinner',
     'Magento_AdobeStockImageAdminUi/js/action/authorization',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate'
-], function (_, $, ko, Column, loader, authorizationAction, messages) {
+], function (_, $, ko, Column, authorizationAction, messages) {
     'use strict';
 
     return Column.extend({
