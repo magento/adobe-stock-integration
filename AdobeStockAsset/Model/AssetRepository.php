@@ -11,6 +11,7 @@ namespace Magento\AdobeStockAsset\Model;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Keyword\SaveMultiplyAndAssignToAsset;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
@@ -56,13 +57,20 @@ class AssetRepository implements AssetRepositoryInterface
     private $searchResultFactory;
 
     /**
+     * @var SaveMultiplyAndAssignToAsset
+     */
+    private $saveMultiplyAndAssignToAsset;
+
+    /**
      * AssetRepository constructor.
-     * @param ResourceModel $resource
-     * @param AssetCollectionFactory $collectionFactory
-     * @param AssetFactory $factory
-     * @param JoinProcessorInterface $joinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
+     *
+     * @param ResourceModel                      $resource
+     * @param AssetCollectionFactory             $collectionFactory
+     * @param AssetFactory                       $factory
+     * @param JoinProcessorInterface             $joinProcessor
+     * @param CollectionProcessorInterface       $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
+     * @param SaveMultiplyAndAssignToAsset       $saveMultiplyAndAssignToAsset
      */
     public function __construct(
         ResourceModel $resource,
@@ -70,7 +78,8 @@ class AssetRepository implements AssetRepositoryInterface
         AssetFactory $factory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        AssetSearchResultsInterfaceFactory $searchResultFactory
+        AssetSearchResultsInterfaceFactory $searchResultFactory,
+        SaveMultiplyAndAssignToAsset $saveMultiplyAndAssignToAsset
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -78,6 +87,7 @@ class AssetRepository implements AssetRepositoryInterface
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
+        $this->saveMultiplyAndAssignToAsset = $saveMultiplyAndAssignToAsset;
     }
 
     /**
@@ -86,6 +96,7 @@ class AssetRepository implements AssetRepositoryInterface
     public function save(AssetInterface $asset): void
     {
         $this->resource->save($asset);
+        $this->saveMultiplyAndAssignToAsset->execute($asset);
     }
 
     /**

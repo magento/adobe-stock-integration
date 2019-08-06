@@ -8,16 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
-use Magento\AdobeStockAssetApi\Api\Data\KeywordExtensionInterface;
-
 /**
  * Interface KeywordInterface
  * @api
  */
 interface KeywordInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    const ID = "id";
-    const KEYWORD = "keyword";
+    const ID = 'id';
+
+    const KEYWORD = 'keyword';
+
+    const ASSET_KEYWORD_ASSET_ID = 'asset_id';
+
+    const ASSET_KEYWORD_KEYWORD_ID = 'keyword_id';
 
     /**
      * Get the id

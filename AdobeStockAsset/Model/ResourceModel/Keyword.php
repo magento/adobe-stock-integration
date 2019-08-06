@@ -16,10 +16,20 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Keyword extends AbstractDb
 {
     /**
+     * Adobe stock keyword table name
+     */
+    const ADOBE_STOCK_KEYWORD_TABLE_NAME = 'adobe_stock_keyword';
+
+    /**
+     * Adobe stock asset keyword relation table name
+     */
+    const ADOBE_STOCK_ASSET_KEYWORD_TABLE_NAME = 'adobe_stock_asset_keyword';
+
+    /**
      * Resource initialization
      */
     protected function _construct()
     {
-        $this->_init('adobe_stock_keyword', 'id');
+        $this->_init(self::ADOBE_STOCK_KEYWORD_TABLE_NAME, 'id');
     }
 }
