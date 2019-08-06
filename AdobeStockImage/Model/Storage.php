@@ -78,6 +78,9 @@ class Storage
      */
     public function save(string $imageUrl, string $destinationDirectoryPath = '') : string
     {
+        if (!empty($destinationDirectoryPath)) {
+            $destinationDirectoryPath = rtrim($destinationDirectoryPath, '/') . '/';
+        }
         $destinationPath = $destinationDirectoryPath . $this->getFileName($imageUrl);
 
         $bytes = false;
