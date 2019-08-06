@@ -15,6 +15,8 @@ define([
 
     return Column.extend({
         defaults: {
+            mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
+            adobeStockModalSelector: '#adobe-stock-images-search-modal',
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
@@ -246,12 +248,10 @@ define([
          * @param record
          */
         save: function (record) {
-            var mediaBrowser = $('.media-gallery-modal:has(#search_adobe_stock)').data('mageMediabrowser');
-            $('#' + record.id).text('');
-            console.log(record.id)
+            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
             $.ajax(
                 {
-                   type: "POST",
+                   type: 'POST',
                    url: this.downloadImagePreviewUrl,
                    dataType: 'json',
                    data: {
@@ -261,11 +261,12 @@ define([
                    success: function (response) {
                        messages.add('success', response.message);
                        messages.scheduleCleanup(3);
-                       $("#adobe-stock-images-search-modal").trigger('closeModal');
+                       $(this.adobeStockModalSelector).trigger('closeModal');
                        mediaBrowser.reload(true);
                    },
                    error: function (response) {
                        messages.add('error', response.responseJSON.error_message);
+                       messages.scheduleCleanup(3);
                    }
                }
            );
