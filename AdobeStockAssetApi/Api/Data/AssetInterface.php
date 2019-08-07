@@ -17,7 +17,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const ID = 'id';
 
-    const PATH = 'path';
+    const PATHS = 'paths';
 
     const CREATED_AT = 'created_at';
 
@@ -99,19 +99,19 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setId($value): void;
 
     /**
-     * Get Path
+     * Get Paths
      *
-     * @return string|null
+     * @return string[]|null
      */
-    public function getPath(): ?string;
+    public function getPaths(): ?array;
 
     /**
-     * Set Path
+     * Set Paths
      *
-     * @param string $value
+     * @param string[] $paths
      * @return void
      */
-    public function setPath(string $value): void;
+    public function setPaths(array $paths): void;
 
     /**
      * Get URL

@@ -69,7 +69,6 @@
         <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Category ID"/>
         <column xsi:type="int" name="creator_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Creator ID"/>
         <column xsi:type="int" name="premium_level_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Premium Level ID"/>
-        <column xsi:type="varchar" length="255" name="path" nullable="true" comment="Path"/>
         <column xsi:type="varchar" length="255" name="stock_id" nullable="true" comment="Stock Id"/>
         <column xsi:type="int" name="is_licensed" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Is Licensed"/>
         <column xsi:type="varchar" length="255" name="title" nullable="true" comment="Title"/>
@@ -107,6 +106,18 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_CAT_ID" table="adobe_stock_asset" column="category_id" referenceTable="adobe_stock_category" referenceColumn="id" onDelete="SET NULL"/>
         <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_CRE_ID" table="adobe_stock_asset" column="creator_id" referenceTable="adobe_stock_creator" referenceColumn="id" onDelete="SET NULL"/>
+    </table>
+    <table name="adobe_stock_asset_path" resource="default" engine="innodb" comment="Adobe Stock Asset Path">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="asset_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Asset ID"/>
+        <column xsi:type="varchar" length="255" name="path" nullable="true" comment="Path"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="PATH">
+            <column name="path"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADO_STO_ASS_PATH_ASS_ID" table="adobe_stock_asset_path" column="asset_id" referenceTable="adobe_stock_asset" referenceColumn="id" onDelete="CASCADE"/>
     </table>
     <table name="adobe_stock_category" resource="default" engine="innodb" comment="Adobe Stock Category">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>

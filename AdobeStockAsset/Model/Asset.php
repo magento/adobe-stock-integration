@@ -165,17 +165,17 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getPath(): ?string
+    public function getPaths(): ?array
     {
-        return (string) $this->getData(self::PATH);
+        return $this->getData(self::PATHS);
     }
 
     /**
      * @inheritdoc
      */
-    public function setPath(string $path): void
+    public function setPaths(array $paths): void
     {
-        $this->setData(self::PATH, $path);
+        $this->setData(self::PATHS, $paths);
     }
 
     /**

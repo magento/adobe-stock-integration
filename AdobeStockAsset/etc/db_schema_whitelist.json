@@ -67,7 +67,6 @@
             "category_id": true,
             "creator_id": true,
             "premium_level_id": true,
-            "path": true,
             "stock_id": true,
             "is_licensed": true,
             "title": true,
@@ -96,6 +95,18 @@
             "PRIMARY": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID_ADOBE_STOCK_CATEGORY_ID": true,
             "ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID": true
+        }
+    },
+    "adobe_stock_asset_path": {
+        "column": {
+            "id": true,
+            "asset_id": true,
+            "path": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PATH": true,
+            "ADO_STO_ASS_PATH_ASS_ID": true
         }
     },
     "adobe_stock_category": {
