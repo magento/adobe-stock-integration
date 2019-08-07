@@ -60,6 +60,7 @@ interface KeywordInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Set extension attributes
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\KeywordExtensionInterface $extensionAttributes
+     * @return void
      */
     public function setExtensionAttributes(KeywordExtensionInterface $extensionAttributes): void;
 }

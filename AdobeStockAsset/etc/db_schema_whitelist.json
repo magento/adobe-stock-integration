@@ -68,7 +68,6 @@
             "creator_id": true,
             "premium_level_id": true,
             "path": true,
-            "adobe_id": true,
             "stock_id": true,
             "is_licensed": true,
             "title": true,
@@ -95,16 +94,13 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "ADOBE_STOCK_ASSET_MEDIA_TYPE_ID_ADOBE_STOCK_MEDIA_TYPE_ID": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID_ADOBE_STOCK_CATEGORY_ID": true,
-            "ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID": true,
-            "ADOBE_STOCK_ASSET_PREMIUM_LEVEL_ID_ADOBE_STOCK_PREMIUM_LEVEL_ID": true
+            "ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID": true
         }
     },
     "adobe_stock_category": {
         "column": {
             "id": true,
-            "adobe_id": true,
             "name": true
         },
         "index": {
@@ -144,37 +140,10 @@
     "adobe_stock_creator": {
         "column": {
             "id": true,
-            "adobe_id": true,
             "creator_name": true
         },
         "index": {
             "ADOBE_STOCK_CREATOR_ID": true
-        },
-        "constraint": {
-            "PRIMARY": true
-        }
-    },
-    "adobe_stock_media_type": {
-        "column": {
-            "id": true,
-            "adobe_id": true,
-            "name": true
-        },
-        "index": {
-            "ADOBE_STOCK_MEDIA_TYPE_ID": true
-        },
-        "constraint": {
-            "PRIMARY": true
-        }
-    },
-    "adobe_stock_premium_level": {
-        "column": {
-            "id": true,
-            "adobe_id": true,
-            "name": true
-        },
-        "index": {
-            "ADOBE_STOCK_PREMIUM_LEVEL_ID": true
         },
         "constraint": {
             "PRIMARY": true

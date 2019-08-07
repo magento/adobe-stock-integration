@@ -13,7 +13,7 @@ use Magento\AdobeStockAsset\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClient\Model\Config;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -34,25 +34,33 @@ class ImagePreview extends Column
     private $userContext;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * @var Config
      */
     private $config;
 
     /**
      * ImagePreview constructor.
-     * @param ContextInterface $context
-     * @param UiComponentFactory $uiComponentFactory
-     * @param UserContextInterface $userContext
+     *
+     * @param ContextInterface               $context
+     * @param UiComponentFactory             $uiComponentFactory
+     * @param UserContextInterface           $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param Config $config
-     * @param array $components
-     * @param array $data
+     * @param UrlInterface                   $urlBuilder
+     * @param Config                         $config
+     * @param array                          $components
+     * @param array                          $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UserContextInterface $userContext,
         UserProfileRepositoryInterface $userProfileRepository,
+        UrlInterface $urlBuilder,
         Config $config,
         array $components = [],
         array $data = []
@@ -61,6 +69,7 @@ class ImagePreview extends Column
 
         $this->userContext = $userContext;
         $this->userProfileRepository = $userProfileRepository;
+        $this->urlBuilder = $urlBuilder;
         $this->config = $config;
     }
 
@@ -76,6 +85,7 @@ class ImagePreview extends Column
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
+                    'downloadImagePreviewUrl' => $this->urlBuilder->getUrl('adobe_stock_image/preview/download'),
                     'authConfig' => [
                         'url' => $this->config->getAuthUrl(),
                         'isAuthorized' => $this->isAuthorized(),
@@ -104,14 +114,12 @@ class ImagePreview extends Column
                 (int)$this->userContext->getUserId()
             );
 
-            $isAuthorized = !empty($userProfile->getId())
+            return !empty($userProfile->getId())
                 && !empty($userProfile->getAccessToken())
                 && !empty($userProfile->getAccessTokenExpiresAt())
                 && strtotime($userProfile->getAccessTokenExpiresAt()) >= strtotime('now');
         } catch (Exception $e) {
-            $isAuthorized = false;
+            return false;
         }
-
-        return $isAuthorized;
     }
 }
