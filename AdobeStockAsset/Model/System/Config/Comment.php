@@ -18,6 +18,8 @@ use Magento\Framework\UrlInterface;
  */
 class Comment implements CommentInterface
 {
+    private const REDIRECT_MCA = 'adobe_stock/oauth/callback';
+
     /**
      * @var UrlInterface
      */
@@ -42,12 +44,38 @@ class Comment implements CommentInterface
      */
     public function getCommentText($elementValue)
     {
-        $redirectUrl = $this->url->getUrl('adobe_stock/oauth/callback');
-        $redirectUrlPattern = str_replace('.', '\\.', $redirectUrl);
-        $commentText = "Configure an Adobe Stock account on the 
-        <a href=\"https://console.adobe.io/\" target=\"_blank\">Adobe.io</a> 
-        site to retrieve an Private key (Client secret).</br> 
-        Note: the Default redirect URI is {$redirectUrl} and the redirect URI pattern is {$redirectUrlPattern}.";
-        return $commentText;
+        $message = sprintf(
+            'Configure an Adobe Stock account on the %s site to retrieve an Private key (Client secret).',
+            '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>'
+        );
+
+        $notes = sprintf(
+            'Redirect URI: %s <br> Pattern: %s',
+            $this->getRedirectUrl(),
+            $this->getRedirectUrlPattern()
+        );
+
+
+        return $message . '<br>' . $notes;
+    }
+
+    /**
+     * Redirect URL for the authentication callback
+     *
+     * @return string
+     */
+    private function getRedirectUrl()
+    {
+        return $this->url->getUrl(self::REDIRECT_MCA);
+    }
+
+    /**
+     * Redirect URL pattern for the authentication callback
+     *
+     * @return string
+     */
+    private function getRedirectUrlPattern()
+    {
+        return str_replace('.', '\\.', $this->getRedirectUrl());
     }
 }
