@@ -55,7 +55,6 @@ class Comment implements CommentInterface
             $this->getRedirectUrlPattern()
         );
 
-
         return $message . '<br>' . $notes;
     }
 
