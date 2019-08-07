@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Category as ResourceModel;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category as Resource;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\SaveMultiple;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
@@ -26,9 +27,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class CategoryRepository implements CategoryRepositoryInterface
 {
     /**
-     * @var ResourceModel
+     * @var Resource
      */
     private $resource;
+
+    /**
+     * @var SaveMultiple
+     */
+    private $categorySaveMultipleService;
 
     /**
      * @var CategoryFactory
@@ -58,15 +64,17 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * CategoryRepository constructor.
      *
-     * @param ResourceModel                         $resource
-     * @param CategoryCollectionFactory             $collectionFactory
-     * @param CategoryFactory                       $factory
-     * @param JoinProcessorInterface                $joinProcessor
-     * @param CollectionProcessorInterface          $collectionProcessor
+     * @param Resource $resource
+     * @param SaveMultiple $saveMultiple
+     * @param CategoryCollectionFactory $collectionFactory
+     * @param CategoryFactory $factory
+     * @param JoinProcessorInterface $joinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param CategorySearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
-        ResourceModel $resource,
+        Resource $resource,
+        SaveMultiple $saveMultiple,
         CategoryCollectionFactory $collectionFactory,
         CategoryFactory $factory,
         JoinProcessorInterface $joinProcessor,
@@ -74,6 +82,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         CategorySearchResultsInterfaceFactory $searchResultFactory
     ) {
         $this->resource = $resource;
+        $this->categorySaveMultipleService = $saveMultiple;
         $this->collectionFactory = $collectionFactory;
         $this->factory = $factory;
         $this->joinProcessor = $joinProcessor;
@@ -86,7 +95,7 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function save(CategoryInterface $item): CategoryInterface
     {
-        $this->resource->save($item);
+        $this->categorySaveMultipleService->execute($item);
 
         return $item;
     }
