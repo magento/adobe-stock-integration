@@ -24,10 +24,10 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminAdobeStockSystemConfigActionGroup" stepKey="seeAdobeStockConfigs"/>
-        <fillField userInput="" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="fillblankadobeStockApiKey"/>
+        <fillField userInput="" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="fillBlankAdobeStockApiKey"/>
         <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveConfiguration"/>
         <see userInput="This is a required field." selector="{{AdminConfigSystemSection.errorLabel}}" stepKey="seeErrorMessage"/>
-        <actionGroup ref="AdminAdobeStockTestConnectionActionGroup" stepKey="testconnectionValidation"/>
+        <actionGroup ref="AdminAdobeStockTestConnectionActionGroup" stepKey="testConnectionValidation"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
     </test>
 </tests>
