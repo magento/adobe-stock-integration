@@ -27,7 +27,7 @@ class MediaId implements SearchParameterProviderInterface
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'media_id') {
                     // Todo parameter expected to be int, string given
-                    $searchParams->setMediaId($filter->getValue());
+                    $searchParams->setMediaId((int)$filter->getValue());
                 }
             }
         }

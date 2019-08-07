@@ -21,6 +21,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
  * Test for GetImageList service
@@ -53,6 +55,16 @@ class GetImageListTest extends TestCase
     private $urlMock;
 
     /**
+     * @var MockObject
+     */
+    private $filterBuilderMock;
+
+    /**
+     * @var MockObject
+     */
+    private $filterGroupBuilderMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -61,14 +73,22 @@ class GetImageListTest extends TestCase
         $this->searchResultFactoryMock = $this->createMock(AssetSearchResultsInterfaceFactory::class);
         $this->converterMock = $this->createMock(DocumentToAsset::class);
         $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
+        $this->filterGroupBuilderMock = $this->createMock(FilterGroupBuilder::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             GetImageList::class,
             [
-                'client'              => $this->clientMock,
+                'client' => $this->clientMock,
                 'searchResultFactory' => $this->searchResultFactoryMock,
-                'url'                 => $this->urlMock,
-                'documentToAsset'    => $this->converterMock
+                'url' => $this->urlMock,
+                'documentToAsset' => $this->converterMock,
+                'filterBuilder' => $this->filterBuilderMock,
+                'filterGroupBuilder' => $this->filterGroupBuilderMock,
+                'defaultFilters' => [
+                    'filter1' => ['type' => 'content_type_filter', 'condition' => 'or', 'field' => 'illustration'],
+                    'filter2' => ['type' => 'content_type_filter', 'condition' => 'or', 'field' => 'photo'],
+                    ]
             ]
         );
     }
@@ -80,17 +100,31 @@ class GetImageListTest extends TestCase
     public function testExecute()
     {
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
 
         $documentMock = $this->createMock(DocumentInterface::class);
-
         $documentSearchResults = $this->createMock(SearchResultInterface::class);
         $documentSearchResults->expects($this->once())->method('getItems')->willReturn([$documentMock]);
         $documentSearchResults->expects($this->once())->method('getTotalCount')->willReturn(1);
-
         $this->clientMock->expects($this->once())
             ->method('search')
             ->with($searchCriteriaMock)
             ->willReturn($documentSearchResults);
+        $this->filterBuilderMock->expects($this->atLeast(2))
+            ->method('setField')
+            ->willReturn($this->filterBuilderMock);
+        $this->filterBuilderMock->expects($this->atLeast(2))
+            ->method('setConditionType')
+            ->willReturn($this->filterBuilderMock);
+        $this->filterBuilderMock->expects($this->atLeast(2))
+            ->method('setValue')
+            ->willReturn($this->filterBuilderMock);
+        $this->filterBuilderMock->expects($this->atLeast(2))
+            ->method('create')
+            ->willReturn($filter);
+        $this->filterGroupBuilderMock->expects($this->atLeast(1))
+            ->method('setFilters')
+            ->willReturn($this->filterGroupBuilderMock);
 
         $assetMock = $this->createMock(AssetInterface::class);
 
@@ -102,7 +136,7 @@ class GetImageListTest extends TestCase
             ->with(
                 [
                     'data' => [
-                        'items'       => [$assetMock],
+                        'items' => [$assetMock],
                         'total_count' => 1,
                     ],
                 ]

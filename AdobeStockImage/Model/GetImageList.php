@@ -63,6 +63,11 @@ class GetImageList implements GetImageListInterface
     private $filterGroupBuilder;
 
     /**
+     * @var array $defaultFilter
+     */
+    private $defaultFilters;
+
+    /**
      * GetImageList constructor.
      * @param ClientInterface $client
      * @param SearchResultFactory $searchResultFactory
@@ -71,6 +76,7 @@ class GetImageList implements GetImageListInterface
      * @param LoggerInterface $log
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
+     * @param array $defaultFilters
      */
     public function __construct(
         ClientInterface $client,
@@ -79,7 +85,8 @@ class GetImageList implements GetImageListInterface
         UrlInterface $url,
         LoggerInterface $log,
         FilterBuilder $filterBuilder,
-        FilterGroupBuilder $filterGroupBuilder
+        FilterGroupBuilder $filterGroupBuilder,
+        array $defaultFilters = []
     ) {
         $this->client = $client;
         $this->searchResultFactory = $searchResultFactory;
@@ -88,6 +95,7 @@ class GetImageList implements GetImageListInterface
         $this->log = $log;
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
+        $this->defaultFilters = $defaultFilters;
     }
 
     /**
@@ -131,30 +139,21 @@ class GetImageList implements GetImageListInterface
     /**
      * Setting the default filter states for SDK:
      *
-     * @param  SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return SearchCriteriaInterface
      */
-    private function setDefaultFilters($searchCriteria)
+    private function setDefaultFilters(SearchCriteriaInterface $searchCriteria)
     {
         if (!$searchCriteria->getFilterGroups()) {
-            $filterPhoto = $this->filterBuilder
-                ->setField('content_type_filter')
-                ->setConditionType('or')
-                ->setValue('illustration')
-                ->create();
-            $filterIllustration = $this->filterBuilder
-                ->setField('content_type_filter')
-                ->setConditionType('or')
-                ->setValue('photo')
-                ->create();
-            $searchCriteria->setFilterGroups(
-                [
-                $this->filterGroupBuilder
-                    ->addFilter($filterIllustration)
-                    ->addFilter($filterPhoto)
-                    ->create()
-                ]
-            );
+            $filters = [];
+            foreach ($this->defaultFilters as $filter) {
+                $filters[] = $this->filterBuilder
+                    ->setField($filter['type'])
+                    ->setConditionType($filter['condition'])
+                    ->setValue($filter['field'])
+                    ->create();
+            }
+            $searchCriteria->setFilterGroups([$this->filterGroupBuilder->setFilters($filters)->create()]);
         }
         return $searchCriteria;
     }
