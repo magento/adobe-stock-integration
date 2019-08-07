@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
 /**
- * Interface
+ * Asset Interface
  *
  * @api
  */
@@ -141,7 +141,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return int
      */
-    public function getHeight() : int;
+    public function getHeight(): int;
 
     /**
      * Set full licensed asset's width
@@ -156,7 +156,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return int
      */
-    public function getWidth() : int;
+    public function getWidth(): int;
 
     /**
      * Get media type
