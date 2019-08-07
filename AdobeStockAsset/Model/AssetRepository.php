@@ -83,9 +83,9 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(AssetInterface $item): void
+    public function save(AssetInterface $asset): void
     {
-        $this->resource->save($item);
+        $this->resource->save($asset);
     }
 
     /**

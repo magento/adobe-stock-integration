@@ -5,14 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminFilterByOrientationActionGroup">
-        <arguments>
-            <argument name="type" type="string" defaultValue="{{AdobeStockFilterSection.orientationFilterAllOption}}"/>
-        </arguments>
-        <click selector="{{AdobeStockFilterSection.orientationFilter}}" stepKey="clickOnFilter"/>
-        <click selector="{{AdobeStockFilterSection.orientationFilterOption(type)}}" stepKey="openAdobeStockPanel"/>
+    <actionGroup name="AdminUserApplySafeSearchFilterActionGroup">
+        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersOpen"/>
+        <click selector="{{AdobeStockFilterSection.safeSearchFilterCheckbox}}" stepKey="selectSafeSearchFilter"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>
