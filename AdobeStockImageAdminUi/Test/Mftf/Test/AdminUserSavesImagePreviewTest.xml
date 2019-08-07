@@ -40,7 +40,6 @@
         <waitForPageLoad stepKey="waitForPopupLoad"/>
         <actionGroup ref="AdminOpenAdobeStockModalFromCreatedCmsPageActionGroup" stepKey="openAdobeStockFromCreatedCmsPage"/>
         <actionGroup ref="AdminOpenAdobeStockPopupActionGroup" stepKey="openAdobeStockPopupFromCmsPage"/>
-        <actionGroup ref="AdminSaveCmsPageAndAssertImagePreviewActionGroup" stepKey="saveImagePreviews"/>
-        <!-- TODO: Assert that following image attributes associated with the stock image are saved into Magento DB  -->
+        <actionGroup ref="AdminAssertImagePreviewActionGroup" stepKey="assertSavedImage"/>
     </test>
 </tests>

@@ -23,5 +23,6 @@
         <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="recordsFound" type="text" selector="//*[@id='adobe-stock-images-search-modal']//*[text()='records found']/parent::div"/>
         <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
+        <element name="selectedImagePreview" type="text" selector="//small/parent::*[@class='filecnt selected']//img"/>
     </section>
 </sections>
