@@ -23,22 +23,11 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <scrollTo selector="{{AdminConfigSystemSection.adobeStockIntegration}}" stepKey="scrollToAdobeStockIntegrationSection"/>
-        <conditionalClick stepKey="expandadobeStockIntegrationTab" selector="{{AdminConfigSystemSection.adobeStockIntegration}}" dependentSelector="{{AdminConfigSystemSection.CheckIfTabExpand}}" visible="true" />
-        <seeElement selector="{{AdminConfigSystemSection.expandedTab}}" stepKey="seeSectionExpanded"/>
+        <actionGroup ref="AdminAdobeStockSystemConfigActionGroup" stepKey="seeAdobeStockConfigs"/>
         <fillField userInput="" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="fillblankadobeStockApiKey"/>
         <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveConfiguration"/>
         <see userInput="This is a required field." selector="{{AdminConfigSystemSection.errorLabel}}" stepKey="seeErrorMessage"/>
-        <fillField userInput="blahblahblah" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="fillIncorrectAdobeStockApiKey"/>
-        <click selector="{{AdminConfigSystemSection.testConnection}}" stepKey="testConnection"/>
-        <see selector="{{AdminConfigSystemSection.apivalidation}}" userInput="Connection Failed!" stepKey="apiValidationResult"/>
-        <fillField userInput="{{AdobeStockConfigDataApiKey.value}}" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="filladobeStockApiKey"/>
-        <click selector="{{AdminConfigSystemSection.testConnection}}" stepKey="testConnection1"/>
-        <see selector="{{AdminConfigSystemSection.apivalidation}}" userInput="Connection Successful!" stepKey="apiValidationResult1"/>
-        <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveOkConfiguration"/>
-        <waitForElementVisible selector="{{AdminConfigSystemSection.saveConfigSuccessMessage}}" stepKey="waitForSuccessMessageLoggedOut" time="5"/>
-        <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminAdobeStockTestConnectionActionGroup" stepKey="testconnectionValidation"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
     </test>
 </tests>

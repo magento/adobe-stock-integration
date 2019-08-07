@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAdobeStockTestConnectionActionGroup">
+        <fillField userInput="blahblahblah" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="fillIncorrectAdobeStockApiKey"/>
+        <click selector="{{AdminConfigSystemSection.testConnection}}" stepKey="testConnection"/>
+        <see selector="{{AdminConfigSystemSection.apivalidation}}" userInput="Connection Failed!" stepKey="apiValidationResult"/>
+        <fillField userInput="{{AdobeStockConfigDataApiKey.value}}" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="filladobeStockApiKey"/>
+        <click selector="{{AdminConfigSystemSection.testConnection}}" stepKey="testConnection1"/>
+        <see selector="{{AdminConfigSystemSection.apivalidation}}" userInput="Connection Successful!" stepKey="apiValidationResult1"/>
+    </actionGroup>
+</actionGroups>
