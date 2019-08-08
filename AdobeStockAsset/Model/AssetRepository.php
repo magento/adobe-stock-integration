@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\Save;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
@@ -25,6 +26,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class AssetRepository implements AssetRepositoryInterface
 {
+    /**
+     * @var Save
+     */
+    private $assetSaveService;
+
     /**
      * @var ResourceModel
      */
@@ -63,6 +69,7 @@ class AssetRepository implements AssetRepositoryInterface
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
+     * @param Save $commandSave
      */
     public function __construct(
         ResourceModel $resource,
@@ -70,7 +77,8 @@ class AssetRepository implements AssetRepositoryInterface
         AssetFactory $factory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        AssetSearchResultsInterfaceFactory $searchResultFactory
+        AssetSearchResultsInterfaceFactory $searchResultFactory,
+        Save $commandSave
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -78,6 +86,7 @@ class AssetRepository implements AssetRepositoryInterface
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
+        $this->assetSaveService = $commandSave;
     }
 
     /**
@@ -85,7 +94,7 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function save(AssetInterface $asset): void
     {
-        $this->resource->save($asset);
+        $this->assetSaveService->execute($asset);
     }
 
     /**

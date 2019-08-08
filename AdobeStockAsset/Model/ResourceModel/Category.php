@@ -16,7 +16,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Category extends AbstractDb
 {
     /**
-     * Adobe stock asset  category relation table name
+     * Adobe stock asset category table name
      */
     const ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME = 'adobe_stock_category';
 

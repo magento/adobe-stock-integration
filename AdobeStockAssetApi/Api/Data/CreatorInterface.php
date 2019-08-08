@@ -18,7 +18,7 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
 {
     const ID = 'id';
     const ADOBE_ID = 'adobe_id';
-    const NAME = 'name';
+    const NAME = 'creator_name';
 
     /**
      * Get the id
@@ -40,7 +40,7 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return string|null
      */
-    public function getName(): ?string;
+    public function getCreatorName(): ?string;
 
     /**
      * Set the creator name
@@ -48,7 +48,7 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param string $value
      * @return void
      */
-    public function setName(string $value): void;
+    public function setCreatorName(string $value): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

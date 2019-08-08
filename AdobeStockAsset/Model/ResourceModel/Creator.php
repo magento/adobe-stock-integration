@@ -16,6 +16,11 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Creator extends AbstractDb
 {
     /**
+     * Adobe stock asset creator table name
+     */
+    const ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME = 'adobe_stock_creator';
+
+    /**
      * @inheritdoc
      */
     protected $_isPkAutoIncrement = false;
@@ -29,6 +34,6 @@ class Creator extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('adobe_stock_creator', 'id');
+        $this->_init(self::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME, 'id');
     }
 }

@@ -10,6 +10,7 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
+use Psr\Log\LoggerInterface;
 
 /**
  * Save multiple asset service.
@@ -17,30 +18,163 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 class Save
 {
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
-     * SaveMultiple constructor.
+     * Save constructor.
      * @param ResourceConnection $resourceConnection
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->logger = $logger;
     }
 
     /**
-     *  Save assets
+     * Multiple save category
      *
-     * @param AssetInterface[] $assets
+     * @param AssetInterface $assets
      * @return void
      */
-    public function execute(array $assets): void
+    public function execute(AssetInterface $assets): void
     {
-        if (!count($assets)) {
+        $assetsData[] = $assets->getData();
+        if (!count($assetsData)) {
             return;
         }
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName(
+            AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
+        );
+        $onDuplicateSql = $this->buildOnDuplicateSqlPart([AssetInterface::ID]);
+        $columnsSql = $this->buildColumnsSqlPart(
+            [
+                AssetInterface::ID,
+                AssetInterface::MEDIA_TYPE_ID,
+                AssetInterface::CATEGORY_ID,
+                AssetInterface::CREATOR_ID,
+                AssetInterface::PREMIUM_LEVEL_ID,
+                AssetInterface::PATH,
+                AssetInterface::STOCK_ID,
+                AssetInterface::IS_LICENSED,
+                AssetInterface::TITLE,
+                AssetInterface::PREVIEW_URL,
+                AssetInterface::THUMBNAIL_URL,
+                AssetInterface::PREVIEW_WIDTH,
+                AssetInterface::PREVIEW_HEIGHT,
+                AssetInterface::WIDTH,
+                AssetInterface::HEIGHT,
+                AssetInterface::URL,
+                AssetInterface::COUNTRY_NAME,
+                AssetInterface::DETAILS_URL,
+                AssetInterface::VECTOR_TYPE,
+                AssetInterface::CONTENT_TYPE,
+                AssetInterface::CREATION_DATE,
+            ]
+        );
+        $bind = $this->getSqlBindData($assetsData);
+        $valuesSql = $this->buildValuesSqlPart(count($bind));
+        $insertSql = sprintf(
+            'INSERT INTO `%s` (%s) VALUES %s %s',
+            $tableName,
+            $columnsSql,
+            $valuesSql,
+            $onDuplicateSql
+        );
+        try {
+            $connection->query($insertSql, $bind);
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+        }
+    }
+
+    /**
+     * Build columns save asset sql request part.
+     *
+     * @param array $columns
+     * @return string
+     */
+    private function buildColumnsSqlPart(array $columns): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
+        $sql = implode(', ', $processedColumns);
+        return $sql;
+    }
+
+    /**
+     * Build values sql part of the save category query.
+     *
+     * @param int $bind
+     * @return string
+     */
+    private function buildValuesSqlPart($bind): string
+    {
+        $sql = '(' . rtrim(str_repeat('?,', $bind), ',') . ')';
+        return $sql;
+    }
+
+    /**
+     * Get sql bind data.
+     *
+     * @param AssetInterface[] $assets
+     * @return array
+     */
+    private function getSqlBindData(array $assets): array
+    {
+        $bind = [];
+        foreach ($assets as $asset) {
+            $bind = [
+                $asset['id'],
+                $asset['media_type_id'] ?? null,
+                $asset['category_id'] ?? null,
+                $asset['creator_id'] ?? null,
+                $asset['premium_level_id'] ?? null,
+                $asset['path'] ?? null,
+                $asset['stock_id'] ?? null,
+                $asset['is_licensed'] ?? 0,
+                $asset['title'] ?? null,
+                $asset['preview_url'] ?? null,
+                $asset['thumbnail_url'] ?? null,
+                $asset['preview_width'] ?? 0,
+                $asset['preview_height'] ?? 0,
+                $asset['width'] ?? null,
+                $asset['height'] ?? null,
+                $asset['url'] ?? null,
+                $asset['country_name'] ?? null,
+                $asset['details_url'] ?? null,
+                $asset['vector_type'] ?? null,
+                $asset['content_type'] ?? null,
+                $asset['creation_date'] ?? null
+            ];
+        }
+        return $bind;
+    }
+
+    /**
+     * Build sql part on duplicate, to update record if it's already exists.
+     *
+     * @param array $fields
+     * @return string
+     */
+    private function buildOnDuplicateSqlPart(array $fields): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $processedFields = [];
+        foreach ($fields as $field) {
+            $processedFields[] = sprintf('%1$s = VALUES(%1$s)', $connection->quoteIdentifier($field));
+        }
+        $sql = 'ON DUPLICATE KEY UPDATE ' . implode(', ', $processedFields);
+        return $sql;
     }
 }
