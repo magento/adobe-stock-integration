@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\System\Config;
+namespace Magento\AdobeStockAdminUi\Test\Unit\Controller\Adminhtml\System\Config;
 
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\System\Config\TestConnection;
+use Magento\AdobeStockAdminUi\Controller\Adminhtml\System\Config\TestConnection;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;

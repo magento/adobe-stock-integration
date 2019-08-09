@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\System\Config;
+namespace Magento\AdobeStockAdminUi\Controller\Adminhtml\System\Config;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;

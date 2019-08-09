@@ -46,14 +46,14 @@ class ImagePreview extends Column
     /**
      * ImagePreview constructor.
      *
-     * @param ContextInterface               $context
-     * @param UiComponentFactory             $uiComponentFactory
-     * @param UserContextInterface           $userContext
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param UrlInterface                   $urlBuilder
-     * @param Config                         $config
-     * @param array                          $components
-     * @param array                          $data
+     * @param UrlInterface $urlBuilder
+     * @param Config $config
+     * @param array $components
+     * @param array $data
      */
     public function __construct(
         ContextInterface $context,
@@ -85,7 +85,7 @@ class ImagePreview extends Column
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
-                    'downloadImagePreviewUrl' => $this->urlBuilder->getUrl('adobe_stock_image/preview/download'),
+                    'downloadImagePreviewUrl' => $this->urlBuilder->getUrl('adobe_stock/preview/download'),
                     'authConfig' => [
                         'url' => $this->config->getAuthUrl(),
                         'isAuthorized' => $this->isAuthorized(),

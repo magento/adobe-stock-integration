@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Controller\Adminhtml\Preview;
+namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
 use Magento\AdobeStockImage\Model\SaveImagePreview;
 use Magento\Backend\App\Action;

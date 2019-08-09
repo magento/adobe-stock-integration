@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Model\Block\Adminhtml\System\Config;
+namespace Magento\AdobeStockAdminUi\Model\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -19,7 +19,7 @@ class TestConnection extends Field
     /**
      * @inheritdoc
      */
-    protected $_template = 'Magento_AdobeStockImageAdminUi::system/config/testconnection.phtml';
+    protected $_template = 'Magento_AdobeStockAdminUi::system/config/testconnection.phtml';
 
     /**
      * Remove element scope and render form element as HTML

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\AdobeStockImageAdminUi\Model\Block\Adminhtml\System\Config\TestConnection */
+/** @var $block \Magento\AdobeStockAdminUi\Model\Block\Adminhtml\System\Config\TestConnection */
 ?>
 <div id="<?= $block->escapeHtmlAttr($block->getApiKeyValidationResultContainerId()) ?>" class="scalable"></div>
 <button class="scalable" type="button" id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
@@ -15,7 +15,7 @@
 <script type="text/x-magento-init">
     {
         "#validation_api_connection_result": {
-            "Magento_AdobeStockImageAdminUi/js/action/validate-api-key": {
+            "Magento_AdobeStockAdminUi/js/validate-api-key": {
                 "requestValidationUrl": "<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>",
                 "testButtonId": "<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>",
                 "apiKeyInput": "system_adobe_stock_integration_api_key",
