@@ -48,14 +48,14 @@ class Comment implements CommentInterface
         );
 
         $notes = __(
-            'Redirect URI: %uri <br> Pattern: %pattern',
+            'Redirect URI: %uri <br><br>Pattern: %pattern',
             [
                 'uri' => $this->getRedirectUrl(),
                 'pattern' => $this->getRedirectUrlPattern(),
             ]
         );
 
-        return $message . '<br>' . $notes;
+        return $message . '<br><br>' . $notes;
     }
 
     /**
@@ -65,7 +65,10 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrl(): string
     {
-        return $this->url->getUrl(self::REDIRECT_MCA);
+        $adminRoteUrl = $this->url->getRouteUrl('admin');
+        $redirectUrl = $adminRoteUrl . 'index.php/' . self::REDIRECT_MCA;
+
+        return $redirectUrl;
     }
 
     /**
@@ -75,6 +78,6 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrlPattern(): string
     {
-        return str_replace('.', '\\.', $this->getRedirectUrl());
+        return $this->getRedirectUrl();
     }
 }
