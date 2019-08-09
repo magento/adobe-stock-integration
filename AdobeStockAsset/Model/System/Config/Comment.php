@@ -13,8 +13,6 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Class Comment
- *
- * @package Magento\AdobeStockAsset\Model\System\Config
  */
 class Comment implements CommentInterface
 {
@@ -42,17 +40,19 @@ class Comment implements CommentInterface
      * @param  string $elementValue
      * @return string
      */
-    public function getCommentText($elementValue)
+    public function getCommentText($elementValue): string
     {
-        $message = sprintf(
-            'Configure an Adobe Stock account on the %s site to retrieve an Private key (Client secret).',
-            '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>'
+        $message = __(
+            'Configure an Adobe Stock account on the %io_link site to retrieve a Private key (Client secret).',
+            ['io_link' => '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>',]
         );
 
-        $notes = sprintf(
-            'Redirect URI: %s <br> Pattern: %s',
-            $this->getRedirectUrl(),
-            $this->getRedirectUrlPattern()
+        $notes = __(
+            'Redirect URI: %uri <br> Pattern: %pattern',
+            [
+                'uri' => $this->getRedirectUrl(),
+                'pattern' => $this->getRedirectUrlPattern(),
+            ]
         );
 
         return $message . '<br>' . $notes;
@@ -63,7 +63,7 @@ class Comment implements CommentInterface
      *
      * @return string
      */
-    private function getRedirectUrl()
+    private function getRedirectUrl(): string
     {
         return $this->url->getUrl(self::REDIRECT_MCA);
     }
@@ -73,7 +73,7 @@ class Comment implements CommentInterface
      *
      * @return string
      */
-    private function getRedirectUrlPattern()
+    private function getRedirectUrlPattern(): string
     {
         return str_replace('.', '\\.', $this->getRedirectUrl());
     }
