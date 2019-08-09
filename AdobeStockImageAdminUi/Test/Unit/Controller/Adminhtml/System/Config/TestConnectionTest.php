@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Test\Unit\Controller\Adminhtml\System\Config;
+namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\System\Config;
 
-use Magento\AdobeStockAsset\Controller\Adminhtml\System\Config\TestConnection;
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\System\Config\TestConnection;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -91,7 +91,7 @@ class TestConnectionTest extends TestCase
             ->with(
                 [
                     'success' => true,
-                    'errorMessage' => '',
+                    'message' => 'Connection Successful!',
                 ]
             )->willReturnSelf();
         $this->resultJsonFactoryMock->expects($this->once())
@@ -109,10 +109,6 @@ class TestConnectionTest extends TestCase
         $this->clientMock->expects($this->once())
             ->method('testConnection')
             ->willReturn(false);
-        $this->stripTagsMock->expects($this->once())
-            ->method('filter')
-            ->with(__('Invalid API Key.'))
-            ->willReturn('Invalid+API+Key.');
         $jsonMock = $this->getMockBuilder(Json::class)
             ->setMethods(['setData'])
             ->disableOriginalConstructor()
@@ -122,7 +118,7 @@ class TestConnectionTest extends TestCase
             ->with(
                 [
                     'success' => false,
-                    'errorMessage' => 'Invalid+API+Key.',
+                    'message' => 'Connection Failed!',
                 ]
             )->willReturnSelf();
         $this->resultJsonFactoryMock->expects($this->once())
