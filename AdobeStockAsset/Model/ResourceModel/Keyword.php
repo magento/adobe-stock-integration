@@ -13,7 +13,7 @@ use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Asset (metadata) resource model
+ * Keyword esource model
  */
 class Keyword
 {
@@ -47,6 +47,8 @@ class Keyword
     }
 
     /**
+     * Get ID filed name
+     *
      * @return string
      */
     public function getIdFieldName()
@@ -55,6 +57,8 @@ class Keyword
     }
 
     /**
+     * Save association between asset and keywords to database
+     *
      * @param int $assetId
      * @param \int[] $keywordIds
      */
@@ -81,7 +85,9 @@ class Keyword
     }
 
     /**
-     * @param KeywordInterface[] $keyword
+     * Save keywords to database
+     *
+     * @param KeywordInterface[] $keywords
      * @return \int[]
      */
     public function save(array $keywords): array
@@ -111,6 +117,8 @@ class Keyword
     }
 
     /**
+     * Load keywords by asset id
+     *
      * @param int $assetId
      * @return KeywordInterface[]
      * @throws \Zend_Db_Statement_Exception
@@ -137,8 +145,12 @@ class Keyword
     }
 
     /**
+     * Insert ignore query
+     *
      * @param string $table
-     * @param array $data
+     * @param array $columns
+     * @param string $values
+     * @param array $bind
      */
     private function insertIgnore(string $table, array $columns, string $values, array $bind): void
     {
@@ -156,7 +168,7 @@ class Keyword
     }
 
     /**
-     * Select keywords by names.
+     * Select keywords by names
      *
      * @param \string[] $keywords
      * @return \int[]
