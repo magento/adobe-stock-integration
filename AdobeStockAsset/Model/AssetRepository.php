@@ -11,7 +11,7 @@ namespace Magento\AdobeStockAsset\Model;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
-use Magento\AdobeStockAsset\Model\ResourceModel\Keyword\SaveMultiplyAndAssignToAsset;
+use Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
@@ -57,9 +57,9 @@ class AssetRepository implements AssetRepositoryInterface
     private $searchResultFactory;
 
     /**
-     * @var SaveMultiplyAndAssignToAsset
+     * @var AssetKeywordRepositoryInterface
      */
-    private $saveMultiplyAndAssignToAsset;
+    private $assetKeywordRepository;
 
     /**
      * AssetRepository constructor.
@@ -70,7 +70,7 @@ class AssetRepository implements AssetRepositoryInterface
      * @param JoinProcessorInterface             $joinProcessor
      * @param CollectionProcessorInterface       $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
-     * @param SaveMultiplyAndAssignToAsset       $saveMultiplyAndAssignToAsset
+     * @param AssetKeywordRepositoryInterface       $assetKeywordRepository
      */
     public function __construct(
         ResourceModel $resource,
@@ -79,7 +79,7 @@ class AssetRepository implements AssetRepositoryInterface
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         AssetSearchResultsInterfaceFactory $searchResultFactory,
-        SaveMultiplyAndAssignToAsset $saveMultiplyAndAssignToAsset
+        AssetKeywordRepositoryInterface $assetKeywordRepository
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -87,7 +87,7 @@ class AssetRepository implements AssetRepositoryInterface
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
-        $this->saveMultiplyAndAssignToAsset = $saveMultiplyAndAssignToAsset;
+        $this->assetKeywordRepository = $assetKeywordRepository;
     }
 
     /**
@@ -96,15 +96,15 @@ class AssetRepository implements AssetRepositoryInterface
     public function save(AssetInterface $asset): void
     {
         $this->resource->save($asset);
-        $this->saveMultiplyAndAssignToAsset->execute($asset);
+        $this->assetKeywordRepository->saveAssetKeywords($asset);
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(AssetInterface $item): void
+    public function delete(AssetInterface $asset): void
     {
-        $this->resource->delete($item);
+        $this->resource->delete($asset);
     }
 
     /**
@@ -121,9 +121,15 @@ class AssetRepository implements AssetRepositoryInterface
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
+        $items = [];
+        /** @var AssetInterface $item */
+        foreach ($collection->getItems() as $item) {
+            $items[] = $item->setKeywords($this->assetKeywordRepository->getAssetKeywords($item));
+        }
+
         /** @var AssetSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultFactory->create();
-        $searchResults->setItems($collection->getItems());
+        $searchResults->setItems($items);
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
@@ -134,12 +140,14 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getById(int $id) : AssetInterface
     {
-        $item = $this->factory->create();
-        $this->resource->load($item, $id);
-        if (!$item->getId()) {
+        /** @var AssetInterface $asset */
+        $asset = $this->factory->create();
+        $this->resource->load($asset, $id);
+        if (!$asset->getId()) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
         }
-        return $item;
+        $asset->setKeywords($this->assetKeywordRepository->getAssetKeywords($asset));
+        return $asset;
     }
 
     /**
