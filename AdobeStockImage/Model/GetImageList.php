@@ -21,7 +21,7 @@ class GetImageList implements GetImageListInterface
     /**
      * @var GetAssetListInterface
      */
-    private $assetList;
+    private $getAssetList;
 
     /**
      * GetImageList constructor.
@@ -30,7 +30,7 @@ class GetImageList implements GetImageListInterface
     public function __construct(
         GetAssetListInterface $assetList
     ) {
-        $this->assetList = $assetList;
+        $this->getAssetList = $assetList;
     }
 
     /**
@@ -38,6 +38,6 @@ class GetImageList implements GetImageListInterface
      */
     public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
-        return $this->assetList->execute($searchCriteria);
+        return $this->getAssetList->execute($searchCriteria);
     }
 }
