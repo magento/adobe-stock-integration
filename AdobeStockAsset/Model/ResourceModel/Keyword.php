@@ -11,9 +11,10 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
+use Psr\Log\LoggerInterface;
 
 /**
- * Keyword esource model
+ * Keyword resource model
  */
 class Keyword
 {
@@ -34,16 +35,25 @@ class Keyword
     private $keywordFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Keyword constructor.
+     *
      * @param KeywordInterfaceFactory $keywordFactory
-     * @param ResourceConnection $resourceConnection
+     * @param ResourceConnection      $resourceConnection
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         KeywordInterfaceFactory $keywordFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->keywordFactory = $keywordFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -51,7 +61,7 @@ class Keyword
      *
      * @return string
      */
-    public function getIdFieldName()
+    public function getIdFieldName(): string
     {
         return KeywordInterface::ID;
     }
@@ -60,7 +70,8 @@ class Keyword
      * Save association between asset and keywords to database
      *
      * @param int $assetId
-     * @param \int[] $keywordIds
+     * @param int[] $keywordIds
+     * @return void
      */
     public function saveAssetLinks(int $assetId, array $keywordIds): void
     {
@@ -88,13 +99,14 @@ class Keyword
      * Save keywords to database
      *
      * @param KeywordInterface[] $keywords
-     * @return \int[]
+     * @return int[]
      */
     public function save(array $keywords): array
     {
         $values = [];
         $bind = [];
         $keywordNames = [];
+        $data = [];
         /** @var KeywordInterface $keyword */
         foreach ($keywords as $keyword) {
             $keywordNames[] = $keyword->getKeyword();
@@ -170,8 +182,8 @@ class Keyword
     /**
      * Select keywords by names
      *
-     * @param \string[] $keywords
-     * @return \int[]
+     * @param string[] $keywords
+     * @return int[]
      */
     private function getKeywordIds(array $keywords): array
     {

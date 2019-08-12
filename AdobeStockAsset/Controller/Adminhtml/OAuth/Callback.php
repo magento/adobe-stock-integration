@@ -33,7 +33,7 @@ class Callback extends Action
     const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
     /**
-     * Consts of response
+     * Constants of response
      *
      * RESPONSE_TEMPLATE - template of response
      * RESPONSE_REGEXP_PATTERN - RegExp pattern of response (JavaScript)
