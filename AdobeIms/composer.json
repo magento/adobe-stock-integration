@@ -1,0 +1,30 @@
+{
+    "name": "magento/module-adobe-ims",
+    "description": "N/A",
+    "require": {
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-user": "*",
+        "magento/module-adobe-stock-asset-api": "*",
+        "magento/module-adobe-stock-client-api": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\AdobeIms\\": ""
+        }
+    },
+    "repositories": {
+        "stock-api-libphp": {
+            "type": "vcs",
+            "url": "git@github.com:adobe/stock-api-libphp.git"
+        }
+    }
+}

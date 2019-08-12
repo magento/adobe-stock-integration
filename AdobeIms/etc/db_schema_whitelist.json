@@ -1,0 +1,22 @@
+{
+  "adobe_stock_user_profile": {
+    "column": {
+      "id": true,
+      "adobe_id": true,
+      "admin_user_id": true,
+      "display_name": true,
+      "account_type": true,
+      "access_token": true,
+      "refresh_token": true,
+      "created_at": true,
+      "updated_at": true
+    },
+    "index": {
+      "ADOBE_STOCK_USER_PROFILE_ID": true
+    },
+    "constraint": {
+      "PRIMARY": true,
+      "ADOBE_STOCK_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+    }
+  }
+}

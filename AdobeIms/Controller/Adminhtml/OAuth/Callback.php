@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Controller\Adminhtml\OAuth;
+namespace Magento\AdobeIms\Controller\Adminhtml\OAuth;
 
 use DateInterval;
 use DateTime;
