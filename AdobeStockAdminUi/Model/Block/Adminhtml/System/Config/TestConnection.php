@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAdminUi\Model\Block\Adminhtml\System\Config;
 
-use Magento\AdobeStockClient\Model\Config;
+use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Backend\Block\Template\Context;
@@ -22,7 +22,7 @@ class TestConnection extends Field
     /**
      * @inheritdoc
      */
-    protected $_template = 'Magento_AdobeStockAdminUi::system/config/testconnection.phtml';
+    protected $_template = 'Magento_AdobeStockAdminUi::system/config/connection.phtml';
 
     /**
      * @var ClientInterface
@@ -30,7 +30,7 @@ class TestConnection extends Field
     private $client;
 
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -38,13 +38,13 @@ class TestConnection extends Field
      * TestConnection constructor.
      *
      * @param ClientInterface $client
-     * @param Config          $config
+     * @param ConfigInterface $config
      * @param Context         $context
      * @param array           $data
      */
     public function __construct(
         ClientInterface $client,
-        Config $config,
+        ConfigInterface $config,
         Context $context,
         array $data = []
     ) {

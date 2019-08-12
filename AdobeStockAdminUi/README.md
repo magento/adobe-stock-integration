@@ -1,4 +1,4 @@
-# AdobeStockImageAdminUi Module
+# AdobeStockAdminUi Module
 
 The AdobeStockAdminUi module responsible for the admin panel UI implementation
 

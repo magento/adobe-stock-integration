@@ -11,7 +11,7 @@ namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 use Exception;
 use Magento\AdobeStockAsset\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
-use Magento\AdobeStockClient\Model\Config;
+use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -39,7 +39,7 @@ class ImagePreview extends Column
     private $urlBuilder;
 
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -51,7 +51,7 @@ class ImagePreview extends Column
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UrlInterface $urlBuilder
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param array $components
      * @param array $data
      */
@@ -61,7 +61,7 @@ class ImagePreview extends Column
         UserContextInterface $userContext,
         UserProfileRepositoryInterface $userProfileRepository,
         UrlInterface $urlBuilder,
-        Config $config,
+        ConfigInterface $config,
         array $components = [],
         array $data = []
     ) {

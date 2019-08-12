@@ -6,8 +6,8 @@
         "magento/framework": "*",
         "magento/module-ui": "*",
         "magento/module-backend": "*",
-        "magento/module-adobe-stock-image-api": "*",
-        "magento/module-adobe-stock-asset": "*"
+        "magento/module-adobe-stock-asset-api": "*",
+        "magento/module-adobe-stock-client-api": "*",
     },
     "suggest": {
         "magento/module-cms": "*"
@@ -22,7 +22,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\AdobeStockImageAdminUi\\": ""
+            "Magento\\AdobeStockAdminUi\\": ""
         }
     }
 }

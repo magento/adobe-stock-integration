@@ -37,7 +37,7 @@ class Download extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /** @var LoggerInterface */
     private $logger;
