@@ -6,7 +6,7 @@
         "magento/framework": "*",
         "magento/module-user": "*",
         "magento/module-adobe-stock-asset-api": "*",
-        "astock/stock-api-libphp": "1.1.0"
+        "magento/module-adobe-stock-client-api": "*"
     },
     "type": "magento2-module",
     "license": [
