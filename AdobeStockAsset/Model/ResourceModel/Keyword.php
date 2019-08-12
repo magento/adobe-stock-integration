@@ -11,7 +11,6 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
 
 /**
  * Keyword resource model
@@ -35,25 +34,17 @@ class Keyword
     private $keywordFactory;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Keyword constructor.
      *
      * @param KeywordInterfaceFactory $keywordFactory
      * @param ResourceConnection      $resourceConnection
-     * @param LoggerInterface         $logger
      */
     public function __construct(
         KeywordInterfaceFactory $keywordFactory,
-        ResourceConnection $resourceConnection,
-        LoggerInterface $logger
+        ResourceConnection $resourceConnection
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->keywordFactory = $keywordFactory;
-        $this->logger = $logger;
     }
 
     /**
