@@ -11,11 +11,12 @@ namespace Magento\AdobeStockClient\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 
 /**
  * Class Config
  */
-class Config
+class Config implements ConfigInterface
 {
     private const XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
     private const XML_PATH_PRIVATE_KEY = 'adobe_stock/integration/private_key';
