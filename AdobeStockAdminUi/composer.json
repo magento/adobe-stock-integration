@@ -1,13 +1,13 @@
 {
-    "name": "magento/module-adobe-stock-image-admin-ui",
+    "name": "magento/module-adobe-stock-admin-ui",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-ui": "*",
         "magento/module-backend": "*",
-        "magento/module-adobe-stock-image-api": "*",
-        "magento/module-adobe-stock-asset-api": "*"
+        "magento/module-adobe-stock-asset-api": "*",
+        "magento/module-adobe-stock-client-api": "*"
     },
     "suggest": {
         "magento/module-cms": "*"
@@ -22,7 +22,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\AdobeStockImageAdminUi\\": ""
+            "Magento\\AdobeStockAdminUi\\": ""
         }
     }
 }

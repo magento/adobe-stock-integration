@@ -4,20 +4,40 @@
  */
 
 define([
+    'uiElement',
     'jquery',
     'mage/translate',
     'Magento_Ui/js/modal/modal'
-], function ($, $t) {
+], function (Element, $, $t) {
     'use strict';
 
-    return function (config, element) {
-        $(element).modal({
-            type: 'slide',
-            buttons: [],
-            modalClass: 'adobe-stock-modal',
-            title: $t('Adobe Stock')
-        }).on('openModal', function () {
-            window.dispatchEvent(new Event('resize'));
-        }).applyBindings();
-    };
+    return Element.extend({
+        defaults: {
+            containerId: '',
+            masonryComponentPath: '',
+            modules: {
+                masonry: '${$.masonryComponentPath}'
+            },
+        },
+
+        /**
+         * Init component
+         *
+         * @return {exports}
+         */
+        initialize: function () {
+            this._super();
+
+            $(this.containerId).modal({
+                type: 'slide',
+                buttons: [],
+                modalClass: 'adobe-stock-modal',
+                title: $t('Adobe Stock')
+            }).on('openModal', function () {
+                this.masonry().setLayoutStyles();
+            }.bind(this)).applyBindings();
+
+            return this;
+        }
+    });
 });

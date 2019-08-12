@@ -204,7 +204,6 @@ class Client implements ClientInterface
      * Create and return search request based on search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
-     *
      * @return SearchFilesRequest
      * @throws IntegrationException
      * @throws \AdobeStock\Api\Exception\StockApi

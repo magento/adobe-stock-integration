@@ -9,6 +9,7 @@
         "magento/module-adobe-stock-image-admin-ui": "*",
         "magento/module-adobe-stock-image-api": "*",
         "magento/module-adobe-stock-client": "*",
-        "magento/module-adobe-stock-client-api": "*"
+        "magento/module-adobe-stock-client-api": "*",
+        "magento/module-adobe-stock-admin-ui": "*"
     }
 }
