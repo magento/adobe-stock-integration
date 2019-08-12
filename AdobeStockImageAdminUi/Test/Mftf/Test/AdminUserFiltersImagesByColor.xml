@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserFiltersImagesByImageColor">
+    <test name="AdminUserFiltersImagesByColor">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="User filters images by image color"/>
@@ -22,14 +22,15 @@
             <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
-               <argument name="enabled" value="0"/>
-               <argument name="wysiwygEnabled" value="disabled"/>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="wysiwygEnabled" value="disabled"/>
 <!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
 <!--                <argument name="apiKey" value=""/>-->
 <!--                <argument name="privateKey" value=""/>-->
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>

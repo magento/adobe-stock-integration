@@ -35,6 +35,7 @@ class Words implements SearchParameterProviderInterface
 
     /**
      * @inheritdoc
+     * @throws \AdobeStock\Api\Exception\StockApi
      */
     public function apply(
         SearchCriteriaInterface $searchCriteria,

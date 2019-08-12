@@ -13,7 +13,7 @@
             <button class="action-next" type="button" data-bind="click: function () { $col.next($row()); }">
                 <span translate="'Next'"/>
             </button>
-            <button class="action-close" type="button" data-bind="click: function () { $col.hide($row()); }">
+            <button class="action-close" type="button" data-bind="click: function () { $col.hide(); }">
                 <span translate="'Close'"/>
             </button>
         </div>
@@ -25,9 +25,13 @@
             </div>
             <ul class="messages" if="$col.getMessages().length > 0">
                 <!-- ko foreach: $col.getMessages() -->
-                <li attr="class: code">
-                    <span data-bind="html: message"></span>
-                </li>
+                <div class="messages">
+                    <div attr="class: 'message message-'+code">
+                        <div data-ui-id="messages-message-error">
+                            <span data-bind="html: message"></span>
+                        </div>
+                    </div>
+                </div>
                 <!-- /ko -->
             </ul>
             <button class="action-secondary" type="button" data-bind="click: function(){ $col.save($row()) }">
@@ -39,6 +43,16 @@
                     data-bind="click: function () { $col.licenseProcess($row()); }">
                 <span data-bind="i18n: 'License and Save'"></span>
             </button>
+        </div>
+        <div class="attributes">
+            <!-- ko foreach: $col.getDisplayAttributes($row()) -->
+            <div class="attribute">
+                <span class="title" translate="name"/>
+                <div class="value">
+                   <span text="value" />
+                </div>
+            </div>
+            <!-- /ko -->
         </div>
     </div>
 </div>

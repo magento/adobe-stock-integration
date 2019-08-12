@@ -21,11 +21,11 @@ interface AssetRepositoryInterface
     /**
      * Save asset
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $item
+     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $asset
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function save(AssetInterface $item): void;
+    public function save(AssetInterface $asset): void;
 
     /**
      * Delete item

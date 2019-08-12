@@ -15,12 +15,24 @@ define([
 
     return Column.extend({
         defaults: {
-            visibility: [],
-            height: 0,
-            saveAvailable: true,
+            mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
+            adobeStockModalSelector: '#adobe-stock-images-search-modal',
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            visibility: [],
+            height: 0,
+            saveAvailable: true,
+            statefull: {
+                visible: true,
+                sorting: true,
+                lastOpenedImage: true
+            },
+            tracks: {
+                lastOpenedImage: true,
+            },
+            lastOpenedImage: null,
+            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             messageDelay: 5,
             authConfig: {
                 url: '',
@@ -60,6 +72,16 @@ define([
         },
 
         /**
+         * Return id of the row.
+         *
+         * @param record
+         * @returns {*}
+         */
+        getId: function (record) {
+            return record.id;
+        },
+
+        /**
          * Returns url to given record.
          *
          * @param {Object} record - Data to be preprocessed.
@@ -86,7 +108,34 @@ define([
          * @returns {String}
          */
         getAuthor: function (record) {
-            return record.author || 'Author';
+            return record.creator.name || 'Author';
+        },
+
+        /**
+         * Returns attributes to display under the preview image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getDisplayAttributes: function(record) {
+            return [
+                {
+                    name: 'Dimensions',
+                    value: record.width + ' x ' + record.height + ' px'
+                },
+                {
+                    name: 'File type',
+                    value: record.content_type.toUpperCase()
+                },
+                {
+                    name: 'Cateogory',
+                    value: record.category.name
+                },
+                {
+                    name: 'File #',
+                    value: record.id
+                }
+            ];
         },
 
         /**
@@ -96,6 +145,9 @@ define([
          * @return {*|boolean}
          */
         isVisible: function (record) {
+            if (this.lastOpenedImage === record._rowIndex) {
+                this.show(record);
+            }
             return this.visibility()[record._rowIndex] || false;
         },
 
@@ -155,6 +207,7 @@ define([
             var visibility = this.visibility(),
                 img;
 
+            this.lastOpenedImage = null;
             if(~visibility.indexOf(true)) {// hide any preview
                 if(!Array.prototype.fill) {
                     visibility = _.times(visibility.length, _.constant(false));
@@ -175,6 +228,7 @@ define([
                 this._updateHeight();
             } else {
                 img.load(this._updateHeight.bind(this));
+                this.lastOpenedImage = record._rowIndex;
             }
         },
 
@@ -193,12 +247,12 @@ define([
 
         /**
          * Close image preview
-         *
-         * @param {Object} record
          */
-        hide: function (record) {
+        hide: function () {
             var visibility = this.visibility();
-            visibility[record._rowIndex] = false;
+
+            this.lastOpenedImage = null;
+            visibility.fill(false);
             this.visibility(visibility);
             this.height(0);
             this._selectRow(null, 0);
@@ -221,18 +275,30 @@ define([
          * @param record
          */
         save: function (record) {
-            // update modal with an image url
-            var image_url = record.preview_url;
-            var targetEl = $('.media-gallery-modal:has(#search_adobe_stock)')
-                .data('mageMediabrowser')
-                .getTargetElement();
-            targetEl.val(image_url).trigger('change');
-            // close insert image panel
-            window.MediabrowserUtility.closeDialog();
-            targetEl.focus();
-            $(targetEl).change();
-            // close adobe panel
-            $("#adobe-stock-images-search-modal").trigger('closeModal');
+            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
+            $(this.adobeStockModalSelector).trigger('processStart');
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: this.downloadImagePreviewUrl,
+                    dataType: 'json',
+                    data: {
+                       'media_id': record.id,
+                       'destination_path': mediaBrowser.activeNode.path || ''
+                    },
+                    context: this,
+                    success: function () {
+                        $(this.adobeStockModalSelector).trigger('processStop');
+                        $(this.adobeStockModalSelector).trigger('closeModal');
+                        mediaBrowser.reload(true);
+                    },
+                    error: function (response) {
+                        $(this.adobeStockModalSelector).trigger('processStop');
+                        messages.add('error', response.responseJSON.message);
+                        messages.scheduleCleanup(3);
+                    }
+               }
+           );
         },
 
         /**

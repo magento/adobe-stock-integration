@@ -19,6 +19,10 @@
         <element name="gridSpinner" type="text" selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']"/>
         <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
         <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
+        <element name="recordsFound" type="text" selector="//*[@id='adobe-stock-images-search-modal']//*[text()='records found']/parent::div"/>
+        <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
+        <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
+        <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
         <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
     </section>
 </sections>
