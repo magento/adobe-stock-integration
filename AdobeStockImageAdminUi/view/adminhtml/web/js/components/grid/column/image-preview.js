@@ -109,7 +109,34 @@ define([
          * @returns {String}
          */
         getAuthor: function (record) {
-            return record.author || 'Author';
+            return record.creator.name || 'Author';
+        },
+
+        /**
+         * Returns attributes to display under the preview image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getDisplayAttributes: function(record) {
+            return [
+                {
+                    name: 'Dimensions',
+                    value: record.width + ' x ' + record.height + ' px'
+                },
+                {
+                    name: 'File type',
+                    value: record.content_type.toUpperCase()
+                },
+                {
+                    name: 'Cateogory',
+                    value: record.category.name
+                },
+                {
+                    name: 'File #',
+                    value: record.id
+                }
+            ];
         },
 
         /**
