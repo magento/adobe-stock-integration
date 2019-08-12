@@ -14,7 +14,7 @@ use Exception;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
 use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
-use Magento\AdobeStockClient\Model\Client;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
@@ -60,7 +60,7 @@ class Callback extends Action
     private $userProfileFactory;
 
     /**
-     * @var Client
+     * @var ClientInterface
      */
     private $client;
 
@@ -74,14 +74,14 @@ class Callback extends Action
      * @param Action\Context $context
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserProfileInterfaceFactory $userProfileFactory
-     * @param Client $client
+     * @param ClientInterface $client
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
         UserProfileRepositoryInterface $userProfileRepository,
         UserProfileInterfaceFactory $userProfileFactory,
-        Client $client,
+        ClientInterface $client,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
