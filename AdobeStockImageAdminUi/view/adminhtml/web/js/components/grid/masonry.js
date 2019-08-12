@@ -57,10 +57,8 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'rows',
-                    'images'
+                    'rows'
                 ]);
-
             return this;
         },
 
