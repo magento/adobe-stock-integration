@@ -7,7 +7,7 @@
         "magento/module-ui": "*",
         "magento/module-backend": "*",
         "magento/module-adobe-stock-asset-api": "*",
-        "magento/module-adobe-stock-client-api": "*",
+        "magento/module-adobe-stock-client-api": "*"
     },
     "suggest": {
         "magento/module-cms": "*"
