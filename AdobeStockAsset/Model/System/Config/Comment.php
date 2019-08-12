@@ -9,12 +9,11 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model\System\Config;
 
 use Magento\Config\Model\Config\CommentInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
 
 /**
  * Class Comment
- *
- * @package Magento\AdobeStockAsset\Model\System\Config
  */
 class Comment implements CommentInterface
 {
@@ -26,14 +25,22 @@ class Comment implements CommentInterface
     private $url;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Comment constructor.
      *
-     * @param UrlInterface $url
+     * @param UrlInterface         $url
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        UrlInterface $url
+        UrlInterface $url,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->url = $url;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -42,20 +49,22 @@ class Comment implements CommentInterface
      * @param  string $elementValue
      * @return string
      */
-    public function getCommentText($elementValue)
+    public function getCommentText($elementValue): string
     {
-        $message = sprintf(
-            'Configure an Adobe Stock account on the %s site to retrieve an Private key (Client secret).',
-            '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>'
+        $message = __(
+            'Configure an Adobe Stock account on the %io_link site to retrieve a Private key (Client secret).',
+            ['io_link' => '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>',]
         );
 
-        $notes = sprintf(
-            'Redirect URI: %s <br> Pattern: %s',
-            $this->getRedirectUrl(),
-            $this->getRedirectUrlPattern()
+        $notes = __(
+            'Redirect URI: %uri <br><br>Pattern: %pattern',
+            [
+                'uri' => $this->getRedirectUrl(),
+                'pattern' => $this->getRedirectUrlPattern(),
+            ]
         );
 
-        return $message . '<br>' . $notes;
+        return $message . '<br><br>' . $notes;
     }
 
     /**
@@ -63,9 +72,15 @@ class Comment implements CommentInterface
      *
      * @return string
      */
-    private function getRedirectUrl()
+    private function getRedirectUrl(): string
     {
-        return $this->url->getUrl(self::REDIRECT_MCA);
+        $adminRoteUrl = $this->url->getRouteUrl('admin');
+        $indexPhpToUrl = $this->scopeConfig->isSetFlag(\Magento\Store\Model\Store::XML_PATH_USE_REWRITES) ?
+            ''
+            : 'index.php/';
+        $redirectUrl = $adminRoteUrl . $indexPhpToUrl . self::REDIRECT_MCA;
+
+        return $redirectUrl;
     }
 
     /**
@@ -73,8 +88,8 @@ class Comment implements CommentInterface
      *
      * @return string
      */
-    private function getRedirectUrlPattern()
+    private function getRedirectUrlPattern(): string
     {
-        return str_replace('.', '\\.', $this->getRedirectUrl());
+        return $this->getRedirectUrl();
     }
 }

@@ -14,7 +14,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Controller used for testing connection to Adobe Stock API from stores configuration
@@ -39,27 +38,19 @@ class TestConnection extends Action
     private $client;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * TestConnection constructor.
      * @param Context $context
      * @param ClientInterface $client
      * @param JsonFactory $resultJsonFactory
-     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         ClientInterface $client,
-        JsonFactory $resultJsonFactory,
-        LoggerInterface $logger
+        JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->client = $client;
-        $this->logger = $logger;
     }
 
     /**

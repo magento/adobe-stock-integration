@@ -59,7 +59,7 @@ class TestConnection extends Field
      * @param AbstractElement $element
      * @return string
      */
-    public function render(AbstractElement $element)
+    public function render(AbstractElement $element): string
     {
         $element->setData('scope', null);
         return parent::render($element);
@@ -71,7 +71,7 @@ class TestConnection extends Field
      * @param AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element): string
     {
         $this->addData(
             [
@@ -97,12 +97,12 @@ class TestConnection extends Field
      *
      * @return string
      */
-    public function getAjaxUrl()
+    public function getAjaxUrl(): string
     {
         return $this->_urlBuilder->getUrl(
             'adobe_stock/system_config/testconnection',
             [
-                'form_key' => $this->getFormKey()
+                'form_key' => $this->getFormKey(),
             ]
         );
     }
