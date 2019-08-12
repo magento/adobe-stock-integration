@@ -44,5 +44,15 @@
                 <span data-bind="i18n: 'License and Save'"></span>
             </button>
         </div>
+        <div class="attributes">
+            <!-- ko foreach: $col.getDisplayAttributes($row()) -->
+            <div class="attribute">
+                <span class="title" translate="name"/>
+                <div class="value">
+                   <span text="value" />
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
     </div>
 </div>
