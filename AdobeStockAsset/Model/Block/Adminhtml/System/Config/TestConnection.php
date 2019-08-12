@@ -22,7 +22,7 @@ class TestConnection extends Field
     /**
      * @inheritdoc
      */
-    protected $_template = 'Magento_AdobeStockAsset::system/config/testconnection.phtml';
+    protected $_template = 'Magento_AdobeStockAsset::system/config/connection.phtml';
 
     /**
      * @var ClientInterface
@@ -73,19 +73,9 @@ class TestConnection extends Field
      */
     protected function _getElementHtml(AbstractElement $element)
     {
-        $originalData = $element->getOriginalData();
         $this->addData(
             [
-                'button_label' => __($originalData['button_label']),
-                'html_id' => $element->getHtmlId(),
-                'ajax_url' => $this->_urlBuilder->getUrl(
-                    'adobe_stock/system_config/testconnection',
-                    [
-                        'form_key' => $this->getFormKey()
-                    ]
-                ),
-                'api_key_validation_result_container_id' => 'validation_api_connection_result',
-                'is_current_connection_valid' => $this->isConnectionValid(),
+                'button_label' => __($element->getOriginalData()['button_label']),
             ]
         );
 
@@ -97,11 +87,23 @@ class TestConnection extends Field
      *
      * @return bool
      */
-    private function isConnectionValid(): bool
+    public function isConnectionSuccessful(): bool
     {
-        $apiKey = $this->config->getApiKey();
-        $isConnectionValid = $this->client->testConnection($apiKey);
+        return $this->client->testConnection($this->config->getApiKey());
+    }
 
-        return $isConnectionValid;
+    /**
+     * Get test connection url
+     *
+     * @return string
+     */
+    public function getAjaxUrl()
+    {
+        return $this->_urlBuilder->getUrl(
+            'adobe_stock/system_config/testconnection',
+            [
+                'form_key' => $this->getFormKey()
+            ]
+        );
     }
 }
