@@ -25,7 +25,7 @@ class GetImageList implements GetImageListInterface
 
     /**
      * GetImageList constructor.
-     * @param GetAssetListInterface $assetList
+     * @param GetAssetListInterface $getAssetList
      */
     public function __construct(
         GetAssetListInterface $getAssetList
