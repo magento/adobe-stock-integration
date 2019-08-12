@@ -147,7 +147,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
         $this->assetRepository->save($asset);
     }
 
-    /**
+    /**AdobeStockAsset/Model/Block/Adminhtml/System/Config/TestConnection.php
      * Is asset already exists.
      *
      * @param int $id
