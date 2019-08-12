@@ -93,7 +93,10 @@ class StorageTest extends TestCase
         $this->httpsDriverMock->expects($this->once())
             ->method('fileGetContents')
             ->willReturn($content);
-
-        $this->assertSame('240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg', $this->storage->save($imageUrl));
+        $assets = $this->createMock(\Magento\AdobeStockAsset\Model\Asset::class);
+        $assets->expects($this->once())
+            ->method('getData')
+            ->willReturn(['preview_url' => $imageUrl, 'id' => 123, 'title' => 'title']);
+        $this->assertSame('title123.jpg', $this->storage->save($assets));
     }
 }

@@ -108,7 +108,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
         try {
             $items = $searchResult->getItems();
             $asset = reset($items);
-            $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
+            $path = $this->storage->save($asset, $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);
         } catch (\Exception $exception) {

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model;
 
 use Exception;
+use Magento\AdobeStockAsset\Model\Asset;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -71,24 +72,25 @@ class Storage
     /**
      * Save file from the URL to destination directory relative to media directory
      *
-     * @param string $imageUrl
+     * @param Asset $assets
      * @param string $destinationDirectoryPath
      * @return string
      * @throws LocalizedException
      */
-    public function save(string $imageUrl, string $destinationDirectoryPath = '') : string
+    public function save(Asset $assets, string $destinationDirectoryPath = '') : string
     {
         if (!empty($destinationDirectoryPath)) {
             $destinationDirectoryPath = rtrim($destinationDirectoryPath, '/') . '/';
         }
-        $destinationPath = $destinationDirectoryPath . $this->getFileName($imageUrl);
+        $imgName = $this->generateImageName($assets->getData());
+        $destinationPath = $destinationDirectoryPath . $imgName;
 
         $bytes = false;
 
         try {
             $bytes = $this->getMediaDirectory()->writeFile(
                 $destinationPath,
-                $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl))
+                $this->driver->fileGetContents($this->getUrlWithoutProtocol($assets->getPreviewUrl()))
             );
         } catch (Exception $exception) {
             $this->log->critical("Failed to save the image. Exception: \n" . $exception);
@@ -99,6 +101,19 @@ class Storage
         }
 
         return $destinationPath;
+    }
+
+    /**
+     * Generate image name by Title + id.
+     *
+     * @param aray $imageData
+     * @return string
+     */
+    private function generateImageName(array $imageData) :string
+    {
+        $imgName = str_replace(' ', '', $imageData['title']).$imageData['id'];
+        preg_match('/\.[a-z]{1,3}/', $this->getFileName($imageData['preview_url']), $imageType);
+        return $imgName.implode($imageType);
     }
 
     /**
