@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 
 use Exception;
-use Magento\AdobeStockAsset\Controller\Adminhtml\OAuth\Callback;
-use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
+use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
