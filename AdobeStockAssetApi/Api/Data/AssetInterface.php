@@ -27,31 +27,13 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const CREATOR = 'creator';
 
-    const STOCK_ID = 'stock_id';
-
     const IS_LICENSED = 'is_licensed';
 
     const TITLE = 'title';
 
-    const PREVIEW_URL = 'preview_url';
-
-    const THUMBNAIL_URL = 'thumbnail_url';
-
-    const PREVIEW_WIDTH = 'preview_width';
-
-    const PREVIEW_HEIGHT = 'preview_height';
-
-    const URL = 'url';
-
     const WIDTH = 'width';
 
     const HEIGHT = 'height';
-
-    const COUNTRY_NAME = 'country_name';
-
-    const DETAILS_URL = 'details_url';
-
-    const VECTOR_TYPE = 'vector_type';
 
     const CONTENT_TYPE = 'content_type';
 
@@ -62,6 +44,10 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     const FIELD_CREATED_AT = 'created_at';
 
     const FIELD_UPDATED_AT = 'updated_at';
+
+    const PREVIEW_URL = 'preview_url';
+
+    const THUMBNAIL_URL = 'thumbnail_url';
 
     /**
      * Category id is an id of a category entry related to the asset
@@ -77,11 +63,6 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Media type is an id of a media type entry related to the asset
      */
     const MEDIA_TYPE_ID = 'media_type_id';
-
-    /**
-     * Premium level id is an id of a media type entry related to the asset
-     */
-    const PREMIUM_LEVEL_ID = 'premium_level_id';
 
     /**
      * Get ID
@@ -112,21 +93,6 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return void
      */
     public function setPath(string $value): void;
-
-    /**
-     * Get URL
-     *
-     * @return string|null
-     */
-    public function getThumbnailUrl(): ?string;
-
-    /**
-     * Set URL
-     *
-     * @param string $url
-     * @return void
-     */
-    public function setThumbnailUrl(string $url): void;
 
     /**
      * Set full licensed asset's height
@@ -249,36 +215,6 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setKeywords(array $keywords): void;
 
     /**
-     * Return the premium level
-     *
-     * @return int|null
-     */
-    public function getPremiumLevelId(): ?int;
-
-    /**
-     * Set the premium level
-     *
-     * @param int|null $premiumLevelId
-     * @return void
-     */
-    public function setPremiumLevelId(int $premiumLevelId): void;
-
-    /**
-     * Get the stock id
-     *
-     * @return int
-     */
-    public function getStockId(): int;
-
-    /**
-     * Set stock id
-     *
-     * @param int $stockId
-     * @return void
-     */
-    public function setStockId(int $stockId): void;
-
-    /**
      * Is licensed
      *
      * @return int
@@ -307,96 +243,6 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return void
      */
     public function setTitle(string $title): void;
-
-    /**
-     * Get preview url
-     *
-     * @return string
-     */
-    public function getPreviewUrl(): string;
-
-    /**
-     * Set preview url
-     *
-     * @param string $previewUrl
-     * @return void
-     */
-    public function setPreviewUrl(string $previewUrl): void;
-
-    /**
-     * Get preview width
-     *
-     * @return int
-     */
-    public function getPreviewWidth(): int;
-
-    /**
-     * Set preview width
-     *
-     * @param int $previewWidth
-     * @return void
-     */
-    public function setPreviewWidth(int $previewWidth): void;
-
-    /**
-     * Get the preview height
-     *
-     * @return int
-     */
-    public function getPreviewHeight(): int;
-
-    /**
-     * Set preview height
-     *
-     * @param int $previewHeight
-     * @return void
-     */
-    public function setPreviewHeight(int $previewHeight): void;
-
-    /**
-     * Get country name
-     *
-     * @return string
-     */
-    public function getCountryName(): string;
-
-    /**
-     * Set country name
-     *
-     * @param string $countryName
-     * @return void
-     */
-    public function setCountryName(string $countryName): void;
-
-    /**
-     * Get details url
-     *
-     * @return string
-     */
-    public function getDetailsUrl(): string;
-
-    /**
-     * Set details url
-     *
-     * @param string $detailsUrl
-     * @return void
-     */
-    public function setDetailsUrl(string $detailsUrl): void;
-
-    /**
-     * Get vector types
-     *
-     * @return string
-     */
-    public function getVectorType(): string;
-
-    /**
-     * Set vector types
-     *
-     * @param string $vectorType
-     * @return void
-     */
-    public function setVectorType(string $vectorType): void;
 
     /**
      * Get content type
@@ -457,6 +303,36 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return void
      */
     public function setUpdatedAt(string $updatedAt): void;
+
+    /**
+     * Get URL
+     *
+     * @return string|null
+     */
+    public function getThumbnailUrl(): ?string;
+
+    /**
+     * Set URL
+     *
+     * @param string $url
+     * @return void
+     */
+    public function setThumbnailUrl(string $url): void;
+
+    /**
+     * Get preview url
+     *
+     * @return string
+     */
+    public function getPreviewUrl(): string;
+
+    /**
+     * Set preview url
+     *
+     * @param string $previewUrl
+     * @return void
+     */
+    public function setPreviewUrl(string $previewUrl): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

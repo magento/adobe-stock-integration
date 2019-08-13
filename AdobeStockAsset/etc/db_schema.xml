@@ -11,21 +11,11 @@
         <column xsi:type="int" name="media_type_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Media Type ID"/>
         <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Category ID"/>
         <column xsi:type="int" name="creator_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Creator ID"/>
-        <column xsi:type="int" name="premium_level_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Premium Level ID"/>
         <column xsi:type="varchar" length="255" name="path" nullable="true" comment="Path"/>
-        <column xsi:type="varchar" length="255" name="stock_id" nullable="true" comment="Stock Id"/>
         <column xsi:type="int" name="is_licensed" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Is Licensed"/>
         <column xsi:type="varchar" length="255" name="title" nullable="true" comment="Title"/>
-        <column xsi:type="varchar" length="255" name="preview_url" nullable="true" comment="Preview Url"/>
-        <column xsi:type="varchar" length="255" name="thumbnail_url" nullable="true" comment="Thumbnail Url"/>
-        <column xsi:type="int" name="preview_width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Preview With"/>
-        <column xsi:type="int" name="preview_height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Preview Height"/>
         <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
         <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
-        <column xsi:type="varchar" name="url" length="255" nullable="true" comment="Url"/>
-        <column xsi:type="varchar" length="255" name="country_name" nullable="true" comment="Country Name"/>
-        <column xsi:type="varchar" length="255" name="details_url" nullable="true" comment="Details Url"/>
-        <column xsi:type="varchar" length="255" name="vector_type" nullable="true" comment="Vector Type"/>
         <column xsi:type="varchar" length="255" name="content_type" nullable="true" comment="Content Type"/>
         <column xsi:type="varchar" length="255" name="creation_date" nullable="true" comment="Creation Date"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
@@ -41,9 +31,6 @@
         </index>
         <index referenceId="ADB_STK_CRT_ID_INDEX" indexType="btree">
             <column name="creator_id"/>
-        </index>
-        <index referenceId="ADB_STK_PRM_LVL_INDEX" indexType="btree">
-            <column name="premium_level_id"/>
         </index>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>

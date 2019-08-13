@@ -19,10 +19,8 @@ $assetFactory = $objectManager->get(AssetInterfaceFactory::class);
 /** @var AssetInterface $asset */
 $asset = $assetFactory->create();
 
-$asset->setAdobeId(1);
+$asset->setId(1);
 $asset->setIsLicensed(1);
-$asset->setPreviewWidth(1);
-$asset->setPreviewHeight(1);
 $asset->setWidth(1);
 $asset->setHeight(1);
 
