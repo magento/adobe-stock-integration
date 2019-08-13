@@ -60,15 +60,19 @@ class StorageTest extends TestCase
         );
     }
 
-    public function testSavePreview()
+    /**
+     * @dataProvider imagesCollectionProvider
+     * @param array $imageData
+     * @param string $expected
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testSavePreview(array $imageData, string $expected)
     {
         /** @var Storage $storageMock */
 
-        $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
-
         $this->fileSystemIoMock->expects($this->once())
             ->method('getPathInfo')
-            ->with($imageUrl)
+            ->with($imageData['preview_url'])
             ->willReturn(
                 [
                     'dirname'   => 'https://t4.ftcdn.net/jpg/02/72/29/99',
@@ -96,7 +100,56 @@ class StorageTest extends TestCase
         $assets = $this->createMock(\Magento\AdobeStockAsset\Model\Asset::class);
         $assets->expects($this->once())
             ->method('getData')
-            ->willReturn(['preview_url' => $imageUrl, 'id' => 123, 'title' => 'title']);
-        $this->assertSame('title123.jpg', $this->storage->save($assets));
+            ->willReturn($imageData);
+        $this->assertSame($expected, $this->storage->save($assets));
+    }
+
+    /**
+     * @return array
+     */
+    public function imagesCollectionProvider() :array
+    {
+        return [
+            [
+                'with_long_name_and_id' =>
+                [
+                    'preview_url' =>
+                        'https://as2.ftcdn.net/jpg/01/08/33/57/500_F_108335799_yBDMncoeDvX1OkC8nBKRDx9uHrMrI077.jpg',
+                    'id' => 123456789986542334,
+                    'title' => 'Woman with backpack standing on the edge near big tropical river and looking far away'
+                ],
+                'expected' => 'Woman-with-backpack-standing-on--123456789986542334.jpg'
+            ],
+            [
+                'with_short_name_and_id' =>
+                [
+                    'preview_url' =>
+                        'https://as1.ftcdn.net/jpg/02/46/41/54/500_F_246415465_tZgm5OOV53DQHblTyWvO5taWUt0FJRw2.jpg',
+                    'id' => 246415465,
+                    'title' => 'Love'
+                ],
+                'expected' => 'Love-246415465.jpg'
+            ],
+            [
+                'with_upper_case_name' =>
+                [
+                    'preview_url' =>
+                        'https://as1.ftcdn.net/jpg/01/38/48/40/500_F_138484065_1enzXuW8NlkppNxSv4hVUrYoeF8qgoeY.jpg',
+                    'id' => 138484065,
+                    'title' => 'NOT AVAILABLE'
+                ],
+                'expected' => 'NOT-AVAILABLE-138484065.jpg'
+            ],
+            [
+                'random' =>
+                [
+                    'preview_url' =>
+                        'https://as1.ftcdn.net/jpg/01/38/48/40/500_F_138484065_1enzXuW8NlkppNxSv4hVUrYoeF8qgoeY.jpg',
+                    'id' => 138484065,
+                    'title' => 'NOT AVAILABLE7^-#$@!@#$'
+                ],
+                'expected' => 'NOT-AVAILABLE7^-#$@!@#$-138484065.jpg'
+            ]
+        ];
     }
 }

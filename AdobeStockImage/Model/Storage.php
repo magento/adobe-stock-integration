@@ -82,8 +82,8 @@ class Storage
         if (!empty($destinationDirectoryPath)) {
             $destinationDirectoryPath = rtrim($destinationDirectoryPath, '/') . '/';
         }
-        $imgName = $this->generateImageName($assets->getData());
-        $destinationPath = $destinationDirectoryPath . $imgName;
+        $imageName = $this->generateImageName($assets->getData());
+        $destinationPath = $destinationDirectoryPath . $imageName;
 
         $bytes = false;
 
@@ -106,14 +106,14 @@ class Storage
     /**
      * Generate image name by Title + id.
      *
-     * @param aray $imageData
+     * @param array $imageData
      * @return string
      */
     private function generateImageName(array $imageData) :string
     {
-        $imgName = str_replace(' ', '', $imageData['title']).$imageData['id'];
+        $imageName = str_replace(' ', '-', substr($imageData['title'], 0, 32)) . '-' . $imageData['id'];
         preg_match('/\.[a-z]{1,3}/', $this->getFileName($imageData['preview_url']), $imageType);
-        return $imgName.implode($imageType);
+        return $imageName.implode($imageType);
     }
 
     /**
