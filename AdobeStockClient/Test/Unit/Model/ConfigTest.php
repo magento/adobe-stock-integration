@@ -58,17 +58,6 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * Get API key test.
-     */
-    public function testGetApiKey(): void
-    {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with(self::CONFIG_XML_PATH_API_KEY);
-        $this->config->getApiKey();
-    }
-
-    /**
      * Get target environment test.
      */
     public function testGetTargetEnvironment(): void

@@ -122,7 +122,6 @@ class SaveImagePreview implements SaveImagePreviewInterface
      * Save asset.
      *
      * @param AssetInterface $asset
-     *
      * @throws AlreadyExistsException
      */
     private function saveAsset(AssetInterface $asset): void
@@ -151,7 +150,6 @@ class SaveImagePreview implements SaveImagePreviewInterface
      * Is asset already exists.
      *
      * @param int $id
-     *
      * @return bool
      */
     private function isAssetSaved(int $id): bool
@@ -165,10 +163,9 @@ class SaveImagePreview implements SaveImagePreviewInterface
     }
 
     /**
-     * Is asset already exists.
+     * Is asset category exists.
      *
      * @param int $id
-     *
      * @return bool
      */
     private function isCategorySaved(int $id): bool
@@ -182,10 +179,9 @@ class SaveImagePreview implements SaveImagePreviewInterface
     }
 
     /**
-     * Is asset already exists.
+     * Is creator already exists.
      *
      * @param int $id
-     *
      * @return bool
      */
     private function isCreatorSaved(int $id): bool
