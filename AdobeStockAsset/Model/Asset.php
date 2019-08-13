@@ -149,6 +149,22 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
+    public function getPremiumLevelId(): ?int
+    {
+        return $this->getData(self::PREMIUM_LEVEL_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPremiumLevelId(int $premiumLevelId): void
+    {
+        $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevelId);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getPath(): ?string
     {
         return (string) $this->getData(self::PATH);
@@ -160,6 +176,22 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setPath(string $path): void
     {
         $this->setData(self::PATH, $path);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStockId(): int
+    {
+        return (int) $this->getData(self::STOCK_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStockId(int $stockId): void
+    {
+        $this->setData(self::STOCK_ID, $stockId);
     }
 
     /**
@@ -197,6 +229,86 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
+    public function getPreviewUrl(): string
+    {
+        return (string) $this->getData(self::PREVIEW_URL);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPreviewUrl(string $previewUrl): void
+    {
+        $this->setData(self::PREVIEW_URL, $previewUrl);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPreviewWidth(): int
+    {
+        return (int) $this->getData(self::PREVIEW_WIDTH);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPreviewWidth(int $previewWidth): void
+    {
+        $this->setData(self::PREVIEW_WIDTH, $previewWidth);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPreviewHeight(): int
+    {
+        return (int) $this->getData(self::PREVIEW_HEIGHT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPreviewHeight(int $previewHeight): void
+    {
+        $this->setData(self::PREVIEW_HEIGHT, $previewHeight);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getUrl(): string
+    {
+        return (string) $this->getData(self::URL);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setUrl(string $url): void
+    {
+        $this->setData(self::URL, $url);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getThumbnailUrl(): string
+    {
+        return (string) $this->getData(self::THUMBNAIL_URL);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setThumbnailUrl(string $url): void
+    {
+        $this->setData(self::THUMBNAIL_URL, $url);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getWidth(): int
     {
         return (int) $this->getData(self::WIDTH);
@@ -224,6 +336,54 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setHeight(int $height): void
     {
         $this->setData(self::HEIGHT, $height);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCountryName(): string
+    {
+        return (string) $this->getData(self::COUNTRY_NAME);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCountryName(string $countryName): void
+    {
+        $this->setData(self::COUNTRY_NAME, $countryName);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDetailsUrl(): string
+    {
+        return (string) $this->getData(self::DETAILS_URL);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDetailsUrl(string $detailsUrl): void
+    {
+        $this->setData(self::DETAILS_URL, $detailsUrl);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getVectorType(): string
+    {
+        return (string) $this->getData(self::VECTOR_TYPE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setVectorType(string $vectorType): void
+    {
+        $this->setData(self::VECTOR_TYPE, $vectorType);
     }
 
     /**
@@ -288,38 +448,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setUpdatedAt(string $updatedAt): void
     {
         $this->setData(self::UPDATED_AT, $updatedAt);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getThumbnailUrl(): string
-    {
-        return (string) $this->getData(self::THUMBNAIL_URL);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setThumbnailUrl(string $url): void
-    {
-        $this->setData(self::THUMBNAIL_URL, $url);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPreviewUrl(): string
-    {
-        return (string) $this->getData(self::PREVIEW_URL);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPreviewUrl(string $previewUrl): void
-    {
-        $this->setData(self::PREVIEW_URL, $previewUrl);
     }
 
     /**
