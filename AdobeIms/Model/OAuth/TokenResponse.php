@@ -6,14 +6,15 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockClient\Model\OAuth;
+namespace Magento\AdobeIms\Model\OAuth;
 
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\DataObject;
 
 /**
  * Class TokenResponse
  */
-class TokenResponse extends DataObject
+class TokenResponse extends DataObject implements TokenResponseInterface
 {
     /**
      * Get access token

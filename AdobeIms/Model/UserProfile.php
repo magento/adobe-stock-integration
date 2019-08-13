@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model;
+namespace Magento\AdobeIms\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\UserProfile as UserProfileResource;
-use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
+use Magento\AdobeIms\Model\ResourceModel\UserProfile as UserProfileResource;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\AdobeStockAssetApi\Api\Data\UserProfileExtensionInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileExtensionInterface;
 
 /**
  * Class UserProfile

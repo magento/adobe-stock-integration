@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAssetApi\Api;
+namespace Magento\AdobeImsApi\Api;
 
 /**
  * Interface UserProfileRepositoryInterface
@@ -17,27 +17,27 @@ interface UserProfileRepositoryInterface
     /**
      * Save user profile
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface $entity
+     * @param \Magento\AdobeImsApi\Api\Data\UserProfileInterface $entity
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface $entity): void;
+    public function save(\Magento\AdobeImsApi\Api\Data\UserProfileInterface $entity): void;
 
     /**
      * Get user profile
      *
      * @param int $entityId
-     * @return \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface
+     * @return \Magento\AdobeImsApi\Api\Data\UserProfileInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get(int $entityId): \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
+    public function get(int $entityId): \Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 
     /**
      * Get user profile by user ID
      *
      * @param int $userId
-     * @return \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface
+     * @return \Magento\AdobeImsApi\Api\Data\UserProfileInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getByUserId(int $userId): \Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
+    public function getByUserId(int $userId): \Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 }

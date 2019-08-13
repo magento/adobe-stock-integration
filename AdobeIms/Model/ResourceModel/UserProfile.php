@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\ResourceModel;
+namespace Magento\AdobeIms\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
@@ -20,6 +20,6 @@ class UserProfile extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('adobe_stock_user_profile', 'id');
+        $this->_init('adobe_user_profile', 'id');
     }
 }

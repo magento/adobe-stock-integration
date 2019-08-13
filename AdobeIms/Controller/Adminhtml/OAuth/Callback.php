@@ -11,10 +11,10 @@ namespace Magento\AdobeIms\Controller\Adminhtml\OAuth;
 use DateInterval;
 use DateTime;
 use Exception;
-use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
-use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
+use Magento\AdobeImsApi\Api\GetTokenInterface;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
@@ -60,9 +60,9 @@ class Callback extends Action
     private $userProfileFactory;
 
     /**
-     * @var ClientInterface
+     * @var GetTokenInterface
      */
-    private $client;
+    private $getToken;
 
     /**
      * @var LoggerInterface
@@ -74,21 +74,21 @@ class Callback extends Action
      * @param Action\Context $context
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserProfileInterfaceFactory $userProfileFactory
-     * @param ClientInterface $client
+     * @param GetTokenInterface $getToken
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
         UserProfileRepositoryInterface $userProfileRepository,
         UserProfileInterfaceFactory $userProfileFactory,
-        ClientInterface $client,
+        GetTokenInterface $getToken,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
         $this->userProfileRepository = $userProfileRepository;
         $this->userProfileFactory = $userProfileFactory;
-        $this->client = $client;
+        $this->getToken = $getToken;
         $this->logger = $logger;
     }
 
@@ -98,7 +98,7 @@ class Callback extends Action
     public function execute() : \Magento\Framework\Controller\ResultInterface
     {
         try {
-            $tokenResponse = $this->client->getToken(
+            $tokenResponse = $this->getToken->execute(
                 (string)$this->getRequest()->getParam('code')
             );
 

@@ -7,7 +7,7 @@ define([
     'jquery',
     'knockout',
     'Magento_Ui/js/grid/columns/column',
-    'Magento_AdobeStockImageAdminUi/js/action/authorization',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate'
 ], function (_, $, ko, Column, authorizationAction, messages) {
@@ -194,10 +194,9 @@ define([
          * Set selected row id
          *
          * @param {Number} rowId
-         * @param {Number} [height]
          * @private
          */
-        _selectRow: function (rowId, height){
+        _selectRow: function (rowId){
             this.thumbnailComponent().previewRowId(rowId);
         },
 
@@ -266,7 +265,7 @@ define([
             visibility.fill(false);
             this.visibility(visibility);
             this.height(0);
-            this._selectRow(null, 0);
+            this._selectRow(null);
         },
 
         /**

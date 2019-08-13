@@ -1,3 +1,5 @@
+@import AdobeIms
+@import AdobeImsApi
 @import AdobeStockAdminUi
 @import AdobeStockAsset
 @import AdobeStockAssetApi

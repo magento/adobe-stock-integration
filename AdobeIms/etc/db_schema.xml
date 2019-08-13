@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="adobe_stock_user_profile" resource="default" engine="innodb" comment="Adobe Stock User Profile">
+    <table name="adobe_user_profile" resource="default" engine="innodb" comment="Adobe Stock User Profile">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="int" name="adobe_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Adobe Id"/>
         <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
@@ -17,12 +17,12 @@
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <column xsi:type="timestamp" name="access_token_expires_at" on_update="false" nullable="false" comment="Access Token Expires At"/>
-        <index referenceId="ADB_STK_USR_PRO" indexType="btree">
+        <index referenceId="ADOBE_USER_PROFILE_ID" indexType="btree">
             <column name="id"/>
         </index>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="ADO_STO_USR_PRO_ADM_USER_ID" table="adobe_stock_user_profile" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="ADOBE_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID" table="adobe_user_profile" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
     </table>
 </schema>

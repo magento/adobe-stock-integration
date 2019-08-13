@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\ResourceModel\UserProfile;
+namespace Magento\AdobeIms\Model\ResourceModel\UserProfile;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\UserProfile as UserProfileResource;
-use Magento\AdobeStockAsset\Model\UserProfile as UserProfileModel;
+use Magento\AdobeIms\Model\ResourceModel\UserProfile as UserProfileResource;
+use Magento\AdobeIms\Model\UserProfile as UserProfileModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**

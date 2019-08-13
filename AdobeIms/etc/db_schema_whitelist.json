@@ -1,5 +1,5 @@
 {
-  "adobe_stock_user_profile": {
+  "adobe_user_profile": {
     "column": {
       "id": true,
       "adobe_id": true,
@@ -12,11 +12,11 @@
       "updated_at": true
     },
     "index": {
-      "ADOBE_STOCK_USER_PROFILE_ID": true
+      "ADOBE_USER_PROFILE_ID": true
     },
     "constraint": {
       "PRIMARY": true,
-      "ADOBE_STOCK_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
+      "ADOBE_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
     }
   }
 }

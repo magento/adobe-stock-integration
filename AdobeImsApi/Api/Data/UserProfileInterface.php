@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAssetApi\Api\Data;
+namespace Magento\AdobeImsApi\Api\Data;
 
 /**
  * Interface UserProfileInterface
@@ -182,14 +182,14 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\UserProfileExtensionInterface
+     * @return \Magento\AdobeImsApi\Api\Data\UserProfileExtensionInterface
      */
     public function getExtensionAttributes(): UserProfileExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\UserProfileExtensionInterface $extensionAttributes
+     * @param \Magento\AdobeImsApi\Api\Data\UserProfileExtensionInterface $extensionAttributes
      * @return void
      */
     public function setExtensionAttributes(UserProfileExtensionInterface $extensionAttributes): void;

@@ -6,18 +6,19 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\System\Config;
+namespace Magento\AdobeStockAdminUi\Model\System\Config;
 
 use Magento\Config\Model\Config\CommentInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Class Comment
  */
 class Comment implements CommentInterface
 {
-    private const REDIRECT_MCA = 'adobe_stock/oauth/callback';
+    private const REDIRECT_MCA = 'adobe_ims/oauth/callback';
 
     /**
      * @var UrlInterface
@@ -53,7 +54,7 @@ class Comment implements CommentInterface
     {
         $message = __(
             'Configure an Adobe Stock account on the %io_link site to retrieve a Private key (Client secret).',
-            ['io_link' => '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>',]
+            ['io_link' => '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>']
         );
 
         $notes = __(
@@ -75,9 +76,7 @@ class Comment implements CommentInterface
     private function getRedirectUrl(): string
     {
         $adminRoteUrl = $this->url->getRouteUrl('admin');
-        $indexPhpToUrl = $this->scopeConfig->isSetFlag(\Magento\Store\Model\Store::XML_PATH_USE_REWRITES) ?
-            ''
-            : 'index.php/';
+        $indexPhpToUrl = $this->scopeConfig->isSetFlag(Store::XML_PATH_USE_REWRITES) ? '' : 'index.php/';
         $redirectUrl = $adminRoteUrl . $indexPhpToUrl . self::REDIRECT_MCA;
 
         return $redirectUrl;

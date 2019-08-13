@@ -83,7 +83,7 @@ define([], function () {
                     reject(new Error('Time\'s up.'));
                 }, authConfig.stopHandleTimeout || 10000);
 
-                responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern)
+                responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern);
                 if (responseData) {
                     stopHandle();
 

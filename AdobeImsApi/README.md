@@ -1,5 +1,6 @@
-# Magento_AdobeIms Module
+# Magento_AdobeImsApi Module
 
+The Magento_AdobeImsApi module responsible for authentication to adobe services
 
 ## Structure
 

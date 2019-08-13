@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model;
+namespace Magento\AdobeIms\Model;
 
 use Exception;
-use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface;
-use Magento\AdobeStockAssetApi\Api\Data\UserProfileInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
