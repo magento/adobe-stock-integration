@@ -1,4 +1,4 @@
-# Magento_AdobeStockImage Module
+# Magento_AdobeUi Module
 
 
 ## Structure

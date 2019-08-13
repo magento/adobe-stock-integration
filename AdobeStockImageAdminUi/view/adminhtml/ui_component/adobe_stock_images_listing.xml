@@ -32,7 +32,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <listingToolbar name="listing_top" template="Magento_AdobeUi/grid/toolbar">
+    <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
         <settings>
             <sticky>true</sticky>
         </settings>
@@ -41,7 +41,7 @@
         <paging name="listing_paging">
             <settings>
                 <sizesConfig>
-                    <component>Magento_AdobeUi/js/components/images-grid-sizes</component>
+                    <component>Magento_AdobeStockImageAdminUi/js/components/images-grid-sizes</component>
                 </sizesConfig>
             </settings>
         </paging>
@@ -163,7 +163,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="preview" component="Magento_AdobeUi/js/components/grid/column/image-preview" class="Magento\AdobeUi\Ui\Component\Listing\Columns\ImagePreview">
+        <column name="preview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview">
             <settings>
                 <label translate="true">Image Preview</label>
                 <bodyTmpl>Magento_AdobeUi/grid/column/image-preview</bodyTmpl>

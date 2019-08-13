@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeUi\Ui\Component\Listing\Columns;
+namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 
 use Exception;
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
