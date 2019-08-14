@@ -7,8 +7,9 @@ define([
     'uiElement',
     'jquery',
     'mage/translate',
-    'Magento_Ui/js/modal/modal'
-], function (Element, $, $t) {
+    'Magento_Ui/js/modal/modal',
+    'text!Magento_AdobeStockImageAdminUi/templates/modal/modal-slide.html'
+], function (Element, $, $t, modal, slideTpl) {
     'use strict';
 
     return Element.extend({
@@ -31,7 +32,9 @@ define([
             $(this.containerId).modal({
                 type: 'slide',
                 buttons: [],
+                slideTpl: slideTpl,
                 modalClass: 'adobe-stock-modal',
+                signInText: $t('Sign in'),
                 title: $t('Adobe Stock')
             }).on('openModal', function () {
                 this.masonry().setLayoutStyles();
