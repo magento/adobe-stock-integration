@@ -130,7 +130,7 @@ define([
                 },
                 {
                     name: 'Cateogory',
-                    value: record.category.name
+                    value: record.category.name || 'None'
                 },
                 {
                     name: 'File #',
