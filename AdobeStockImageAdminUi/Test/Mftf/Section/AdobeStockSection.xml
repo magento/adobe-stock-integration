@@ -8,7 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockSection">
-        <element name="slideOutPanelButton" type="button" selector="[data-ui-id=wysiwyg-images-content-search-adobe-stock-button]"/>
+        <element name="slideOutPanelButton" type="button" selector="//*[@data-ui-id='wysiwyg-images-content-search-adobe-stock-button']"/>
         <element name="modal" type="block" selector="aside.adobe-stock-modal"/>
         <element name="panelTitle" type="block" selector="[data-role=title]"/>
         <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
@@ -23,5 +23,7 @@
         <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
         <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
+        <element name="imageAttribute" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='attributes']//span[text()='{{type}}']/parent::div//div[@class='value']//span" parameterized="true"/>
+        <element name="imageAttributeTitle" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='attributes']//span[text()='{{title}}']" parameterized="true"/>
     </section>
 </sections>
