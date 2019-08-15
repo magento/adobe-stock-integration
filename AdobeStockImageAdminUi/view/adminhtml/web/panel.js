@@ -33,10 +33,7 @@ define([
                 buttons: [],
                 modalClass: 'adobe-stock-modal',
                 title: $t('Adobe Stock')
-            }).on('openModal', function () {
-                this.masonry().setLayoutStyles();
-            }.bind(this)).applyBindings();
-
+            }).applyBindings();
             return this;
         }
     });
