@@ -70,12 +70,12 @@ class SaveTest extends WebapiAbstract
     {
         $this->saveAsset($data);
         /** @var Asset $asset */
-        $asset = $this->getSavedAsset($data[AssetInterface::ADOBE_ID]);
+        $asset = $this->getSavedAsset($data[AssetInterface::ID]);
         $uniqueData = [
-            AssetInterface::ADOBE_ID => $data[AssetInterface::ADOBE_ID],
+            AssetInterface::ID => $data[AssetInterface::ID],
             AssetInterface::PATH => $data[AssetInterface::PATH],
             AssetInterface::PREVIEW_URL => $data[AssetInterface::PREVIEW_URL],
-            AssetInterface::DETAILS_URL => $data[AssetInterface::DETAILS_URL]
+            AssetInterface::DETAILS_URL => $data[AssetInterface::DETAILS_URL],
         ];
 
         $this->assertArraySubset($uniqueData, $asset->getData());
@@ -83,14 +83,15 @@ class SaveTest extends WebapiAbstract
 
     /**
      * @return array
+     * @throws \Exception
      */
-    public function assetDataProvider()
+    public function assetDataProvider(): array
     {
         if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
             return [
                 [
                     [
-                        AssetInterface::ADOBE_ID => (string) random_int(9999, 99999),
+                        AssetInterface::ID => (string) random_int(9999, 99999),
                         AssetInterface::PATH => uniqid() . '/file-path.png',
                         AssetInterface::WIDTH => '1000',
                         AssetInterface::HEIGHT => '800',
@@ -106,14 +107,14 @@ class SaveTest extends WebapiAbstract
         return [
             [
                 [
-                    AssetInterface::ADOBE_ID => (string) random_int(9999, 99999),
+                    AssetInterface::ID => (string) random_int(9999, 99999),
                     AssetInterface::PATH => uniqid() . '/file-path.png',
                     AssetInterface::WIDTH => '1000',
                     AssetInterface::HEIGHT => '800',
                     AssetInterface::PREVIEW_WIDTH => '500',
                     AssetInterface::PREVIEW_HEIGHT => '400',
                     AssetInterface::MEDIA_TYPE_ID => null,
-                    AssetInterface::KEYWORDS => [],
+                    AssetInterface::KEYWORDS => ['test_kyeword_1', 'test_kyeword_2', 'test_kyeword_3',],
                     AssetInterface::PREMIUM_LEVEL_ID => null,
                     AssetInterface::STOCK_ID => 1,
                     AssetInterface::TITLE => 'Title',
@@ -137,7 +138,7 @@ class SaveTest extends WebapiAbstract
      * @param array $data
      * @return array
      */
-    private function saveAsset(array $data)
+    private function saveAsset(array $data): array
     {
         $serviceInfo = [
             'rest' => [
@@ -151,7 +152,7 @@ class SaveTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION,
             ],
         ];
-        $requestData = ['asset' => $data];
+        $requestData = ['asset' => $data,];
 
         return $this->_webApiCall($serviceInfo, $requestData);
     }
@@ -164,7 +165,7 @@ class SaveTest extends WebapiAbstract
     {
         /** @var Collection $collection */
         $collection = $this->assetCollectionFactory->create();
-        $collection->addFieldToFilter(AssetInterface::ADOBE_ID, $adobeId);
+        $collection->addFieldToFilter(AssetInterface::ID, $adobeId);
         /** @var AssetInterface $asset */
         $asset = $collection->getLastItem();
 

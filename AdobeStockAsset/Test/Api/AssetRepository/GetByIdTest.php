@@ -90,7 +90,7 @@ class GetByIdTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 $this->_webApiCall($serviceInfo);
             } else {
-                $this->_webApiCall($serviceInfo, [AssetInterface::ID => $notExistedAssetId]);
+                $this->_webApiCall($serviceInfo, [AssetInterface::ID => $notExistedAssetId,]);
             }
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
@@ -101,7 +101,7 @@ class GetByIdTest extends WebapiAbstract
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
             } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
-                $this->checkSoapFault($e, $expectedMessage, 'env:Sender', [1 => $notExistedAssetId]);
+                $this->checkSoapFault($e, $expectedMessage, 'env:Sender', [1 => $notExistedAssetId,]);
             } else {
                 throw $e;
             }
@@ -111,7 +111,7 @@ class GetByIdTest extends WebapiAbstract
     /**
      * Test get by ID
      *
-     * @magentoApiDataFixture assetFixtureProvider
+     * @magentoApiDataFixture Magento_AdobeStockAsset/_files/assets.php
      *
      * @return void
      */
@@ -133,7 +133,7 @@ class GetByIdTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
             $assetResultData = $this->_webApiCall($serviceInfo);
         } else {
-            $assetResultData = $this->_webApiCall($serviceInfo, [AssetInterface::ID => $assetId]);
+            $assetResultData = $this->_webApiCall($serviceInfo, [AssetInterface::ID => $assetId,]);
         }
 
         self::assertEquals($assetId, $assetResultData[AssetInterface::ID]);
@@ -161,6 +161,6 @@ class GetByIdTest extends WebapiAbstract
      */
     public static function assetFixtureProvider()
     {
-        require __DIR__ . '/../../_files/asset.php';
+        require __DIR__ . '/../../_files/assets_for_api.php';
     }
 }

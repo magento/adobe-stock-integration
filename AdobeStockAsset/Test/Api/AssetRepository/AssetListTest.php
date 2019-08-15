@@ -89,6 +89,6 @@ class AssetListTest extends WebapiAbstract
      */
     public static function assetFixtureProvider()
     {
-        require __DIR__ . '/../../_files/asset.php';
+        require __DIR__ . '/../../_files/assets_for_api.php';
     }
 }
