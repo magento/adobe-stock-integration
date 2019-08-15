@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
 
 /**
  * Class Config
  */
-class Config
+class Config implements ConfigInterface
 {
     /**
      * Path to enable/disable adobe stock integration in the system settings.

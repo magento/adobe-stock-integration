@@ -74,7 +74,7 @@ class GetByIdTest extends WebapiAbstract
         $notExistedAssetId = -1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $notExistedAssetId,
+                'resourcePath' => self::RESOURCE_PATH . DIRECTORY_SEPARATOR . $notExistedAssetId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -90,7 +90,7 @@ class GetByIdTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 $this->_webApiCall($serviceInfo);
             } else {
-                $this->_webApiCall($serviceInfo, ['id' => $notExistedAssetId]);
+                $this->_webApiCall($serviceInfo, [AssetInterface::ID => $notExistedAssetId]);
             }
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
@@ -133,7 +133,7 @@ class GetByIdTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
             $assetResultData = $this->_webApiCall($serviceInfo);
         } else {
-            $assetResultData = $this->_webApiCall($serviceInfo, ['id' => $assetId]);
+            $assetResultData = $this->_webApiCall($serviceInfo, [AssetInterface::ID => $assetId]);
         }
 
         self::assertEquals($assetId, $assetResultData[AssetInterface::ID]);

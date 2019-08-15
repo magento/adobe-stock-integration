@@ -23,7 +23,7 @@ define([
         },
 
         /**
-         * @inheritDoc
+         * @inheritdoc
          */
         initObservable: function () {
             this.preparedOptions();
@@ -49,7 +49,7 @@ define([
                             label: column.label
                         });
                     }
-                }).bind(this);
+                }.bind(this))
             }
         },
 
