@@ -7,7 +7,7 @@ define([
     'jquery',
     'knockout',
     'Magento_Ui/js/grid/columns/column',
-    'Magento_AdobeStockImageAdminUi/js/action/authorization',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate'
 ], function (_, $, ko, Column, authorizationAction, messages) {
@@ -17,6 +17,7 @@ define([
         defaults: {
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
+            previewImageSelector: '[data-image-preview]',
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
@@ -145,7 +146,9 @@ define([
          * @return {*|boolean}
          */
         isVisible: function (record) {
-            if (this.lastOpenedImage === record._rowIndex) {
+            if (this.lastOpenedImage === record._rowIndex &&
+                (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
+            ) {
                 this.show(record);
             }
             return this.visibility()[record._rowIndex] || false;
@@ -191,10 +194,9 @@ define([
          * Set selected row id
          *
          * @param {Number} rowId
-         * @param {Number} [height]
          * @private
          */
-        _selectRow: function (rowId, height){
+        _selectRow: function (rowId){
             this.thumbnailComponent().previewRowId(rowId);
         },
 
@@ -223,13 +225,13 @@ define([
             }
             this.visibility(visibility);
 
-            img = $('[data-image-preview] img');
+            img = $(this.previewImageSelector + ' img');
             if(img.get(0).complete) {
                 this._updateHeight();
             } else {
                 img.load(this._updateHeight.bind(this));
-                this.lastOpenedImage = record._rowIndex;
             }
+            this.lastOpenedImage = this._isInt(record) ? record : record._rowIndex;
         },
 
         /**
@@ -237,12 +239,20 @@ define([
          * @private
          */
         _updateHeight: function (){
-            var $preview = $('[data-image-preview]');
-
-            this.height($preview.height() + 'px');// set height
+            this.height($(this.previewImageSelector).height() + 'px');// set height
             this.visibility(this.visibility());// rerender
-            // update scroll if needed
-            $preview.get(0).scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+            this.scrollToPreview();
+        },
+
+        /**
+         * Scroll to preview window
+         */
+        scrollToPreview: function () {
+            $(this.previewImageSelector).get(0).scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest"
+            });
         },
 
         /**
@@ -255,7 +265,7 @@ define([
             visibility.fill(false);
             this.visibility(visibility);
             this.height(0);
-            this._selectRow(null, 0);
+            this._selectRow(null);
         },
 
         /**

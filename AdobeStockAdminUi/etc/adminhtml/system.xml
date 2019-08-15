@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <group id="adobe_stock_integration" translate="label" type="text" sortOrder="1100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Adobe Stock Integration</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enabled Adobe Stock</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>adobe_stock/integration/enabled</config_path>
+                </field>
+                <field id="api_key" translate="label" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Key</label>
+                    <comment><![CDATA[Configure an Adobe Stock account on the <a href="https://console.adobe.io/" target="_blank">Adobe.io</a> site to retrieve an API key (Client ID).]]></comment>
+                    <config_path>adobe_stock/integration/api_key</config_path>
+                    <validate>required-entry</validate>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="adobe_stock_test_connect_wizard" translate="button_label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label/>
+                    <button_label>Test Connection</button_label>
+                    <frontend_model>Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                    <comment><![CDATA[Check currently inserted value on the fly or already saved value if the API Key input value is not changed.]]></comment>
+                </field>
+                <field id="private_key" translate="label" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Private Key</label>
+                    <comment model="Magento\AdobeStockAdminUi\Model\System\Config\Comment" />
+                    <config_path>adobe_stock/integration/private_key</config_path>
+                    <validate>required-entry</validate>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

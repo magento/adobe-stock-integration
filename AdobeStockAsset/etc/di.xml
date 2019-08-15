@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\AdobeStockAssetApi\Api\Data\ConfigInterface" type="Magento\AdobeStockAsset\Model\Config"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetInterface" type="Magento\AdobeStockAsset\Model\Asset"/>
     <preference for="Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface" type="Magento\AdobeStockAsset\Model\AssetRepository"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface" type="Magento\AdobeStockAsset\Model\SearchResults"/>
@@ -20,9 +21,6 @@
 
     <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
     <preference for="Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface" type="Magento\AdobeStockAsset\Model\AssetKeywordRepository"/>
-
-    <preference for="Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface" type="Magento\AdobeStockAsset\Model\UserProfileRepository"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\UserProfileInterface" type="Magento\AdobeStockAsset\Model\UserProfile"/>
 
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
