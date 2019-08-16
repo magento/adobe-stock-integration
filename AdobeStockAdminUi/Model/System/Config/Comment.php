@@ -89,6 +89,12 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrlPattern(): string
     {
-        return $this->getRedirectUrl();
+        $url = $this->getRedirectUrl();
+
+        /* Escape dots in the hostname */
+        $hostName = parse_url($url, PHP_URL_HOST);
+        $escapedHostName = str_replace('.', '\\\.', $hostName);
+
+        return str_replace($hostName, $escapedHostName, $url);
     }
 }
