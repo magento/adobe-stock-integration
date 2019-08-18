@@ -18,54 +18,5 @@
             </button>
         </div>
         <img attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
-        <div class="info">
-            <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
-            <div class="author" if="$col.getAuthor($row())">
-                <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
-            </div>
-            <ul class="messages" if="$col.getMessages().length > 0">
-                <!-- ko foreach: $col.getMessages() -->
-                <div class="messages">
-                    <div attr="class: 'message message-'+code">
-                        <div data-ui-id="messages-message-error">
-                            <span data-bind="html: message"></span>
-                        </div>
-                    </div>
-                </div>
-                <!-- /ko -->
-            </ul>
-            <button class="action-secondary" type="button" data-bind="click: function(){ $col.save($row()) }">
-                <span translate="'Save Preview'"/>
-            </button>
-            <button class="action-default primary"
-                    type="button"
-                    attr="title: $t('License and Save')"
-                    data-bind="click: function () { $col.licenseProcess($row()); }">
-                <span data-bind="i18n: 'License and Save'"></span>
-            </button>
-        </div>
-        <div class="attributes">
-            <!-- ko foreach: $col.getDisplayAttributes($row()) -->
-            <div class="attribute">
-                <span class="title" translate="name"/>
-                <div class="value">
-                   <span text="value" />
-                </div>
-            </div>
-            <!-- /ko -->
-        </div>
-        <div class="keywords">
-            <div class="title" translate="'Similar Keywords'"></div>
-            <!-- ko foreach: $col.getKeyWords($row()) -->
-            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeyWordsLimit($row())}">
-                <div class="value">
-                    <span text="keyword"></span>
-                </div>
-            </div>
-            <!-- /ko -->
-            <button data-bind="visible: $col.isButtonVisible($row()), click: function(){ $col.viewAllKeyWords($row()) }">
-                <span data-bind="i18n: 'View all'"/>
-            </button>
-        </div>
     </div>
 </div>

@@ -21,7 +21,7 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
-            limit: 5,
+            keywordsLimit: 5,
             saveAvailable: true,
             statefull: {
                 visible: true,
@@ -143,7 +143,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getKeyWords: function(record) {
+        getKeywords: function(record) {
             return record.keywords;
         },
 
@@ -153,11 +153,11 @@ define([
          * @param record
          * @returns {*}
          */
-        getKeyWordsLimit: function (record){
-            if (!record.limit) {
-                record.limit = ko.observable(this.limit);
+        getKeywordsLimit: function (record){
+            if (!record.keywordsLimit) {
+                record.keywordsLimit = ko.observable(this.keywordsLimit);
             }
-            return record.limit();
+            return record.keywordsLimit();
         },
 
         /**
@@ -166,8 +166,8 @@ define([
          * @param record
          * @returns {*}
          */
-        viewAllKeyWords: function(record) {
-            record.limit(record.keywords.length);
+        viewAllKeywords: function(record) {
+            record.keywordsLimit(record.keywords.length);
         },
 
         /**
@@ -176,14 +176,14 @@ define([
          * @param record
          * @returns {*}
          */
-        isButtonVisible: function(record) {
-            if (!record.buttonVisible) {
-                record.buttonVisible = ko.observable(true);
+        canViewMoreKeywords: function(record) {
+            if (!record.canViewMoreKeywords) {
+                record.canViewMoreKeywords = ko.observable(true);
             }
-            if (record.limit() === record.keywords.length) {
-                record.buttonVisible(false);
+            if (record.keywordsLimit() >= record.keywords.length) {
+                record.canViewMoreKeywords(false);
             }
-            return record.buttonVisible();
+            return record.canViewMoreKeywords();
         },
 
         /**
