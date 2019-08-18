@@ -54,5 +54,18 @@
             </div>
             <!-- /ko -->
         </div>
+        <div class="keywords">
+            <div class="title" translate="'Similar Keywords'"></div>
+            <!-- ko foreach: $col.getKeyWords($row()) -->
+            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeyWordsLimit($row())}">
+                <div class="value">
+                    <span text="keyword"></span>
+                </div>
+            </div>
+            <!-- /ko -->
+            <button data-bind="visible: $col.isButtonVisible($row()), click: function(){ $col.viewAllKeyWords($row()) }">
+                <span data-bind="i18n: 'View all'"/>
+            </button>
+        </div>
     </div>
 </div>

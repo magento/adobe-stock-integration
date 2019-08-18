@@ -23,6 +23,7 @@ define([
             },
             visibility: [],
             height: 0,
+            limit: 5,
             saveAvailable: true,
             statefull: {
                 visible: true,
@@ -129,7 +130,7 @@ define([
                     value: record.content_type.toUpperCase()
                 },
                 {
-                    name: 'Cateogory',
+                    name: 'Category',
                     value: record.category.name || 'None'
                 },
                 {
@@ -137,6 +138,55 @@ define([
                     value: record.id
                 }
             ];
+        },
+
+        /**
+         * Returns keywords to display under the attributes image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getKeyWords: function(record) {
+            return record.keywords;
+        },
+
+        /**
+         * Returns keywords limit to show no of keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        getKeyWordsLimit: function (record){
+            if (!record.limit) {
+                record.limit = ko.observable(this.limit);
+            }
+            return record.limit();
+        },
+
+        /**
+         * Show all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        viewAllKeyWords: function(record) {
+            record.limit(record.keywords.length);
+        },
+
+        /**
+         * Check if view all button is visible or not
+         *
+         * @param record
+         * @returns {*}
+         */
+        isButtonVisible: function(record) {
+            if (!record.buttonVisible) {
+                record.buttonVisible = ko.observable(true);
+            }
+            if (record.limit() === record.keywords.length) {
+                record.buttonVisible(false);
+            }
+            return record.buttonVisible();
         },
 
         /**
