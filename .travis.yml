@@ -17,13 +17,17 @@ before_script:
 env:
   matrix:
     - TEST_CATEGORY=static
+    - TEST_CATEGORY=unit_ims
     - TEST_CATEGORY=unit_client
     - TEST_CATEGORY=unit_image
     - TEST_CATEGORY=unit_ui
+    - TEST_CATEGORY=unit_image_ui
 matrix:
   fast_finish: true
 script:
+  - if [ $TEST_CATEGORY == 'unit_ims' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-ims/Test/Unit; fi
   - if [ $TEST_CATEGORY == 'unit_client' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-client/Test/Unit; fi
+  - if [ $TEST_CATEGORY == 'unit_ui' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-admin-ui/Test/Unit; fi
   - if [ $TEST_CATEGORY == 'unit_image' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-image/Test/Unit; fi
-  - if [ $TEST_CATEGORY == 'unit_ui' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-image-admin-ui/Test/Unit; fi
+  - if [ $TEST_CATEGORY == 'unit_image_ui' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-image-admin-ui/Test/Unit; fi
   - if [ $TEST_CATEGORY == 'static' ]; then vendor/bin/phpunit --configuration dev/tests/static/phpunit.xml.dist dev/tests/static/testsuite/Magento/Test/Php/LiveCodeTest.php; fi

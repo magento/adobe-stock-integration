@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 
 use Exception;
-use Magento\AdobeStockAsset\Controller\Adminhtml\OAuth\Callback;
-use Magento\AdobeStockAssetApi\Api\UserProfileRepositoryInterface;
-use Magento\AdobeStockClient\Model\Config;
+use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -39,21 +39,21 @@ class ImagePreview extends Column
     private $urlBuilder;
 
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
     /**
      * ImagePreview constructor.
      *
-     * @param ContextInterface               $context
-     * @param UiComponentFactory             $uiComponentFactory
-     * @param UserContextInterface           $userContext
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param UrlInterface                   $urlBuilder
-     * @param Config                         $config
-     * @param array                          $components
-     * @param array                          $data
+     * @param UrlInterface $urlBuilder
+     * @param ConfigInterface $config
+     * @param array $components
+     * @param array $data
      */
     public function __construct(
         ContextInterface $context,
@@ -61,7 +61,7 @@ class ImagePreview extends Column
         UserContextInterface $userContext,
         UserProfileRepositoryInterface $userProfileRepository,
         UrlInterface $urlBuilder,
-        Config $config,
+        ConfigInterface $config,
         array $components = [],
         array $data = []
     ) {
@@ -85,7 +85,7 @@ class ImagePreview extends Column
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
-                    'downloadImagePreviewUrl' => $this->urlBuilder->getUrl('adobe_stock_image/preview/download'),
+                    'downloadImagePreviewUrl' => $this->urlBuilder->getUrl('adobe_stock/preview/download'),
                     'authConfig' => [
                         'url' => $this->config->getAuthUrl(),
                         'isAuthorized' => $this->isAuthorized(),
