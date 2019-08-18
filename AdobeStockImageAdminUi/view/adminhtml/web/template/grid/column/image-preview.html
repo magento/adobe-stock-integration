@@ -1,0 +1,72 @@
+
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles($row())">
+    <div class="container">
+        <div class="action-buttons">
+            <button class="action-previous" type="button" data-bind="click: function () { $col.prev($row()); }">
+                <span translate="'Previous'"/>
+            </button>
+            <button class="action-next" type="button" data-bind="click: function () { $col.next($row()); }">
+                <span translate="'Next'"/>
+            </button>
+            <button class="action-close" type="button" data-bind="click: function () { $col.hide(); }">
+                <span translate="'Close'"/>
+            </button>
+        </div>
+        <img attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
+        <div class="info">
+            <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
+            <div class="author" if="$col.getAuthor($row())">
+                <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
+            </div>
+            <ul class="messages" if="$col.getMessages().length > 0">
+                <!-- ko foreach: $col.getMessages() -->
+                <div class="messages">
+                    <div attr="class: 'message message-'+code">
+                        <div data-ui-id="messages-message-error">
+                            <span data-bind="html: message"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </ul>
+            <button class="action-secondary" type="button" data-bind="click: function(){ $col.save($row()) }">
+                <span translate="'Save Preview'"/>
+            </button>
+            <button class="action-default primary"
+                    type="button"
+                    attr="title: $t('License and Save')"
+                    data-bind="click: function () { $col.licenseProcess($row()); }">
+                <span translate="'License and Save'"></span>
+            </button>
+        </div>
+        <div class="attributes">
+            <!-- ko foreach: $col.getDisplayAttributes($row()) -->
+            <div class="attribute">
+                <span class="title" translate="name"/>
+                <div class="value">
+                    <span text="value" />
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+        <div class="keywords">
+            <div class="title" translate="'Similar Keywords'"></div>
+            <!-- ko foreach: $col.getKeywords($row()) -->
+                <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
+                    <div class="value">
+                        <span text="keyword"/>
+                    </div>
+                </div>
+            <!-- /ko -->
+            <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
+                <span translate="'View all'"/>
+            </button>
+        </div>
+    </div>
+</div>
