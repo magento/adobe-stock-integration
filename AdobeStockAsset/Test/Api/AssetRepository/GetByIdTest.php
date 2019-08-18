@@ -161,6 +161,6 @@ class GetByIdTest extends WebapiAbstract
      */
     public static function assetFixtureProvider()
     {
-        require __DIR__ . '/../../_files/assets_for_api.php';
+        require __DIR__ . '/../../_files/api_assets.php';
     }
 }

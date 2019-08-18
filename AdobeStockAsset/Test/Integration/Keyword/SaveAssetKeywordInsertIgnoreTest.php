@@ -9,7 +9,6 @@ namespace Magento\AdobeStockAsset\Test\Integration\Keyword;
 
 use Magento\AdobeStockAsset\Model\ResourceModel\Keyword;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
-use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -86,35 +85,7 @@ class SaveAssetKeywordTest extends TestCase
      */
     public static function keywordsDataProvider(): array
     {
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var KeywordInterfaceFactory $keywordFactory */
-        $keywordFactory = $objectManager->get(KeywordInterfaceFactory::class);
-
-        $keywordData = [
-            [
-                'id' => 1,
-                'keyword' => 'alpha',
-            ],
-            [
-                'id' => 2,
-                'keyword' => 'betta',
-            ],
-            [
-                'id' => 3,
-                'keyword' => 'gama',
-            ],
-        ];
-
-        $keywords = [];
-        foreach ($keywordData as $keywordDatum) {
-            /** @var KeywordInterface $keyword */
-            $keyword = $keywordFactory->create();
-            $keyword->setId($keywordDatum['id']);
-            $keyword->setKeyword($keywordDatum['keyword']);
-            $keywords[] = $keyword;
-        }
-
-        return [[$keywords,]];
+        $keywords =  require __DIR__ . '/../../_files/keywords.php';
+        return [[$keywords]];
     }
 }
