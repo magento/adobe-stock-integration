@@ -17,7 +17,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
  * DataProvider of customer addresses for customer address grid.
@@ -63,11 +62,6 @@ class DataProvider implements DataProviderInterface
     private $getImageList;
 
     /**
-     * @var SearchResultFactory
-     */
-    private $searchResultFactory;
-
-    /**
      * @var SearchCriteria
      */
     protected $searchCriteria;
@@ -96,7 +90,6 @@ class DataProvider implements DataProviderInterface
      * @param RequestInterface      $request
      * @param FilterBuilder         $filterBuilder
      * @param GetImageListInterface $getImageList
-     * @param SearchResultFactory   $searchResultFactory
      * @param array                 $meta
      * @param array                 $data
      */
@@ -108,7 +101,6 @@ class DataProvider implements DataProviderInterface
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
-        SearchResultFactory $searchResultFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -121,7 +113,6 @@ class DataProvider implements DataProviderInterface
         $this->meta = $meta;
         $this->data = $data;
         $this->getImageList = $getImageList;
-        $this->searchResultFactory = $searchResultFactory;
         $this->prepareUpdateUrl();
     }
 
@@ -160,13 +151,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getSearchResult()
     {
-        $result = $this->getImageList->execute($this->getSearchCriteria());
-        return $this->searchResultFactory->create(
-            $result->getItems(),
-            $result->getTotalCount(),
-            $this->getSearchCriteria(),
-            'id'
-        );
+        return $this->getImageList->execute($this->getSearchCriteria());
     }
 
     /**
