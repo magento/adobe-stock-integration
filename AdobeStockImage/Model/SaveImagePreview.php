@@ -8,20 +8,23 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class SaveImagePreview
@@ -64,15 +67,27 @@ class SaveImagePreview implements SaveImagePreviewInterface
     private $categoryRepository;
 
     /**
+     * @var DocumentToAsset
+     */
+    private $documentToAsset;
+
+    /**
+     * @var AssetSearchResultsInterfaceFactory
+     */
+    private $searchResultFactory;
+
+    /**
      * SaveImagePreview constructor.
      *
-     * @param AssetRepositoryInterface    $assetRepository
-     * @param CreatorRepositoryInterface  $creatorRepository
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param Storage                     $storage
-     * @param LoggerInterface             $logger
-     * @param GetImageListInterface       $getImageList
-     * @param SearchCriteriaBuilder       $searchCriteriaBuilder
+     * @param AssetRepositoryInterface           $assetRepository
+     * @param CreatorRepositoryInterface         $creatorRepository
+     * @param CategoryRepositoryInterface        $categoryRepository
+     * @param Storage                            $storage
+     * @param LoggerInterface                    $logger
+     * @param GetImageListInterface              $getImageList
+     * @param SearchCriteriaBuilder              $searchCriteriaBuilder
+     * @param DocumentToAsset                    $documentToAsset
+     * @param AssetSearchResultsInterfaceFactory $searchResultFactory
      */
     public function __construct(
         AssetRepositoryInterface $assetRepository,
@@ -81,7 +96,9 @@ class SaveImagePreview implements SaveImagePreviewInterface
         Storage $storage,
         LoggerInterface $logger,
         GetImageListInterface $getImageList,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        DocumentToAsset $documentToAsset,
+        AssetSearchResultsInterfaceFactory $searchResultFactory
     ) {
         $this->assetRepository = $assetRepository;
         $this->creatorRepository = $creatorRepository;
@@ -90,6 +107,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
         $this->logger = $logger;
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->documentToAsset = $documentToAsset;
+        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
@@ -208,6 +227,21 @@ class SaveImagePreview implements SaveImagePreviewInterface
             ->setSortOrders([])
             ->create();
 
-        return $this->getImageList->execute($searchCriteria);
+        $searchResult = $this->getImageList->execute($searchCriteria);
+
+        $items = [];
+        /** @var Document $item */
+        foreach ($searchResult->getItems() as $item) {
+            $items[] = $this->documentToAsset->convert($item);
+        }
+
+        return $this->searchResultFactory->create(
+            [
+                'data' => [
+                    'items'       => $items,
+                    'total_count' => $searchResult->getTotalCount(),
+                ],
+            ]
+        );
     }
 }
