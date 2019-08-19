@@ -11,7 +11,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_AdobeStockAsset/connection',
+            template: 'Magento_AdobeStockAdminUi/connection',
             defaultErrorMessage: 'Connection test failed.',
             apiKeyInputId: 'system_adobe_stock_integration_api_key',
             url: '',

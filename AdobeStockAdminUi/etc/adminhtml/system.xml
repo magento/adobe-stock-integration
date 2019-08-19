@@ -28,7 +28,7 @@
                 <field id="adobe_stock_test_connect_wizard" translate="button_label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label/>
                     <button_label>Test Connection</button_label>
-                    <frontend_model>Magento\AdobeStockAdminUi\Model\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                    <frontend_model>Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\TestConnection</frontend_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
@@ -36,7 +36,7 @@
                 </field>
                 <field id="private_key" translate="label" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Private Key</label>
-                    <comment model="Magento\AdobeStockAsset\Model\System\Config\Comment" />
+                    <comment model="Magento\AdobeStockAdminUi\Model\System\Config\Comment" />
                     <config_path>adobe_stock/integration/private_key</config_path>
                     <validate>required-entry</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
