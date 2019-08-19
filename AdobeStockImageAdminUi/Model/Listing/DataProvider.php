@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Model\Listing;
 
+use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
@@ -57,9 +57,9 @@ class DataProvider implements DataProviderInterface
     protected $meta = [];
 
     /**
-     * @var GetImageListInterface
+     * @var GetAssetListInterface
      */
-    private $getImageList;
+    private $getAssetList;
 
     /**
      * @var SearchCriteria
@@ -89,7 +89,7 @@ class DataProvider implements DataProviderInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface      $request
      * @param FilterBuilder         $filterBuilder
-     * @param GetImageListInterface $getImageList
+     * @param GetAssetListInterface $getAssetList
      * @param array                 $meta
      * @param array                 $data
      */
@@ -100,7 +100,7 @@ class DataProvider implements DataProviderInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        GetImageListInterface $getImageList,
+        GetAssetListInterface $getAssetList,
         array $meta = [],
         array $data = []
     ) {
@@ -112,7 +112,7 @@ class DataProvider implements DataProviderInterface
         $this->filterBuilder = $filterBuilder;
         $this->meta = $meta;
         $this->data = $data;
-        $this->getImageList = $getImageList;
+        $this->getAssetList = $getAssetList;
         $this->prepareUpdateUrl();
     }
 
@@ -151,7 +151,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getSearchResult()
     {
-        return $this->getImageList->execute($this->getSearchCriteria());
+        return $this->getAssetList->execute($this->getSearchCriteria());
     }
 
     /**
