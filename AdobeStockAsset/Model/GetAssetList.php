@@ -103,7 +103,7 @@ class GetAssetList implements GetAssetListInterface
                 )
             );
         } catch (\Exception $exception) {
-            $message = __('Get image list action failed.');
+            $message = __('Get asset list action failed.');
             $this->log->critical($exception);
             throw new LocalizedException($message, $exception, $exception->getCode());
         }

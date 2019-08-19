@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Test\Unit\Model;
+namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\DocumentToAsset;
+use Magento\AdobeStockAsset\Model\GetAssetList;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockImage\Model\GetImageList;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -23,12 +23,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for GetImageList service
+ * Test for GetAssetList service
  */
-class GetImageListTest extends TestCase
+class GetAssetListTest extends TestCase
 {
     /**
-     * @var GetImageList
+     * @var GetAssetList
      */
     private $model;
 
@@ -63,7 +63,7 @@ class GetImageListTest extends TestCase
         $this->urlMock = $this->createMock(UrlInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
-            GetImageList::class,
+            GetAssetList::class,
             [
                 'client'              => $this->clientMock,
                 'searchResultFactory' => $this->searchResultFactoryMock,
