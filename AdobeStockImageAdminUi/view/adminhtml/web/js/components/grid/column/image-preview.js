@@ -9,20 +9,19 @@ define([
     'Magento_Ui/js/grid/columns/column',
     'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
-    'mage/translate'
-], function (_, $, ko, Column, authorizationAction, messages) {
+    'mage/translate',
+    'Magento_AdobeUi/js/components/grid/column/image-preview',
+], function (_, $, ko, Column, authorizationAction, messages, translate, imagePreview) {
     'use strict';
 
-    return Column.extend({
+    return imagePreview.extend({
         defaults: {
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            previewImageSelector: '[data-image-preview]',
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
-            visibility: [],
-            height: 0,
+            keywordsLimit: 5,
             saveAvailable: true,
             statefull: {
                 visible: true,
@@ -32,7 +31,6 @@ define([
             tracks: {
                 lastOpenedImage: true,
             },
-            lastOpenedImage: null,
             downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             messageDelay: 5,
             authConfig: {
@@ -129,14 +127,63 @@ define([
                     value: record.content_type.toUpperCase()
                 },
                 {
-                    name: 'Cateogory',
-                    value: record.category.name
+                    name: 'Category',
+                    value: record.category.name || 'None'
                 },
                 {
                     name: 'File #',
                     value: record.id
                 }
             ];
+        },
+
+        /**
+         * Returns keywords to display under the attributes image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getKeywords: function(record) {
+            return record.keywords;
+        },
+
+        /**
+         * Returns keywords limit to show no of keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        getKeywordsLimit: function (record){
+            if (!record.keywordsLimit) {
+                record.keywordsLimit = ko.observable(this.keywordsLimit);
+            }
+            return record.keywordsLimit();
+        },
+
+        /**
+         * Show all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        viewAllKeywords: function(record) {
+            record.keywordsLimit(record.keywords.length);
+        },
+
+        /**
+         * Check if view all button is visible or not
+         *
+         * @param record
+         * @returns {*}
+         */
+        canViewMoreKeywords: function(record) {
+            if (!record.canViewMoreKeywords) {
+                record.canViewMoreKeywords = ko.observable(true);
+            }
+            if (record.keywordsLimit() >= record.keywords.length) {
+                record.canViewMoreKeywords(false);
+            }
+            return record.canViewMoreKeywords();
         },
 
         /**
@@ -171,80 +218,6 @@ define([
         },
 
         /**
-         * Next image preview
-         *
-         * @param record
-         */
-        next: function (record){
-            this._selectRow(record.lastInRow ? record.currentRow + 1 : record.currentRow);
-            this.show(record._rowIndex + 1);
-        },
-
-        /**
-         * Previous image preview
-         *
-         * @param record
-         */
-        prev: function (record){
-            this._selectRow(record.firstInRow ? record.currentRow - 1 : record.currentRow);
-            this.show(record._rowIndex - 1);
-        },
-
-        /**
-         * Set selected row id
-         *
-         * @param {Number} rowId
-         * @private
-         */
-        _selectRow: function (rowId){
-            this.thumbnailComponent().previewRowId(rowId);
-        },
-
-        /**
-         * Show image preview
-         *
-         * @param {Object|Number} record
-         */
-        show: function (record) {
-            var visibility = this.visibility(),
-                img;
-
-            this.lastOpenedImage = null;
-            if(~visibility.indexOf(true)) {// hide any preview
-                if(!Array.prototype.fill) {
-                    visibility = _.times(visibility.length, _.constant(false));
-                } else {
-                    visibility.fill(false);
-                }
-            }
-            if(this._isInt(record)) {
-                visibility[record] = true;
-            } else {
-                this._selectRow(record.currentRow);
-                visibility[record._rowIndex] = true;
-            }
-            this.visibility(visibility);
-
-            img = $(this.previewImageSelector + ' img');
-            if(img.get(0).complete) {
-                this._updateHeight();
-            } else {
-                img.load(this._updateHeight.bind(this));
-            }
-            this.lastOpenedImage = this._isInt(record) ? record : record._rowIndex;
-        },
-
-        /**
-         *
-         * @private
-         */
-        _updateHeight: function (){
-            this.height($(this.previewImageSelector).height() + 'px');// set height
-            this.visibility(this.visibility());// rerender
-            this.scrollToPreview();
-        },
-
-        /**
          * Scroll to preview window
          */
         scrollToPreview: function () {
@@ -253,30 +226,6 @@ define([
                 block: "center",
                 inline: "nearest"
             });
-        },
-
-        /**
-         * Close image preview
-         */
-        hide: function () {
-            var visibility = this.visibility();
-
-            this.lastOpenedImage = null;
-            visibility.fill(false);
-            this.visibility(visibility);
-            this.height(0);
-            this._selectRow(null);
-        },
-
-        /**
-         * Check if value is integer
-         *
-         * @param value
-         * @returns {boolean}
-         * @private
-         */
-        _isInt: function (value) {
-            return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
         },
 
         /**
