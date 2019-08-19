@@ -9,7 +9,8 @@
         "magento/module-adobe-stock-image-api": "*",
         "magento/module-adobe-stock-asset-api": "*",
         "magento/module-adobe-ims": "*",
-        "magento/module-adobe-ims-api": "*"
+        "magento/module-adobe-ims-api": "*",
+        "magento/module-adobe-ui": "*"
     },
     "suggest": {
         "magento/module-cms": "*"
