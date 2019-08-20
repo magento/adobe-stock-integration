@@ -132,6 +132,7 @@ class AddSearchButtonTest extends TestCase
                 'class' => 'action-secondary',
                 'label' => __('Search Adobe Stock'),
                 'type' => 'button',
+                'disabled' => 'true',
                 'onclick' => 'jQuery("#adobe-stock-images-search-modal").trigger("openModal");'
             ],
             0,
