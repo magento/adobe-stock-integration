@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
@@ -22,8 +22,8 @@ interface GetAssetListInterface
      * Search for images based on search criteria
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface;
+    public function execute(SearchCriteriaInterface $searchCriteria): SearchResultInterface;
 }
