@@ -171,6 +171,17 @@ define([
         },
 
         /**
+         * Hide all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        hideAllKeywords: function(record) {
+            record.keywordsLimit(this.keywordsLimit);
+            record.canViewMoreKeywords(true);
+        },
+
+        /**
          * Check if view all button is visible or not
          *
          * @param record
