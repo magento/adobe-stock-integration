@@ -87,7 +87,7 @@ define([
          * @returns {String}
          */
         getUrl: function (record) {
-            return record.preview_url;
+            return record.thumbnail_500_url;
         },
 
         /**
@@ -107,7 +107,7 @@ define([
          * @returns {String}
          */
         getAuthor: function (record) {
-            return record.creator.name || 'Author';
+            return record.creator_name || 'Author';
         },
 
         /**
@@ -193,6 +193,7 @@ define([
          * @return {*|boolean}
          */
         isVisible: function (record) {
+            console.log(record)
             if (this.lastOpenedImage === record._rowIndex &&
                 (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
             ) {
