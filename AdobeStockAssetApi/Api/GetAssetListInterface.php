@@ -6,17 +6,17 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageApi\Api;
+namespace Magento\AdobeStockAssetApi\Api;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * GetImageListInterface
+ * GetAssetListInterface
  *
  * @api
  */
-interface GetImageListInterface
+interface GetAssetListInterface
 {
     /**
      * Search for images based on search criteria
