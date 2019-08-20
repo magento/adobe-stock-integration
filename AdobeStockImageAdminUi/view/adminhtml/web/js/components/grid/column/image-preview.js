@@ -21,6 +21,7 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
+            keywordsLimit: 5,
             saveAvailable: true,
             statefull: {
                 visible: true,
@@ -126,7 +127,7 @@ define([
                     value: record.content_type.toUpperCase()
                 },
                 {
-                    name: 'Cateogory',
+                    name: 'Category',
                     value: record.category.name || 'None'
                 },
                 {
@@ -134,6 +135,55 @@ define([
                     value: record.id
                 }
             ];
+        },
+
+        /**
+         * Returns keywords to display under the attributes image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getKeywords: function(record) {
+            return record.keywords;
+        },
+
+        /**
+         * Returns keywords limit to show no of keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        getKeywordsLimit: function (record){
+            if (!record.keywordsLimit) {
+                record.keywordsLimit = ko.observable(this.keywordsLimit);
+            }
+            return record.keywordsLimit();
+        },
+
+        /**
+         * Show all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        viewAllKeywords: function(record) {
+            record.keywordsLimit(record.keywords.length);
+        },
+
+        /**
+         * Check if view all button is visible or not
+         *
+         * @param record
+         * @returns {*}
+         */
+        canViewMoreKeywords: function(record) {
+            if (!record.canViewMoreKeywords) {
+                record.canViewMoreKeywords = ko.observable(true);
+            }
+            if (record.keywordsLimit() >= record.keywords.length) {
+                record.canViewMoreKeywords(false);
+            }
+            return record.canViewMoreKeywords();
         },
 
         /**

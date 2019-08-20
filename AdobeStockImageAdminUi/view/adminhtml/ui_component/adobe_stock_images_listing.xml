@@ -166,7 +166,7 @@
         <column name="preview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview">
             <settings>
                 <label translate="true">Image Preview</label>
-                <bodyTmpl>Magento_AdobeUi/grid/column/image-preview</bodyTmpl>
+                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image-preview</bodyTmpl>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
