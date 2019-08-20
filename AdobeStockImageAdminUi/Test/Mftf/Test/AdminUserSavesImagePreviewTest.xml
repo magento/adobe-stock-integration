@@ -17,9 +17,8 @@
         </annotations>
         <before>
             <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
-            <createData entity="simpleCmsPage" stepKey="createCMSPage">
-                <field key="title">Thank You for Subscribing</field>
-            </createData>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
