@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Test\Integration\Keyword;
+namespace Magento\AdobeStockAsset\Test\Integration;
 
 use Magento\AdobeStockAsset\Model\ResourceModel\Keyword;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
@@ -13,7 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class SaveAssetKeywordTest extends TestCase
+class SaveAssetKeywordInsertIgnoreTest extends TestCase
 {
     /**
      * @var Keyword
@@ -85,7 +85,7 @@ class SaveAssetKeywordTest extends TestCase
      */
     public static function keywordsDataProvider(): array
     {
-        $keywords =  require __DIR__ . '/../../_files/keywords.php';
+        $keywords =  require __DIR__ . '/../_files/objects/keywords.php';
         return [[$keywords]];
     }
 }

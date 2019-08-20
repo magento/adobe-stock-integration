@@ -59,7 +59,6 @@ class SaveAssetKeywordTest extends TestCase
         $this->creatorRepository = Bootstrap::getObjectManager()->get(CreatorRepositoryInterface::class);
         $this->assetKeywordsRepository = Bootstrap::getObjectManager()->get(AssetKeywordRepositoryInterface::class);
         $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
-        $this->resourceConnection->getConnection()->beginTransaction();
     }
 
     /**
@@ -67,9 +66,8 @@ class SaveAssetKeywordTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->resourceConnection->getConnection()->rollBack();
+        require __DIR__ . '/../_files/asset_rollback.php';
     }
-
     /**
      * @dataProvider testSaveDataProvider
      * @throws \Magento\Framework\Exception\AlreadyExistsException
@@ -110,16 +108,16 @@ class SaveAssetKeywordTest extends TestCase
     public static function testSaveDataProvider(): array
     {
         /** @var KeywordInterface[] $keywords */
-        $keywords =  require __DIR__ . '/../_files/keywords.php';
+        $keywords =  require __DIR__ . '/../_files/objects/keywords.php';
 
         /** @var CategoryInterface $category */
-        $category =  require __DIR__ . '/../_files/category.php';
+        $category =  require __DIR__ . '/../_files/objects/category.php';
 
         /** @var CreatorInterface $creator */
-        $creator =  require __DIR__ . '/../_files/creator.php';
+        $creator =  require __DIR__ . '/../_files/objects/creator.php';
 
         /** @var AssetInterface $asset */
-        $asset = require __DIR__ . '/../_files/asset.php';
+        $asset = require __DIR__ . '/../_files/objects/asset.php';
 
         $asset->setCategory($category);
         $asset->setCreator($creator);
