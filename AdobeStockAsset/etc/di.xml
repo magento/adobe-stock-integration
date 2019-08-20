@@ -22,6 +22,8 @@
     <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
     <preference for="Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface" type="Magento\AdobeStockAsset\Model\AssetKeywordRepository"/>
 
+    <preference for="Magento\AdobeStockAssetApi\Api\GetAssetListInterface" type="Magento\AdobeStockAsset\Model\GetAssetList"/>
+
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
