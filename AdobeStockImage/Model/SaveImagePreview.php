@@ -71,14 +71,14 @@ class SaveImagePreview implements SaveImagePreviewInterface
     /**
      * SaveImagePreview constructor.
      *
-     * @param AssetRepositoryInterface    $assetRepository
-     * @param CreatorRepositoryInterface  $creatorRepository
+     * @param AssetRepositoryInterface $assetRepository
+     * @param CreatorRepositoryInterface $creatorRepository
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param Storage                     $storage
-     * @param LoggerInterface             $logger
-     * @param GetImageListInterface       $getImageList
-     * @param SearchCriteriaBuilder       $searchCriteriaBuilder
-     * @param DocumentToAsset             $documentToAsset
+     * @param Storage $storage
+     * @param LoggerInterface $logger
+     * @param GetImageListInterface $getImageList
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param DocumentToAsset $documentToAsset
      */
     public function __construct(
         AssetRepositoryInterface $assetRepository,
@@ -105,17 +105,9 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     public function execute(int $adobeId, string $destinationPath): void
     {
-        $searchResult = $this->getImageByAdobeId($adobeId);
-
-        if (1 < $searchResult->getTotalCount()) {
-            $message = __('Requested image doesn\'t exists');
-            $this->logger->critical($message);
-            throw new NotFoundException($message);
-        }
+        $asset = $this->getImageByAdobeId($adobeId);
 
         try {
-            $items = $searchResult->getItems();
-            $asset = reset($items);
             $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);

@@ -17,8 +17,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface;
 interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const ID = 'id';
-    const ADOBE_ID = 'adobe_id';
-    const NAME = 'creator_name';
+    const NAME = 'name';
 
     /**
      * Get the id
@@ -40,7 +39,7 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return string|null
      */
-    public function getCreatorName(): ?string;
+    public function getName(): ?string;
 
     /**
      * Set the creator name
@@ -48,7 +47,7 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param string $value
      * @return void
      */
-    public function setCreatorName(string $value): void;
+    public function setName(string $value): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

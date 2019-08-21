@@ -51,7 +51,7 @@ class Creator extends AbstractExtensibleModel implements CreatorInterface
     /**
      * @inheritdoc
      */
-    public function getCreatorName(): string
+    public function getName(): string
     {
         return (string) $this->getData(self::NAME);
     }
@@ -59,7 +59,7 @@ class Creator extends AbstractExtensibleModel implements CreatorInterface
     /**
      * @inheritdoc
      */
-    public function setCreatorName(string $value): void
+    public function setName(string $value): void
     {
         $this->setData(self::NAME, $value);
     }
