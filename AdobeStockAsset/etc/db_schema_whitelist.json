@@ -5,20 +5,11 @@
             "media_type_id": true,
             "category_id": true,
             "creator_id": true,
-            "premium_level_id": true,
             "path": true,
-            "stock_id": true,
             "is_licensed": true,
             "title": true,
-            "preview_url": true,
-            "preview_width": true,
-            "preview_height": true,
             "width": true,
             "height": true,
-            "url": true,
-            "country_name": true,
-            "details_url": true,
-            "vector_type": true,
             "content_type": true,
             "creation_date": true,
             "created_at": true,
@@ -28,8 +19,7 @@
             "ADOBE_STOCK_ASSET_ID": true,
             "ADOBE_STOCK_ASSET_MEDIA_TYPE_ID": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID": true,
-            "ADOBE_STOCK_ASSET_CREATOR_ID": true,
-            "ADOBE_STOCK_ASSET_PREMIUM_LEVEL_ID": true
+            "ADOBE_STOCK_ASSET_CREATOR_ID": true
         },
         "constraint": {
             "PRIMARY": true,
@@ -55,24 +45,25 @@
             "asset_id": true
         },
         "index": {
-            "ADB_STK_AST_KWD_AST_ID_INDEX": true,
-            "ADB_STK_AST_KWD_KWD_ID_INDEX": true
+            "ADOBE_STOCK_ASSET_KEYWORD_ASSET_ID": true,
+            "ADOBE_STOCK_ASSET_KEYWORD_KEYWORD_ID": true
         },
         "constraint": {
             "PRIMARY": true,
-            "ADB_STK_AST_KWD_KWD_ID": true,
-            "ADB_STK_AST_KWD_ASS_ID": true
+            "ADOBE_STOCK_ASSET_KEYWORD_KEYWORD_ID_ADOBE_STOCK_KEYWORD_ID": true,
+            "ADOBE_STOCK_ASSET_KEYWORD_ASSET_ID_ADOBE_STOCK_ASSET_ID": true
         }
     },
     "adobe_stock_keyword": {
         "column": {
-            "asset_id": true,
+            "id": true,
             "keyword": true
         },
         "index": {
-            "ADOBE_STOCK_KEYWORD_ASSET_ID": true
+            "ADOBE_STOCK_KEYWORD_ID": true
         },
         "constraint": {
+            "ADOBE_STOCK_KEYWORD_KEYWORD": true,
             "PRIMARY": true
         }
     },
@@ -85,8 +76,7 @@
             "ADOBE_STOCK_CREATOR_ID": true
         },
         "constraint": {
-            "PRIMARY": true,
-            "ADB_STK_KWD_KWD_UNIQUE": true
+            "PRIMARY": true
         }
     }
 }

@@ -13,7 +13,11 @@ define([
                 previewComponent: '${ $.parentName }.preview'
             },
             previewRowId: null,
-            previewHeight: 0
+            previewHeight: 0,
+            fields: {
+                id: 'id',
+                url: 'thumbnail_240_url'
+            }
         },
 
         /**
@@ -37,7 +41,7 @@ define([
          * @returns {String}
          */
         getUrl: function (record) {
-            return record.thumbnail_url;
+            return record[this.fields.url];
         },
 
         /**
@@ -47,7 +51,7 @@ define([
          * @returns {Number}
          */
         getId: function (record) {
-            return record.id;
+            return record[this.fields.id];
         },
 
         /**

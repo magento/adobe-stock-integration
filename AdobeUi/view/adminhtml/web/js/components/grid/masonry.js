@@ -11,7 +11,7 @@ define([
 
     return Element.extend({
         defaults: {
-            template: 'Magento_AdobeStockImageAdminUi/grid/masonry',
+            template: 'Magento_AdobeUi/grid/masonry',
             imports: {
                 rows: '${ $.provider }:data.items'
             },
