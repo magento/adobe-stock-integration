@@ -105,16 +105,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     public function execute(int $adobeId, string $destinationPath): void
     {
-        $searchResult = $this->getImageByAdobeId($adobeId);
-        if (null === $searchResult || 1 < $searchResult->getTotalCount()) {
-            $message = __('Requested image doesn\'t exists');
-            $this->logger->critical($message);
-            throw new NotFoundException($message);
-        }
-
         try {
-            $items = $searchResult->getItems();
-            $asset = reset($items);
+            $asset = $this->getImageByAdobeId($adobeId);
             $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);
@@ -205,10 +197,10 @@ class SaveImagePreview implements SaveImagePreviewInterface
      * Get image by adobe id.
      *
      * @param int $adobeId
-     * @return null|AssetInterface
+     * @return AssetInterface
      * @throws LocalizedException
      */
-    private function getImageByAdobeId(int $adobeId): ?AssetInterface
+    private function getImageByAdobeId(int $adobeId): AssetInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('media_id', $adobeId)
@@ -216,7 +208,11 @@ class SaveImagePreview implements SaveImagePreviewInterface
             ->create();
 
         $items = $this->getImageList->execute($searchCriteria)->getItems();
+        if (empty($items) || 1 < count($items)) {
+            $message = __('Requested image doesn\'t exists');
+            throw new NotFoundException($message);
+        }
 
-        return empty($items) ? null : $this->documentToAsset->convert(reset($items));
+        return $this->documentToAsset->convert(reset($items));
     }
 }
