@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserAccessesAdobeStockPanelTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="Access Adobe Stock Image panel via the Admin"/>
+            <title value="Admin should be able to access Adobe Stock Image panel"/>
+            <description value="Admin should be able to access Adobe Stock Image panel"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="wysiwygEnabled" value="disabled"/>
+                <argument name="apiKey" value=""/>
+                <argument name="privateKey" value=""/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPanel"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32images"/>
+        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeFirstPage"/>
+        <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
+            <argument name="pageNumber" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockCloseSearchModalActionGroup" stepKey="closeAdobeStockPanel"/>
+    </test>
+</tests>

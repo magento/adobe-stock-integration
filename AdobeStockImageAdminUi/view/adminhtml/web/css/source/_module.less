@@ -2,127 +2,57 @@
 //  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
-@admin__adobe_stock_image__space: 20px;
 
 & when (@media-common = true) {
-    .masonry-image {
-        &-grid {
-            position: relative;
-            margin: @admin__adobe_stock_image__space/2 -(@admin__adobe_stock_image__space/2);
-            overflow: hidden;
-            &:hover .masonry-image-overlay {
-                display: block;
-            }
-            .no-data-message-container {
-                font-size: @data-grid__no-records__font-size;
-                padding: @data-grid__no-records__padding;
-                text-align: center;
-            }
-        }
-        &-column {
-            overflow: hidden;
-            margin: @admin__adobe_stock_image__space/2;
-            float: left;
-            background-color: #ffffff;
-            img {
-                cursor: pointer;
-                height: 100%;
-                width: 100%;
-            }
-            &:first-child .masonry-image-preview .action-previous ,
-            &:last-child .masonry-image-preview .action-next {
-                opacity: .5;
-                pointer-events: none;
-            }
-        }
-        &-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            color: #fff;
-            z-index: 10;
-            height: 3rem;
-            opacity: 0.6;
-            background-color: #D5D5D5;
-        }
-        &-preview {
-            position: absolute;
-            left: 0;
-            right: 0;
-            display: table;
-            background-color: #ffffff;
-            width: 100%;
-            padding: 0 0 30px;
-            .action-buttons {
-                text-align: right;
-                .action {
-                    &-close {
-                        position: static;
-                        padding: 3rem;
-                    }
-                    &-previous,
-                    &-next {
-                        background: transparent;
-                        border: none;
-                        margin: 0;
-                        white-space: nowrap;
-                    }
-                    &-close,
-                    &-previous,
-                    &-next {
-                        font-size: 2rem;
-                    }
-                }
-            }
-            .container {
-                max-width: 880px;
-                margin: auto;
-                img {
-                    max-width: 60%;
-                    max-height: 500px;
-                    margin: 0 30px 20px 0;
-                    width: auto;
-                }
-                .info {
-                    width: ~"calc(40% - 30px)";
-                    float: right;
-                    text-align: left;
-                    .title {
-                        margin: 0 0 20px;
-                    }
-                    .author {
-                        margin: 0 0 30px;
-                    }
-                    .action-buttons {
-                        text-align: left;
-                        margin: 0 0 30px;
-                    }
-                }
-            }
-        }
-    }
-    .masonry-sorting {
-        display: inline-block;
-        select {
-            border: none;
-            background-image: url(../images/arrows-bg.svg);
-            padding-right: 2.2rem;
-            &:active {
-                background-image+: url('../images/arrows-bg.svg');
-            }
-        }
-    }
-    .masonry-results-number {
-        display: inline-block;
-        margin-right: 1.4rem;
-    }
-    .admin__form-field {
-        .colorpicker-input {
-            min-width: 70%;
-        }
+    .masonry-image-preview {
+          .container {
+              .info {
+                  width: ~"calc(40% - 30px)";
+                  float: right;
+                  text-align: left;
+                  .title {
+                      margin: 0 0 20px;
+                  }
+                  .author {
+                      margin: 0 0 30px;
+                  }
+                  .action-buttons {
+                      text-align: left;
+                      margin: 0 0 30px;
+                  }
+              }
+              .attributes {
+                  .attribute {
+                      display: inline-block;
+                      margin-right: 2em;
+                      .title {
+                          font-weight: bold;
+                      }
+                      .value {
+                          margin-top: 1em;
+                      }
+                  }
+              }
+              .keywords {
+                  .title {
+                      margin-top: 10px;
+                      font-weight: bold;
+                  }
+                  .keyword {
+                      &.hide {
+                          display: none;
+                      }
+                      display: inline-block;
+                      margin: 10px 0;
+                      .value{
+                          font-size: 15px;
+                          border: 1px solid #cacaca;
+                          border-radius: 3px;
+                          padding: 6px 10px;
+                      }
+                  }
+              }
+          }
     }
     .admin__adobe-stock-image-checkbox {
         .admin__field-control._with-tooltip {

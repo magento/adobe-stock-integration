@@ -1,85 +1,15 @@
 {
-    "adobe_stock_request": {
-        "column": {
-            "id": true,
-            "admin_user_id": true,
-            "request_id": true
-        },
-        "index": {
-          "ADOBE_STOCK_REQUEST_ID": true
-        },
-        "constraint": {
-            "PRIMARY": true,
-            "ADOBE_STOCK_REQUEST_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
-        }
-    },
-    "adobe_stock_language": {
-        "column": {
-            "language_id": true,
-            "language": true
-        },
-        "index": {
-            "ADOBE_STOCK_LANGUAGE_LANGUAGE_ID": true
-        },
-        "constraint": {
-            "PRIMARY": true
-        }
-    },
-    "adobe_stock_user_language": {
-        "column": {
-            "language_id": true,
-            "admin_user_id": true
-        },
-        "index": {
-            "ADOBE_STOCK_USER_LANGUAGE_LANGUAGE_ID": true,
-            "ADOBE_STOCK_USER_LANGUAGE_ADMIN_USER_ID": true
-        },
-        "constraint": {
-            "PRIMARY": true,
-            "FK_CC85819E717B309C725653D7AB61E291": true,
-            "ADOBE_STOCK_USER_LANGUAGE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
-        }
-    },
-    "adobe_stock_user_profile": {
-        "column": {
-            "id": true,
-            "adobe_id": true,
-            "admin_user_id": true,
-            "display_name": true,
-            "account_type": true,
-            "access_token": true,
-            "refresh_token": true,
-            "created_at": true,
-            "updated_at": true
-        },
-        "index": {
-            "ADOBE_STOCK_USER_PROFILE_ID": true
-        },
-        "constraint": {
-            "PRIMARY": true,
-            "ADOBE_STOCK_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
-        }
-    },
     "adobe_stock_asset": {
         "column": {
             "id": true,
             "media_type_id": true,
             "category_id": true,
             "creator_id": true,
-            "premium_level_id": true,
             "path": true,
-            "stock_id": true,
             "is_licensed": true,
             "title": true,
-            "preview_url": true,
-            "preview_width": true,
-            "preview_height": true,
             "width": true,
             "height": true,
-            "url": true,
-            "country_name": true,
-            "details_url": true,
-            "vector_type": true,
             "content_type": true,
             "creation_date": true,
             "created_at": true,
@@ -89,8 +19,7 @@
             "ADOBE_STOCK_ASSET_ID": true,
             "ADOBE_STOCK_ASSET_MEDIA_TYPE_ID": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID": true,
-            "ADOBE_STOCK_ASSET_CREATOR_ID": true,
-            "ADOBE_STOCK_ASSET_PREMIUM_LEVEL_ID": true
+            "ADOBE_STOCK_ASSET_CREATOR_ID": true
         },
         "constraint": {
             "PRIMARY": true,
@@ -121,19 +50,20 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "FK_C0CDEF8AFCED5E1BD956F363D9AF92B4": true,
+            "ADOBE_STOCK_ASSET_KEYWORD_KEYWORD_ID_ADOBE_STOCK_KEYWORD_ID": true,
             "ADOBE_STOCK_ASSET_KEYWORD_ASSET_ID_ADOBE_STOCK_ASSET_ID": true
         }
     },
     "adobe_stock_keyword": {
         "column": {
-            "asset_id": true,
+            "id": true,
             "keyword": true
         },
         "index": {
-            "ADOBE_STOCK_KEYWORD_ASSET_ID": true
+            "ADOBE_STOCK_KEYWORD_ID": true
         },
         "constraint": {
+            "ADOBE_STOCK_KEYWORD_KEYWORD": true,
             "PRIMARY": true
         }
     },
