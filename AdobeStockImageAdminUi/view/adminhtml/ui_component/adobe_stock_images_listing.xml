@@ -37,7 +37,7 @@
             <sticky>true</sticky>
         </settings>
         <bookmark name="bookmarks"/>
-        <filterSearch name="words" component="Magento_AdobeStockImageAdminUi/js/components/grid/search/search"/>
+        <filterSearch name="words"/>
         <paging name="listing_paging">
             <settings>
                 <sizesConfig>
@@ -57,7 +57,7 @@
                 </item>
             </argument>
         </container>
-        <filters name="listing_filters" component="Magento_AdobeStockImageAdminUi/js/components/grid/filters/filters">
+        <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">10</item>
