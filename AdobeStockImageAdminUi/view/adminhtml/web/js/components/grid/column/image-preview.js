@@ -193,7 +193,6 @@ define([
          * @return {*|boolean}
          */
         isVisible: function (record) {
-            console.log(record)
             if (this.lastOpenedImage === record._rowIndex &&
                 (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
             ) {
