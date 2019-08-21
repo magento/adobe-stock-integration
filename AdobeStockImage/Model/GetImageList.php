@@ -25,7 +25,7 @@ class GetImageList implements GetImageListInterface
 
     /**
      * GetImageList constructor.
-     * 
+     *
      * @param GetAssetListInterface $getAssetList
      */
     public function __construct(
@@ -39,8 +39,8 @@ class GetImageList implements GetImageListInterface
      */
     public function execute(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-            $searchCriteria = $this->setDefaultFilters($searchCriteria);
-            return $this->getAssetList->execute($searchCriteria);
+        $searchCriteria = $this->setDefaultFilters($searchCriteria);
+        return $this->getAssetList->execute($searchCriteria);
     }
 
     /**
