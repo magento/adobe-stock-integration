@@ -106,8 +106,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
     public function execute(int $adobeId, string $destinationPath): void
     {
         $searchResult = $this->getImageByAdobeId($adobeId);
-
-        if (1 < $searchResult->getTotalCount()) {
+        if (null === $searchResult || 1 < $searchResult->getTotalCount()) {
             $message = __('Requested image doesn\'t exists');
             $this->logger->critical($message);
             throw new NotFoundException($message);
@@ -206,10 +205,10 @@ class SaveImagePreview implements SaveImagePreviewInterface
      * Get image by adobe id.
      *
      * @param int $adobeId
-     * @return AssetInterface
+     * @return null|AssetInterface
      * @throws LocalizedException
      */
-    private function getImageByAdobeId(int $adobeId): AssetInterface
+    private function getImageByAdobeId(int $adobeId): ?AssetInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('media_id', $adobeId)
