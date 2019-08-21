@@ -105,17 +105,9 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     public function execute(int $adobeId, string $destinationPath): void
     {
-        $searchResult = $this->getImageByAdobeId($adobeId);
-
-        if (1 < $searchResult->getTotalCount()) {
-            $message = __('Requested image doesn\'t exists');
-            $this->logger->critical($message);
-            throw new NotFoundException($message);
-        }
+        $asset = $this->getImageByAdobeId($adobeId);
 
         try {
-            $items = $searchResult->getItems();
-            $asset = reset($items);
             $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);
