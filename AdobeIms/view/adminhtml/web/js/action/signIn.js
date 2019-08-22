@@ -11,10 +11,12 @@ define([
 ], function (ko, Component, $, authorizationAction, _) {
     'use strict';
 
-
     return Component.extend({
 
         defaults: {
+            visibility: ko.observable(true),
+            nameVisibility: ko.observable(false),
+            displayName: ko.observable(),
             authConfig: {
                 url: '',
                 isAuthorized: false,
@@ -26,9 +28,10 @@ define([
                     left: 300
                 },
                 response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
+                    regexpPattern: /auth\[code=(success|error);message=(.+);name=(.+)\]/,
                     codeIndex: 1,
                     messageIndex: 2,
+                    nameIndex: 3,
                     successCode: 'success',
                     errorCode: 'error'
                 }
@@ -37,29 +40,48 @@ define([
 
         initialize: function () {
             this._super();
+            this.observe([
+                'visibility',
+                'nameVisibility',
+                'displayName'
+            ]);
+            this.checkAuthorize();
+            this.displayName(this.authConfig.displayName);
+            return this;
+        },
+
+        /**
+         * Check if user authorized, to show or hide sign in button.
+         */
+        checkAuthorize: function () {
+                if (this.authConfig.isAuthorized) {
+                    this.visibility(false);
+                    this.nameVisibility(true);
+                } else if (!this.authConfig.isAuthorized) {
+                    this.visibility(true);
+                    this.nameVisibility(false);
+                }
         },
 
         /**
          * Authorization process.
          */
         execute: function () {
-            authorizationAction(this.authConfig)
+           return  authorizationAction(this.authConfig)
                 .then(
                     function (authConfig) {
-                        this.authConfig = _.extend(this.defaults.authConfig, authConfig);
-
-                        console.log('success');
+                        this.authConfig = _.extend(this.authConfig, authConfig);
+                        this.displayName(authConfig.displayName);
+                        this.checkAuthorize();
+                        return this.authConfig.isAuthorized;
                     }.bind(this)
-                )
-                .catch(
+                ).catch(
                     function (error) {
-                        console.log('error');
+                        return error;
                     }.bind(this)
-                )
-                .finally((function () {
-                    console.log('finally');
-                }).bind(this));
+                );
         },
+
     });
 
 });

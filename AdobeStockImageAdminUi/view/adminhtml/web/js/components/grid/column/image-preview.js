@@ -7,11 +7,11 @@ define([
     'jquery',
     'knockout',
     'Magento_Ui/js/grid/columns/column',
-    'Magento_AdobeIms/js/action/authorization',
+    'Magento_AdobeIms/js/action/signIn',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
-], function (_, $, ko, Column, authorizationAction, messages, translate, imagePreview) {
+], function (_, $, ko, Column, signIn, messages, translate, imagePreview) {
     'use strict';
 
     return imagePreview.extend({
@@ -44,9 +44,10 @@ define([
                     left: 300
                 },
                 response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
+                    regexpPattern: /auth\[code=(success|error);message=(.+);name=(.+)\]/,
                     codeIndex: 1,
                     messageIndex: 2,
+                    nameIndex: 3,
                     successCode: 'success',
                     errorCode: 'error'
                 }
@@ -288,30 +289,12 @@ define([
         licenseProcess: function (record) {
             if (this.authConfig.isAuthorized) {
                 this.licenseAndSave(record);
-
                 return;
             }
-
-            /**
-             * Opens authorization window of Adobe Stock
-             * then starts the authorization process
-             */
-            authorizationAction(this.authConfig)
-                .then(
-                    function (authConfig) {
-                        this.authConfig = _.extend(this.authConfig, authConfig);
-                        this.licenseProcess(record);
-                        messages.add('success', authConfig.lastAuthSuccessMessage);
-                    }.bind(this)
-                )
-                .catch(
-                    function (error) {
-                        messages.add('error', error.message);
-                    }.bind(this)
-                )
-                .finally((function () {
-                    messages.scheduleCleanup(this.messageDelay);
-                }).bind(this));
+            signIn.defaults.authConfig.url = this.authConfig.url;
+            if (signIn().execute()) {
+                this.authConfig.isAuthorized = true;
+            }
         }
     });
 });

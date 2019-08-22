@@ -73,10 +73,10 @@ class GetToken implements GetTokenInterface
         $curl->post(
             $this->config->getTokenUrl(),
             [
+                'grant_type' => 'authorization_code',
                 'client_id' => $this->config->getApiKey(),
                 'client_secret' => $this->config->getPrivateKey(),
-                'code' => $code,
-                'grant_type' => 'authorization_code'
+                'code' => $code
             ]
         );
 
@@ -84,8 +84,8 @@ class GetToken implements GetTokenInterface
         /** @var TokenResponse $tokenResponse */
         $tokenResponse = $this->tokenResponseFactory->create()
             ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')]);
-
-        if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
+        if (empty($tokenResponse->getAccessToken()) ||
+            empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(
                 __('Authentication is failing. Error code: %1', $tokenResponse->getError())
             );

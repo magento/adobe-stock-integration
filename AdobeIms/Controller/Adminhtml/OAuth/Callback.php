@@ -42,8 +42,8 @@ class Callback extends Action
      * RESPONSE_SUCCESS_CODE success code
      * RESPONSE_ERROR_CODE error code
      */
-    const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
-    const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
+    const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s;name=%s]';
+    const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+);name=(.+);\\]';
     const RESPONSE_CODE_INDEX = 1;
     const RESPONSE_MESSAGE_INDEX = 2;
     const RESPONSE_SUCCESS_CODE = 'success';
@@ -95,14 +95,17 @@ class Callback extends Action
     /**
      * @inheritdoc
      */
-    public function execute() : \Magento\Framework\Controller\ResultInterface
+    public function execute(): \Magento\Framework\Controller\ResultInterface
     {
+        $userName = '';
         try {
             $tokenResponse = $this->getToken->execute(
                 (string)$this->getRequest()->getParam('code')
             );
-
             $userProfile = $this->getUserProfile();
+            $userName = $tokenResponse->getGivenName();
+            ($userName != '') ?: $userName = 'You are logged in';
+            $userProfile->setName($userName);
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
@@ -115,12 +118,23 @@ class Callback extends Action
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_SUCCESS_CODE,
-                __('Authorization was successful')
+                __('Authorization was successful'),
+                $userName
             );
         } catch (AuthorizationException $e) {
-            $response = sprintf(self::RESPONSE_TEMPLATE, self::RESPONSE_ERROR_CODE, $e->getMessage());
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                $e->getMessage(),
+                $userName
+            );
         } catch (CouldNotSaveException $e) {
-            $response = sprintf(self::RESPONSE_TEMPLATE, self::RESPONSE_ERROR_CODE, $e->getMessage());
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                $e->getMessage(),
+                $userName
+            );
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
             $response = sprintf(
@@ -142,7 +156,7 @@ class Callback extends Action
      *
      * @return UserProfileInterface
      */
-    private function getUserProfile() : UserProfileInterface
+    private function getUserProfile(): UserProfileInterface
     {
         try {
             return $this->userProfileRepository->getByUserId(
@@ -160,10 +174,10 @@ class Callback extends Action
      * @return string
      * @throws Exception
      */
-    private function getExpiresTime(int $expiresIn) : string
+    private function getExpiresTime(int $expiresIn): string
     {
         $dateTime = new DateTime();
-        $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn/1000)));
+        $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn / 1000)));
         return $dateTime->format('Y-m-d H:i:s');
     }
 }

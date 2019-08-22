@@ -44,6 +44,16 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
+                <field id="integration_type" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Integration type</label>
+                    <config_path>adobe_stock/integration/scope_type</config_path>
+                    <comment><![CDATA[Access an API - Creative SDK or Adobe Stock ]]></comment>
+                    <validate>required-entry</validate>
+                    <source_model>Magento\AdobeIms\Model\Config\Source\IntegrationType</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
             </group>
         </section>
     </system>

@@ -147,7 +147,7 @@ class CallbackTest extends TestCase
             ->willReturn(null);
         $resultInterfaceMock->expects($this->once())
             ->method('setContents')
-            ->with('auth[code=success;message=Authorization was successful]')
+            ->with('auth[code=success;message=Authorization was successful;name=You are logged in]')
             ->willReturnSelf();
         $this->resultFactory->expects($this->once())
             ->method('create')

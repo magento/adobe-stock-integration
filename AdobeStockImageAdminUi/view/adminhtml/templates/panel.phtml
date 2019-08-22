@@ -31,7 +31,11 @@
                        "adobe-stock-sign-in": {
                         "component": "Magento_AdobeIms/js/action/signIn",
                         "template": "Magento_AdobeIms/signIn",
-                        "authConfig": {"url": "<?= $block->escapeHtml($block->getAuthUrl()) ?>"}
+                        "authConfig": {
+                            "displayName": "<?= $block->escapeHtml($block->getName()) ?>",
+                            "url": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
+                            "isAuthorized": "<?= $block->escapeHtml($block->isAuthorized()) ?>"
+                             }
                     }
                 }
             }
