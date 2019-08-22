@@ -74,8 +74,6 @@ class SaveTest extends WebapiAbstract
         $uniqueData = [
             AssetInterface::ID => $data[AssetInterface::ID],
             AssetInterface::PATH => $data[AssetInterface::PATH],
-            AssetInterface::PREVIEW_URL => $data[AssetInterface::PREVIEW_URL],
-            AssetInterface::DETAILS_URL => $data[AssetInterface::DETAILS_URL],
         ];
 
         $this->assertArraySubset($uniqueData, $asset->getData());
@@ -95,10 +93,6 @@ class SaveTest extends WebapiAbstract
                         AssetInterface::PATH => uniqid() . '/file-path.png',
                         AssetInterface::WIDTH => '1000',
                         AssetInterface::HEIGHT => '800',
-                        AssetInterface::PREVIEW_WIDTH => '500',
-                        AssetInterface::PREVIEW_HEIGHT => '400',
-                        AssetInterface::PREVIEW_URL => uniqid('preview-url'),
-                        AssetInterface::DETAILS_URL => uniqid('details-url'),
                     ]
                 ]
             ];
@@ -111,22 +105,13 @@ class SaveTest extends WebapiAbstract
                     AssetInterface::PATH => uniqid() . '/file-path.png',
                     AssetInterface::WIDTH => '1000',
                     AssetInterface::HEIGHT => '800',
-                    AssetInterface::PREVIEW_WIDTH => '500',
-                    AssetInterface::PREVIEW_HEIGHT => '400',
                     AssetInterface::MEDIA_TYPE_ID => null,
-                    AssetInterface::KEYWORDS => ['test_kyeword_1', 'test_kyeword_2', 'test_kyeword_3',],
-                    AssetInterface::PREMIUM_LEVEL_ID => null,
-                    AssetInterface::STOCK_ID => 1,
+                    AssetInterface::KEYWORDS => [],
                     AssetInterface::TITLE => 'Title',
-                    AssetInterface::URL => uniqid('preview-url'),
-                    AssetInterface::COUNTRY_NAME => '',
-                    AssetInterface::VECTOR_TYPE => '',
                     AssetInterface::CONTENT_TYPE => '',
                     AssetInterface::CREATION_DATE => '',
                     AssetInterface::CREATED_AT => '',
                     AssetInterface::UPDATED_AT => '',
-                    AssetInterface::PREVIEW_URL => uniqid('preview-url'),
-                    AssetInterface::DETAILS_URL => uniqid('details-url'),
                     AssetInterface::IS_LICENSED => 1,
                     'licensed' => 1,
                 ]
