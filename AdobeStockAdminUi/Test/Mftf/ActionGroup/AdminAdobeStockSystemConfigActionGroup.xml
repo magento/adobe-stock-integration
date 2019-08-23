@@ -12,7 +12,10 @@
         <amOnPage url="{{AdminConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{AdminConfigSystemSection.adobeStockIntegration}}" stepKey="scrollToAdobeStockIntegrationSection"/>
-        <conditionalClick stepKey="expandadobeStockIntegrationTab" selector="{{AdminConfigSystemSection.adobeStockIntegration}}" dependentSelector="{{AdminConfigSystemSection.CheckIfTabExpand}}" visible="true" />
-        <seeElement selector="{{AdminConfigSystemSection.expandedTab}}" stepKey="seeSectionExpanded"/>
+        <conditionalClick stepKey="expandAdobeStockIntegrationTab" selector="{{AdminConfigSystemSection.adobeStockIntegration}}" dependentSelector="{{AdminConfigSystemSection.isEnabledField}}" visible="false" />
+        <seeElement selector="{{AdminConfigSystemSection.isEnabledField}}" stepKey="seeIsEnabledField"/>
+        <seeElement selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="seeApiKeyField"/>
+        <seeElement selector="{{AdminConfigSystemSection.privateKeyField}}" stepKey="seePrivateKeyField"/>
+        <seeElement selector="{{AdminConfigSystemSection.testConnectionButton}}" stepKey="seeTestConnectionButton"/>
     </actionGroup>
 </actionGroups>

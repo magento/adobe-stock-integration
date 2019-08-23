@@ -8,9 +8,9 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserConfigureAdobeStockIntegrationTest">
+    <test name="AdminAdobeStockConfigurationTest">
         <annotations>
-            <features value="AdobeStockImageConfiguration"/>
+            <features value="AdobeStockConfiguration"/>
             <stories value="Configure Adobe Stock Integration via the Admin"/>
             <title value="Admin should be able to configure Adobe Stock Integration"/>
             <description value="Admin should be able to configure Adobe Stock Integration"/>
@@ -23,11 +23,8 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminAdobeStockSystemConfigActionGroup" stepKey="seeAdobeStockConfigs"/>
-        <fillField userInput="" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="fillBlankAdobeStockApiKey"/>
-        <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveConfiguration"/>
-        <see userInput="This is a required field." selector="{{AdminConfigSystemSection.errorLabel}}" stepKey="seeErrorMessage"/>
-        <actionGroup ref="AdminAdobeStockTestConnectionActionGroup" stepKey="testConnectionValidation"/>
-        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+        <actionGroup ref="AdminAdobeStockSystemConfigActionGroup" stepKey="navigateToAdobeStockConfigurationFieldset"/>
+        <actionGroup ref="AdminAdobeStockConfigurationValidationActionGroup" stepKey="testAdobeStockConfigurationValidation"/>
+        <actionGroup ref="AdminAdobeStockTestConnectionActionGroup" stepKey="testConnection"/>
     </test>
 </tests>

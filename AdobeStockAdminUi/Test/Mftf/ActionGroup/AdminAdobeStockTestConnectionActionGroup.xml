@@ -9,11 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockTestConnectionActionGroup">
-        <fillField userInput="blahblahblah" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="fillIncorrectAdobeStockApiKey"/>
-        <click selector="{{AdminConfigSystemSection.testConnection}}" stepKey="testConnection"/>
-        <see selector="{{AdminConfigSystemSection.messageError}}" userInput="Connection Failed!" stepKey="apiValidationResult"/>
-        <fillField userInput="{{AdobeStockConfigDataApiKey.value}}" selector="{{AdminConfigSystemSection.adobeStockApiKey}}" stepKey="filladobeStockApiKey"/>
-        <click selector="{{AdminConfigSystemSection.testConnection}}" stepKey="testConnection1"/>
-        <see selector="{{AdminConfigSystemSection.messageSuccess}}" userInput="Connection Successful!" stepKey="apiValidationResult1"/>
+        <fillField userInput="blahblahblah" selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="enterIncorrectAdobeStockApiKey"/>
+        <click selector="{{AdminConfigSystemSection.testConnectionButton}}" stepKey="testConnection"/>
+        <see selector="{{AdminConfigSystemSection.errorMessage}}" userInput="Connection Failed!" stepKey="seeConnectionFailedMethod"/>
+        <fillField userInput="{{AdobeStockConfigDataApiKey.value}}" selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="enterAdobeStockApiKey"/>
+        <click selector="{{AdminConfigSystemSection.testConnectionButton}}" stepKey="testConnection1"/>
+        <see selector="{{AdminConfigSystemSection.successMessage}}" userInput="Connection Successful!" stepKey="seeConnectionSuccessfulMessage"/>
     </actionGroup>
 </actionGroups>

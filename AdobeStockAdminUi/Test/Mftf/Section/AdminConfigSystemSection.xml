@@ -10,14 +10,13 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigSystemSection">
         <element name="adobeStockIntegration" type="select" selector="#system_adobe_stock_integration-head"/>
-        <element name="CheckIfTabExpand" type="button" selector="#system_adobe_stock_integration-head:not(.open)"/>
-        <element name="expandedTab" type="button" selector="#system_adobe_stock_integration-head.open"/>
-        <element name="adobeStockApiKey" type="input" selector="#system_adobe_stock_integration_api_key"/>
-        <element name="testConnection" type="button" selector="#system_adobe_stock_integration_adobe_stock_test_connect_wizard" timeout="30"/>
-        <element name="messageSuccess" type="text" selector="div.message-success"/>
-        <element name="messageError" type="text" selector="div.message-error"/>
-        <element name="saveConfigSuccessMessage" type="text" selector="div.message-success"/>
-        <element name="errorLabel" type="text" selector="label.mage-error"/>
+        <element name="isEnabledField" type="select" selector="[data-ui-id='select-groups-adobe-stock-integration-fields-enabled-value']"/>
+        <element name="apiKeyField" type="input" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-api-key-value']"/>
+        <element name="privateKeyField" type="input" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-private-key-value']"/>
+        <element name="testConnectionButton" type="button" selector="[data-ui-id='adobe-stock-integration-buttons-test-connection']" timeout="30"/>
+        <element name="apiKeyFieldValidationError" type="text" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-api-key-value'] + label.mage-error"/>
+        <element name="successMessage" type="text" selector="div.message-success"/>
+        <element name="errorMessage" type="text" selector="div.message-error"/>
         <element name="saveConfig" type="button" selector="#save"/>
     </section>
 </sections>
