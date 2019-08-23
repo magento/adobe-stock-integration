@@ -36,4 +36,10 @@
             <resource ref="Magento_AdobeStockImage::actions_view"/>
         </resources>
     </route>
+    <route url="/V1/adobestock/asset/list" method="GET">
+        <service class="Magento\AdobeStockAssetApi\Api\GetAssetListInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_AdobeStockAsset::actions_view"/>
+        </resources>
+    </route>
 </routes>
