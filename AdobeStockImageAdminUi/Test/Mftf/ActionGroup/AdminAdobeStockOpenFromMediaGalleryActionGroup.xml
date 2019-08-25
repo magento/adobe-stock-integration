@@ -8,8 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAdobeStockOpenNextPageActionGroup">
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPage" />
-        <waitForLoadingMaskToDisappear stepKey="waitForNextPageToLoad"/>
+    <actionGroup name="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup">
+        <click selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel" />
+        <waitForPageLoad stepKey="waitForAdobeStockPanelOpen"/>
     </actionGroup>
 </actionGroups>
