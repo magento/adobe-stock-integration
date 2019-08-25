@@ -45,7 +45,7 @@ class Series extends Action
     private $logger;
 
     /**
-     * Serie constructor.
+     * Series constructor.
      *
      * @param Action\Context       $context
      * @param GetImageSeries       $getImageSeries

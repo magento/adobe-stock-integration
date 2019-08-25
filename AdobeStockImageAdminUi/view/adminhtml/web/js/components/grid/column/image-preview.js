@@ -236,7 +236,7 @@ define([
             let self = this
             self.series.removeAll();
             processSeries(record.id, this.imageSeriesUrl, function (result) {
-                self.series(result)
+                //@TODO implement the series data representation self.series(result)
             })
         },
 
