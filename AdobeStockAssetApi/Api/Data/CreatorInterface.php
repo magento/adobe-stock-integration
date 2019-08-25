@@ -17,7 +17,6 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface;
 interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const ID = 'id';
-    const ADOBE_ID = 'adobe_id';
     const NAME = 'name';
 
     /**
