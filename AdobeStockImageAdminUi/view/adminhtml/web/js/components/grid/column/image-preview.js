@@ -8,11 +8,36 @@ define([
     'knockout',
     'Magento_Ui/js/grid/columns/column',
     'Magento_AdobeIms/js/action/authorization',
-    'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
-], function (_, $, ko, Column, authorizationAction, messages, translate, imagePreview) {
+    'Magento_AdobeStockImageAdminUi/js/model/messages',
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages) {
     'use strict';
+
+    /**
+     * Get image related image series.
+     *
+     * @param image_id
+     * @param url
+     * @param callback
+     */
+    function processSeries (image_id, url, callback)
+    {
+        let settings = {
+            type: 'GET',
+            url: url,
+            async: true,
+            dataType: 'json',
+            data: {
+                'serie_id': image_id,
+            },
+        }
+        $.ajax(settings).done(function (data) {
+            callback(data.result.assets);
+        }).fail(function (data) {
+            //@TODO implement fail catch logic
+        });
+    }
 
     return imagePreview.extend({
         defaults: {
@@ -32,6 +57,7 @@ define([
                 lastOpenedImage: true,
             },
             downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            imageSeriesUrl: Column.imageSeriesUrl,
             messageDelay: 5,
             authConfig: {
                 url: '',
@@ -63,7 +89,7 @@ define([
                     'visibility',
                     'height'
                 ]);
-
+            this.series = ko.observableArray([]);
             this.height.subscribe(function(){
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
@@ -202,6 +228,20 @@ define([
         },
 
         /**
+         * Returns image series for given record.
+         *
+         * @param {Object} record
+         * @return {*}
+         */
+        getImageSeries: function (record) {
+            let self = this
+            self.series.removeAll();
+            processSeries(record.id, this.imageSeriesUrl, function (result) {
+                self.series(result)
+            })
+        },
+
+        /**
          * Get styles for preview
          *
          * @param {Object} record
@@ -315,3 +355,4 @@ define([
         }
     });
 });
+

@@ -68,5 +68,11 @@
                 <span translate="'View all'"/>
             </button>
         </div>
+        <div class="series" data-bind="afterRender: $col.getImageSeries($row())">
+            <div class="title" translate="'More from series'" class="masonry-image-column"
+                 data-bind="foreach: series">
+                <img attr="src: thumbnail_url, alt: title">
+            </div>
+        </div>
     </div>
 </div>
