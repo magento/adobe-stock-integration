@@ -26,7 +26,6 @@ define([
         let settings = {
             type: 'GET',
             url: url,
-            async: true,
             dataType: 'json',
             data: {
                 'serie_id': image_id,
