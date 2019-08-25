@@ -12,7 +12,6 @@ use Magento\AdobeStockImage\Model\GetImageSeries;
 use Magento\AdobeStockImage\Model\ImageSeriesSerialize;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
-use \Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -41,11 +40,6 @@ class Series extends Action
     private $imageSeriesSerialize;
 
     /**
-     * @var Json
-     */
-    private $jsonSerialize;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -56,20 +50,17 @@ class Series extends Action
      * @param Action\Context       $context
      * @param GetImageSeries       $getImageSeries
      * @param ImageSeriesSerialize $imageSeriesSerialize
-     * @param Json                 $jsonSerialize
      * @param LoggerInterface      $logger
      */
     public function __construct(
         Action\Context $context,
         GetImageSeries $getImageSeries,
         ImageSeriesSerialize $imageSeriesSerialize,
-        Json $jsonSerialize,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->getImageSeries = $getImageSeries;
         $this->imageSeriesSerialize = $imageSeriesSerialize;
-        $this->jsonSerialize = $jsonSerialize;
         $this->logger = $logger;
     }
     /**
