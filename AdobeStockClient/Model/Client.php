@@ -29,6 +29,8 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Phrase;
+use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
+use AdobeStock\Api\Request\License as LicenseRequest;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -77,6 +79,11 @@ class Client implements ClientInterface
     private $connectionFactory;
 
     /**
+     * @var LicenseRequestFactory
+     */
+    private $licenseRequestFactory;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -91,6 +98,7 @@ class Client implements ClientInterface
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
      * @param ConnectionFactory $connectionFactory
+     * @param LicenseRequestFactory $licenseRequestFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -102,6 +110,7 @@ class Client implements ClientInterface
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
         ConnectionFactory $connectionFactory,
+        LicenseRequestFactory $licenseRequestFactory,
         LoggerInterface $logger
     ) {
         $this->clientConfig = $clientConfig;
@@ -112,6 +121,7 @@ class Client implements ClientInterface
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
         $this->connectionFactory = $connectionFactory;
+        $this->licenseRequestFactory = $licenseRequestFactory;
         $this->logger = $logger;
     }
 
@@ -153,6 +163,27 @@ class Client implements ClientInterface
         $searchResult->setTotalCount($totalCount);
 
         return $searchResult;
+    }
+
+    /**
+     * Gets license quota for current content from Adobe Stock API
+     *
+     * @param int $contentId
+     * @param string $accessToken
+     * @return int
+     * @throws IntegrationException
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    public function getQuota(int $contentId, string $accessToken): int
+    {
+        /** @var LicenseRequest $licenseRequest */
+        $licenseRequest = $this->licenseRequestFactory->create();
+        $licenseRequest->setContentId($contentId)
+            ->setLocale($this->clientConfig->getLocale())
+            ->setLicenseState('STANDARD');
+        $licenseInfo = $this->getConnection()->getContentInfo($licenseRequest, $accessToken);
+
+        return $licenseInfo->getEntitlement()->getQuota();
     }
 
     /**

@@ -25,6 +25,15 @@ interface ClientInterface
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface;
 
     /**
+     * Gets license quota for current content from Adobe Stock API
+     *
+     * @param int $contentId
+     * @param string $accessToken
+     * @return mixed
+     */
+    public function getQuota(int $contentId, string $accessToken): int;
+
+    /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.
      *
      * @param string|null $apiKey

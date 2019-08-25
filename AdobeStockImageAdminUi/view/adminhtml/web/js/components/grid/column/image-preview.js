@@ -11,7 +11,8 @@ define([
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
-], function (_, $, ko, Column, authorizationAction, messages, translate, imagePreview) {
+    'Magento_Ui/js/modal/confirm'
+], function (_, $, ko, Column, authorizationAction, messages, translate, imagePreview, confirmation) {
     'use strict';
 
     return imagePreview.extend({
@@ -32,6 +33,7 @@ define([
                 lastOpenedImage: true,
             },
             downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            getQuotaUrl: Column.getQuotaUrl,
             messageDelay: 5,
             authConfig: {
                 url: '',
@@ -281,13 +283,54 @@ define([
         },
 
         /**
+         * Shows license confirmation popup with information about current license quota
+         *
+         * @param {Object} record
+         */
+        showLicenseConfirmation: function (record) {
+            var licenseAndSave = this.licenseAndSave;
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: this.getQuotaUrl,
+                    dataType: 'json',
+                    data: {
+                        'media_id': record.id
+                    },
+                    context: this,
+
+                    success: function (response) {
+                        var quota = response.result;
+                        var confirmationContent = $.mage.__('License "' + record.name + '"');
+                        var quotaInfo = $.mage.__('This will use 1 of ' + quota + ' images');
+                        confirmation({
+                            title: $.mage.__('License Adobe Stock Image?'),
+                            content: $.mage.__(confirmationContent + '<p><b>' + quotaInfo + '</b></p>'),
+                            actions: {
+                                confirm: function(){
+                                    licenseAndSave(record);
+                                }
+                            }
+                        });
+                    },
+
+                    error: function (response) {
+                        $(this.adobeStockModalSelector).trigger('processStop');
+                        messages.add('error', response.responseJSON.message);
+                        messages.scheduleCleanup(3);
+                    }
+                }
+            );
+        },
+
+        /**
          * Process of license
          *
          * @param {Object} record
          */
         licenseProcess: function (record) {
             if (this.authConfig.isAuthorized) {
-                this.licenseAndSave(record);
+                this.showLicenseConfirmation(record);
 
                 return;
             }
