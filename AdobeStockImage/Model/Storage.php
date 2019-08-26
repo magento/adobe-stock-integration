@@ -72,17 +72,17 @@ class Storage
     /**
      * Save file from the URL to destination directory relative to media directory
      *
-     * @param Asset $assets
+     * @param Asset $asset
      * @param string $destinationDirectoryPath
      * @return string
      * @throws LocalizedException
      */
-    public function save(Asset $assets, string $destinationDirectoryPath = '') : string
+    public function save(Asset $asset, string $destinationDirectoryPath = '') : string
     {
         if (!empty($destinationDirectoryPath)) {
             $destinationDirectoryPath = rtrim($destinationDirectoryPath, '/') . '/';
         }
-        $imageName = $this->generateImageName($assets->getData());
+        $imageName = $this->generateImageName($asset->getData());
         $destinationPath = $destinationDirectoryPath . $imageName;
 
         $bytes = false;
@@ -90,7 +90,7 @@ class Storage
         try {
             $bytes = $this->getMediaDirectory()->writeFile(
                 $destinationPath,
-                $this->driver->fileGetContents($this->getUrlWithoutProtocol($assets->getPreviewUrl()))
+                $this->driver->fileGetContents($this->getUrlWithoutProtocol($asset->getPreviewUrl()))
             );
         } catch (Exception $exception) {
             $this->log->critical("Failed to save the image. Exception: \n" . $exception);
