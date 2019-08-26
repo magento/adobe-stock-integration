@@ -9,9 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAdminUi\Model\System\Config;
 
 use Magento\Config\Model\Config\CommentInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\Store;
 
 /**
  * Class Comment
@@ -26,22 +24,14 @@ class Comment implements CommentInterface
     private $url;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Comment constructor.
      *
-     * @param UrlInterface         $url
-     * @param ScopeConfigInterface $scopeConfig
+     * @param UrlInterface $url
      */
     public function __construct(
-        UrlInterface $url,
-        ScopeConfigInterface $scopeConfig
+        UrlInterface $url
     ) {
         $this->url = $url;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -75,11 +65,7 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrl(): string
     {
-        $adminRoteUrl = $this->url->getRouteUrl('admin');
-        $indexPhpToUrl = $this->scopeConfig->isSetFlag(Store::XML_PATH_USE_REWRITES) ? '' : 'index.php/';
-        $redirectUrl = $adminRoteUrl . $indexPhpToUrl . self::REDIRECT_MCA;
-
-        return $redirectUrl;
+        return $this->url->getRouteUrl(self::REDIRECT_MCA);
     }
 
     /**
@@ -89,6 +75,6 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrlPattern(): string
     {
-        return $this->getRedirectUrl();
+        return str_replace('.', '\\\.', $this->getRedirectUrl());
     }
 }

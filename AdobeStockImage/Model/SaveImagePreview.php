@@ -8,20 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class SaveImagePreview
@@ -64,6 +64,11 @@ class SaveImagePreview implements SaveImagePreviewInterface
     private $categoryRepository;
 
     /**
+     * @var DocumentToAsset
+     */
+    private $documentToAsset;
+
+    /**
      * SaveImagePreview constructor.
      *
      * @param AssetRepositoryInterface    $assetRepository
@@ -73,6 +78,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
      * @param LoggerInterface             $logger
      * @param GetImageListInterface       $getImageList
      * @param SearchCriteriaBuilder       $searchCriteriaBuilder
+     * @param DocumentToAsset             $documentToAsset
      */
     public function __construct(
         AssetRepositoryInterface $assetRepository,
@@ -81,7 +87,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
         Storage $storage,
         LoggerInterface $logger,
         GetImageListInterface $getImageList,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        DocumentToAsset $documentToAsset
     ) {
         $this->assetRepository = $assetRepository;
         $this->creatorRepository = $creatorRepository;
@@ -90,6 +97,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
         $this->logger = $logger;
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->documentToAsset = $documentToAsset;
     }
 
     /**
@@ -97,17 +105,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     public function execute(int $adobeId, string $destinationPath): void
     {
-        $searchResult = $this->getImagesByAdobeId($adobeId);
-
-        if (1 < $searchResult->getTotalCount()) {
-            $message = __('Requested image doesn\'t exists');
-            $this->logger->critical($message);
-            throw new NotFoundException($message);
-        }
-
         try {
-            $items = $searchResult->getItems();
-            $asset = reset($items);
+            $asset = $this->getImageByAdobeId($adobeId);
             $path = $this->storage->save($asset, $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);
@@ -198,16 +197,22 @@ class SaveImagePreview implements SaveImagePreviewInterface
      * Get image by adobe id.
      *
      * @param int $adobeId
-     * @return AssetSearchResultsInterface
+     * @return AssetInterface
      * @throws LocalizedException
      */
-    private function getImagesByAdobeId(int $adobeId): AssetSearchResultsInterface
+    private function getImageByAdobeId(int $adobeId): AssetInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('media_id', $adobeId)
             ->setSortOrders([])
             ->create();
 
-        return $this->getImageList->execute($searchCriteria);
+        $items = $this->getImageList->execute($searchCriteria)->getItems();
+        if (empty($items) || 1 < count($items)) {
+            $message = __('Requested image doesn\'t exists');
+            throw new NotFoundException($message);
+        }
+
+        return $this->documentToAsset->convert(reset($items));
     }
 }
