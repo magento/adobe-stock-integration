@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserSeesKeywordsInTheImagePreviewTest">
+        <annotations>
+            <stories value="Admin User Sees keywords in the image preview "/>
+            <title value="Admin should be able to see keywords in the image preview"/>
+            <description value="Admin should be able to able to see keywords in the image preview"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
+                <argument name="enabled" value="0"/>
+                <argument name="wysiwygEnabled" value="disabled"/>
+<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
+<!--                <argument name="apiKey" value=""/>-->
+<!--                <argument name="privateKey" value=""/>-->
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
+        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <!-- Assert that image attributes keywords visible "-->
+        <seeElement selector="{{AdobeStockSection.imageKeywordsTitle}}" stepKey="seeAttributeTitle"/>
+        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCount">
+            <argument name="keywordsNumber" value="5"/>
+        </actionGroup>
+        <!-- Click view all keywords -->
+        <click selector="{{AdobeStockSection.imagePreviewKeywordsButtons('View all')}}" stepKey="clickOnViewAlKeywords"/>
+        <click selector="{{AdobeStockSection.imagePreviewNavigation('next')}}" stepKey="navigateToNextImage"/>
+        <click selector="{{AdobeStockSection.imagePreviewNavigation('previous')}}" stepKey="navigateToPreviousImage"/>
+        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
+            <argument name="keywordsNumber" value="5"/>
+        </actionGroup>
+        <seeElement selector="{{AdobeStockSection.imagePreviewKeywordsButtons('View all')}}" stepKey="VerifyViewAllButton"/>
+    </test>
+</tests>
