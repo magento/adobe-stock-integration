@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
 use Magento\AdobeStockImage\Model\GetImageSeries;
-use Magento\AdobeStockImage\Model\ImageSeriesSerialize;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
@@ -35,11 +34,6 @@ class Series extends Action
     private $getImageSeries;
 
     /**
-     * @var ImageSeriesSerialize
-     */
-    private $imageSeriesSerialize;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -49,18 +43,15 @@ class Series extends Action
      *
      * @param Action\Context       $context
      * @param GetImageSeries       $getImageSeries
-     * @param ImageSeriesSerialize $imageSeriesSerialize
      * @param LoggerInterface      $logger
      */
     public function __construct(
         Action\Context $context,
         GetImageSeries $getImageSeries,
-        ImageSeriesSerialize $imageSeriesSerialize,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->getImageSeries = $getImageSeries;
-        $this->imageSeriesSerialize = $imageSeriesSerialize;
         $this->logger = $logger;
     }
     /**
@@ -72,13 +63,12 @@ class Series extends Action
             $params = $params = $this->getRequest()->getParams();
             $serieId = (int) $params['serie_id'];
             $imageSeries = $this->getImageSeries->execute($serieId);
-            $seriesData = $this->imageSeriesSerialize->execute($imageSeries);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
                 'message' => __('Get image series finished successfully'),
-                'result' => $seriesData,
+                'result' => $imageSeries,
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;

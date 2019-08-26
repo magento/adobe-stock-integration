@@ -32,7 +32,7 @@ define([
             },
         }
         $.ajax(settings).done(function (data) {
-            callback(data.result.assets);
+            callback(data.result.series);
         }).fail(function (data) {
             //@TODO implement fail catch logic
         });

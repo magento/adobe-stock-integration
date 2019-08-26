@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAsset\Model\DocumentToAsset;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\SerializationException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -36,36 +36,28 @@ class GetImageSeries
     private $logger;
 
     /**
-     * @var DocumentToAsset
-     */
-    private $documentToAsset;
-
-    /**
-     * GetImageSerie constructor.
+     * GetImageSeries constructor.
      *
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DocumentToAsset       $documentToAsset
      * @param LoggerInterface       $logger
      */
     public function __construct(
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        DocumentToAsset $documentToAsset,
         LoggerInterface $logger
     ) {
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
-        $this->documentToAsset = $documentToAsset;
     }
 
     /**
-     * Get image serie.
+     * Get image related image series.
      *
      * @param int $serieId
      *
-     * @return AssetInterface[]
+     * @return array
      * @throws IntegrationException
      */
     public function execute(int $serieId): array
@@ -75,16 +67,44 @@ class GetImageSeries
                 ->setSortOrders([])
                 ->create();
             $items = $this->getImageList->execute($searchCriteria)->getItems();
+            $series = $this->serializeImageSeries($items);
 
-            $assets = [];
-            foreach ($items as $item) {
-                $assets[] = $this->documentToAsset->convert($item);
-            }
-
-            return $assets;
+            return $series;
         } catch (\Exception $exception) {
             $message = __('Get image series list failed: %s', $exception->getMessage());
             throw new IntegrationException($message, $exception);
+        }
+    }
+
+    /**
+     * Serialize image series data.
+     *
+     * @param Document[] $series
+     *
+     * @return array
+     * @throws SerializationException
+     */
+    private function serializeImageSeries(array $series): array
+    {
+        $data = [];
+        try {
+            /** @var Document $seriesItem */
+            foreach ($series as $seriesItem) {
+                $item['id'] = $seriesItem->getId();
+                $item['title'] = $seriesItem->getCustomAttribute('title')->getValue();
+                $item['thumbnail_url'] = $seriesItem->getCustomAttribute('thumbnail_240_url')->getValue();
+                $data[] = $item;
+            }
+
+            $result = [
+                'type' => 'series',
+                'series' => $data,
+            ];
+
+            return $result;
+        } catch (\Exception $exception) {
+            $message = __('An error occurred during image series serialization: %s', $exception->getMessage());
+            throw new SerializationException($message);
         }
     }
 }

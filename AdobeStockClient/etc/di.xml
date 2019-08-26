@@ -50,7 +50,6 @@
                 <item name="words" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Words</item>
                 <item name="media_id" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\MediaId</item>
                 <item name="premium_price_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Premium</item>
-                <item name="serie_id_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Series</item>
             </argument>
         </arguments>
     </type>
@@ -58,6 +57,7 @@
         <arguments>
             <argument name="filters" xsi:type="array">
                 <item name="colors_filter" xsi:type="string">setFilterColors</item>
+                <item name="serie_id" xsi:type="string">setSerieId</item>
             </argument>
         </arguments>
     </type>
