@@ -54,6 +54,30 @@ define([
         },
 
         /**
+         * @inheritDoc
+         */
+        next: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        prev: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        hide: function (record) {
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
          * Init observable variables
          * @return {Object}
          */
@@ -87,7 +111,7 @@ define([
          * @returns {String}
          */
         getUrl: function (record) {
-            return record.preview_url;
+            return record.thumbnail_500_url;
         },
 
         /**
@@ -107,7 +131,7 @@ define([
          * @returns {String}
          */
         getAuthor: function (record) {
-            return record.creator.name || 'Author';
+            return record.creator_name || 'Author';
         },
 
         /**

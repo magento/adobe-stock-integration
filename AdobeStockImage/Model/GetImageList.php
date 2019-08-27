@@ -10,8 +10,8 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Class GetImageList
@@ -36,7 +36,7 @@ class GetImageList implements GetImageListInterface
     /**
      * @inheritdoc
      */
-    public function execute(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
+    public function execute(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
         return $this->getAssetList->execute($searchCriteria);
     }
