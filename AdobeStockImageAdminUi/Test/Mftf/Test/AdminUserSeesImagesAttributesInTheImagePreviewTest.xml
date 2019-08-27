@@ -17,18 +17,11 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanConfig">
-                <argument name="enabled" value="0"/>
-                <argument name="wysiwygEnabled" value="disabled"/>
-<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
-<!--                <argument name="apiKey" value=""/>-->
-<!--                <argument name="privateKey" value=""/>-->
-            </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
         <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
@@ -44,24 +37,23 @@
             <argument name="attributeName" value="Category"/>
         </actionGroup>
         <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeFile">
-            <argument name="attributeName" value="File#"/>
+            <argument name="attributeName" value="File #"/>
         </actionGroup>
-        <grabTextFrom selector="AdobeStockSection.imageAttribute('Dimension')"
-                      stepKey="getDimensionAttributeValue"/>
-        <grabTextFrom selector="AdobeStockSection.imageAttribute('File type')" stepKey="getFileTypeAttributeValue"/>
-        <grabTextFrom selector="AdobeStockSection.imageAttribute('Category')" stepKey="getCategoryAttributeValue"/>
-        <grabTextFrom selector="AdobeStockSection.imageAttribute('File#')" stepKey="getFileAttributeValue"/>
-        <click selector="AdobeStockSection.imagePreviewNavigation('next')" stepKey="navigateToNextImage"/>
+        <grabTextFrom selector="{{AdobeStockSection.imageAttribute('Dimensions')}}" stepKey="getDimensionAttributeValue"/>
+        <grabTextFrom selector="{{AdobeStockSection.imageAttribute('File type')}}" stepKey="getFileTypeAttributeValue"/>
+        <grabTextFrom selector="{{AdobeStockSection.imageAttribute('Category')}}" stepKey="getCategoryAttributeValue"/>
+        <grabTextFrom selector="{{AdobeStockSection.imageAttribute('File #')}}" stepKey="getFileAttributeValue"/>
+        <click selector="{{AdobeStockSection.imagePreviewNavigation('next')}}" stepKey="navigateToNextImage"/>
 
         <!-- Assert that image attributes changed "-->
-        <assertNotContains actual="$getDimensionAttributeValues"
+        <assertNotContains actual="$getDimensionAttributeValue"
                            expected="AdobeStockSection.imageAttribute('Dimensions')" expectedType="string"
                            stepKey="assertAttributeDimensionChanged"/>
-        <assertNotContains actual="$getDimensionAttributeValues"
+        <assertNotContains actual="$getDimensionAttributeValue"
                            expected="AdobeStockSection.imageAttribute('Category')" expectedType="string"
                            stepKey="assertAttributeCategoryChanged"/>
-        <assertNotContains actual="$getDimensionAttributeValues"
-                           expected="AdobeStockSection.imageAttribute('File#')" expectedType="string"
+        <assertNotContains actual="$getDimensionAttributeValue"
+                           expected="AdobeStockSection.imageAttribute('File #')" expectedType="string"
                            stepKey="assertAttributeFileChanged"/>
     </test>
 </tests>
