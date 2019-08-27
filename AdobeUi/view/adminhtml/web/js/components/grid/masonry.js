@@ -48,6 +48,16 @@ define([
              * @param int
              */
             maxImageHeight: 240,
+
+            /**
+             * Container for masonry  grid.
+             */
+            container: '',
+
+            /**
+             * Button's id that opens grid.
+             */
+            buttonId: '',
         },
 
         /**
@@ -76,6 +86,9 @@ define([
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
+            if ($(this.container).length > 0) {
+                $('[id=' + this.buttonId + ']').removeAttr("disabled").removeClass('disabled');
+            }
             this.setLayoutStyles();
             this.setEventListener();
             return this;
