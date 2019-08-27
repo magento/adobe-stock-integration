@@ -14,30 +14,6 @@ define([
 ], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages) {
     'use strict';
 
-    /**
-     * Get image related image series.
-     *
-     * @param image_id
-     * @param url
-     * @param callback
-     */
-    function processSeries (image_id, url, callback)
-    {
-        let settings = {
-            type: 'GET',
-            url: url,
-            dataType: 'json',
-            data: {
-                'serie_id': image_id,
-            },
-        }
-        $.ajax(settings).done(function (data) {
-            callback(data.result.series);
-        }).fail(function (data) {
-            //@TODO implement fail catch logic
-        });
-    }
-
     return imagePreview.extend({
         defaults: {
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
@@ -88,11 +64,30 @@ define([
                     'visibility',
                     'height'
                 ]);
-            this.series = ko.observableArray([]);
             this.height.subscribe(function(){
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
             return this;
+        },
+
+        /**
+         * Get image related image series.
+         *
+         * @param record
+         */
+        requestSeries: function (record)
+        {
+            $.ajax({
+                type: 'GET',
+                url: this.imageSeriesUrl,
+                dataType: 'json',
+                data: {
+                    'serie_id': record.id,
+                    'limit': 4
+                },
+            }).done(function (data) {
+                record.series(data.result.series);
+            });
         },
 
         /**
@@ -163,6 +158,21 @@ define([
         },
 
         /**
+         * Returns series to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getSeries: function(record) {
+            if (!record.series) {
+                record.series = ko.observableArray([]);
+                this.requestSeries(record);
+                this._updateHeight();
+            }
+            return record.series;
+        },
+
+        /**
          * Returns keywords to display under the attributes image
          *
          * @param record
@@ -178,7 +188,7 @@ define([
          * @param record
          * @returns {*}
          */
-        getKeywordsLimit: function (record){
+        getKeywordsLimit: function (record) {
             if (!record.keywordsLimit) {
                 record.keywordsLimit = ko.observable(this.keywordsLimit);
             }
@@ -227,26 +237,12 @@ define([
         },
 
         /**
-         * Returns image series for given record.
-         *
-         * @param {Object} record
-         * @return {*}
-         */
-        getImageSeries: function (record) {
-            let self = this
-            self.series.removeAll();
-            processSeries(record.id, this.imageSeriesUrl, function (result) {
-                //@TODO implement the series data representation self.series(result)
-            })
-        },
-
-        /**
          * Get styles for preview
          *
          * @param {Object} record
          * @returns {Object}
          */
-        getStyles: function (record){
+        getStyles: function (record) {
             if(!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }

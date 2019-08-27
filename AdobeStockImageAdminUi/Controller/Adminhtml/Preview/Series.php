@@ -62,7 +62,8 @@ class Series extends Action
         try {
             $params = $params = $this->getRequest()->getParams();
             $serieId = (int) $params['serie_id'];
-            $imageSeries = $this->getImageSeries->execute($serieId);
+            $limit = (int) ($params['limit'] ?? 4);
+            $imageSeries = $this->getImageSeries->execute($serieId, $limit);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

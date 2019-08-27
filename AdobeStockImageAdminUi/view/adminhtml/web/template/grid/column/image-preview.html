@@ -18,7 +18,7 @@
                 <span translate="'Close'"/>
             </button>
         </div>
-        <img attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
+        <img class="preview" attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
         <div class="info">
             <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
             <div class="author" if="$col.getAuthor($row())">
@@ -68,10 +68,13 @@
                 <span translate="'View all'"/>
             </button>
         </div>
-        <div class="series" data-bind="afterRender: $col.getImageSeries($row())">
-            <div class="title" translate="'More from series'" class="masonry-image-column"
-                 data-bind="foreach: series">
+        <div class="series">
+            <div class="title" translate="'More from this series'"></div>
+            <!-- ko foreach: $col.getSeries($row()) -->
+            <div class="thumbnail" data-bind="css: { 'hide': $index() >= 3}">
                 <img attr="src: thumbnail_url, alt: title">
+            </div>
+            <!-- /ko -->
             </div>
         </div>
     </div>

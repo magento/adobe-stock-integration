@@ -10,7 +10,8 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\SerializationException;
 use Psr\Log\LoggerInterface;
@@ -31,24 +32,31 @@ class GetImageSeries
     private $searchCriteriaBuilder;
 
     /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
      * GetImageSeries constructor.
-     *
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param LoggerInterface       $logger
+     * @param FilterBuilder $filterBuilder
+     * @param LoggerInterface $logger
      */
     public function __construct(
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
         LoggerInterface $logger
     ) {
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
         $this->logger = $logger;
     }
 
@@ -56,20 +64,20 @@ class GetImageSeries
      * Get image related image series.
      *
      * @param int $serieId
+     * @param int $limit
      *
      * @return array
      * @throws IntegrationException
      */
-    public function execute(int $serieId): array
+    public function execute(int $serieId, int $limit): array
     {
         try {
-            $searchCriteria = $this->searchCriteriaBuilder->addFilter('serie_id', $serieId)
-                ->setSortOrders([])
-                ->create();
-            $items = $this->getImageList->execute($searchCriteria)->getItems();
-            $series = $this->serializeImageSeries($items);
+            $filter = $this->filterBuilder->setField('serie_id')->setValue($serieId)->create();
+            $searchCriteria = $this->searchCriteriaBuilder->addFilter($filter)->setPageSize($limit)->create();
 
-            return $series;
+            return $this->serializeImageSeries(
+                $this->getImageList->execute($searchCriteria)->getItems()
+            );
         } catch (\Exception $exception) {
             $message = __('Get image series list failed: %s', $exception->getMessage());
             throw new IntegrationException($message, $exception);
