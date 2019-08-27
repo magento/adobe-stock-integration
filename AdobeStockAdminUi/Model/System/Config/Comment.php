@@ -75,6 +75,6 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrlPattern(): string
     {
-        return $this->getRedirectUrl();
+        return str_replace('.', '\\\.', $this->getRedirectUrl());
     }
 }

@@ -18,8 +18,8 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
@@ -31,11 +31,12 @@
                 <argument name="privateKey" value=""/>
             </actionGroup>
         </after>
-        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
-            <argument name="query" value="popular"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPear">
+            <argument name="query" value="pear"/>
         </actionGroup>
         <!-- Assert that User searches for "popular" using keyboard input and mouse navigation and sees "that grid was updated by new images"-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
