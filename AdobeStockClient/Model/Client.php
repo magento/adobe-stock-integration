@@ -181,7 +181,7 @@ class Client implements ClientInterface
         $licenseRequest->setContentId($contentId)
             ->setLocale($this->clientConfig->getLocale())
             ->setLicenseState('STANDARD');
-        $licenseInfo = $this->getConnection()->getContentInfo($licenseRequest, $accessToken);
+        $licenseInfo = $this->getConnection()->getMemberProfile($licenseRequest, $accessToken);
 
         return $licenseInfo->getEntitlement()->getQuota();
     }
