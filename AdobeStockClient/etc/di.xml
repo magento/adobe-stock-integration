@@ -57,6 +57,7 @@
         <arguments>
             <argument name="filters" xsi:type="array">
                 <item name="colors_filter" xsi:type="string">setFilterColors</item>
+                <item name="serie_id" xsi:type="string">setSerieId</item>
             </argument>
         </arguments>
     </type>

@@ -36,7 +36,7 @@ define([
          * Clear messages
          */
         clear: function () {
-            this.messages([]);
+            this.messages.removeAll();
         },
 
         /**
