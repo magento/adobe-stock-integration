@@ -15,7 +15,8 @@ use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
@@ -69,6 +70,11 @@ class SaveImagePreview implements SaveImagePreviewInterface
     private $documentToAsset;
 
     /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * SaveImagePreview constructor.
      *
      * @param AssetRepositoryInterface $assetRepository
@@ -79,6 +85,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DocumentToAsset $documentToAsset
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         AssetRepositoryInterface $assetRepository,
@@ -88,7 +95,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
         LoggerInterface $logger,
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        DocumentToAsset $documentToAsset
+        DocumentToAsset $documentToAsset,
+        FilterBuilder $filterBuilder
     ) {
         $this->assetRepository = $assetRepository;
         $this->creatorRepository = $creatorRepository;
@@ -98,6 +106,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->documentToAsset = $documentToAsset;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -198,9 +207,11 @@ class SaveImagePreview implements SaveImagePreviewInterface
      */
     private function getImageByAdobeId(int $adobeId): AssetInterface
     {
+        $mediaIdFilter = $this->filterBuilder->setField('media_id')
+            ->setValue($adobeId)
+            ->create();
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('media_id', $adobeId)
-            ->setSortOrders([])
+            ->addFilter($mediaIdFilter)
             ->create();
 
         $items = $this->getImageList->execute($searchCriteria)->getItems();
