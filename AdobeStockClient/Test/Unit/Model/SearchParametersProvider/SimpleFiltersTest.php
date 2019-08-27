@@ -99,7 +99,7 @@ class SimpleFiltersTest extends TestCase
         $searchParameters->expects($this->once())
             ->method('setWords')
             ->with('value+1');
-        $filterItemMock->expects($this->once())
+        $filterItemMock->expects($this->atLeastOnce())
             ->method('getValue')
             ->willReturn('value 1');
         $this->escaperMock->expects($this->once())

@@ -54,8 +54,11 @@ class SimpleFilters implements SearchParameterProviderInterface
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if (isset($this->filters[$filter->getField()])) {
+                    $value = $filter->getValue();
                     $searchParams->{$this->filters[$filter->getField()]}(
-                        $this->escaper->encodeUrlParam($filter->getValue())
+                        is_int($value) ?
+                            $value :
+                            $this->escaper->encodeUrlParam($filter->getValue())
                     );
                 }
             }
