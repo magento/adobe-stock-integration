@@ -31,6 +31,10 @@ define([
             tracks: {
                 lastOpenedImage: true,
             },
+            listens: {
+                '${ $.provider }:params.filters': 'hide',
+                '${ $.provider }:params.search': 'hide',
+            },
             downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             imageSeriesUrl: Column.imageSeriesUrl,
             messageDelay: 5,
