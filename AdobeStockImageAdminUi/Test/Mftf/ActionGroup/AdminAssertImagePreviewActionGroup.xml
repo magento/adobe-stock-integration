@@ -8,7 +8,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertImagePreviewActionGroup">
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <click selector="{{AdobeStockSection.modal}} {{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
         <grabAttributeFrom selector="{{AdobeStockSection.imagePreview}}" userInput="src" stepKey="getUrlImageFromCmsPage"/>
         <click selector="{{AdobeStockSection.savePreview}}" stepKey="clickOnSavePreview"/>
         <waitForPageLoad stepKey="waitForPageLoad" />

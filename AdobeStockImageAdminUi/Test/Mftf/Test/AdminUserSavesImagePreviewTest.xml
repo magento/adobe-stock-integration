@@ -16,21 +16,13 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
-            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
-                <argument name="enabled" value="0"/>
-                <argument name="wysiwygEnabled" value="disabled"/>
-<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
-<!--                <argument name="apiKey" value=""/>-->
-<!--                <argument name="privateKey" value=""/>-->
-            </actionGroup>
         </after>
         <!-- Assert that User can save image preview in the context of CmsEP  -->
         <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
