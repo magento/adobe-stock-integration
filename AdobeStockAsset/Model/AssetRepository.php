@@ -124,7 +124,8 @@ class AssetRepository implements AssetRepositoryInterface
         $items = [];
         /** @var AssetInterface $item */
         foreach ($collection->getItems() as $item) {
-            $items[] = $item->setKeywords($this->assetKeywordRepository->getAssetKeywords($item));
+            $item->setKeywords($this->assetKeywordRepository->getAssetKeywords($item));
+            $items[] = $item;
         }
 
         /** @var AssetSearchResultsInterface $searchResults */

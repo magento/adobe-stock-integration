@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Model\Block\Wysiwyg\Images\Content\Plugin;
 
-use Magento\AdobeStockAsset\Model\Config;
+use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\AuthorizationInterface;
@@ -29,16 +29,16 @@ class AddSearchButton
     private $authorization;
 
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
     /**
      * AddSearchButton constructor.
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param AuthorizationInterface $authorization
      */
-    public function __construct(Config $config, AuthorizationInterface $authorization)
+    public function __construct(ConfigInterface $config, AuthorizationInterface $authorization)
     {
         $this->config = $config;
         $this->authorization = $authorization;
@@ -61,6 +61,7 @@ class AddSearchButton
                     'class' => 'action-secondary',
                     'label' => __('Search Adobe Stock'),
                     'type' => 'button',
+                    'disabled' => 'true',
                     'onclick' => 'jQuery("#adobe-stock-images-search-modal").trigger("openModal");'
                 ],
                 0,

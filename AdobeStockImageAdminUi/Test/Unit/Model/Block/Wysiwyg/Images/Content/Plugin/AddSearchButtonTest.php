@@ -14,7 +14,7 @@ use Magento\Backend\Block\Widget\Container;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
-use \Magento\Framework\AuthorizationInterface;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Test adding Adobe Stock Search button to the toolbar.
@@ -132,6 +132,7 @@ class AddSearchButtonTest extends TestCase
                 'class' => 'action-secondary',
                 'label' => __('Search Adobe Stock'),
                 'type' => 'button',
+                'disabled' => 'true',
                 'onclick' => 'jQuery("#adobe-stock-images-search-modal").trigger("openModal");'
             ],
             0,

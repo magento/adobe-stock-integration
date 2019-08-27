@@ -18,7 +18,15 @@
 <script type="text/x-magento-init">
     {
         "#adobe-stock-images-search-modal": {
-            "Magento_AdobeStockImageAdminUi/panel": {}
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "stock_panel": {
+                        "component": "Magento_AdobeStockImageAdminUi/panel",
+                        "containerId": "#adobe-stock-images-search-modal",
+                        "masonryComponentPath": "adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns"
+                    }
+                }
+            }
         }
     }
 </script>

@@ -13,7 +13,7 @@ use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\Ui\DataProvider\SearchResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * DataProvider of customer addresses for customer address grid.
@@ -26,23 +26,17 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     private $getImageList;
 
     /**
-     * @var SearchResultFactory
-     */
-    private $searchResultFactory;
-
-    /**
      * DataProvider constructor.
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
-     * @param ReportingInterface $reporting
+     * @param string                $name
+     * @param string                $primaryFieldName
+     * @param string                $requestFieldName
+     * @param ReportingInterface    $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param RequestInterface $request
-     * @param FilterBuilder $filterBuilder
+     * @param RequestInterface      $request
+     * @param FilterBuilder         $filterBuilder
      * @param GetImageListInterface $getImageList
-     * @param SearchResultFactory $searchResultFactory
-     * @param array $meta
-     * @param array $data
+     * @param array                 $meta
+     * @param array                 $data
      */
     public function __construct(
         string $name,
@@ -53,7 +47,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
-        SearchResultFactory $searchResultFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -69,20 +62,15 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $data
         );
         $this->getImageList = $getImageList;
-        $this->searchResultFactory = $searchResultFactory;
     }
 
     /**
      * @inheritdoc
+     *
+     * @throws LocalizedException
      */
     public function getSearchResult()
     {
-        $result = $this->getImageList->execute($this->getSearchCriteria());
-        return $this->searchResultFactory->create(
-            $result->getItems(),
-            $result->getTotalCount(),
-            $this->getSearchCriteria(),
-            'id'
-        );
+        return $this->getImageList->execute($this->getSearchCriteria());
     }
 }

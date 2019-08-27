@@ -10,7 +10,6 @@ namespace Magento\AdobeStockAsset\Model;
 use Magento\AdobeStockAsset\Model\ResourceModel\Keyword;
 use Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
 use Psr\Log\LoggerInterface;
 
 /**
