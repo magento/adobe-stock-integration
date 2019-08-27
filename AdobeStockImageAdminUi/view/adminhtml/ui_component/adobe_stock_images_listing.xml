@@ -145,6 +145,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
+                <item name="buttonId" xsi:type="string">search_adobe_stock</item>
             </item>
         </argument>
         <column name="thumbnail_url" component="Magento_AdobeUi/js/components/grid/column/image">
