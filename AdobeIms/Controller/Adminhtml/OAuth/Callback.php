@@ -104,7 +104,6 @@ class Callback extends Action
             );
             $userProfile = $this->getUserProfile();
             $userName = $tokenResponse->getGivenName();
-            ($userName != '') ?: $userName = 'You are logged in';
             $userProfile->setName($userName);
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
