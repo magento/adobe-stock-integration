@@ -13,7 +13,7 @@
         <element name="panelTitle" type="block" selector="[data-role=title]"/>
         <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
         <element name="imagesThumbnails" type="block" selector="[data-role=grid-wrapper] img[data-role=thumbnail]"/>
-        <element name="searchButton" type="button" selector="button.action-submit"/>
+        <element name="searchButton" type="button" selector="#words + button.action-submit"/>
         <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" parameterized="true"/>
         <element name="firstImageAfterSearch" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] img"/>
         <element name="gridSpinner" type="text" selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']"/>
@@ -23,6 +23,8 @@
         <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
         <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
-        <element name="panelCloseButton" type="text" selector="//aside[@aria-labelledby='modal-title-11']/div/header/button[@class='action-close']"/>
+        <element name="imageAttribute" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='attributes']//span[text()='{{type}}']/parent::div//div[@class='value']//span" parameterized="true"/>
+        <element name="imageAttributeTitle" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='attributes']//span[text()='{{title}}']" parameterized="true"/>
+        <element name="imageKeyword" type="block" selector="//div[@class='keyword']//span[text()='{{keyword}}']" parameterized="true"/>
     </section>
 </sections>

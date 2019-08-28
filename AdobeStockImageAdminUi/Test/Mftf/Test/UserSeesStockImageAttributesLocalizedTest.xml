@@ -17,25 +17,19 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
-           <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <!--Set Admin "Interface Locale" to ru_RU-->
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
                 <argument name="InterfaceLocaleByValue" value="ru_RU"/>
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
-                <argument name="enabled" value="0"/>
-                <argument name="wysiwygEnabled" value="disabled"/>
-<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
-<!--                <argument name="apiKey" value=""/>-->
-<!--                <argument name="privateKey" value=""/>-->
-            </actionGroup>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
                 <argument name="InterfaceLocaleByValue" value="en_US"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- verify that user can search adobe stock image in ru_RU locale -->
         <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
@@ -43,7 +37,7 @@
             <argument name="query" value="Автомобили"/>
         </actionGroup>
         <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnails"/>
-        <!-- verify that images attributes are in ru_RU locale -->
-        <!-- TODO Add assert to ru_Ru local when images attribute will be implemented implemented -->
+        <seeElement selector="{{AdobeStockSection.imageKeyword('Авто')}}" stepKey="assertAttributeLocalized"/>
+        <seeElement selector="{{AdobeStockSection.imageAttributeTitle('Транспорт')}}" stepKey="assertCategoryLocalized"/>
     </test>
 </tests>
