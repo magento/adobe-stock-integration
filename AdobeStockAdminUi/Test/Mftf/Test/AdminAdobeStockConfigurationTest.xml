@@ -15,7 +15,7 @@
             <title value="Admin should be able to configure Adobe Stock Integration"/>
             <description value="Admin should be able to configure Adobe Stock Integration"/>
             <severity value="CRITICAL"/>
-            <group value="AdobeStockIntegration"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>

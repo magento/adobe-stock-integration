@@ -20,16 +20,7 @@
         <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
         <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
         <element name="recordsFound" type="text" selector="//*[@id='adobe-stock-images-search-modal']//*[text()='records found']/parent::div"/>
-        <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
-        <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
-        <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
-        <element name="imageAttribute" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='{{type}}']/parent::div//div[@class='value']//span" parameterized="true"/>
         <element name="selectedImagePreview" type="text" selector="//small[contains(., '{{imageName}}')]/parent::*[@class='filecnt selected']//img" parameterized="true"/>
-        <element name="imageAttributeTitle" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='{{title}}']" parameterized="true"/>
-        <element name="imagePreviewKeywordsButtons" type="button" selector="//*[@id='adobe-stock-images-search-modal']//span[text()='{{type}}']" parameterized="true"/>
-        <element name="imagePreviewKeywords" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='keyword']"/>
-        <element name="imageKeywordsTitle" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[text()='Similar Keywords']"/>
-        <element name="imageKeyword" type="block" selector="//div[@class='keyword']//span[text()='{{keyword}}']" parameterized="true"/>
         <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
     </section>
 </sections>

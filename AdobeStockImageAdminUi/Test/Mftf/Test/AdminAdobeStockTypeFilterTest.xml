@@ -6,41 +6,39 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUserFiltersImagesByPriceTest">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockIsolatedFilterTest">
         <annotations>
-            <stories value="Cover scenario: User filters images by price"/>
-            <title value="Admin should be able to filters images by price"/>
-            <description value="Admin should be able to filters images by price"/>
+            <stories value="Cover scenario: User filters images by type"/>
+            <title value="Admin should be able to filters images by type"/>
+            <description value="Admin should be able to filters images by type"/>
             <severity value="CRITICAL"/>
-            <group value="AdobeStockIntegration"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlWithoutFilters"/>
         <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
         <waitForPageLoad stepKey="waitForFiltersOpen"/>
         <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
-            <argument name="filterName" value="Price"/>
+            <argument name="filterName" value="Subcategory"/>
         </actionGroup>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToPremium">
-            <argument name="type" value="Premium"/>
-            <argument name="filter" value="{{AdobeStockFilterSection.premiumPriceFilter}}"/>
-            <argument name="filterOption" value="premium_price_filter"/>
+            <argument name="type" value="Photo"/>
+            <argument name="filter" value="{{AdobeStockFilterSection.filterByType}}"/>
+            <argument name="filterOption" value="content_type_filter"/>
         </actionGroup>
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
-            <argument name="resultValue" value="Premium"/>
+            <argument name="resultValue" value="Photo"/>
         </actionGroup>
     </test>
 </tests>

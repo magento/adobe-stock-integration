@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockGridTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="Basic Adobe Stock grid controls"/>
+            <title value="Basic Adobe Stock grid controls"/>
+            <description value="Basic Adobe Stock grid controls"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32images"/>
+        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeFirstPage"/>
+        <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
+            <argument name="pageNumber" value="2"/>
+        </actionGroup>
+    </test>
+</tests>

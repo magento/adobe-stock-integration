@@ -240,8 +240,10 @@ define([
          * @returns {*}
          */
         hideAllKeywords: function(record) {
-            record.keywordsLimit(this.keywordsLimit);
-            record.canViewMoreKeywords(true);
+            if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
+                record.keywordsLimit(this.keywordsLimit);
+                record.canViewMoreKeywords(true);
+            }
         },
 
         /**
