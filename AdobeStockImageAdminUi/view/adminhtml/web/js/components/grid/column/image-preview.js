@@ -340,7 +340,7 @@ define([
 
                     success: function (response) {
                         var quota = response.result;
-                        var confirmationContent = $.mage.__('License "' + record.name + '"');
+                        var confirmationContent = $.mage.__('License "' + record.title + '"');
                         var quotaInfo = $.mage.__('This will use 1 of ' + quota + ' images');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),

@@ -87,7 +87,7 @@ class GetQuota extends Action
     {
         try {
             $params = $params = $this->getRequest()->getParams();
-            $contentId = (int)$params['media_id']; // TODO: Check that param exists
+            $contentId = (int)$params['media_id'];
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
             $quota = $this->getQuotaService->execute($contentId, $userProfile->getAccessToken());
             $responseCode = self::HTTP_OK;
@@ -99,11 +99,11 @@ class GetQuota extends Action
 
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during image download: %1', $exception->getMessage());
+            $logMessage = __('An error occurred during get quota operation: %1', $exception->getMessage());
             $this->logger->critical($logMessage);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while image download. Contact support.'),
+                'message' => __('An error occurred during get quota operation. Contact support.'),
             ];
         }
 

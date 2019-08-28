@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 
 /**
