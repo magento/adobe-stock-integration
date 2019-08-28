@@ -1,11 +1,47 @@
+sudo: required
+dist: trusty
+group: edge
+addons:
+  apt:
+    packages:
+      - mysql-server-5.6
+      - mysql-client-core-5.6
+      - mysql-client-5.6
+      - postfix
+  firefox: "46.0"
+  hosts:
+    - magento2.travis
+services:
+  - rabbitmq
+  - elasticsearch
 language: php
 php:
   - '7.2'
-install:
+env:
+  global:
+    - COMPOSER_BIN_DIR=~/bin
+    - NODE_JS_VERSION=8
+    - MAGENTO_HOST_NAME="magento2.travis"
+  matrix:
+    - TEST_SUITE=static
+    - TEST_SUITE=unit
+    - TEST_SUITE=integration
+    - TEST_SUITE=api
+#    - TEST_SUITE=functional
+matrix:
+  fast_finish: true
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.nvm
+    - $HOME/node_modules
+    - $HOME/yarn.lock
+before_install:
   - mkdir -p ext/magento/adobe-stock-integration
   - mv !(ext) ext/magento/adobe-stock-integration/
-  - composer config --global http-basic.repo.magento.com "$MAGENTO_USERNAME" "$MAGENTO_PASSWORD"
-  - git clone https://github.com/magento/magento2
+  - ./ext/magento/adobe-stock-integration/dev/travis/before_install.sh
+install:
   - cd magento2
   - composer install
   - composer config minimum-stability dev
@@ -14,16 +50,17 @@ install:
 before_script:
   - echo "vendor/magento/module-adobe-stock-*" > dev/tests/static/testsuite/Magento/Test/Php/_files/whitelist/common.txt
   - sed -i 's/name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/name="TESTCODESTYLE_IS_FULL_SCAN" value="1"/g' dev/tests/static/phpunit.xml.dist
-env:
-  matrix:
-    - TEST_CATEGORY=static
-    - TEST_CATEGORY=unit_client
-    - TEST_CATEGORY=unit_image
-    - TEST_CATEGORY=unit_ui
-matrix:
-  fast_finish: true
+  - cp ../ext/magento/adobe-stock-integration/dev/tests/unit/phpunit.xml dev/tests/unit/phpunit.xml
+  - cp ../ext/magento/adobe-stock-integration/dev/tests/integration/phpunit.xml dev/tests/integration/phpunit.xml
+  - cp ../ext/magento/adobe-stock-integration/dev/tests/api/phpunit.xml dev/tests/api-functional/phpunit.xml
+  - cp ../ext/magento/adobe-stock-integration/dev/tests/acceptance/.env dev/tests/acceptance/.env
+  - cp -f ../ext/magento/adobe-stock-integration/dev/travis/before_script.sh dev/travis/before_script.sh
+  - cp dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php
+  - cp dev/tests/api-functional/config/install-config-mysql.php.dist dev/tests/api-functional/config/install-config-mysql.php
+  - ./dev/travis/before_script.sh
 script:
-  - if [ $TEST_CATEGORY == 'unit_client' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-client/Test/Unit; fi
-  - if [ $TEST_CATEGORY == 'unit_image' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-image/Test/Unit; fi
-  - if [ $TEST_CATEGORY == 'unit_ui' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml.dist vendor/magento/module-adobe-stock-image-admin-ui/Test/Unit; fi
-  - if [ $TEST_CATEGORY == 'static' ]; then vendor/bin/phpunit --configuration dev/tests/static/phpunit.xml.dist dev/tests/static/testsuite/Magento/Test/Php/LiveCodeTest.php; fi
+  - if [ $TEST_SUITE == 'static' ]; then phpunit --configuration dev/tests/static/phpunit.xml.dist dev/tests/static/testsuite/Magento/Test/Php/LiveCodeTest.php; fi
+  - if [ $TEST_SUITE == 'unit' ]; then phpunit --configuration dev/tests/unit/phpunit.xml; fi
+  - if [ $TEST_SUITE == 'integration' ]; then phpunit -c dev/tests/integration; fi
+  - if [ $TEST_SUITE == 'api' ]; then phpunit -c dev/tests/api-functional; fi
+#  - if [ $TEST_SUITE == 'functional' ]; then codecept run functional --verbose --steps -g AdobeStockIntegration -c dev/tests/acceptance/codeception.yml; fi

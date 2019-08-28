@@ -14,24 +14,21 @@ use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Exception;
-use Magento\AdobeStockAsset\Model\OAuth\OAuthException;
-use Magento\AdobeStockAsset\Model\OAuth\TokenResponse;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Phrase;
-use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -42,7 +39,12 @@ class Client implements ClientInterface
     /**
      * @var Config
      */
-    private $config;
+    private $clientConfig;
+
+    /**
+     * @var ImsConfig
+     */
+    private $imsConfig;
 
     /**
      * @var SearchResultFactory
@@ -75,72 +77,46 @@ class Client implements ClientInterface
     private $connectionFactory;
 
     /**
-     * @var CurlFactory
-     */
-    private $curlFactory;
-
-    /**
-     * @var OAuth\TokenResponseFactory
-     */
-    private $tokenResponseFactory;
-
-    /**
-     * @var Json
-     */
-    private $json;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
      * Client constructor.
-     * @param Config $config
+     * @param ConfigInterface $clientConfig
+     * @param ImsConfig $imsConfig
      * @param DocumentFactory $documentFactory
      * @param SearchResultFactory $searchResultFactory
      * @param AttributeValueFactory $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
      * @param ConnectionFactory $connectionFactory
-     * @param CurlFactory $curlFactory
-     * @param OAuth\TokenResponseFactory $tokenResponseFactory
-     * @param Json $json
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $clientConfig,
+        ImsConfig $imsConfig,
         DocumentFactory $documentFactory,
         SearchResultFactory $searchResultFactory,
         AttributeValueFactory $attributeValueFactory,
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
         ConnectionFactory $connectionFactory,
-        CurlFactory $curlFactory,
-        OAuth\TokenResponseFactory $tokenResponseFactory,
-        Json $json,
         LoggerInterface $logger
     ) {
-        $this->config = $config;
+        $this->clientConfig = $clientConfig;
+        $this->imsConfig = $imsConfig;
         $this->documentFactory = $documentFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
         $this->connectionFactory = $connectionFactory;
-        $this->curlFactory = $curlFactory;
-        $this->tokenResponseFactory = $tokenResponseFactory;
-        $this->json = $json;
         $this->logger = $logger;
     }
 
     /**
-     * Search assets
-     *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultInterface
-     * @throws AuthenticationException
-     * @throws IntegrationException
+     * @inheritdoc
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
@@ -188,6 +164,7 @@ class Client implements ClientInterface
 
         $category = (array) $itemData['category'];
 
+        $itemData['category'] = $category;
         $itemData['category_id'] = $category['id'];
         $itemData['category_name'] = $category['name'];
 
@@ -204,7 +181,6 @@ class Client implements ClientInterface
      * Create and return search request based on search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
-     *
      * @return SearchFilesRequest
      * @throws IntegrationException
      * @throws \AdobeStock\Api\Exception\StockApi
@@ -230,7 +206,7 @@ class Client implements ClientInterface
     {
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
-        foreach ($this->config->getSearchResultFields() as $field) {
+        foreach ($this->clientConfig->getSearchResultFields() as $field) {
             if (!isset($resultsColumns[$field])) {
                 $message = __('Cannot retrieve the field %1. It\'s not available in Adobe Stock SDK', $field);
                 $this->logger->critical($message);
@@ -239,39 +215,6 @@ class Client implements ClientInterface
         }
 
         return $resultColumnArray;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getToken(string $code): OAuth\TokenResponse
-    {
-        $curl = $this->curlFactory->create();
-
-        $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
-        $curl->addHeader('cache-control', 'no-cache');
-
-        $curl->post(
-            $this->config->getTokenUrl(),
-            [
-                'client_id' => $this->config->getApiKey(),
-                'client_secret' => $this->config->getPrivateKey(),
-                'code' => $code,
-                'grant_type' => 'authorization_code'
-            ]
-        );
-
-        $tokenResponse = $this->json->unserialize($curl->getBody());
-        $tokenResponse = $this->tokenResponseFactory->create()
-            ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')]);
-
-        if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
-            throw new AuthorizationException(
-                __('Authentication is failing. Error code: %1', $tokenResponse->getError())
-            );
-        }
-
-        return $tokenResponse;
     }
 
     /**
@@ -326,11 +269,11 @@ class Client implements ClientInterface
     private function getConnection(string $key = null): AdobeStock
     {
         try {
-            $apiKey = !empty($key) ? $key : $this->config->getApiKey();
+            $apiKey = !empty($key) ? $key : $this->imsConfig->getApiKey();
             return $this->connectionFactory->create(
                 $apiKey,
-                $this->config->getProductName(),
-                $this->config->getTargetEnvironment()
+                $this->clientConfig->getProductName(),
+                $this->clientConfig->getTargetEnvironment()
             );
         } catch (Exception $exception) {
             $message = __(

@@ -1,3 +1,4 @@
+
 <!--
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -17,7 +18,7 @@
                 <span translate="'Close'"/>
             </button>
         </div>
-        <img attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
+        <img class="preview" attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
         <div class="info">
             <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
             <div class="author" if="$col.getAuthor($row())">
@@ -41,7 +42,7 @@
                     type="button"
                     attr="title: $t('License and Save')"
                     data-bind="click: function () { $col.licenseProcess($row()); }">
-                <span data-bind="i18n: 'License and Save'"></span>
+                <span translate="'License and Save'"></span>
             </button>
         </div>
         <div class="attributes">
@@ -49,10 +50,32 @@
             <div class="attribute">
                 <span class="title" translate="name"/>
                 <div class="value">
-                   <span text="value" />
+                    <span text="value" />
                 </div>
             </div>
             <!-- /ko -->
+        </div>
+        <div class="keywords">
+            <div class="title" translate="'Similar Keywords'"></div>
+            <!-- ko foreach: $col.getKeywords($row()) -->
+                <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
+                    <div class="value">
+                        <span text="name"/>
+                    </div>
+                </div>
+            <!-- /ko -->
+            <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
+                <span translate="'View all'"/>
+            </button>
+        </div>
+        <div class="series">
+            <div class="title" translate="'More from this series'"></div>
+            <!-- ko foreach: $col.getSeries($row()) -->
+            <div class="thumbnail" data-bind="css: { 'hide': $index() >= 3}">
+                <img attr="src: thumbnail_url, alt: title">
+            </div>
+            <!-- /ko -->
+            </div>
         </div>
     </div>
 </div>

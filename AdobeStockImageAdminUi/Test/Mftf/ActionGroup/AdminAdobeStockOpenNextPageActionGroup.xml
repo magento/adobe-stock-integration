@@ -10,5 +10,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockOpenNextPageActionGroup">
         <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPage" />
+        <waitForLoadingMaskToDisappear stepKey="waitForNextPageToLoad"/>
     </actionGroup>
 </actionGroups>

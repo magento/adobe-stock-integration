@@ -7,21 +7,21 @@ define([
     'jquery',
     'knockout',
     'Magento_Ui/js/grid/columns/column',
-    'Magento_AdobeStockImageAdminUi/js/action/authorization',
+    'Magento_AdobeIms/js/action/authorization',
+    'mage/translate',
+    'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
-    'mage/translate'
-], function (_, $, ko, Column, authorizationAction, messages) {
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages) {
     'use strict';
 
-    return Column.extend({
+    return imagePreview.extend({
         defaults: {
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
-            visibility: [],
-            height: 0,
+            keywordsLimit: 5,
             saveAvailable: true,
             statefull: {
                 visible: true,
@@ -31,8 +31,12 @@ define([
             tracks: {
                 lastOpenedImage: true,
             },
-            lastOpenedImage: null,
+            listens: {
+                '${ $.provider }:params.filters': 'hide',
+                '${ $.provider }:params.search': 'hide',
+            },
             downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            imageSeriesUrl: Column.imageSeriesUrl,
             messageDelay: 5,
             authConfig: {
                 url: '',
@@ -64,11 +68,30 @@ define([
                     'visibility',
                     'height'
                 ]);
-
             this.height.subscribe(function(){
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
             return this;
+        },
+
+        /**
+         * Get image related image series.
+         *
+         * @param record
+         */
+        requestSeries: function (record)
+        {
+            $.ajax({
+                type: 'GET',
+                url: this.imageSeriesUrl,
+                dataType: 'json',
+                data: {
+                    'serie_id': record.id,
+                    'limit': 4
+                },
+            }).done(function (data) {
+                record.series(data.result.series);
+            });
         },
 
         /**
@@ -88,7 +111,7 @@ define([
          * @returns {String}
          */
         getUrl: function (record) {
-            return record.preview_url;
+            return record.thumbnail_500_url;
         },
 
         /**
@@ -108,7 +131,7 @@ define([
          * @returns {String}
          */
         getAuthor: function (record) {
-            return record.creator.name || 'Author';
+            return record.creator_name || 'Author';
         },
 
         /**
@@ -128,8 +151,8 @@ define([
                     value: record.content_type.toUpperCase()
                 },
                 {
-                    name: 'Cateogory',
-                    value: record.category.name
+                    name: 'Category',
+                    value: record.category.name || 'None'
                 },
                 {
                     name: 'File #',
@@ -139,13 +162,79 @@ define([
         },
 
         /**
+         * Returns series to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getSeries: function(record) {
+            if (!record.series) {
+                record.series = ko.observableArray([]);
+                this.requestSeries(record);
+                this._updateHeight();
+            }
+            return record.series;
+        },
+
+        /**
+         * Returns keywords to display under the attributes image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getKeywords: function(record) {
+            return record.keywords;
+        },
+
+        /**
+         * Returns keywords limit to show no of keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        getKeywordsLimit: function (record) {
+            if (!record.keywordsLimit) {
+                record.keywordsLimit = ko.observable(this.keywordsLimit);
+            }
+            return record.keywordsLimit();
+        },
+
+        /**
+         * Show all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        viewAllKeywords: function(record) {
+            record.keywordsLimit(record.keywords.length);
+        },
+
+        /**
+         * Check if view all button is visible or not
+         *
+         * @param record
+         * @returns {*}
+         */
+        canViewMoreKeywords: function(record) {
+            if (!record.canViewMoreKeywords) {
+                record.canViewMoreKeywords = ko.observable(true);
+            }
+            if (record.keywordsLimit() >= record.keywords.length) {
+                record.canViewMoreKeywords(false);
+            }
+            return record.canViewMoreKeywords();
+        },
+
+        /**
          * Returns visibility for given record.
          *
          * @param {Object} record
          * @return {*|boolean}
          */
         isVisible: function (record) {
-            if (this.lastOpenedImage === record._rowIndex) {
+            if (this.lastOpenedImage === record._rowIndex &&
+                (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
+            ) {
                 this.show(record);
             }
             return this.visibility()[record._rowIndex] || false;
@@ -157,7 +246,7 @@ define([
          * @param {Object} record
          * @returns {Object}
          */
-        getStyles: function (record){
+        getStyles: function (record) {
             if(!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }
@@ -168,105 +257,14 @@ define([
         },
 
         /**
-         * Next image preview
-         *
-         * @param record
+         * Scroll to preview window
          */
-        next: function (record){
-            this._selectRow(record.lastInRow ? record.currentRow + 1 : record.currentRow);
-            this.show(record._rowIndex + 1);
-        },
-
-        /**
-         * Previous image preview
-         *
-         * @param record
-         */
-        prev: function (record){
-            this._selectRow(record.firstInRow ? record.currentRow - 1 : record.currentRow);
-            this.show(record._rowIndex - 1);
-        },
-
-        /**
-         * Set selected row id
-         *
-         * @param {Number} rowId
-         * @param {Number} [height]
-         * @private
-         */
-        _selectRow: function (rowId, height){
-            this.thumbnailComponent().previewRowId(rowId);
-        },
-
-        /**
-         * Show image preview
-         *
-         * @param {Object|Number} record
-         */
-        show: function (record) {
-            var visibility = this.visibility(),
-                img;
-
-            this.lastOpenedImage = null;
-            if(~visibility.indexOf(true)) {// hide any preview
-                if(!Array.prototype.fill) {
-                    visibility = _.times(visibility.length, _.constant(false));
-                } else {
-                    visibility.fill(false);
-                }
-            }
-            if(this._isInt(record)) {
-                visibility[record] = true;
-            } else {
-                this._selectRow(record.currentRow);
-                visibility[record._rowIndex] = true;
-            }
-            this.visibility(visibility);
-
-            img = $('[data-image-preview] img');
-            if(img.get(0).complete) {
-                this._updateHeight();
-            } else {
-                img.load(this._updateHeight.bind(this));
-                this.lastOpenedImage = record._rowIndex;
-            }
-        },
-
-        /**
-         *
-         * @private
-         */
-        _updateHeight: function (){
-            var $preview = $('[data-image-preview]');
-
-            this.height($preview.height() + 'px');// set height
-            this.visibility(this.visibility());// rerender
-            // update scroll if needed
-            $preview.get(0).scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
-        },
-
-        /**
-         * Close image preview
-         */
-        hide: function () {
-            var visibility = this.visibility();
-
-            this.lastOpenedImage = null;
-            visibility.fill(false);
-            this.visibility(visibility);
-            this.height(0);
-            this._selectRow(null, 0);
-        },
-
-        /**
-         * Check if value is integer
-         *
-         * @param value
-         * @returns {boolean}
-         * @private
-         */
-        _isInt: function (value) {
-            return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+        scrollToPreview: function () {
+            $(this.previewImageSelector).get(0).scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest"
+            });
         },
 
         /**
@@ -356,3 +354,4 @@ define([
         }
     });
 });
+

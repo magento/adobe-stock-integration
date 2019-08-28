@@ -24,7 +24,8 @@ class Pagination implements SearchParameterProviderInterface
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {
         $searchParams->setLimit($searchCriteria->getPageSize() ?? 32);
-        $searchParams->setOffset(($searchCriteria->getCurrentPage() - 1) * $searchCriteria->getPageSize());
+        $currentPage = $searchCriteria->getCurrentPage() ?? 1;
+        $searchParams->setOffset(($currentPage - 1) * $searchCriteria->getPageSize());
         return $searchParams;
     }
 }
