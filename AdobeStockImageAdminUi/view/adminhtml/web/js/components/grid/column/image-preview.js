@@ -59,6 +59,30 @@ define([
         },
 
         /**
+         * @inheritDoc
+         */
+        next: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        prev: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        hide: function (record) {
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
          * Init observable variables
          * @return {Object}
          */
@@ -207,6 +231,17 @@ define([
          */
         viewAllKeywords: function(record) {
             record.keywordsLimit(record.keywords.length);
+        },
+
+        /**
+         * Hide all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        hideAllKeywords: function(record) {
+            record.keywordsLimit(this.keywordsLimit);
+            record.canViewMoreKeywords(true);
         },
 
         /**
