@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UserSeesStockImageAttributesLocalizedTest">
+        <annotations>
+            <stories value="User sees stock image attributes localized"/>
+            <title value="Admin should be able to sees stock image attributes localized"/>
+            <description value="Admin should be able to sees stock image attributes localized"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <!--Set Admin "Interface Locale" to ru_RU-->
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
+                <argument name="InterfaceLocaleByValue" value="ru_RU"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- verify that user can search adobe stock image in ru_RU locale -->
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
+            <argument name="query" value="Автомобили"/>
+        </actionGroup>
+        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnails"/>
+        <seeElement selector="{{AdobeStockSection.imageKeyword('Авто')}}" stepKey="assertAttributeLocalized"/>
+        <seeElement selector="{{AdobeStockSection.imageAttributeTitle('Транспорт')}}" stepKey="assertCategoryLocalized"/>
+    </test>
+</tests>
