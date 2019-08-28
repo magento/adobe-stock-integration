@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserSeesKeywordsInTheImagePreviewTest">
+        <annotations>
+            <stories value="Admin User Sees keywords in the image preview "/>
+            <title value="Admin should be able to see keywords in the image preview"/>
+            <description value="Admin should be able to able to see keywords in the image preview"/>
+            <severity value="CRITICAL"/>
+            <group value="AdobeStockIntegration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
+        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <!-- Verify view all button and numbers of keywords-->
+        <seeElement selector="{{AdobeStockSection.imagePreviewKeywordsButtons('View all')}}" stepKey="VerifyViewAllButtonPresnt"/>
+        <seeElement selector="{{AdobeStockSection.imageKeywordsTitle}}" stepKey="seeAttributeTitle"/>
+        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCount">
+            <argument name="keywordsNumber" value="5"/>
+        </actionGroup>
+        <!-- Click view all keywords -->
+        <click selector="{{AdobeStockSection.imagePreviewKeywordsButtons('View all')}}" stepKey="clickOnViewAlKeywords"/>
+        <!-- Verify that keywords expanded -->
+        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterClickViewAll">
+            <argument name="keywordsNumber" value="28"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdobeStockSection.imagePreviewKeywordsButtons('View all')}}" stepKey="VerifyViewAllButtonDisappears"/>
+        <!-- Verify that keywords closed after navigate to next image -->
+        <click selector="{{AdobeStockSection.imagePreviewNavigation('next')}}" stepKey="navigateToNextImage"/>
+        <click selector="{{AdobeStockSection.imagePreviewNavigation('previous')}}" stepKey="navigateToPreviousImage"/>
+        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
+            <argument name="keywordsNumber" value="5"/>
+        </actionGroup>
+        <seeElement selector="{{AdobeStockSection.imagePreviewKeywordsButtons('View all')}}" stepKey="VerifyViewAllButton"/>
+    </test>
+</tests>
