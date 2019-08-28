@@ -24,7 +24,7 @@ use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
@@ -126,12 +126,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Search assets
-     *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultInterface
-     * @throws AuthenticationException
-     * @throws IntegrationException
+     * @inheritdoc
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
@@ -200,6 +195,7 @@ class Client implements ClientInterface
 
         $category = (array) $itemData['category'];
 
+        $itemData['category'] = $category;
         $itemData['category_id'] = $category['id'];
         $itemData['category_name'] = $category['name'];
 
