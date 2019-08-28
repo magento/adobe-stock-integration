@@ -26,5 +26,6 @@
         <element name="imageAttribute" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='attributes']//span[text()='{{type}}']/parent::div//div[@class='value']//span" parameterized="true"/>
         <element name="imageAttributeTitle" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='attributes']//span[text()='{{title}}']" parameterized="true"/>
         <element name="imageKeyword" type="block" selector="//div[@class='keyword']//span[text()='{{keyword}}']" parameterized="true"/>
+        <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
     </section>
 </sections>
