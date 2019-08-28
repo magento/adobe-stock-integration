@@ -23,6 +23,7 @@
         <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
         <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
-        <element name="selectedImagePreview" type="text" selector="//small/parent::*[@class='filecnt selected']//img"/>
+        <element name="imageAttribute" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='{{type}}']/parent::div//div[@class='value']//span" parameterized="true"/>
+        <element name="selectedImagePreview" type="text" selector="//small[contains(., '{{imageName}}')]/parent::*[@class='filecnt selected']//img" parameterized="true"/>
     </section>
 </sections>
