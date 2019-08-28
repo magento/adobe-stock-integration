@@ -1,0 +1,14 @@
+<button
+        class="adobe-sign-in-button"
+        id="adobeImsSignIn"
+        data-role="signInBtn"
+        data-bind="click: execute, visible: visibility"
+        type="button">
+    <span>Sign In</span>
+</button>
+<button
+        id="adobe-ims-user-name"
+        class="admin__action-dropdown"
+        data-bind="visible: nameVisibility">
+    <span><!--ko text: displayName--><!--/ko--></span>
+</button>

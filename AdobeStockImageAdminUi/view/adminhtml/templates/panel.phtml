@@ -10,11 +10,13 @@
 ?>
 
 <div id="adobe-stock-images-search-modal" style="display: none;">
+    <div data-bind="scope: 'adobe-stock-sign-in'" class="scalable">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
     <div class="adobe-stock-images-search-modal-content">
         <?= $block->getChildHtml(); ?>
     </div>
 </div>
-
 <script type="text/x-magento-init">
     {
         "#adobe-stock-images-search-modal": {
@@ -23,7 +25,17 @@
                     "stock_panel": {
                         "component": "Magento_AdobeStockImageAdminUi/panel",
                         "containerId": "#adobe-stock-images-search-modal",
+                        "buttonId": "#adobeImsSignIn",
                         "masonryComponentPath": "adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns"
+                    },
+                       "adobe-stock-sign-in": {
+                        "component": "Magento_AdobeIms/js/action/signIn",
+                        "template": "Magento_AdobeIms/signIn",
+                        "authConfig": {
+                            "displayName": "<?= $block->escapeHtml($block->getName()) ?>",
+                            "url": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
+                            "isAuthorized": "<?= $block->escapeHtml($block->isAuthorized()) ?>"
+                             }
                     }
                 }
             }

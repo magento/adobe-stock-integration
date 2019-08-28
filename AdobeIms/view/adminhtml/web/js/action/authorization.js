@@ -3,7 +3,9 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([
+
+], function () {
     'use strict';
 
     /**
@@ -89,6 +91,7 @@ define([], function () {
 
                     if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
                         resolve({
+                            displayName: responseData[authConfig.response.nameIndex],
                             isAuthorized: true,
                             lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
                         });

@@ -22,6 +22,7 @@ class Config implements ConfigInterface
     private const XML_PATH_PRIVATE_KEY = 'adobe_stock/integration/private_key';
     private const XML_PATH_TOKEN_URL = 'adobe_stock/integration/token_url';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_stock/integration/auth_url_pattern';
+    private const XML_PATH_SCOPE_TYPE = 'adobe_stock/integration/scope_type';
 
     /**
      * @var ScopeConfigInterface
@@ -78,10 +79,18 @@ class Config implements ConfigInterface
     public function getAuthUrl(): string
     {
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{locale}'],
-            [$this->getApiKey(), $this->getCallBackUrl(), $this->getLocale()],
+            ['#{client_id}', '#{redirect_uri}', '#{locale}', '#{scope}'],
+            [$this->getApiKey(), $this->getCallBackUrl(), $this->getLocale(), $this->getScope()],
             $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
         );
+    }
+
+    /**
+     * Retrieve scope.
+     */
+    private function getScope(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_SCOPE_TYPE);
     }
 
     /**
