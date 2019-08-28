@@ -12,8 +12,8 @@
         <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
         <column xsi:type="varchar" length="255" name="display_name" nullable="false" comment="Display Name"/>
         <column xsi:type="varchar" length="255" name="account_type" nullable="true" comment="Account Type"/>
-        <column xsi:type="varchar" length="255" name="access_token" nullable="true" comment="Access Token"/>
-        <column xsi:type="varchar" length="255" name="refresh_token" nullable="true" comment="Refresh Token"/>
+        <column xsi:type="varchar" length="1500" name="access_token" nullable="true" comment="Access Token"/>
+        <column xsi:type="varchar" length="1500" name="refresh_token" nullable="true" comment="Refresh Token"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <column xsi:type="timestamp" name="access_token_expires_at" on_update="false" nullable="false" comment="Access Token Expires At"/>
