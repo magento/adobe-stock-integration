@@ -17,18 +17,11 @@
             <group value="AdobeStockIntegration"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
-                <argument name="enabled" value="0"/>
-                <argument name="wysiwygEnabled" value="disabled"/>
-<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
-<!--                <argument name="apiKey" value=""/>-->
-<!--                <argument name="privateKey" value=""/>-->
-            </actionGroup>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser"/>
             <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
             <waitForPageLoad stepKey="waitForRolesGridLoad" />
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
@@ -39,7 +32,7 @@
             <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
                 <argument name="userName" value="{{admin2.username}}"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create user role-->
         <actionGroup ref="AdminFillUserRoleRequiredData" stepKey="fillUserRoleRequiredData">
@@ -53,26 +46,48 @@
         </actionGroup>
         <scrollTo selector="{{AdobeStockSection.systemAclActions}}"  x="0" y="-100" stepKey="scrollToResourceElement"/>
         <click stepKey="clickAdobeSystemActions" selector="{{AdobeStockSection.systemAclActions}}"/>
+
         <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleAddEditNewPages">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Pages"/>
         </actionGroup>
         <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
-        <see userInput="You saved the role." stepKey="seeUserRoleSavedMessage"/>
+
         <!--Create user and assign role to it-->
         <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
             <argument name="role" value="adminRole"/>
             <argument name="User" value="admin2"/>
         </actionGroup>
+
         <!--Log out of admin and login with newly created user-->
         <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
             <argument name="adminUser" value="admin2"/>
         </actionGroup>
+
         <!-- verify that user can access to adobe stock image -->
         <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
-        <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+
+        <!--Change user role to not accessible -->
+        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminNavigateToCreatedUserRoleActionGroup" stepKey="navigateToUserRoleEditPage">
+            <argument name="userRoleName" value="{{adminRole.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="removeRestrictedRole">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Adobe Stock"/>
+        </actionGroup>
+        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="saveRole" />
+        <actionGroup ref="logout" stepKey="logoutAdmin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginNewUserRole">
+            <argument name="adminUser" value="admin2"/>
+        </actionGroup>
+
+        <!-- verify that user can't access to adobe stock image -->
+        <actionGroup ref="AssertAdminUserHaveNoAccessToAdobeStockActionGroup" stepKey="tryOpenAdobeStockPopup"/>
+        <actionGroup ref="logout" stepKey="logoutFromCreatedUser"/>
     </test>
 </tests>

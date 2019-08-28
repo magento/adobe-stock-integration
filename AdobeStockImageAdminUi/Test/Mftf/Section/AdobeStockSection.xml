@@ -24,6 +24,5 @@
         <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
         <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
-        <element name="firstImageAfterSearch" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] img"/>
     </section>
 </sections>
