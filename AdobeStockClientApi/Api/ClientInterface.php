@@ -28,10 +28,17 @@ interface ClientInterface
      * Gets license quota for current content from Adobe Stock API
      *
      * @param int $contentId
-     * @param string $accessToken
-     * @return mixed
+     * @return int
      */
-    public function getQuota(int $contentId, string $accessToken): int;
+    public function getQuota(int $contentId): int;
+
+    /**
+     * Get quota confirmation message before licensing an asset
+     *
+     * @param int $contentId
+     * @return string
+     */
+    public function getQuotaConfirmationMessage(int $contentId): string;
 
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.

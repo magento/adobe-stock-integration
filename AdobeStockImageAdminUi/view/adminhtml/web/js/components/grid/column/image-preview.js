@@ -398,12 +398,11 @@ define([
                     context: this,
 
                     success: function (response) {
-                        var quota = response.result;
+                        var quotaInfo = response.result;
                         var confirmationContent = $.mage.__('License "' + record.title + '"');
-                        var quotaInfo = $.mage.__('This will use 1 of ' + quota + ' images');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
-                            content: $.mage.__(confirmationContent + '<p><b>' + quotaInfo + '</b></p>'),
+                            content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
                             actions: {
                                 confirm: function(){
                                     licenseAndSave(record);

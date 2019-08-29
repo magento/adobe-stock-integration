@@ -13,11 +13,14 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use AdobeStock\Api\Response\License;
 use Exception;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentFactory;
@@ -89,6 +92,16 @@ class Client implements ClientInterface
     private $logger;
 
     /**
+     * @var UserProfileRepositoryInterface
+     */
+    private $userProfileRepository;
+
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * Client constructor.
      * @param ConfigInterface $clientConfig
      * @param ImsConfig $imsConfig
@@ -111,7 +124,9 @@ class Client implements ClientInterface
         LocaleResolver $localeResolver,
         ConnectionFactory $connectionFactory,
         LicenseRequestFactory $licenseRequestFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        UserProfileRepositoryInterface $userProfileRepository,
+        UserContextInterface $userContext
     ) {
         $this->clientConfig = $clientConfig;
         $this->imsConfig = $imsConfig;
@@ -123,6 +138,8 @@ class Client implements ClientInterface
         $this->connectionFactory = $connectionFactory;
         $this->licenseRequestFactory = $licenseRequestFactory;
         $this->logger = $logger;
+        $this->userProfileRepository = $userProfileRepository;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -161,24 +178,35 @@ class Client implements ClientInterface
     }
 
     /**
-     * Gets license quota for current content from Adobe Stock API
+     * Get license information for the asset
      *
      * @param int $contentId
-     * @param string $accessToken
-     * @return int
-     * @throws IntegrationException
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @return License
      */
-    public function getQuota(int $contentId, string $accessToken): int
+    private function getLicenseInfo(int $contentId): License
     {
         /** @var LicenseRequest $licenseRequest */
         $licenseRequest = $this->licenseRequestFactory->create();
         $licenseRequest->setContentId($contentId)
             ->setLocale($this->clientConfig->getLocale())
             ->setLicenseState('STANDARD');
-        $licenseInfo = $this->getConnection()->getMemberProfile($licenseRequest, $accessToken);
+        return $this->getConnection()->getMemberProfile($licenseRequest, $this->getAccessToken());
+    }
 
-        return $licenseInfo->getEntitlement()->getQuota();
+    /**
+     * @inheritdoc
+     */
+    public function getQuota(int $contentId): int
+    {
+        return $this->getLicenseInfo($contentId)->getEntitlement()->getQuota();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getQuotaConfirmationMessage(int $contentId): string
+    {
+        return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
     }
 
     /**
@@ -316,13 +344,15 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: Implement retrieving of an access token
+     * Retrieve an access token for current user
      *
-     * @return null
+     * @return string|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getAccessToken()
     {
-        return null;
+        return $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId())
+            ->getAccessToken();
     }
 
     /**

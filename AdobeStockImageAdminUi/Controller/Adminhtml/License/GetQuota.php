@@ -8,11 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
-use \Magento\AdobeStockAsset\Model\GetQuota as GetQuoteService;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -32,24 +30,13 @@ class GetQuota extends Action
 
     /**
      * @see _isAllowed()
-     * TODO: we might need an additional ACL resource for the current action
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
-     * @var UserContextInterface
+     * @var ClientInterface
      */
-    private $userContext;
-
-    /**
-     * @var UserProfileRepositoryInterface
-     */
-    private $userProfileRepository;
-
-    /**
-     * @var GetQuoteService
-     */
-    private $getQuotaService;
+    private $client;
 
     /**
      * @var LoggerInterface
@@ -60,23 +47,17 @@ class GetQuota extends Action
      * GetQuota constructor.
      *
      * @param Action\Context $context
-     * @param UserContextInterface $userContext
-     * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param GetQuoteService $getQuotaService
+     * @param ClientInterface $client
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        UserContextInterface $userContext,
-        UserProfileRepositoryInterface $userProfileRepository,
-        GetQuoteService $getQuotaService,
+        ClientInterface $client,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->userContext = $userContext;
-        $this->userProfileRepository = $userProfileRepository;
-        $this->getQuotaService = $getQuotaService;
+        $this->client = $client;
         $this->logger = $logger;
     }
 
@@ -88,13 +69,11 @@ class GetQuota extends Action
         try {
             $params = $params = $this->getRequest()->getParams();
             $contentId = (int)$params['media_id'];
-            $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
-            $quota = $this->getQuotaService->execute($contentId, $userProfile->getAccessToken());
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
                 'error_message' => '',
-                'result' => $quota
+                'result' => $this->client->getQuotaConfirmationMessage($contentId),
             ];
 
         } catch (\Exception $exception) {
