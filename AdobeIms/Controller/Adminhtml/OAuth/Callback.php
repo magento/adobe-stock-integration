@@ -42,8 +42,8 @@ class Callback extends Action
      * RESPONSE_SUCCESS_CODE success code
      * RESPONSE_ERROR_CODE error code
      */
-    const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s;name=%s]';
-    const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+);name=(.+);\\]';
+    const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
+    const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
     const RESPONSE_CODE_INDEX = 1;
     const RESPONSE_MESSAGE_INDEX = 2;
     const RESPONSE_SUCCESS_CODE = 'success';
@@ -97,14 +97,15 @@ class Callback extends Action
      */
     public function execute(): \Magento\Framework\Controller\ResultInterface
     {
-        $userName = '';
         try {
             $tokenResponse = $this->getToken->execute(
                 (string)$this->getRequest()->getParam('code')
             );
+
             $userProfile = $this->getUserProfile();
-            $userName = $tokenResponse->getGivenName();
-            $userProfile->setName($userName);
+            $userProfile->setName($tokenResponse->getGivenName());
+            $userProfile->setEmail($tokenResponse->getEmail());
+            $userProfile->setFamilyName($tokenResponse->getFamilyName());
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
@@ -117,22 +118,19 @@ class Callback extends Action
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_SUCCESS_CODE,
-                __('Authorization was successful'),
-                $userName
+                __('Authorization was successful')
             );
         } catch (AuthorizationException $e) {
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_ERROR_CODE,
-                $e->getMessage(),
-                $userName
+                $e->getMessage()
             );
         } catch (CouldNotSaveException $e) {
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_ERROR_CODE,
-                $e->getMessage(),
-                $userName
+                $e->getMessage()
             );
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());

@@ -5,6 +5,8 @@
       "adobe_id": true,
       "admin_user_id": true,
       "display_name": true,
+      "email": true,
+      "family_name": true,
       "account_type": true,
       "access_token": true,
       "refresh_token": true,

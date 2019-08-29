@@ -7,15 +7,16 @@ define([
     'jquery',
     'knockout',
     'Magento_Ui/js/grid/columns/column',
-    'Magento_AdobeIms/js/action/signIn',
+    'Magento_AdobeIms/js/action/authorization',
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
-    'Magento_AdobeStockImageAdminUi/js/model/messages'
-], function (_, $, ko, Column, signIn, translate, imagePreview, messages) {
+    'Magento_AdobeStockImageAdminUi/js/model/messages',
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
+            isAuthorized: ko.observable(false),
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             modules: {
@@ -49,10 +50,9 @@ define([
                     left: 300
                 },
                 response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+);name=(.+)\]/,
+                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
                     codeIndex: 1,
                     messageIndex: 2,
-                    nameIndex: 3,
                     successCode: 'success',
                     errorCode: 'error'
                 }
@@ -62,7 +62,7 @@ define([
         /**
          * @inheritDoc
          */
-        next: function (record){
+        next: function (record) {
             this._super();
             this.hideAllKeywords(record);
         },
@@ -70,7 +70,7 @@ define([
         /**
          * @inheritDoc
          */
-        prev: function (record){
+        prev: function (record) {
             this._super();
             this.hideAllKeywords(record);
         },
@@ -93,9 +93,15 @@ define([
                     'visibility',
                     'height'
                 ]);
-            this.height.subscribe(function(){
+            this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
+
+            this.isAuthorized.subscribe(function () {
+                if (this.isAuthorized() === true) {
+                    this.authConfig.isAuthorized = true;
+                }
+            }.bind(this));
             return this;
         },
 
@@ -104,8 +110,7 @@ define([
          *
          * @param record
          */
-        requestSeries: function (record)
-        {
+        requestSeries: function (record) {
             $.ajax({
                 type: 'GET',
                 url: this.imageSeriesUrl,
@@ -165,7 +170,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getDisplayAttributes: function(record) {
+        getDisplayAttributes: function (record) {
             return [
                 {
                     name: 'Dimensions',
@@ -192,7 +197,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getSeries: function(record) {
+        getSeries: function (record) {
             if (!record.series) {
                 record.series = ko.observableArray([]);
                 this.requestSeries(record);
@@ -207,7 +212,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getKeywords: function(record) {
+        getKeywords: function (record) {
             return record.keywords;
         },
 
@@ -230,7 +235,7 @@ define([
          * @param record
          * @returns {*}
          */
-        viewAllKeywords: function(record) {
+        viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
         },
 
@@ -240,7 +245,7 @@ define([
          * @param record
          * @returns {*}
          */
-        hideAllKeywords: function(record) {
+        hideAllKeywords: function (record) {
             record.keywordsLimit(this.keywordsLimit);
             record.canViewMoreKeywords(true);
         },
@@ -251,7 +256,7 @@ define([
          * @param record
          * @returns {*}
          */
-        canViewMoreKeywords: function(record) {
+        canViewMoreKeywords: function (record) {
             if (!record.canViewMoreKeywords) {
                 record.canViewMoreKeywords = ko.observable(true);
             }
@@ -283,7 +288,7 @@ define([
          * @returns {Object}
          */
         getStyles: function (record) {
-            if(!record.previewStyles) {
+            if (!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }
             record.previewStyles({
@@ -317,8 +322,8 @@ define([
                     url: this.downloadImagePreviewUrl,
                     dataType: 'json',
                     data: {
-                       'media_id': record.id,
-                       'destination_path': mediaBrowser.activeNode.path || ''
+                        'media_id': record.id,
+                        'destination_path': mediaBrowser.activeNode.path || ''
                     },
                     context: this,
                     success: function () {
@@ -331,8 +336,8 @@ define([
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(3);
                     }
-               }
-           );
+                }
+            );
         },
 
         /**
@@ -363,12 +368,31 @@ define([
         licenseProcess: function (record) {
             if (this.authConfig.isAuthorized) {
                 this.licenseAndSave(record);
+
                 return;
             }
-            signIn.defaults.authConfig.url = this.authConfig.url;
-            if (signIn().execute()) {
-                this.authConfig.isAuthorized = true;
-            }
+
+            /**
+             * Opens authorization window of Adobe Stock
+             * then starts the authorization process
+             */
+            authorizationAction(this.authConfig)
+                .then(
+                    function (authConfig) {
+                        this.authConfig = _.extend(this.authConfig, authConfig);
+                        this.licenseProcess(record);
+                        this.isAuthorized(true);
+                        messages.add('success', authConfig.lastAuthSuccessMessage);
+                    }.bind(this)
+                )
+                .catch(
+                    function (error) {
+                        messages.add('error', error.message);
+                    }.bind(this)
+                )
+                .finally((function () {
+                    messages.scheduleCleanup(this.messageDelay);
+                }).bind(this));
         }
     });
 });

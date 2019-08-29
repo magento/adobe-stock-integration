@@ -6,18 +6,20 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Block\Adminhtml;
+namespace Magento\AdobeIms\Block\Adminhtml;
 
 use Magento\AdobeIms\Model\Config;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Adobe Stock sign in block
  */
-class Panel extends Template
+class SignIn extends Template
 {
 
     /**
@@ -31,28 +33,47 @@ class Panel extends Template
     private $userContext;
 
     /**
+     * @var UserAuthorizedInterface
+     */
+    private $userAuthorize;
+
+    /**
      * @var UserProfileRepositoryInterface
      */
     private $userProfileRepository;
 
     /**
-     * Panel constructor.
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * SignIn constructor.
+     *
      * @param Config $config
      * @param Context $context
      * @param UserContextInterface $userContext
+     * @param UserAuthorizedInterface $userAuthorize
      * @param UserProfileRepositoryInterface $userProfileRepository
+     * @param Json $json
      * @param array $data
      */
     public function __construct(
         Config $config,
         Context $context,
         UserContextInterface $userContext,
+        UserAuthorizedInterface $userAuthorize,
         UserProfileRepositoryInterface $userProfileRepository,
+        Json $json,
         array $data = []
     ) {
         $this->config = $config;
         $this->userContext = $userContext;
+        $this->userAuthorize = $userAuthorize;
         $this->userProfileRepository = $userProfileRepository;
+        $this->serializer = $json;
         parent::__construct($context, $data);
     }
 
@@ -66,23 +87,28 @@ class Panel extends Template
         return $this->config->getAuthUrl();
     }
 
+
     /**
      * Return user name.
      *
-     * @return string
+     * @return Json
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getName(): string
+    public function getUserData()
     {
-        $name = '';
-
+        $data = [
+            "email" => "",
+            "display_name" => ""
+        ];
         if ($this->isAuthorized()) {
             $userProfile = $this->userProfileRepository->getByUserId(
                 (int)$this->userContext->getUserId()
             );
-            $name = $userProfile->getName();
+            $data['email'] = $userProfile->getEmail();
+            $data['display_name'] = $userProfile->getName();
         }
-        return $name;
+
+        return $this->serializer->serialize($data);
     }
 
     /**
@@ -92,17 +118,6 @@ class Panel extends Template
      */
     public function isAuthorized(): bool
     {
-        try {
-            $userProfile = $this->userProfileRepository->getByUserId(
-                (int)$this->userContext->getUserId()
-            );
-
-            return !empty($userProfile->getId())
-                && !empty($userProfile->getAccessToken())
-                && !empty($userProfile->getAccessTokenExpiresAt())
-                && strtotime($userProfile->getAccessTokenExpiresAt()) >= strtotime('now');
-        } catch (\Exception $e) {
-            return false;
-        }
+        return $this->userAuthorize->execute((int)$this->userContext->getUserId());
     }
 }

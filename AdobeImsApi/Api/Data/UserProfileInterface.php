@@ -27,6 +27,8 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
+    const EMAIL = 'email';
+    const FAMILY_NAME = 'family_name';
     /**#@-*/
 
     /**
@@ -82,12 +84,42 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getName(): string;
 
     /**
+     * Get family name
+     *
+     * @return string
+     */
+    public function getFamilyName(): string;
+
+    /**
      * Set name
      *
      * @param string $value
      * @return void
      */
     public function setName(string $value): void;
+
+    /**
+     * Set family name
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setFamilyName(string $value): void;
+
+    /**
+     * Set email
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setEmail(string $value): void;
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail(): string;
 
     /**
      * Get account type

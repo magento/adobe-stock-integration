@@ -1,0 +1,23 @@
+<div data-bind="scope: 'adobe-stock-sign-in'" class="scalable">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "#adobe-stock-images-search-modal": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "adobe-stock-sign-in": {
+                        "component": "Magento_AdobeIms/js/action/signIn",
+                        "template": "Magento_AdobeStockAdminUi/signIn",
+                        "getUserDataUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/userprofile/getuserdata')); ?>",
+                        "userData": <?= /* @noEscape */ $block->getUserData() ?>,
+                        "authConfig": {
+                            "url": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
+                            "isAuthorized": "<?= $block->escapeHtml($block->isAuthorized()) ?>"
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>

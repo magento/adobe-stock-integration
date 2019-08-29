@@ -8,15 +8,19 @@ define([
     'jquery',
     'Magento_AdobeIms/js/action/authorization',
     'underscore',
-], function (ko, Component, $, authorizationAction, _) {
+    'Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview'
+], function (ko, Component, $, authorizationAction, _, imagePreview) {
     'use strict';
 
     return Component.extend({
 
         defaults: {
+            isAuthorized: ko.observable(false),
             visibility: ko.observable(true),
             nameVisibility: ko.observable(false),
             displayName: ko.observable(),
+            getUserDataUrl: '',
+            userData: '',
             authConfig: {
                 url: '',
                 isAuthorized: false,
@@ -28,7 +32,7 @@ define([
                     left: 300
                 },
                 response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+);name=(.+)\]/,
+                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
                     codeIndex: 1,
                     messageIndex: 2,
                     nameIndex: 3,
@@ -46,7 +50,14 @@ define([
                 'displayName'
             ]);
             this.checkAuthorize();
-            this.displayName(this.authConfig.displayName);
+            this.displayName(this.userData['display_name']);
+            imagePreview().isAuthorized.subscribe(function () {
+                if (imagePreview().isAuthorized() === true) {
+                    this.authConfig.isAuthorized = true;
+                    this.getUserData();
+                    this.checkAuthorize();
+                }
+            }.bind(this));
             return this;
         },
 
@@ -54,25 +65,26 @@ define([
          * Check if user authorized, to show or hide sign in button.
          */
         checkAuthorize: function () {
-                if (this.authConfig.isAuthorized) {
-                    this.visibility(false);
-                    this.nameVisibility(true);
-                } else if (!this.authConfig.isAuthorized) {
-                    this.visibility(true);
-                    this.nameVisibility(false);
-                }
+            if (this.authConfig.isAuthorized) {
+                this.visibility(false);
+                this.nameVisibility(true);
+                this.displayName(this.userData['display_name']);
+            } else if (!this.authConfig.isAuthorized) {
+                this.visibility(true);
+                this.nameVisibility(false);
+            }
         },
 
         /**
          * Authorization process.
          */
         execute: function () {
-           return  authorizationAction(this.authConfig)
+            return authorizationAction(this.authConfig)
                 .then(
                     function (authConfig) {
                         this.authConfig = _.extend(this.authConfig, authConfig);
-                        this.displayName(authConfig.displayName);
-                        this.checkAuthorize();
+                        imagePreview().isAuthorized(true);
+                        this.isAuthorized(true);
                         return this.authConfig.isAuthorized;
                     }.bind(this)
                 ).catch(
@@ -80,6 +92,29 @@ define([
                         return error;
                     }.bind(this)
                 );
+        },
+
+        /**
+         * Retrieve data to authorized user.
+         *
+         * @return array
+         */
+        getUserData: function () {
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: this.getUserDataUrl,
+                    data: {form_key: window.FORM_KEY},
+                    dataType: 'json',
+                    async: false,
+                    context: this,
+                    success: function  (response)  {
+                        this.userData = response.result;
+                    },
+                    error: function (response) {
+                        return response.message;
+                    }
+                });
         },
 
     });

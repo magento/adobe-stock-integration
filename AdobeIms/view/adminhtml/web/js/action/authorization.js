@@ -4,8 +4,8 @@
  */
 
 define([
-
-], function () {
+    'ko'
+], function (ko){
     'use strict';
 
     /**
@@ -91,7 +91,6 @@ define([
 
                     if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
                         resolve({
-                            displayName: responseData[authConfig.response.nameIndex],
                             isAuthorized: true,
                             lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
                         });
