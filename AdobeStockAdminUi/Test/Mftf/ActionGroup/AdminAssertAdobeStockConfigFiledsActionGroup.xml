@@ -8,11 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAdobeStockSystemConfigActionGroup">
-        <amOnPage url="{{AdminConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <scrollTo selector="{{AdminConfigSystemSection.adobeStockIntegration}}" stepKey="scrollToAdobeStockIntegrationSection"/>
-        <conditionalClick stepKey="expandAdobeStockIntegrationTab" selector="{{AdminConfigSystemSection.adobeStockIntegration}}" dependentSelector="{{AdminConfigSystemSection.isEnabledField}}" visible="false" />
+    <actionGroup name="AdminAssertAdobeStockConfigFieldsActionGroup">
         <seeElement selector="{{AdminConfigSystemSection.isEnabledField}}" stepKey="seeIsEnabledField"/>
         <seeElement selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="seeApiKeyField"/>
         <seeElement selector="{{AdminConfigSystemSection.privateKeyField}}" stepKey="seePrivateKeyField"/>

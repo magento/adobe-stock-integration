@@ -19,27 +19,38 @@ define([
         defaults: {
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            modules: {
-                thumbnailComponent: '${ $.parentName }.thumbnail_url'
-            },
+            chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
+            searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            inputValue: '',
+            chipInputValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
+            searchValue: null,
+            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            messageDelay: 5,
             statefull: {
                 visible: true,
                 sorting: true,
                 lastOpenedImage: true
             },
             tracks: {
-                lastOpenedImage: true,
+                lastOpenedImage: true
+            },
+            modules: {
+                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+                chips: '${ $.chipsProvider }',
+                searchChips: '${ $.searchChipsProvider }'
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
                 '${ $.provider }:params.search': 'hide',
             },
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            exports: {
+                inputValue: '${ $.provider }:params.search',
+                chipInputValue: '${ $.searchChipsProvider }:value'
+            },
             getQuotaUrl: Column.getQuotaUrl,
             imageSeriesUrl: Column.imageSeriesUrl,
-            messageDelay: 5,
             authConfig: {
                 url: '',
                 isAuthorized: false,
@@ -61,6 +72,30 @@ define([
         },
 
         /**
+         * @inheritDoc
+         */
+        next: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        prev: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        hide: function (record) {
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
          * Init observable variables
          * @return {Object}
          */
@@ -68,7 +103,9 @@ define([
             this._super()
                 .observe([
                     'visibility',
-                    'height'
+                    'height',
+                    'inputValue',
+                    'chipInputValue'
                 ]);
             this.height.subscribe(function(){
                 this.thumbnailComponent().previewHeight(this.height());
@@ -212,6 +249,19 @@ define([
         },
 
         /**
+         * Hide all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        hideAllKeywords: function(record) {
+            if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
+                record.keywordsLimit(this.keywordsLimit);
+                record.canViewMoreKeywords(true);
+            }
+        },
+
+        /**
          * Check if view all button is visible or not
          *
          * @param record
@@ -225,6 +275,15 @@ define([
                 record.canViewMoreKeywords(false);
             }
             return record.canViewMoreKeywords();
+        },
+
+        /**
+         * Drop all filters and initiate search on keyword click event
+         */
+        searchByKeyWord: function(keyword) {
+            _.invoke(this.chips().elems(), 'clear');
+            this.inputValue(keyword);
+            this.chipInputValue(keyword);
         },
 
         /**
@@ -283,8 +342,8 @@ define([
                     url: this.downloadImagePreviewUrl,
                     dataType: 'json',
                     data: {
-                       'media_id': record.id,
-                       'destination_path': mediaBrowser.activeNode.path || ''
+                        'media_id': record.id,
+                        'destination_path': mediaBrowser.activeNode.path || ''
                     },
                     context: this,
                     success: function () {
@@ -297,8 +356,8 @@ define([
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(3);
                     }
-               }
-           );
+                }
+            );
         },
 
         /**
