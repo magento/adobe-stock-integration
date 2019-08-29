@@ -71,7 +71,7 @@ class Download extends Action
     public function execute()
     {
         try {
-            $params = $params = $this->getRequest()->getParams();
+            $params = $this->getRequest()->getParams();
             $mediaId = (int) $params['media_id'];
             $destinationPath = (string) $params['destination_path'];
             $this->saveImagePreview->execute($mediaId, $destinationPath);
