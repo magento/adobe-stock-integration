@@ -7,34 +7,35 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUserFiltersIsolatedImageOnlyTest">
+    <test name="AdminAdobeStockSafeContentFilterTest">
         <annotations>
-            <title value="Isolated Images Filter Test"/>
-            <stories value="User filters images in Adobe Stock image grid by isolated images"/>
             <features value="AdobeStockImagePanel"/>
-            <description value="Admin should be able to filter images by Isolated images"/>
+            <stories value="Filter safe content images via Admin"/>
+            <title value="Admin should be able to filters safe content images"/>
+            <description value="Admin should be able to filters safe content images"/>
             <severity value="CRITICAL"/>
-            <group value="AdobeStockIntegration"/>
+            <group value="adobe_stock_integration_filters"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithoutSafeFilter"/>
-        <actionGroup ref="AdminUserApplyIsolatedAssetsFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AdminUserApplySafeSearchFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
         <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutSafeFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
         </assertNotContains>
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
-            <argument name="resultValue" value="Isolated Only"/>
+            <argument name="resultValue" value="Disabled"/>
         </actionGroup>
     </test>
 </tests>

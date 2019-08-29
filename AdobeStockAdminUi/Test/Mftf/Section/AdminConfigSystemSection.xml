@@ -14,7 +14,7 @@
         <element name="apiKeyField" type="input" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-api-key-value']"/>
         <element name="privateKeyField" type="input" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-private-key-value']"/>
         <element name="testConnectionButton" type="button" selector="[data-ui-id='adobe-stock-integration-buttons-test-connection']" timeout="30"/>
-        <element name="apiKeyFieldValidationError" type="text" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-api-key-value'] + label.mage-error"/>
+        <element name="requiredFieldError" type="text" selector="label.mage-error"/>
         <element name="successMessage" type="text" selector="div.message-success"/>
         <element name="errorMessage" type="text" selector="div.message-error"/>
         <element name="saveConfig" type="button" selector="#save"/>
