@@ -13,6 +13,7 @@
             <title value="Admin should be able to saves image preview"/>
             <description value="Admin should be able to saves image preview "/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_general"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

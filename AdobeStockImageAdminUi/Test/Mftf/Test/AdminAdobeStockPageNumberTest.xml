@@ -14,6 +14,7 @@
             <title value="Admin should be able to chooses the number of images to display on the page"/>
             <description value="Admin should be able to chooses the number of images to display on the page"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_grid"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

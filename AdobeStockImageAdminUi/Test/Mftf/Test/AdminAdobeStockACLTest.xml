@@ -14,6 +14,7 @@
             <title value="Admin should be able to controls access to Adobe Stock images from Admin Panel in ACL"/>
             <description value="Test to cover scenario: User controls access to Adobe Stock images from Admin Panel in ACL"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_general"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

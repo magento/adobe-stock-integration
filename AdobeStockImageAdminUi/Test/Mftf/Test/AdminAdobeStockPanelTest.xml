@@ -14,6 +14,7 @@
             <title value="Admin should be able to access Adobe Stock Image panel"/>
             <description value="Admin should be able to access Adobe Stock Image panel"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_general"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

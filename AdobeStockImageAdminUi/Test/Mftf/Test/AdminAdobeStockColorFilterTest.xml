@@ -15,6 +15,7 @@
             <title value="Admin should be able to filters images by image color"/>
             <description value="Admin should be able to filters images by image color"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -26,8 +27,7 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
-        <waitForPageLoad stepKey="waitForFiltersOpen"/>
+        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
         <seeElement selector="{{AdobeStockFilterSection.colorFilter}}" stepKey="seeAdobeStockColorFilter"/>
 
         <actionGroup ref="AdminApplyColorFilterValue" stepKey="userChoseAndApplyColorFilter">

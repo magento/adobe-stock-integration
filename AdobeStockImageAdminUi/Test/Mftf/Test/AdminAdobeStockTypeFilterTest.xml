@@ -13,6 +13,7 @@
             <title value="Admin should be able to filters images by type"/>
             <description value="Admin should be able to filters images by type"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -26,8 +27,7 @@
         </after>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlWithoutFilters"/>
-        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
-        <waitForPageLoad stepKey="waitForFiltersOpen"/>
+        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Subcategory"/>
         </actionGroup>

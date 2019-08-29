@@ -14,6 +14,7 @@
             <title value="Admin should be able to navigates to next previous image from the currently viewed"/>
             <description value="Admin should be able to navigates to next previous image from the currently viewed"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

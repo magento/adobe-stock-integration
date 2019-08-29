@@ -12,12 +12,8 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
         </before>
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="resetCorrectModuleConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <include>
             <group name="adobe_stock_integration"/>

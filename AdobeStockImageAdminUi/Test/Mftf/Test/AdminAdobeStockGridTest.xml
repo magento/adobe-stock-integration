@@ -14,6 +14,7 @@
             <title value="Basic Adobe Stock grid controls"/>
             <description value="Basic Adobe Stock grid controls"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_grid"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

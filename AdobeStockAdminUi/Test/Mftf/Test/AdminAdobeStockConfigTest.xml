@@ -15,6 +15,7 @@
             <title value="Admin should be able to configure Adobe Stock Integration"/>
             <description value="Admin should be able to configure Adobe Stock Integration"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_general"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -23,8 +24,9 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminAdobeStockSystemConfigActionGroup" stepKey="navigateToAdobeStockConfigurationFieldset"/>
-        <actionGroup ref="AdminAdobeStockConfigurationValidationActionGroup" stepKey="testAdobeStockConfigurationValidation"/>
-        <actionGroup ref="AdminAdobeStockTestConnectionActionGroup" stepKey="testConnection"/>
+        <actionGroup ref="AdminOpenAdobeStockConfigActionGroup" stepKey="navigateToAdobeStockConfigurationFieldset"/>
+        <actionGroup ref="AdminAssertAdobeStockConfigFieldsActionGroup" stepKey="checkAdobeStockConfigurationFields"/>
+        <actionGroup ref="AdminAssertAdobeStockConfigRequiredFieldsActionGroup" stepKey="testAdobeStockConfigRequiredFields"/>
+        <actionGroup ref="AdminAssertAdobeStockConnectionTestActionGroup" stepKey="testConnection"/>
     </test>
 </tests>

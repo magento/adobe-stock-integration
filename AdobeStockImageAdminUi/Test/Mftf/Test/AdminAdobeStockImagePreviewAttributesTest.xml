@@ -14,6 +14,7 @@
             <title value="Admin should be able to see images attributes in the image preview"/>
             <description value="Admin should be able to see images attributes in the image preview"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

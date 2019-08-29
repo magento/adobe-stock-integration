@@ -15,6 +15,7 @@
             <title value="User searches stock images by keywords"/>
             <description value="User searches stock images by keywords"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_grid"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
