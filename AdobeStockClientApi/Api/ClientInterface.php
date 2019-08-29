@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClientApi\Api;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Adobe Stock API Client
