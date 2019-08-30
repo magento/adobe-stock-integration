@@ -74,7 +74,7 @@ define([
         /**
          * @inheritDoc
          */
-        next: function (record){
+        next: function (record) {
             this._super();
             this.hideAllKeywords(record);
         },
@@ -82,7 +82,7 @@ define([
         /**
          * @inheritDoc
          */
-        prev: function (record){
+        prev: function (record) {
             this._super();
             this.hideAllKeywords(record);
         },
@@ -107,7 +107,7 @@ define([
                     'inputValue',
                     'chipInputValue'
                 ]);
-            this.height.subscribe(function(){
+            this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
             return this;
@@ -118,8 +118,7 @@ define([
          *
          * @param record
          */
-        requestSeries: function (record)
-        {
+        requestSeries: function (record) {
             $.ajax({
                 type: 'GET',
                 url: this.imageSeriesUrl,
@@ -179,7 +178,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getDisplayAttributes: function(record) {
+        getDisplayAttributes: function (record) {
             return [
                 {
                     name: 'Dimensions',
@@ -206,7 +205,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getSeries: function(record) {
+        getSeries: function (record) {
             if (!record.series) {
                 record.series = ko.observableArray([]);
                 this.requestSeries(record);
@@ -221,7 +220,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getKeywords: function(record) {
+        getKeywords: function (record) {
             return record.keywords;
         },
 
@@ -244,7 +243,7 @@ define([
          * @param record
          * @returns {*}
          */
-        viewAllKeywords: function(record) {
+        viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
         },
 
@@ -254,7 +253,7 @@ define([
          * @param record
          * @returns {*}
          */
-        hideAllKeywords: function(record) {
+        hideAllKeywords: function (record) {
             if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
                 record.keywordsLimit(this.keywordsLimit);
                 record.canViewMoreKeywords(true);
@@ -267,7 +266,7 @@ define([
          * @param record
          * @returns {*}
          */
-        canViewMoreKeywords: function(record) {
+        canViewMoreKeywords: function (record) {
             if (!record.canViewMoreKeywords) {
                 record.canViewMoreKeywords = ko.observable(true);
             }
@@ -308,7 +307,7 @@ define([
          * @returns {Object}
          */
         getStyles: function (record) {
-            if(!record.previewStyles) {
+            if (!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }
             record.previewStyles({
@@ -335,6 +334,7 @@ define([
          */
         save: function (record) {
             var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
+            var destinationPath = (mediaBrowser.activeNode.path || '') + '/' + this.generateImageName(record);
             $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
@@ -343,7 +343,7 @@ define([
                     dataType: 'json',
                     data: {
                         'media_id': record.id,
-                        'destination_path': mediaBrowser.activeNode.path || ''
+                        'destination_path': destinationPath
                     },
                     context: this,
                     success: function () {
@@ -359,6 +359,20 @@ define([
                 }
             );
         },
+
+
+        /**
+         * Generate meaningful name image file
+         *
+         * @param record
+         * @return string
+         */
+        generateImageName: function (record) {
+            var imageType = record.content_type.match(/[^/]{1,4}$/),
+                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return imageName + '.' + imageType;
+        },
+
 
         /**
          * Get messages
