@@ -30,6 +30,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Phrase;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
@@ -113,6 +114,8 @@ class Client implements ClientInterface
      * @param ConnectionFactory $connectionFactory
      * @param LicenseRequestFactory $licenseRequestFactory
      * @param LoggerInterface $logger
+     * @param UserProfileRepositoryInterface $userProfileRepository
+     * @param UserContextInterface $userContext
      */
     public function __construct(
         ConfigInterface $clientConfig,
@@ -180,6 +183,10 @@ class Client implements ClientInterface
     /**
      * Get license information for the asset
      *
+     * @param int $contentId
+     * @return License
+     */
+    /**
      * @param int $contentId
      * @return License
      */
@@ -347,12 +354,16 @@ class Client implements ClientInterface
      * Retrieve an access token for current user
      *
      * @return string|null
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getAccessToken()
     {
-        return $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId())
-            ->getAccessToken();
+        try {
+            return $this->userProfileRepository->getByUserId(
+                (int)$this->userContext->getUserId()
+            )->getAccessToken();
+        } catch (NoSuchEntityException $exception) {
+            return null;
+        }
     }
 
     /**
