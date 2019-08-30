@@ -186,10 +186,6 @@ class Client implements ClientInterface
      * @param int $contentId
      * @return License
      */
-    /**
-     * @param int $contentId
-     * @return License
-     */
     private function getLicenseInfo(int $contentId): License
     {
         /** @var LicenseRequest $licenseRequest */
