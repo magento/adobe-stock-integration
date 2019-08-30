@@ -32,7 +32,6 @@ define([
                 sorting: true,
                 lastOpenedImage: true
             },
-            destinationPath: '',
             tracks: {
                 lastOpenedImage: true
             },
@@ -333,10 +332,7 @@ define([
          */
         save: function (record) {
             var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
-            this.destinationPath = this.generateImageName(
-                mediaBrowser.activeNode.path || '',
-                record
-            );
+            var destinationPath = mediaBrowser.activeNode.path || '' + '/' + this.generateImageName(record);
             $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
@@ -345,7 +341,7 @@ define([
                     dataType: 'json',
                     data: {
                         'media_id': record.id,
-                        'destination_path': this.destinationPath
+                        'destination_path': destinationPath
                     },
                     context: this,
                     success: function () {
@@ -370,10 +366,10 @@ define([
          * @param record
          * @return string
          */
-        generateImageName: function (path, record) {
+        generateImageName: function (record) {
             var imageType = record.content_type.match(/[^/]{1,4}$/),
                 imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
-            return path + '/' + imageName + '.' + imageType;
+            return imageName + '.' + imageType;
         },
 
 
