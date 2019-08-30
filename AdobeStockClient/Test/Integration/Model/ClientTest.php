@@ -53,7 +53,6 @@ class ClientTest extends TestCase
             ->getMock();
         $connectionFactory->expects($this->once())
             ->method('create')
-            ->with('', 'magento-adobe-stock-integration', 'PROD')
             ->willReturn($this->connection);
         $this->client = Bootstrap::getObjectManager()->create(
             Client::class,
