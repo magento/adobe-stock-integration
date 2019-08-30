@@ -334,7 +334,7 @@ define([
          */
         save: function (record) {
             var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
-            var destinationPath = mediaBrowser.activeNode.path || '' + '/' + this.generateImageName(record);
+            var destinationPath = (mediaBrowser.activeNode.path || '') + '/' + this.generateImageName(record);
             $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
