@@ -8,17 +8,17 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserControlsAccessToAdobeStockImagesFromAdminPanelInACLTest">
+    <test name="AdminAdobeStockACLTest">
         <annotations>
             <stories value="Controls access to Adobe Stock images from Admin Panel in ACL"/>
             <title value="Admin should be able to controls access to Adobe Stock images from Admin Panel in ACL"/>
             <description value="Test to cover scenario: User controls access to Adobe Stock images from Admin Panel in ACL"/>
             <severity value="CRITICAL"/>
-            <group value="AdobeStockIntegration"/>
+            <group value="adobe_stock_integration_general"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser"/>
