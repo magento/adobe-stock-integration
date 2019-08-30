@@ -79,8 +79,10 @@ class GetImageList implements GetImageListInterface
     {
         $isContentTypeFilter = false;
         $filters = [];
+        $currentFilters = [];
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
+                $currentFilters[] = $filterGroup;
                 if ($filter->getField() === 'content_type_filter') {
                     $isContentTypeFilter = true;
                 }
@@ -94,7 +96,9 @@ class GetImageList implements GetImageListInterface
                     ->setValue($filter['field'])
                     ->create();
             }
-            $searchCriteria->setFilterGroups([$this->filterGroupBuilder->setFilters($filters)->create()]);
+            $searchCriteria->setFilterGroups(
+                array_merge([$this->filterGroupBuilder->setFilters($filters)->create()], $currentFilters)
+            );
         }
         return $searchCriteria;
     }
