@@ -8,31 +8,47 @@ define([
     'knockout',
     'Magento_Ui/js/grid/columns/column',
     'Magento_AdobeIms/js/action/authorization',
-    'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
-], function (_, $, ko, Column, authorizationAction, messages, translate, imagePreview) {
+    'Magento_AdobeStockImageAdminUi/js/model/messages',
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            modules: {
-                thumbnailComponent: '${ $.parentName }.thumbnail_url'
-            },
+            chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
+            searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            inputValue: '',
+            chipInputValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
+            searchValue: null,
+            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            messageDelay: 5,
             statefull: {
                 visible: true,
                 sorting: true,
                 lastOpenedImage: true
             },
             tracks: {
-                lastOpenedImage: true,
+                lastOpenedImage: true
             },
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
-            messageDelay: 5,
+            modules: {
+                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+                chips: '${ $.chipsProvider }',
+                searchChips: '${ $.searchChipsProvider }'
+            },
+            listens: {
+                '${ $.provider }:params.filters': 'hide',
+                '${ $.provider }:params.search': 'hide',
+            },
+            exports: {
+                inputValue: '${ $.provider }:params.search',
+                chipInputValue: '${ $.searchChipsProvider }:value'
+            },
+            imageSeriesUrl: Column.imageSeriesUrl,
             authConfig: {
                 url: '',
                 isAuthorized: false,
@@ -54,6 +70,30 @@ define([
         },
 
         /**
+         * @inheritDoc
+         */
+        next: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        prev: function (record){
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        hide: function (record) {
+            this._super();
+            this.hideAllKeywords(record);
+        },
+
+        /**
          * Init observable variables
          * @return {Object}
          */
@@ -61,13 +101,34 @@ define([
             this._super()
                 .observe([
                     'visibility',
-                    'height'
+                    'height',
+                    'inputValue',
+                    'chipInputValue'
                 ]);
-
             this.height.subscribe(function(){
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
             return this;
+        },
+
+        /**
+         * Get image related image series.
+         *
+         * @param record
+         */
+        requestSeries: function (record)
+        {
+            $.ajax({
+                type: 'GET',
+                url: this.imageSeriesUrl,
+                dataType: 'json',
+                data: {
+                    'serie_id': record.id,
+                    'limit': 4
+                },
+            }).done(function (data) {
+                record.series(data.result.series);
+            });
         },
 
         /**
@@ -138,6 +199,21 @@ define([
         },
 
         /**
+         * Returns series to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getSeries: function(record) {
+            if (!record.series) {
+                record.series = ko.observableArray([]);
+                this.requestSeries(record);
+                this._updateHeight();
+            }
+            return record.series;
+        },
+
+        /**
          * Returns keywords to display under the attributes image
          *
          * @param record
@@ -153,7 +229,7 @@ define([
          * @param record
          * @returns {*}
          */
-        getKeywordsLimit: function (record){
+        getKeywordsLimit: function (record) {
             if (!record.keywordsLimit) {
                 record.keywordsLimit = ko.observable(this.keywordsLimit);
             }
@@ -168,6 +244,19 @@ define([
          */
         viewAllKeywords: function(record) {
             record.keywordsLimit(record.keywords.length);
+        },
+
+        /**
+         * Hide all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        hideAllKeywords: function(record) {
+            if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
+                record.keywordsLimit(this.keywordsLimit);
+                record.canViewMoreKeywords(true);
+            }
         },
 
         /**
@@ -187,13 +276,21 @@ define([
         },
 
         /**
+         * Drop all filters and initiate search on keyword click event
+         */
+        searchByKeyWord: function(keyword) {
+            _.invoke(this.chips().elems(), 'clear');
+            this.inputValue(keyword);
+            this.chipInputValue(keyword);
+        },
+
+        /**
          * Returns visibility for given record.
          *
          * @param {Object} record
          * @return {*|boolean}
          */
         isVisible: function (record) {
-            console.log(record)
             if (this.lastOpenedImage === record._rowIndex &&
                 (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
             ) {
@@ -208,7 +305,7 @@ define([
          * @param {Object} record
          * @returns {Object}
          */
-        getStyles: function (record){
+        getStyles: function (record) {
             if(!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }
@@ -243,8 +340,8 @@ define([
                     url: this.downloadImagePreviewUrl,
                     dataType: 'json',
                     data: {
-                       'media_id': record.id,
-                       'destination_path': mediaBrowser.activeNode.path || ''
+                        'media_id': record.id,
+                        'destination_path': mediaBrowser.activeNode.path || ''
                     },
                     context: this,
                     success: function () {
@@ -257,8 +354,8 @@ define([
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(3);
                     }
-               }
-           );
+                }
+            );
         },
 
         /**
@@ -316,3 +413,4 @@ define([
         }
     });
 });
+

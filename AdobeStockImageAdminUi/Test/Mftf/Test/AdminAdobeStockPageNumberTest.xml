@@ -7,31 +7,25 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUserCanSelectNumberOfImagesToDisplayTest">
+    <test name="AdminAdobeStockColorFilterTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="Access Adobe Stock Image panel via the Admin"/>
             <title value="Admin should be able to chooses the number of images to display on the page"/>
             <description value="Admin should be able to chooses the number of images to display on the page"/>
             <severity value="CRITICAL"/>
-            <group value="AdobeStockIntegration"/>
+            <group value="adobe_stock_integration_grid"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="cleanModuleConfig">
-                <argument name="enabled" value="0"/>
-                <argument name="wysiwygEnabled" value="disabled"/>
-<!--                TODO: uncomment next lines where issue with sensitive config setting will be resolved. -->
-<!--                <argument name="apiKey" value=""/>-->
-<!--                <argument name="privateKey" value=""/>-->
-            </actionGroup>
         </after>
-        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPanel"/>
         <actionGroup ref="adminDataGridSelectPerPage" stepKey="select64rderPerPage">
             <argument name="perPage" value="64"/>
         </actionGroup>
