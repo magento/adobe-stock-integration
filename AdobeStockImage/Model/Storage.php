@@ -48,7 +48,6 @@ class Storage
      * Storage constructor.
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param File $fileSystemIo
      * @param LoggerInterface $log
      */
     public function __construct(
