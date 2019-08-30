@@ -35,11 +35,6 @@ class Storage
     private $driver;
 
     /**
-     * @var File
-     */
-    private $fileSystemIo;
-
-    /**
      * @var LoggerInterface
      */
     private $log;
@@ -59,12 +54,10 @@ class Storage
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        File $fileSystemIo,
         LoggerInterface $log
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->fileSystemIo = $fileSystemIo;
         $this->log = $log;
     }
 
@@ -94,17 +87,6 @@ class Storage
         }
 
         return $destinationPath;
-    }
-
-    /**
-     * Get file basename
-     *
-     * @param string $imageUrl
-     * @return string
-     */
-    private function getFileName(string $imageUrl): string
-    {
-        return $this->fileSystemIo->getPathInfo($imageUrl)['basename'];
     }
 
     /**
