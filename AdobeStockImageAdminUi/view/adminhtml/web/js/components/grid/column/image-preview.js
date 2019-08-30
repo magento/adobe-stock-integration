@@ -18,11 +18,15 @@ define([
         defaults: {
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            modules: {
-                thumbnailComponent: '${ $.parentName }.thumbnail_url'
-            },
+            chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
+            searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            inputValue: '',
+            chipInputValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
+            searchValue: null,
+            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            messageDelay: 5,
             statefull: {
                 visible: true,
                 sorting: true,
@@ -30,15 +34,22 @@ define([
             },
             destinationPath: '',
             tracks: {
-                lastOpenedImage: true,
+                lastOpenedImage: true
+            },
+            modules: {
+                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+                chips: '${ $.chipsProvider }',
+                searchChips: '${ $.searchChipsProvider }'
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
                 '${ $.provider }:params.search': 'hide',
             },
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            exports: {
+                inputValue: '${ $.provider }:params.search',
+                chipInputValue: '${ $.searchChipsProvider }:value'
+            },
             imageSeriesUrl: Column.imageSeriesUrl,
-            messageDelay: 5,
             authConfig: {
                 url: '',
                 isAuthorized: false,
@@ -91,7 +102,9 @@ define([
             this._super()
                 .observe([
                     'visibility',
-                    'height'
+                    'height',
+                    'inputValue',
+                    'chipInputValue'
                 ]);
             this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
@@ -260,6 +273,15 @@ define([
                 record.canViewMoreKeywords(false);
             }
             return record.canViewMoreKeywords();
+        },
+
+        /**
+         * Drop all filters and initiate search on keyword click event
+         */
+        searchByKeyWord: function(keyword) {
+            _.invoke(this.chips().elems(), 'clear');
+            this.inputValue(keyword);
+            this.chipInputValue(keyword);
         },
 
         /**
