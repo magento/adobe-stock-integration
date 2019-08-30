@@ -364,7 +364,6 @@ define([
         /**
          * Generate meaningful name image file
          *
-         * @param path string
          * @param record
          * @return string
          */
