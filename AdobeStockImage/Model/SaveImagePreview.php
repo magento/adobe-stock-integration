@@ -115,7 +115,7 @@ class SaveImagePreview implements SaveImagePreviewInterface
     {
         try {
             $asset = $this->getImageByAdobeId($adobeId);
-            $path = $this->storage->save($asset, $destinationPath);
+            $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset($asset);
         } catch (\Exception $exception) {

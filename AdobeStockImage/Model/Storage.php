@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model;
 
 use Exception;
-use Magento\AdobeStockAsset\Model\Asset;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -72,25 +71,19 @@ class Storage
     /**
      * Save file from the URL to destination directory relative to media directory
      *
-     * @param Asset $asset
-     * @param string $destinationDirectoryPath
+     * @param string $imageUrl
+     * @param string $destinationPath
      * @return string
      * @throws LocalizedException
      */
-    public function save(Asset $asset, string $destinationDirectoryPath = '') : string
+    public function save(string $imageUrl, string $destinationPath = '') : string
     {
-        if (!empty($destinationDirectoryPath)) {
-            $destinationDirectoryPath = rtrim($destinationDirectoryPath, '/') . '/';
-        }
-        $imageName = $this->generateImageName($asset->getData());
-        $destinationPath = $destinationDirectoryPath . $imageName;
-
         $bytes = false;
 
         try {
             $bytes = $this->getMediaDirectory()->writeFile(
                 $destinationPath,
-                $this->driver->fileGetContents($this->getUrlWithoutProtocol($asset->getPreviewUrl()))
+                $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl))
             );
         } catch (Exception $exception) {
             $this->log->critical("Failed to save the image. Exception: \n" . $exception);
@@ -101,19 +94,6 @@ class Storage
         }
 
         return $destinationPath;
-    }
-
-    /**
-     * Generate image name by Title + id.
-     *
-     * @param array $imageData
-     * @return string
-     */
-    private function generateImageName(array $imageData) :string
-    {
-        $imageName = str_replace(' ', '-', substr($imageData['title'], 0, 32)) . '-' . $imageData['id'];
-        preg_match('/\.[a-z]{1,3}/', $this->getFileName($imageData['preview_url']), $imageType);
-        return $imageName.implode($imageType);
     }
 
     /**
