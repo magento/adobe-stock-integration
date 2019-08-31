@@ -35,8 +35,11 @@
                 </div>
                 <!-- /ko -->
             </ul>
-            <button class="action-secondary" type="button" data-bind="click: function(){ $col.save($row()) }">
+            <button class="action-secondary" type="button" data-bind="visible: !$col.isDownloaded($row())(), click: function(){ $col.save($row()) }">
                 <span translate="'Save Preview'"/>
+            </button>
+            <button class="action-secondary" type="button" data-bind="visible: $col.isDownloaded($row())(), click: function(){ $col.locate($row()) }">
+                <span translate="'Locate'"/>
             </button>
             <button class="action-default primary"
                     type="button"

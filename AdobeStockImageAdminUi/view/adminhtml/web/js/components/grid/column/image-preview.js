@@ -301,6 +301,20 @@ define([
         },
 
         /**
+         * Returns is_downloaded flag as observable for given record
+         *
+         * @param record
+         * @returns {observable}
+         */
+        isDownloaded: function(record) {
+            if (!ko.isObservable((record.is_downloaded))){
+                record.is_downloaded = ko.observable(record.is_downloaded);
+            }
+
+            return record.is_downloaded;
+        },
+
+        /**
          * Get styles for preview
          *
          * @param {Object} record
@@ -328,6 +342,17 @@ define([
         },
 
         /**
+         * Locate downloaded in media browser (draft)
+         *
+         * @param record
+         */
+        locate: function (record) {
+            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
+            $(this.adobeStockModalSelector).trigger('closeModal');
+            mediaBrowser.reload(true);
+        },
+
+        /**
          * Save record as image
          *
          * @param record
@@ -347,6 +372,7 @@ define([
                     },
                     context: this,
                     success: function () {
+                        record.is_downloaded(1);
                         $(this.adobeStockModalSelector).trigger('processStop');
                         $(this.adobeStockModalSelector).trigger('closeModal');
                         mediaBrowser.reload(true);
