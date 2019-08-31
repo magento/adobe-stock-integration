@@ -8,14 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockImageApi\Api\SaveImagePreviewInterface;
+use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SaveImagePreview
+ * Class SaveImage
  */
-class SaveImagePreview implements SaveImagePreviewInterface
+class SaveImage implements SaveImageInterface
 {
     /**
      * @var Storage
@@ -38,22 +39,30 @@ class SaveImagePreview implements SaveImagePreviewInterface
     private $saveAsset;
 
     /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
      * SaveImagePreview constructor.
      * @param SaveAsset $saveAsset
      * @param Storage $storage
      * @param GetImageByAdobeId $getImageByAdobeId
      * @param LoggerInterface $logger
+     * @param ClientInterface $client
      */
     public function __construct(
         SaveAsset $saveAsset,
         Storage $storage,
         GetImageByAdobeId $getImageByAdobeId,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ClientInterface $client
     ) {
         $this->storage = $storage;
         $this->logger = $logger;
         $this->getImageByAdobeId = $getImageByAdobeId;
         $this->saveAsset = $saveAsset;
+        $this->client = $client;
     }
 
     /**
@@ -63,7 +72,8 @@ class SaveImagePreview implements SaveImagePreviewInterface
     {
         try {
             $asset = $this->getImageByAdobeId->execute($adobeId);
-            $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
+            $downloadUrl = $this->client->getImageDownloadUrl($adobeId);
+            $path = $this->storage->save($downloadUrl, $destinationPath);
             $asset->setPath($path);
             $this->saveAsset->execute($asset);
         } catch (\Exception $exception) {

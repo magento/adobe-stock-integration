@@ -86,6 +86,7 @@ class ImagePreview extends Column
                 (array)$this->getData('config'),
                 [
                     'downloadImagePreviewUrl' => $this->urlBuilder->getUrl('adobe_stock/preview/download'),
+                    'licenseAndDownloadUrl' => $this->urlBuilder->getUrl('adobe_stock/license/license'),
                     'getQuotaUrl' => $this->urlBuilder->getUrl('adobe_stock/license/getquota'),
                     'imageSeriesUrl' => $this->urlBuilder->getUrl('adobe_stock/preview/series'),
                     'authConfig' => [

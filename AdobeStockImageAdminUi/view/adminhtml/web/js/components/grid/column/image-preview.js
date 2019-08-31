@@ -27,6 +27,7 @@ define([
             saveAvailable: true,
             searchValue: null,
             downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
+            licenseAndDownloadUrl: Column.licenseAndDownloadUrl,
             messageDelay: 5,
             statefull: {
                 visible: true,
@@ -328,18 +329,28 @@ define([
         },
 
         /**
-         * Save record as image
+         * Saves image preview
          *
          * @param record
          */
-        save: function (record) {
+        savePreview: function(record) {
+            this.save(record, this.downloadImagePreviewUrl)
+        },
+
+        /**
+         * Save record as image
+         *
+         * @param record
+         * @param actionUrl
+         */
+        save: function (record, actionUrl) {
             var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
             var destinationPath = (mediaBrowser.activeNode.path || '') + '/' + this.generateImageName(record);
             $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
                     type: 'POST',
-                    url: this.downloadImagePreviewUrl,
+                    url: actionUrl,
                     dataType: 'json',
                     data: {
                         'media_id': record.id,
@@ -367,7 +378,7 @@ define([
          * @param record
          * @return string
          */
-        generateImageName: function (record) {
+            generateImageName: function (record) {
             var imageType = record.content_type.match(/[^/]{1,4}$/),
                 imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
             return imageName + '.' + imageType;
@@ -389,9 +400,7 @@ define([
          * @param {Object} record
          */
         licenseAndSave: function (record) {
-            /** @todo add license functionality */
-            console.warn('add license functionality');
-            console.dir(record);
+            this.save(record, this.licenseAndDownloadUrl);
         },
 
         /**
@@ -400,7 +409,7 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-            var licenseAndSave = this.licenseAndSave;
+            var licenseAndSave = this.licenseAndSave.bind(this);
             $.ajax(
                 {
                     type: 'POST',
@@ -419,11 +428,11 @@ define([
                             content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
                             actions: {
                                 confirm: function(){
-                                    licenseAndSave(record);
+                                    licenseAndSave(record)
                                 }
                             }
-                        });
-                    },
+                        }).bind(this);
+                    }.bind(this),
 
                     error: function (response) {
                         $(this.adobeStockModalSelector).trigger('processStop');

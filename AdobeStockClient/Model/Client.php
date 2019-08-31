@@ -189,11 +189,26 @@ class Client implements ClientInterface
     private function getLicenseInfo(int $contentId): License
     {
         /** @var LicenseRequest $licenseRequest */
+        $licenseRequest = $this->getLicenseRequest($contentId);
+        return $this->getConnection()->getMemberProfile($licenseRequest, $this->getAccessToken());
+    }
+
+    /**
+     * Generates license request
+     *
+     * @param int $contentId
+     * @return LicenseRequest
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    private function getLicenseRequest(int $contentId): LicenseRequest
+    {
+        /** @var LicenseRequest $licenseRequest */
         $licenseRequest = $this->licenseRequestFactory->create();
         $licenseRequest->setContentId($contentId)
             ->setLocale($this->clientConfig->getLocale())
             ->setLicenseState('STANDARD');
-        return $this->getConnection()->getMemberProfile($licenseRequest, $this->getAccessToken());
+
+        return $licenseRequest;
     }
 
     /**
@@ -211,6 +226,22 @@ class Client implements ClientInterface
     {
         return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
     }
+
+    public function licenseImage(int $contentId): License
+    {
+        $licenseRequest = $this->getLicenseRequest($contentId);
+        $license = $this->getConnection()->getContentLicense($licenseRequest, $this->getAccessToken());
+
+        return $license;
+    }
+
+    public function getImageDownloadUrl(int $contentId): string
+    {
+        $licenseRequest = $this->getLicenseRequest($contentId);
+
+        return $this->getConnection()->downloadAssetUrl($licenseRequest, $this->getAccessToken());
+    }
+
 
     /**
      * Convert a stock file object to a document object

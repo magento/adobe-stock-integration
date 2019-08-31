@@ -48,4 +48,11 @@ interface ClientInterface
      * @return bool
      */
     public function testConnection(string $apiKey = null): bool;
+
+    /**
+     * Invokes licensing image operation via Adobe Stock API
+     *
+     * @param int $contentId
+     */
+    public function licenseImage(int $contentId);
 }
