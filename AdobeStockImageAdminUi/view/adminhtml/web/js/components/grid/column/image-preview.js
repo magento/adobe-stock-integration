@@ -11,8 +11,9 @@ define([
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
-    'Magento_Ui/js/modal/confirm'
-], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation) {
+    'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/prompt'
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation, prompt) {
     'use strict';
 
     return imagePreview.extend({
@@ -328,14 +329,51 @@ define([
         },
 
         /**
+         * Save preview
+         *
+         * @param {Object} record
+         * @return {void}
+         */
+        savePreview: function (record) {
+            prompt({
+                title: 'Specify image name',
+                value: this.generateImageName(record),
+                validation: true,
+                promptField: '[data-role="promptField"]',
+                validationRules: ['required-entry'],
+                attributesForm: {
+                    novalidate: 'novalidate',
+                    action: '',
+                    onkeydown: 'return event.key != \'Enter\';'
+                },
+                attributesField: {
+                    name: 'name',
+                    'data-validate': '{required:true}',
+                    maxlength: '128'
+                },
+                context: this,
+                actions: {
+                    confirm: function (imageName) {
+                        this.save(record, imageName);
+                    }.bind(this)
+                }
+            });
+        },
+
+        /**
          * Save record as image
          *
-         * @param record
+         * @param {Object} record
+         * @param {String} imageName
+         * @return {void}
          */
-        save: function (record) {
-            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
-            var destinationPath = (mediaBrowser.activeNode.path || '') + '/' + this.generateImageName(record);
+        save: function (record, imageName) {
+            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser'),
+                imageType = record.content_type.match(/[^/]{1,4}$/),
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + imageName + '.' + imageType;
+
             $(this.adobeStockModalSelector).trigger('processStart');
+
             $.ajax(
                 {
                     type: 'POST',
@@ -360,7 +398,6 @@ define([
             );
         },
 
-
         /**
          * Generate meaningful name image file
          *
@@ -368,11 +405,8 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            var imageType = record.content_type.match(/[^/]{1,4}$/),
-                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
-            return imageName + '.' + imageType;
+            return record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
         },
-
 
         /**
          * Get messages
