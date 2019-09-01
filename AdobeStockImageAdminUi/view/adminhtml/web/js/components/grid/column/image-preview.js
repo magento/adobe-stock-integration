@@ -11,7 +11,8 @@ define([
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
-    'Magento_Ui/js/modal/confirm'
+    'Magento_Ui/js/modal/confirm',
+    'mage/backend/tabs'
 ], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation) {
     'use strict';
 
@@ -124,11 +125,12 @@ define([
                 url: this.imageSeriesUrl,
                 dataType: 'json',
                 data: {
-                    'serie_id': record.id,
+                    'image_id': record.id,
                     'limit': 4
                 },
             }).done(function (data) {
                 record.series(data.result.series);
+                record.model(data.result.model);
             });
         },
 
@@ -200,18 +202,42 @@ define([
         },
 
         /**
+         * Initalize Tabs
+         *
+         */
+        getDataMageInit: function () {
+            $('#adobe-stock-tabs').tabs({
+                active: 'series_content',
+                destination: '#adobe-stock-tabs-content',
+                shadowTabs: []
+            });
+        },
+
+        /**
          * Returns series to display under the image
          *
          * @param record
          * @returns {*[]}
          */
         getSeries: function (record) {
-            if (!record.series) {
+            if (!record.series || !record.model) {
                 record.series = ko.observableArray([]);
+                record.model = ko.observableArray([]);
                 this.requestSeries(record);
+                this.getModel(record);
                 this._updateHeight();
             }
             return record.series;
+        },
+
+        /**
+         * Returns model to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getModel: function (record) {
+            return record.model;
         },
 
         /**
