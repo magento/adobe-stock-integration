@@ -23,6 +23,7 @@ define([
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
             inputValue: '',
             chipInputValue: '',
+            serieFilterValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
@@ -47,6 +48,7 @@ define([
             },
             exports: {
                 inputValue: '${ $.provider }:params.search',
+                serieFilterValue: '${ $.provider }:params.filters.serie_id',
                 chipInputValue: '${ $.searchChipsProvider }:value'
             },
             getQuotaUrl: Column.getQuotaUrl,
@@ -105,7 +107,8 @@ define([
                     'visibility',
                     'height',
                     'inputValue',
-                    'chipInputValue'
+                    'chipInputValue',
+                    'serieFilterValue'
                 ]);
             this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
@@ -123,6 +126,7 @@ define([
                 type: 'GET',
                 url: this.imageSeriesUrl,
                 dataType: 'json',
+                showLoader: true,
                 data: {
                     'serie_id': record.id,
                     'limit': 4
@@ -215,6 +219,16 @@ define([
         },
 
         /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromSeries: function(record) {
+            this.serieFilterValue(record.id);
+        },
+
+        /**
          * Returns keywords to display under the attributes image
          *
          * @param record
@@ -245,6 +259,7 @@ define([
          */
         viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
+            this._updateHeight();
         },
 
         /**
