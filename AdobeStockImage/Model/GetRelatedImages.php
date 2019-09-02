@@ -84,8 +84,14 @@ class GetRelatedImages
         try {
             $seriesFilter = $this->filterBuilder->setField(self::SERIE_ID)->setValue($imageId)->create();
             $modelFilter = $this->filterBuilder->setField(self::MODEL_ID)->setValue($imageId)->create();
-            $serieSearchCriteria = $this->searchCriteriaBuilder->addFilter($seriesFilter)->setPageSize($limit)->create();
-            $modelSearchCriteria = $this->searchCriteriaBuilder->addFilter($modelFilter)->setPageSize($limit)->create();
+            $serieSearchCriteria = $this->searchCriteriaBuilder
+                ->addFilter($seriesFilter)
+                ->setPageSize($limit)
+                ->create();
+            $modelSearchCriteria = $this->searchCriteriaBuilder
+                ->addFilter($modelFilter)
+                ->setPageSize($limit)
+                ->create();
 
             return $this->serializeRelatedImages(
                 $this->getImageList->execute($serieSearchCriteria)->getItems(),
