@@ -431,8 +431,8 @@ define([
                                     licenseAndSave(record)
                                 }
                             }
-                        }).bind(this);
-                    }.bind(this),
+                        })
+                    },
 
                     error: function (response) {
                         $(this.adobeStockModalSelector).trigger('processStop');
