@@ -34,10 +34,22 @@ define([
                 modalClass: 'adobe-stock-modal',
                 title: $t('Adobe Stock')
             }).on('openModal', function () {
-                this.masonry().setLayoutStyles();
+                this.setStyles();
             }.bind(this)).applyBindings();
 
             return this;
+        },
+
+        /**
+         * Apply style after images rendered on page.
+         */
+        setStyles: function () {
+            window.dispatchEvent(new Event('resize'));
+            $(document).ajaxComplete(() => {
+                setTimeout(() => {
+                    this.masonry().setLayoutStyles();
+                }, 200);
+            });
         }
     });
 });
