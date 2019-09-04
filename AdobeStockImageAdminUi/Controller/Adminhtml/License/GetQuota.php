@@ -67,7 +67,7 @@ class GetQuota extends Action
     public function execute()
     {
         try {
-            $params = $params = $this->getRequest()->getParams();
+            $params = $this->getRequest()->getParams();
             $contentId = (int)$params['media_id'];
             $responseCode = self::HTTP_OK;
             $responseContent = [
