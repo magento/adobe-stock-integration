@@ -14,11 +14,11 @@
             <button class="action-next" type="button" data-bind="click: function () { $col.next($row()); }">
                 <span translate="'Next'"/>
             </button>
-            <button class="action-close" type="button" data-bind="click: function () { $col.hide(); }">
+            <button class="action-close" type="button" data-bind="click: function () { $col.hide($row()); }">
                 <span translate="'Close'"/>
             </button>
         </div>
-        <img attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
+        <img class="preview" attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
         <div class="info">
             <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
             <div class="author" if="$col.getAuthor($row())">
@@ -45,7 +45,7 @@
                 <span translate="'License and Save'"></span>
             </button>
         </div>
-        <div class="attributes">
+        <div class="attributes" data-role="image-attributes-value">
             <!-- ko foreach: $col.getDisplayAttributes($row()) -->
             <div class="attribute">
                 <span class="title" translate="name"/>
@@ -59,14 +59,23 @@
             <div class="title" translate="'Similar Keywords'"></div>
             <!-- ko foreach: $col.getKeywords($row()) -->
                 <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
-                    <div class="value">
+                    <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
                         <span text="name"/>
-                    </div>
+                    </a>
                 </div>
             <!-- /ko -->
             <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
                 <span translate="'View all'"/>
             </button>
+        </div>
+        <div class="series">
+            <div class="title" translate="'More from this series'"></div>
+            <!-- ko foreach: $col.getSeries($row()) -->
+            <div class="thumbnail" data-bind="css: { 'hide': $index() >= 3}">
+                <img attr="src: thumbnail_url, alt: title">
+            </div>
+            <!-- /ko -->
+            </div>
         </div>
     </div>
 </div>

@@ -6,28 +6,22 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
+namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
-use Magento\AdobeStockImage\Model\SaveImagePreview;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Download
+ * Backend controller for retrieving license quota for the current user
  */
-class Download extends Action
+class GetQuota extends Action
 {
     /**
      * Successful image download result code.
      */
     const HTTP_OK = 200;
-
-    /**
-     * Download image failed response code.
-     */
-    const HTTP_BAD_REQUEST = 400;
 
     /**
      * Internal server error response code.
@@ -37,31 +31,33 @@ class Download extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
-    /** @var LoggerInterface */
+    /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
     /**
-     * @var SaveImagePreview
-     */
-    private $saveImagePreview;
-
-    /**
-     * Download constructor.
+     * GetQuota constructor.
      *
-     * @param Action\Context   $context
-     * @param SaveImagePreview $saveImagePreview
-     * @param LoggerInterface  $logger
+     * @param Action\Context $context
+     * @param ClientInterface $client
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        SaveImagePreview $saveImagePreview,
+        ClientInterface $client,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->saveImagePreview = $saveImagePreview;
+        $this->client = $client;
         $this->logger = $logger;
     }
 
@@ -72,28 +68,21 @@ class Download extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $mediaId = (int) $params['media_id'];
-            $destinationPath = (string) $params['destination_path'];
-            $this->saveImagePreview->execute($mediaId, $destinationPath);
-
+            $contentId = (int)$params['media_id'];
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully downloaded the image.'),
+                'error_message' => '',
+                'result' => $this->client->getQuotaConfirmationMessage($contentId),
             ];
-        } catch (NotFoundException $exception) {
-            $responseCode = self::HTTP_BAD_REQUEST;
-            $responseContent = [
-                'success' => false,
-                'message' => __('Image not found. Could not be saved.'),
-            ];
+
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during image download: %1', $exception->getMessage());
+            $logMessage = __('An error occurred during get quota operation: %1', $exception->getMessage());
             $this->logger->critical($logMessage);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while image download. Contact support.'),
+                'message' => __('An error occurred during get quota operation. Contact support.'),
             ];
         }
 

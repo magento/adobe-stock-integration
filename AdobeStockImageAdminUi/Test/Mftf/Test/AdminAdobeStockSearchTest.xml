@@ -8,25 +8,25 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUserSearchesStockImagesByKeywordsTest">
+    <test name="AdminAdobeStockSearchTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="Access Adobe Stock Image panel via the Admin"/>
             <title value="User searches stock images by keywords"/>
             <description value="User searches stock images by keywords"/>
             <severity value="CRITICAL"/>
-            <group value="AdobeStockIntegration"/>
+            <group value="adobe_stock_integration_grid"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPear">
