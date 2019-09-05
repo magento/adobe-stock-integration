@@ -18,6 +18,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\Save;
 
 /**
  * Category repository test.
@@ -61,11 +62,17 @@ class CreatorRepositoryTest extends TestCase
     private $creatorRepository;
 
     /**
+     * @var MockObject|Save $commandSave
+     */
+    private $commandSave;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
     {
         $this->resourceModel = $this->createMock(ResourceModel::class);
+        $this->commandSave = $this->createMock(Save::class);
         $this->creatorCollectionFactory = $this->createMock(CreatorCollectionFactory::class);
         $this->creatorFactory = $this->createMock(CreatorFactory::class);
         $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);
@@ -78,7 +85,8 @@ class CreatorRepositoryTest extends TestCase
             $this->creatorFactory,
             $this->joinProcessorInterface,
             $this->collectionProcessorInterface,
-            $this->creatorSearchResultInterfaceFactory
+            $this->creatorSearchResultInterfaceFactory,
+            $this->commandSave
         );
     }
 

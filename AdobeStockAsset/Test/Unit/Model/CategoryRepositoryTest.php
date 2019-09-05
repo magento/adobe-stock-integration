@@ -11,6 +11,7 @@ use Magento\AdobeStockAsset\Model\CategoryFactory;
 use Magento\AdobeStockAsset\Model\CategoryRepository;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\Save;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -60,11 +61,17 @@ class CategoryRepositoryTest extends TestCase
     private $categoryRepository;
 
     /**
+     * @var MockObject|Save $commandSave
+     */
+    private $commandSave;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
     {
         $this->resourceModel = $this->createMock(ResourceModel::class);
+        $this->commandSave = $this->createMock(Save::class);
         $this->categoryCollectionFactory = $this->createMock(CategoryCollectionFactory::class);
         $this->categoryFactory = $this->createMock(CategoryFactory::class);
         $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);
@@ -73,6 +80,7 @@ class CategoryRepositoryTest extends TestCase
 
         $this->categoryRepository = new CategoryRepository(
             $this->resourceModel,
+            $this->commandSave,
             $this->categoryCollectionFactory,
             $this->categoryFactory,
             $this->joinProcessorInterface,

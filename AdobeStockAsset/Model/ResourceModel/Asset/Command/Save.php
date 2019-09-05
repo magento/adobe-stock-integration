@@ -48,7 +48,7 @@ class Save
      */
     public function execute(AssetInterface $assets): void
     {
-        $assetsData[] = $assets->getData();
+        $assetsData = $assets->getData();
         if (!count($assetsData)) {
             return;
         }
@@ -56,24 +56,13 @@ class Save
         $tableName = $this->resourceConnection->getTableName(
             AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
         );
+
+        $columns = array_keys($connection->describeTable($tableName));
+        $assetsData = array_intersect_key($assetsData, array_flip($columns));
+
         $onDuplicateSql = $this->buildOnDuplicateSqlPart([AssetInterface::ID]);
-        $columnsSql = $this->buildColumnsSqlPart(
-            [
-                AssetInterface::ID,
-                AssetInterface::MEDIA_TYPE_ID,
-                AssetInterface::CATEGORY_ID,
-                AssetInterface::CREATOR_ID,
-                AssetInterface::PATH,
-                AssetInterface::IS_LICENSED,
-                AssetInterface::TITLE,
-                AssetInterface::WIDTH,
-                AssetInterface::HEIGHT,
-                AssetInterface::CONTENT_TYPE,
-                AssetInterface::CREATION_DATE,
-            ]
-        );
-        $bind = $this->getSqlBindData($assetsData);
-        $valuesSql = $this->buildValuesSqlPart(count($bind));
+        $columnsSql = $this->buildColumnsSqlPart(array_keys($assetsData));
+        $valuesSql = $this->buildValuesSqlPart(count($assetsData));
         $insertSql = sprintf(
             'INSERT INTO `%s` (%s) VALUES %s %s',
             $tableName,
@@ -82,7 +71,7 @@ class Save
             $onDuplicateSql
         );
         try {
-            $connection->query($insertSql, $bind);
+            $connection->query($insertSql, array_values($assetsData));
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
@@ -112,33 +101,6 @@ class Save
     {
         $sql = '(' . rtrim(str_repeat('?,', $bind), ',') . ')';
         return $sql;
-    }
-
-    /**
-     * Get sql bind data.
-     *
-     * @param AssetInterface[] $assets
-     * @return array
-     */
-    private function getSqlBindData(array $assets): array
-    {
-        $bind = [];
-        foreach ($assets as $asset) {
-            $bind = [
-                $asset['id'],
-                $asset['media_type_id'] ?? null,
-                $asset['category_id'] ?? null,
-                $asset['creator_id'] ?? null,
-                $asset['path'] ?? null,
-                $asset['is_licensed'] ?? 0,
-                $asset['title'] ?? null,
-                $asset['width'] ?? null,
-                $asset['height'] ?? null,
-                $asset['content_type'] ?? null,
-                $asset['creation_date'] ?? null,
-            ];
-        }
-        return $bind;
     }
 
     /**
