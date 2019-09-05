@@ -41,6 +41,14 @@ class GetImageByAdobeId
      */
     private $documentToAsset;
 
+    /**
+     * GetImageByAdobeId constructor.
+     *
+     * @param FilterBuilder $filterBuilder
+     * @param GetImageListInterface $getImageList
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param DocumentToAsset $documentToAsset
+     */
     public function __construct(
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,

@@ -55,4 +55,12 @@ interface ClientInterface
      * @param int $contentId
      */
     public function licenseImage(int $contentId);
+
+    /**
+     * Returns download URL for a licensed image
+     *
+     * @param int $contentId
+     * @return mixed
+     */
+    public function getImageDownloadUrl(int $contentId): string;
 }

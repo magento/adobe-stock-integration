@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
@@ -37,6 +36,13 @@ class SaveAsset
      */
     private $creatorRepository;
 
+    /**
+     * SaveAsset constructor.
+     *
+     * @param AssetRepositoryInterface $assetRepository
+     * @param CreatorRepositoryInterface $creatorRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
     public function __construct(
         AssetRepositoryInterface $assetRepository,
         CreatorRepositoryInterface $creatorRepository,

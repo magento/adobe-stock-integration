@@ -227,6 +227,14 @@ class Client implements ClientInterface
         return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
     }
 
+    /**
+     * Performs image license request to Adobe Stock APi
+     *
+     * @param int $contentId
+     * @return License
+     * @throws IntegrationException
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
     public function licenseImage(int $contentId): License
     {
         $licenseRequest = $this->getLicenseRequest($contentId);
@@ -235,13 +243,20 @@ class Client implements ClientInterface
         return $license;
     }
 
+    /**
+     * Returns download URL for a licensed image
+     *
+     * @param int $contentId
+     * @return string
+     * @throws IntegrationException
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
     public function getImageDownloadUrl(int $contentId): string
     {
         $licenseRequest = $this->getLicenseRequest($contentId);
 
         return $this->getConnection()->downloadAssetUrl($licenseRequest, $this->getAccessToken());
     }
-
 
     /**
      * Convert a stock file object to a document object

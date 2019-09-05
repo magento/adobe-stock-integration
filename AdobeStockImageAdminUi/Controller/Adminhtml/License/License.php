@@ -16,7 +16,7 @@ use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Backend controller for licensing the image
+ * Backend controller for licensing and downloading an image
  */
 class License extends Action
 {
