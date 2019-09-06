@@ -87,7 +87,6 @@ class SignIn extends Template
         return $this->config->getAuthUrl();
     }
 
-
     /**
      * Return user name.
      *
@@ -106,6 +105,7 @@ class SignIn extends Template
             );
             $data['email'] = $userProfile->getEmail();
             $data['display_name'] = $userProfile->getName();
+            $data['full_name'] = $userProfile->getFullName();
         }
 
         return $this->serializer->serialize($data);

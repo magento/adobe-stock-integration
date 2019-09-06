@@ -13,6 +13,7 @@
         <column xsi:type="varchar" length="255" name="display_name" nullable="false" comment="Display Name"/>
         <column xsi:type="varchar" length="255" name="email" nullable="false" comment="user profile email"/>
         <column xsi:type="varchar" length="255" name="family_name" nullable="false" comment="user last name"/>
+        <column xsi:type="varchar" length="255" name="full_name" nullable="false" comment="user first and last name"/>
         <column xsi:type="varchar" length="255" name="account_type" nullable="true" comment="Account Type"/>
         <column xsi:type="text" name="access_token" nullable="true" comment="Access Token"/>
         <column xsi:type="text" name="refresh_token" nullable="true" comment="Refresh Token"/>

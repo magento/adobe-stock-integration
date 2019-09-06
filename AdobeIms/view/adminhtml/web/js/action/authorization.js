@@ -3,9 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'ko'
-], function (ko){
+define([], function (){
     'use strict';
 
     /**

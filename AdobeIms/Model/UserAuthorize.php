@@ -11,7 +11,10 @@ namespace Magento\AdobeIms\Model;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 
-class UserAuthorize implements  UserAuthorizedInterface
+/**
+ * User authorize
+ */
+class UserAuthorize implements UserAuthorizedInterface
 {
     /**
      * @var UserProfileRepositoryInterface

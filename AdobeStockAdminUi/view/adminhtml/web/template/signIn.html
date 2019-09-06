@@ -1,14 +1,50 @@
 <button
-        class="adobe-sign-in-button"
-        id="adobeImsSignIn"
-        data-role="signInBtn"
-        data-bind="click: execute, visible: visibility"
-        type="button">
+    class="adobe-sign-in-button"
+    id="adobeImsSignIn"
+    data-role="signInBtn"
+    data-bind="click: execute, visible: visibility"
+    type="button">
     <span>Sign In</span>
 </button>
-<button
-        id="adobe-ims-user-name"
-        class="adobe-sign-in-button admin__action-dropdown"
-        data-bind="visible: nameVisibility">
-    <span><!--ko text: displayName--><!--/ko--></span>
-</button>
+<div class="adobe-user-information">
+    <div class="admin__action-dropdown-wrap">
+        <button
+            id="adobe-ims-user-name"
+            data-mage-init='{"dropdown":{}}'
+            data-toggle="dropdown"
+            class="adobe-user-name admin__action-dropdown"
+            data-bind="visible: nameVisibility">
+            <span><!--ko text: displayName--><!--/ko--></span>
+        </button>
+        <ul class="admin__action-dropdown-menu" data-bind="visible: nameVisibility">
+            <li>
+                <img class="adobe-profile-avatar"
+                     alt="user-profile photo"
+                     src="https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-138.png?cb=264615658">
+                </img>
+            </li>
+            <li class="user-profile-information">
+                <ul class="adobe-user-data">
+                    <li><!--ko text: fullName--><!--/ko--></li>
+                    <li><!--ko text: email--><!--/ko--></li>
+                    <li><a href="#">Manage Account</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="adobe-user-credits">
+                    <span>AVAILABLE</span>
+                    <p><b><!--ko text: imagesAvailable--><!--/ko--></b> images | <b><!--ko text: credits-->
+                        <!--/ko--></b> Credits</p>
+                </div>
+                <button
+                    class="adobe-sign-out-button"
+                    id="adobeImsSignOut"
+                    data-bind="click: signOut"
+                    data-role="signOutBtn"
+                    type="button">
+                    <span>Sign Out</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>

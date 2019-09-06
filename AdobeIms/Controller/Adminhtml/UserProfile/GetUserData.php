@@ -12,6 +12,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
+
 /**
  * Backend controller for retrieving data for the current user
  */
@@ -77,7 +78,8 @@ class GetUserData extends Action
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
             $userData = [
                 'email' => $userProfile->getEmail(),
-                'display_name' => $userProfile->getName()
+                'display_name' => $userProfile->getName(),
+                'full_name'  => $userProfile->getFullName()
             ];
             $responseCode = self::HTTP_OK;
 

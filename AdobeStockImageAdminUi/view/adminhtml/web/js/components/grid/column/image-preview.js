@@ -113,9 +113,7 @@ define([
             }, this);
 
             this.isAuthorized.subscribe(function () {
-                if (this.isAuthorized() === true) {
-                    this.authConfig.isAuthorized = true;
-                }
+                this.authConfig.isAuthorized = this.isAuthorized() === true;
             }.bind(this));
             return this;
         },
@@ -287,7 +285,7 @@ define([
         /**
          * Drop all filters and initiate search on keyword click event
          */
-        searchByKeyWord: function(keyword) {
+        searchByKeyWord: function (keyword) {
             _.invoke(this.chips().elems(), 'clear');
             this.inputValue(keyword);
             this.chipInputValue(keyword);
@@ -426,7 +424,7 @@ define([
                             title: $.mage.__('License Adobe Stock Image?'),
                             content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
                             actions: {
-                                confirm: function(){
+                                confirm: function () {
                                     licenseAndSave(record);
                                 }
                             }

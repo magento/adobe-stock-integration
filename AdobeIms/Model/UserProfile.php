@@ -85,6 +85,22 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
+    public function getFullName(): string
+    {
+        return $this->getData(self::FULL_NAME);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setFullName(string $value): void
+    {
+        $this->setData(self::FULL_NAME, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setFamilyName(string $value): void
     {
         $this->setData(self::FAMILY_NAME, $value);

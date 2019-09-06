@@ -29,6 +29,7 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
     const EMAIL = 'email';
     const FAMILY_NAME = 'family_name';
+    const FULL_NAME = 'full_name';
     /**#@-*/
 
     /**
@@ -89,6 +90,21 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return string
      */
     public function getFamilyName(): string;
+
+    /**
+     * Get full name
+     *
+     * @return string
+     */
+    public function getFullName(): string;
+
+    /**
+     * Set full name
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setFullName(string $value): void;
 
     /**
      * Set name

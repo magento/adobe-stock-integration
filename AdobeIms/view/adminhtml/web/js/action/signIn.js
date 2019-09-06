@@ -19,7 +19,12 @@ define([
             visibility: ko.observable(true),
             nameVisibility: ko.observable(false),
             displayName: ko.observable(),
+            fullName: ko.observable(),
+            email:  ko.observable(),
+            imagesAvailable:  ko.observable(0),
+            credits: ko.observable(0),
             getUserDataUrl: '',
+            getSignOutUrl: '',
             userData: '',
             authConfig: {
                 url: '',
@@ -69,7 +74,12 @@ define([
                 this.visibility(false);
                 this.nameVisibility(true);
                 this.displayName(this.userData['display_name']);
+                this.fullName(this.userData['full_name']);
+                this.email(this.userData['email']);
+                imagePreview().isAuthorized(true);
             } else if (!this.authConfig.isAuthorized) {
+                this.isAuthorized(false);
+                imagePreview().isAuthorized(false);
                 this.visibility(true);
                 this.nameVisibility(false);
             }
@@ -83,8 +93,7 @@ define([
                 .then(
                     function (authConfig) {
                         this.authConfig = _.extend(this.authConfig, authConfig);
-                        imagePreview().isAuthorized(true);
-                        this.isAuthorized(true);
+                        this.checkAuthorize();
                         return this.authConfig.isAuthorized;
                     }.bind(this)
                 ).catch(
@@ -92,6 +101,29 @@ define([
                         return error;
                     }.bind(this)
                 );
+        },
+
+        /**
+         * Sign out user from adobeSDK
+         */
+        signOut: function () {
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: this.getSignOutUrl,
+                    data: {form_key: window.FORM_KEY},
+                    dataType: 'json',
+                    async: false,
+                    context: this,
+                    success: function  ()  {
+                        this.authConfig.isAuthorized = false;
+                        this.checkAuthorize();
+                    },
+                    error: function (response) {
+                        return response.message;
+                    }
+                });
+
         },
 
         /**

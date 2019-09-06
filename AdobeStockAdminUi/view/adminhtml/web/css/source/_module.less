@@ -4,14 +4,66 @@
 //  */
 
 & when (@media-common = true) {
-  .adobe-sign-in-button {
-    float: right;
-    background: transparent;
-    border: none;
-    margin-right: 3%;
-    position: relative;
-    z-index: 99;
-    margin-top: -50px;
-  }
+    .adobe-sign-in-button {
+        border: none;
+        margin-right: 3%;
+        z-index: 99;
+        position: initial;
+        box-shadow: none !important;
+        float: right;
+        margin-top: -50px;
+        background: transparent;
+    }
 
+    .user-profile-information {
+        margin-left: 70px;
+        padding: 10px;
+    }
+
+    .adobe-profile-avatar {
+        float: left;
+        width: 30%;
+        padding-top: 6px;
+    }
+
+    .adobe-user-data > li {
+        padding-bottom: 5px;
+    }
+
+    .adobe-user-data {
+        list-style: none;
+    }
+
+    .adobe-sign-in-button:hover:active {
+        background: transparent;
+        color: #007bdb;
+    }
+
+    .adobe-user-name {
+        box-shadow: none !important;
+    }
+
+    .adobe-sign-out-button {
+        float: left;
+        margin-top: 20px;
+        background: transparent;
+        padding-left: 0px;
+        border: none;
+        padding-bottom: 20px;
+    }
+
+    .admin__action-dropdown-menu {
+        padding-left: 20px;
+        padding-right: 50px;
+    }
+
+    .adobe-sign-out-button:hover {
+        background: transparent;
+    }
+
+    .adobe-user-information {
+        float: right;
+        margin-right: 3%;
+        margin-top: -53px;
+    }
 }

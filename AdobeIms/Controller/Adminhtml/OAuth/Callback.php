@@ -106,6 +106,7 @@ class Callback extends Action
             $userProfile->setName($tokenResponse->getGivenName());
             $userProfile->setEmail($tokenResponse->getEmail());
             $userProfile->setFamilyName($tokenResponse->getFamilyName());
+            $userProfile->setFullName($tokenResponse->getName());
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
