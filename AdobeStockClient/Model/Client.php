@@ -13,11 +13,14 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use AdobeStock\Api\Response\License;
 use Exception;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentFactory;
@@ -27,8 +30,11 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Phrase;
+use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
+use AdobeStock\Api\Request\License as LicenseRequest;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -77,9 +83,24 @@ class Client implements ClientInterface
     private $connectionFactory;
 
     /**
+     * @var LicenseRequestFactory
+     */
+    private $licenseRequestFactory;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var UserProfileRepositoryInterface
+     */
+    private $userProfileRepository;
+
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
 
     /**
      * Client constructor.
@@ -91,7 +112,10 @@ class Client implements ClientInterface
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
      * @param ConnectionFactory $connectionFactory
+     * @param LicenseRequestFactory $licenseRequestFactory
      * @param LoggerInterface $logger
+     * @param UserProfileRepositoryInterface $userProfileRepository
+     * @param UserContextInterface $userContext
      */
     public function __construct(
         ConfigInterface $clientConfig,
@@ -102,7 +126,10 @@ class Client implements ClientInterface
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
         ConnectionFactory $connectionFactory,
-        LoggerInterface $logger
+        LicenseRequestFactory $licenseRequestFactory,
+        LoggerInterface $logger,
+        UserProfileRepositoryInterface $userProfileRepository,
+        UserContextInterface $userContext
     ) {
         $this->clientConfig = $clientConfig;
         $this->imsConfig = $imsConfig;
@@ -112,7 +139,10 @@ class Client implements ClientInterface
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
         $this->connectionFactory = $connectionFactory;
+        $this->licenseRequestFactory = $licenseRequestFactory;
         $this->logger = $logger;
+        $this->userProfileRepository = $userProfileRepository;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -148,6 +178,38 @@ class Client implements ClientInterface
         $searchResult->setTotalCount($totalCount);
 
         return $searchResult;
+    }
+
+    /**
+     * Get license information for the asset
+     *
+     * @param int $contentId
+     * @return License
+     */
+    private function getLicenseInfo(int $contentId): License
+    {
+        /** @var LicenseRequest $licenseRequest */
+        $licenseRequest = $this->licenseRequestFactory->create();
+        $licenseRequest->setContentId($contentId)
+            ->setLocale($this->clientConfig->getLocale())
+            ->setLicenseState('STANDARD');
+        return $this->getConnection()->getMemberProfile($licenseRequest, $this->getAccessToken());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getQuota(int $contentId): int
+    {
+        return $this->getLicenseInfo($contentId)->getEntitlement()->getQuota();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getQuotaConfirmationMessage(int $contentId): string
+    {
+        return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
     }
 
     /**
@@ -285,13 +347,19 @@ class Client implements ClientInterface
     }
 
     /**
-     * TODO: Implement retrieving of an access token
+     * Retrieve an access token for current user
      *
-     * @return null
+     * @return string|null
      */
     private function getAccessToken()
     {
-        return null;
+        try {
+            return $this->userProfileRepository->getByUserId(
+                (int)$this->userContext->getUserId()
+            )->getAccessToken();
+        } catch (NoSuchEntityException $exception) {
+            return null;
+        }
     }
 
     /**

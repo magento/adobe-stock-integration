@@ -11,7 +11,8 @@ define([
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
-], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages) {
+    'Magento_Ui/js/modal/confirm'
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation) {
     'use strict';
 
     return imagePreview.extend({
@@ -48,6 +49,7 @@ define([
                 inputValue: '${ $.provider }:params.search',
                 chipInputValue: '${ $.searchChipsProvider }:value'
             },
+            getQuotaUrl: Column.getQuotaUrl,
             imageSeriesUrl: Column.imageSeriesUrl,
             authConfig: {
                 url: '',
@@ -72,7 +74,7 @@ define([
         /**
          * @inheritDoc
          */
-        next: function (record){
+        next: function (record) {
             this._super();
             this.hideAllKeywords(record);
         },
@@ -80,7 +82,7 @@ define([
         /**
          * @inheritDoc
          */
-        prev: function (record){
+        prev: function (record) {
             this._super();
             this.hideAllKeywords(record);
         },
@@ -105,7 +107,7 @@ define([
                     'inputValue',
                     'chipInputValue'
                 ]);
-            this.height.subscribe(function(){
+            this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
             return this;
@@ -116,8 +118,7 @@ define([
          *
          * @param record
          */
-        requestSeries: function (record)
-        {
+        requestSeries: function (record) {
             $.ajax({
                 type: 'GET',
                 url: this.imageSeriesUrl,
@@ -177,7 +178,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getDisplayAttributes: function(record) {
+        getDisplayAttributes: function (record) {
             return [
                 {
                     name: 'Dimensions',
@@ -204,7 +205,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getSeries: function(record) {
+        getSeries: function (record) {
             if (!record.series) {
                 record.series = ko.observableArray([]);
                 this.requestSeries(record);
@@ -219,7 +220,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getKeywords: function(record) {
+        getKeywords: function (record) {
             return record.keywords;
         },
 
@@ -242,7 +243,7 @@ define([
          * @param record
          * @returns {*}
          */
-        viewAllKeywords: function(record) {
+        viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
         },
 
@@ -252,7 +253,7 @@ define([
          * @param record
          * @returns {*}
          */
-        hideAllKeywords: function(record) {
+        hideAllKeywords: function (record) {
             if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
                 record.keywordsLimit(this.keywordsLimit);
                 record.canViewMoreKeywords(true);
@@ -265,7 +266,7 @@ define([
          * @param record
          * @returns {*}
          */
-        canViewMoreKeywords: function(record) {
+        canViewMoreKeywords: function (record) {
             if (!record.canViewMoreKeywords) {
                 record.canViewMoreKeywords = ko.observable(true);
             }
@@ -306,7 +307,7 @@ define([
          * @returns {Object}
          */
         getStyles: function (record) {
-            if(!record.previewStyles) {
+            if (!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }
             record.previewStyles({
@@ -333,6 +334,7 @@ define([
          */
         save: function (record) {
             var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
+            var destinationPath = (mediaBrowser.activeNode.path || '') + '/' + this.generateImageName(record);
             $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
@@ -341,7 +343,7 @@ define([
                     dataType: 'json',
                     data: {
                         'media_id': record.id,
-                        'destination_path': mediaBrowser.activeNode.path || ''
+                        'destination_path': destinationPath
                     },
                     context: this,
                     success: function () {
@@ -357,6 +359,20 @@ define([
                 }
             );
         },
+
+
+        /**
+         * Generate meaningful name image file
+         *
+         * @param record
+         * @return string
+         */
+        generateImageName: function (record) {
+            var imageType = record.content_type.match(/[^/]{1,4}$/),
+                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return imageName + '.' + imageType;
+        },
+
 
         /**
          * Get messages
@@ -379,13 +395,55 @@ define([
         },
 
         /**
+         * Shows license confirmation popup with information about current license quota
+         *
+         * @param {Object} record
+         */
+        showLicenseConfirmation: function (record) {
+            var licenseAndSave = this.licenseAndSave;
+            $(this.adobeStockModalSelector).trigger('processStart');
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: this.getQuotaUrl,
+                    dataType: 'json',
+                    data: {
+                        'media_id': record.id
+                    },
+                    context: this,
+
+                    success: function (response) {
+                        var quotaInfo = response.result;
+                        var confirmationContent = $.mage.__('License "' + record.title + '"');
+                        $(this.adobeStockModalSelector).trigger('processStop');
+                        confirmation({
+                            title: $.mage.__('License Adobe Stock Image?'),
+                            content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
+                            actions: {
+                                confirm: function(){
+                                    licenseAndSave(record);
+                                }
+                            }
+                        })
+                    },
+
+                    error: function (response) {
+                        $(this.adobeStockModalSelector).trigger('processStop');
+                        messages.add('error', response.responseJSON.message);
+                        messages.scheduleCleanup(3);
+                    }
+                }
+            );
+        },
+
+        /**
          * Process of license
          *
          * @param {Object} record
          */
         licenseProcess: function (record) {
             if (this.authConfig.isAuthorized) {
-                this.licenseAndSave(record);
+                this.showLicenseConfirmation(record);
 
                 return;
             }
@@ -413,4 +471,3 @@ define([
         }
     });
 });
-
