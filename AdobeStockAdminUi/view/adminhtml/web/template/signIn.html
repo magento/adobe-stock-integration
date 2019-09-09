@@ -7,16 +7,16 @@
     <span>Sign In</span>
 </button>
 <div class="adobe-user-information">
-    <div class="admin__action-dropdown-wrap">
+    <div class="admin__action-dropdown-wrap" data-bind="collapsible">
         <button
             id="adobe-ims-user-name"
-            data-mage-init='{"dropdown":{}}'
+            type="button"
             data-toggle="dropdown"
             class="adobe-user-name admin__action-dropdown"
-            data-bind="visible: nameVisibility">
+            data-bind="visible: nameVisibility, toggleCollapsible">
             <span><!--ko text: displayName--><!--/ko--></span>
         </button>
-        <ul class="admin__action-dropdown-menu" data-bind="visible: nameVisibility">
+        <ul class="admin__action-dropdown-menu adobe-user-menu" data-bind="visible: nameVisibility">
             <li>
                 <img class="adobe-profile-avatar"
                      alt="user-profile photo"
@@ -27,7 +27,7 @@
                 <ul class="adobe-user-data">
                     <li><!--ko text: fullName--><!--/ko--></li>
                     <li><!--ko text: email--><!--/ko--></li>
-                    <li><a href="#">Manage Account</a></li>
+                    <li><a target="_blank" href="https://account.adobe.com/profile">Manage Account</a></li>
                 </ul>
             </li>
             <li>

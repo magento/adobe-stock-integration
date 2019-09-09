@@ -11,7 +11,6 @@
                         "template": "Magento_AdobeStockAdminUi/signIn",
                         "getUserDataUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/userprofile/getuserdata')); ?>",
                         "getSignOutUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/userprofile/signout')); ?>",
-                        "userData": <?= /* @noEscape */ $block->getUserData() ?>,
                         "authConfig": {
                             "url": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
                             "isAuthorized": "<?= $block->escapeHtml($block->isAuthorized()) ?>"

@@ -23,6 +23,7 @@ define([
             email:  ko.observable(),
             imagesAvailable:  ko.observable(0),
             credits: ko.observable(0),
+            adobeStockModalSelector: '#adobe-stock-images-search-modal',
             getUserDataUrl: '',
             getSignOutUrl: '',
             userData: '',
@@ -54,8 +55,8 @@ define([
                 'nameVisibility',
                 'displayName'
             ]);
+            this.getUserData();
             this.checkAuthorize();
-            this.displayName(this.userData['display_name']);
             imagePreview().isAuthorized.subscribe(function () {
                 if (imagePreview().isAuthorized() === true) {
                     this.authConfig.isAuthorized = true;
@@ -73,9 +74,7 @@ define([
             if (this.authConfig.isAuthorized) {
                 this.visibility(false);
                 this.nameVisibility(true);
-                this.displayName(this.userData['display_name']);
-                this.fullName(this.userData['full_name']);
-                this.email(this.userData['email']);
+                this.setUserData();
                 imagePreview().isAuthorized(true);
             } else if (!this.authConfig.isAuthorized) {
                 this.isAuthorized(false);
@@ -83,6 +82,17 @@ define([
                 this.visibility(true);
                 this.nameVisibility(false);
             }
+        },
+
+        /**
+         * Setting's all user data after authorization.
+         */
+        setUserData: function () {
+            this.displayName(this.userData['display_name']);
+            this.fullName(this.userData['full_name']);
+            this.email(this.userData['email']);
+            this.imagesAvailable(this.userData['image_quota'] || 0);
+            this.credits(this.userData['credits_quota'] || 0);
         },
 
         /**
@@ -107,6 +117,7 @@ define([
          * Sign out user from adobeSDK
          */
         signOut: function () {
+            $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
                     type: 'POST',
@@ -115,13 +126,15 @@ define([
                     dataType: 'json',
                     async: false,
                     context: this,
-                    success: function  ()  {
+                    success: function ()  {
+                        $(this.adobeStockModalSelector).trigger('processStop');
                         this.authConfig.isAuthorized = false;
                         this.checkAuthorize();
-                    },
+                    }.bind(this),
                     error: function (response) {
+                        $(this.adobeStockModalSelector).trigger('processStop');
                         return response.message;
-                    }
+                    }.bind(this)
                 });
 
         },

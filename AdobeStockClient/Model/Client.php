@@ -10,6 +10,7 @@ namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
+use AdobeStock\Api\Models\LicenseEntitlementQuota;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
@@ -202,6 +203,14 @@ class Client implements ClientInterface
     public function getQuota(int $contentId): int
     {
         return $this->getLicenseInfo($contentId)->getEntitlement()->getQuota();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFullEntitlementQuota(int $contentId): LicenseEntitlementQuota
+    {
+        return $this->getLicenseInfo($contentId)->getEntitlement()->getFullEntitlementQuota();
     }
 
     /**

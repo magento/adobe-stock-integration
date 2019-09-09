@@ -13,7 +13,6 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -38,11 +37,6 @@ class SignIn extends Template
     private $userAuthorize;
 
     /**
-     * @var UserProfileRepositoryInterface
-     */
-    private $userProfileRepository;
-
-    /**
      * Json Serializer Instance
      *
      * @var Json
@@ -56,7 +50,6 @@ class SignIn extends Template
      * @param Context $context
      * @param UserContextInterface $userContext
      * @param UserAuthorizedInterface $userAuthorize
-     * @param UserProfileRepositoryInterface $userProfileRepository
      * @param Json $json
      * @param array $data
      */
@@ -65,14 +58,12 @@ class SignIn extends Template
         Context $context,
         UserContextInterface $userContext,
         UserAuthorizedInterface $userAuthorize,
-        UserProfileRepositoryInterface $userProfileRepository,
         Json $json,
         array $data = []
     ) {
         $this->config = $config;
         $this->userContext = $userContext;
         $this->userAuthorize = $userAuthorize;
-        $this->userProfileRepository = $userProfileRepository;
         $this->serializer = $json;
         parent::__construct($context, $data);
     }
@@ -85,30 +76,6 @@ class SignIn extends Template
     public function getAuthUrl(): string
     {
         return $this->config->getAuthUrl();
-    }
-
-    /**
-     * Return user name.
-     *
-     * @return Json
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function getUserData()
-    {
-        $data = [
-            "email" => "",
-            "display_name" => ""
-        ];
-        if ($this->isAuthorized()) {
-            $userProfile = $this->userProfileRepository->getByUserId(
-                (int)$this->userContext->getUserId()
-            );
-            $data['email'] = $userProfile->getEmail();
-            $data['display_name'] = $userProfile->getName();
-            $data['full_name'] = $userProfile->getFullName();
-        }
-
-        return $this->serializer->serialize($data);
     }
 
     /**

@@ -7,6 +7,7 @@
       "display_name": true,
       "email": true,
       "family_name": true,
+      "full_name": true,
       "account_type": true,
       "access_token": true,
       "refresh_token": true,
