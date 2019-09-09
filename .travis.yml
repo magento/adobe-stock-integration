@@ -62,5 +62,5 @@ script:
   - if [ $TEST_SUITE == 'static' ]; then phpunit --configuration dev/tests/static/phpunit.xml.dist dev/tests/static/testsuite/Magento/Test/Php/LiveCodeTest.php; fi
   - if [ $TEST_SUITE == 'unit' ]; then phpunit --configuration dev/tests/unit/phpunit.xml; fi
   - if [ $TEST_SUITE == 'integration' ]; then phpunit -c dev/tests/integration; fi
-  - if [ $TEST_SUITE == 'api' ]; then phpunit -c dev/tests/api-functional; fi
+  - if [ $TEST_SUITE == 'api' AND $ADOBE_STOCK_API_KEY]; then phpunit -c dev/tests/api-functional; fi
 #  - if [ $TEST_SUITE == 'functional' ]; then codecept run functional --verbose --steps -g AdobeStockIntegration -c dev/tests/acceptance/codeception.yml; fi
