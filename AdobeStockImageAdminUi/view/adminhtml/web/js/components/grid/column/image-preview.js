@@ -401,6 +401,7 @@ define([
          */
         showLicenseConfirmation: function (record) {
             var licenseAndSave = this.licenseAndSave;
+            $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
                     type: 'POST',
@@ -414,6 +415,7 @@ define([
                     success: function (response) {
                         var quotaInfo = response.result;
                         var confirmationContent = $.mage.__('License "' + record.title + '"');
+                        $(this.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
                             content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
@@ -422,7 +424,7 @@ define([
                                     licenseAndSave(record);
                                 }
                             }
-                        });
+                        })
                     },
 
                     error: function (response) {
