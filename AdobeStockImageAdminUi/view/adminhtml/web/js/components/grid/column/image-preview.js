@@ -280,7 +280,7 @@ define([
         /**
          * Drop all filters and initiate search on keyword click event
          */
-        searchByKeyWord: function(keyword) {
+        searchByKeyWord: function (keyword) {
             _.invoke(this.chips().elems(), 'clear');
             this.inputValue(keyword);
             this.chipInputValue(keyword);
@@ -336,7 +336,8 @@ define([
          */
         savePreview: function (record) {
             prompt({
-                title: 'Specify image name',
+                title: 'Save Preview',
+                content: 'File Name',
                 value: this.generateImageName(record),
                 validation: true,
                 promptField: '[data-role="promptField"]',
@@ -353,8 +354,8 @@ define([
                 },
                 context: this,
                 actions: {
-                    confirm: function (imageName) {
-                        this.save(record, imageName);
+                    confirm: function (fileName) {
+                        this.save(record, fileName);
                     }.bind(this)
                 }
             });
@@ -364,38 +365,35 @@ define([
          * Save record as image
          *
          * @param {Object} record
-         * @param {String} imageName
+         * @param {String} fileName
          * @return {void}
          */
-        save: function (record, imageName) {
+        save: function (record, fileName) {
             var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser'),
-                imageType = record.content_type.match(/[^/]{1,4}$/),
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + imageName + '.' + imageType;
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
 
             $(this.adobeStockModalSelector).trigger('processStart');
 
-            $.ajax(
-                {
-                    type: 'POST',
-                    url: this.downloadImagePreviewUrl,
-                    dataType: 'json',
-                    data: {
-                        'media_id': record.id,
-                        'destination_path': destinationPath
-                    },
-                    context: this,
-                    success: function () {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        $(this.adobeStockModalSelector).trigger('closeModal');
-                        mediaBrowser.reload(true);
-                    },
-                    error: function (response) {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        messages.add('error', response.responseJSON.message);
-                        messages.scheduleCleanup(3);
-                    }
+            $.ajax({
+                type: 'POST',
+                url: this.downloadImagePreviewUrl,
+                dataType: 'json',
+                data: {
+                    'media_id': record.id,
+                    'destination_path': destinationPath
+                },
+                context: this,
+                success: function () {
+                    $(this.adobeStockModalSelector).trigger('processStop');
+                    $(this.adobeStockModalSelector).trigger('closeModal');
+                    mediaBrowser.reload(true);
+                },
+                error: function (response) {
+                    $(this.adobeStockModalSelector).trigger('processStop');
+                    messages.add('error', response.responseJSON.message);
+                    messages.scheduleCleanup(3);
                 }
-            );
+            });
         },
 
         /**
@@ -405,7 +403,9 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            return record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            var imageType = record.content_type.match(/[^/]{1,4}$/),
+                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return imageName + '.' + imageType;
         },
 
         /**
@@ -454,7 +454,7 @@ define([
                             title: $.mage.__('License Adobe Stock Image?'),
                             content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
                             actions: {
-                                confirm: function(){
+                                confirm: function () {
                                     licenseAndSave(record);
                                 }
                             }
