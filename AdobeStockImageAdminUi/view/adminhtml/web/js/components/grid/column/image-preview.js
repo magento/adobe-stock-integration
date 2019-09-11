@@ -11,8 +11,9 @@ define([
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
-    'Magento_Ui/js/modal/confirm'
-], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation) {
+    'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/prompt'
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation, prompt) {
     'use strict';
 
     return imagePreview.extend({
@@ -334,38 +335,72 @@ define([
         },
 
         /**
-         * Save record as image
+         * Save preview
          *
-         * @param record
+         * @param {Object} record
+         * @return {void}
          */
-        save: function (record) {
-            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
-            var destinationPath = (mediaBrowser.activeNode.path || '') + '/' + this.generateImageName(record);
-            $(this.adobeStockModalSelector).trigger('processStart');
-            $.ajax(
-                {
-                    type: 'POST',
-                    url: this.downloadImagePreviewUrl,
-                    dataType: 'json',
-                    data: {
-                        'media_id': record.id,
-                        'destination_path': destinationPath
-                    },
-                    context: this,
-                    success: function () {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        $(this.adobeStockModalSelector).trigger('closeModal');
-                        mediaBrowser.reload(true);
-                    },
-                    error: function (response) {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        messages.add('error', response.responseJSON.message);
-                        messages.scheduleCleanup(3);
-                    }
+        savePreview: function (record) {
+            prompt({
+                title: 'Save Preview',
+                content: 'File Name',
+                value: this.generateImageName(record),
+                validation: true,
+                promptField: '[data-role="promptField"]',
+                validationRules: ['required-entry'],
+                attributesForm: {
+                    novalidate: 'novalidate',
+                    action: '',
+                    onkeydown: 'return event.key != \'Enter\';'
+                },
+                attributesField: {
+                    name: 'name',
+                    'data-validate': '{required:true}',
+                    maxlength: '128'
+                },
+                context: this,
+                actions: {
+                    confirm: function (fileName) {
+                        this.save(record, fileName);
+                    }.bind(this)
                 }
-            );
+            });
         },
 
+        /**
+         * Save record as image
+         *
+         * @param {Object} record
+         * @param {String} fileName
+         * @return {void}
+         */
+        save: function (record, fileName) {
+            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser'),
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
+
+            $(this.adobeStockModalSelector).trigger('processStart');
+
+            $.ajax({
+                type: 'POST',
+                url: this.downloadImagePreviewUrl,
+                dataType: 'json',
+                data: {
+                    'media_id': record.id,
+                    'destination_path': destinationPath
+                },
+                context: this,
+                success: function () {
+                    $(this.adobeStockModalSelector).trigger('processStop');
+                    $(this.adobeStockModalSelector).trigger('closeModal');
+                    mediaBrowser.reload(true);
+                },
+                error: function (response) {
+                    $(this.adobeStockModalSelector).trigger('processStop');
+                    messages.add('error', response.responseJSON.message);
+                    messages.scheduleCleanup(3);
+                }
+            });
+        },
 
         /**
          * Generate meaningful name image file
@@ -378,7 +413,6 @@ define([
                 imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
             return imageName + '.' + imageType;
         },
-
 
         /**
          * Get messages
