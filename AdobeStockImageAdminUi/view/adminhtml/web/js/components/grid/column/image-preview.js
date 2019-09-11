@@ -51,7 +51,7 @@ define([
                 chipInputValue: '${ $.searchChipsProvider }:value'
             },
             getQuotaUrl: Column.getQuotaUrl,
-            imageSeriesUrl: Column.imageSeriesUrl,
+            relatedImagesUrl: Column.relatedImagesUrl,
             authConfig: {
                 url: '',
                 isAuthorized: false,
@@ -122,15 +122,15 @@ define([
         requestSeries: function (record) {
             $.ajax({
                 type: 'GET',
-                url: this.imageSeriesUrl,
+                url: this.relatedImagesUrl,
                 dataType: 'json',
                 data: {
                     'image_id': record.id,
                     'limit': 4
                 },
             }).done(function (data) {
-                record.series(data.result.series);
-                record.model(data.result.model);
+                record.series(data.result.same_series);
+                record.model(data.result.same_model);
             });
         },
 

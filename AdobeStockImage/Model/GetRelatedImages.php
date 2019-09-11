@@ -21,16 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class GetRelatedImages
 {
-    /*
-     * Series ID.
-     */
-    const SERIE_ID = 'serie_id';
-
-    /*
-     * Model ID.
-     */
-    const MODEL_ID = 'model_id';
-
     /**
      * @var GetImageListInterface
      */
@@ -52,26 +42,34 @@ class GetRelatedImages
     private $logger;
 
     /**
+     * @var string[]
+     */
+    private $fields;
+
+    /**
      * GetRelatedImages constructor.
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param LoggerInterface $logger
+     * @param array $fields
      */
     public function __construct(
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        array $fields = []
     ) {
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->logger = $logger;
+        $this->fields = $fields;
     }
 
     /**
-     * Get image related image series.
+     * Get related images
      *
      * @param int $imageId
      * @param int $limit
@@ -81,22 +79,18 @@ class GetRelatedImages
      */
     public function execute(int $imageId, int $limit): array
     {
+        $relatedImageGroups = [];
         try {
-            $seriesFilter = $this->filterBuilder->setField(self::SERIE_ID)->setValue($imageId)->create();
-            $modelFilter = $this->filterBuilder->setField(self::MODEL_ID)->setValue($imageId)->create();
-            $serieSearchCriteria = $this->searchCriteriaBuilder
-                ->addFilter($seriesFilter)
-                ->setPageSize($limit)
-                ->create();
-            $modelSearchCriteria = $this->searchCriteriaBuilder
-                ->addFilter($modelFilter)
-                ->setPageSize($limit)
-                ->create();
-
-            return $this->serializeRelatedImages(
-                $this->getImageList->execute($serieSearchCriteria)->getItems(),
-                $this->getImageList->execute($modelSearchCriteria)->getItems()
-            );
+            foreach ($this->fields as $key => $field) {
+                $filter = $this->filterBuilder->setField($field)->setValue($imageId)->create();
+                $searchCriteria = $this->searchCriteriaBuilder->addFilter($filter)
+                    ->setPageSize($limit)
+                    ->create();
+                $relatedImageGroups[$key] = $this->serializeRelatedImages(
+                    $this->getImageList->execute($searchCriteria)->getItems()
+                );
+            }
+            return $relatedImageGroups;
         } catch (\Exception $exception) {
             $message = __('Get related images list failed: %s', $exception->getMessage());
             throw new IntegrationException($message, $exception);
@@ -106,40 +100,30 @@ class GetRelatedImages
     /**
      * Serialize related image data.
      *
-     * @param Document[] $series
-     * @param Document[] $models
+     * @param Document[] $images
      * @return array
      * @throws SerializationException
      */
-    private function serializeRelatedImages(array $series, array $models): array
+    private function serializeRelatedImages(array $images): array
     {
-        $seriesData = [];
-        $modelData = [];
+        $data = [];
         try {
-            /** @var Document $seriesItem */
-            foreach ($series as $seriesItem) {
-                $item['id'] = $seriesItem->getId();
-                $item['title'] = $seriesItem->getCustomAttribute('title')->getValue();
-                $item['thumbnail_url'] = $seriesItem->getCustomAttribute('thumbnail_240_url')->getValue();
-                $seriesData[] = $item;
+            /** @var Document $image */
+            foreach ($images as $image) {
+                $data[] = [
+                    'id' => $image->getId(),
+                    'title' => $image->getCustomAttribute('title')->getValue(),
+                    'thumbnail_url' => $image->getCustomAttribute('thumbnail_240_url')->getValue()
+                ];
             }
-            /** @var Document $modelItem */
-            foreach ($models as $modelItem) {
-                $item['id'] = $modelItem->getId();
-                $item['title'] = $modelItem->getCustomAttribute('title')->getValue();
-                $item['thumbnail_url'] = $modelItem->getCustomAttribute('thumbnail_240_url')->getValue();
-                $modelData[] = $item;
-            }
-
-            $result = [
-                'series' => $seriesData,
-                'model' => $modelData
-            ];
-
-            return $result;
+            return $data;
         } catch (\Exception $exception) {
-            $message = __('An error occurred during related images serialization: %s', $exception->getMessage());
-            throw new SerializationException($message);
+            throw new SerializationException(
+                __(
+                    'An error occurred during related images serialization: %s',
+                    $exception->getMessage()
+                )
+            );
         }
     }
 }
