@@ -22,24 +22,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class GetByIdTest extends WebapiAbstract
 {
-    /**
-     * Resource path
-     */
     const RESOURCE_PATH = '/V1/adobestock/asset';
 
-    /**
-     * Service version
-     */
     const SERVICE_VERSION = 'V1';
 
-    /**
-     * Service name
-     */
     const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
 
-    /**
-     * Service operation
-     */
     const SERVICE_OPERATION = 'GetById';
 
     /**
