@@ -331,11 +331,11 @@ class Client implements ClientInterface
     private function getConnection(string $key = null): AdobeStock
     {
         try {
-            $apiKey = !empty($key) ? $key : $this->imsConfig->getApiKey();
+            $apiKey = !empty($key) ? $key : (string) $this->imsConfig->getApiKey();
             return $this->connectionFactory->create(
                 $apiKey,
-                $this->clientConfig->getProductName(),
-                $this->clientConfig->getTargetEnvironment()
+                (string) $this->clientConfig->getProductName(),
+                (string) $this->clientConfig->getTargetEnvironment()
             );
         } catch (Exception $exception) {
             $message = __(
