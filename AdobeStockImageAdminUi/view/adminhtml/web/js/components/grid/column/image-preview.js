@@ -342,14 +342,18 @@ define([
         },
 
         /**
-         * Locate downloaded in media browser (draft)
+         * Locate downloaded image in media browser
          *
          * @param record
          */
         locate: function (record) {
-            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
             $(this.adobeStockModalSelector).trigger('closeModal');
-            mediaBrowser.reload(true);
+
+            var fileSelector = 'div[data-row="file"]:has(img[alt="' + record.path.replace(/^\/+/, '') + '"])';
+            var file = $(fileSelector);
+            if (file.length){
+                file.click();
+            }
         },
 
         /**
@@ -373,6 +377,7 @@ define([
                     context: this,
                     success: function () {
                         record.is_downloaded(1);
+                        record.path = destinationPath;
                         $(this.adobeStockModalSelector).trigger('processStop');
                         $(this.adobeStockModalSelector).trigger('closeModal');
                         mediaBrowser.reload(true);
