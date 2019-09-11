@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockImage\Model\GetImageByAdobeId;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
@@ -41,6 +42,11 @@ class License extends Action
     const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
+     * @var GetImageByAdobeId
+     */
+    private $getImageByAdobeId;
+
+    /**
      * @var ClientInterface
      */
     private $client;
@@ -62,17 +68,20 @@ class License extends Action
      * @param ClientInterface $client
      * @param SaveImageInterface $saveImage
      * @param LoggerInterface $logger
+     * @param GetImageByAdobeId $getImageByAdobeId
      */
     public function __construct(
         Action\Context $context,
         ClientInterface $client,
         SaveImageInterface $saveImage,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        GetImageByAdobeId $getImageByAdobeId
     ) {
         parent::__construct($context);
 
         $this->client = $client;
         $this->saveImage = $saveImage;
+        $this->getImageByAdobeId = $getImageByAdobeId;
         $this->logger = $logger;
     }
 
@@ -82,12 +91,15 @@ class License extends Action
     public function execute()
     {
         try {
-            $params = $params = $this->getRequest()->getParams();
+            $params = $this->getRequest()->getParams();
             $contentId = (int)$params['media_id'];
             $destinationPath = (string) $params['destination_path'];
             $responseCode = self::HTTP_OK;
             $this->client->licenseImage($contentId);
-            $this->saveImage->execute($contentId, $destinationPath);
+            $asset = $this->getImageByAdobeId->execute($contentId);
+            $imageUrl = $this->client->getImageDownloadUrl($contentId);
+            $asset->setUrl($imageUrl);
+            $this->saveImage->execute($asset, $destinationPath);
 
             $responseContent = [
                 'success' => true,

@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Magento\AdobeStockAsset\Model\SaveAsset;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
@@ -68,12 +70,10 @@ class SaveImage implements SaveImageInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adobeId, string $destinationPath): void
+    public function execute(AssetInterface $asset, string $destinationPath): void
     {
         try {
-            $asset = $this->getImageByAdobeId->execute($adobeId);
-            $downloadUrl = $this->client->getImageDownloadUrl($adobeId);
-            $path = $this->storage->save($downloadUrl, $destinationPath);
+            $path = $this->storage->save($asset->getUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset->execute($asset);
         } catch (\Exception $exception) {
