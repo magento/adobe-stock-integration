@@ -5,17 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Test\Unit\Model;
+namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
+use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\AdobeStockAsset\Model\DocumentToAsset;
-use \Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use \Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
-use \Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 
 /**
  * Document to asset test.
@@ -72,24 +72,20 @@ class DocumentToAssetTest extends TestCase
         $this->keywordFactory = $this->getMockBuilder(KeywordInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $attributes =
-            [
-                'factory' => $this->assetFactory,
-                'fields' => ['thumbnail_240_urll' => 'thumbnail_url', 'thumbnail_500_url' => 'preview_url'],
-                'children' =>
-                    [
-                        'creator' =>
-                            [
-                                'factory' => $this->creatorFactory,
-                                'fields' => ['creator_id' => 'id', 'creator_name' => 'name']
-                            ],
-                        'category' =>
-                            [
-                                'factory' => $this->categoryFactory,
-                                'fields' => ['category_id' => 'id', 'category_name' => 'name'],
-                            ],
-                    ]
-            ];
+        $attributes = [
+            'factory' => $this->assetFactory,
+            'fields' => ['thumbnail_240_urll' => 'thumbnail_url', 'thumbnail_500_url' => 'preview_url'],
+            'children' => [
+                'creator' => [
+                    'factory' => $this->creatorFactory,
+                    'fields' => ['creator_id' => 'id', 'creator_name' => 'name']
+                ],
+                'category' => [
+                    'factory' => $this->categoryFactory,
+                    'fields' => ['category_id' => 'id', 'category_name' => 'name'],
+                ],
+            ]
+        ];
         $this->document->setCustomAttributes($attributes);
         $this->documentToAsset = new DocumentToAsset(($attributes));
     }
@@ -124,9 +120,9 @@ class DocumentToAssetTest extends TestCase
             ->method('getCustomAttributes')
             ->willReturn(
                 [
-                'id_field_name' => new \Magento\Framework\DataObject(
-                    ['_data' => ['attribute_code' => "id_field_name", 'value' => 'id']]
-                )
+                    'id_field_name' => new \Magento\Framework\DataObject(
+                        ['_data' => ['attribute_code' => "id_field_name", 'value' => 'id']]
+                    )
                 ]
             );
         $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
