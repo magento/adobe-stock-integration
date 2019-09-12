@@ -147,19 +147,19 @@
                 <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
             </item>
         </argument>
-        <column name="thumbnail_url" component="Magento_AdobeUi/js/components/grid/column/image">
-            <settings>
-                <label translate="true">Thumbnail Image</label>
-                <bodyTmpl>Magento_AdobeUi/grid/column/image</bodyTmpl>
-                <visible>true</visible>
-                <sortable>false</sortable>
-            </settings>
-        </column>
         <column name="overlay" component="Magento_AdobeUi/js/components/grid/column/overlay">
             <settings>
                 <label translate="true">Overlay</label>
                 <bodyTmpl>Magento_AdobeUi/grid/column/overlay</bodyTmpl>
                 <visible>false</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="thumbnail_url" component="Magento_AdobeUi/js/components/grid/column/image">
+            <settings>
+                <label translate="true">Thumbnail Image</label>
+                <bodyTmpl>Magento_AdobeUi/grid/column/image</bodyTmpl>
+                <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
         </column>
