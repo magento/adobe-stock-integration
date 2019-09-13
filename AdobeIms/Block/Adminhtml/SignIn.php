@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeIms\Block\Adminhtml;
@@ -21,7 +20,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 class SignIn extends Template
 {
-
     /**
      * @var Config
      */
@@ -35,7 +33,7 @@ class SignIn extends Template
     /**
      * @var UserAuthorizedInterface
      */
-    private $userAuthorize;
+    private $userAuthorized;
 
     /**
      * @var UserProfileRepositoryInterface
@@ -55,7 +53,7 @@ class SignIn extends Template
      * @param Config $config
      * @param Context $context
      * @param UserContextInterface $userContext
-     * @param UserAuthorizedInterface $userAuthorize
+     * @param UserAuthorizedInterface $userAuthorized
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param Json $json
      * @param array $data
@@ -64,14 +62,14 @@ class SignIn extends Template
         Config $config,
         Context $context,
         UserContextInterface $userContext,
-        UserAuthorizedInterface $userAuthorize,
+        UserAuthorizedInterface $userAuthorized,
         UserProfileRepositoryInterface $userProfileRepository,
         Json $json,
         array $data = []
     ) {
         $this->config = $config;
         $this->userContext = $userContext;
-        $this->userAuthorize = $userAuthorize;
+        $this->userAuthorized = $userAuthorized;
         $this->userProfileRepository = $userProfileRepository;
         $this->serializer = $json;
         parent::__construct($context, $data);
@@ -97,8 +95,8 @@ class SignIn extends Template
     public function getUserData()
     {
         $data = [
-            "email" => "",
-            "display_name" => ""
+            'email' => '',
+            'display_name' => ''
         ];
         if ($this->isAuthorized()) {
             $userProfile = $this->userProfileRepository->getByUserId(
@@ -118,6 +116,6 @@ class SignIn extends Template
      */
     public function isAuthorized(): bool
     {
-        return $this->userAuthorize->execute((int)$this->userContext->getUserId());
+        return $this->userAuthorized->execute((int)$this->userContext->getUserId());
     }
 }

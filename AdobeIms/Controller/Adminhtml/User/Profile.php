@@ -5,17 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Controller\Adminhtml\UserProfile;
+namespace Magento\AdobeIms\Controller\Adminhtml\User;
 
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
+
 /**
  * Backend controller for retrieving data for the current user
  */
-class GetUserData extends Action
+class Profile extends Action
 {
 
     /**

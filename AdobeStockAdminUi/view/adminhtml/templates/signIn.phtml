@@ -9,7 +9,7 @@
                     "adobe-stock-sign-in": {
                         "component": "Magento_AdobeIms/js/action/signIn",
                         "template": "Magento_AdobeStockAdminUi/signIn",
-                        "getUserDataUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/userprofile/getuserdata')); ?>",
+                        "getUserDataUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/user/profile')); ?>",
                         "userData": <?= /* @noEscape */ $block->getUserData() ?>,
                         "authConfig": {
                             "url": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
