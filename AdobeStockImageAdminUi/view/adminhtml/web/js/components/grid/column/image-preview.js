@@ -203,18 +203,6 @@ define([
         },
 
         /**
-         * Initalize Tabs
-         *
-         */
-        getDataMageInit: function () {
-            $('#adobe-stock-tabs').tabs({
-                active: 'series_content',
-                destination: '#adobe-stock-tabs-content',
-                shadowTabs: []
-            });
-        },
-
-        /**
          * Returns series to display under the image
          *
          * @param record
