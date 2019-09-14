@@ -22,6 +22,7 @@ define([
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             inputValue: '',
             chipInputValue: '',
             serieFilterValue: '',
@@ -41,7 +42,8 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url',
                 chips: '${ $.chipsProvider }',
-                searchChips: '${ $.searchChipsProvider }'
+                searchChips: '${ $.searchChipsProvider }',
+                filterChips: '${ $.filterChipsProvider }'
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
@@ -227,6 +229,7 @@ define([
          */
         seeMoreFromSeries: function(record) {
             this.serieFilterValue(record.id);
+            this.filterChips().set('applied', {'serie_id' : record.id.toString()})
         },
 
         /**
