@@ -44,7 +44,7 @@ class StockFileToDocument
      * @param AttributeValueFactory $attributeValueFactory
      * @param LoggerInterface $logger
      */
-    public function __construct (
+    public function __construct(
         DocumentFactory $documentFactory,
         AttributeValueFactory $attributeValueFactory,
         LoggerInterface $logger
