@@ -1,0 +1,14 @@
+<button
+        class="adobe-sign-in-button"
+        id="adobeImsSignIn"
+        data-role="signInBtn"
+        data-bind="click: login, visible: !user.isAuthorized()"
+        type="button">
+    <span>Sign In</span>
+</button>
+<button
+        id="adobe-ims-user-name"
+        class="adobe-sign-in-button admin__action-dropdown"
+        data-bind="visible: user.isAuthorized">
+    <span><!--ko text: user.name--><!--/ko--></span>
+</button>

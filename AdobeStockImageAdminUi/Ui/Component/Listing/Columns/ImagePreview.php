@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 
-use Exception;
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface;
@@ -17,6 +16,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 
 /**
  * Class ImagePreview
@@ -44,12 +44,17 @@ class ImagePreview extends Column
     private $config;
 
     /**
+     * @var UserAuthorizedInterface $userAuthorize
+     */
+    private $userAuthorize;
+
+    /**
      * ImagePreview constructor.
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UserContextInterface $userContext
-     * @param UserProfileRepositoryInterface $userProfileRepository
+     * @param UserAuthorizedInterface $userAuthorize
      * @param UrlInterface $urlBuilder
      * @param ConfigInterface $config
      * @param array $components
@@ -59,7 +64,7 @@ class ImagePreview extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UserContextInterface $userContext,
-        UserProfileRepositoryInterface $userProfileRepository,
+        UserAuthorizedInterface $userAuthorize,
         UrlInterface $urlBuilder,
         ConfigInterface $config,
         array $components = [],
@@ -68,7 +73,7 @@ class ImagePreview extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
 
         $this->userContext = $userContext;
-        $this->userProfileRepository = $userProfileRepository;
+        $this->userAuthorize = $userAuthorize;
         $this->urlBuilder = $urlBuilder;
         $this->config = $config;
     }
@@ -111,17 +116,6 @@ class ImagePreview extends Column
      */
     private function isAuthorized(): bool
     {
-        try {
-            $userProfile = $this->userProfileRepository->getByUserId(
-                (int)$this->userContext->getUserId()
-            );
-
-            return !empty($userProfile->getId())
-                && !empty($userProfile->getAccessToken())
-                && !empty($userProfile->getAccessTokenExpiresAt())
-                && strtotime($userProfile->getAccessTokenExpiresAt()) >= strtotime('now');
-        } catch (Exception $e) {
-            return false;
-        }
+        return $this->userAuthorize->execute((int)$this->userContext->getUserId());
     }
 }

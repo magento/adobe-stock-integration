@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\AdobeIms\Block\Adminhtml\SignIn */
+?>
+<div data-bind="scope: 'adobe-stock-sign-in'" class="scalable">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "#adobe-stock-images-search-modal": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "adobe-stock-sign-in": {
+                        "component": "Magento_AdobeIms/js/action/signIn",
+                        "template": "Magento_AdobeStockAdminUi/signIn",
+                        "profileUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/user/profile')); ?>",
+                        "userName": "<?= $block->escapeHtml($block->getName()) ?>",
+                        "userEmail": "<?= $block->escapeHtml($block->getEmail()) ?>",
+                        "loginUrl": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
+                        "isAuthorized": "<?= $block->escapeHtml($block->isAuthorizedJson()) ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>
