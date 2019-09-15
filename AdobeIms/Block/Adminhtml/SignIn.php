@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Block\Adminhtml;
 
 use Magento\AdobeIms\Model\Config;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Authorization\Model\UserContextInterface;
@@ -85,28 +86,36 @@ class SignIn extends Template
         return $this->config->getAuthUrl();
     }
 
-
     /**
-     * Return user name.
+     * Adobe profile name
      *
-     * @return Json
+     * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getUserData()
+    public function getName(): string
     {
-        $data = [
-            'email' => '',
-            'display_name' => ''
-        ];
-        if ($this->isAuthorized()) {
-            $userProfile = $this->userProfileRepository->getByUserId(
-                (int)$this->userContext->getUserId()
-            );
-            $data['email'] = $userProfile->getEmail();
-            $data['display_name'] = $userProfile->getName();
-        }
+        return $this->isAuthorized() ? $this->getUserProfile()->getName() : '';
+    }
 
-        return $this->serializer->serialize($data);
+    /**
+     * Adobe profile email
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getEmail(): string
+    {
+        return $this->isAuthorized() ? $this->getUserProfile()->getEmail() : '';
+    }
+
+    /**
+     * Authorized as a sting for json
+     *
+     * @return string
+     */
+    public function isAuthorizedJson(): string
+    {
+        return $this->isAuthorized() ? 'true' : 'false';
     }
 
     /**
@@ -114,8 +123,29 @@ class SignIn extends Template
      *
      * @return bool
      */
-    public function isAuthorized(): bool
+    private function isAuthorized(): bool
     {
-        return $this->userAuthorized->execute((int)$this->userContext->getUserId());
+        return $this->userAuthorized->execute($this->getAdminUserId());
+    }
+
+    /**
+     * Adobe user profile
+     *
+     * @return UserProfileInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getUserProfile(): UserProfileInterface
+    {
+        return $this->userProfileRepository->getByUserId($this->getAdminUserId());
+    }
+
+    /**
+     * Current admin user id
+     *
+     * @return int
+     */
+    private function getAdminUserId(): int
+    {
+        return (int) $this->userContext->getUserId();
     }
 }

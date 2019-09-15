@@ -2,7 +2,6 @@
   "adobe_user_profile": {
     "column": {
       "id": true,
-      "adobe_id": true,
       "admin_user_id": true,
       "display_name": true,
       "email": true,

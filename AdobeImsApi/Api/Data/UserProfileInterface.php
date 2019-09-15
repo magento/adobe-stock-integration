@@ -101,9 +101,9 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Get email
      *
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string;
+    public function getEmail(): ?string;
 
     /**
      * Get account type

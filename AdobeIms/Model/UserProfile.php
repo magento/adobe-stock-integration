@@ -77,7 +77,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->getData(self::EMAIL);
     }

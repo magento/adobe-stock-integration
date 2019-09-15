@@ -78,7 +78,7 @@ class Profile extends Action
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
             $userData = [
                 'email' => $userProfile->getEmail(),
-                'display_name' => $userProfile->getName()
+                'name' => $userProfile->getName()
             ];
             $responseCode = self::HTTP_OK;
 
