@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Block\Adminhtml;
+namespace Magento\AdobeStockAdminUi\Block\Adminhtml;
 
 use Magento\AdobeIms\Model\Config;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
@@ -125,7 +125,7 @@ class SignIn extends Template
      */
     private function isAuthorized(): bool
     {
-        return $this->userAuthorized->execute($this->getAdminUserId());
+        return $this->userAuthorized->execute();
     }
 
     /**

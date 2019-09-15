@@ -2,7 +2,7 @@
     class="adobe-sign-in-button"
     id="adobeImsSignIn"
     data-role="signInBtn"
-    data-bind="click: execute, visible: !user.isAuthorized()"
+    data-bind="click: login, visible: !user.isAuthorized()"
     type="button">
     <span>Sign In</span>
 </button>
@@ -27,7 +27,7 @@
             <li>
                 <div class="adobe-user-credits">
                     <span>AVAILABLE</span>
-                    <p><b><!--ko text: user.images--><!--/ko--></b> images | <b><!--ko text: user.credits -->
+                    <p><b><!--ko text: userQuota.images--><!--/ko--></b> Images | <b><!--ko text: userQuota.credits -->
                         <!--/ko--></b> Credits</p>
                 </div>
                 <button

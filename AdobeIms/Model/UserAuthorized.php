@@ -10,6 +10,7 @@ namespace Magento\AdobeIms\Model;
 
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * User authorized
@@ -22,21 +23,33 @@ class UserAuthorized implements UserAuthorizedInterface
     private $userProfileRepository;
 
     /**
-     * UserAuthorize constructor.
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
+     * UserAuthorized constructor.
+     * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
      */
     public function __construct(
+        UserContextInterface $userContext,
         UserProfileRepositoryInterface $userProfileRepository
     ) {
+        $this->userContext = $userContext;
         $this->userProfileRepository = $userProfileRepository;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute($adminUserId): bool
+    public function execute(int $adminUserId = null): bool
     {
         try {
+            if ($adminUserId === null) {
+                $adminUserId = (int) $this->userContext->getUserId();
+            }
+
             $userProfile = $this->userProfileRepository->getByUserId($adminUserId);
 
             return !empty($userProfile->getId())

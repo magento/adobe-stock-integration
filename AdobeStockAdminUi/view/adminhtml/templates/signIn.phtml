@@ -1,3 +1,12 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var $block \Magento\AdobeStockAdminUi\Block\Adminhtml\SignIn
+ */
+use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+?>
 <div data-bind="scope: 'adobe-stock-sign-in'" class="scalable">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
@@ -7,14 +16,21 @@
             "Magento_Ui/js/core/app": {
                 "components": {
                     "adobe-stock-sign-in": {
-                        "component": "Magento_AdobeIms/js/action/signIn",
+                        "component": "Magento_AdobeStockAdminUi/js/signIn",
                         "template": "Magento_AdobeStockAdminUi/signIn",
                         "profileUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/user/profile')); ?>",
                         "userName": "<?= $block->escapeHtml($block->getName()) ?>",
                         "userEmail": "<?= $block->escapeHtml($block->getEmail()) ?>",
                         "loginUrl": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
                         "logoutUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/user/logout')); ?>",
-                        "isAuthorized": "<?= $block->escapeHtml($block->isAuthorizedJson()) ?>"
+                        "isAuthorized": "<?= $block->escapeHtml($block->isAuthorizedJson()) ?>",
+                        "callbackParsingParams": {
+                            "regexpPattern": <?= json_encode(Callback::RESPONSE_REGEXP_PATTERN, JSON_HEX_QUOT) ?>,
+                            "codeIndex": "<?= Callback::RESPONSE_CODE_INDEX ?>",
+                            "messageIndex": "<?= Callback::RESPONSE_MESSAGE_INDEX ?>",
+                            "successCode": "<?= Callback::RESPONSE_SUCCESS_CODE ?>",
+                            "errorCode": "<?= Callback::RESPONSE_ERROR_CODE ?>"
+                        }
                     }
                 }
             }

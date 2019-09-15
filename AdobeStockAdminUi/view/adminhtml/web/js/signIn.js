@@ -7,8 +7,9 @@ define([
     'jquery',
     'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeIms/js/config',
-    'Magento_AdobeIms/js/user'
-], function (Component, $, login, config, user) {
+    'Magento_AdobeIms/js/user',
+    'Magento_AdobeStockAdminUi/js/user-quota',
+], function (Component, $, login, config, user, userQuota) {
     'use strict';
 
     return Component.extend({
@@ -24,6 +25,7 @@ define([
         },
 
         user: user,
+        userQuota: userQuota,
         login: login,
 
         initialize: function () {
@@ -32,6 +34,7 @@ define([
             config.profileUrl = this.profileUrl;
             config.loginUrl = this.loginUrl;
             config.logoutUrl = this.logoutUrl;
+            config.login.callbackParsingParams = this.callbackParsingParams;
 
             user.isAuthorized.subscribe(function () {
                 if (user.isAuthorized() && user.name() === '') {

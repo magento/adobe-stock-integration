@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Controller\Adminhtml\UserProfile;
+namespace Magento\AdobeIms\Controller\Adminhtml\User;
 
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;

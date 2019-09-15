@@ -10,7 +10,6 @@ namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
-use AdobeStock\Api\Models\LicenseEntitlementQuota;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
@@ -18,6 +17,8 @@ use AdobeStock\Api\Response\License;
 use Exception;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
@@ -104,6 +105,11 @@ class Client implements ClientInterface
     private $userContext;
 
     /**
+     * @var UserQuotaInterfaceFactory
+     */
+    private $userQuotaFactory;
+
+    /**
      * Client constructor.
      * @param ConfigInterface $clientConfig
      * @param ImsConfig $imsConfig
@@ -117,6 +123,7 @@ class Client implements ClientInterface
      * @param LoggerInterface $logger
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserContextInterface $userContext
+     * @param UserQuotaInterfaceFactory $userQuotaFactory
      */
     public function __construct(
         ConfigInterface $clientConfig,
@@ -130,7 +137,8 @@ class Client implements ClientInterface
         LicenseRequestFactory $licenseRequestFactory,
         LoggerInterface $logger,
         UserProfileRepositoryInterface $userProfileRepository,
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        UserQuotaInterfaceFactory $userQuotaFactory
     ) {
         $this->clientConfig = $clientConfig;
         $this->imsConfig = $imsConfig;
@@ -144,6 +152,7 @@ class Client implements ClientInterface
         $this->logger = $logger;
         $this->userProfileRepository = $userProfileRepository;
         $this->userContext = $userContext;
+        $this->userQuotaFactory = $userQuotaFactory;
     }
 
     /**
@@ -208,9 +217,14 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getFullEntitlementQuota(): LicenseEntitlementQuota
+    public function getFullEntitlementQuota(): UserQuotaInterface
     {
-        return $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
+        $quota = $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
+        /** @var UserQuotaInterface $userQuota */
+        $userQuota = $this->userQuotaFactory->create();
+        $userQuota->setImages((int) $quota->standard_credits_quota);
+        $userQuota->setCredits((int) $quota->premium_credits_quota);
+        return $userQuota;
     }
 
     /**
