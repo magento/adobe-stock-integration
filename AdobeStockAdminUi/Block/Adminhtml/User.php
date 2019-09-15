@@ -67,6 +67,8 @@ class User extends Template
     }
 
     /**
+     * Get adobe user profile name
+     *
      * @return string
      */
     public function getName(): string
@@ -79,6 +81,8 @@ class User extends Template
     }
 
     /**
+     * Get adobe user profile email
+     *
      * @return string
      */
     public function getEmail(): string
@@ -91,6 +95,8 @@ class User extends Template
     }
 
     /**
+     * Get adobe user profile
+     *
      * @return UserProfileInterface|null
      */
     private function getUserProfile(): ?UserProfileInterface
