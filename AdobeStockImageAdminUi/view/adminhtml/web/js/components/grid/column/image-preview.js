@@ -12,13 +12,13 @@ define([
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'Magento_Ui/js/modal/confirm',
-    'Magento_Ui/js/modal/prompt'
-], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation, prompt) {
+    'Magento_Ui/js/modal/prompt',
+    'Magento_AdobeIms/js/user'
+], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation, prompt, user) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
-            isAuthorized: ko.observable(false),
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
@@ -52,25 +52,7 @@ define([
                 chipInputValue: '${ $.searchChipsProvider }:value'
             },
             getQuotaUrl: Column.getQuotaUrl,
-            imageSeriesUrl: Column.imageSeriesUrl,
-            authConfig: {
-                url: '',
-                isAuthorized: false,
-                stopHandleTimeout: 10000,
-                windowParams: {
-                    width: 500,
-                    height: 600,
-                    top: 100,
-                    left: 300
-                },
-                response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
-                    codeIndex: 1,
-                    messageIndex: 2,
-                    successCode: 'success',
-                    errorCode: 'error'
-                }
-            }
+            imageSeriesUrl: Column.imageSeriesUrl
         },
 
         /**
@@ -113,9 +95,6 @@ define([
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
 
-            this.isAuthorized.subscribe(function () {
-                this.authConfig.isAuthorized = this.isAuthorized() === true;
-            }.bind(this));
             return this;
         },
 
@@ -482,7 +461,7 @@ define([
          * @param {Object} record
          */
         licenseProcess: function (record) {
-            if (this.authConfig.isAuthorized) {
+            if (user.isAuthorized()) {
                 this.showLicenseConfirmation(record);
 
                 return;
@@ -492,20 +471,14 @@ define([
              * Opens authorization window of Adobe Stock
              * then starts the authorization process
              */
-            authorizationAction(this.authConfig)
-                .then(
-                    function (authConfig) {
-                        this.authConfig = _.extend(this.authConfig, authConfig);
-                        this.licenseProcess(record);
-                        this.isAuthorized(true);
-                        messages.add('success', authConfig.lastAuthSuccessMessage);
-                    }.bind(this)
-                )
-                .catch(
-                    function (error) {
-                        messages.add('error', error.message);
-                    }.bind(this)
-                )
+            authorizationAction()
+                .then(function (result) {
+                    this.licenseProcess(record);
+                    messages.add('success', result.lastAuthSuccessMessage);
+                }.bind(this))
+                .catch(function (error) {
+                    messages.add('error', error.message);
+                })
                 .finally((function () {
                     messages.scheduleCleanup(this.messageDelay);
                 }).bind(this));

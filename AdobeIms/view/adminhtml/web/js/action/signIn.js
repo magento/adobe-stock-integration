@@ -3,140 +3,47 @@
  * See COPYING.txt for license details.
  */
 define([
-    'ko',
     'uiComponent',
     'jquery',
     'Magento_AdobeIms/js/action/authorization',
-    'underscore',
-    'Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview'
-], function (ko, Component, $, authorizationAction, _, imagePreview) {
+    'Magento_AdobeIms/js/config',
+    'Magento_AdobeIms/js/user'
+], function (Component, $, login, config, user) {
     'use strict';
 
     return Component.extend({
 
         defaults: {
-            isAuthorized: ko.observable(false),
-            visibility: ko.observable(true),
-            nameVisibility: ko.observable(false),
-            displayName: ko.observable(),
-            fullName: ko.observable(),
-            email:  ko.observable(),
-            imagesAvailable:  ko.observable(0),
-            credits: ko.observable(0),
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            getUserDataUrl: '',
-            getSignOutUrl: '',
-            userData: '',
-            authConfig: {
-                url: '',
-                isAuthorized: false,
-                stopHandleTimeout: 10000,
-                windowParams: {
-                    width: 500,
-                    height: 600,
-                    top: 100,
-                    left: 300
-                },
-                response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
-                    codeIndex: 1,
-                    messageIndex: 2,
-                    nameIndex: 3,
-                    successCode: 'success',
-                    errorCode: 'error'
-                }
-            },
+            profileUrl: 'adobe_ims/user/profile',
+            loginUrl: 'https://ims-na1.adobelogin.com/ims/authorize',
+            logoutUrl: 'adobe_ims/user/logout',
+            userName: '',
+            userEmail: '',
+            isAuthorized: false
         },
+
+        user: user,
+        login: login,
 
         initialize: function () {
             this._super();
-            this.observe([
-                'visibility',
-                'nameVisibility',
-                'displayName'
-            ]);
-            this.getUserData();
-            this.checkAuthorize();
-            imagePreview().isAuthorized.subscribe(function () {
-                if (imagePreview().isAuthorized() === true) {
-                    this.authConfig.isAuthorized = true;
-                    this.getUserData();
-                    this.checkAuthorize();
+
+            config.profileUrl = this.profileUrl;
+            config.loginUrl = this.loginUrl;
+            config.logoutUrl = this.logoutUrl;
+
+            user.isAuthorized.subscribe(function () {
+                if (user.isAuthorized() && user.name() === '') {
+                    this.loadUserProfile();
                 }
             }.bind(this));
+
+            user.name(this.userName);
+            user.email(this.userEmail);
+            user.isAuthorized(this.isAuthorized === 'true');
+
             return this;
-        },
-
-        /**
-         * Check if user authorized, to show or hide sign in button.
-         */
-        checkAuthorize: function () {
-            if (this.authConfig.isAuthorized) {
-                this.visibility(false);
-                this.nameVisibility(true);
-                this.setUserData();
-                imagePreview().isAuthorized(true);
-            } else if (!this.authConfig.isAuthorized) {
-                this.isAuthorized(false);
-                imagePreview().isAuthorized(false);
-                this.visibility(true);
-                this.nameVisibility(false);
-            }
-        },
-
-        /**
-         * Setting's all user data after authorization.
-         */
-        setUserData: function () {
-            this.displayName(this.userData['display_name']);
-            this.fullName(this.userData['full_name']);
-            this.email(this.userData['email']);
-            this.imagesAvailable(this.userData['image_quota'] || 0);
-            this.credits(this.userData['credits_quota'] || 0);
-        },
-
-        /**
-         * Authorization process.
-         */
-        execute: function () {
-            return authorizationAction(this.authConfig)
-                .then(
-                    function (authConfig) {
-                        this.authConfig = _.extend(this.authConfig, authConfig);
-                        this.checkAuthorize();
-                        return this.authConfig.isAuthorized;
-                    }.bind(this)
-                ).catch(
-                    function (error) {
-                        return error;
-                    }.bind(this)
-                );
-        },
-
-        /**
-         * Sign out user from adobeSDK
-         */
-        signOut: function () {
-            $(this.adobeStockModalSelector).trigger('processStart');
-            $.ajax(
-                {
-                    type: 'POST',
-                    url: this.getSignOutUrl,
-                    data: {form_key: window.FORM_KEY},
-                    dataType: 'json',
-                    async: false,
-                    context: this,
-                    success: function ()  {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        this.authConfig.isAuthorized = false;
-                        this.checkAuthorize();
-                    }.bind(this),
-                    error: function (response) {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        return response.message;
-                    }.bind(this)
-                });
-
         },
 
         /**
@@ -144,24 +51,45 @@ define([
          *
          * @return array
          */
-        getUserData: function () {
-            $.ajax(
-                {
-                    type: 'POST',
-                    url: this.getUserDataUrl,
-                    data: {form_key: window.FORM_KEY},
-                    dataType: 'json',
-                    async: false,
-                    context: this,
-                    success: function  (response)  {
-                        this.userData = response.result;
-                    },
-                    error: function (response) {
-                        return response.message;
-                    }
-                });
+        loadUserProfile: function () {
+            $.ajax({
+                type: 'POST',
+                url: config.profileUrl,
+                data: {form_key: window.FORM_KEY},
+                dataType: 'json',
+                async: false,
+                context: this,
+                success: function (response) {
+                    user.name(response.result.name);
+                    user.email(response.result.email);
+                },
+                error: function (response) {
+                    return response.message;
+                }
+            });
         },
 
+        /**
+         * Logout from adobe account
+         */
+        logout: function () {
+            $(this.adobeStockModalSelector).trigger('processStart');
+            $.ajax({
+                type: 'POST',
+                url: config.logoutUrl,
+                data: {form_key: window.FORM_KEY},
+                dataType: 'json',
+                async: false,
+                context: this,
+                success: function ()  {
+                    $(this.adobeStockModalSelector).trigger('processStop');
+                    user.isAuthorized(false);
+                }.bind(this),
+                error: function (response) {
+                    $(this.adobeStockModalSelector).trigger('processStop');
+                    return response.message;
+                }.bind(this)
+            });
+        }
     });
-
 });

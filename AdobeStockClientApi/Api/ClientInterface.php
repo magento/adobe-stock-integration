@@ -44,10 +44,9 @@ interface ClientInterface
     /**
      * Get full entitlement quota.
      *
-     * @param int $contentId
      * @return LicenseEntitlementQuota|null
      */
-    public function getFullEntitlementQuota(int $contentId): LicenseEntitlementQuota;
+    public function getFullEntitlementQuota(): LicenseEntitlementQuota;
 
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.

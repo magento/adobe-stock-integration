@@ -12,9 +12,9 @@ use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 
 /**
- * User authorize
+ * User authorized
  */
-class UserAuthorize implements UserAuthorizedInterface
+class UserAuthorized implements UserAuthorizedInterface
 {
     /**
      * @var UserProfileRepositoryInterface

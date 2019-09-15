@@ -9,12 +9,12 @@
                     "adobe-stock-sign-in": {
                         "component": "Magento_AdobeIms/js/action/signIn",
                         "template": "Magento_AdobeStockAdminUi/signIn",
-                        "getUserDataUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/userprofile/getuserdata')); ?>",
-                        "getSignOutUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/userprofile/signout')); ?>",
-                        "authConfig": {
-                            "url": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
-                            "isAuthorized": "<?= $block->escapeHtml($block->isAuthorized()) ?>"
-                        }
+                        "profileUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/user/profile')); ?>",
+                        "userName": "<?= $block->escapeHtml($block->getName()) ?>",
+                        "userEmail": "<?= $block->escapeHtml($block->getEmail()) ?>",
+                        "loginUrl": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
+                        "logoutUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/user/logout')); ?>",
+                        "isAuthorized": "<?= $block->escapeHtml($block->isAuthorizedJson()) ?>"
                     }
                 }
             }

@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeIms\Block\Adminhtml;
 
 use Magento\AdobeIms\Model\Config;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -20,7 +21,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 class SignIn extends Template
 {
-
     /**
      * @var Config
      */
@@ -34,7 +34,12 @@ class SignIn extends Template
     /**
      * @var UserAuthorizedInterface
      */
-    private $userAuthorize;
+    private $userAuthorized;
+
+    /**
+     * @var UserProfileRepositoryInterface
+     */
+    private $userProfileRepository;
 
     /**
      * Json Serializer Instance
@@ -49,7 +54,8 @@ class SignIn extends Template
      * @param Config $config
      * @param Context $context
      * @param UserContextInterface $userContext
-     * @param UserAuthorizedInterface $userAuthorize
+     * @param UserAuthorizedInterface $userAuthorized
+     * @param UserProfileRepositoryInterface $userProfileRepository
      * @param Json $json
      * @param array $data
      */
@@ -57,13 +63,15 @@ class SignIn extends Template
         Config $config,
         Context $context,
         UserContextInterface $userContext,
-        UserAuthorizedInterface $userAuthorize,
+        UserAuthorizedInterface $userAuthorized,
+        UserProfileRepositoryInterface $userProfileRepository,
         Json $json,
         array $data = []
     ) {
         $this->config = $config;
         $this->userContext = $userContext;
-        $this->userAuthorize = $userAuthorize;
+        $this->userAuthorized = $userAuthorized;
+        $this->userProfileRepository = $userProfileRepository;
         $this->serializer = $json;
         parent::__construct($context, $data);
     }
@@ -79,12 +87,65 @@ class SignIn extends Template
     }
 
     /**
+     * Adobe profile name
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getName(): string
+    {
+        return $this->isAuthorized() ? $this->getUserProfile()->getName() : '';
+    }
+
+    /**
+     * Adobe profile email
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getEmail(): string
+    {
+        return $this->isAuthorized() ? $this->getUserProfile()->getEmail() : '';
+    }
+
+    /**
+     * Authorized as a sting for json
+     *
+     * @return string
+     */
+    public function isAuthorizedJson(): string
+    {
+        return $this->isAuthorized() ? 'true' : 'false';
+    }
+
+    /**
      * Checks if user authorized.
      *
      * @return bool
      */
-    public function isAuthorized(): bool
+    private function isAuthorized(): bool
     {
-        return $this->userAuthorize->execute((int)$this->userContext->getUserId());
+        return $this->userAuthorized->execute($this->getAdminUserId());
+    }
+
+    /**
+     * Adobe user profile
+     *
+     * @return UserProfileInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getUserProfile(): UserProfileInterface
+    {
+        return $this->userProfileRepository->getByUserId($this->getAdminUserId());
+    }
+
+    /**
+     * Current admin user id
+     *
+     * @return int
+     */
+    private function getAdminUserId(): int
+    {
+        return (int) $this->userContext->getUserId();
     }
 }

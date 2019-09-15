@@ -3,7 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([
+    'Magento_AdobeIms/js/config',
+    'Magento_AdobeIms/js/user'
+], function (config, user) {
     'use strict';
 
     /**
@@ -11,7 +14,7 @@ define([], function () {
      * @param {Object} windowParams
      * @returns {String}
      */
-    function buildWindowParams (windowParams) {
+    function buildWindowParams(windowParams) {
         var output = '',
             coma = '',
             paramName,
@@ -28,13 +31,13 @@ define([], function () {
         return output;
     }
 
-    return function (authConfig) {
+    return function () {
         var authWindow;
 
         /**
          * If user have access tokens then reject authorization request
          */
-        if (authConfig.isAuthorized) {
+        if (user.isAuthorized()) {
             return new window.Promise(function (resolve, reject) {
                 reject(new Error('You are authorized.'));
             });
@@ -44,9 +47,9 @@ define([], function () {
          * Opens authorization window with special parameters
          */
         authWindow = window.adobeStockAuthWindow = window.open(
-            authConfig.url,
+            config.loginUrl,
             '',
-            buildWindowParams(authConfig.windowParams || {width: 500, height: 300})
+            buildWindowParams(config.login.popupWindowParams || {width: 500, height: 300})
         );
 
         return new window.Promise(function (resolve, reject) {
@@ -56,7 +59,7 @@ define([], function () {
             /**
              * Stop handle
              */
-             function stopHandle () {
+            function stopHandle() {
                 // Clear timers
                 clearTimeout(stopWatcherId);
                 clearInterval(watcherId);
@@ -68,7 +71,7 @@ define([], function () {
             /**
              * Start handle
              */
-            function startHandle () {
+            function startHandle() {
                 var responseData;
 
                 if (-1 === String(authWindow.origin).indexOf(window.location.host)) {
@@ -81,19 +84,22 @@ define([], function () {
                 stopWatcherId = setTimeout(function () {
                     stopHandle();
                     reject(new Error('Time\'s up.'));
-                }, authConfig.stopHandleTimeout || 10000);
+                }, config.login.popupWindowTimeout || 10000);
 
-                responseData = authWindow.document.body.innerText.match(authConfig.response.regexpPattern);
+                responseData = authWindow.document.body.innerText.match(
+                    config.login.callbackParsingParams.regexpPattern
+                );
                 if (responseData) {
                     stopHandle();
 
-                    if (responseData[authConfig.response.codeIndex] === authConfig.response.successCode) {
+                    if (responseData[config.login.callbackParsingParams.codeIndex] === config.login.callbackParsingParams.successCode) {
+                        user.isAuthorized(true);
                         resolve({
                             isAuthorized: true,
-                            lastAuthSuccessMessage: responseData[authConfig.response.messageIndex]
+                            lastAuthSuccessMessage: responseData[config.login.callbackParsingParams.messageIndex]
                         });
                     } else {
-                        reject(new Error(responseData[authConfig.response.messageIndex]));
+                        reject(new Error(responseData[config.login.callbackParsingParams.messageIndex]));
                     }
                 }
             }

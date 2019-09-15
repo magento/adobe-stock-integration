@@ -17,11 +17,10 @@ use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
 /**
- * Backend controller for retrieving data for the current user
+ * Logout from adobe account
  */
-class SignOut extends Action
+class Logout extends Action
 {
-
     /**
      * Successful result code.
      */

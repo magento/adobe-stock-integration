@@ -5,19 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Controller\Adminhtml\UserProfile;
+namespace Magento\AdobeIms\Controller\Adminhtml\User;
 
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
 
 /**
  * Backend controller for retrieving data for the current user
  */
-class GetUserData extends Action
+class Profile extends Action
 {
 
     /**
@@ -51,11 +50,6 @@ class GetUserData extends Action
     private $logger;
 
     /**
-     * @var ClientInterface
-     */
-    private $client;
-
-    /**
      * GetUserData constructor.
      *
      * @param Action\Context $context
@@ -67,14 +61,12 @@ class GetUserData extends Action
         Action\Context $context,
         UserContextInterface $userContext,
         UserProfileRepositoryInterface $userProfileRepository,
-        LoggerInterface $logger,
-        ClientInterface $client
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->userContext = $userContext;
         $this->userProfileRepository = $userProfileRepository;
         $this->logger = $logger;
-        $this->client = $client;
     }
 
     /**
@@ -84,13 +76,9 @@ class GetUserData extends Action
     {
         try {
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
-            $quota = $this->client->getFullEntitlementQuota(0);
             $userData = [
                 'email' => $userProfile->getEmail(),
-                'display_name' => $userProfile->getName(),
-                'full_name'  => $userProfile->getFullName(),
-                'image_quota' => $quota->getImageQuota(),
-                'credits_quota' => $quota->getCreditsQuota()
+                'name' => $userProfile->getName()
             ];
             $responseCode = self::HTTP_OK;
 

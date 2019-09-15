@@ -11,5 +11,5 @@
     <preference for="Magento\AdobeImsApi\Api\Data\ConfigInterface" type="Magento\AdobeIms\Model\Config"/>
     <preference for="Magento\AdobeImsApi\Api\Data\TokenResponseInterface" type="Magento\AdobeIms\Model\OAuth\TokenResponse"/>
     <preference for="Magento\AdobeImsApi\Api\GetTokenInterface" type="Magento\AdobeIms\Model\GetToken"/>
-    <preference for="Magento\AdobeImsApi\Api\UserAuthorizedInterface" type="Magento\AdobeIms\Model\UserAuthorize"/>
+    <preference for="Magento\AdobeImsApi\Api\UserAuthorizedInterface" type="Magento\AdobeIms\Model\UserAuthorized"/>
 </config>

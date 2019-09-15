@@ -208,9 +208,9 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getFullEntitlementQuota(int $contentId): LicenseEntitlementQuota
+    public function getFullEntitlementQuota(): LicenseEntitlementQuota
     {
-        return $this->getLicenseInfo($contentId)->getEntitlement()->getFullEntitlementQuota();
+        return $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
     }
 
     /**
