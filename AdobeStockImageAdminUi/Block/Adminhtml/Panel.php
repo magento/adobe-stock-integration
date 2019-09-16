@@ -38,6 +38,8 @@ class Panel extends Template
      * Panel constructor.
      * @param Context $context
      * @param ClientInterface $client
+     * @param UserAuthorizedInterface $authorized
+     * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param array $data
      */
     public function __construct(
