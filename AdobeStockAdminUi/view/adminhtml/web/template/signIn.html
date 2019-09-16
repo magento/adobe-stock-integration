@@ -1,0 +1,44 @@
+<button
+    class="adobe-sign-in-button"
+    id="adobeImsSignIn"
+    data-role="signInBtn"
+    data-bind="click: login, visible: !user.isAuthorized()"
+    type="button">
+    <span>Sign In</span>
+</button>
+<div class="adobe-user-information">
+    <div class="admin__action-dropdown-wrap" data-bind="collapsible">
+        <button
+            id="adobe-ims-user-name"
+            type="button"
+            data-toggle="dropdown"
+            class="adobe-user-name admin__action-dropdown"
+            data-bind="visible: user.isAuthorized, toggleCollapsible">
+            <span><!--ko text: user.name--><!--/ko--></span>
+        </button>
+        <ul class="admin__action-dropdown-menu adobe-user-menu" data-bind="visible: user.isAuthorized">
+            <li class="user-profile-information">
+                <ul class="adobe-user-data">
+                    <li><!--ko text: user.name--><!--/ko--></li>
+                    <li><!--ko text: user.email--><!--/ko--></li>
+                    <li><a target="_blank" href="https://account.adobe.com/profile">Manage Account</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="adobe-user-credits">
+                    <span>AVAILABLE</span>
+                    <p><b><!--ko text: userQuota.images--><!--/ko--></b> Images | <b><!--ko text: userQuota.credits -->
+                        <!--/ko--></b> Credits</p>
+                </div>
+                <button
+                    class="adobe-sign-out-button"
+                    id="adobeImsSignOut"
+                    data-bind="click: logout"
+                    data-role="signOutBtn"
+                    type="button">
+                    <span>Sign Out</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>

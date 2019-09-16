@@ -23,22 +23,17 @@ class ContentType implements SearchParameterProviderInterface
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {
-        // Set default filters state to add photos and illustrations to the results.
-        $searchParams->setFilterContentTypePhotos(true);
-        $searchParams->setFilterContentTypeIllustration(true);
-
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'content_type_filter') {
                     switch ($filter->getValue()) {
                         case 'photo':
-                            $searchParams->setFilterContentTypeIllustration(false);
+                            $searchParams->setFilterContentTypePhotos(true);
                             break;
                         case 'illustration':
-                            $searchParams->setFilterContentTypePhotos(false);
+                            $searchParams->setFilterContentTypeIllustration(true);
                             break;
                     }
-                    break;
                 }
             }
         }
