@@ -99,10 +99,10 @@ class Save
     /**
      * Get values query part
      *
-     * @param int $bind
+     * @param int $number
      * @return string
      */
-    private function getValues($number): string
+    private function getValues(int $number): string
     {
         return implode(',', array_pad([], $number, '?'));
     }
