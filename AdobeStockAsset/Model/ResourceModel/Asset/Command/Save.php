@@ -11,18 +11,12 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Save multiple asset service.
  */
 class Save
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     /**
      * @var ResourceConnection
      */
@@ -31,14 +25,11 @@ class Save
     /**
      * Save constructor.
      * @param ResourceConnection $resourceConnection
-     * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        LoggerInterface $logger
+        ResourceConnection $resourceConnection
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->logger = $logger;
     }
 
     /**
@@ -60,17 +51,14 @@ class Save
 
         $data = $this->filterData($data, array_keys($this->getConnection()->describeTable($tableName)));
 
-        $insertSql = sprintf(
-            'INSERT IGNORE INTO `%s` (%s) VALUES (%s)',
+        $query = sprintf(
+            'INSERT INTO `%s` (%s) VALUES (%s)',
             $tableName,
             $this->getColumns(array_keys($data)),
             $this->getValues(count($data))
         );
-        try {
-            $this->getConnection()->query($insertSql, array_values($data));
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
-        }
+
+        $this->getConnection()->query($query, array_values($data));
     }
 
     /**
