@@ -7,8 +7,9 @@ define([
     'uiElement',
     'jquery',
     'mage/translate',
-    'Magento_Ui/js/modal/modal'
-], function (Element, $, $t) {
+    'Magento_AdobeStockAdminUi/js/config',
+    'Magento_AdobeStockAdminUi/js/user-quota',
+], function (Element, $, $t, config, userQuota) {
     'use strict';
 
     return Element.extend({
@@ -27,6 +28,13 @@ define([
          */
         initialize: function () {
             this._super();
+
+            config.downloadPreviewUrl = this.downloadPreviewUrl;
+            config.quotaUrl = this.quotaUrl;
+            config.seriesUrl = this.seriesUrl;
+
+            userQuota.images(this.userQuota.images);
+            userQuota.credits(this.userQuota.credits);
 
             $(this.containerId).modal({
                 type: 'slide',
