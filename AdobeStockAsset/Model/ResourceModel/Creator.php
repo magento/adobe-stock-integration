@@ -15,9 +15,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class Creator extends AbstractDb
 {
-    /**
-     * Adobe stock asset creator table name
-     */
     const ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME = 'adobe_stock_creator';
 
     /**
