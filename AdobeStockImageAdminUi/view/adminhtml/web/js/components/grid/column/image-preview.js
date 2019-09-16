@@ -6,21 +6,19 @@ define([
     'underscore',
     'jquery',
     'knockout',
-    'Magento_Ui/js/grid/columns/column',
     'Magento_AdobeIms/js/action/authorization',
     'mage/translate',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
-    'Magento_AdobeIms/js/user'
-], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation, prompt, user) {
+    'Magento_AdobeIms/js/user',
+    'Magento_AdobeStockAdminUi/js/config',
+], function (_, $, ko, authorizationAction, translate, imagePreview, messages, confirmation, prompt, user, config) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
-            mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
-            adobeStockModalSelector: '#adobe-stock-images-search-modal',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
             inputValue: '',
@@ -28,7 +26,6 @@ define([
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             messageDelay: 5,
             statefull: {
                 visible: true,
@@ -50,9 +47,7 @@ define([
             exports: {
                 inputValue: '${ $.provider }:params.search',
                 chipInputValue: '${ $.searchChipsProvider }:value'
-            },
-            getQuotaUrl: Column.getQuotaUrl,
-            imageSeriesUrl: Column.imageSeriesUrl
+            }
         },
 
         /**
@@ -106,7 +101,7 @@ define([
         requestSeries: function (record) {
             $.ajax({
                 type: 'GET',
-                url: this.imageSeriesUrl,
+                url: config.seriesUrl,
                 dataType: 'json',
                 data: {
                     'serie_id': record.id,
@@ -354,14 +349,14 @@ define([
          * @return {void}
          */
         save: function (record, fileName) {
-            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser'),
+            var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
 
-            $(this.adobeStockModalSelector).trigger('processStart');
+            $(config.adobeStockModalSelector).trigger('processStart');
 
             $.ajax({
                 type: 'POST',
-                url: this.downloadImagePreviewUrl,
+                url: config.downloadPreviewUrl,
                 dataType: 'json',
                 data: {
                     'media_id': record.id,
@@ -369,12 +364,12 @@ define([
                 },
                 context: this,
                 success: function () {
-                    $(this.adobeStockModalSelector).trigger('processStop');
-                    $(this.adobeStockModalSelector).trigger('closeModal');
+                    $(config.adobeStockModalSelector).trigger('processStop');
+                    $(config.adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
                 },
                 error: function (response) {
-                    $(this.adobeStockModalSelector).trigger('processStop');
+                    $(config.adobeStockModalSelector).trigger('processStop');
                     messages.add('error', response.responseJSON.message);
                     messages.scheduleCleanup(3);
                 }
@@ -420,11 +415,11 @@ define([
          */
         showLicenseConfirmation: function (record) {
             var licenseAndSave = this.licenseAndSave;
-            $(this.adobeStockModalSelector).trigger('processStart');
+            $(config.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
                     type: 'POST',
-                    url: this.getQuotaUrl,
+                    url: config.quotaUrl,
                     dataType: 'json',
                     data: {
                         'media_id': record.id
@@ -434,7 +429,7 @@ define([
                     success: function (response) {
                         var quotaInfo = response.result;
                         var confirmationContent = $.mage.__('License "' + record.title + '"');
-                        $(this.adobeStockModalSelector).trigger('processStop');
+                        $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
                             content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
@@ -447,7 +442,7 @@ define([
                     },
 
                     error: function (response) {
-                        $(this.adobeStockModalSelector).trigger('processStop');
+                        $(config.adobeStockModalSelector).trigger('processStop');
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(3);
                     }

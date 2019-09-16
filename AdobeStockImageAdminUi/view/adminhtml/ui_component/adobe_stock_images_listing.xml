@@ -79,7 +79,7 @@
                     <dataScope>orientation_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }" sortOrder="30">
+            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color" template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }" sortOrder="30">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Color</item>
@@ -163,7 +163,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="preview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview">
+        <column name="preview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
             <settings>
                 <label translate="true">Image Preview</label>
                 <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image-preview</bodyTmpl>

@@ -2,9 +2,10 @@
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * @var $block \Magento\AdobeStockAdminUi\Block\Adminhtml\SignIn
  */
-
-/** @var $block \Magento\AdobeIms\Block\Adminhtml\SignIn */
+use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
 ?>
 <div data-bind="scope: 'adobe-stock-sign-in'" class="scalable">
     <!-- ko template: getTemplate() --><!-- /ko -->
@@ -15,13 +16,21 @@
             "Magento_Ui/js/core/app": {
                 "components": {
                     "adobe-stock-sign-in": {
-                        "component": "Magento_AdobeIms/js/action/signIn",
+                        "component": "Magento_AdobeStockAdminUi/js/signIn",
                         "template": "Magento_AdobeStockAdminUi/signIn",
-                        "profileUrl": "<?= $block->escapeJs($block->getUrl('adobe_ims/user/profile')); ?>",
-                        "userName": "<?= $block->escapeHtml($block->getName()) ?>",
-                        "userEmail": "<?= $block->escapeHtml($block->getEmail()) ?>",
+                        "profileUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/profile') ?>",
+                        "userName": "<?= $block->escapeJs($block->getName()) ?>",
+                        "userEmail": "<?= $block->escapeJs($block->getEmail()) ?>",
                         "loginUrl": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
-                        "isAuthorized": "<?= $block->escapeHtml($block->isAuthorizedJson()) ?>"
+                        "logoutUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/logout') ?>",
+                        "isAuthorized": "<?= /* @noEscape */ $block->isAuthorizedJson() ?>",
+                        "callbackParsingParams": {
+                            "regexpPattern": <?= /* @noEscape */ json_encode(Callback::RESPONSE_REGEXP_PATTERN, JSON_HEX_QUOT) ?>,
+                            "codeIndex": "<?= /* @noEscape */ Callback::RESPONSE_CODE_INDEX ?>",
+                            "messageIndex": "<?= /* @noEscape */ Callback::RESPONSE_MESSAGE_INDEX ?>",
+                            "successCode": "<?= /* @noEscape */ Callback::RESPONSE_SUCCESS_CODE ?>",
+                            "errorCode": "<?= /* @noEscape */ Callback::RESPONSE_ERROR_CODE ?>"
+                        }
                     }
                 }
             }

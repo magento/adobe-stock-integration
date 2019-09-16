@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\AdobeIms\Model\GetToken;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
-use Magento\AdobeIms\Model\GetToken;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * User repository test.
@@ -64,13 +64,12 @@ class GetTokenTest extends TestCase
             ->getMock();
         $this->jsonMock = $this->createMock(Json::class);
         $this->tokenResponseFactoryMock = $this->createMock(TokenResponseInterfaceFactory::class);
-        $this->getToken = New GetToken(
+        $this->getToken = new GetToken(
             $this->configMock,
             $this->curlFactoryMock,
             $this->jsonMock,
             $this->tokenResponseFactoryMock
         );
-
     }
 
     /**
@@ -117,6 +116,4 @@ class GetTokenTest extends TestCase
             ->willReturn('string');
         $this->assertEquals($tokenResponse, $this->getToken->execute('code'));
     }
-
-
 }
