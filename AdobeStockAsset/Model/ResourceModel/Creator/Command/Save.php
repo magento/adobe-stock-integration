@@ -10,6 +10,7 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator as CreatorResourceModel;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -21,6 +22,7 @@ class Save
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var ResourceConnection
      */
@@ -42,78 +44,77 @@ class Save
     /**
      * Multiple save creators
      *
-     * @param CreatorInterface $creators
+     * @param CreatorInterface $creator
      * @return void
      */
-    public function execute(CreatorInterface $creators): void
+    public function execute(CreatorInterface $creator): void
     {
-        $creator[] = $creators->getData();
+        $data = $creator->getData();
 
-        if (!count($creator)) {
-            return;
-        }
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->getConnection();
         $tableName = $this->resourceConnection->getTableName(
             CreatorResourceModel::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME
         );
-        $columnsSql = $this->buildColumnsSqlPart([CreatorInterface::ID, CreatorInterface::NAME]);
-        $bind = $this->getSqlBindData($creator);
-        $valuesSql = $this->buildValuesSqlPart(count($bind));
+        $data = $this->filterData($data, [CreatorInterface::ID, CreatorInterface::NAME]);
+        if (empty($data)) {
+            return;
+        }
         $insertSql = sprintf(
-            'INSERT INTO `%s` (%s) VALUES %s',
+            'INSERT IGNORE INTO `%s` (%s) VALUES (%s)',
             $tableName,
-            $columnsSql,
-            $valuesSql
+            $this->getColumns(array_keys($data)),
+            $this->getValues(count($data))
         );
         try {
-            $connection->query($insertSql, $bind);
+            $connection->query($insertSql, array_values($data));
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
     }
 
     /**
-     * Build columns save creators sql request part.
+     * Filter data to keep only data for columns specified
+     *
+     * @param array $data
+     * @param array $columns
+     * @return array
+     */
+    private function filterData(array $data, array $columns)
+    {
+        return array_intersect_key($data, array_flip($columns));
+    }
+
+    /**
+     * Retrieve DB adapter
+     *
+     * @return AdapterInterface
+     */
+    private function getConnection(): AdapterInterface
+    {
+        return $this->resourceConnection->getConnection();
+    }
+
+    /**
+     * Get columns query part
      *
      * @param array $columns
      * @return string
      */
-    private function buildColumnsSqlPart(array $columns): string
+    private function getColumns(array $columns): string
     {
-        $connection = $this->resourceConnection->getConnection();
-        $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
-        $sql = implode(', ', $processedColumns);
+        $connection = $this->getConnection();
+        $sql = implode(', ', array_map([$connection, 'quoteIdentifier'], $columns));
         return $sql;
     }
 
     /**
-     * Build values sql part of the save creators query.
+     * Get values query part
      *
      * @param int $bind
      * @return string
      */
-    private function buildValuesSqlPart($bind): string
+    private function getValues($number): string
     {
-        $sql = '(' . rtrim(str_repeat('?,', $bind), ',') . ')';
-
-        return $sql;
-    }
-
-    /**
-     * Get sql bind data.
-     *
-     * @param CreatorInterface[] $creators
-     * @return array
-     */
-    private function getSqlBindData(array $creators): array
-    {
-        $bind = [];
-        foreach ($creators as $creator) {
-            $bind = [
-                $creator['id'],
-                $creator['name']
-            ];
-        }
-        return $bind;
+        return implode(',', array_pad([], $number, '?'));
     }
 }

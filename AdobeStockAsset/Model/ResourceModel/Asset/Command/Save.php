@@ -10,6 +10,7 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -48,75 +49,73 @@ class Save
      */
     public function execute(AssetInterface $assets): void
     {
-        $assetsData = $assets->getData();
-        if (!count($assetsData)) {
-            return;
-        }
-        $connection = $this->resourceConnection->getConnection();
+        $data = $assets->getData();
         $tableName = $this->resourceConnection->getTableName(
             AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
         );
 
-        $columns = array_keys($connection->describeTable($tableName));
-        $assetsData = array_intersect_key($assetsData, array_flip($columns));
+        if (empty($data)) {
+            return;
+        }
 
-        $onDuplicateSql = $this->buildOnDuplicateSqlPart([AssetInterface::ID]);
-        $columnsSql = $this->buildColumnsSqlPart(array_keys($assetsData));
-        $valuesSql = $this->buildValuesSqlPart(count($assetsData));
+        $data = $this->filterData($data, array_keys($this->getConnection()->describeTable($tableName)));
+
         $insertSql = sprintf(
-            'INSERT INTO `%s` (%s) VALUES %s %s',
+            'INSERT IGNORE INTO `%s` (%s) VALUES (%s)',
             $tableName,
-            $columnsSql,
-            $valuesSql,
-            $onDuplicateSql
+            $this->getColumns(array_keys($data)),
+            $this->getValues(count($data))
         );
         try {
-            $connection->query($insertSql, array_values($assetsData));
+            $this->getConnection()->query($insertSql, array_values($data));
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
     }
 
     /**
-     * Build columns save asset sql request part.
+     * Filter data to keep only data for columns specified
+     *
+     * @param array $data
+     * @param array $columns
+     * @return array
+     */
+    private function filterData(array $data, array $columns)
+    {
+        return array_intersect_key($data, array_flip($columns));
+    }
+
+    /**
+     * Retrieve DB adapter
+     *
+     * @return AdapterInterface
+     */
+    private function getConnection(): AdapterInterface
+    {
+        return $this->resourceConnection->getConnection();
+    }
+
+    /**
+     * Get columns query part
      *
      * @param array $columns
      * @return string
      */
-    private function buildColumnsSqlPart(array $columns): string
+    private function getColumns(array $columns): string
     {
-        $connection = $this->resourceConnection->getConnection();
-        $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
-        $sql = implode(', ', $processedColumns);
+        $connection = $this->getConnection();
+        $sql = implode(', ', array_map([$connection, 'quoteIdentifier'], $columns));
         return $sql;
     }
 
     /**
-     * Build values sql part of the save category query.
+     * Get values query part
      *
      * @param int $bind
      * @return string
      */
-    private function buildValuesSqlPart($bind): string
+    private function getValues($number): string
     {
-        $sql = '(' . rtrim(str_repeat('?,', $bind), ',') . ')';
-        return $sql;
-    }
-
-    /**
-     * Build sql part on duplicate, to update record if it's already exists.
-     *
-     * @param array $fields
-     * @return string
-     */
-    private function buildOnDuplicateSqlPart(array $fields): string
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $processedFields = [];
-        foreach ($fields as $field) {
-            $processedFields[] = sprintf('%1$s = VALUES(%1$s)', $connection->quoteIdentifier($field));
-        }
-        $sql = 'ON DUPLICATE KEY UPDATE ' . implode(', ', $processedFields);
-        return $sql;
+        return implode(',', array_pad([], $number, '?'));
     }
 }
