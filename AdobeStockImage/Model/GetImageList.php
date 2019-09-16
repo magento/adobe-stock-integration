@@ -77,29 +77,37 @@ class GetImageList implements GetImageListInterface
      */
     private function setDefaultFilters(SearchCriteriaInterface $searchCriteria)
     {
-        $isContentTypeFilter = false;
-        $filters = [];
-        $currentFilters = [];
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $currentFilters[] = $filterGroup;
-                if ($filter->getField() === 'content_type_filter') {
-                    $isContentTypeFilter = true;
-                }
-            }
-        }
-        if (!$isContentTypeFilter) {
-            foreach ($this->defaultFilters as $filter) {
+        $filterGroups = $searchCriteria->getFilterGroups();
+        $appliedFilters = $this->getAppliedFilters($filterGroups);
+
+        foreach ($this->defaultFilters as $filter) {
+            if (!in_array($filter['type'], $appliedFilters)) {
                 $filters[] = $this->filterBuilder
                     ->setField($filter['type'])
                     ->setConditionType($filter['condition'])
                     ->setValue($filter['field'])
                     ->create();
             }
-            $searchCriteria->setFilterGroups(
-                array_merge([$this->filterGroupBuilder->setFilters($filters)->create()], $currentFilters)
-            );
         }
+        if (!empty($filters)) {
+            $filterGroups[] = $this->filterGroupBuilder->setFilters($filters)->create();
+        }
+        $searchCriteria->setFilterGroups($filterGroups);
         return $searchCriteria;
+    }
+
+    /**
+     * @param array $filterGroups
+     * @return array
+     */
+    private function getAppliedFilters(array $filterGroups): array
+    {
+        $appliedFilters = [];
+        foreach ($filterGroups as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                $appliedFilters[] = $filter->getField();
+            }
+        }
+        return $appliedFilters;
     }
 }
