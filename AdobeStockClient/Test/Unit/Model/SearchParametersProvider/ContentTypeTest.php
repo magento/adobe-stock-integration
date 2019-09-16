@@ -51,15 +51,8 @@ class ContentTypeTest extends TestCase
             ->getMockForAbstractClass();
         /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
         $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setFilterContentTypePhotos', 'setFilterContentTypeIllustration'])
             ->disableOriginalConstructor()
             ->getMock();
-        $searchParameters->expects($this->exactly(2))
-            ->method('setFilterContentTypeIllustration')
-            ->withConsecutive([true], [false]);
-        $searchParameters->expects($this->exactly(1))
-            ->method('setFilterContentTypePhotos')
-            ->with(true);
         $filterGroupItemMock = $this->getMockBuilder(FilterGroup::class)
             ->setMethods(['getFilters'])
             ->disableOriginalConstructor()
@@ -95,16 +88,8 @@ class ContentTypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setFilterContentTypePhotos', 'setFilterContentTypeIllustration'])
-            ->disableOriginalConstructor()
+        $searchParameters = $this->getMockBuilder(SearchParameters::class)->disableOriginalConstructor()
             ->getMock();
-        $searchParameters->expects($this->exactly(2))
-            ->method('setFilterContentTypePhotos')
-            ->withConsecutive([true], [false]);
-        $searchParameters->expects($this->exactly(1))
-            ->method('setFilterContentTypeIllustration')
-            ->with(true);
         $filterGroupItemMock = $this->getMockBuilder(FilterGroup::class)
             ->setMethods(['getFilters'])
             ->disableOriginalConstructor()
