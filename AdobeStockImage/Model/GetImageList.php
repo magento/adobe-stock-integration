@@ -97,6 +97,8 @@ class GetImageList implements GetImageListInterface
     }
 
     /**
+     * Get already applied filter types
+     *
      * @param array $filterGroups
      * @return array
      */
