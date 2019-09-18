@@ -181,6 +181,24 @@ class Client implements ClientInterface
     }
 
     /**
+     * Generates license request
+     *
+     * @param int $contentId
+     * @return LicenseRequest
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    private function getLicenseRequest(int $contentId): LicenseRequest
+    {
+        /** @var LicenseRequest $licenseRequest */
+        $licenseRequest = $this->licenseRequestFactory->create();
+        $licenseRequest->setContentId($contentId)
+            ->setLocale($this->clientConfig->getLocale())
+            ->setLicenseState('STANDARD');
+
+        return $licenseRequest;
+    }
+
+    /**
      * Get license information for the asset
      *
      * @param int $contentId
@@ -190,12 +208,7 @@ class Client implements ClientInterface
      */
     private function getLicenseInfo(int $contentId): License
     {
-        /** @var LicenseRequest $licenseRequest */
-        $licenseRequest = $this->licenseRequestFactory->create();
-        $licenseRequest->setContentId($contentId)
-            ->setLocale($this->clientConfig->getLocale())
-            ->setLicenseState('STANDARD');
-        return $this->getConnection()->getMemberProfile($licenseRequest, $this->getAccessToken());
+        return $this->getConnection()->getMemberProfile($this->getLicenseRequest($contentId), $this->getAccessToken());
     }
 
     /**

@@ -61,19 +61,14 @@ class SaveAsset
      */
     public function execute(AssetInterface $asset): void
     {
-        if (!$this->isAssetSaved($asset->getId())) {
-            $asset->isObjectNew(true);
-        }
         $category = $asset->getCategory();
         if ($category !== null && !$this->isCategorySaved($category->getId())) {
-            $category->isObjectNew(true);
             $category = $this->categoryRepository->save($category);
         }
         $asset->setCategoryId($category->getId());
 
         $creator = $asset->getCreator();
         if ($creator !== null && !$this->isCreatorSaved($creator->getId())) {
-            $creator->isObjectNew(true);
             $creator = $this->creatorRepository->save($creator);
         }
         $asset->setCreatorId($creator->getId());

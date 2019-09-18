@@ -26,7 +26,6 @@ define([
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
-            licenseAndDownloadUrl: Column.licenseAndDownloadUrl,
             messageDelay: 5,
             statefull: {
                 visible: true,
@@ -336,7 +335,7 @@ define([
                 context: this,
                 actions: {
                     confirm: function (fileName) {
-                        this.save(record, fileName);
+                        this.save(record, fileName, config.downloadPreviewUrl);
                     }.bind(this)
                 }
             });
@@ -347,10 +346,10 @@ define([
          *
          * @param {Object} record
          * @param {String} fileName
+         * @param {String} actionURI
          * @return {void}
-         * // TODO: add url
          */
-        save: function (record, fileName) {
+        save: function (record, fileName, actionURI) {
             var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
 
@@ -358,7 +357,7 @@ define([
 
             $.ajax({
                 type: 'POST',
-                url: config.downloadPreviewUrl,
+                url: actionURI,
                 dataType: 'json',
                 data: {
                     'media_id': record.id,
@@ -405,7 +404,7 @@ define([
          * @param {Object} record
          */
         licenseAndSave: function (record) {
-            this.save(record, this.licenseAndDownloadUrl);
+            this.save(record, this.generateImageName(record), config.licenseAndDownloadUrl);
         },
 
         /**
@@ -414,8 +413,8 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-            $(config.adobeStockModalSelector).trigger('processStart');
             var licenseAndSave = this.licenseAndSave.bind(this);
+            $(config.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
                     type: 'POST',

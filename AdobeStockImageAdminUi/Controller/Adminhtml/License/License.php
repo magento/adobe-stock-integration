@@ -10,7 +10,7 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImage\Model\GetImageByAdobeId;
-use Magento\AdobeStockImageApi\Api\SaveImageInterface;
+use Magento\AdobeStockImage\Model\SaveImage;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
@@ -57,7 +57,7 @@ class License extends Action
     private $logger;
 
     /**
-     * @var SaveImageInterface
+     * @var SaveImage
      */
     private $saveImage;
 
@@ -66,14 +66,14 @@ class License extends Action
      *
      * @param Action\Context $context
      * @param ClientInterface $client
-     * @param SaveImageInterface $saveImage
+     * @param SaveImage $saveImage
      * @param LoggerInterface $logger
      * @param GetImageByAdobeId $getImageByAdobeId
      */
     public function __construct(
         Action\Context $context,
         ClientInterface $client,
-        SaveImageInterface $saveImage,
+        SaveImage $saveImage,
         LoggerInterface $logger,
         GetImageByAdobeId $getImageByAdobeId
     ) {

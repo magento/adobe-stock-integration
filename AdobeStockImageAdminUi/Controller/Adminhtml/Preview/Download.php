@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
 use Magento\AdobeStockImage\Model\GetImageByAdobeId;
-use Magento\AdobeStockImageApi\Api\SaveImageInterface;
+use Magento\AdobeStockImage\Model\SaveImagePreview;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
@@ -51,27 +51,27 @@ class Download extends Action
     private $logger;
 
     /**
-     * @var SaveImageInterface
+     * @var SaveImagePreview
      */
-    private $saveImage;
+    private $saveImagePreview;
 
     /**
      * Download constructor.
      *
      * @param Action\Context $context
-     * @param SaveImageInterface $saveImage
+     * @param SaveImagePreview $saveImagePreview
      * @param LoggerInterface $logger
      * @param GetImageByAdobeId $getImageByAdobeId
      */
     public function __construct(
         Action\Context $context,
-        SaveImageInterface $saveImage,
+        SaveImagePreview $saveImagePreview,
         LoggerInterface $logger,
         GetImageByAdobeId $getImageByAdobeId
     ) {
         parent::__construct($context);
 
-        $this->saveImage = $saveImage;
+        $this->saveImagePreview = $saveImagePreview;
         $this->getImageByAdobeId = $getImageByAdobeId;
         $this->logger = $logger;
     }
@@ -86,7 +86,7 @@ class Download extends Action
             $mediaId = (int) $params['media_id'];
             $destinationPath = (string) $params['destination_path'];
             $asset = $this->getImageByAdobeId->execute($mediaId);
-            $this->saveImage->execute($asset, $destinationPath);
+            $this->saveImagePreview->execute($asset, $destinationPath);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
