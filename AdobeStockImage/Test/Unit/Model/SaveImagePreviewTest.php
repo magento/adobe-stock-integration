@@ -146,8 +146,6 @@ class SaveImagePreviewTest extends TestCase
         $this->storage->expects($this->once())->method('save')
             ->willReturn('');
         $asset->expects($this->once())->method('setPath')->willReturn(null);
-        $asset->expects($this->exactly(2))->method('getId')->willReturn(2);
-        $this->assetRepository->expects($this->once())->method('getById')->willReturn($asset);
         $categoryMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\CategoryInterface::class);
         $asset->expects($this->once())
             ->method('getCategory')
