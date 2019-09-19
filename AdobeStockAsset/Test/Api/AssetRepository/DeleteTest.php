@@ -21,24 +21,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class DeleteTest extends WebapiAbstract
 {
-    /**
-     * Service name
-     */
     private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
 
-    /**
-     * Service version
-     */
     private const SERVICE_VERSION = 'V1';
 
-    /**
-     * Resource path
-     */
     private const RESOURCE_PATH = '/V1/adobestock/asset';
 
-    /**
-     * Service operation
-     */
     private const SERVICE_OPERATION = 'DeleteById';
 
     /**

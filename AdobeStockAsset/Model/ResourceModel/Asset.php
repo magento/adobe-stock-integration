@@ -15,6 +15,8 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class Asset extends AbstractDb
 {
+    const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
+
     /**
      * @inheritdoc
      */
@@ -30,6 +32,6 @@ class Asset extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('adobe_stock_asset', 'id');
+        $this->_init(self::ADOBE_STOCK_ASSET_TABLE_NAME, 'id');
     }
 }

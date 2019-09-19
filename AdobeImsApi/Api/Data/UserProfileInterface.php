@@ -18,9 +18,9 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     const ID = 'id';
-    const ADOBE_ID = 'adobe_id';
     const USER_ID = 'admin_user_id';
-    const NAME = 'display_name';
+    const NAME = 'name';
+    const EMAIL = 'email';
     const ACCOUNT_TYPE = 'account_type';
     const ACCESS_TOKEN = 'access_token';
     const REFRESH_TOKEN = 'refresh_token';
@@ -45,21 +45,6 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setId($value);
 
     /**
-     * Get adobe ID
-     *
-     * @return int
-     */
-    public function getAdobeId(): int;
-
-    /**
-     * Set adobe ID
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setAdobeId(int $value): void;
-
-    /**
      * Get user ID
      *
      * @return int
@@ -77,9 +62,9 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Get name
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string;
+    public function getName(): ?string;
 
     /**
      * Set name
@@ -88,6 +73,21 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return void
      */
     public function setName(string $value): void;
+
+    /**
+     * Set email
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setEmail(string $value): void;
+
+    /**
+     * Get email
+     *
+     * @return string|null
+     */
+    public function getEmail(): ?string;
 
     /**
      * Get account type

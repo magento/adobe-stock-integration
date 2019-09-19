@@ -73,10 +73,10 @@ class GetToken implements GetTokenInterface
         $curl->post(
             $this->config->getTokenUrl(),
             [
+                'grant_type' => 'authorization_code',
                 'client_id' => $this->config->getApiKey(),
                 'client_secret' => $this->config->getPrivateKey(),
-                'code' => $code,
-                'grant_type' => 'authorization_code'
+                'code' => $code
             ]
         );
 
