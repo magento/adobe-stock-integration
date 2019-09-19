@@ -3,7 +3,7 @@
     "column": {
       "id": true,
       "admin_user_id": true,
-      "display_name": true,
+      "name": true,
       "email": true,
       "account_type": true,
       "access_token": true,
