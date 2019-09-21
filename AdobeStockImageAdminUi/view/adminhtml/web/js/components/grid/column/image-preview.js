@@ -32,7 +32,8 @@ define([
             statefull: {
                 visible: true,
                 sorting: true,
-                lastOpenedImage: true
+                lastOpenedImage: true,
+                serieFilterValue: true
             },
             tracks: {
                 lastOpenedImage: true
