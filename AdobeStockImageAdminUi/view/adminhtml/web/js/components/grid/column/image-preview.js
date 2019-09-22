@@ -349,7 +349,34 @@ define([
          */
         locate: function (record) {
             $(this.adobeStockModalSelector).trigger('closeModal');
+            var imageFilename, imagePath = record.path.replace(/^\/+/, '');
+            var imagePathParts = imagePath.split( '/' );
+            var imageFolder = false;
+            var folderFileNameMaxLength = 20;
+            var rootFolderName = 'Storage Root';
 
+            /* folder name is being cut in file browser */
+            if (imagePathParts.length > 1){
+                imageFilename = imagePathParts[imagePathParts.length - 1];
+                imageFolder = imagePathParts[0];
+                if (imageFolder.length > folderFileNameMaxLength){
+                    imageFolder = imageFolder.substring(0, folderFileNameMaxLength) + '...';
+                }
+            } else {
+                imageFilename = imagePath;
+                imageFolder = rootFolderName;
+            }
+
+            //select folder
+            if (imageFolder !== false){
+                var folderSelector = ".jstree a:contains('" + imageFolder+ "')";
+                var folder = $(folderSelector);
+                if (folder.length){
+                    folder[0].click();
+                }
+            }
+
+            /** TODO: if image is in folder it can not be found because "select folder" step is not completed yet */
             var fileSelector = 'div[data-row="file"]:has(img[alt="' + record.path.replace(/^\/+/, '') + '"])';
             var file = $(fileSelector);
             if (file.length){
