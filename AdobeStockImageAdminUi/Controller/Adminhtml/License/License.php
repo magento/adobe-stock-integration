@@ -99,6 +99,7 @@ class License extends Action
             $asset = $this->getAssetById->execute($contentId);
             $imageUrl = $this->client->getImageDownloadUrl($contentId);
             $asset->setUrl($imageUrl);
+            $asset->setIsLicensed(1);
             $this->saveImage->execute($asset, $destinationPath);
 
             $responseContent = [
