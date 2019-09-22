@@ -68,27 +68,11 @@ class SaveAsset
         $asset->setCategoryId($category->getId());
 
         $creator = $asset->getCreator();
-        if ($creator !== null && !$this->isCreatorSaved($creator->getId())) {
+        if ($creator !== null) {
             $creator = $this->creatorRepository->save($creator);
         }
         $asset->setCreatorId($creator->getId());
 
         $this->assetRepository->save($asset);
-    }
-
-    /**
-     * Is creator already exists.
-     *
-     * @param int $id
-     * @return bool
-     */
-    private function isCreatorSaved(int $id): bool
-    {
-        try {
-            $creator = $this->creatorRepository->getById($id);
-            return $creator->getId() !== null;
-        } catch (NoSuchEntityException $exception) {
-            return false;
-        }
     }
 }
