@@ -62,7 +62,7 @@ class SaveAsset
     public function execute(AssetInterface $asset): void
     {
         $category = $asset->getCategory();
-        if ($category !== null && !$this->isCategorySaved($category->getId())) {
+        if ($category !== null) {
             $category = $this->categoryRepository->save($category);
         }
         $asset->setCategoryId($category->getId());
@@ -74,38 +74,6 @@ class SaveAsset
         $asset->setCreatorId($creator->getId());
 
         $this->assetRepository->save($asset);
-    }
-
-    /**
-     * Is asset already exists.
-     *
-     * @param int $id
-     * @return bool
-     */
-    private function isAssetSaved(int $id): bool
-    {
-        try {
-            $asset = $this->assetRepository->getById($id);
-            return $asset->getId() !== null;
-        } catch (NoSuchEntityException $exception) {
-            return false;
-        }
-    }
-
-    /**
-     * Is asset category exists.
-     *
-     * @param int $id
-     * @return bool
-     */
-    private function isCategorySaved(int $id): bool
-    {
-        try {
-            $category = $this->categoryRepository->getById($id);
-            return $category->getId() !== null;
-        } catch (NoSuchEntityException $exception) {
-            return false;
-        }
     }
 
     /**

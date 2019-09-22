@@ -61,8 +61,9 @@ interface ClientInterface
      * Invokes licensing image operation via Adobe Stock API
      *
      * @param int $contentId
+     * @return void
      */
-    public function licenseImage(int $contentId);
+    public function licenseImage(int $contentId): void;
 
     /**
      * Returns download URL for a licensed image

@@ -5,21 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Model;
+namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
- * Class GetImageByAdobeId
+ * Class GetAssetById
  *
- * Service for getting image by content id
+ * Service for getting asset by content id
  */
-class GetImageByAdobeId
+class GetAssetById
 {
     /**
      * @var SearchCriteriaBuilder
@@ -27,9 +27,9 @@ class GetImageByAdobeId
     private $searchCriteriaBuilder;
 
     /**
-     * @var GetImageListInterface
+     * @var GetAssetListInterface
      */
-    private $getImageList;
+    private $getAssetList;
 
     /**
      * @var FilterBuilder
@@ -45,18 +45,18 @@ class GetImageByAdobeId
      * GetImageByAdobeId constructor.
      *
      * @param FilterBuilder $filterBuilder
-     * @param GetImageListInterface $getImageList
+     * @param GetAssetListInterface $getAssetList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DocumentToAsset $documentToAsset
      */
     public function __construct(
         FilterBuilder $filterBuilder,
-        GetImageListInterface $getImageList,
+        GetImageListInterface $getAssetList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DocumentToAsset $documentToAsset
     ) {
         $this->filterBuilder = $filterBuilder;
-        $this->getImageList = $getImageList;
+        $this->getAssetList = $getAssetList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->documentToAsset = $documentToAsset;
     }
@@ -79,7 +79,7 @@ class GetImageByAdobeId
             ->addFilter($mediaIdFilter)
             ->create();
 
-        $items = $this->getImageList->execute($searchCriteria)->getItems();
+        $items = $this->getAssetList->execute($searchCriteria)->getItems();
         if (empty($items) || 1 < count($items)) {
             $message = __('Requested image doesn\'t exists');
             throw new NotFoundException($message);

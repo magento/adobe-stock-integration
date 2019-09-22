@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
+use Magento\AdobeStockAsset\Model\GetAssetById;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockImage\Model\GetImageByAdobeId;
 use Magento\AdobeStockImage\Model\SaveImage;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
@@ -42,9 +42,9 @@ class License extends Action
     const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
-     * @var GetImageByAdobeId
+     * @var GetAssetById
      */
-    private $getImageByAdobeId;
+    private $getAssetById;
 
     /**
      * @var ClientInterface
@@ -68,20 +68,20 @@ class License extends Action
      * @param ClientInterface $client
      * @param SaveImage $saveImage
      * @param LoggerInterface $logger
-     * @param GetImageByAdobeId $getImageByAdobeId
+     * @param GetAssetById $getAssetById
      */
     public function __construct(
         Action\Context $context,
         ClientInterface $client,
         SaveImage $saveImage,
         LoggerInterface $logger,
-        GetImageByAdobeId $getImageByAdobeId
+        GetAssetById $getAssetById
     ) {
         parent::__construct($context);
 
         $this->client = $client;
         $this->saveImage = $saveImage;
-        $this->getImageByAdobeId = $getImageByAdobeId;
+        $this->getAssetById = $getAssetById;
         $this->logger = $logger;
     }
 
@@ -96,7 +96,7 @@ class License extends Action
             $destinationPath = (string) $params['destination_path'];
             $responseCode = self::HTTP_OK;
             $this->client->licenseImage($contentId);
-            $asset = $this->getImageByAdobeId->execute($contentId);
+            $asset = $this->getAssetById->execute($contentId);
             $imageUrl = $this->client->getImageDownloadUrl($contentId);
             $asset->setUrl($imageUrl);
             $this->saveImage->execute($asset, $destinationPath);

@@ -244,16 +244,13 @@ class Client implements ClientInterface
      * Performs image license request to Adobe Stock APi
      *
      * @param int $contentId
-     * @return License
      * @throws IntegrationException
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @throws StockApi
      */
-    public function licenseImage(int $contentId): License
+    public function licenseImage(int $contentId): void
     {
         $licenseRequest = $this->getLicenseRequest($contentId);
-        $license = $this->getConnection()->getContentLicense($licenseRequest, $this->getAccessToken());
-
-        return $license;
+        $this->getConnection()->getContentLicense($licenseRequest, $this->getAccessToken());
     }
 
     /**
@@ -269,33 +266,6 @@ class Client implements ClientInterface
         $licenseRequest = $this->getLicenseRequest($contentId);
 
         return $this->getConnection()->downloadAssetUrl($licenseRequest, $this->getAccessToken());
-    }
-
-    /**
-     * Convert a stock file object to a document object
-     *
-     * @param StockFile $file
-     * @return DocumentInterface
-     * @throws IntegrationException
-     */
-    private function convertStockFileToDocument(StockFile $file): DocumentInterface
-    {
-        $itemData = (array) $file;
-        $itemId = $itemData['id'];
-
-        $category = (array) $itemData['category'];
-
-        $itemData['category'] = $category;
-        $itemData['category_id'] = $category['id'];
-        $itemData['category_name'] = $category['name'];
-
-        $attributes = $this->createAttributes('id', $itemData);
-
-        $item = $this->documentFactory->create();
-        $item->setId($itemId);
-        $item->setCustomAttributes($attributes);
-
-        return $item;
     }
 
     /**

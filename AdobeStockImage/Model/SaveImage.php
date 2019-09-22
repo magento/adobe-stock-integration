@@ -31,11 +31,6 @@ class SaveImage implements SaveImageInterface
     private $logger;
 
     /**
-     * @var GetImageByAdobeId
-     */
-    private $getImageByAdobeId;
-
-    /**
      * @var SaveAsset
      */
     private $saveAsset;
@@ -49,20 +44,17 @@ class SaveImage implements SaveImageInterface
      * SaveImagePreview constructor.
      * @param SaveAsset $saveAsset
      * @param Storage $storage
-     * @param GetImageByAdobeId $getImageByAdobeId
      * @param LoggerInterface $logger
      * @param ClientInterface $client
      */
     public function __construct(
         SaveAsset $saveAsset,
         Storage $storage,
-        GetImageByAdobeId $getImageByAdobeId,
         LoggerInterface $logger,
         ClientInterface $client
     ) {
         $this->storage = $storage;
         $this->logger = $logger;
-        $this->getImageByAdobeId = $getImageByAdobeId;
         $this->saveAsset = $saveAsset;
         $this->client = $client;
     }
