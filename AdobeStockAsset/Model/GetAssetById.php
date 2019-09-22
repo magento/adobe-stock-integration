@@ -51,7 +51,7 @@ class GetAssetById
      */
     public function __construct(
         FilterBuilder $filterBuilder,
-        GetImageListInterface $getAssetList,
+        GetAssetListInterface $getAssetList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DocumentToAsset $documentToAsset
     ) {
