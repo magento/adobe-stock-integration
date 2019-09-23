@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockIsolatedFilterTest">
+    <test name="AdminAdobeStockTypeFilterTest">
         <annotations>
             <stories value="Cover scenario: User filters images by type"/>
             <title value="Admin should be able to filters images by type"/>
