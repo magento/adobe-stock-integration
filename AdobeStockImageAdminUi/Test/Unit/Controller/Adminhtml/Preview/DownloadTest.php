@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
+use Magento\AdobeStockAsset\Model\GetAssetById;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockImage\Model\SaveImagePreview;
@@ -23,6 +25,16 @@ use Magento\Framework\Exception\CouldNotSaveException;
  */
 class DownloadTest extends TestCase
 {
+    /**
+     * @var MockObject|AssetInterface
+     */
+    private $asset;
+
+    /**
+     * @var MockObject|GetAssetById
+     */
+    private $getAssetById;
+
     /**
      * @var MockObject|SaveImagePreview $saveImagePreview
      */
@@ -66,6 +78,8 @@ class DownloadTest extends TestCase
         $this->saveImagePreview = $this->createMock(SaveImagePreview::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->getAssetById = $this->createMock(GetAssetById::class);
+        $this->asset = $this->createMock(AssetInterface::class);
         $this->request = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,
             [],
@@ -75,6 +89,9 @@ class DownloadTest extends TestCase
             true,
             ['getParams']
         );
+        $this->getAssetById->expects($this->once())
+            ->method('execute')
+            ->willReturn($this->asset);
         $this->context->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
@@ -104,7 +121,8 @@ class DownloadTest extends TestCase
         $this->download = new Download(
             $this->context,
             $this->saveImagePreview,
-            $this->logger
+            $this->logger,
+            $this->getAssetById
         );
     }
 

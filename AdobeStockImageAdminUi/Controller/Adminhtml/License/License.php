@@ -6,29 +6,25 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
+namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
 use Magento\AdobeStockAsset\Model\GetAssetById;
-use Magento\AdobeStockImage\Model\SaveImagePreview;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockImage\Model\SaveImage;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Download
+ * Backend controller for licensing and downloading an image
  */
-class Download extends Action
+class License extends Action
 {
     /**
-     * Successful image download result code.
+     * Successful image license and download result code.
      */
     const HTTP_OK = 200;
-
-    /**
-     * Download image failed response code.
-     */
-    const HTTP_BAD_REQUEST = 400;
 
     /**
      * Internal server error response code.
@@ -36,9 +32,14 @@ class Download extends Action
     const HTTP_INTERNAL_ERROR = 500;
 
     /**
+     * Download image failed response code.
+     */
+    const HTTP_BAD_REQUEST = 400;
+
+    /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
      * @var GetAssetById
@@ -46,32 +47,40 @@ class Download extends Action
     private $getAssetById;
 
     /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var SaveImagePreview
+     * @var SaveImage
      */
-    private $saveImagePreview;
+    private $saveImage;
 
     /**
-     * Download constructor.
+     * GetQuota constructor.
      *
      * @param Action\Context $context
-     * @param SaveImagePreview $saveImagePreview
+     * @param ClientInterface $client
+     * @param SaveImage $saveImage
      * @param LoggerInterface $logger
      * @param GetAssetById $getAssetById
      */
     public function __construct(
         Action\Context $context,
-        SaveImagePreview $saveImagePreview,
+        ClientInterface $client,
+        SaveImage $saveImage,
         LoggerInterface $logger,
         GetAssetById $getAssetById
     ) {
         parent::__construct($context);
 
-        $this->saveImagePreview = $saveImagePreview;
+        $this->client = $client;
+        $this->saveImage = $saveImage;
         $this->getAssetById = $getAssetById;
         $this->logger = $logger;
     }
@@ -83,16 +92,21 @@ class Download extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $mediaId = (int) $params['media_id'];
+            $contentId = (int)$params['media_id'];
             $destinationPath = (string) $params['destination_path'];
-            $asset = $this->getAssetById->execute($mediaId);
-            $this->saveImagePreview->execute($asset, $destinationPath);
-
             $responseCode = self::HTTP_OK;
+            $this->client->licenseImage($contentId);
+            $asset = $this->getAssetById->execute($contentId);
+            $imageUrl = $this->client->getImageDownloadUrl($contentId);
+            $asset->setUrl($imageUrl);
+            $asset->setIsLicensed(1);
+            $this->saveImage->execute($asset, $destinationPath);
+
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully downloaded the image.'),
+                'message' => __('You have successfully licensed and downloaded the image.'),
             ];
+
         } catch (NotFoundException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
             $responseContent = [
@@ -101,11 +115,11 @@ class Download extends Action
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during image download: %1', $exception->getMessage());
+            $logMessage = __('An error occurred during image license and download: %1', $exception->getMessage());
             $this->logger->critical($logMessage);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while image download. Contact support.'),
+                'message' => __('An error occurred while image license and download. Contact support.'),
             ];
         }
 

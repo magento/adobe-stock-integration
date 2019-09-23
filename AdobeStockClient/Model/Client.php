@@ -181,6 +181,24 @@ class Client implements ClientInterface
     }
 
     /**
+     * Generates license request
+     *
+     * @param int $contentId
+     * @return LicenseRequest
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    private function getLicenseRequest(int $contentId): LicenseRequest
+    {
+        /** @var LicenseRequest $licenseRequest */
+        $licenseRequest = $this->licenseRequestFactory->create();
+        $licenseRequest->setContentId($contentId)
+            ->setLocale($this->clientConfig->getLocale())
+            ->setLicenseState('STANDARD');
+
+        return $licenseRequest;
+    }
+
+    /**
      * Get license information for the asset
      *
      * @param int $contentId
@@ -190,12 +208,7 @@ class Client implements ClientInterface
      */
     private function getLicenseInfo(int $contentId): License
     {
-        /** @var LicenseRequest $licenseRequest */
-        $licenseRequest = $this->licenseRequestFactory->create();
-        $licenseRequest->setContentId($contentId)
-            ->setLocale($this->clientConfig->getLocale())
-            ->setLicenseState('STANDARD');
-        return $this->getConnection()->getMemberProfile($licenseRequest, $this->getAccessToken());
+        return $this->getConnection()->getMemberProfile($this->getLicenseRequest($contentId), $this->getAccessToken());
     }
 
     /**
@@ -225,6 +238,34 @@ class Client implements ClientInterface
     public function getQuotaConfirmationMessage(int $contentId): string
     {
         return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
+    }
+
+    /**
+     * Performs image license request to Adobe Stock APi
+     *
+     * @param int $contentId
+     * @throws IntegrationException
+     * @throws StockApi
+     */
+    public function licenseImage(int $contentId): void
+    {
+        $licenseRequest = $this->getLicenseRequest($contentId);
+        $this->getConnection()->getContentLicense($licenseRequest, $this->getAccessToken());
+    }
+
+    /**
+     * Returns download URL for a licensed image
+     *
+     * @param int $contentId
+     * @return string
+     * @throws IntegrationException
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    public function getImageDownloadUrl(int $contentId): string
+    {
+        $licenseRequest = $this->getLicenseRequest($contentId);
+
+        return $this->getConnection()->downloadAssetUrl($licenseRequest, $this->getAccessToken());
     }
 
     /**

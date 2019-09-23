@@ -335,7 +335,7 @@ define([
                 context: this,
                 actions: {
                     confirm: function (fileName) {
-                        this.save(record, fileName);
+                        this.save(record, fileName, config.downloadPreviewUrl);
                     }.bind(this)
                 }
             });
@@ -346,9 +346,10 @@ define([
          *
          * @param {Object} record
          * @param {String} fileName
+         * @param {String} actionURI
          * @return {void}
          */
-        save: function (record, fileName) {
+        save: function (record, fileName, actionURI) {
             var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
 
@@ -356,7 +357,7 @@ define([
 
             $.ajax({
                 type: 'POST',
-                url: config.downloadPreviewUrl,
+                url: actionURI,
                 dataType: 'json',
                 data: {
                     'media_id': record.id,
@@ -403,9 +404,7 @@ define([
          * @param {Object} record
          */
         licenseAndSave: function (record) {
-            /** @todo add license functionality */
-            console.warn('add license functionality');
-            console.dir(record);
+            this.save(record, this.generateImageName(record), config.licenseAndDownloadUrl);
         },
 
         /**
@@ -414,7 +413,7 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-            var licenseAndSave = this.licenseAndSave;
+            var licenseAndSave = this.licenseAndSave.bind(this);
             $(config.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
