@@ -25,7 +25,7 @@ define([
          *
          * @param record
          */
-        next: function (record){
+        next: function (record) {
             var recordToShow = this.records[record._rowIndex + 1];
             recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
             this.show(recordToShow);
@@ -36,7 +36,7 @@ define([
          *
          * @param record
          */
-        prev: function (record){
+        prev: function (record) {
             var recordToShow = this.records[record._rowIndex - 1];
             recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
             this.show(recordToShow);
@@ -48,7 +48,7 @@ define([
          * @param {Number} rowId
          * @private
          */
-        _selectRow: function (rowId){
+        _selectRow: function (rowId) {
             this.thumbnailComponent().previewRowId(rowId);
         },
 
@@ -83,7 +83,7 @@ define([
         /**
          * @private
          */
-        _updateHeight: function (){
+        _updateHeight: function () {
             this.height($(this.previewImageSelector).height() + 'px');
             this.visibility(this.visibility());
             this.scrollToPreview();
@@ -100,6 +100,25 @@ define([
             this.visibility(visibility);
             this.height(0);
             this._selectRow(null);
+        },
+
+        /**
+         * Returns visibility for given record.
+         *
+         * @param {Object} record
+         * @return {*|boolean}
+         */
+        isVisible: function (record) {
+            if (this.lastOpenedImage
+                && this.lastOpenedImage._rowIndex === record._rowIndex
+                && (
+                    this.visibility()[record._rowIndex] === undefined
+                    || this.visibility()[record._rowIndex] === false
+                )
+            ) {
+                this.show(record);
+            }
+            return this.visibility()[record._rowIndex] || false;
         }
     });
 });
