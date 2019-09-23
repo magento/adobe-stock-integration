@@ -17,9 +17,9 @@ use Magento\Framework\Exception\SerializationException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetImageSeries
+ * Class GetRelatedImages
  */
-class GetImageSeries
+class GetRelatedImages
 {
     /**
      * @var GetImageListInterface
@@ -42,77 +42,88 @@ class GetImageSeries
     private $logger;
 
     /**
-     * GetImageSeries constructor.
+     * @var string[]
+     */
+    private $fields;
+
+    /**
+     * GetRelatedImages constructor.
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param LoggerInterface $logger
+     * @param array $fields
      */
     public function __construct(
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        array $fields = []
     ) {
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->logger = $logger;
+        $this->fields = $fields;
     }
 
     /**
-     * Get image related image series.
+     * Get related images
      *
-     * @param int $serieId
+     * @param int $imageId
      * @param int $limit
      *
      * @return array
      * @throws IntegrationException
      */
-    public function execute(int $serieId, int $limit): array
+    public function execute(int $imageId, int $limit): array
     {
+        $relatedImageGroups = [];
         try {
-            $filter = $this->filterBuilder->setField('serie_id')->setValue($serieId)->create();
-            $searchCriteria = $this->searchCriteriaBuilder->addFilter($filter)->setPageSize($limit)->create();
-
-            return $this->serializeImageSeries(
-                $this->getImageList->execute($searchCriteria)->getItems()
-            );
+            foreach ($this->fields as $key => $field) {
+                $filter = $this->filterBuilder->setField($field)->setValue($imageId)->create();
+                $searchCriteria = $this->searchCriteriaBuilder->addFilter($filter)
+                    ->setPageSize($limit)
+                    ->create();
+                $relatedImageGroups[$key] = $this->serializeRelatedImages(
+                    $this->getImageList->execute($searchCriteria)->getItems()
+                );
+            }
+            return $relatedImageGroups;
         } catch (\Exception $exception) {
-            $message = __('Get image series list failed: %s', $exception->getMessage());
+            $message = __('Get related images list failed: %s', $exception->getMessage());
             throw new IntegrationException($message, $exception);
         }
     }
 
     /**
-     * Serialize image series data.
+     * Serialize related image data.
      *
-     * @param Document[] $series
-     *
+     * @param Document[] $images
      * @return array
      * @throws SerializationException
      */
-    private function serializeImageSeries(array $series): array
+    private function serializeRelatedImages(array $images): array
     {
         $data = [];
         try {
-            /** @var Document $seriesItem */
-            foreach ($series as $seriesItem) {
-                $item['id'] = $seriesItem->getId();
-                $item['title'] = $seriesItem->getCustomAttribute('title')->getValue();
-                $item['thumbnail_url'] = $seriesItem->getCustomAttribute('thumbnail_240_url')->getValue();
-                $data[] = $item;
+            /** @var Document $image */
+            foreach ($images as $image) {
+                $data[] = [
+                    'id' => $image->getId(),
+                    'title' => $image->getCustomAttribute('title')->getValue(),
+                    'thumbnail_url' => $image->getCustomAttribute('thumbnail_240_url')->getValue()
+                ];
             }
-
-            $result = [
-                'type' => 'series',
-                'series' => $data,
-            ];
-
-            return $result;
+            return $data;
         } catch (\Exception $exception) {
-            $message = __('An error occurred during image series serialization: %s', $exception->getMessage());
-            throw new SerializationException($message);
+            throw new SerializationException(
+                __(
+                    'An error occurred during related images serialization: %s',
+                    $exception->getMessage()
+                )
+            );
         }
     }
 }

@@ -35,4 +35,12 @@
             <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\Https</argument>
         </arguments>
     </type>
+    <type name="Magento\AdobeStockImage\Model\GetRelatedImages">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="same_series" xsi:type="string">serie_id</item>
+                <item name="same_model" xsi:type="string">model_id</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -6,15 +6,16 @@ define([
     'underscore',
     'jquery',
     'knockout',
-    'Magento_AdobeIms/js/action/authorization',
     'mage/translate',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
-], function (_, $, ko, authorizationAction, translate, imagePreview, messages, confirmation, prompt, user, config) {
+    'mage/backend/tabs'
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, confirmation, prompt, user, config) {
     'use strict';
 
     return imagePreview.extend({
@@ -51,27 +52,44 @@ define([
         },
 
         /**
+         *
+         * @param {Obejct} record
+         * @private
+         */
+        _initRecord(record) {
+            if (!record.model || !record.series) {
+                record.series = ko.observable([]);
+                record.model = ko.observable([]);
+            }
+            record.keywordsLimit = ko.observable(this.keywordsLimit);
+            record.canViewMoreKeywords = ko.observable(true);
+        },
+
+        /**
          * @inheritDoc
          */
         next: function (record) {
-            this._super();
             this.hideAllKeywords(record);
+            this._super(record);
         },
 
         /**
          * @inheritDoc
          */
         prev: function (record) {
-            this._super();
             this.hideAllKeywords(record);
+            this._super(record);
         },
 
         /**
          * @inheritDoc
          */
-        hide: function (record) {
-            this._super();
+        show: function(record) {
+            this._initRecord(record);
             this.hideAllKeywords(record);
+            this._super(record);
+            this.loadRelatedImages(record);
+            this._updateHeight();
         },
 
         /**
@@ -98,18 +116,20 @@ define([
          *
          * @param record
          */
-        requestSeries: function (record) {
+        loadRelatedImages: function (record) {
             $.ajax({
                 type: 'GET',
-                url: config.seriesUrl,
+                url: config.relatedImagesUrl,
                 dataType: 'json',
                 data: {
-                    'serie_id': record.id,
+                    'image_id': record.id,
                     'limit': 4
                 },
             }).done(function (data) {
-                record.series(data.result.series);
-            });
+                record.series(data.result.same_series);
+                record.model(data.result.same_model);
+                this._updateHeight();
+            }.bind(this));
         },
 
         /**
@@ -186,12 +206,17 @@ define([
          * @returns {*[]}
          */
         getSeries: function (record) {
-            if (!record.series) {
-                record.series = ko.observableArray([]);
-                this.requestSeries(record);
-                this._updateHeight();
-            }
             return record.series;
+        },
+
+        /**
+         * Returns model to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getModel: function (record) {
+            return record.model;
         },
 
         /**
@@ -225,6 +250,7 @@ define([
          */
         viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
+            record.canViewMoreKeywords(false);
         },
 
         /**
@@ -234,11 +260,8 @@ define([
          * @returns {*}
          */
         hideAllKeywords: function (record) {
-            if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
-                record.keywordsLimit(this.keywordsLimit);
-                record.canViewMoreKeywords(true);
-            }
-
+            record.keywordsLimit(this.keywordsLimit);
+            record.canViewMoreKeywords(true);
         },
 
         /**
@@ -251,9 +274,6 @@ define([
             if (!record.canViewMoreKeywords) {
                 record.canViewMoreKeywords = ko.observable(true);
             }
-            if (record.keywordsLimit() >= record.keywords.length) {
-                record.canViewMoreKeywords(false);
-            }
             return record.canViewMoreKeywords();
         },
 
@@ -264,21 +284,6 @@ define([
             _.invoke(this.chips().elems(), 'clear');
             this.inputValue(keyword);
             this.chipInputValue(keyword);
-        },
-
-        /**
-         * Returns visibility for given record.
-         *
-         * @param {Object} record
-         * @return {*|boolean}
-         */
-        isVisible: function (record) {
-            if (this.lastOpenedImage === record._rowIndex &&
-                (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
-            ) {
-                this.show(record);
-            }
-            return this.visibility()[record._rowIndex] || false;
         },
 
         /**

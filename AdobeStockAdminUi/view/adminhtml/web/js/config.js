@@ -11,6 +11,6 @@ define([], function () {
         downloadPreviewUrl: 'adobe_stock/preview/download',
         licenseAndDownloadUrl: 'adobe_stock/license/license',
         quotaUrl: 'adobe_stock/license/getquota',
-        seriesUrl: 'adobe_stock/preview/series'
+        relatedImagesUrl: 'adobe_stock/preview/relatedimages'
     };
 });
