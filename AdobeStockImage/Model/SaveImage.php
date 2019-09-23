@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class SaveImage
  */
-class SaveImagePreview implements SaveImageInterface
+class SaveImage implements SaveImageInterface
 {
     /**
      * @var Storage
@@ -65,7 +65,7 @@ class SaveImagePreview implements SaveImageInterface
     public function execute(AssetInterface $asset, string $destinationPath): void
     {
         try {
-            $path = $this->storage->save($asset->getPreviewUrl(), $destinationPath);
+            $path = $this->storage->save($asset->getUrl(), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset->execute($asset);
         } catch (\Exception $exception) {

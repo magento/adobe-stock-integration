@@ -140,7 +140,7 @@ define([
                         this.setImageClass(img, {
                             bottom: isBottom
                         });
-                        img.currentRow = imageRowNumber;
+                        img.rowNumber = imageRowNumber;
                     }.bind(this));
 
                     row[0].firstInRow = true;
