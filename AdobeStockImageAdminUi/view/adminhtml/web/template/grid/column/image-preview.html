@@ -92,14 +92,14 @@
         <div id="adobe-stock-tabs-content">
             <div attr="'id': 'series_content_' + $row().id">
                 <!-- ko foreach: $col.getSeries($row()) -->
-                <div class="thumbnail" data-bind="css: { 'hide': $index() >= 3}">
+                <div class="thumbnail">
                     <img attr="src: thumbnail_url, alt: title">
                 </div>
                 <!-- /ko -->
             </div>
             <div attr="'id': 'model_content_' + $row().id">
                 <!-- ko foreach: $col.getModel($row()) -->
-                <div class="thumbnail" data-bind="css: { 'hide': $index() >= 3}">
+                <div class="thumbnail">
                     <img attr="src: thumbnail_url, alt: title">
                 </div>
                 <!-- /ko -->

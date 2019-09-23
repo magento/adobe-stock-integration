@@ -54,25 +54,15 @@ define([
         /**
          * @inheritDoc
          */
-        next: function (record) {
-            this._super();
+        show: function(record) {
+            if (!record.model || !record.series) {
+                record.series = ko.observable([]);
+                record.model = ko.observable([]);
+            }
+            this._super(record);
             this.hideAllKeywords(record);
-        },
-
-        /**
-         * @inheritDoc
-         */
-        prev: function (record) {
-            this._super();
-            this.hideAllKeywords(record);
-        },
-
-        /**
-         * @inheritDoc
-         */
-        hide: function (record) {
-            this._super();
-            this.hideAllKeywords(record);
+            this.loadRelatedImages(record);
+            this._updateHeight();
         },
 
         /**
@@ -99,7 +89,7 @@ define([
          *
          * @param record
          */
-        requestSeries: function (record) {
+        loadRelatedImages: function (record) {
             $.ajax({
                 type: 'GET',
                 url: config.relatedImagesUrl,
@@ -111,7 +101,8 @@ define([
             }).done(function (data) {
                 record.series(data.result.same_series);
                 record.model(data.result.same_model);
-            });
+                this._updateHeight();
+            }.bind(this));
         },
 
         /**
@@ -188,13 +179,6 @@ define([
          * @returns {*[]}
          */
         getSeries: function (record) {
-            if (!record.series || !record.model) {
-                record.series = ko.observableArray([]);
-                record.model = ko.observableArray([]);
-                this.requestSeries(record);
-                this.getModel(record);
-                this._updateHeight();
-            }
             return record.series;
         },
 

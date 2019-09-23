@@ -5,9 +5,8 @@
 define([
     'underscore',
     'jquery',
-    'knockout',
     'Magento_Ui/js/grid/columns/column',
-], function (_, $, ko, Column) {
+], function (_, $, Column) {
     'use strict';
 
     return Column.extend({
@@ -16,6 +15,9 @@ define([
             visibility: [],
             height: 0,
             lastOpenedImage: null,
+            imports: {
+                records: '${ $.provider }:data.items'
+            }
         },
 
         /**
@@ -24,8 +26,9 @@ define([
          * @param record
          */
         next: function (record){
-            this._selectRow(record.lastInRow ? record.currentRow + 1 : record.currentRow);
-            this.show(record._rowIndex + 1);
+            var recordToShow = this.records[record._rowIndex + 1];
+            recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
+            this.show(recordToShow);
         },
 
         /**
@@ -34,8 +37,9 @@ define([
          * @param record
          */
         prev: function (record){
-            this._selectRow(record.firstInRow ? record.currentRow - 1 : record.currentRow);
-            this.show(record._rowIndex - 1);
+            var recordToShow = this.records[record._rowIndex - 1];
+            recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
+            this.show(recordToShow);
         },
 
         /**
@@ -51,26 +55,20 @@ define([
         /**
          * Show image preview
          *
-         * @param {Object|Number} record
+         * @param {Object} record
          */
         show: function (record) {
             var visibility = this.visibility(),
                 img;
 
-            this.lastOpenedImage = null;
-            if(~visibility.indexOf(true)) {// hide any preview
-                if(!Array.prototype.fill) {
-                    visibility = _.times(visibility.length, _.constant(false));
-                } else {
-                    visibility.fill(false);
-                }
+            this.hide();
+
+            if (record.rowNumber) {
+                this._selectRow(record.rowNumber);
             }
-            if(this._isInt(record)) {
-                visibility[record] = true;
-            } else {
-                this._selectRow(record.currentRow);
-                visibility[record._rowIndex] = true;
-            }
+
+            visibility[record._rowIndex] = true;
+
             this.visibility(visibility);
 
             img = $(this.previewImageSelector + ' img');
@@ -79,15 +77,15 @@ define([
             } else {
                 img.load(this._updateHeight.bind(this));
             }
-            this.lastOpenedImage = this._isInt(record) ? record : record._rowIndex;
+            this.lastOpenedImage = record;
         },
 
         /**
          * @private
          */
         _updateHeight: function (){
-            this.height($(this.previewImageSelector).height() + 'px');// set height
-            this.visibility(this.visibility());// rerender
+            this.height($(this.previewImageSelector).height() + 'px');
+            this.visibility(this.visibility());
             this.scrollToPreview();
         },
 
@@ -102,18 +100,6 @@ define([
             this.visibility(visibility);
             this.height(0);
             this._selectRow(null);
-        },
-
-        /**
-         * Check if value is integer
-         *
-         * @param value
-         * @returns {boolean}
-         * @private
-         */
-        _isInt: function (value) {
-            return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
-        },
-
+        }
     });
 });
