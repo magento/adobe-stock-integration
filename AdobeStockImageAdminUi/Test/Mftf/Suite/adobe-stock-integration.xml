@@ -19,4 +19,16 @@
             <group name="adobe_stock_integration"/>
         </include>
     </suite>
+    <suite name="adobe_stock_integration_suite2">
+        <before>
+<!--            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>-->
+<!--            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>-->
+        </before>
+        <after>
+        </after>
+        <include>
+            <test name="AdminAdobeStockImagePreviewKeywordsSearchTest"/>
+<!--            <group name="adobe_stock_integration2"/>-->
+        </include>
+    </suite>
 </suites>

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="UserSearchesImagesByClickingOnKeywordsInImagePreviewTest">
+    <test name="AdminAdobeStockImagePreviewKeywordsSearchTest">
         <annotations>
             <stories value="Cover scenario: User searches images by keywords in image preview"/>
             <title value="Admin should be able to searches images by keywords in image preview"/>
