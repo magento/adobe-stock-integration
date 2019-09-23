@@ -12,6 +12,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 
 /**
  * Backend controller for retrieving data for the current user
@@ -50,23 +51,31 @@ class Profile extends Action
     private $logger;
 
     /**
-     * GetUserData constructor.
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
+     * Profile constructor.
      *
      * @param Action\Context $context
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param LoggerInterface $logger
+     * @param ClientInterface $client
      */
     public function __construct(
         Action\Context $context,
         UserContextInterface $userContext,
         UserProfileRepositoryInterface $userProfileRepository,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ClientInterface $client
     ) {
         parent::__construct($context);
         $this->userContext = $userContext;
         $this->userProfileRepository = $userProfileRepository;
         $this->logger = $logger;
+        $this->client = $client;
     }
 
     /**
@@ -76,9 +85,12 @@ class Profile extends Action
     {
         try {
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
+            $quota = $this->client->getFullEntitlementQuota();
             $userData = [
                 'email' => $userProfile->getEmail(),
-                'name' => $userProfile->getName()
+                'name' => $userProfile->getName(),
+                'credits' => $quota->getCredits(),
+                'images' => $quota->getImages()
             ];
             $responseCode = self::HTTP_OK;
 

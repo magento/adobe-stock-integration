@@ -65,6 +65,8 @@ define([
                 success: function (response) {
                     user.name(response.result.name);
                     user.email(response.result.email);
+                    userQuota.images(response.result.images);
+                    userQuota.credits(response.result.credits);
                 },
                 error: function (response) {
                     return response.message;
