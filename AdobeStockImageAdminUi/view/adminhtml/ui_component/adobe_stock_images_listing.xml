@@ -79,7 +79,7 @@
                     <dataScope>orientation_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"  template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }" sortOrder="30">
+            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color" template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }" sortOrder="30">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Color</item>
@@ -139,6 +139,18 @@
                     <label translate="true">Isolated Assets</label>
                 </settings>
             </filterInput>
+            <filterInput name="serie_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\SerieId" provider="${ $.parentName }" sortOrder="70">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Serie Id</item>
+                        <item name="visible" xsi:type="boolean">false</item>
+                        <item name="dataScope" xsi:type="string">serie_id</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Serie Id</label>
+                </settings>
+            </filterInput>
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" component="Magento_AdobeUi/js/components/grid/masonry">
@@ -163,7 +175,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="preview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview">
+        <column name="preview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
             <settings>
                 <label translate="true">Image Preview</label>
                 <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image-preview</bodyTmpl>

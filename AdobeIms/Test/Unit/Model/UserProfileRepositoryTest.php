@@ -53,7 +53,7 @@ class UserProfileRepositoryTest extends TestCase
         $this->entityFactory =  $this->getMockBuilder(UserProfileInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = New UserProfileRepository(
+        $this->model = new UserProfileRepository(
             $this->resource,
             $this->entityFactory
         );
@@ -111,8 +111,8 @@ class UserProfileRepositoryTest extends TestCase
         $this->resource->expects($this->once())
             ->method('load')
             ->willThrowException(
-            new \Magento\Framework\Exception\NoSuchEntityException(__('The user profile wasn\'t found.'))
-        );
+                new \Magento\Framework\Exception\NoSuchEntityException(__('The user profile wasn\'t found.'))
+            );
         $this->model->get(1);
     }
 
@@ -126,7 +126,4 @@ class UserProfileRepositoryTest extends TestCase
             ->willReturn($entity);
         $this->assertEquals($this->model->getByUserId(1)->getId(), 1);
     }
-
-
-
 }

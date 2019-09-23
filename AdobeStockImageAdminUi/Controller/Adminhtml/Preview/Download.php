@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
+use Magento\AdobeStockAsset\Model\GetAssetById;
 use Magento\AdobeStockImage\Model\SaveImagePreview;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
@@ -39,7 +40,14 @@ class Download extends Action
      */
     const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
-    /** @var LoggerInterface */
+    /**
+     * @var GetAssetById
+     */
+    private $getAssetById;
+
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
     /**
@@ -50,18 +58,21 @@ class Download extends Action
     /**
      * Download constructor.
      *
-     * @param Action\Context   $context
+     * @param Action\Context $context
      * @param SaveImagePreview $saveImagePreview
-     * @param LoggerInterface  $logger
+     * @param LoggerInterface $logger
+     * @param GetAssetById $getAssetById
      */
     public function __construct(
         Action\Context $context,
         SaveImagePreview $saveImagePreview,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        GetAssetById $getAssetById
     ) {
         parent::__construct($context);
 
         $this->saveImagePreview = $saveImagePreview;
+        $this->getAssetById = $getAssetById;
         $this->logger = $logger;
     }
 
@@ -74,7 +85,8 @@ class Download extends Action
             $params = $this->getRequest()->getParams();
             $mediaId = (int) $params['media_id'];
             $destinationPath = (string) $params['destination_path'];
-            $this->saveImagePreview->execute($mediaId, $destinationPath);
+            $asset = $this->getAssetById->execute($mediaId);
+            $this->saveImagePreview->execute($asset, $destinationPath);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
