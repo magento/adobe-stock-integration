@@ -22,8 +22,10 @@ define([
         defaults: {
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             inputValue: '',
             chipInputValue: '',
+            serieFilterValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
@@ -31,7 +33,8 @@ define([
             statefull: {
                 visible: true,
                 sorting: true,
-                lastOpenedImage: true
+                lastOpenedImage: true,
+                serieFilterValue: true
             },
             tracks: {
                 lastOpenedImage: true
@@ -39,7 +42,8 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url',
                 chips: '${ $.chipsProvider }',
-                searchChips: '${ $.searchChipsProvider }'
+                searchChips: '${ $.searchChipsProvider }',
+                filterChips: '${ $.filterChipsProvider }'
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
@@ -47,6 +51,7 @@ define([
             },
             exports: {
                 inputValue: '${ $.provider }:params.search',
+                serieFilterValue: '${ $.provider }:params.filters.serie_id',
                 chipInputValue: '${ $.searchChipsProvider }:value'
             }
         },
@@ -102,7 +107,8 @@ define([
                     'visibility',
                     'height',
                     'inputValue',
-                    'chipInputValue'
+                    'chipInputValue',
+                    'serieFilterValue'
                 ]);
             this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
@@ -121,6 +127,7 @@ define([
                 type: 'GET',
                 url: config.relatedImagesUrl,
                 dataType: 'json',
+                showLoader: true,
                 data: {
                     'image_id': record.id,
                     'limit': 4
@@ -220,6 +227,17 @@ define([
         },
 
         /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromSeries: function(record) {
+            this.serieFilterValue(record.id);
+            this.filterChips().set('applied', {'serie_id' : record.id.toString()})
+        },
+
+        /**
          * Returns keywords to display under the attributes image
          *
          * @param record
@@ -251,6 +269,7 @@ define([
         viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
             record.canViewMoreKeywords(false);
+            this._updateHeight();
         },
 
         /**

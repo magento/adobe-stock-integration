@@ -4,86 +4,96 @@
 //  */
 
 & when (@media-common = true) {
-    .masonry-image-preview {
-        .title {
-            font-weight: bold;
-        }
-
-        .info {
-            width: ~"calc(40% - 30px)";
-            float: right;
-            text-align: left;
-
-            .title {
-                margin: 0 0 20px;
-            }
-
-            .author {
-                margin: 0 0 30px;
-            }
-
-            .action-buttons {
-                text-align: left;
-                margin: 0 0 30px;
-            }
-        }
-
-        .attributes {
-            .attribute {
-                display: inline-block;
-                margin-right: 2em;
-
-                .value {
-                    margin-top: 1em;
-                }
-            }
-        }
-
-        .keywords {
-
-            .title {
-                margin-top: 10px;
-            }
-
-            .keyword {
-                &.hide {
-                    display: none;
-                }
-
-                display: inline-block;
-                margin: 15px 15px 15px 0;
-
-                .value {
-                    font-size: 15px;
-                    text-transform: capitalize;
-                }
-            }
-        }
-
-        #adobe-stock-tabs-content {
-            height: 120px;
-            vertical-align: middle;
-            .thumbnail {
-                display: inline-block;
-                margin: 10px 10px 10px 0;
-
-                img {
-                    max-height: 100px;
-                    max-width: 160px;
-                }
-            }
-        }
-
-        .admin__adobe-stock-image-checkbox {
-            .admin__field-control._with-tooltip {
-                .admin__form-field-label {
-                    display: inline-block;
-                }
-
-                .admin__field-tooltip {
-                    margin: -5px 0 0 5px;
-                }
-            }
-        }
+  .masonry-image-preview {
+    .title {
+      font-weight: bold;
     }
+
+    .info {
+      width: ~"calc(40% - 30px)";
+      float: right;
+      text-align: left;
+
+      .title {
+        margin: 0 0 20px;
+      }
+
+      .author {
+        margin: 0 0 30px;
+      }
+
+      .action-buttons {
+        text-align: left;
+        margin: 0 0 30px;
+      }
+    }
+
+    .attributes {
+      .attribute {
+        display: inline-block;
+        margin-right: 2em;
+
+        .value {
+          margin-top: 1em;
+        }
+      }
+    }
+
+    .keywords {
+
+      .title {
+        margin-top: 10px;
+      }
+
+      .keyword {
+        &.hide {
+          display: none;
+        }
+
+        display: inline-block;
+        margin: 15px 15px 15px 0;
+
+        .value {
+          font-size: 15px;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .adobe-stock-related-images-tab-content {
+      height: 120px;
+      vertical-align: middle;
+
+      .thumbnail {
+        display: inline-block;
+        margin: 10px 10px 10px 0;
+
+        img {
+          max-height: 100px;
+          max-width: 160px;
+        }
+      }
+
+      .see-more-wrapper {
+        display: inline-block;
+        vertical-align: top;
+        height: 120px;
+        padding-top: 50px;
+        margin-left: 30px;
+      }
+    }
+  }
+
+
+  .admin__adobe-stock-image-checkbox {
+    .admin__field-control._with-tooltip {
+      .admin__form-field-label {
+        display: inline-block;
+      }
+
+      .admin__field-tooltip {
+        margin: -5px 0 0 5px;
+      }
+    }
+  }
 }
