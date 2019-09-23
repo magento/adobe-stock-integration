@@ -6,21 +6,20 @@ define([
     'underscore',
     'jquery',
     'knockout',
-    'Magento_Ui/js/grid/columns/column',
-    'Magento_AdobeIms/js/action/authorization',
     'mage/translate',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
+    'Magento_AdobeIms/js/user',
+    'Magento_AdobeStockAdminUi/js/config',
     'mage/backend/tabs'
-], function (_, $, ko, Column, authorizationAction, translate, imagePreview, messages, confirmation, prompt) {
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, confirmation, prompt, user, config) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
-            mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
-            adobeStockModalSelector: '#adobe-stock-images-search-modal',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
             inputValue: '',
@@ -28,7 +27,6 @@ define([
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
             messageDelay: 5,
             statefull: {
                 visible: true,
@@ -50,26 +48,6 @@ define([
             exports: {
                 inputValue: '${ $.provider }:params.search',
                 chipInputValue: '${ $.searchChipsProvider }:value'
-            },
-            getQuotaUrl: Column.getQuotaUrl,
-            relatedImagesUrl: Column.relatedImagesUrl,
-            authConfig: {
-                url: '',
-                isAuthorized: false,
-                stopHandleTimeout: 10000,
-                windowParams: {
-                    width: 500,
-                    height: 600,
-                    top: 100,
-                    left: 300
-                },
-                response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
-                    codeIndex: 1,
-                    messageIndex: 2,
-                    successCode: 'success',
-                    errorCode: 'error'
-                }
             }
         },
 
@@ -112,6 +90,7 @@ define([
             this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
+
             return this;
         },
 
@@ -123,7 +102,7 @@ define([
         requestSeries: function (record) {
             $.ajax({
                 type: 'GET',
-                url: this.relatedImagesUrl,
+                url: config.relatedImagesUrl,
                 dataType: 'json',
                 data: {
                     'image_id': record.id,
@@ -369,7 +348,7 @@ define([
                 context: this,
                 actions: {
                     confirm: function (fileName) {
-                        this.save(record, fileName);
+                        this.save(record, fileName, config.downloadPreviewUrl);
                     }.bind(this)
                 }
             });
@@ -380,17 +359,18 @@ define([
          *
          * @param {Object} record
          * @param {String} fileName
+         * @param {String} actionURI
          * @return {void}
          */
-        save: function (record, fileName) {
-            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser'),
+        save: function (record, fileName, actionURI) {
+            var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
 
-            $(this.adobeStockModalSelector).trigger('processStart');
+            $(config.adobeStockModalSelector).trigger('processStart');
 
             $.ajax({
                 type: 'POST',
-                url: this.downloadImagePreviewUrl,
+                url: actionURI,
                 dataType: 'json',
                 data: {
                     'media_id': record.id,
@@ -398,12 +378,12 @@ define([
                 },
                 context: this,
                 success: function () {
-                    $(this.adobeStockModalSelector).trigger('processStop');
-                    $(this.adobeStockModalSelector).trigger('closeModal');
+                    $(config.adobeStockModalSelector).trigger('processStop');
+                    $(config.adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
                 },
                 error: function (response) {
-                    $(this.adobeStockModalSelector).trigger('processStop');
+                    $(config.adobeStockModalSelector).trigger('processStop');
                     messages.add('error', response.responseJSON.message);
                     messages.scheduleCleanup(3);
                 }
@@ -437,9 +417,7 @@ define([
          * @param {Object} record
          */
         licenseAndSave: function (record) {
-            /** @todo add license functionality */
-            console.warn('add license functionality');
-            console.dir(record);
+            this.save(record, this.generateImageName(record), config.licenseAndDownloadUrl);
         },
 
         /**
@@ -448,12 +426,12 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-            var licenseAndSave = this.licenseAndSave;
-            $(this.adobeStockModalSelector).trigger('processStart');
+            var licenseAndSave = this.licenseAndSave.bind(this);
+            $(config.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {
                     type: 'POST',
-                    url: this.getQuotaUrl,
+                    url: config.quotaUrl,
                     dataType: 'json',
                     data: {
                         'media_id': record.id
@@ -463,7 +441,7 @@ define([
                     success: function (response) {
                         var quotaInfo = response.result;
                         var confirmationContent = $.mage.__('License "' + record.title + '"');
-                        $(this.adobeStockModalSelector).trigger('processStop');
+                        $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
                             content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
@@ -476,7 +454,7 @@ define([
                     },
 
                     error: function (response) {
-                        $(this.adobeStockModalSelector).trigger('processStop');
+                        $(config.adobeStockModalSelector).trigger('processStop');
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(3);
                     }
@@ -490,7 +468,7 @@ define([
          * @param {Object} record
          */
         licenseProcess: function (record) {
-            if (this.authConfig.isAuthorized) {
+            if (user.isAuthorized()) {
                 this.showLicenseConfirmation(record);
 
                 return;
@@ -500,19 +478,14 @@ define([
              * Opens authorization window of Adobe Stock
              * then starts the authorization process
              */
-            authorizationAction(this.authConfig)
-                .then(
-                    function (authConfig) {
-                        this.authConfig = _.extend(this.authConfig, authConfig);
-                        this.licenseProcess(record);
-                        messages.add('success', authConfig.lastAuthSuccessMessage);
-                    }.bind(this)
-                )
-                .catch(
-                    function (error) {
-                        messages.add('error', error.message);
-                    }.bind(this)
-                )
+            authorizationAction()
+                .then(function (result) {
+                    this.licenseProcess(record);
+                    messages.add('success', result.lastAuthSuccessMessage);
+                }.bind(this))
+                .catch(function (error) {
+                    messages.add('error', error.message);
+                })
                 .finally((function () {
                     messages.scheduleCleanup(this.messageDelay);
                 }).bind(this));

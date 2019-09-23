@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\AdobeStockClientApi\Api\ClientInterface" type="Magento\AdobeStockClient\Model\Client"/>
     <preference for="Magento\AdobeStockClientApi\Api\Data\ConfigInterface" type="Magento\AdobeStockClient\Model\Config"/>
+    <preference for="Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface" type="Magento\AdobeStockClient\Model\UserQuota"/>
     <type name="Magento\AdobeStockClient\Model\Config">
         <arguments>
             <argument name="searchResultFields" xsi:type="array">

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\Save;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Collection as CreatorCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
@@ -25,6 +26,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class CreatorRepository implements CreatorRepositoryInterface
 {
+    /**
+     * @var Save
+     */
+    private $saveService;
+
     /**
      * @var ResourceModel
      */
@@ -58,12 +64,13 @@ class CreatorRepository implements CreatorRepositoryInterface
     /**
      * CreatorRepository constructor.
      *
-     * @param ResourceModel                        $resource
-     * @param CreatorCollectionFactory             $collectionFactory
-     * @param CreatorFactory                       $factory
-     * @param JoinProcessorInterface               $joinProcessor
-     * @param CollectionProcessorInterface         $collectionProcessor
+     * @param ResourceModel $resource
+     * @param CreatorCollectionFactory $collectionFactory
+     * @param CreatorFactory $factory
+     * @param JoinProcessorInterface $joinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param CreatorSearchResultsInterfaceFactory $searchResultFactory
+     * @param Save $commandSave
      */
     public function __construct(
         ResourceModel $resource,
@@ -71,7 +78,8 @@ class CreatorRepository implements CreatorRepositoryInterface
         CreatorFactory $factory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        CreatorSearchResultsInterfaceFactory $searchResultFactory
+        CreatorSearchResultsInterfaceFactory $searchResultFactory,
+        Save $commandSave
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -79,6 +87,7 @@ class CreatorRepository implements CreatorRepositoryInterface
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
+        $this->saveService = $commandSave;
     }
 
     /**
@@ -86,7 +95,7 @@ class CreatorRepository implements CreatorRepositoryInterface
      */
     public function save(CreatorInterface $item): CreatorInterface
     {
-        $this->resource->save($item);
+        $this->saveService->execute($item);
 
         return $item;
     }

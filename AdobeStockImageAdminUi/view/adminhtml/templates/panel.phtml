@@ -5,7 +5,7 @@
  */
 
 /**
- * @var $block Magento\Backend\Block\Template
+ * @var $block Magento\AdobeStockImageAdminUi\Block\Adminhtml\Panel
  */
 ?>
 
@@ -23,7 +23,15 @@
                     "stock_panel": {
                         "component": "Magento_AdobeStockImageAdminUi/panel",
                         "containerId": "#adobe-stock-images-search-modal",
-                        "masonryComponentPath": "adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns"
+                        "masonryComponentPath": "adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns",
+                        "downloadPreviewUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/preview/download') ?>",
+                        "licenseAndDownloadUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/license/license') ?>",
+                        "quotaUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/license/getquota') ?>",
+                        "relatedImagesUrl": "<?= $block->getUrl('adobe_stock/preview/relatedimages') ?>",
+                        "userQuota": {
+                            "images": "<?= /* @noEscape */ $block->getUserQuota()->getImages() ?>",
+                            "credits": "<?= /* @noEscape */ $block->getUserQuota()->getCredits() ?>"
+                        }
                     }
                 }
             }

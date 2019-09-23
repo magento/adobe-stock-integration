@@ -10,6 +10,7 @@ namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
+use AdobeStock\Api\Exception\StockApi;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
@@ -17,14 +18,13 @@ use AdobeStock\Api\Response\License;
 use Exception;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
+use Magento\AdobeStockClient\Model\StockFileToDocument;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\Search\DocumentFactory;
-use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
@@ -58,14 +58,9 @@ class Client implements ClientInterface
     private $searchResultFactory;
 
     /**
-     * @var DocumentFactory
+     * @var StockFileToDocument
      */
-    private $documentFactory;
-
-    /**
-     * @var AttributeValueFactory
-     */
-    private $attributeValueFactory;
+    private $stockFileToDocument;
 
     /**
      * @var SearchParameterProviderInterface
@@ -103,12 +98,15 @@ class Client implements ClientInterface
     private $userContext;
 
     /**
+     * @var UserQuotaInterfaceFactory
+     */
+    private $userQuotaFactory;
+
+    /**
      * Client constructor.
      * @param ConfigInterface $clientConfig
      * @param ImsConfig $imsConfig
-     * @param DocumentFactory $documentFactory
      * @param SearchResultFactory $searchResultFactory
-     * @param AttributeValueFactory $attributeValueFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
      * @param ConnectionFactory $connectionFactory
@@ -116,26 +114,26 @@ class Client implements ClientInterface
      * @param LoggerInterface $logger
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserContextInterface $userContext
+     * @param UserQuotaInterfaceFactory $userQuotaFactory
+     * @param StockFileToDocument $stockFileToDocument
      */
     public function __construct(
         ConfigInterface $clientConfig,
         ImsConfig $imsConfig,
-        DocumentFactory $documentFactory,
         SearchResultFactory $searchResultFactory,
-        AttributeValueFactory $attributeValueFactory,
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
         ConnectionFactory $connectionFactory,
         LicenseRequestFactory $licenseRequestFactory,
         LoggerInterface $logger,
         UserProfileRepositoryInterface $userProfileRepository,
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        UserQuotaInterfaceFactory $userQuotaFactory,
+        StockFileToDocument $stockFileToDocument
     ) {
         $this->clientConfig = $clientConfig;
         $this->imsConfig = $imsConfig;
-        $this->documentFactory = $documentFactory;
         $this->searchResultFactory = $searchResultFactory;
-        $this->attributeValueFactory = $attributeValueFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
         $this->connectionFactory = $connectionFactory;
@@ -143,6 +141,8 @@ class Client implements ClientInterface
         $this->logger = $logger;
         $this->userProfileRepository = $userProfileRepository;
         $this->userContext = $userContext;
+        $this->userQuotaFactory = $userQuotaFactory;
+        $this->stockFileToDocument = $stockFileToDocument;
     }
 
     /**
@@ -162,7 +162,7 @@ class Client implements ClientInterface
             $response = $connection->getNextResponse();
             /** @var StockFile $file */
             foreach ($response->getFiles() as $file) {
-                $items[] = $this->convertStockFileToDocument($file);
+                $items[] = $this->stockFileToDocument->convert($file);
             }
             $totalCount = $response->getNbResults();
         } catch (Exception $exception) {
@@ -181,19 +181,34 @@ class Client implements ClientInterface
     }
 
     /**
-     * Get license information for the asset
+     * Generates license request
      *
      * @param int $contentId
-     * @return License
+     * @return LicenseRequest
+     * @throws \AdobeStock\Api\Exception\StockApi
      */
-    private function getLicenseInfo(int $contentId): License
+    private function getLicenseRequest(int $contentId): LicenseRequest
     {
         /** @var LicenseRequest $licenseRequest */
         $licenseRequest = $this->licenseRequestFactory->create();
         $licenseRequest->setContentId($contentId)
             ->setLocale($this->clientConfig->getLocale())
             ->setLicenseState('STANDARD');
-        return $this->getConnection()->getMemberProfile($licenseRequest, $this->getAccessToken());
+
+        return $licenseRequest;
+    }
+
+    /**
+     * Get license information for the asset
+     *
+     * @param int $contentId
+     * @return License
+     * @throws IntegrationException
+     * @throws StockApi
+     */
+    private function getLicenseInfo(int $contentId): License
+    {
+        return $this->getConnection()->getMemberProfile($this->getLicenseRequest($contentId), $this->getAccessToken());
     }
 
     /**
@@ -207,36 +222,50 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
+    public function getFullEntitlementQuota(): UserQuotaInterface
+    {
+        $quota = $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
+        /** @var UserQuotaInterface $userQuota */
+        $userQuota = $this->userQuotaFactory->create();
+        $userQuota->setImages((int) $quota->standard_credits_quota);
+        $userQuota->setCredits((int) $quota->premium_credits_quota);
+        return $userQuota;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getQuotaConfirmationMessage(int $contentId): string
     {
         return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
     }
 
     /**
-     * Convert a stock file object to a document object
+     * Performs image license request to Adobe Stock APi
      *
-     * @param StockFile $file
-     * @return DocumentInterface
+     * @param int $contentId
      * @throws IntegrationException
+     * @throws StockApi
      */
-    private function convertStockFileToDocument(StockFile $file): DocumentInterface
+    public function licenseImage(int $contentId): void
     {
-        $itemData = (array) $file;
-        $itemId = $itemData['id'];
+        $licenseRequest = $this->getLicenseRequest($contentId);
+        $this->getConnection()->getContentLicense($licenseRequest, $this->getAccessToken());
+    }
 
-        $category = (array) $itemData['category'];
+    /**
+     * Returns download URL for a licensed image
+     *
+     * @param int $contentId
+     * @return string
+     * @throws IntegrationException
+     * @throws \AdobeStock\Api\Exception\StockApi
+     */
+    public function getImageDownloadUrl(int $contentId): string
+    {
+        $licenseRequest = $this->getLicenseRequest($contentId);
 
-        $itemData['category'] = $category;
-        $itemData['category_id'] = $category['id'];
-        $itemData['category_name'] = $category['name'];
-
-        $attributes = $this->createAttributes('id', $itemData);
-
-        $item = $this->documentFactory->create();
-        $item->setId($itemId);
-        $item->setCustomAttributes($attributes);
-
-        return $item;
+        return $this->getConnection()->downloadAssetUrl($licenseRequest, $this->getAccessToken());
     }
 
     /**
@@ -244,8 +273,7 @@ class Client implements ClientInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchFilesRequest
-     * @throws IntegrationException
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @throws StockApi
      */
     private function getSearchRequest(SearchCriteriaInterface $searchCriteria): SearchFilesRequest
     {
@@ -277,47 +305,6 @@ class Client implements ClientInterface
         }
 
         return $resultColumnArray;
-    }
-
-    /**
-     * Create custom attributes for columns returned by search
-     *
-     * @param string $idFieldName
-     * @param array $itemData
-     * @return AttributeValue[]
-     * @throws IntegrationException
-     */
-    private function createAttributes(string $idFieldName, array $itemData): array
-    {
-        try {
-            $attributes = [];
-
-            $idFieldNameAttribute = $this->attributeValueFactory->create();
-            $idFieldNameAttribute->setAttributeCode('id_field_name');
-            $idFieldNameAttribute->setValue($idFieldName);
-            $attributes['id_field_name'] = $idFieldNameAttribute;
-
-            foreach ($itemData as $key => $value) {
-                if ($value === null) {
-                    continue;
-                }
-                $attribute = $this->attributeValueFactory->create();
-                $attribute->setAttributeCode($key);
-                if (is_bool($value)) {
-                    // for proper work of form and grid (for example for Yes/No properties)
-                    $value = (string)(int)$value;
-                }
-                $attribute->setValue($value);
-                $attributes[$key] = $attribute;
-            }
-            return $attributes;
-        } catch (Exception $exception) {
-            $message = __(
-                'Create attributes process failed: %error_message',
-                ['error_message' => $exception->getMessage()]
-            );
-            $this->processException($message, $exception);
-        }
     }
 
     /**

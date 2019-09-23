@@ -94,7 +94,6 @@ class Config implements ConfigInterface
         return $this->url->getUrl('adobe_ims/oauth/callback');
     }
 
-
     /**
      * Retrieve token URL
      *
