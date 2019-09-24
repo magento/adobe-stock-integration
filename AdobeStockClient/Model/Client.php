@@ -227,8 +227,8 @@ class Client implements ClientInterface
         $quota = $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
         /** @var UserQuotaInterface $userQuota */
         $userQuota = $this->userQuotaFactory->create();
-        $userQuota->setImages((int) $quota->standard_credits_quota);
-        $userQuota->setCredits((int) $quota->premium_credits_quota);
+        $userQuota->setImages((int)$quota->standard_credits_quota);
+        $userQuota->setCredits((int)$quota->premium_credits_quota);
         return $userQuota;
     }
 
@@ -318,11 +318,11 @@ class Client implements ClientInterface
     private function getConnection(string $key = null): AdobeStock
     {
         try {
-            $apiKey = !empty($key) ? $key : (string) $this->imsConfig->getApiKey();
+            $apiKey = !empty($key) ? $key : (string)$this->imsConfig->getApiKey();
             return $this->connectionFactory->create(
                 $apiKey,
-                (string) $this->clientConfig->getProductName(),
-                (string) $this->clientConfig->getTargetEnvironment()
+                (string)$this->clientConfig->getProductName(),
+                (string)$this->clientConfig->getTargetEnvironment()
             );
         } catch (Exception $exception) {
             $message = __(
@@ -334,19 +334,26 @@ class Client implements ClientInterface
     }
 
     /**
-     * Retrieve an access token for current user
+     * Checks if Access token valid and returns result.
      *
      * @return string|null
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     private function getAccessToken()
     {
         try {
-            return $this->userProfileRepository->getByUserId(
-                (int)$this->userContext->getUserId()
-            )->getAccessToken();
-        } catch (NoSuchEntityException $exception) {
-            return null;
+            $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
+            $accessToken = $userProfile->getAccessToken();
+            if ($accessToken) {
+                $this->getConnection()->getContentInfo($this->getLicenseRequest(0), $accessToken);
+                return $accessToken;
+            }
+        } catch (Exception $e) {
+            $userProfile->setAccessToken('');
+            $userProfile->setRefreshToken('');
+            $this->userProfileRepository->save($userProfile);
         }
+        return null;
     }
 
     /**
