@@ -20,6 +20,7 @@
             <directory suffix=".php">../../../vendor/magento/module-adobe*/</directory>
             <exclude>
                 <directory>../../../vendor/magento/module-adobe*/Test</directory>
+                <file>../../../vendor/magento/module-adobe*/registration.php</file>
             </exclude>
         </whitelist>
     </filter>
