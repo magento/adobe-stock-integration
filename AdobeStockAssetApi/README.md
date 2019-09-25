@@ -1,16 +1,13 @@
-# Magento_AdobeStockAssetApi Module
+# Magento_AdobeStockAssetApi module
 
-The Magento_AdobeStockAssetApi module responsible for the general Adobe Stock API declaration
-
-## Structure
-
-Beyond the [usual module file structure](https://devdocs.magento.com/guides/v2.2/architecture/archi_perspectives/components/modules/mod_intro.html) the module contains a directory `ReportXml`.
-[Report XML](https://devdocs.magento.com/guides/v2.2/advanced-reporting/report-xml.html) is a markup language used to build reports for Advanced Reporting.
-The language declares SQL queries using XML declaration.
-
-## Subscription Process
-
-## Analytics Settings
+The Magento_AdobeStockAssetApi module serves as application program interface (API) for the Adobe Stock assets integration.
 
 ## Extensibility
 
+Extension developers can interact with the Magento_AdobeStockAssetApi module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/plugins.html).
+
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_AdobeStockAssetApi module.
+
+## Additional information
+
+For information about significant changes in patch releases, see [2.3.x Release information](https://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html).
