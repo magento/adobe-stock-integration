@@ -8,16 +8,16 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\SaveAsset;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockImage\Model\SaveImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockImage\Model\Storage;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeStockImage\Model\SaveImagePreview;
 
 /**
- * Test for Save image preview model.
+ * Test for Save image model.
  */
-class SaveImagePreviewTest extends TestCase
+class SaveImageTest extends TestCase
 {
     /**
      * @var MockObject|ClientInterface
@@ -40,9 +40,9 @@ class SaveImagePreviewTest extends TestCase
     private $logger;
 
     /**
-     * @var SaveImagePreview $saveImagePreview
+     * @var SaveImage $saveImage
      */
-    private $saveImagePreview;
+    private $saveImage;
 
     /**
      * @inheritDoc
@@ -54,7 +54,7 @@ class SaveImagePreviewTest extends TestCase
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->client = $this->createMock(ClientInterface::class);
 
-        $this->saveImagePreview = new SaveImagePreview(
+        $this->saveImage = new SaveImage(
             $this->saveAsset,
             $this->storage,
             $this->logger,
@@ -71,11 +71,11 @@ class SaveImagePreviewTest extends TestCase
 
         $this->storage->expects($this->once())->method('save')
             ->willReturn('');
-        $asset->expects($this->once())->method('getPreviewUrl')
+        $asset->expects($this->once())->method('getUrl')
             ->willReturn('https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg');
         $asset->expects($this->once())->method('setPath')->willReturn(null);
         $this->saveAsset->expects($this->once())->method('execute')
             ->with($asset);
-        $this->saveImagePreview->execute($asset, '');
+        $this->saveImage->execute($asset, '');
     }
 }
