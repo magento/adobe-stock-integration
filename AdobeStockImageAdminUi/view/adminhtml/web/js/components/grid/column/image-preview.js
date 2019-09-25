@@ -61,7 +61,7 @@ define([
          * @param {Obejct} record
          * @private
          */
-        _initRecord(record) {
+        _initRecord: function (record) {
             if (!record.model || !record.series) {
                 record.series = ko.observable([]);
                 record.model = ko.observable([]);
