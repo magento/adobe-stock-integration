@@ -15,4 +15,16 @@
     <testsuite name="Magento Adobe Stock Unit Tests">
         <directory suffix="Test.php">../../../vendor/magento/module-adobe*/Test/Unit/</directory>
     </testsuite>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../../../vendor/magento/module-adobe*/</directory>
+            <exclude>
+                <directory>../../../vendor/magento/module-adobe*/Test</directory>
+                <file>../../../vendor/magento/module-adobe*/registration.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
 </phpunit>

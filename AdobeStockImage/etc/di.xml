@@ -9,6 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\AdobeStockImageApi\Api\GetImageListInterface"
                 type="Magento\AdobeStockImage\Model\GetImageList"/>
+    <preference for="Magento\AdobeStockImageApi\Api\SaveImageInterface" type="Magento\AdobeStockImage\Model\SaveImage"/>
     <type name="Magento\Catalog\Model\Product\Gallery\Processor">
         <plugin name="adobe_stock_image_remove_metadata" type="Magento\AdobeStockImage\Plugin\Product\Gallery\Processor"
                 sortOrder="10" disabled="false"/>
@@ -32,6 +33,14 @@
     <type name="Magento\AdobeStockImage\Model\Storage">
         <arguments>
             <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\Https</argument>
+        </arguments>
+    </type>
+    <type name="Magento\AdobeStockImage\Model\GetRelatedImages">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="same_series" xsi:type="string">serie_id</item>
+                <item name="same_model" xsi:type="string">model_id</item>
+            </argument>
         </arguments>
     </type>
 </config>

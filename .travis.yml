@@ -64,3 +64,5 @@ script:
   - if [ $TEST_SUITE == 'integration' ]; then phpunit -c dev/tests/integration; fi
   - if [ $TEST_SUITE == 'api' ]; then phpunit -c dev/tests/api-functional; fi
   - if [ $TEST_SUITE == 'functional' ]; then codecept run functional --verbose --steps -g AdobeStockIntegration -c dev/tests/acceptance/codeception.yml; fi
+after_success:
+  - if [ $TEST_SUITE == 'unit' ]; then cd ../ && travis_retry coveralls; fi
