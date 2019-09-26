@@ -26,6 +26,7 @@ define([
             inputValue: '',
             chipInputValue: '',
             serieFilterValue: '',
+            modelFilterValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
@@ -34,7 +35,8 @@ define([
                 visible: true,
                 sorting: true,
                 lastOpenedImage: true,
-                serieFilterValue: true
+                serieFilterValue: true,
+                modelFilterValue: true
             },
             tracks: {
                 lastOpenedImage: true
@@ -47,18 +49,19 @@ define([
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
-                '${ $.provider }:params.search': 'hide',
+                '${ $.provider }:params.search': 'hide'
             },
             exports: {
                 inputValue: '${ $.provider }:params.search',
                 serieFilterValue: '${ $.provider }:params.filters.serie_id',
+                modelFilterValue: '${ $.provider }:params.filters.model_id',
                 chipInputValue: '${ $.searchChipsProvider }:value'
             }
         },
 
         /**
          *
-         * @param {Obejct} record
+         * @param {Object} record
          * @private
          */
         _initRecord: function (record) {
@@ -108,7 +111,8 @@ define([
                     'height',
                     'inputValue',
                     'chipInputValue',
-                    'serieFilterValue'
+                    'serieFilterValue',
+                    'modelFilterValue'
                 ]);
             this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
@@ -131,7 +135,7 @@ define([
                 data: {
                     'image_id': record.id,
                     'limit': 4
-                },
+                }
             }).done(function (data) {
                 record.series(data.result.same_series);
                 record.model(data.result.same_model);
@@ -235,6 +239,17 @@ define([
         seeMoreFromSeries: function(record) {
             this.serieFilterValue(record.id);
             this.filterChips().set('applied', {'serie_id' : record.id.toString()})
+        },
+
+        /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromModel: function(record) {
+            this.modelFilterValue(record.id);
+            this.filterChips().set('applied', {'model_id' : record.id.toString()})
         },
 
         /**
