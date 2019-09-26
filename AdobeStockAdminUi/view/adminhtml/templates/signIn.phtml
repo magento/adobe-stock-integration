@@ -25,7 +25,7 @@ use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
                         "logoutUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/logout') ?>",
                         "isAuthorized": "<?= /* @noEscape */ $block->isAuthorizedJson() ?>",
                         "callbackParsingParams": {
-                            "regexpPattern": <?= /* @noEscape */ json_encode(Callback::RESPONSE_REGEXP_PATTERN, JSON_HEX_QUOT) ?>,
+                            "regexpPattern": <?= /* @noEscape */ $block->getRegexpPattern() ?>,
                             "codeIndex": "<?= /* @noEscape */ Callback::RESPONSE_CODE_INDEX ?>",
                             "messageIndex": "<?= /* @noEscape */ Callback::RESPONSE_MESSAGE_INDEX ?>",
                             "successCode": "<?= /* @noEscape */ Callback::RESPONSE_SUCCESS_CODE ?>",
