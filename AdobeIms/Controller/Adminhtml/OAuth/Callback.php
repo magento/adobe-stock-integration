@@ -95,7 +95,7 @@ class Callback extends Action
     /**
      * @inheritdoc
      */
-    public function execute() : \Magento\Framework\Controller\ResultInterface
+    public function execute(): \Magento\Framework\Controller\ResultInterface
     {
         try {
             $tokenResponse = $this->getToken->execute(
@@ -103,6 +103,8 @@ class Callback extends Action
             );
 
             $userProfile = $this->getUserProfile();
+            $userProfile->setName($tokenResponse->getName());
+            $userProfile->setEmail($tokenResponse->getEmail());
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
@@ -118,9 +120,17 @@ class Callback extends Action
                 __('Authorization was successful')
             );
         } catch (AuthorizationException $e) {
-            $response = sprintf(self::RESPONSE_TEMPLATE, self::RESPONSE_ERROR_CODE, $e->getMessage());
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                $e->getMessage()
+            );
         } catch (CouldNotSaveException $e) {
-            $response = sprintf(self::RESPONSE_TEMPLATE, self::RESPONSE_ERROR_CODE, $e->getMessage());
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                $e->getMessage()
+            );
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
             $response = sprintf(
@@ -142,7 +152,7 @@ class Callback extends Action
      *
      * @return UserProfileInterface
      */
-    private function getUserProfile() : UserProfileInterface
+    private function getUserProfile(): UserProfileInterface
     {
         try {
             return $this->userProfileRepository->getByUserId(
@@ -160,10 +170,10 @@ class Callback extends Action
      * @return string
      * @throws Exception
      */
-    private function getExpiresTime(int $expiresIn) : string
+    private function getExpiresTime(int $expiresIn): string
     {
         $dateTime = new DateTime();
-        $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn/1000)));
+        $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn / 1000)));
         return $dateTime->format('Y-m-d H:i:s');
     }
 }

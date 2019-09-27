@@ -6,18 +6,19 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
+use Magento\Framework\Exception\IntegrationException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeStockImage\Model\GetImageSeries;
+use Magento\AdobeStockImage\Model\GetRelatedImages;
 
 /**
- * Test for GetImageSeries Model
+ * Test for GetRelatedSeries Model
  */
-class GetImageSeriesTest extends TestCase
+class GetRelatedSeriesTest extends TestCase
 {
 
     /**
@@ -41,9 +42,14 @@ class GetImageSeriesTest extends TestCase
     private $logger;
 
     /**
-     * @var GetImageSeries $getImageSeries
+     * @var GetRelatedImages $getRelatedSeries
      */
-    private $getImageSeries;
+    private $getRelatedSeries;
+
+    /**
+     * @var string[]
+     */
+    private $fields;
 
     /**
      * @inheritDoc
@@ -54,56 +60,57 @@ class GetImageSeriesTest extends TestCase
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
         $this->getImageListInterface = $this->createMock(GetImageListInterface::class);
-
-        $this->getImageSeries = new GetImageSeries(
+        $this->fields = ['same_series' => 'serie_id', 'same_model' => 'model_id'];
+        $this->getRelatedSeries = new GetRelatedImages(
             $this->getImageListInterface,
             $this->searchCriteriaBuilder,
             $this->filterBuilder,
-            $this->logger
+            $this->logger,
+            $this->fields
         );
     }
 
     /**
-     * Check if image series can be executed.
+     * Check if related images can be executed.
      *
-     * @param $series
+     * @param $relatedImagesProvider
      * @param $expectedResult
-     * @dataProvider seriesDataProvider
-     * @throws \Magento\Framework\Exception\IntegrationException
+     * @throws IntegrationException
+     * @dataProvider relatedImagesDataProvider
      */
-    public function testExecute($seriesProvider, $expectedResult)
+    public function testExecute($relatedImagesProvider, $expectedResult)
     {
-        $this->filterBuilder->expects($this->once())
+        $this->filterBuilder->expects($this->any())
             ->method('setField')
             ->willReturnSelf();
-        $this->filterBuilder->expects($this->once())
+        $this->filterBuilder->expects($this->any())
             ->method('setValue')
             ->willReturnSelf();
-        $this->filterBuilder->expects($this->once())
+        $this->filterBuilder->expects($this->any())
             ->method('create')
             ->willReturn(
                 $this->createMock(\Magento\Framework\Api\Filter::class)
             );
-        $this->searchCriteriaBuilder->expects($this->once())
+        $this->searchCriteriaBuilder->expects($this->any())
             ->method('addFilter')
             ->willReturnSelf();
-        $this->searchCriteriaBuilder->expects($this->once())
+        $this->searchCriteriaBuilder->expects($this->any())
             ->method('setPageSize')
             ->willReturnSelf();
-        $this->searchCriteriaBuilder->expects($this->once())
+        $this->searchCriteriaBuilder->expects($this->any())
             ->method('create')
             ->willReturn(
                 $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class)
             );
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\Search\SearchResultInterface::class);
-        $this->getImageListInterface->expects($this->once())
+        $this->getImageListInterface->expects($this->any())
             ->method('execute')
             ->willReturn($searchCriteriaMock);
-        $searchCriteriaMock->expects($this->once())
+        $searchCriteriaMock->expects($this->any())
             ->method('getItems')
-            ->willReturn($seriesProvider);
+            ->willReturn($relatedImagesProvider);
 
-        $this->assertEquals($expectedResult, $this->getImageSeries->execute(12345678, 30));
+        $this->assertEquals($expectedResult, $this->getRelatedSeries->execute(12345678, 30));
     }
 
     /**
@@ -111,11 +118,11 @@ class GetImageSeriesTest extends TestCase
      *
      * @return array
      */
-    public function seriesDataProvider(): array
+    public function relatedImagesDataProvider(): array
     {
         return [
             [
-                'seriesProvider' => [
+                'relatedImagesProvider' => [
                     new \Magento\Framework\Api\Search\Document(
                         [
                             'id' => 1234556789,
@@ -143,8 +150,14 @@ class GetImageSeriesTest extends TestCase
                     )
                 ],
                 'expectedResult' => [
-                    'type' => 'series',
-                    'series' => [
+                    'same_model' => [
+                        [
+                            'id' => 1234556789,
+                            'title' => 'Some Title',
+                            'thumbnail_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg'
+                        ]
+                    ],
+                    'same_series' => [
                         [
                             'id' => 1234556789,
                             'title' => 'Some Title',
