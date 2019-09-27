@@ -55,20 +55,9 @@
             </div>
             <!-- /ko -->
         </div>
-        <div class="keywords">
-            <div class="title" translate="'Similar Keywords'"></div>
-            <!-- ko foreach: $col.getKeywords($row()) -->
-            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
-                <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
-                    <span text="name"/>
-                </a>
-            </div>
-            <!-- /ko -->
-            <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
-                <span translate="'View all'"/>
-            </button>
-        </div>
+
         <div id="adobe-stock-tabs"
+             class="adobe-stock-tabs"
              data-bind="mageInit: {
                     'mage/backend/tabs': {
                     active: 'series_content_' + $row().id,
@@ -124,6 +113,19 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="keywords">
+            <div class="title" translate="'Similar Keywords'"></div>
+            <!-- ko foreach: $col.getKeywords($row()) -->
+            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
+                <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
+                    <span text="name"/>
+                </a>
+            </div>
+            <!-- /ko -->
+            <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
+                <span translate="'View all'"/>
+            </button>
         </div>
     </div>
 </div>
