@@ -70,24 +70,46 @@ class AppendAttributes
             foreach ($items as $key => $item) {
                 $customAttributes = $item->getCustomAttributes();
 
-                //adding is_downloaded attribute
-                $isDownloadedValue = (int)isset($downloadedAssets[$item->getId()]);
-                $attribute = $this->attributeValueFactory->create();
-                $attribute->setAttributeCode(self::ATTRIBUTE_CODE_IS_DOWNLOADED);
-                $attribute->setValue($isDownloadedValue);
-                $customAttributes[self::ATTRIBUTE_CODE_IS_DOWNLOADED] = $attribute;
-
-                //adding path attribute
-                $pathValue = $downloadedAssets[$item->getId()][AssetInterface::PATH] ?? '';
-                $attribute = $this->attributeValueFactory->create();
-                $attribute->setAttributeCode(self::ATTRIBUTE_CODE_PATH);
-                $attribute->setValue($pathValue);
-                $customAttributes[self::ATTRIBUTE_CODE_PATH] = $attribute;
+                if (isset($downloadedAssets[$item->getId()])) {
+                    $assetData = $downloadedAssets[$item->getId()];
+                    $this->addIsDownloaded($customAttributes, $assetData);
+                    $this->addPath($customAttributes, $assetData);
+                }
 
                 $item->setCustomAttributes($customAttributes);
             }
         }
 
         return $searchResult;
+    }
+
+    /**
+     * Add is_downloaded attribute
+     *
+     * @param array|null $customAttributes
+     * @param array|null $assetData
+     */
+    private function addIsDownloaded(?array &$customAttributes, ?array $assetData)
+    {
+        $isDownloadedValue = (int)isset($assetData[AssetInterface::ID]);
+        $attribute = $this->attributeValueFactory->create();
+        $attribute->setAttributeCode(self::ATTRIBUTE_CODE_IS_DOWNLOADED);
+        $attribute->setValue($isDownloadedValue);
+        $customAttributes[self::ATTRIBUTE_CODE_IS_DOWNLOADED] = $attribute;
+    }
+
+    /**
+     * Add path attribute
+     *
+     * @param array|null $customAttributes
+     * @param array|null $assetData
+     */
+    private function addPath(?array &$customAttributes, ?array $assetData)
+    {
+        $pathValue = $assetData[AssetInterface::PATH] ?? '';
+        $attribute = $this->attributeValueFactory->create();
+        $attribute->setAttributeCode(self::ATTRIBUTE_CODE_PATH);
+        $attribute->setValue($pathValue);
+        $customAttributes[self::ATTRIBUTE_CODE_PATH] = $attribute;
     }
 }

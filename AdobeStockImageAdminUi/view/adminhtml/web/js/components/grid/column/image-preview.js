@@ -22,6 +22,8 @@ define([
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            jsTreeRootFolderName: 'Storage Root',
+            jsTreeFolderNameMaxLength: 20,
             inputValue: '',
             chipInputValue: '',
             keywordsLimit: 5,
@@ -348,40 +350,44 @@ define([
          * @param record
          */
         locate: function (record) {
+            $.ajaxSetup({async: false});
             $(this.adobeStockModalSelector).trigger('closeModal');
-            var imageFilename, imagePath = record.path.replace(/^\/+/, '');
-            var imagePathParts = imagePath.split( '/' );
-            var imageFolder = false;
-            var folderFileNameMaxLength = 20;
-            var rootFolderName = 'Storage Root';
+            var imagePath = record.path.replace(/^\/+/, '');
+            var imagePathParts = imagePath.split('/');
+            var imageFilename = imagePath;
+            var imageFolderName = this.jsTreeRootFolderName;
 
-            /* folder name is being cut in file browser */
-            if (imagePathParts.length > 1){
+            if (imagePathParts.length > 1) {
                 imageFilename = imagePathParts[imagePathParts.length - 1];
-                imageFolder = imagePathParts[0];
-                if (imageFolder.length > folderFileNameMaxLength){
-                    imageFolder = imageFolder.substring(0, folderFileNameMaxLength) + '...';
+                imageFolderName = imagePathParts[imagePathParts.length - 2];
+
+                for (var i = 0; i < imagePathParts.length - 2; i++) {
+                    var folderName = imagePathParts[i];
+
+                    /* folder name is being cut in file browser */
+                    if (folderName.length > this.jsTreeFolderNameMaxLength) {
+                        folderName = folderName.substring(0, this.jsTreeFolderNameMaxLength) + '...';
+                    }
+
+                    //var folderSelector = ".jstree a:contains('" + folderName + "')";
+                    var openFolderChildrenButton = $(".jstree a:contains('" + folderName + "')").prev('.jstree-icon');
+                    if (openFolderChildrenButton.length) {
+                        openFolderChildrenButton.click();
+                    }
                 }
-            } else {
-                imageFilename = imagePath;
-                imageFolder = rootFolderName;
             }
 
             //select folder
-            if (imageFolder !== false){
-                var folderSelector = ".jstree a:contains('" + imageFolder+ "')";
-                var folder = $(folderSelector);
-                if (folder.length){
-                    folder[0].click();
+            var imageFolder = $(".jstree a:contains('" + imageFolderName + "')");
+            if (imageFolder.length) {
+                imageFolder.click();
+                //select image
+                var locatedImage = $("div[data-row='file']:has(img[alt=\"" + imageFilename + "\"])");
+                if (locatedImage.length) {
+                    locatedImage.click();
                 }
             }
-
-            /** TODO: if image is in folder it can not be found because "select folder" step is not completed yet */
-            var fileSelector = 'div[data-row="file"]:has(img[alt="' + record.path.replace(/^\/+/, '') + '"])';
-            var file = $(fileSelector);
-            if (file.length){
-                file.click();
-            }
+            $.ajaxSetup({async: true});
         },
 
         /**
