@@ -45,15 +45,12 @@ class StockFileToDocumentTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->documentFactory = $this->getMockBuilder(DocumentFactory::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -73,21 +70,58 @@ class StockFileToDocumentTest extends TestCase
         $stockFile = new StockFile([]);
 
         $stockFileId = 5;
-        $stockFile->setId($stockFileId);
-        $stockFile->setCategory(1, 'test_category');
+        $categoryId = 1;
+        $categoryName = 'test_category';
+        $categoryTitle = 'test_title';
+        $creatorName = 'test_creator';
+        $keyWords = ['test', 'test2', 'test3'];
 
-        $idFieldNameAttribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
+        $stockFile->setId($stockFileId);
+        $stockFile->setCategory($categoryId, $categoryName);
+        $stockFile->setTitle($categoryTitle);
+        $stockFile->setCreatorName($creatorName);
+        $stockFile->setKeywords($keyWords);
+
+        $attribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
             ->setMethods(['setAttributeCode', 'setValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $item = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
-            ->setMethods(['setId', 'setCustomAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributeValueFactory->expects($this->any())
+        $this->attributeValueFactory->expects($this->exactly(8))
             ->method('create')
-            ->willReturn($idFieldNameAttribute);
+            ->willReturn($attribute);
+        $attribute->expects($this->exactly(8))
+            ->method('setAttributeCode')
+            ->withConsecutive(
+                [$this->identicalTo('id_field_name')],
+                [$this->identicalTo('id')],
+                [$this->identicalTo('title')],
+                [$this->identicalTo('creator_name')],
+                [$this->identicalTo('category')],
+                [$this->identicalTo('keywords')],
+                [$this->identicalTo('category_id')],
+                [$this->identicalTo('category_name')]
+            );
+        $attribute->expects($this->exactly(8))
+            ->method('setValue')
+            ->withConsecutive(
+                [$this->identicalTo('id')],
+                [$this->identicalTo($stockFileId)],
+                [$this->identicalTo($categoryTitle)],
+                [$this->identicalTo($creatorName)],
+                [$this->identicalTo([
+                    'id' => $categoryId,
+                    'name' => $categoryName,
+                    'link' => null,
+                    ])
+                ],
+                [$this->identicalTo($keyWords)],
+                [$this->identicalTo($categoryId)],
+                [$this->identicalTo($categoryName)]
+            );
         $this->documentFactory->expects($this->once())
             ->method('create')
             ->willReturn($item);
