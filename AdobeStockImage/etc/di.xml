@@ -27,6 +27,11 @@
                     <item name="condition" xsi:type="string">or</item>
                     <item name="field" xsi:type="string">photo</item>
                 </item>
+                <item name="premium_filter" xsi:type="array">
+                    <item name="type" xsi:type="string">premium_price_filter</item>
+                    <item name="condition" xsi:type="string">eq</item>
+                    <item name="field" xsi:type="string">ALL</item>
+                </item>
             </argument>
         </arguments>
     </type>
