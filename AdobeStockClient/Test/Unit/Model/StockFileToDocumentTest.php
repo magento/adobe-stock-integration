@@ -28,12 +28,12 @@ class StockFileToDocumentTest extends TestCase
     private $stockFileToDocument;
 
     /**
-     * @var DocumentFactory
+     * @var DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $documentFactory;
 
     /**
-     * @var AttributeValueFactory
+     * @var AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeValueFactory;
 
@@ -64,7 +64,57 @@ class StockFileToDocumentTest extends TestCase
         );
     }
 
-    public function testConvert()
+    /**
+     * @param StockFile $stockFile
+     * @param array $attributesData
+     *
+     * @dataProvider convertDataProvider
+     */
+    public function testConvert(StockFile $stockFile, array $attributesData)
+    {
+        $item = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $i = 0;
+        foreach ($attributesData as $attributeKey => $attributeValue) {
+            $attribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
+                ->setMethods(['setAttributeCode', 'setValue'])
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $this->attributeValueFactory->expects($this->at($i))
+                ->method('create')
+                ->willReturn($attribute);
+
+            $attribute->expects($this->once())
+                ->method('setValue')
+                ->with($attributeValue);
+
+            $attribute->expects($this->once())
+                ->method('setAttributeCode')
+                ->with($attributeKey);
+            $i++;
+        }
+
+        $this->documentFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($item);
+        $item->expects($this->once())
+            ->method('setId')
+            ->with($stockFile->getId())
+            ->willReturn($item);
+        $item->expects($this->once())
+            ->method('setCustomAttributes')
+            ->willReturn($item);
+
+        $this->stockFileToDocument->convert($stockFile);
+    }
+
+    /**
+     * @return array
+     */
+    public function convertDataProvider()
     {
         /** @var StockFile $stockFile */
         $stockFile = new StockFile([]);
@@ -86,62 +136,25 @@ class StockFileToDocumentTest extends TestCase
         $stockFile->setCountryName($countryName);
         $stockFile->setDescription($description);
 
-        $attribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
-            ->setMethods(['setAttributeCode', 'setValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $item = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributesData = [
+            'id_field_name' => 'id',
+            'id' => $stockFileId,
+            'title' => $categoryTitle,
+            'creator_name' => $creatorName,
+            'country_name' => $countryName,
+            'category' => [
+                'id' => $categoryId,
+                'name' => $categoryName,
+                'link' => null,
+            ],
+            'keywords' => $keyWords,
+            'description' => $description,
+            'category_id' => $categoryId,
+            'category_name' => $categoryName,
+        ];
 
-        $this->attributeValueFactory->expects($this->exactly(10))
-            ->method('create')
-            ->willReturn($attribute);
-        $attribute->expects($this->exactly(10))
-            ->method('setAttributeCode')
-            ->withConsecutive(
-                [$this->identicalTo('id_field_name')],
-                [$this->identicalTo('id')],
-                [$this->identicalTo('title')],
-                [$this->identicalTo('creator_name')],
-                [$this->identicalTo('country_name')],
-                [$this->identicalTo('category')],
-                [$this->identicalTo('keywords')],
-                [$this->identicalTo('description')],
-                [$this->identicalTo('category_id')],
-                [$this->identicalTo('category_name')]
-            );
-        $attribute->expects($this->exactly(10))
-            ->method('setValue')
-            ->withConsecutive(
-                [$this->identicalTo('id')],
-                [$this->identicalTo($stockFileId)],
-                [$this->identicalTo($categoryTitle)],
-                [$this->identicalTo($creatorName)],
-                [$this->identicalTo($countryName)],
-                [
-                    $this->identicalTo([
-                        'id' => $categoryId,
-                        'name' => $categoryName,
-                        'link' => null,
-                    ])
-                ],
-                [$this->identicalTo($keyWords)],
-                [$this->identicalTo($description)],
-                [$this->identicalTo($categoryId)],
-                [$this->identicalTo($categoryName)]
-            );
-        $this->documentFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($item);
-        $item->expects($this->once())
-            ->method('setId')
-            ->with($stockFileId)
-            ->willReturn($item);
-        $item->expects($this->once())
-            ->method('setCustomAttributes')
-            ->willReturn($item);
-
-        $this->stockFileToDocument->convert($stockFile);
+        return [
+            [$stockFile, $attributesData]
+        ];
     }
 }
