@@ -40,38 +40,50 @@
     }
 
     .keywords {
-
+      margin: 30px 0;
+      display: inline-block;
+      width: 100%;
       .title {
-        margin-top: 10px;
+        margin-bottom: 30px;
       }
 
       .keyword {
+        display: inline-block;
+        margin-right: 5px;
+        line-height: 40px;
         &.hide {
           display: none;
         }
-
-        display: inline-block;
-        margin: 15px 15px 15px 0;
-
         .value {
           font-size: 15px;
           text-transform: capitalize;
+          border: 1px solid #c6c1bb;
+          padding: 5px;
+          border-radius: 3px;
+          background-color: #f5f5f5;
+          color: #666666;
         }
+      }
+      button {
+        margin-left: 10px;
       }
     }
 
+    .adobe-stock-tabs {
+      margin-top: 30px;
+    }
+
     .adobe-stock-related-images-tab-content {
-      height: 120px;
+      height: auto;
       vertical-align: middle;
       display: inline-block;
       width: 100%;
       .ui-tabs-panel {
-        width: 100%;
-
+        margin-top: 30px;
+        padding: 0;
         .thumbnail {
           display: inline-block;
-          margin: 10px 10px 10px 0;
-          vertical-align: middle;
+          margin-right: 10px;
 
           img {
             max-height: 100px;
