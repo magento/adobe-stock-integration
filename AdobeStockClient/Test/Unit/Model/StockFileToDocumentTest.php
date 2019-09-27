@@ -119,10 +119,11 @@ class StockFileToDocumentTest extends TestCase
                 [$this->identicalTo($categoryTitle)],
                 [$this->identicalTo($creatorName)],
                 [$this->identicalTo($countryName)],
-                [$this->identicalTo([
-                    'id' => $categoryId,
-                    'name' => $categoryName,
-                    'link' => null,
+                [
+                    $this->identicalTo([
+                        'id' => $categoryId,
+                        'name' => $categoryName,
+                        'link' => null,
                     ])
                 ],
                 [$this->identicalTo($keyWords)],
