@@ -8,6 +8,7 @@ define(['ko'], function (ko) {
     return {
         isAuthorized: ko.observable(false),
         name: ko.observable(''),
-        email: ko.observable('')
+        email: ko.observable(''),
+        avatar: ko.observable('')
     };
 });

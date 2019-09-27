@@ -21,6 +21,7 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     const USER_ID = 'admin_user_id';
     const NAME = 'name';
     const EMAIL = 'email';
+    const AVATAR = 'avatar';
     const ACCOUNT_TYPE = 'account_type';
     const ACCESS_TOKEN = 'access_token';
     const REFRESH_TOKEN = 'refresh_token';
@@ -88,6 +89,21 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return string|null
      */
     public function getEmail(): ?string;
+
+    /**
+     * Get user profile avatar.
+     *
+     * @return string|null
+     */
+    public function getAvatar(): ?string;
+
+    /**
+     * Set's user profile avatar.
+     *
+     * @param string $value
+     * @return void|null
+     */
+    public function setAvatar(string $value): void;
 
     /**
      * Get account type

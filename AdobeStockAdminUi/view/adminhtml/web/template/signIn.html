@@ -8,6 +8,9 @@
 </button>
 <div class="adobe-user-information">
     <div class="admin__action-dropdown-wrap" data-bind="collapsible">
+        <img class="adobe-profile-small-avatar"
+             attr="src: user.avatar"
+             data-bind="visible: user.isAuthorized()"/>
         <button
             id="adobe-ims-user-name"
             type="button"
@@ -17,6 +20,12 @@
             <span><!--ko text: user.name--><!--/ko--></span>
         </button>
         <ul class="admin__action-dropdown-menu adobe-user-menu" data-bind="visible: user.isAuthorized">
+            <li>
+                <img class="adobe-profile-avatar"
+                     alt="user-profile photo"
+                     attr="src: user.avatar">
+                </img>
+            </li>
             <li class="user-profile-information">
                 <ul class="adobe-user-data">
                     <li><!--ko text: user.name--><!--/ko--></li>

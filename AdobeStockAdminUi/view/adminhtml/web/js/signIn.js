@@ -19,8 +19,10 @@ define([
             profileUrl: 'adobe_ims/user/profile',
             loginUrl: 'https://ims-na1.adobelogin.com/ims/authorize',
             logoutUrl: 'adobe_ims/user/logout',
+            avatarUrl: 'adobe_ims/user/avatar',
             userName: '',
             userEmail: '',
+            avatar: '',
             isAuthorized: false
         },
 
@@ -34,6 +36,8 @@ define([
             config.profileUrl = this.profileUrl;
             config.loginUrl = this.loginUrl;
             config.logoutUrl = this.logoutUrl;
+            config.avatarUrl = this.avatarUrl;
+
             config.login.callbackParsingParams = this.callbackParsingParams;
 
             user.isAuthorized.subscribe(function () {
@@ -44,6 +48,7 @@ define([
 
             user.name(this.userName);
             user.email(this.userEmail);
+            user.avatar(this.avatar);
             user.isAuthorized(this.isAuthorized === 'true');
 
             return this;
@@ -65,12 +70,34 @@ define([
                 success: function (response) {
                     user.name(response.result.name);
                     user.email(response.result.email);
+                    this.loadAvatar();
                 },
                 error: function (response) {
                     return response.message;
                 }
             });
         },
+
+        /**
+         * Load user avatar
+         */
+        loadAvatar: function() {
+            $.ajax({
+                type: 'POST',
+                url: config.avatarUrl,
+                data: {form_key: window.FORM_KEY},
+                dataType: 'json',
+                async: false,
+                context: this,
+                success: function (response) {
+                    user.avatar(response.result);
+                },
+                error: function (response) {
+                    return response.message;
+                }
+            });
+        },
+
 
         /**
          * Logout from adobe account
