@@ -75,12 +75,16 @@ class StockFileToDocumentTest extends TestCase
         $categoryTitle = 'test_title';
         $creatorName = 'test_creator';
         $keyWords = ['test', 'test2', 'test3'];
+        $countryName = 'USA';
+        $description = 'Test description';
 
         $stockFile->setId($stockFileId);
         $stockFile->setCategory($categoryId, $categoryName);
         $stockFile->setTitle($categoryTitle);
         $stockFile->setCreatorName($creatorName);
         $stockFile->setKeywords($keyWords);
+        $stockFile->setCountryName($countryName);
+        $stockFile->setDescription($description);
 
         $attribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
             ->setMethods(['setAttributeCode', 'setValue'])
@@ -90,28 +94,31 @@ class StockFileToDocumentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributeValueFactory->expects($this->exactly(8))
+        $this->attributeValueFactory->expects($this->exactly(10))
             ->method('create')
             ->willReturn($attribute);
-        $attribute->expects($this->exactly(8))
+        $attribute->expects($this->exactly(10))
             ->method('setAttributeCode')
             ->withConsecutive(
                 [$this->identicalTo('id_field_name')],
                 [$this->identicalTo('id')],
                 [$this->identicalTo('title')],
                 [$this->identicalTo('creator_name')],
+                [$this->identicalTo('country_name')],
                 [$this->identicalTo('category')],
                 [$this->identicalTo('keywords')],
+                [$this->identicalTo('description')],
                 [$this->identicalTo('category_id')],
                 [$this->identicalTo('category_name')]
             );
-        $attribute->expects($this->exactly(8))
+        $attribute->expects($this->exactly(10))
             ->method('setValue')
             ->withConsecutive(
                 [$this->identicalTo('id')],
                 [$this->identicalTo($stockFileId)],
                 [$this->identicalTo($categoryTitle)],
                 [$this->identicalTo($creatorName)],
+                [$this->identicalTo($countryName)],
                 [$this->identicalTo([
                     'id' => $categoryId,
                     'name' => $categoryName,
@@ -119,6 +126,7 @@ class StockFileToDocumentTest extends TestCase
                     ])
                 ],
                 [$this->identicalTo($keyWords)],
+                [$this->identicalTo($description)],
                 [$this->identicalTo($categoryId)],
                 [$this->identicalTo($categoryName)]
             );
