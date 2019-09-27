@@ -11,9 +11,9 @@ namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter;
 use Magento\Ui\Component\Filters\Type\Input;
 
 /**
- * SerieId filter
+ * RelatedImages filter
  */
-class SerieId extends Input
+class RelatedImages extends Input
 {
     const NAME = 'filter_input';
 

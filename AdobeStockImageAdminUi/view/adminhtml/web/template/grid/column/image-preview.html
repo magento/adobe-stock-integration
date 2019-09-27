@@ -86,7 +86,14 @@
                 </div>
                 <!-- /ko -->
                 <div class="see-more-wrapper" data-bind="click: function(){ $col.seeMoreFromSeries($row()) }">
-                    <a href="" class="see-more">See more</a>
+                    <div class="see-more-content">
+                        <div class="three-dots">
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                        </div>
+                        <a href="" class="see-more">See more</a>
+                    </div>
                 </div>
             </div>
             <div attr="'id': 'model_content_' + $row().id">
@@ -95,6 +102,16 @@
                     <img attr="src: thumbnail_url, alt: title">
                 </div>
                 <!-- /ko -->
+                <div class="see-more-wrapper" data-bind="click: function(){ $col.seeMoreFromModel($row()) }">
+                    <div class="see-more-content">
+                        <div class="three-dots">
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                        </div>
+                        <a href="" class="see-more">See more</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="keywords">

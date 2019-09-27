@@ -90,14 +90,33 @@
             max-width: 160px;
           }
         }
-      }
 
-      .see-more-wrapper {
-        display: inline-block;
-        vertical-align: top;
-        height: auto;
-        padding-top: 50px;
-        margin-left: 30px;
+        .see-more-wrapper {
+          display: inline-block;
+          max-height: 100px;
+          text-align: center;
+          max-width: 140px;
+          vertical-align: middle;
+          width: 100%;
+          cursor: pointer;
+          .see-more-content {
+            padding: 30px;
+            .three-dots {
+              margin-bottom: 10px;
+              .dots {
+                content: "\22EE";
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                color: #fff;
+                background-color: #626160;
+                border-radius: 50%;
+                line-height: 1;
+                text-align: center;
+              }
+            }
+          }
+        }
       }
     }
   }
