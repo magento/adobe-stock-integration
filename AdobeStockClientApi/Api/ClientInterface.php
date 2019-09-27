@@ -34,12 +34,12 @@ interface ClientInterface
     public function getQuota(int $contentId): int;
 
     /**
-     * Get quota confirmation message before licensing an asset
+     * Get quota information before licensing an image
      *
      * @param int $contentId
-     * @return string
+     * @return array
      */
-    public function getQuotaConfirmationMessage(int $contentId): string;
+    public function getQuotaInformation(int $contentId): array;
 
     /**
      * Get full entitlement quota.

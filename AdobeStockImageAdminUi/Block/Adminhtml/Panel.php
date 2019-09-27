@@ -71,4 +71,14 @@ class Panel extends Template
             return $userQuota;
         }
     }
+
+    /**
+     * Get URL for buying more credits
+     *
+     * @return string
+     */
+    public function getBuyCreditsUrl(): string
+    {
+        return 'https://stock.adobe.com/ ';
+    }
 }
