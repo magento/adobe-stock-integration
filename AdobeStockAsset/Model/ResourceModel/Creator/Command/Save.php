@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator as CreatorResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\Hydrator;
 
 /**
  * Save multiple asset service.
@@ -23,13 +24,22 @@ class Save
     private $resourceConnection;
 
     /**
+     * @var Hydrator $hydrator
+     */
+    private $hydrator;
+
+    /**
      * Save constructor.
+     *
      * @param ResourceConnection $resourceConnection
+     * @param Hydrator $hydrator
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        Hydrator $hydrator
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->hydrator = $hydrator;
     }
 
     /**
@@ -40,7 +50,7 @@ class Save
      */
     public function execute(CreatorInterface $creator): void
     {
-        $data = $creator->getData();
+        $data = $this->hydrator->extract($creator);
 
         $connection = $this->getConnection();
         $tableName = $this->resourceConnection->getTableName(
