@@ -11,7 +11,7 @@ namespace Magento\AdobeImsApi\Api;
 /**
  * Interface LogOutInterface
  */
-interface  LogOutInterface
+interface LogOutInterface
 {
     /*
      *  LogOut User from Adobe Account

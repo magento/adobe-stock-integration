@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Model;
 
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\{UserProfileRepositoryInterface, LogOutInterface};
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Log Out User from Adobe Account
  */
-class LogOut implements \Magento\AdobeImsApi\Api\LogoutInterface
+class LogOut implements LogOutInterface
 {
     /**
      * Successful result code.
