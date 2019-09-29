@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\User;
+namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\LogOut;
 use PHPUnit\Framework\{MockObject\MockObject, TestCase};
