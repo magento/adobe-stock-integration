@@ -20,7 +20,25 @@
             <directory suffix=".php">../../../vendor/magento/module-adobe*/</directory>
             <exclude>
                 <directory>../../../vendor/magento/module-adobe*/Test</directory>
-                <file>../../../vendor/magento/module-adobe*/registration.php</file>
+                <directory suffix="registration.php">../../../vendor/magento/module-adobe*/</directory>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Asset.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Category.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Creator.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Keyword.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Config.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Asset.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Category.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Creator.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Asset/Collection.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Category/Collection.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Creator/Collection.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-client/Model/UserQuota.php</file>
+                <file>../../../vendor/magento/module-adobe-stock-client/Model/Config.php</file>
+                <file>../../../vendor/magento/module-adobe-ims/Model/Config.php</file>
+                <file>../../../vendor/magento/module-adobe-ims/Model/UserProfile.php</file>
+                <file>../../../vendor/magento/module-adobe-ims/Model/OAuth/TokenResponse.php</file>
+                <file>../../../vendor/magento/module-adobe-ims/Model/ResourceModel/UserProfile.php</file>
+                <file>../../../vendor/magento/module-adobe-ims/Model/ResourceModel/UserProfile/Collection.php</file>
             </exclude>
         </whitelist>
     </filter>
