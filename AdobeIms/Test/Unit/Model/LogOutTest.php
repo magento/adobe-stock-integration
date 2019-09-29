@@ -18,9 +18,9 @@ use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Get logout test.
+ * LogOut test.
  */
-class LogoutTest extends TestCase
+class LogOutTest extends TestCase
 {
     /**
      * @var CurlFactory|MockObject $curlFactoryMock
@@ -91,7 +91,7 @@ class LogoutTest extends TestCase
     }
 
     /**
-     * Test logout.
+     * Test LogOut.
      */
     public function testExecute(): void
     {
@@ -123,6 +123,9 @@ class LogoutTest extends TestCase
         $this->assertEquals(true, $this->model->execute());
     }
 
+    /**
+     * Test LogOut with Exception.
+     */
     public function testExecuteWithException(): void
     {
         $this->userContextInterfaceMock->expects($this->exactly(1))
