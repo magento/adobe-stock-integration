@@ -13,13 +13,14 @@ use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 
 /**
  * Class GetAssetById
  *
  * Service for getting asset by content id
  */
-class GetAssetById
+class GetAssetById implements GetAssetByIdInterface
 {
     /**
      * @var SearchCriteriaBuilder
@@ -62,13 +63,7 @@ class GetAssetById
     }
 
     /**
-     * Returns image by Adobe ID
-     *
-     * @param int $adobeId
-     * @return AssetInterface
-     * @throws NotFoundException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Payment\Gateway\Http\ConverterException
+     * @inheritdoc
      */
     public function execute(int $adobeId): AssetInterface
     {

@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockAsset\Model\GetAssetById;
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImage\Model\SaveImagePreview;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Controller\Result\Json;
@@ -31,42 +31,42 @@ class DownloadTest extends TestCase
     private $asset;
 
     /**
-     * @var MockObject|GetAssetById
+     * @var MockObject|GetAssetByIdInterface
      */
     private $getAssetById;
 
     /**
-     * @var MockObject|SaveImagePreview $saveImagePreview
+     * @var MockObject|SaveImageInterface
      */
-    private $saveImagePreview;
+    private $saveImage;
 
     /**
-     * @var MockObject|LoggerInterface $logger
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
     /**
-     * @var MockObject|ActionContext $context
+     * @var MockObject|ActionContext
      */
     private $context;
 
     /**
-     * @var Download $download
+     * @var Download
      */
     private $download;
 
     /**
-     * @var MockObject $request
+     * @var MockObject
      */
     private $request;
 
     /**
-     * @var MockObject $resultFactory
+     * @var MockObject
      */
     private $resultFactory;
 
     /**
-     * @var MockObject $jsonObject
+     * @var MockObject
      */
     private $jsonObject;
 
@@ -75,10 +75,10 @@ class DownloadTest extends TestCase
      */
     protected function setUp()
     {
-        $this->saveImagePreview = $this->createMock(SaveImagePreview::class);
+        $this->saveImage = $this->getMockForAbstractClass(SaveImageInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->getAssetById = $this->createMock(GetAssetById::class);
+        $this->getAssetById = $this->getMockForAbstractClass(GetAssetByIdInterface::class);
         $this->asset = $this->createMock(AssetInterface::class);
         $this->request = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,
@@ -102,7 +102,7 @@ class DownloadTest extends TestCase
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
-        $this->saveImagePreview->expects($this->once())->method('execute')->willReturn(null);
+        $this->saveImage->expects($this->once())->method('execute')->willReturn(null);
         $this->jsonObject = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -120,7 +120,7 @@ class DownloadTest extends TestCase
 
         $this->download = new Download(
             $this->context,
-            $this->saveImagePreview,
+            $this->saveImage,
             $this->logger,
             $this->getAssetById
         );
@@ -144,7 +144,7 @@ class DownloadTest extends TestCase
     public function testExecuteWithException()
     {
         $result = ['success' => false, 'message' => new Phrase('An error occurred while image download. Contact support.')];
-        $this->saveImagePreview->method('execute')->willThrowException(new CouldNotSaveException(new Phrase('Error')));
+        $this->saveImage->method('execute')->willThrowException(new CouldNotSaveException(new Phrase('Error')));
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($result));

@@ -9,7 +9,7 @@ namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClient\Model\SearchParametersProviderComposite;
-use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
+use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
