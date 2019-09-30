@@ -6,7 +6,8 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockAsset\Model\SaveAsset;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImage\Model\SaveImage;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,7 +26,7 @@ class SaveImageTest extends TestCase
     private $client;
 
     /**
-     * @var MockObject|SaveAsset
+     * @var MockObject|SaveAssetInterface
      */
     private $saveAsset;
 
@@ -49,7 +50,7 @@ class SaveImageTest extends TestCase
      */
     public function setUp()
     {
-        $this->saveAsset = $this->createMock(SaveAsset::class);
+        $this->saveAsset = $this->getMockForAbstractClass(SaveAssetInterface::class);
         $this->storage = $this->createMock(Storage::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->client = $this->createMock(ClientInterface::class);
@@ -64,18 +65,80 @@ class SaveImageTest extends TestCase
 
     /**
      * Verify that image can be saved.
+     * @param int $isLicensed
+     * @param string $path
+     * @param string $url
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @dataProvider assetProvider
      */
-    public function testExecute()
+    public function testExecute(int $isLicensed, string $path, string $url)
     {
-        $asset = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
+        $this->storage->expects($this->once())
+            ->method('save')
+            ->willReturn($path);
 
-        $this->storage->expects($this->once())->method('save')
-            ->willReturn('');
-        $asset->expects($this->once())->method('getUrl')
-            ->willReturn('https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg');
-        $asset->expects($this->once())->method('setPath')->willReturn(null);
-        $this->saveAsset->expects($this->once())->method('execute')
+        $asset = $this->getAsset($isLicensed, $path, $url);
+
+        $this->saveAsset->expects($this->once())
+            ->method('execute')
             ->with($asset);
-        $this->saveImage->execute($asset, '');
+        $this->saveImage->execute($asset, $path);
+    }
+
+    /**
+     * @param int $isLicensed
+     * @param string $path
+     * @param string $url
+     * @return AssetInterface|MockObject
+     */
+    private function getAsset(int $isLicensed, string $path, string $url): AssetInterface
+    {
+        $asset = $this->createMock(AssetInterface::class);
+
+        $asset->expects($this->once())
+            ->method('isLicensed')
+            ->willReturn($isLicensed);
+
+        if ($isLicensed) {
+            $asset->expects($this->any())
+                ->method('getUrl')
+                ->willReturn($url);
+            $asset->expects($this->never())
+                ->method('getPreviewUrl');
+        } else {
+            $asset->expects($this->never())
+                ->method('getUrl');
+            $asset->expects($this->once())
+                ->method('getPreviewUrl')
+                ->willReturn($url);
+        }
+
+        $asset->expects($this->once())
+            ->method('setPath')
+            ->with($path)
+            ->willReturn(null);
+
+        return $asset;
+    }
+
+    /**
+     * Data provider for testExecute
+     *
+     * @return array
+     */
+    public function assetProvider(): array
+    {
+        return [
+            'licensed asset' => [
+                'isLicensed' => 1,
+                'path' => 'path',
+                'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg'
+            ],
+            'preview asset' => [
+                'isLicensed' => 0,
+                'path' => 'path',
+                'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg'
+            ],
+        ];
     }
 }
