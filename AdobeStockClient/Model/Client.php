@@ -369,7 +369,6 @@ class Client implements ClientInterface
             $searchParams = new SearchParameters();
             $searchRequest = new SearchFilesRequest();
             $resultColumnArray = [];
-
             $resultColumnArray[] = 'nb_results';
 
             $searchRequest->setLocale('en_GB');
