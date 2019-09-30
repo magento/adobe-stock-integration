@@ -124,10 +124,10 @@ class Avatar extends Action
             $curl->get($this->getUserAvatarUrl($userProfile));
 
             if ($curl->getStatus() === self::HTTP_OK) {
+                $responseCode = self::HTTP_OK;
                 $result = $this->json->unserialize($curl->getBody());
                 $userProfile->setAvatar($result['user']['images']['100']);
                 $this->userProfileRepository->save($userProfile);
-                $responseCode = 200;
                 $response = [
                     'success' => true,
                     'result' => $result['user']['images']['100']
