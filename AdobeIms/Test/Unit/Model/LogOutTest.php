@@ -124,9 +124,9 @@ class LogOutTest extends TestCase
     }
 
     /**
-     * Test LogOut with Exception.
+     * Test LogOut with Error.
      */
-    public function testExecuteWithException(): void
+    public function testExecuteWithError(): void
     {
         $this->userContextInterfaceMock->expects($this->exactly(1))
             ->method('getUserId')->willReturn(1);
@@ -148,6 +148,43 @@ class LogOutTest extends TestCase
             ->willReturn(self::HTTP_ERROR);
         $this->loggerInterfaceMock->expects($this->once())
              ->method('critical');
+        $this->assertEquals(false, $this->model->execute());
+    }
+
+    /**
+     * Test LogOut with Exception.
+     */
+    public function testExecuteWithException(): void
+    {
+        $this->userContextInterfaceMock->expects($this->exactly(1))
+            ->method('getUserId')->willReturn(1);
+        $this->userProfileRepositoryInterfaceMock->expects($this->exactly(1))
+            ->method('getByUserId')
+            ->willReturn($this->userProfileInterfaceMock);
+        $curl = $this->createMock(\Magento\Framework\HTTP\Client\Curl::class);
+        $this->curlFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($curl);
+        $curl->expects($this->exactly(2))
+            ->method('addHeader')
+            ->willReturn(null);
+        $curl->expects($this->once())
+            ->method('get')
+            ->willReturnSelf();
+        $curl->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(self::HTTP_FOUND);
+        $this->userProfileInterfaceMock->expects($this->once())
+            ->method('setAccessToken');
+        $this->userProfileInterfaceMock->expects($this->once())
+            ->method('setRefreshToken');
+        $this->userProfileRepositoryInterfaceMock->expects($this->once())
+            ->method('save')
+            ->willThrowException(
+                new \Exception('Could not save user profile.')
+            );
+        $this->loggerInterfaceMock->expects($this->once())
+            ->method('critical');
         $this->assertEquals(false, $this->model->execute());
     }
 }
