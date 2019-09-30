@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockClientApi\Api;
+namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Models\SearchParameters;
 use Magento\Framework\Api\SearchCriteriaInterface;
