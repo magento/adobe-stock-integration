@@ -9,7 +9,8 @@ define([
     'Magento_AdobeIms/js/config',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/user-quota',
-], function (Component, $, login, config, user, userQuota) {
+    'Magento_AdobeStockAdminUi/js/config',
+], function (Component, $, login, config, user, userQuota, stockConfig) {
     'use strict';
 
     return Component.extend({
@@ -65,12 +66,32 @@ define([
                 success: function (response) {
                     user.name(response.result.name);
                     user.email(response.result.email);
-                    userQuota.images(response.result.images);
-                    userQuota.credits(response.result.credits);
+                    this.getUserQuota();
                 },
                 error: function (response) {
                     return response.message;
                 }
+            });
+        },
+
+        /**
+         * Retrieves full user quota.
+         */
+        getUserQuota: function () {
+            $.ajax({
+                type: 'POST',
+                url: stockConfig.quotaUrl,
+                data: {form_key: window.FORM_KEY},
+                dataType: 'json',
+                async: false,
+                context: this,
+                success: function (response)  {
+                    userQuota.images(response.result.images);
+                    userQuota.credits(response.result.credits);
+                }.bind(this),
+                error: function (response) {
+                    return response.message;
+                }.bind(this)
             });
         },
 

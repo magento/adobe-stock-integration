@@ -68,12 +68,16 @@ class GetQuota extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $contentId = (int)$params['media_id'];
+            $contentId = isset($params['media_id']) ? (int)$params['media_id'] : 0;
+            $quota = $this->client->getQuota($contentId);
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'error_message' => '',
-                'result' => $this->client->getQuotaConfirmationMessage($contentId),
+                'result' => [
+                    'message' => $quota->getMessage(),
+                    'credits' => $quota->getCredits(),
+                    'images' => $quota->getImages()
+                ],
             ];
 
         } catch (\Exception $exception) {

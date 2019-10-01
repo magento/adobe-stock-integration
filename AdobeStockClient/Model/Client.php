@@ -214,30 +214,16 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getQuota(int $contentId): int
+    public function getQuota(int $contentId = 0): UserQuotaInterface
     {
-        return $this->getLicenseInfo($contentId)->getEntitlement()->getQuota();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getFullEntitlementQuota(): UserQuotaInterface
-    {
-        $quota = $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
+        $quota = $this->getLicenseInfo($contentId)->getEntitlement()->getFullEntitlementQuota();
+        $message = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
         /** @var UserQuotaInterface $userQuota */
         $userQuota = $this->userQuotaFactory->create();
         $userQuota->setImages((int) $quota->standard_credits_quota);
         $userQuota->setCredits((int) $quota->premium_credits_quota);
+        $userQuota->setMessage($message);
         return $userQuota;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getQuotaConfirmationMessage(int $contentId): string
-    {
-        return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
     }
 
     /**

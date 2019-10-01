@@ -44,6 +44,22 @@ class UserQuota extends AbstractExtensibleModel implements UserQuotaInterface
     /**
      * @inheritdoc
      */
+    public function getMessage(): string
+    {
+        return $this->getData(self::MESSAGE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMessage(string $value): void
+    {
+        $this->setData(self::MESSAGE, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setCredits(int $value): void
     {
         $this->setData(self::CREDITS, $value);

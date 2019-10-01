@@ -63,7 +63,7 @@ class Panel extends Template
     public function getUserQuota(): UserQuotaInterface
     {
         if ($this->authorized->execute()) {
-            return $this->client->getFullEntitlementQuota();
+            return $this->client->getQuota();
         } else {
             $userQuota = $this->userQuotaFactory->create();
             $userQuota->setImages(0);

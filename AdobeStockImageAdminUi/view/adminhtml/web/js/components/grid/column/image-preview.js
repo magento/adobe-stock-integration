@@ -465,7 +465,7 @@ define([
                     context: this,
 
                     success: function (response) {
-                        var quotaInfo = response.result;
+                        var quotaInfo = response.result.message;
                         var confirmationContent = $.mage.__('License "' + record.title + '"');
                         $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
