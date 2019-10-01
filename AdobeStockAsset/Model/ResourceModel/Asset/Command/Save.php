@@ -43,14 +43,14 @@ class Save
     }
 
     /**
-     * Multiple save category
+     * Save asset
      *
-     * @param AssetInterface $assets
+     * @param AssetInterface $asset
      * @return void
      */
-    public function execute(AssetInterface $assets): void
+    public function execute(AssetInterface $asset): void
     {
-        $data = $this->hydrator->extract($assets);
+        $data = $this->hydrator->extract($asset);
         $tableName = $this->resourceConnection->getTableName(
             AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
         );
