@@ -55,27 +55,77 @@
             </div>
             <!-- /ko -->
         </div>
+
+        <div id="adobe-stock-tabs"
+             class="adobe-stock-tabs"
+             data-bind="mageInit: {
+                    'mage/backend/tabs': {
+                    active: 'series_content_' + $row().id,
+                    destination: '#adobe-stock-tabs-content',
+                    shadowTabs: [],
+                }
+            }">
+            <ul class="tabs-horiz">
+                <li>
+                    <a id="series_tab" attr="'href': '#series_content_' + $row().id">
+                        <span class="title" translate="'More from this series'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="model_tab" attr="'href': '#model_content_' + $row().id">
+                        <span class="title" translate="'More from this model'"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="adobe-stock-tabs-content" class="adobe-stock-related-images-tab-content">
+            <div attr="'id': 'series_content_' + $row().id">
+                <!-- ko foreach: $col.getSeries($row()) -->
+                <div class="thumbnail">
+                    <img attr="src: thumbnail_url, alt: title">
+                </div>
+                <!-- /ko -->
+                <div class="see-more-wrapper" data-bind="click: function(){ $col.seeMoreFromSeries($row()) }">
+                    <div class="see-more-content">
+                        <div class="three-dots">
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                        </div>
+                        <a href="" class="see-more">See more</a>
+                    </div>
+                </div>
+            </div>
+            <div attr="'id': 'model_content_' + $row().id">
+                <!-- ko foreach: $col.getModel($row()) -->
+                <div class="thumbnail">
+                    <img attr="src: thumbnail_url, alt: title">
+                </div>
+                <!-- /ko -->
+                <div class="see-more-wrapper" data-bind="click: function(){ $col.seeMoreFromModel($row()) }">
+                    <div class="see-more-content">
+                        <div class="three-dots">
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                        </div>
+                        <a href="" class="see-more">See more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="keywords">
             <div class="title" translate="'Similar Keywords'"></div>
             <!-- ko foreach: $col.getKeywords($row()) -->
-                <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
-                    <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
-                        <span text="name"/>
-                    </a>
-                </div>
+            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
+                <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
+                    <span text="name"/>
+                </a>
+            </div>
             <!-- /ko -->
             <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
                 <span translate="'View all'"/>
             </button>
-        </div>
-        <div class="series">
-            <div class="title" translate="'More from this series'"></div>
-            <!-- ko foreach: $col.getSeries($row()) -->
-            <div class="thumbnail" data-bind="css: { 'hide': $index() >= 3}">
-                <img attr="src: thumbnail_url, alt: title">
-            </div>
-            <!-- /ko -->
-            </div>
         </div>
     </div>
 </div>

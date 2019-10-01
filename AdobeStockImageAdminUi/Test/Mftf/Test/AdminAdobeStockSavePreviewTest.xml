@@ -22,14 +22,10 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
-        <grabTextFrom  selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="selectedImage"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
-        <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertImageSaved">
-            <argument name="imageName" value="{$selectedImage}"/>
-        </actionGroup>
+        <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
     </test>
 </tests>

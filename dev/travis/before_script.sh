@@ -64,3 +64,9 @@ if [[ $TEST_SUITE = "api" ]]; then
         php bin/magento config:sensitive:set adobe_stock/integration/private_key ${ADOBE_STOCK_PRIVATE_KEY}
         php bin/magento cache:flush
 fi
+
+if [[ $TEST_SUITE = "unit" ]]; then
+      echo "Prepare unit tests for runining"
+      composer require "mustache/mustache":"~2.5"
+      composer require "php-coveralls/php-coveralls":"^1.0"
+fi

@@ -39,7 +39,6 @@ class StockFileToDocument
     private $logger;
 
     /**
-     * StockFileToDocument constructor.
      * @param DocumentFactory $documentFactory
      * @param AttributeValueFactory $attributeValueFactory
      * @param LoggerInterface $logger

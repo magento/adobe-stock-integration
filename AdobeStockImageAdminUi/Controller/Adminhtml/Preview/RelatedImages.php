@@ -8,18 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockImage\Model\GetImageSeries;
+use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Series
+ * Class RelatedImages
  */
-class Series extends Action
+class RelatedImages extends Action
 {
     /**
-     * Successful get image serie result code.
+     * Successful get related image result code.
      */
     const HTTP_OK = 200;
 
@@ -29,9 +30,9 @@ class Series extends Action
     const HTTP_INTERNAL_ERROR = 500;
 
     /**
-     * @var GetImageSeries
+     * @var GetRelatedImagesInterface
      */
-    private $getImageSeries;
+    private $getRelatedImages;
 
     /**
      * @var LoggerInterface
@@ -39,19 +40,19 @@ class Series extends Action
     private $logger;
 
     /**
-     * Series constructor.
+     * RelatedImages constructor.
      *
-     * @param Action\Context       $context
-     * @param GetImageSeries       $getImageSeries
-     * @param LoggerInterface      $logger
+     * @param Action\Context $context
+     * @param GetRelatedImagesInterface $getRelatedImages
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        GetImageSeries $getImageSeries,
+        GetRelatedImagesInterface $getRelatedImages,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
-        $this->getImageSeries = $getImageSeries;
+        $this->getRelatedImages = $getRelatedImages;
         $this->logger = $logger;
     }
     /**
@@ -61,27 +62,27 @@ class Series extends Action
     {
         try {
             $params = $params = $this->getRequest()->getParams();
-            $serieId = (int) $params['serie_id'];
+            $imageId = (int) $params['image_id'];
             $limit = (int) ($params['limit'] ?? 4);
-            $imageSeries = $this->getImageSeries->execute($serieId, $limit);
+            $relatedImages = $this->getRelatedImages->execute($imageId, $limit);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('Get image series finished successfully'),
-                'result' => $imageSeries,
+                'message' => __('Get related images finished successfully'),
+                'result' => $relatedImages,
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during get image serie data: %1', $exception->getMessage());
+            $logMessage = __('An error occurred during get related images data: %1', $exception->getMessage());
             $this->logger->critical($logMessage);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while getting image series. Contact support.'),
+                'message' => __('An error occurred while getting related images. Contact support.'),
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);

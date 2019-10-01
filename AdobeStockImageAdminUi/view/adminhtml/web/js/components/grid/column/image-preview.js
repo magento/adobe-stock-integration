@@ -6,23 +6,27 @@ define([
     'underscore',
     'jquery',
     'knockout',
-    'Magento_AdobeIms/js/action/authorization',
     'mage/translate',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
-], function (_, $, ko, authorizationAction, translate, imagePreview, messages, confirmation, prompt, user, config) {
+    'mage/backend/tabs'
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, confirmation, prompt, user, config) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             inputValue: '',
             chipInputValue: '',
+            serieFilterValue: '',
+            modelFilterValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
@@ -30,7 +34,9 @@ define([
             statefull: {
                 visible: true,
                 sorting: true,
-                lastOpenedImage: true
+                lastOpenedImage: true,
+                serieFilterValue: true,
+                modelFilterValue: true
             },
             tracks: {
                 lastOpenedImage: true
@@ -38,40 +44,60 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url',
                 chips: '${ $.chipsProvider }',
-                searchChips: '${ $.searchChipsProvider }'
+                searchChips: '${ $.searchChipsProvider }',
+                filterChips: '${ $.filterChipsProvider }'
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
-                '${ $.provider }:params.search': 'hide',
+                '${ $.provider }:params.search': 'hide'
             },
             exports: {
                 inputValue: '${ $.provider }:params.search',
+                serieFilterValue: '${ $.provider }:params.filters.serie_id',
+                modelFilterValue: '${ $.provider }:params.filters.model_id',
                 chipInputValue: '${ $.searchChipsProvider }:value'
             }
+        },
+
+        /**
+         *
+         * @param {Object} record
+         * @private
+         */
+        _initRecord: function (record) {
+            if (!record.model || !record.series) {
+                record.series = ko.observable([]);
+                record.model = ko.observable([]);
+            }
+            record.keywordsLimit = ko.observable(this.keywordsLimit);
+            record.canViewMoreKeywords = ko.observable(true);
         },
 
         /**
          * @inheritDoc
          */
         next: function (record) {
-            this._super();
             this.hideAllKeywords(record);
+            this._super(record);
         },
 
         /**
          * @inheritDoc
          */
         prev: function (record) {
-            this._super();
             this.hideAllKeywords(record);
+            this._super(record);
         },
 
         /**
          * @inheritDoc
          */
-        hide: function (record) {
-            this._super();
+        show: function(record) {
+            this._initRecord(record);
             this.hideAllKeywords(record);
+            this._super(record);
+            this.loadRelatedImages(record);
+            this._updateHeight();
         },
 
         /**
@@ -84,7 +110,9 @@ define([
                     'visibility',
                     'height',
                     'inputValue',
-                    'chipInputValue'
+                    'chipInputValue',
+                    'serieFilterValue',
+                    'modelFilterValue'
                 ]);
             this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
@@ -98,18 +126,21 @@ define([
          *
          * @param record
          */
-        requestSeries: function (record) {
+        loadRelatedImages: function (record) {
             $.ajax({
                 type: 'GET',
-                url: config.seriesUrl,
+                url: config.relatedImagesUrl,
                 dataType: 'json',
+                showLoader: true,
                 data: {
-                    'serie_id': record.id,
+                    'image_id': record.id,
                     'limit': 4
-                },
+                }
             }).done(function (data) {
-                record.series(data.result.series);
-            });
+                record.series(data.result.same_series);
+                record.model(data.result.same_model);
+                this._updateHeight();
+            }.bind(this));
         },
 
         /**
@@ -186,12 +217,39 @@ define([
          * @returns {*[]}
          */
         getSeries: function (record) {
-            if (!record.series) {
-                record.series = ko.observableArray([]);
-                this.requestSeries(record);
-                this._updateHeight();
-            }
             return record.series;
+        },
+
+        /**
+         * Returns model to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getModel: function (record) {
+            return record.model;
+        },
+
+        /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromSeries: function(record) {
+            this.serieFilterValue(record.id);
+            this.filterChips().set('applied', {'serie_id' : record.id.toString()})
+        },
+
+        /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromModel: function(record) {
+            this.modelFilterValue(record.id);
+            this.filterChips().set('applied', {'model_id' : record.id.toString()})
         },
 
         /**
@@ -225,6 +283,8 @@ define([
          */
         viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
+            record.canViewMoreKeywords(false);
+            this._updateHeight();
         },
 
         /**
@@ -234,11 +294,8 @@ define([
          * @returns {*}
          */
         hideAllKeywords: function (record) {
-            if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
-                record.keywordsLimit(this.keywordsLimit);
-                record.canViewMoreKeywords(true);
-            }
-
+            record.keywordsLimit(this.keywordsLimit);
+            record.canViewMoreKeywords(true);
         },
 
         /**
@@ -251,9 +308,6 @@ define([
             if (!record.canViewMoreKeywords) {
                 record.canViewMoreKeywords = ko.observable(true);
             }
-            if (record.keywordsLimit() >= record.keywords.length) {
-                record.canViewMoreKeywords(false);
-            }
             return record.canViewMoreKeywords();
         },
 
@@ -264,21 +318,6 @@ define([
             _.invoke(this.chips().elems(), 'clear');
             this.inputValue(keyword);
             this.chipInputValue(keyword);
-        },
-
-        /**
-         * Returns visibility for given record.
-         *
-         * @param {Object} record
-         * @return {*|boolean}
-         */
-        isVisible: function (record) {
-            if (this.lastOpenedImage === record._rowIndex &&
-                (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
-            ) {
-                this.show(record);
-            }
-            return this.visibility()[record._rowIndex] || false;
         },
 
         /**
@@ -335,7 +374,7 @@ define([
                 context: this,
                 actions: {
                     confirm: function (fileName) {
-                        this.save(record, fileName);
+                        this.save(record, fileName, config.downloadPreviewUrl);
                     }.bind(this)
                 }
             });
@@ -346,9 +385,10 @@ define([
          *
          * @param {Object} record
          * @param {String} fileName
+         * @param {String} actionURI
          * @return {void}
          */
-        save: function (record, fileName) {
+        save: function (record, fileName, actionURI) {
             var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
 
@@ -356,7 +396,7 @@ define([
 
             $.ajax({
                 type: 'POST',
-                url: config.downloadPreviewUrl,
+                url: actionURI,
                 dataType: 'json',
                 data: {
                     'media_id': record.id,
@@ -403,9 +443,7 @@ define([
          * @param {Object} record
          */
         licenseAndSave: function (record) {
-            /** @todo add license functionality */
-            console.warn('add license functionality');
-            console.dir(record);
+            this.save(record, this.generateImageName(record), config.licenseAndDownloadUrl);
         },
 
         /**
@@ -414,7 +452,7 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-            var licenseAndSave = this.licenseAndSave;
+            var licenseAndSave = this.licenseAndSave.bind(this);
             $(config.adobeStockModalSelector).trigger('processStart');
             $.ajax(
                 {

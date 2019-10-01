@@ -17,5 +17,9 @@
         <element name="keywords" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='keyword']"/>
         <element name="keywordsTitle" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[text()='Similar Keywords']"/>
         <element name="keyword" type="block" selector="//div[@class='keyword']//span[text()='{{keyword}}']" parameterized="true"/>
+        <element name="confirm" selector="//*[@class='action-primary action-accept']" type="button"/>
+        <element name="generatedImageName" selector="//*[@data-role='promptField']" type="input"/>
+        <element name="moreFromThisModel" selector="//*[@id='model_tab']" type="block"/>
+        <element name="moreFromThisModelImages" selector="//div[@aria-labelledby='model_tab']//div[@class='thumbnail']" type="block"/>
     </section>
 </sections>

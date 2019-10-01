@@ -229,6 +229,14 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
+    public function getUrl(): string
+    {
+        return (string) $this->getData(self::URL);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getPreviewUrl(): string
     {
         return (string) $this->getData(self::PREVIEW_URL);
@@ -272,14 +280,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setPreviewHeight(int $previewHeight): void
     {
         $this->setData(self::PREVIEW_HEIGHT, $previewHeight);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getUrl(): string
-    {
-        return (string) $this->getData(self::URL);
     }
 
     /**

@@ -1,8 +1,8 @@
 {
     "name": "magento/module-adobe-stock-client-api",
-    "description": "N/A",
+    "description": "Magento module responsible for interaction with Adobe Stock API",
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*"
     },
     "type": "magento2-module",

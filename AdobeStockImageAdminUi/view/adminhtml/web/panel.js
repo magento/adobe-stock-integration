@@ -30,8 +30,9 @@ define([
             this._super();
 
             config.downloadPreviewUrl = this.downloadPreviewUrl;
+            config.licenseAndDownloadUrl = this.licenseAndDownloadUrl;
             config.quotaUrl = this.quotaUrl;
-            config.seriesUrl = this.seriesUrl;
+            config.relatedImagesUrl = this.relatedImagesUrl;
 
             userQuota.images(this.userQuota.images);
             userQuota.credits(this.userQuota.credits);

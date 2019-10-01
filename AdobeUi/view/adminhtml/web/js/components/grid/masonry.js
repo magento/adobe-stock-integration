@@ -114,11 +114,9 @@ define([
         setLayoutStyles: function () {
             var waitForEl = function (callback) {
                 if (this.imports.rows.length === 0 || typeof this.container === "undefined") {
-
                     setTimeout(function () {
                         waitForEl(callback);
                     }, 500);
-
                 } else {
                     callback();
                 }
