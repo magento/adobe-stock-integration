@@ -70,8 +70,14 @@ define([
                 record.series = ko.observable([]);
                 record.model = ko.observable([]);
             }
+
+            if (!record.selectedSeries) {
+                record.selectedSeries = ko.observable(null);
+            }
+
             record.keywordsLimit = ko.observable(this.keywordsLimit);
             record.canViewMoreKeywords = ko.observable(true);
+            record.selectedSeries(null);
         },
 
         /**
@@ -99,6 +105,46 @@ define([
             this._super(record);
             this.loadRelatedImages(record);
             this._updateHeight();
+        },
+
+        /**
+         * Next series preview
+         *
+         * @param {Object} currentSeries
+         * @param {Object} record
+         *
+         * @return {void}
+         */
+        nextSeries: function (currentSeries, record) {
+            var seriesList = record.series(),
+                nextSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) + 1,
+                nextSeries = seriesList[nextSeriesIndex];
+
+            if (typeof nextSeries === 'undefined') {
+                return;
+            }
+
+            this.switchImagePreviewToSeriesImage(nextSeries, record);
+        },
+
+        /**
+         * Previous series preview
+         *
+         * @param {Object} currentSeries
+         * @param {Object} record
+         *
+         * @return {void}
+         */
+        prevSeries: function (currentSeries, record) {
+            var seriesList = record.series(),
+                prevSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) - 1,
+                prevSeries = seriesList[prevSeriesIndex];
+
+            if (typeof prevSeries === 'undefined') {
+                return;
+            }
+
+            this.switchImagePreviewToSeriesImage(prevSeries, record);
         },
 
         /**
@@ -542,6 +588,88 @@ define([
                 .finally((function () {
                     messages.scheduleCleanup(this.messageDelay);
                 }).bind(this));
+        },
+
+        /**
+         * Get previous button disabled
+         *
+         * @param {Object|null} currentSeries
+         * @param {Object} record
+         *
+         * @return {Boolean}
+         */
+        getPreviousSeriesButtonDisabled: function (currentSeries, record) {
+            var seriesList = record.series(),
+                prevSeriesIndex = 0,
+                prevSeries = null;
+
+            if (!currentSeries) {
+                return true;
+            }
+
+            prevSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) - 1;
+            prevSeries = seriesList[prevSeriesIndex];
+
+            if (typeof prevSeries === 'undefined') {
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Get next button disabled
+         *
+         * @param {Object|null} currentSeries
+         * @param {Object} record
+         *
+         * @return {Boolean}
+         */
+        getNextSeriesButtonDisabled: function (currentSeries, record) {
+            var seriesList = record.series(),
+                nextSeriesIndex = 0,
+                nextSeries = null;
+
+            if (!currentSeries) {
+                return true;
+            }
+
+            nextSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) + 1;
+            nextSeries = seriesList[nextSeriesIndex];
+
+            if (typeof nextSeries === 'undefined') {
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Switch image preview to series image
+         *
+         * @param {Object|null} series
+         * @param {Object} record
+         *
+         * @return {void}
+         */
+        switchImagePreviewToSeriesImage: function (series, record) {
+            if (!series) {
+                record.selectedSeries(null);
+
+                return;
+            }
+
+            if (!record.selectedSeries()) {
+                record.selectedSeries(series);
+
+                return;
+            }
+
+            if (record.selectedSeries().id === series.id) {
+                return;
+            }
+
+            record.selectedSeries(series);
         }
     });
 });

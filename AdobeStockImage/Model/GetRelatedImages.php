@@ -108,7 +108,14 @@ class GetRelatedImages implements GetRelatedImagesInterface
                 $data[] = [
                     'id' => $image->getId(),
                     'title' => $image->getCustomAttribute('title')->getValue(),
-                    'thumbnail_url' => $image->getCustomAttribute('thumbnail_240_url')->getValue()
+                    'thumbnail_url' => $image->getCustomAttribute('thumbnail_240_url')->getValue(),
+                    'thumbnail_500_url' => $image->getCustomAttribute('thumbnail_500_url')->getValue(),
+                    'creator_name' => $image->getCustomAttribute('creator_name')->getValue(),
+                    'content_type' => $image->getCustomAttribute('content_type')->getValue(),
+                    'width' => $image->getCustomAttribute('width')->getValue(),
+                    'height' => $image->getCustomAttribute('height')->getValue(),
+                    'category' => $image->getCustomAttribute('category')->getValue(),
+                    'keywords' => $image->getCustomAttribute('keywords')->getValue(),
                 ];
             }
             return $data;
