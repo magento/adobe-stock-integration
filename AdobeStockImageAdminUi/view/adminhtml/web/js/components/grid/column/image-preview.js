@@ -13,10 +13,11 @@ define([
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
+    'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
     'mage/backend/tabs'
-], function (_, $, ko, translate, authorizationAction, imagePreview, messages, mediaGallery, confirmation, prompt, user, config) {
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, user, config) {
     'use strict';
 
     return imagePreview.extend({
@@ -383,6 +384,9 @@ define([
                 title: 'Save Preview',
                 content: 'File Name',
                 value: this.generateImageName(record),
+                imageExtension: this.getImageExtension(record),
+                promptContentTmpl : adobePromptContentTmpl,
+                modalClass: 'adobe-stock-save-preview-prompt',
                 validation: true,
                 promptField: '[data-role="promptField"]',
                 validationRules: ['required-entry'],
@@ -401,7 +405,14 @@ define([
                     confirm: function (fileName) {
                         this.save(record, fileName, config.downloadPreviewUrl);
                     }.bind(this)
-                }
+                },
+                buttons: [{
+                    text: $.mage.__('Cancel'),
+                    class: 'action-secondary action-dismiss'
+                }, {
+                    text: $.mage.__('Confirm'),
+                    class: 'action-primary action-accept'
+                }]
             });
         },
 
@@ -415,7 +426,7 @@ define([
          */
         save: function (record, fileName, actionURI) {
             var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record);
 
             $(config.adobeStockModalSelector).trigger('processStart');
 
@@ -450,9 +461,13 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            var imageType = record.content_type.match(/[^/]{1,4}$/),
-                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
-            return imageName + '.' + imageType;
+            var imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return imageName;
+        },
+
+        getImageExtension: function (record) {
+            var imageType = record.content_type.match(/[^/]{1,4}$/);
+            return imageType;
         },
 
         /**
