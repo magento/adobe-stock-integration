@@ -8,8 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\LoadByIds;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\ResourceConnection;
 
@@ -18,9 +19,8 @@ use Magento\Framework\App\ResourceConnection;
  */
 class AppendAttributes
 {
-    const TABLE_ASSET                  = 'adobe_stock_asset';
     const ATTRIBUTE_CODE_IS_DOWNLOADED = 'is_downloaded';
-    const ATTRIBUTE_CODE_PATH          = 'path';
+    const ATTRIBUTE_CODE_PATH = 'path';
 
     /**
      * @var AttributeValueFactory
@@ -33,16 +33,24 @@ class AppendAttributes
     private $resourceConnection;
 
     /**
-     * AddIsDownloadedToSearchResult constructor.
+     * @var LoadByIds
+     */
+    private $loadByIds;
+
+    /**
+     * AppendAttributes constructor.
      * @param ResourceConnection $resourceConnection
      * @param AttributeValueFactory $attributeValueFactory
+     * @param LoadByIds $loadByIds
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        AttributeValueFactory $attributeValueFactory
+        AttributeValueFactory $attributeValueFactory,
+        LoadByIds $loadByIds
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->attributeValueFactory = $attributeValueFactory;
+        $this->loadByIds = $loadByIds;
     }
 
     /**
@@ -54,62 +62,65 @@ class AppendAttributes
     public function execute(SearchResultInterface $searchResult): SearchResultInterface
     {
         $items = $searchResult->getItems();
-        $itemIds = [];
 
-        foreach ($items as $key => $item) {
-            $itemIds[$key] = $item->getId();
+        if (empty($items)) {
+            return $searchResult;
         }
 
-        if (count($itemIds)) {
-            $connection = $this->resourceConnection->getConnection();
-            $select = $connection->select()
-                ->from(self::TABLE_ASSET)
-                ->where('id in (?)', $itemIds);
-            $downloadedAssets = $connection->fetchAssoc($select);
+        $ids = array_map(
+            function($item) {
+                return $item->getId();
+            },
+            $items
+        );
 
-            foreach ($items as $key => $item) {
-                $customAttributes = $item->getCustomAttributes();
 
-                if (isset($downloadedAssets[$item->getId()])) {
-                    $assetData = $downloadedAssets[$item->getId()];
-                    $this->addIsDownloaded($customAttributes, $assetData);
-                    $this->addPath($customAttributes, $assetData);
-                }
+        $assets = $this->loadByIds->execute($ids);
 
-                $item->setCustomAttributes($customAttributes);
+        foreach ($items as $key => $item) {
+            if (!isset($assets[$item->getId()])) {
+                $this->addAttributes(
+                    $item,
+                    [
+                        self::ATTRIBUTE_CODE_IS_DOWNLOADED => 0,
+                        self::ATTRIBUTE_CODE_PATH => ''
+                    ]
+                );
+                continue;
             }
+
+            $this->addAttributes(
+                $item,
+                [
+                    self::ATTRIBUTE_CODE_IS_DOWNLOADED => 1,
+                    self::ATTRIBUTE_CODE_PATH => $assets[$item->getId()]->getPath()
+                ]
+            );
         }
 
         return $searchResult;
     }
 
     /**
-     * Add is_downloaded attribute
+     * Add attributes to document
      *
-     * @param array|null $customAttributes
-     * @param array|null $assetData
+     * @param DocumentInterface $document
+     * @param array $attributes [code => value]
+     * @return DocumentInterface
      */
-    private function addIsDownloaded(?array &$customAttributes, ?array $assetData)
+    private function addAttributes(DocumentInterface $document, array $attributes): DocumentInterface
     {
-        $isDownloadedValue = (int)isset($assetData[AssetInterface::ID]);
-        $attribute = $this->attributeValueFactory->create();
-        $attribute->setAttributeCode(self::ATTRIBUTE_CODE_IS_DOWNLOADED);
-        $attribute->setValue($isDownloadedValue);
-        $customAttributes[self::ATTRIBUTE_CODE_IS_DOWNLOADED] = $attribute;
-    }
+        $customAttributes = $document->getCustomAttributes();
 
-    /**
-     * Add path attribute
-     *
-     * @param array|null $customAttributes
-     * @param array|null $assetData
-     */
-    private function addPath(?array &$customAttributes, ?array $assetData)
-    {
-        $pathValue = $assetData[AssetInterface::PATH] ?? '';
-        $attribute = $this->attributeValueFactory->create();
-        $attribute->setAttributeCode(self::ATTRIBUTE_CODE_PATH);
-        $attribute->setValue($pathValue);
-        $customAttributes[self::ATTRIBUTE_CODE_PATH] = $attribute;
+        foreach ($attributes as $code => $value) {
+            $attribute = $this->attributeValueFactory->create();
+            $attribute->setAttributeCode($code);
+            $attribute->setValue($value);
+            $customAttributes[$code] = $attribute;
+        }
+
+        $document->setCustomAttributes($customAttributes);
+
+        return $document;
     }
 }

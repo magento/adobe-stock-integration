@@ -10,20 +10,19 @@ define([
     'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
+    'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
     'mage/backend/tabs'
-], function (_, $, ko, translate, authorizationAction, imagePreview, messages, confirmation, prompt, user, config) {
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, mediaGallery, confirmation, prompt, user, config) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
-            jsTreeRootFolderName: 'Storage Root',
-            jsTreeFolderNameMaxLength: 20,
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             inputValue: '',
             chipInputValue: '',
@@ -369,44 +368,8 @@ define([
          * @param record
          */
         locate: function (record) {
-            $.ajaxSetup({async: false});
             $(config.adobeStockModalSelector).trigger('closeModal');
-            var imagePath = record.path.replace(/^\/+/, '');
-            var imagePathParts = imagePath.split('/');
-            var imageFilename = imagePath;
-            var imageFolderName = this.jsTreeRootFolderName;
-
-            if (imagePathParts.length > 1) {
-                imageFilename = imagePathParts[imagePathParts.length - 1];
-                imageFolderName = imagePathParts[imagePathParts.length - 2];
-
-                for (var i = 0; i < imagePathParts.length - 2; i++) {
-                    var folderName = imagePathParts[i];
-
-                    /* folder name is being cut in file browser */
-                    if (folderName.length > this.jsTreeFolderNameMaxLength) {
-                        folderName = folderName.substring(0, this.jsTreeFolderNameMaxLength) + '...';
-                    }
-
-                    //var folderSelector = ".jstree a:contains('" + folderName + "')";
-                    var openFolderChildrenButton = $(".jstree a:contains('" + folderName + "')").prev('.jstree-icon');
-                    if (openFolderChildrenButton.length) {
-                        openFolderChildrenButton.click();
-                    }
-                }
-            }
-
-            //select folder
-            var imageFolder = $(".jstree a:contains('" + imageFolderName + "')");
-            if (imageFolder.length) {
-                imageFolder[0].click();
-                //select image
-                var locatedImage = $("div[data-row='file']:has(img[alt=\"" + imageFilename + "\"])");
-                if (locatedImage.length) {
-                    locatedImage.click();
-                }
-            }
-            $.ajaxSetup({async: true});
+            mediaGallery.locate(record.path);
         },
 
         /**
