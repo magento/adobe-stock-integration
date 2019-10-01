@@ -7,9 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\AdobeStockImageApi\Api\GetImageListInterface"
-                type="Magento\AdobeStockImage\Model\GetImageList"/>
+    <preference for="Magento\AdobeStockImageApi\Api\GetImageListInterface" type="Magento\AdobeStockImage\Model\GetImageList"/>
     <preference for="Magento\AdobeStockImageApi\Api\SaveImageInterface" type="Magento\AdobeStockImage\Model\SaveImage"/>
+    <preference for="Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface" type="Magento\AdobeStockImage\Model\GetRelatedImages"/>
+
     <type name="Magento\Catalog\Model\Product\Gallery\Processor">
         <plugin name="adobe_stock_image_remove_metadata" type="Magento\AdobeStockImage\Plugin\Product\Gallery\Processor"
                 sortOrder="10" disabled="false"/>
