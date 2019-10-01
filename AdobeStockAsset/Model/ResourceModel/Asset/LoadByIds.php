@@ -34,8 +34,7 @@ class LoadByIds
     private $factory;
 
     /**
-     * Save constructor.
-     *
+     * @param AssetInterfaceFactory $factory
      * @param ResourceConnection $resourceConnection
      * @param Hydrator $hydrate
      */

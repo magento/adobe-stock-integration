@@ -68,12 +68,11 @@ class AppendAttributes
         }
 
         $ids = array_map(
-            function($item) {
+            function ($item) {
                 return $item->getId();
             },
             $items
         );
-
 
         $assets = $this->loadByIds->execute($ids);
 
