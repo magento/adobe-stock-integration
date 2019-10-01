@@ -13,7 +13,7 @@ use PHPUnit\Framework\{MockObject\MockObject, TestCase};
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
 
@@ -38,9 +38,9 @@ class LogOutTest extends TestCase
     private $userContextInterfaceMock;
 
     /**
-     * @var ScopeConfigInterface|MockObject $scopeConfigInterfaceMock
+     * @var ConfigInterface|MockObject $configInterfaceMock
      */
-    private $scopeConfigInterfaceMock;
+    private $configInterfaceMock;
 
     /**
      * @var UserProfileRepositoryInterface|MockObject $userProfileRepositoryInterfaceMock
@@ -79,13 +79,13 @@ class LogOutTest extends TestCase
         $this->userProfileInterfaceMock = $this->createMock(UserProfileInterface::class);
         $this->userProfileRepositoryInterfaceMock = $this->createMock(UserProfileRepositoryInterface::class);
         $this->userContextInterfaceMock = $this->createMock(UserContextInterface::class);
-        $this->scopeConfigInterfaceMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configInterfaceMock = $this->createMock(ConfigInterface::class);
         $this->loggerInterfaceMock = $this->createMock(LoggerInterface::class);
         $this->model = new LogOut(
             $this->userContextInterfaceMock,
             $this->userProfileRepositoryInterfaceMock,
             $this->loggerInterfaceMock,
-            $this->scopeConfigInterfaceMock,
+            $this->configInterfaceMock,
             $this->curlFactoryMock
         );
     }
@@ -97,6 +97,9 @@ class LogOutTest extends TestCase
     {
         $this->userContextInterfaceMock->expects($this->exactly(1))
             ->method('getUserId')->willReturn(1);
+        $this->userProfileInterfaceMock->expects($this->once())
+            ->method('getAccessToken')
+            ->willReturn('token');
         $this->userProfileRepositoryInterfaceMock->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($this->userProfileInterfaceMock);
@@ -130,6 +133,9 @@ class LogOutTest extends TestCase
     {
         $this->userContextInterfaceMock->expects($this->exactly(1))
             ->method('getUserId')->willReturn(1);
+        $this->userProfileInterfaceMock->expects($this->once())
+            ->method('getAccessToken')
+            ->willReturn('token');
         $this->userProfileRepositoryInterfaceMock->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($this->userProfileInterfaceMock);
@@ -158,6 +164,9 @@ class LogOutTest extends TestCase
     {
         $this->userContextInterfaceMock->expects($this->exactly(1))
             ->method('getUserId')->willReturn(1);
+        $this->userProfileInterfaceMock->expects($this->once())
+            ->method('getAccessToken')
+            ->willReturn('token');
         $this->userProfileRepositoryInterfaceMock->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($this->userProfileInterfaceMock);

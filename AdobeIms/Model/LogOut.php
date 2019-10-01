@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
-use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\AdobeImsApi\Api\{UserProfileRepositoryInterface, LogOutInterface};
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\LogOutInterface;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
 
@@ -19,12 +19,7 @@ class LogOut implements LogOutInterface
     /**
      * Successful result code.
      */
-    const HTTP_FOUND = 302;
-
-    /**
-     * Logout url pattern.
-     */
-    const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_stock/integration/logout_url';
+    private const HTTP_FOUND = 302;
 
     /**
      * @var UserContextInterface
@@ -42,9 +37,9 @@ class LogOut implements LogOutInterface
     private $logger;
 
     /**
-     * @var  ScopeConfigInterface $scopeConfig
+     * @var ConfigInterface
      */
-    private $scopeConfig;
+    private $config;
 
     /**
      * @var CurlFactory
@@ -57,20 +52,20 @@ class LogOut implements LogOutInterface
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param LoggerInterface $logger
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ConfigInterface $config
      * @param CurlFactory $curlFactory
      */
     public function __construct(
         UserContextInterface $userContext,
         UserProfileRepositoryInterface $userProfileRepository,
         LoggerInterface $logger,
-        ScopeConfigInterface $scopeConfig,
+        ConfigInterface $config,
         CurlFactory $curlFactory
     ) {
         $this->userContext = $userContext;
         $this->userProfileRepository = $userProfileRepository;
         $this->logger = $logger;
-        $this->scopeConfig = $scopeConfig;
+        $this->config = $config;
         $this->curlFactory = $curlFactory;
     }
 
@@ -85,7 +80,7 @@ class LogOut implements LogOutInterface
             $curl = $this->curlFactory->create();
             $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
             $curl->addHeader('cache-control', 'no-cache');
-            $curl->get($this->getLogoutUrl($userProfile));
+            $curl->get($this->config->getLogoutUrl($userProfile->getAccessToken()));
 
             if ($curl->getStatus() === self::HTTP_FOUND) {
                 $userProfile->setAccessToken('');
@@ -101,20 +96,5 @@ class LogOut implements LogOutInterface
             $this->logger->critical($e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Return logout url for AdobeSdk.
-     *
-     * @param UserProfileInterface $userProfile
-     * @return mixed
-     */
-    private function getLogoutUrl($userProfile) : string
-    {
-        return str_replace(
-            ['#{access_token}', '#{redirect_uri}'],
-            [$userProfile->getAccessToken(), ''],
-            $this->scopeConfig->getValue(self::XML_PATH_LOGOUT_URL_PATTERN)
-        );
     }
 }
