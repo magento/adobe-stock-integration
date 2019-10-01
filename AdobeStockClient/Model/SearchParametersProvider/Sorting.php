@@ -10,7 +10,7 @@ namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
-use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
+use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**

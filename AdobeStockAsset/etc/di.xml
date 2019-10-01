@@ -23,6 +23,8 @@
     <preference for="Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface" type="Magento\AdobeStockAsset\Model\AssetKeywordRepository"/>
 
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetListInterface" type="Magento\AdobeStockAsset\Model\GetAssetList"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\SaveAssetInterface" type="Magento\AdobeStockAsset\Model\SaveAsset"/>
+    <preference for="Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface" type="Magento\AdobeStockAsset\Model\GetAssetById"/>
 
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
