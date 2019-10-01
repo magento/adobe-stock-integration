@@ -23,6 +23,11 @@ use Psr\Log\LoggerInterface;
 class GetAssetList implements GetAssetListInterface
 {
     /**
+     * @var AppendAttributes
+     */
+    private $appendAttributes;
+
+    /**
      * @var ClientInterface
      */
     private $client;
@@ -40,17 +45,20 @@ class GetAssetList implements GetAssetListInterface
     /**
      * GetAssetList constructor.
      * @param ClientInterface $client
-     * @param UrlInterface    $url
+     * @param UrlInterface $url
      * @param LoggerInterface $log
+     * @param AppendAttributes $appendAttributes
      */
     public function __construct(
         ClientInterface $client,
         UrlInterface $url,
-        LoggerInterface $log
+        LoggerInterface $log,
+        AppendAttributes $appendAttributes
     ) {
         $this->client = $client;
         $this->url = $url;
         $this->log = $log;
+        $this->appendAttributes = $appendAttributes;
     }
 
     /**
@@ -59,7 +67,10 @@ class GetAssetList implements GetAssetListInterface
     public function execute(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
         try {
-            return $this->client->search($searchCriteria);
+            $searchResult = $this->client->search($searchCriteria);
+            $this->appendAttributes->execute($searchResult);
+
+            return $searchResult;
         } catch (AuthenticationException $exception) {
             throw new LocalizedException(
                 __(
