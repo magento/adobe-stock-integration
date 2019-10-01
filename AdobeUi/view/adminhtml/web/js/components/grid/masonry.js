@@ -112,55 +112,63 @@ define([
          * Set layout styles inside the container
          */
         setLayoutStyles: function () {
-            var waitForEl = function (callback) {
-                if (this.imports.rows.length === 0 || typeof this.container === "undefined") {
-                    setTimeout(function () {
-                        waitForEl(callback);
-                    }, 500);
-                } else {
-                    callback();
+            var containerWidth = parseInt(this.container.clientWidth, 10) - this.imageMargin,
+                row = [],
+                ratio = 0,
+                imageWidth = 0,
+                rowHeight = 0,
+                calcHeight = 0,
+                isBottom = false,
+                imageRowNumber = 1;
+
+            this.setMinRatio();
+
+            this.rows().forEach(function (image, index) {
+                ratio += parseFloat((image.width / image.height).toFixed(2));
+                row.push(image);
+
+                if (ratio >= this.minRatio || index + 1 === this.rows().length) {
+                    ratio = Math.max(ratio, this.minRatio);
+                    calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
+                    rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
+                    isBottom = index + 1 === this.rows().length;
+
+                    row.forEach(function (img) {
+                        imageWidth = rowHeight * (img.width / img.height).toFixed(2);
+                        this.setImageStyles(img, imageWidth, rowHeight);
+                        this.setImageClass(img, {
+                            bottom: isBottom
+                        });
+                        img.rowNumber = imageRowNumber;
+                    }.bind(this));
+
+                    row[0].firstInRow = true;
+                    row[row.length - 1].lastInRow = true;
+                    row = [];
+                    ratio = 0;
+                    imageRowNumber++;
                 }
-            }.bind(this);
-
-            waitForEl(function () {
-                var containerWidth = parseInt(this.container.clientWidth, 10) - this.imageMargin,
-                    row = [],
-                    ratio = 0,
-                    imageWidth = 0,
-                    rowHeight = 0,
-                    calcHeight = 0,
-                    isBottom = false,
-                    imageRowNumber = 1;
-
-                this.setMinRatio();
-
-                this.rows().forEach(function (image, index) {
-                    ratio += parseFloat((image.width / image.height).toFixed(2));
-                    row.push(image);
-
-                    if (ratio >= this.minRatio || index + 1 === this.rows().length) {
-                        ratio = Math.max(ratio, this.minRatio);
-                        calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
-                        rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
-                        isBottom = index + 1 === this.rows().length;
-
-                        row.forEach(function (img) {
-                            imageWidth = rowHeight * (img.width / img.height).toFixed(2);
-                            this.setImageStyles(img, imageWidth, rowHeight);
-                            this.setImageClass(img, {
-                                bottom: isBottom
-                            });
-                            img.currentRow = imageRowNumber;
-                        }.bind(this));
-
-                        row[0].firstInRow = true;
-                        row[row.length - 1].lastInRow = true;
-                        row = [];
-                        ratio = 0;
-                        imageRowNumber++;
-                    }
-                }.bind(this));
             }.bind(this));
+        },
+
+        /**
+         * Waits for container.
+         */
+        waitForContainer: function () {
+            if (this.imports.rows.length === 0 || typeof this.container === "undefined") {
+                setTimeout(function () {
+                    this.waitForContainer();
+                }.bind(this), 500);
+            } else {
+                this.setLayoutStyles();
+            }
+        },
+
+        /**
+         * Sets styles when elements are loaded.
+         */
+        setLayoutStylesWhenLoaded: function () {
+            this.waitForContainer();
         },
 
         /**
