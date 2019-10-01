@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var $block \Magento\AdobeStockAdminUi\Block\Adminhtml\SignIn
+ */
+use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+?>
+<div data-bind="scope: 'adobe-stock-sign-in'" class="scalable">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "#adobe-stock-images-search-modal": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "adobe-stock-sign-in": {
+                        "component": "Magento_AdobeStockAdminUi/js/signIn",
+                        "template": "Magento_AdobeStockAdminUi/signIn",
+                        "profileUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/profile') ?>",
+                        "userName": "<?= $block->escapeJs($block->getName()) ?>",
+                        "userEmail": "<?= $block->escapeJs($block->getEmail()) ?>",
+                        "loginUrl": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
+                        "logoutUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/logout') ?>",
+                        "isAuthorized": "<?= /* @noEscape */ $block->isAuthorizedJson() ?>",
+                        "callbackParsingParams": {
+                            "regexpPattern": <?= /* @noEscape */ $block->getRegexpPattern() ?>,
+                            "codeIndex": "<?= /* @noEscape */ Callback::RESPONSE_CODE_INDEX ?>",
+                            "messageIndex": "<?= /* @noEscape */ Callback::RESPONSE_MESSAGE_INDEX ?>",
+                            "successCode": "<?= /* @noEscape */ Callback::RESPONSE_SUCCESS_CODE ?>",
+                            "errorCode": "<?= /* @noEscape */ Callback::RESPONSE_ERROR_CODE ?>"
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>

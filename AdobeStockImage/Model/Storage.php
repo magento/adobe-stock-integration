@@ -35,11 +35,6 @@ class Storage
     private $driver;
 
     /**
-     * @var File
-     */
-    private $fileSystemIo;
-
-    /**
      * @var LoggerInterface
      */
     private $log;
@@ -53,18 +48,15 @@ class Storage
      * Storage constructor.
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param File $fileSystemIo
      * @param LoggerInterface $log
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        File $fileSystemIo,
         LoggerInterface $log
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->fileSystemIo = $fileSystemIo;
         $this->log = $log;
     }
 
@@ -72,17 +64,12 @@ class Storage
      * Save file from the URL to destination directory relative to media directory
      *
      * @param string $imageUrl
-     * @param string $destinationDirectoryPath
+     * @param string $destinationPath
      * @return string
      * @throws LocalizedException
      */
-    public function save(string $imageUrl, string $destinationDirectoryPath = '') : string
+    public function save(string $imageUrl, string $destinationPath = '') : string
     {
-        if (!empty($destinationDirectoryPath)) {
-            $destinationDirectoryPath = rtrim($destinationDirectoryPath, '/') . '/';
-        }
-        $destinationPath = $destinationDirectoryPath . $this->getFileName($imageUrl);
-
         $bytes = false;
 
         try {
@@ -99,17 +86,6 @@ class Storage
         }
 
         return $destinationPath;
-    }
-
-    /**
-     * Get file basename
-     *
-     * @param string $imageUrl
-     * @return string
-     */
-    private function getFileName(string $imageUrl): string
-    {
-        return $this->fileSystemIo->getPathInfo($imageUrl)['basename'];
     }
 
     /**

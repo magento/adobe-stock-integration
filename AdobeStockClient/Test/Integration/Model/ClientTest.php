@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Test\Integration\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
-use AdobeStock\Api\Exception\StockApi;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
+use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Magento\AdobeStockClient\Model\Client;
 use Magento\AdobeStockClient\Model\ConnectionFactory;
 use Magento\Framework\Api\FilterBuilder;
@@ -19,9 +19,9 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Test client for communication to Adobe Stock API.
@@ -29,94 +29,37 @@ use Magento\Framework\Api\AttributeValueFactory;
 class ClientTest extends TestCase
 {
     /**
-     * @var Bootstrap
-     */
-    private $objectManager;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
      * @var Client
      */
     private $client;
 
     /**
-     * @var ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdobeStock|MockObject
      */
-    private $connectionFactoryMock;
-
-    /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $loggerMock;
+    private $connection;
 
     /**
      * Prepare objects.
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $this->filterBuilder = $this->objectManager->get(FilterBuilder::class);
-        $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactory::class)
+        $this->connection = $this->getMockBuilder(AdobeStock::class)
+            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connectionFactory = $this->getMockBuilder(ConnectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->setMethods(['critical'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->client = $this->objectManager->create(
-            Client::class,
-            [
-                'connectionFactory' => $this->connectionFactoryMock,
-                'logger' => $this->loggerMock
-            ]
-        );
-    }
-
-    /**
-     * Test with error on create attribute.
-     *
-     * @throws IntegrationException
-     */
-    public function testSearchWithErrorOnCreateAttribute(): void
-    {
-        $filter = $this->filterBuilder->setConditionType('fulltext')
-            ->setField('keyword_search')
-            ->setValue('test_value')
-            ->create();
-        $this->searchCriteriaBuilder->addFilter($filter);
-        $this->setupConnectionMockWithErrorOnCreateAttribute();
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeValueFactoryMock->expects($this->once())
+        $connectionFactory->expects($this->once())
             ->method('create')
-            ->willThrowException(new \Exception('Create attribute exception'));
-        $client = $this->objectManager->create(
+            ->willReturn($this->connection);
+        $this->client = Bootstrap::getObjectManager()->create(
             Client::class,
             [
-                'connectionFactory' => $this->connectionFactoryMock,
-                'logger' => $this->loggerMock,
-                'attributeValueFactory' => $attributeValueFactoryMock
+                'connectionFactory' => $connectionFactory
             ]
         );
-        $searchResult = $client->search($searchCriteria);
-        $this->assertInstanceOf(SearchResultInterface::class, $searchResult);
-        $this->assertEquals($searchCriteria, $searchResult->getSearchCriteria());
-        $this->assertEquals([], $searchResult->getItems());
-        $this->assertEquals(0, $searchResult->getTotalCount());
     }
 
     /**
@@ -124,203 +67,60 @@ class ClientTest extends TestCase
      *
      * @throws IntegrationException
      */
-    public function testSearchWithFoundImages(): void
+    public function testSearch(): void
     {
-        $filter = $this->filterBuilder->setConditionType('fulltext')
-            ->setField('keyword_search')
-            ->setValue('test_value')
-            ->create();
-        $this->searchCriteriaBuilder->addFilter($filter);
-        $this->setupConnectionMock();
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchResult = $this->client->search($searchCriteria);
-        $this->assertInstanceOf(SearchResultInterface::class, $searchResult);
-        $this->assertEquals($searchCriteria, $searchResult->getSearchCriteria());
-        $this->assertEquals(3, $searchResult->getTotalCount());
-    }
+        $words = 'pear';
 
-    /**
-     * Test without found images.
-     *
-     * @throws IntegrationException
-     */
-    public function testSearchWithoutFoundImages(): void
-    {
-        $filter = $this->filterBuilder->setConditionType('fulltext')
-            ->setField('keyword_search')
-            ->setValue('test_value')
-            ->create();
-        $this->searchCriteriaBuilder->addFilter($filter);
-        $this->setupConnectionMockWithoutFiles();
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchResult = $this->client->search($searchCriteria);
-        $this->assertInstanceOf(SearchResultInterface::class, $searchResult);
-        $this->assertEquals($searchCriteria, $searchResult->getSearchCriteria());
-        $this->assertEquals([], $searchResult->getItems());
-        $this->assertEquals(0, $searchResult->getTotalCount());
-    }
-
-    /**
-     * Test get error during get connection.
-     */
-    public function testSearchWithConnectionError(): void
-    {
-        $filter = $this->filterBuilder->setConditionType('fulltext')
-            ->setField('keyword_search')
-            ->setValue('test_value')
-            ->create();
-        $this->searchCriteriaBuilder->addFilter($filter);
-        $this->setupConnectionWithErrorMock();
-        try {
-            $this->client->search($this->searchCriteriaBuilder->create());
-        } catch (IntegrationException $e) {
-            $this->assertEquals(
-                'An error occurred during Adobe Stock connection initialization: Test error text',
-                $e->getMessage()
-            );
-        }
-    }
-
-    /**
-     * Test get error during search images.
-     *
-     * @throws IntegrationException
-     */
-    public function testSearchWithSearchError(): void
-    {
-        $filter = $this->filterBuilder->setConditionType('fulltext')
-            ->setField('keyword_search')
-            ->setValue('test_value')
-            ->create();
-        $this->searchCriteriaBuilder->addFilter($filter);
-        $this->setupSearchWithErrorMock();
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $this->loggerMock->expects($this->once())
-            ->method('critical')
-            ->with('Text authorization error');
-        $searchResult = $this->client->search($searchCriteria);
-        $this->assertInstanceOf(SearchResultInterface::class, $searchResult);
-        $this->assertEquals($searchCriteria, $searchResult->getSearchCriteria());
-        $this->assertEquals([], $searchResult->getItems());
-        $this->assertEquals(0, $searchResult->getTotalCount());
-    }
-
-    /**
-     * Setup connection mock which will throw exception.
-     */
-    private function setupConnectionWithErrorMock(): void
-    {
-        $this->connectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('', 'magento-adobe-stock-integration', 'PROD')
-            ->willThrowException(new StockApi('Test error text'));
-    }
-
-    /**
-     * Setup connection mock which will not return files.
-     */
-    private function setupSearchWithErrorMock(): void
-    {
-        $connectionMock = $this->getMockBuilder(AdobeStock::class)
-            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionMock->expects($this->once())
-            ->method('searchFilesInitialize');
-        $connectionMock->expects($this->once())
-            ->method('getNextResponse')
-            ->willThrowException(new StockApi('Text authorization error', 403));
-        $this->connectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('', 'magento-adobe-stock-integration', 'PROD')
-            ->willReturn($connectionMock);
-    }
-
-    /**
-     * Setup connection mock which will not return files.
-     */
-    private function setupConnectionMockWithoutFiles(): void
-    {
-        $connectionMock = $this->getMockBuilder(AdobeStock::class)
-            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionMock->expects($this->once())
-            ->method('searchFilesInitialize');
-        $responseMock = $this->getMockBuilder(SearchFilesResponse::class)
+        $response = $this->getMockBuilder(SearchFilesResponse::class)
             ->setMethods(['getFiles', 'getNbResults'])
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionMock->expects($this->once())
-            ->method('getNextResponse')
-            ->willReturn($responseMock);
-        $responseMock->expects($this->once())
+        $response->expects($this->once())
             ->method('getFiles')
-            ->willReturn([]);
-        $responseMock->expects($this->once())
-            ->method('getNbResults')
-            ->willReturn(0);
-        $this->connectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('', 'magento-adobe-stock-integration', 'PROD')
-            ->willReturn($connectionMock);
-    }
-
-    /**
-     * Setup connection mock.
-     */
-    private function setupConnectionMockWithErrorOnCreateAttribute(): void
-    {
-        $connectionMock = $this->getMockBuilder(AdobeStock::class)
-            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionMock->expects($this->once())
-            ->method('searchFilesInitialize');
-        $responseMock = $this->getMockBuilder(SearchFilesResponse::class)
-            ->setMethods(['getFiles'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionMock->expects($this->once())
-            ->method('getNextResponse')
-            ->willReturn($responseMock);
-        $responseMock->expects($this->once())
-            ->method('getFiles')
-            ->willReturn($this->getFoundFiles());
-        $this->connectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('', 'magento-adobe-stock-integration', 'PROD')
-            ->willReturn($connectionMock);
-    }
-
-    /**
-     * Setup connection mock.
-     */
-    private function setupConnectionMock(): void
-    {
-        $connectionMock = $this->getMockBuilder(AdobeStock::class)
-            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionMock->expects($this->once())
-            ->method('searchFilesInitialize');
-        $responseMock = $this->getMockBuilder(SearchFilesResponse::class)
-            ->setMethods(['getFiles', 'getNbResults'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionMock->expects($this->once())
-            ->method('getNextResponse')
-            ->willReturn($responseMock);
-        $responseMock->expects($this->once())
-            ->method('getFiles')
-            ->willReturn($this->getFoundFiles());
-        $responseMock->expects($this->once())
+            ->willReturn($this->getStockFiles());
+        $response->expects($this->once())
             ->method('getNbResults')
             ->willReturn(3);
-        $this->connectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('', 'magento-adobe-stock-integration', 'PROD')
-            ->willReturn($connectionMock);
+
+        $this->connection->expects($this->once())
+            ->method('searchFilesInitialize')
+            ->with(
+                $this->callback(
+                    function (SearchFilesRequest $searchFiles) use ($words) {
+                        return $searchFiles->getLocale() == 'en_US'
+                            && in_array('id', $searchFiles->getResultColumns())
+                            && in_array('nb_results', $searchFiles->getResultColumns())
+                            && $searchFiles->getSearchParams()->getWords() == $words;
+                    }
+                ),
+                null
+            );
+        $this->connection->expects($this->once())
+            ->method('getNextResponse')
+            ->willReturn($response);
+        $searchResult = $this->client->search($this->getSearchCriteria($words));
+
+        $this->assertInstanceOf(SearchResultInterface::class, $searchResult);
+        $this->assertEquals(3, $searchResult->getTotalCount());
+        $this->assertEquals(
+            'https://test.url/2',
+            $searchResult->getItems()[1]->getCustomAttributes()['comp_url']->getValue()
+        );
+    }
+
+    /**
+     * @return SearchCriteriaInterface
+     */
+    private function getSearchCriteria(string $words): SearchCriteriaInterface
+    {
+        $filter = Bootstrap::getObjectManager()->get(FilterBuilder::class)
+            ->setConditionType('fulltext')
+            ->setField('words')
+            ->setValue($words)
+            ->create();
+        return Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class)
+            ->addFilter($filter)
+            ->create();
     }
 
     /**
@@ -328,10 +128,9 @@ class ClientTest extends TestCase
      *
      * @return StockFile[]
      */
-    private function getFoundFiles(): array
+    private function getStockFiles(): array
     {
-        $result = [];
-        $resultFiles = [
+        $stockFilesData = [
             [
                 'id' => 1,
                 'comp_url' => 'https://test.url/1',
@@ -340,6 +139,11 @@ class ClientTest extends TestCase
                 'height' => 210,
                 'some_bool_param' => false,
                 'some_nullable_param' => null,
+                'category' => [
+                    'id' => 1,
+                    'N
+                    name' => 'Test'
+                ]
             ],
             [
                 'id' => 2,
@@ -349,6 +153,11 @@ class ClientTest extends TestCase
                 'height' => 220,
                 'some_bool_params' => false,
                 'some_nullable_param' => 1,
+                'category' => [
+                    'id' => 1,
+                    'N
+                    name' => 'Test'
+                ]
             ],
             [
                 'id' => 3,
@@ -358,18 +167,19 @@ class ClientTest extends TestCase
                 'height' => 230,
                 'some_bool_params' => true,
                 'some_nullable_param' => 2,
+                'category' => [
+                    'id' => 1,
+                    'N
+                    name' => 'Test'
+                ]
             ],
         ];
 
-        foreach ($resultFiles as $fileData) {
-            $result[] = $this->objectManager->create(
-                StockFile::class,
-                [
-                    'raw_response' => $fileData
-                ]
-            );
+        $stockFiles = [];
+        foreach ($stockFilesData as $stockFileData) {
+            $stockFiles[] = new StockFile($stockFileData);
         }
 
-        return $result;
+        return $stockFiles;
     }
 }

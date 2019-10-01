@@ -6,51 +6,98 @@ define([
     'underscore',
     'jquery',
     'knockout',
-    'Magento_Ui/js/grid/columns/column',
-    'Magento_AdobeIms/js/action/authorization',
-    'Magento_AdobeStockImageAdminUi/js/model/messages',
     'mage/translate',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
-], function (_, $, ko, Column, authorizationAction, messages, translate, imagePreview) {
+    'Magento_AdobeStockImageAdminUi/js/model/messages',
+    'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/prompt',
+    'Magento_AdobeIms/js/user',
+    'Magento_AdobeStockAdminUi/js/config',
+    'mage/backend/tabs'
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, confirmation, prompt, user, config) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
-            mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
-            adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            modules: {
-                thumbnailComponent: '${ $.parentName }.thumbnail_url'
-            },
+            chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
+            searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            inputValue: '',
+            chipInputValue: '',
+            serieFilterValue: '',
+            modelFilterValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
+            searchValue: null,
+            messageDelay: 5,
             statefull: {
                 visible: true,
                 sorting: true,
-                lastOpenedImage: true
+                lastOpenedImage: true,
+                serieFilterValue: true,
+                modelFilterValue: true
             },
             tracks: {
-                lastOpenedImage: true,
+                lastOpenedImage: true
             },
-            downloadImagePreviewUrl: Column.downloadImagePreviewUrl,
-            messageDelay: 5,
-            authConfig: {
-                url: '',
-                isAuthorized: false,
-                stopHandleTimeout: 10000,
-                windowParams: {
-                    width: 500,
-                    height: 600,
-                    top: 100,
-                    left: 300
-                },
-                response: {
-                    regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
-                    codeIndex: 1,
-                    messageIndex: 2,
-                    successCode: 'success',
-                    errorCode: 'error'
-                }
+            modules: {
+                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+                chips: '${ $.chipsProvider }',
+                searchChips: '${ $.searchChipsProvider }',
+                filterChips: '${ $.filterChipsProvider }'
+            },
+            listens: {
+                '${ $.provider }:params.filters': 'hide',
+                '${ $.provider }:params.search': 'hide'
+            },
+            exports: {
+                inputValue: '${ $.provider }:params.search',
+                serieFilterValue: '${ $.provider }:params.filters.serie_id',
+                modelFilterValue: '${ $.provider }:params.filters.model_id',
+                chipInputValue: '${ $.searchChipsProvider }:value'
             }
+        },
+
+        /**
+         *
+         * @param {Object} record
+         * @private
+         */
+        _initRecord: function (record) {
+            if (!record.model || !record.series) {
+                record.series = ko.observable([]);
+                record.model = ko.observable([]);
+            }
+            record.keywordsLimit = ko.observable(this.keywordsLimit);
+            record.canViewMoreKeywords = ko.observable(true);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        next: function (record) {
+            this.hideAllKeywords(record);
+            this._super(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        prev: function (record) {
+            this.hideAllKeywords(record);
+            this._super(record);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        show: function(record) {
+            this._initRecord(record);
+            this.hideAllKeywords(record);
+            this._super(record);
+            this.loadRelatedImages(record);
+            this._updateHeight();
         },
 
         /**
@@ -61,13 +108,39 @@ define([
             this._super()
                 .observe([
                     'visibility',
-                    'height'
+                    'height',
+                    'inputValue',
+                    'chipInputValue',
+                    'serieFilterValue',
+                    'modelFilterValue'
                 ]);
-
-            this.height.subscribe(function(){
+            this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
             }, this);
+
             return this;
+        },
+
+        /**
+         * Get image related image series.
+         *
+         * @param record
+         */
+        loadRelatedImages: function (record) {
+            $.ajax({
+                type: 'GET',
+                url: config.relatedImagesUrl,
+                dataType: 'json',
+                showLoader: true,
+                data: {
+                    'image_id': record.id,
+                    'limit': 4
+                }
+            }).done(function (data) {
+                record.series(data.result.same_series);
+                record.model(data.result.same_model);
+                this._updateHeight();
+            }.bind(this));
         },
 
         /**
@@ -116,7 +189,7 @@ define([
          * @param record
          * @returns {*[]}
          */
-        getDisplayAttributes: function(record) {
+        getDisplayAttributes: function (record) {
             return [
                 {
                     name: 'Dimensions',
@@ -138,12 +211,54 @@ define([
         },
 
         /**
+         * Returns series to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getSeries: function (record) {
+            return record.series;
+        },
+
+        /**
+         * Returns model to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getModel: function (record) {
+            return record.model;
+        },
+
+        /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromSeries: function(record) {
+            this.serieFilterValue(record.id);
+            this.filterChips().set('applied', {'serie_id' : record.id.toString()})
+        },
+
+        /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromModel: function(record) {
+            this.modelFilterValue(record.id);
+            this.filterChips().set('applied', {'model_id' : record.id.toString()})
+        },
+
+        /**
          * Returns keywords to display under the attributes image
          *
          * @param record
          * @returns {*[]}
          */
-        getKeywords: function(record) {
+        getKeywords: function (record) {
             return record.keywords;
         },
 
@@ -153,7 +268,7 @@ define([
          * @param record
          * @returns {*}
          */
-        getKeywordsLimit: function (record){
+        getKeywordsLimit: function (record) {
             if (!record.keywordsLimit) {
                 record.keywordsLimit = ko.observable(this.keywordsLimit);
             }
@@ -166,8 +281,21 @@ define([
          * @param record
          * @returns {*}
          */
-        viewAllKeywords: function(record) {
+        viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
+            record.canViewMoreKeywords(false);
+            this._updateHeight();
+        },
+
+        /**
+         * Hide all the related keywords
+         *
+         * @param record
+         * @returns {*}
+         */
+        hideAllKeywords: function (record) {
+            record.keywordsLimit(this.keywordsLimit);
+            record.canViewMoreKeywords(true);
         },
 
         /**
@@ -176,29 +304,20 @@ define([
          * @param record
          * @returns {*}
          */
-        canViewMoreKeywords: function(record) {
+        canViewMoreKeywords: function (record) {
             if (!record.canViewMoreKeywords) {
                 record.canViewMoreKeywords = ko.observable(true);
-            }
-            if (record.keywordsLimit() >= record.keywords.length) {
-                record.canViewMoreKeywords(false);
             }
             return record.canViewMoreKeywords();
         },
 
         /**
-         * Returns visibility for given record.
-         *
-         * @param {Object} record
-         * @return {*|boolean}
+         * Drop all filters and initiate search on keyword click event
          */
-        isVisible: function (record) {
-            if (this.lastOpenedImage === record._rowIndex &&
-                (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
-            ) {
-                this.show(record);
-            }
-            return this.visibility()[record._rowIndex] || false;
+        searchByKeyWord: function (keyword) {
+            _.invoke(this.chips().elems(), 'clear');
+            this.inputValue(keyword);
+            this.chipInputValue(keyword);
         },
 
         /**
@@ -207,8 +326,8 @@ define([
          * @param {Object} record
          * @returns {Object}
          */
-        getStyles: function (record){
-            if(!record.previewStyles) {
+        getStyles: function (record) {
+            if (!record.previewStyles) {
                 record.previewStyles = ko.observable();
             }
             record.previewStyles({
@@ -229,35 +348,84 @@ define([
         },
 
         /**
+         * Save preview
+         *
+         * @param {Object} record
+         * @return {void}
+         */
+        savePreview: function (record) {
+            prompt({
+                title: 'Save Preview',
+                content: 'File Name',
+                value: this.generateImageName(record),
+                validation: true,
+                promptField: '[data-role="promptField"]',
+                validationRules: ['required-entry'],
+                attributesForm: {
+                    novalidate: 'novalidate',
+                    action: '',
+                    onkeydown: 'return event.key != \'Enter\';'
+                },
+                attributesField: {
+                    name: 'name',
+                    'data-validate': '{required:true}',
+                    maxlength: '128'
+                },
+                context: this,
+                actions: {
+                    confirm: function (fileName) {
+                        this.save(record, fileName, config.downloadPreviewUrl);
+                    }.bind(this)
+                }
+            });
+        },
+
+        /**
          * Save record as image
          *
-         * @param record
+         * @param {Object} record
+         * @param {String} fileName
+         * @param {String} actionURI
+         * @return {void}
          */
-        save: function (record) {
-            var mediaBrowser = $(this.mediaGallerySelector).data('mageMediabrowser');
-            $(this.adobeStockModalSelector).trigger('processStart');
-            $.ajax(
-                {
-                    type: 'POST',
-                    url: this.downloadImagePreviewUrl,
-                    dataType: 'json',
-                    data: {
-                       'media_id': record.id,
-                       'destination_path': mediaBrowser.activeNode.path || ''
-                    },
-                    context: this,
-                    success: function () {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        $(this.adobeStockModalSelector).trigger('closeModal');
-                        mediaBrowser.reload(true);
-                    },
-                    error: function (response) {
-                        $(this.adobeStockModalSelector).trigger('processStop');
-                        messages.add('error', response.responseJSON.message);
-                        messages.scheduleCleanup(3);
-                    }
-               }
-           );
+        save: function (record, fileName, actionURI) {
+            var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
+
+            $(config.adobeStockModalSelector).trigger('processStart');
+
+            $.ajax({
+                type: 'POST',
+                url: actionURI,
+                dataType: 'json',
+                data: {
+                    'media_id': record.id,
+                    'destination_path': destinationPath
+                },
+                context: this,
+                success: function () {
+                    $(config.adobeStockModalSelector).trigger('processStop');
+                    $(config.adobeStockModalSelector).trigger('closeModal');
+                    mediaBrowser.reload(true);
+                },
+                error: function (response) {
+                    $(config.adobeStockModalSelector).trigger('processStop');
+                    messages.add('error', response.responseJSON.message);
+                    messages.scheduleCleanup(3);
+                }
+            });
+        },
+
+        /**
+         * Generate meaningful name image file
+         *
+         * @param record
+         * @return string
+         */
+        generateImageName: function (record) {
+            var imageType = record.content_type.match(/[^/]{1,4}$/),
+                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return imageName + '.' + imageType;
         },
 
         /**
@@ -275,9 +443,49 @@ define([
          * @param {Object} record
          */
         licenseAndSave: function (record) {
-            /** @todo add license functionality */
-            console.warn('add license functionality');
-            console.dir(record);
+            this.save(record, this.generateImageName(record), config.licenseAndDownloadUrl);
+        },
+
+        /**
+         * Shows license confirmation popup with information about current license quota
+         *
+         * @param {Object} record
+         */
+        showLicenseConfirmation: function (record) {
+            var licenseAndSave = this.licenseAndSave.bind(this);
+            $(config.adobeStockModalSelector).trigger('processStart');
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: config.quotaUrl,
+                    dataType: 'json',
+                    data: {
+                        'media_id': record.id
+                    },
+                    context: this,
+
+                    success: function (response) {
+                        var quotaInfo = response.result;
+                        var confirmationContent = $.mage.__('License "' + record.title + '"');
+                        $(config.adobeStockModalSelector).trigger('processStop');
+                        confirmation({
+                            title: $.mage.__('License Adobe Stock Image?'),
+                            content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
+                            actions: {
+                                confirm: function () {
+                                    licenseAndSave(record);
+                                }
+                            }
+                        })
+                    },
+
+                    error: function (response) {
+                        $(config.adobeStockModalSelector).trigger('processStop');
+                        messages.add('error', response.responseJSON.message);
+                        messages.scheduleCleanup(3);
+                    }
+                }
+            );
         },
 
         /**
@@ -286,8 +494,8 @@ define([
          * @param {Object} record
          */
         licenseProcess: function (record) {
-            if (this.authConfig.isAuthorized) {
-                this.licenseAndSave(record);
+            if (user.isAuthorized()) {
+                this.showLicenseConfirmation(record);
 
                 return;
             }
@@ -296,19 +504,14 @@ define([
              * Opens authorization window of Adobe Stock
              * then starts the authorization process
              */
-            authorizationAction(this.authConfig)
-                .then(
-                    function (authConfig) {
-                        this.authConfig = _.extend(this.authConfig, authConfig);
-                        this.licenseProcess(record);
-                        messages.add('success', authConfig.lastAuthSuccessMessage);
-                    }.bind(this)
-                )
-                .catch(
-                    function (error) {
-                        messages.add('error', error.message);
-                    }.bind(this)
-                )
+            authorizationAction()
+                .then(function (result) {
+                    this.licenseProcess(record);
+                    messages.add('success', result.lastAuthSuccessMessage);
+                }.bind(this))
+                .catch(function (error) {
+                    messages.add('error', error.message);
+                })
                 .finally((function () {
                     messages.scheduleCleanup(this.messageDelay);
                 }).bind(this));

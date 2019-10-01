@@ -12,7 +12,8 @@
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <token_url>https://ims-na1.adobelogin.com/ims/token</token_url>
-                <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=openid&response_type=code]]></auth_url_pattern>
+                <logout_url><![CDATA[https://ims-na1.adobelogin.com/ims/logout?access_token=#{access_token}&redirect_uri=#{redirect_uri}]]></logout_url>
+                <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=openid,creative_sdk&response_type=code]]></auth_url_pattern>
             </integration>
         </adobe_stock>
     </default>

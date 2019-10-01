@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigSystemSection">
+        <element name="adobeStockIntegration" type="select" selector="#system_adobe_stock_integration-head"/>
+        <element name="isEnabledField" type="select" selector="[data-ui-id='select-groups-adobe-stock-integration-fields-enabled-value']"/>
+        <element name="apiKeyField" type="input" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-api-key-value']"/>
+        <element name="privateKeyField" type="input" selector="[data-ui-id='password-groups-adobe-stock-integration-fields-private-key-value']"/>
+        <element name="testConnectionButton" type="button" selector="[data-ui-id='adobe-stock-integration-buttons-test-connection']" timeout="30"/>
+        <element name="requiredFieldError" type="text" selector="label.mage-error"/>
+        <element name="successMessage" type="text" selector="div.message-success"/>
+        <element name="errorMessage" type="text" selector="div.message-error"/>
+        <element name="saveConfig" type="button" selector="#save"/>
+    </section>
+</sections>

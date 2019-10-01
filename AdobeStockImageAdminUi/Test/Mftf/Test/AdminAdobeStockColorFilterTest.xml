@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockColorFilterTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="User filters images by image color"/>
+            <title value="Admin should be able to filters images by image color"/>
+            <description value="Admin should be able to filters images by image color"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_filters"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
+        <seeElement selector="{{AdobeStockFilterSection.colorFilter}}" stepKey="seeAdobeStockColorFilter"/>
+
+        <actionGroup ref="AdminApplyColorFilterValue" stepKey="userChoseAndApplyColorFilter">
+            <argument name="color" value="#000000"/>
+        </actionGroup>
+        <!--Verify that filter is applied -->
+        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+            <argument name="resultValue" value="#000000"/>
+        </actionGroup>
+        <!--Verify message returns zero results if images was not found -->
+        <actionGroup ref="AdminApplyNonValidColorValueToFilterActionGroup" stepKey="userChoseAndApplyNonValidFilter">
+            <argument name="color" value="none"/>
+        </actionGroup>
+        <see selector="{{AdobeStockFilterSection.emptyText}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
+    </test>
+</tests>

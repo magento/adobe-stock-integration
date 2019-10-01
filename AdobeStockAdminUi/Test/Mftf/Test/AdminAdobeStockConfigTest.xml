@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockConfigTest">
+        <annotations>
+            <features value="AdobeStockConfiguration"/>
+            <stories value="Configure Adobe Stock Integration via the Admin"/>
+            <title value="Admin should be able to configure Adobe Stock Integration"/>
+            <description value="Admin should be able to configure Adobe Stock Integration"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_general"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenAdobeStockConfigActionGroup" stepKey="navigateToAdobeStockConfigurationFieldset"/>
+        <actionGroup ref="AdminAssertAdobeStockConfigFieldsActionGroup" stepKey="checkAdobeStockConfigurationFields"/>
+        <actionGroup ref="AdminAssertAdobeStockConfigRequiredFieldsActionGroup" stepKey="testAdobeStockConfigRequiredFields"/>
+        <actionGroup ref="AdminAssertAdobeStockConnectionTestActionGroup" stepKey="testConnection"/>
+    </test>
+</tests>

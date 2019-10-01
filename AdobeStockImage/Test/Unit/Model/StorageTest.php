@@ -66,17 +66,6 @@ class StorageTest extends TestCase
 
         $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
 
-        $this->fileSystemIoMock->expects($this->once())
-            ->method('getPathInfo')
-            ->with($imageUrl)
-            ->willReturn(
-                [
-                    'dirname'   => 'https://t4.ftcdn.net/jpg/02/72/29/99',
-                    'basename'  => '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg',
-                    'extension' => 'jpg',
-                    'filename'  => '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa',
-                ]
-            );
         $mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
         $content = 'content';
@@ -94,6 +83,9 @@ class StorageTest extends TestCase
             ->method('fileGetContents')
             ->willReturn($content);
 
-        $this->assertSame('240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg', $this->storage->save($imageUrl));
+        $this->assertSame(
+            '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg',
+            $this->storage->save($imageUrl, '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg')
+        );
     }
 }
