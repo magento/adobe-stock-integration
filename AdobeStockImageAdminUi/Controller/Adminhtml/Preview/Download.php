@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockAsset\Model\GetAssetById;
-use Magento\AdobeStockImage\Model\SaveImagePreview;
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
+use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
@@ -41,7 +41,7 @@ class Download extends Action
     const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
-     * @var GetAssetById
+     * @var GetAssetByIdInterface
      */
     private $getAssetById;
 
@@ -51,27 +51,27 @@ class Download extends Action
     private $logger;
 
     /**
-     * @var SaveImagePreview
+     * @var SaveImageInterface
      */
-    private $saveImagePreview;
+    private $saveImage;
 
     /**
      * Download constructor.
      *
      * @param Action\Context $context
-     * @param SaveImagePreview $saveImagePreview
+     * @param SaveImageInterface $saveImage
      * @param LoggerInterface $logger
-     * @param GetAssetById $getAssetById
+     * @param GetAssetByIdInterface $getAssetById
      */
     public function __construct(
         Action\Context $context,
-        SaveImagePreview $saveImagePreview,
+        SaveImageInterface $saveImage,
         LoggerInterface $logger,
-        GetAssetById $getAssetById
+        GetAssetByIdInterface $getAssetById
     ) {
         parent::__construct($context);
 
-        $this->saveImagePreview = $saveImagePreview;
+        $this->saveImage = $saveImage;
         $this->getAssetById = $getAssetById;
         $this->logger = $logger;
     }
@@ -86,7 +86,7 @@ class Download extends Action
             $mediaId = (int) $params['media_id'];
             $destinationPath = (string) $params['destination_path'];
             $asset = $this->getAssetById->execute($mediaId);
-            $this->saveImagePreview->execute($asset, $destinationPath);
+            $this->saveImage->execute($asset, $destinationPath);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
