@@ -72,7 +72,6 @@ define([
             if (!rows || !rows.length) {
                 return;
             }
-
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
@@ -86,7 +85,7 @@ define([
          */
         setEventListener: function () {
             var running = false,
-                handler = function() {
+                handler = function () {
                     this.containerWidth = window.innerWidth;
                     this.setLayoutStyles();
                 }.bind(this);
@@ -112,43 +111,55 @@ define([
         /**
          * Set layout styles inside the container
          */
-        setLayoutStyles: function() {
-            var containerWidth = parseInt(this.container.clientWidth, 10) - this.imageMargin,
-                row = [],
-                ratio = 0,
-                imageWidth = 0,
-                rowHeight = 0,
-                calcHeight = 0,
-                isBottom = false,
-                imageRowNumber = 1;
-
-            this.setMinRatio();
-
-            this.rows().forEach(function(image, index) {
-                ratio += parseFloat((image.width / image.height).toFixed(2));
-                row.push(image);
-
-                if (ratio >= this.minRatio || index + 1 === this.rows().length) {
-                    ratio = Math.max(ratio, this.minRatio);
-                    calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
-                    rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
-                    isBottom = index + 1 === this.rows().length;
-
-                    row.forEach(function(img) {
-                        imageWidth = rowHeight * (img.width / img.height).toFixed(2);
-                        this.setImageStyles(img, imageWidth, rowHeight);
-                        this.setImageClass(img, {
-                            bottom: isBottom
-                        });
-                        img.currentRow = imageRowNumber;
-                    }.bind(this));
-
-                    row[0].firstInRow = true;
-                    row[row.length - 1].lastInRow = true;
-                    row = [];
-                    ratio = 0;
-                    imageRowNumber++;
+        setLayoutStyles: function () {
+            var waitForEl = function (callback) {
+                if (this.imports.rows.length === 0 || typeof this.container === "undefined") {
+                    setTimeout(function () {
+                        waitForEl(callback);
+                    }, 500);
+                } else {
+                    callback();
                 }
+            }.bind(this);
+
+            waitForEl(function () {
+                var containerWidth = parseInt(this.container.clientWidth, 10) - this.imageMargin,
+                    row = [],
+                    ratio = 0,
+                    imageWidth = 0,
+                    rowHeight = 0,
+                    calcHeight = 0,
+                    isBottom = false,
+                    imageRowNumber = 1;
+
+                this.setMinRatio();
+
+                this.rows().forEach(function (image, index) {
+                    ratio += parseFloat((image.width / image.height).toFixed(2));
+                    row.push(image);
+
+                    if (ratio >= this.minRatio || index + 1 === this.rows().length) {
+                        ratio = Math.max(ratio, this.minRatio);
+                        calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
+                        rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
+                        isBottom = index + 1 === this.rows().length;
+
+                        row.forEach(function (img) {
+                            imageWidth = rowHeight * (img.width / img.height).toFixed(2);
+                            this.setImageStyles(img, imageWidth, rowHeight);
+                            this.setImageClass(img, {
+                                bottom: isBottom
+                            });
+                            img.currentRow = imageRowNumber;
+                        }.bind(this));
+
+                        row[0].firstInRow = true;
+                        row[row.length - 1].lastInRow = true;
+                        row = [];
+                        ratio = 0;
+                        imageRowNumber++;
+                    }
+                }.bind(this));
             }.bind(this));
         },
 
@@ -174,7 +185,7 @@ define([
          * @param {Object} img
          * @param {Object} classes
          */
-        setImageClass: function(img, classes){
+        setImageClass: function (img, classes) {
             if (!img.css) {
                 img.css = ko.observable(classes);
             }
@@ -184,7 +195,7 @@ define([
         /**
          * Set min ratio for images in layout
          */
-        setMinRatio: function() {
+        setMinRatio: function () {
             if (this.containerWidth <= 640) {
                 this.minRatio = 3;
             } else if (this.containerWidth <= 1280) {
