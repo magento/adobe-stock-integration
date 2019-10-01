@@ -20,12 +20,12 @@ class Logout extends Action
     /**
      * Internal server error response code.
      */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    private const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * @var CurlFactory
