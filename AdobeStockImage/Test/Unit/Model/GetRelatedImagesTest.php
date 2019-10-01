@@ -138,10 +138,62 @@ class GetRelatedImagesTest extends TestCase
                                         'value' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg'
                                     ]
                                 ),
+                                'thumbnail_500_url' => new \Magento\Framework\Api\AttributeValue(
+                                    [
+                                        'attribute_code' => 'thumbnail_500_url',
+                                        'value' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg'
+                                    ]
+                                ),
                                 'id' => new \Magento\Framework\Api\AttributeValue(
                                     [
                                         'attribute_code' => 'id',
                                         'value' => 123456789
+                                    ]
+                                ),
+                                'creator_name' => new \Magento\Framework\Api\AttributeValue(
+                                    [
+                                        'attribute_code' => 'creator_name',
+                                        'value' => 'Author'
+                                    ]
+                                ),
+                                'content_type' => new \Magento\Framework\Api\AttributeValue(
+                                    [
+                                        'attribute_code' => 'content_type',
+                                        'value' => 'image/jpeg'
+                                    ]
+                                ),
+                                'width' => new \Magento\Framework\Api\AttributeValue(
+                                    [
+                                        'attribute_code' => 'width',
+                                        'value' => 1000
+                                    ]
+                                ),
+                                'height' => new \Magento\Framework\Api\AttributeValue(
+                                    [
+                                        'attribute_code' => 'height',
+                                        'value' => 1000
+                                    ]
+                                ),
+                                'category' => new \Magento\Framework\Api\AttributeValue(
+                                    [
+                                        'attribute_code' => 'category',
+                                        'value' => 123
+                                    ]
+                                ),
+                                'keywords' => new \Magento\Framework\Api\AttributeValue(
+                                    [
+                                        'attribute_code' => 'keywords',
+                                        'value' => [
+                                            [
+                                                'name' => 'keyword #1'
+                                            ],
+                                            [
+                                                'name' => 'keyword #2'
+                                            ],
+                                            [
+                                                'name' => 'keyword #3'
+                                            ]
+                                        ]
                                     ]
                                 ),
                             ]
@@ -153,14 +205,48 @@ class GetRelatedImagesTest extends TestCase
                         [
                             'id' => 1234556789,
                             'title' => 'Some Title',
-                            'thumbnail_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg'
+                            'thumbnail_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',
+                            'thumbnail_500_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',
+                            'creator_name' => 'Author',
+                            'content_type' => 'image/jpeg',
+                            'width' => 1000,
+                            'height' => 1000,
+                            'category' => 123,
+                            'keywords' => [
+                                [
+                                    'name' => 'keyword #1'
+                                ],
+                                [
+                                    'name' => 'keyword #2'
+                                ],
+                                [
+                                    'name' => 'keyword #3'
+                                ]
+                            ]
                         ]
                     ],
                     'same_series' => [
                         [
                             'id' => 1234556789,
                             'title' => 'Some Title',
-                            'thumbnail_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg'
+                            'thumbnail_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',
+                            'thumbnail_500_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',
+                            'creator_name' => 'Author',
+                            'content_type' => 'image/jpeg',
+                            'width' => 1000,
+                            'height' => 1000,
+                            'category' => 123,
+                            'keywords' => [
+                                [
+                                    'name' => 'keyword #1'
+                                ],
+                                [
+                                    'name' => 'keyword #2'
+                                ],
+                                [
+                                    'name' => 'keyword #3'
+                                ]
+                            ]
                         ]
                     ]
                 ]
