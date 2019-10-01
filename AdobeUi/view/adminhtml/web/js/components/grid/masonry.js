@@ -154,13 +154,13 @@ define([
         /**
          * Waits for container.
          */
-        waitForContainer: function () {
+        waitForContainer: function (callback) {
             if (this.imports.rows.length === 0 || typeof this.container === "undefined") {
                 setTimeout(function () {
-                    this.waitForContainer();
+                    this.waitForContainer(callback);
                 }.bind(this), 500);
             } else {
-                this.setLayoutStyles();
+                callback();
             }
         },
 
@@ -168,7 +168,9 @@ define([
          * Sets styles when elements are loaded.
          */
         setLayoutStylesWhenLoaded: function () {
-            this.waitForContainer();
+            this.waitForContainer(function () {
+                this.setLayoutStyles();
+            }.bind(this));
         },
 
         /**
