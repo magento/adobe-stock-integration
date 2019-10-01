@@ -10,13 +10,14 @@ define([
     'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
+    'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
     'mage/backend/tabs'
-], function (_, $, ko, translate, authorizationAction, imagePreview, messages, confirmation, prompt, adobePromptContentTmpl, user, config) {
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, user, config) {
     'use strict';
 
     return imagePreview.extend({
@@ -322,6 +323,20 @@ define([
         },
 
         /**
+         * Returns is_downloaded flag as observable for given record
+         *
+         * @param record
+         * @returns {observable}
+         */
+        isDownloaded: function(record) {
+            if (!ko.isObservable((record.is_downloaded))){
+                record.is_downloaded = ko.observable(record.is_downloaded);
+            }
+
+            return record.is_downloaded;
+        },
+
+        /**
          * Get styles for preview
          *
          * @param {Object} record
@@ -346,6 +361,16 @@ define([
                 block: "center",
                 inline: "nearest"
             });
+        },
+
+        /**
+         * Locate downloaded image in media browser
+         *
+         * @param record
+         */
+        locate: function (record) {
+            $(config.adobeStockModalSelector).trigger('closeModal');
+            mediaGallery.locate(record.path);
         },
 
         /**
@@ -415,6 +440,8 @@ define([
                 },
                 context: this,
                 success: function () {
+                    record.is_downloaded(1);
+                    record.path = destinationPath;
                     $(config.adobeStockModalSelector).trigger('processStop');
                     $(config.adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
