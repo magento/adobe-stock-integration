@@ -9,6 +9,6 @@ define(['ko'], function (ko) {
         isAuthorized: ko.observable(false),
         name: ko.observable(''),
         email: ko.observable(''),
-        iamge: ko.observable('')
+        image: ko.observable('')
     };
 });
