@@ -21,11 +21,10 @@ use Magento\Framework\Exception\NotFoundException;
 interface SaveImageInterface
 {
     /**
-     * Runs the save image process.
+     * Save full image interface
      *
      * @param AssetInterface $asset
      * @param string $destinationPath
-     *
      * @return void
      */
     public function execute(AssetInterface $asset, string $destinationPath): void;
