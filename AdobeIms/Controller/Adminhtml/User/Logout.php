@@ -25,7 +25,7 @@ class Logout extends Action
     /**
      * @see _isAllowed()
      */
-    private const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * @var CurlFactory
