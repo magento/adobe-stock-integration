@@ -15,6 +15,8 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class Category extends AbstractDb
 {
+    const ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME = 'adobe_stock_category';
+
     /**
      * @inheritdoc
      */
@@ -30,6 +32,6 @@ class Category extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('adobe_stock_category', 'id');
+        $this->_init(self::ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME, 'id');
     }
 }

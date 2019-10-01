@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
@@ -29,22 +28,6 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getAdobeId(): int
-    {
-        return $this->getData(self::ADOBE_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setAdobeId(int $value): void
-    {
-        $this->setData(self::ADOBE_ID, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getUserId(): int
     {
         return $this->getData(self::USER_ID);
@@ -61,7 +44,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->getData(self::NAME);
     }
@@ -72,6 +55,22 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     public function setName(string $value): void
     {
         $this->setData(self::NAME, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEmail(): ?string
+    {
+        return $this->getData(self::EMAIL);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setEmail(string $value): void
+    {
+        $this->setData(self::EMAIL, $value);
     }
 
     /**

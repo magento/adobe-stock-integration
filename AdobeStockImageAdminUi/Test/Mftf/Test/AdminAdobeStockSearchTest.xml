@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockSearchTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="Access Adobe Stock Image panel via the Admin"/>
+            <title value="User searches stock images by keywords"/>
+            <description value="User searches stock images by keywords"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_grid"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlFromFirstImageWithoutSearch"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPear">
+            <argument name="query" value="pear"/>
+        </actionGroup>
+        <!-- Assert that User searches for "popular" using keyboard input and mouse navigation and sees "that grid was updated by new images"-->
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
+                        stepKey="checkFirstImageNotFoundAfterSearch"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup"
+                     stepKey="assertImagesInGridAfterPopularSearch"/>
+
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlFromFirstImageAfterSearchPopular"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForEmptyQuery"/>
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageAfterSearchPopular)}}"
+                        stepKey="checkFirstPopularImageNotFoundAfterSearchZero"/>
+
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlFromFirstImageAfterSearchZero"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForFirstSymbols">
+            <argument name="query" value="}:->"/>
+        </actionGroup>
+        <actionGroup ref="AssertImageNotFoundAfterSearchFirstSymbols"
+                     stepKey="AssertImageNotFoundAfterInvalidSearches"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForHeadphones">
+            <argument name="query" value="bluetooth true wireless headphones"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
+                        stepKey="checkFirstImageNotFoundAfterSearchHeadphones"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup"
+                     stepKey="assertImagesInGridAfterHeadphonesSearch">
+            <argument name="thumbnailsNumber" value="32"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlFromFirstImageAfterSearchHeadphones"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForSecondSymbols">
+            <argument name="query" value="} { ] [ ) ( ~ ! @ # $ % ^ &amp; ` | \ : &quot; ; ' &lt; &gt; ? , . ⁄ -+"/>
+        </actionGroup>
+        <!-- Assert that searches using clipboard input and mouse navigation and sees "that empty set was returned" -->
+        <actionGroup ref="AssertImageNotFoundAfterSearchFirstSymbols" stepKey="assertImageNotFound">
+            <argument name="src" value="{$getUrlFromFirstImageAfterSearchHeadphones}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageAfterSearchHeadphones)}}"
+                        stepKey="checkFirstPopularImageNotFoundAfterSearchHeadphones"/>
+
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForTopSecret">
+            <argument name="query" value="top secret"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
+                        stepKey="checkFirstImageNotFoundAfterSearchTopSecret"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup"
+                     stepKey="assertImagesInGridAfterTopSecretSearch"/>
+
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlFromFirstImageAfterSearchTopSecret"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForThirdSymbols">
+            <argument name="query" value="%0F"/>
+        </actionGroup>
+        <actionGroup ref="AssertImageNotFoundAfterSearchFirstSymbols" stepKey="assertImageNotFoundAfterTopSecret">
+            <argument name="src" value="{$getUrlFromFirstImageAfterSearchTopSecret}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForChestBand">
+            <argument name="query" value="watch"/>
+        </actionGroup>
+        <!-- Assert searches using clipboard input and mouse navigation and sees "that grid was updated by new images"-->
+        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
+                        stepKey="checkFirstImageNotFoundAfterSearchChestBand"/>
+        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="assertImagesInGridAfterChestBand"/>
+
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlFromFirstImageAfterSearchChestBand"/>
+    </test>
+</tests>

@@ -26,7 +26,7 @@ env:
     - TEST_SUITE=static
     - TEST_SUITE=unit
     - TEST_SUITE=integration
-    - TEST_SUITE=api
+#    - TEST_SUITE=api
 #    - TEST_SUITE=functional
 matrix:
   fast_finish: true
@@ -63,4 +63,6 @@ script:
   - if [ $TEST_SUITE == 'unit' ]; then phpunit --configuration dev/tests/unit/phpunit.xml; fi
   - if [ $TEST_SUITE == 'integration' ]; then phpunit -c dev/tests/integration; fi
   - if [ $TEST_SUITE == 'api' ]; then phpunit -c dev/tests/api-functional; fi
-#  - if [ $TEST_SUITE == 'functional' ]; then codecept run functional --verbose --steps -g AdobeStockIntegration -c dev/tests/acceptance/codeception.yml; fi
+  - if [ $TEST_SUITE == 'functional' ]; then codecept run functional --verbose --steps -g AdobeStockIntegration -c dev/tests/acceptance/codeception.yml; fi
+after_success:
+  - if [ $TEST_SUITE == 'unit' ]; then cd ../ && travis_retry coveralls; fi

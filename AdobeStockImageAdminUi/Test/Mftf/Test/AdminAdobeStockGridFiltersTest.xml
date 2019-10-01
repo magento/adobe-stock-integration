@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockGridFiltersTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="User has access to Adobe Stock Images filters"/>
+            <title value="User has access to Adobe Stock Images filters"/>
+            <description value="User is able to see the available adobe images filters"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_filters"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+                           stepKey="getUrlWithoutFilters"/>
+        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSubcategoryFilter">
+            <argument name="filterName" value="Subcategory"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
+            <argument name="filterName" value="Orientation"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkColorFilter">
+            <argument name="filterName" value="Color"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
+            <argument name="filterName" value="Price"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSafeSearchFilter">
+            <argument name="filterName" value="Safe search"/>
+        </actionGroup>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkIsolatedAssetsFilter">
+            <argument name="filterName" value="Isolated Assets"/>
+        </actionGroup>
+    </test>
+</tests>

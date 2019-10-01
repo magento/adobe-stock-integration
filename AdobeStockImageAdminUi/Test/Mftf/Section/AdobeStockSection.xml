@@ -13,15 +13,14 @@
         <element name="panelTitle" type="block" selector="[data-role=title]"/>
         <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
         <element name="imagesThumbnails" type="block" selector="[data-role=grid-wrapper] img[data-role=thumbnail]"/>
-        <element name="searchButton" type="button" selector="button.action-submit"/>
+        <element name="searchButton" type="button" selector="#words + button.action-submit"/>
         <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" parameterized="true"/>
         <element name="firstImageAfterSearch" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] img"/>
         <element name="gridSpinner" type="text" selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']"/>
         <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
         <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
         <element name="recordsFound" type="text" selector="//*[@id='adobe-stock-images-search-modal']//*[text()='records found']/parent::div"/>
-        <element name="savePreview" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
-        <element name="imagePreview" type="block" selector="//div[@class='masonry-image-preview']//img"/>
-        <element name="imagePreviewNavigation" type="block" selector="//div[@class='masonry-image-preview']//div[@class='action-buttons']/button[@class='action-{{type}}']" parameterized="true"/>
+        <element name="selectedImagePreview" type="text" selector="//img[@alt='{{imageName}}']" parameterized="true"/>
+        <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
     </section>
 </sections>
