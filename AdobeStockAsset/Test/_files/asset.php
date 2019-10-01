@@ -29,15 +29,15 @@ $creator =  require __DIR__ . '/../_files/objects/creator.php';
 /** @var AssetInterface $asset */
 $asset = require __DIR__ . '/../_files/objects/asset.php';
 
+$asset->setCategory($category);
+$asset->setCreator($creator);
+$asset->setKeywords($keywords);
 $asset->setId(1);
 $asset->setIsLicensed(1);
 $asset->setPreviewWidth(1);
 $asset->setPreviewHeight(1);
 $asset->setWidth(1);
 $asset->setHeight(1);
-$asset->setCategory($category);
-$asset->setCreator($creator);
-$asset->setKeywords($keywords);
 
 $assetRepository->save($asset);
 
