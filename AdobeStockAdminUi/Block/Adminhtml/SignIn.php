@@ -110,13 +110,13 @@ class SignIn extends Template
     }
 
     /**
-     * Return users avatar url
+     * Return user image url
      *
      * @return string
      */
-    public function getAvatar()
+    public function getImage()
     {
-        return $this->isAuthorized() ? $this->getUserProfile()->getAvatar() : '';
+        return $this->isAuthorized() ? $this->getUserProfile()->getImage() : '';
     }
     /**
      * Authorized as a sting for json

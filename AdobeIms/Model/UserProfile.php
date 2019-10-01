@@ -68,17 +68,17 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritDoc
      */
-    public function getAvatar(): ?string
+    public function getImage(): ?string
     {
-        return $this->getData(self::AVATAR);
+        return $this->getData(self::IMAGE);
     }
 
     /**
      * @inheritDoc
      */
-    public function setAvatar(string $value): void
+    public function setImage(string $value): void
     {
-        $this->setData(self::AVATAR, $value);
+        $this->setData(self::IMAGE, $value);
     }
 
     /**

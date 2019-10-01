@@ -21,10 +21,9 @@ use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
                         "profileUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/profile') ?>",
                         "userName": "<?= $block->escapeJs($block->getName()) ?>",
                         "userEmail": "<?= $block->escapeJs($block->getEmail()) ?>",
-                        "avatar":  "<?= $block->escapeJs($block->getAvatar()) ?>",
+                        "image":  "<?= $block->escapeJs($block->getImage()) ?>",
                         "loginUrl": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
                         "logoutUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/logout') ?>",
-                        "avatarUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/avatar') ?>",
                         "isAuthorized": "<?= /* @noEscape */ $block->isAuthorizedJson() ?>",
                         "callbackParsingParams": {
                             "regexpPattern": <?= /* @noEscape */ $block->getRegexpPattern() ?>,
