@@ -12,8 +12,10 @@ use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeStockClient\Model\Client;
 use Magento\AdobeStockClient\Model\ConnectionFactory;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -22,6 +24,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 
 /**
  * Test client for communication to Adobe Stock API.
@@ -39,6 +42,16 @@ class ClientTest extends TestCase
     private $connection;
 
     /**
+     * @var MockObject $userContextMock
+     */
+    private $userContextMock;
+
+    /**
+     * @var MockObject $userProfile
+     */
+    private $userProfile;
+
+    /**
      * Prepare objects.
      */
     protected function setUp(): void
@@ -54,10 +67,14 @@ class ClientTest extends TestCase
         $connectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->connection);
+        $this->userContextMock = $this->createMock(\Magento\Authorization\Model\UserContextInterface::class);
+        $this->userProfile = $this->createMock(UserProfileRepositoryInterface::class);
         $this->client = Bootstrap::getObjectManager()->create(
             Client::class,
             [
-                'connectionFactory' => $connectionFactory
+                'connectionFactory' => $connectionFactory,
+                'userProfileRepository' => $this->userProfile,
+                'userContext' => $this->userContextMock,
             ]
         );
     }
@@ -81,7 +98,9 @@ class ClientTest extends TestCase
         $response->expects($this->once())
             ->method('getNbResults')
             ->willReturn(3);
-
+        $userProfileInterface = $this->createMock(UserProfileInterface::class);
+        $this->userProfile->expects($this->once())->method('getByUserId')->willReturn($userProfileInterface);
+        $this->userContextMock->expects($this->once())->method('getUserId')->willReturn(1);
         $this->connection->expects($this->once())
             ->method('searchFilesInitialize')
             ->with(
