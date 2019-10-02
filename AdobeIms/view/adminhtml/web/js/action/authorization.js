@@ -54,7 +54,8 @@ define([
 
         return new window.Promise(function (resolve, reject) {
             var watcherId,
-                stopWatcherId;
+                stopWatcherId,
+                currentDomain = false;
 
             /**
              * Stop handle
@@ -72,35 +73,50 @@ define([
              * Start handle
              */
             function startHandle() {
-                var responseData;
+                try {
+                    if (authWindow.document.domain === document.domain)
+                    {
+                        if (currentDomain && authWindow.document.readyState === "complete")
+                        {
+                            var responseData;
+                            clearInterval(watcherId);
+                            /**
+                             * If within 10 seconds the result is not received, then reject the request
+                             */
+                            stopWatcherId = setTimeout(function () {
+                                stopHandle();
+                                reject(new Error('Time\'s up.'));
+                            }, config.login.popupWindowTimeout || 10000);
 
-                if (-1 === String(authWindow.origin).indexOf(window.location.host)) {
-                    return;
-                }
+                            responseData = authWindow.document.body.innerText.match(
+                                config.login.callbackParsingParams.regexpPattern
+                            );
 
-                /**
-                 * If within 10 seconds the result is not received, then reject the request
-                 */
-                stopWatcherId = setTimeout(function () {
-                    stopHandle();
-                    reject(new Error('Time\'s up.'));
-                }, config.login.popupWindowTimeout || 10000);
+                            if (responseData) {
+                                stopHandle();
 
-                responseData = authWindow.document.body.innerText.match(
-                    config.login.callbackParsingParams.regexpPattern
-                );
-                if (responseData) {
-                    stopHandle();
-
-                    if (responseData[config.login.callbackParsingParams.codeIndex] === config.login.callbackParsingParams.successCode) {
-                        user.isAuthorized(true);
-                        resolve({
-                            isAuthorized: true,
-                            lastAuthSuccessMessage: responseData[config.login.callbackParsingParams.messageIndex]
-                        });
-                    } else {
-                        reject(new Error(responseData[config.login.callbackParsingParams.messageIndex]));
+                                if (responseData[config.login.callbackParsingParams.codeIndex] === config.login.callbackParsingParams.successCode) {
+                                    user.isAuthorized(true);
+                                    resolve({
+                                        isAuthorized: true,
+                                        lastAuthSuccessMessage: responseData[config.login.callbackParsingParams.messageIndex]
+                                    });
+                                } else {
+                                    reject(new Error(responseData[config.login.callbackParsingParams.messageIndex]));
+                                }
+                            }
+                        }
                     }
+                    else {
+                        currentDomain = true;
+                    }
+                }
+                catch(e) {
+                    if (authWindow.closed) {
+                        clearInterval(watcherId);
+                        return;
+                    }
+                    currentDomain = true;
                 }
             }
 
