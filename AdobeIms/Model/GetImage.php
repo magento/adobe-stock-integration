@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
+use Magento\AdobeImsApi\Api\Data\UserImageInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -14,31 +15,18 @@ use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\AdobeImsApi\Api\GetImageInterface;
+use Magento\AdobeImsApi\Api\Data\UserImageInterfaceFactory;
 
 /**
  * Get user image profile.
  */
-class GetImage
+class GetImage implements GetImageInterface
 {
-    /**
-     * Successful result code.
-     */
-    const HTTP_OK = 200;
-
-    /**
-     * Internal server error response code.
-     */
-    const HTTP_INTERNAL_ERROR = 500;
-
     /**
      * Logout url pattern.
      */
     private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_stock/integration/image_url';
-
-    /**
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * @var UserContextInterface
@@ -71,13 +59,18 @@ class GetImage
     private $json;
 
     /**
+     * @var UserImageInterfaceFactory
+     */
+    private $userImageFactory;
+
+    /**
      * @param UserContextInterface $userContext
-     * @param UserProfileRepositoryInterface $userProfileRepository
      * @param LoggerInterface $logger
      * @param ScopeConfigInterface $scopeConfig
      * @param CurlFactory $curlFactory
      * @param Config $config
      * @param Json $json
+     * @param UserImageInterfaceFactory $userImageInterfaceFactory
      */
     public function __construct(
         UserContextInterface $userContext,
@@ -85,7 +78,8 @@ class GetImage
         ScopeConfigInterface $scopeConfig,
         CurlFactory $curlFactory,
         Config $config,
-        Json $json
+        Json $json,
+        UserImageInterfaceFactory $userImageInterfaceFactory
     ) {
         $this->userContext = $userContext;
         $this->logger = $logger;
@@ -93,12 +87,13 @@ class GetImage
         $this->curlFactory = $curlFactory;
         $this->config = $config;
         $this->json = $json;
+        $this->userImageFactory = $userImageInterfaceFactory;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute($accessToken)
+    public function execute(string $accessToken): UserImageInterface
     {
         try {
             $curl = $this->curlFactory->create();
@@ -107,21 +102,22 @@ class GetImage
             $curl->addHeader('cache-control', 'no-cache');
             $curl->get($this->getUserImageUrl());
 
-            if ($curl->getStatus() === self::HTTP_OK) {
                 $result = $this->json->unserialize($curl->getBody());
-                $response = $result['user']['images']['100'];
-            } else {
-                $response = self::HTTP_INTERNAL_ERROR;
-                $this->logger->critical($response);
+                $response = $result['user']['images'];
+
+            $response = $this->userImageFactory->create()
+                ->addData(is_array($response) ? ['images' => $response] : ['error' => __('The response is empty.')]);
+
+            if (empty($response->getImages())) {
                 throw new AuthorizationException(
-                    __('Authentication is failing' . $response)
+                    __('Authentication is failing. Error code: %1', $response->getError())
                 );
             }
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
 
-        return (string)$response;
+        return $response;
     }
 
     /**

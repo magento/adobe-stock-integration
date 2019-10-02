@@ -21,7 +21,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeIms\Model\GetImage;
+use Magento\AdobeImsApi\Api\GetImageInterface;
 
 /**
  * Class Callback
@@ -71,7 +71,7 @@ class Callback extends Action
     private $logger;
 
     /**
-     * @var GetImage $getUserImage
+     * @var GetImageInterface $getUserImage
      */
     private $getUserImage;
 
@@ -89,7 +89,7 @@ class Callback extends Action
         UserProfileInterfaceFactory $userProfileFactory,
         GetTokenInterface $getToken,
         LoggerInterface $logger,
-        GetImage $getImage
+        GetImageInterface $getImage
     ) {
         parent::__construct($context);
 
@@ -113,7 +113,7 @@ class Callback extends Action
             $userProfile = $this->getUserProfile();
             $userProfile->setName($tokenResponse->getName());
             $userProfile->setEmail($tokenResponse->getEmail());
-            $userProfile->setImage($userImage);
+            $userProfile->setImage($userImage->getImages()[100]);
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
