@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Model;
 
 use Magento\AdobeImsApi\Api\GetImageInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -23,11 +22,6 @@ class GetImage implements GetImageInterface
      * Logout url pattern.
      */
     private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_stock/integration/image_url';
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
 
     /**
      * @var LoggerInterface
@@ -60,7 +54,6 @@ class GetImage implements GetImageInterface
     private $defaultImage;
 
     /**
-     * @param UserContextInterface $userContext
      * @param LoggerInterface $logger
      * @param ScopeConfigInterface $scopeConfig
      * @param CurlFactory $curlFactory
@@ -69,7 +62,6 @@ class GetImage implements GetImageInterface
      * @param string $defaultImage
      */
     public function __construct(
-        UserContextInterface $userContext,
         LoggerInterface $logger,
         ScopeConfigInterface $scopeConfig,
         CurlFactory $curlFactory,
@@ -77,7 +69,6 @@ class GetImage implements GetImageInterface
         Json $json,
         string $defaultImage = ''
     ) {
-        $this->userContext = $userContext;
         $this->logger = $logger;
         $this->scopeConfig = $scopeConfig;
         $this->curlFactory = $curlFactory;
