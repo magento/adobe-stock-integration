@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
+use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\RelatedImages;
@@ -16,7 +17,6 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\AdobeStockImage\Model\GetRelatedImages;
 
 /**
  * RelatedImages test.
@@ -55,7 +55,7 @@ class RelatedImagesTest extends TestCase
     private $relatedImages;
 
     /**
-     * @var MockObject|GetRelatedImages $getRelatedImages
+     * @var MockObject|GetRelatedImagesInterface $getRelatedImages
      */
     private $getRelatedImages;
 
@@ -64,9 +64,8 @@ class RelatedImagesTest extends TestCase
      */
     protected function setUp()
     {
-
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->getRelatedImages = $this->createMock(GetRelatedImages::class);
+        $this->getRelatedImages = $this->getMockForAbstractClass(GetRelatedImagesInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $this->request = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,

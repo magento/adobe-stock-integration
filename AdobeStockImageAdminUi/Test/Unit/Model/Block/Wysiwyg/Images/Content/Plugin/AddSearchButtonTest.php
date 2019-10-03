@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model\Block\Wysiwyg\Images\Content\Plugin;
 
-use Magento\AdobeStockAsset\Model\Config;
+use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockImageAdminUi\Model\Block\Wysiwyg\Images\Content\Plugin\AddSearchButton;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -27,7 +27,7 @@ class AddSearchButtonTest extends TestCase
     private $layoutInterface;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $config;
 
@@ -46,14 +46,9 @@ class AddSearchButtonTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->layoutInterface = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->layoutInterface = $this->getMockForAbstractClass(LayoutInterface::class);
 
-        $this->config = $this->getMockBuilder(Config::class)
-            ->setMethods(['isEnabled'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
 

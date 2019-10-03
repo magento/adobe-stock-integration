@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
-use Magento\AdobeStockAsset\Model\GetAssetById;
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockImage\Model\SaveImage;
+use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
@@ -42,7 +42,7 @@ class License extends Action
     const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
-     * @var GetAssetById
+     * @var GetAssetByIdInterface
      */
     private $getAssetById;
 
@@ -57,7 +57,7 @@ class License extends Action
     private $logger;
 
     /**
-     * @var SaveImage
+     * @var SaveImageInterface
      */
     private $saveImage;
 
@@ -66,16 +66,16 @@ class License extends Action
      *
      * @param Action\Context $context
      * @param ClientInterface $client
-     * @param SaveImage $saveImage
+     * @param SaveImageInterface $saveImage
      * @param LoggerInterface $logger
-     * @param GetAssetById $getAssetById
+     * @param GetAssetByIdInterface $getAssetById
      */
     public function __construct(
         Action\Context $context,
         ClientInterface $client,
-        SaveImage $saveImage,
+        SaveImageInterface $saveImage,
         LoggerInterface $logger,
-        GetAssetById $getAssetById
+        GetAssetByIdInterface $getAssetById
     ) {
         parent::__construct($context);
 

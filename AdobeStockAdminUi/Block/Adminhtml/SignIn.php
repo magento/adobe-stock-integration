@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAdminUi\Block\Adminhtml;
 
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
-use Magento\AdobeIms\Model\Config;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
@@ -23,7 +23,7 @@ use Magento\Framework\Serialize\Serializer\JsonHexTag;
 class SignIn extends Template
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -52,16 +52,16 @@ class SignIn extends Template
     /**
      * SignIn constructor.
      *
-     * @param Config $config
-     * @param Context $context
-     * @param UserContextInterface $userContext
-     * @param UserAuthorizedInterface $userAuthorized
+     * @param ConfigInterface                $config
+     * @param Context                        $context
+     * @param UserContextInterface           $userContext
+     * @param UserAuthorizedInterface        $userAuthorized
      * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param JsonHexTag $json
-     * @param array $data
+     * @param JsonHexTag                     $json
+     * @param array                          $data
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         Context $context,
         UserContextInterface $userContext,
         UserAuthorizedInterface $userAuthorized,
