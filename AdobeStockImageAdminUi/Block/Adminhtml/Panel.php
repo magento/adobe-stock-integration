@@ -79,6 +79,6 @@ class Panel extends Template
      */
     public function getBuyCreditsUrl(): string
     {
-        return 'https://stock.adobe.com/ ';
+        return 'https://stock.adobe.com/';
     }
 }

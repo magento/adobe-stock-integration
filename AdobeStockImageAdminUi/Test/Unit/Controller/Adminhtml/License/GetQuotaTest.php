@@ -113,10 +113,14 @@ class GetQuotaTest extends TestCase
     public function testExecute()
     {
         $this->clientInterfaceMock->expects($this->once())
-            ->method('getQuotaConfirmationMessage')
+            ->method('getQuotaInformation')
             ->with(283415387)
-            ->willReturn('You have 0 licenses. Purchase on Adobe Stock?');
-        $data = ['success' => true, 'error_message' => '', 'result' => 'You have 0 licenses. Purchase on Adobe Stock?'];
+            ->willReturn(['message' => 'You have 0 licenses. Purchase on Adobe Stock?']);
+        $data = [
+            'success' => true,
+            'error_message' => '',
+            'result' => ['message' => 'You have 0 licenses. Purchase on Adobe Stock?']
+        ];
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($data));
@@ -133,7 +137,7 @@ class GetQuotaTest extends TestCase
             'message' => new Phrase('An error occurred during get quota operation. Contact support.')
         ];
         $this->clientInterfaceMock->expects($this->once())
-            ->method('getQuotaConfirmationMessage')
+            ->method('getQuotaInformation')
             ->willThrowException(new \Exception());
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->jsonObject->expects($this->once())->method('setData')
