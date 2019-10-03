@@ -18,16 +18,15 @@ use Psr\Log\LoggerInterface;
  */
 class Profile extends Action
 {
-
     /**
      * Successful result code.
      */
-    const HTTP_OK = 200;
+    private const HTTP_OK = 200;
 
     /**
      * Internal server error response code.
      */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @see _isAllowed()

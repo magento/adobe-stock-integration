@@ -119,9 +119,6 @@ class GetQuotaTest extends TestCase
         $quotaInterface->expects($this->once())->method('getImages')->willReturn(2);
         $quotaInterface->expects($this->once())->method('getCredits')->willReturn(1);
 
-        $this->clientInterfaceMock->expects($this->once())
-            ->method('getQuota')
-            ->willReturn($quotaInterface);
         $data = [
             'success' => true,
             'result' => [
@@ -130,6 +127,9 @@ class GetQuotaTest extends TestCase
                 'images' => 2
             ]
         ];
+        $this->clientInterfaceMock->expects($this->once())
+            ->method('getQuota')
+            ->willReturn($quotaInterface);
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($data));

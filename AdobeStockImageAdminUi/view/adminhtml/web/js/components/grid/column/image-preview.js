@@ -10,12 +10,14 @@ define([
     'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
+    'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
+    'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
     'mage/backend/tabs'
-], function (_, $, ko, translate, authorizationAction, imagePreview, messages, confirmation, prompt, user, config) {
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, user, config) {
     'use strict';
 
     return imagePreview.extend({
@@ -321,6 +323,20 @@ define([
         },
 
         /**
+         * Returns is_downloaded flag as observable for given record
+         *
+         * @param record
+         * @returns {observable}
+         */
+        isDownloaded: function(record) {
+            if (!ko.isObservable((record.is_downloaded))){
+                record.is_downloaded = ko.observable(record.is_downloaded);
+            }
+
+            return record.is_downloaded;
+        },
+
+        /**
          * Get styles for preview
          *
          * @param {Object} record
@@ -348,6 +364,16 @@ define([
         },
 
         /**
+         * Locate downloaded image in media browser
+         *
+         * @param record
+         */
+        locate: function (record) {
+            $(config.adobeStockModalSelector).trigger('closeModal');
+            mediaGallery.locate(record.path);
+        },
+
+        /**
          * Save preview
          *
          * @param {Object} record
@@ -358,6 +384,9 @@ define([
                 title: 'Save Preview',
                 content: 'File Name',
                 value: this.generateImageName(record),
+                imageExtension: this.getImageExtension(record),
+                promptContentTmpl : adobePromptContentTmpl,
+                modalClass: 'adobe-stock-save-preview-prompt',
                 validation: true,
                 promptField: '[data-role="promptField"]',
                 validationRules: ['required-entry'],
@@ -376,7 +405,14 @@ define([
                     confirm: function (fileName) {
                         this.save(record, fileName, config.downloadPreviewUrl);
                     }.bind(this)
-                }
+                },
+                buttons: [{
+                    text: $.mage.__('Cancel'),
+                    class: 'action-secondary action-dismiss'
+                }, {
+                    text: $.mage.__('Confirm'),
+                    class: 'action-primary action-accept'
+                }]
             });
         },
 
@@ -390,7 +426,7 @@ define([
          */
         save: function (record, fileName, actionURI) {
             var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record);
 
             $(config.adobeStockModalSelector).trigger('processStart');
 
@@ -404,6 +440,8 @@ define([
                 },
                 context: this,
                 success: function () {
+                    record.is_downloaded(1);
+                    record.path = destinationPath;
                     $(config.adobeStockModalSelector).trigger('processStop');
                     $(config.adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
@@ -423,9 +461,13 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            var imageType = record.content_type.match(/[^/]{1,4}$/),
-                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
-            return imageName + '.' + imageType;
+            var imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return imageName;
+        },
+
+        getImageExtension: function (record) {
+            var imageType = record.content_type.match(/[^/]{1,4}$/);
+            return imageType;
         },
 
         /**
@@ -465,17 +507,35 @@ define([
                     context: this,
 
                     success: function (response) {
-                        var quotaInfo = response.result.message;
-                        var confirmationContent = $.mage.__('License "' + record.title + '"');
+                        var quota = response.result.quota,
+                            confirmationContent = $.mage.__('License "' + record.title + '"');
                         $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
-                            content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
+                            content: confirmationContent + '<p><b>' + quotaMessage + '</b></p>',
                             actions: {
                                 confirm: function () {
-                                    licenseAndSave(record);
+                                    if (quota > 0) {
+                                        licenseAndSave(record);
+                                    } else {
+                                        window.open(config.buyCreditsUrl);
+                                    }
                                 }
-                            }
+                            },
+                            buttons: [{
+                                text: $.mage.__('Cancel'),
+                                class: 'action-secondary action-dismiss',
+                                click: function () {
+                                    this.closeModal();
+                                }
+                            }, {
+                                text: quota > 0 ? $.mage.__('OK') : $.mage.__('Buy Credits'),
+                                class: 'action-primary action-accept',
+                                click: function () {
+                                    this.closeModal();
+                                    this.options.actions.confirm();
+                                }
+                            }]
                         })
                     },
 

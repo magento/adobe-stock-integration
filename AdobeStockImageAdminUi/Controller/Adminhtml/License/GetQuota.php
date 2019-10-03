@@ -77,7 +77,7 @@ class GetQuota extends Action
                     'message' => $quota->getMessage(),
                     'credits' => $quota->getCredits(),
                     'images' => $quota->getImages()
-                ],
+                ]
             ];
 
         } catch (\Exception $exception) {

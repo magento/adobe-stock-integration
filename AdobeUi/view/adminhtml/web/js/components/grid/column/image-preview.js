@@ -15,8 +15,8 @@ define([
             visibility: [],
             height: 0,
             lastOpenedImage: null,
-            imports: {
-                records: '${ $.provider }:data.items'
+            modules: {
+                masonry: '${ $.parentName }'
             }
         },
 
@@ -26,7 +26,7 @@ define([
          * @param record
          */
         next: function (record) {
-            var recordToShow = this.records[record._rowIndex + 1];
+            var recordToShow = this.getRecord(record._rowIndex + 1);
             recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
             this.show(recordToShow);
         },
@@ -37,9 +37,20 @@ define([
          * @param record
          */
         prev: function (record) {
-            var recordToShow = this.records[record._rowIndex - 1];
+            var recordToShow = this.getRecord(record._rowIndex - 1);
             recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
             this.show(recordToShow);
+        },
+
+        /**
+         * Get record
+         *
+         * @param {Integer} recordIndex
+         *
+         * @return {Object}
+         */
+        getRecord: function (recordIndex) {
+            return this.masonry().rows()[recordIndex];
         },
 
         /**
