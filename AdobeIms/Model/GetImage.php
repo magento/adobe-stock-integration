@@ -18,10 +18,6 @@ use Psr\Log\LoggerInterface;
  */
 class GetImage implements GetImageInterface
 {
-    /**
-     * Logout url pattern.
-     */
-    private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_stock/integration/image_url';
 
     /**
      * @var LoggerInterface
@@ -48,10 +44,6 @@ class GetImage implements GetImageInterface
      */
     private $json;
 
-    /**
-     * @var string $defaultImage
-     */
-    private $defaultImage;
 
     /**
      * @param LoggerInterface $logger
@@ -59,22 +51,19 @@ class GetImage implements GetImageInterface
      * @param CurlFactory $curlFactory
      * @param Config $config
      * @param Json $json
-     * @param string $defaultImage
      */
     public function __construct(
         LoggerInterface $logger,
         ScopeConfigInterface $scopeConfig,
         CurlFactory $curlFactory,
         Config $config,
-        Json $json,
-        string $defaultImage = ''
+        Json $json
     ) {
         $this->logger = $logger;
         $this->scopeConfig = $scopeConfig;
         $this->curlFactory = $curlFactory;
         $this->config = $config;
         $this->json = $json;
-        $this->defaultImage = $defaultImage;
     }
 
     /**
@@ -88,28 +77,15 @@ class GetImage implements GetImageInterface
             $curl->addHeader('Authorization:', 'Bearer' . $accessToken);
             $curl->addHeader('cache-control', 'no-cache');
 
-            $curl->get($this->getUserImageUrl());
+            $curl->get($this->config->getUserImageUrl());
             $result = $this->json->unserialize($curl->getBody());
-            $this->defaultImage = $result['user']['images'][$size];
+            $image = $result['user']['images'][$size];
 
         } catch (\Exception $e) {
+            $image = $this->config->getDefaultProfileImage();
             $this->logger->critical('Error during get adobe stock user image operation: ' . $e->getMessage());
         }
 
-        return $this->defaultImage;
-    }
-
-    /**
-     * Return image url for AdobeSdk.
-     *
-     * @return string
-     */
-    private function getUserImageUrl()
-    {
-        return str_replace(
-            ['#{api_key}'],
-            [$this->config->getApiKey()],
-            $this->scopeConfig->getValue(self::XML_PATH_IMAGE_URL_PATTERN)
-        );
+        return $image;
     }
 }

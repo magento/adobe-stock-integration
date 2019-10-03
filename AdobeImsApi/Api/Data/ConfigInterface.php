@@ -36,6 +36,13 @@ interface ConfigInterface
     public function getTokenUrl(): string;
 
     /**
+     * Returns default profile image.
+     *
+     * @return string
+     */
+    public function getDefaultProfileImage(): string;
+
+    /**
      * Retrieve auth URL
      *
      * @return string
@@ -57,4 +64,11 @@ interface ConfigInterface
      * @return string
      */
     public function getLogoutUrl(string $accessToken, string $redirectUrl = '') : string;
+
+    /**
+     * Return image url for AdobeSdk.
+     *
+     * @return string
+     */
+    public function getUserImageUrl(): string;
 }
