@@ -84,7 +84,7 @@ define([
                 stopWatcherId = setTimeout(function () {
                     stopHandle();
                     reject(new Error('Time\'s up.'));
-                }, config.login.popupWindowTimeout || 10000);
+                }, config.login.popupWindowTimeout || 60000);
 
                 responseData = authWindow.document.body.innerText.match(
                     config.login.callbackParsingParams.regexpPattern
