@@ -31,6 +31,7 @@ define([
 
             config.downloadPreviewUrl = this.downloadPreviewUrl;
             config.licenseAndDownloadUrl = this.licenseAndDownloadUrl;
+            config.buyCreditsUrl = this.buyCreditsUrl;
             config.quotaUrl = this.quotaUrl;
             config.relatedImagesUrl = this.relatedImagesUrl;
 

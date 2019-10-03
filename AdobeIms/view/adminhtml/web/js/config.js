@@ -25,7 +25,7 @@ define([], function () {
                 top: 100,
                 left: 300
             },
-            popupWindowTimeout: 10000
+            popupWindowTimeout: 60000
         }
     };
 });

@@ -507,17 +507,36 @@ define([
                     context: this,
 
                     success: function (response) {
-                        var quotaInfo = response.result;
+                        var quota = response.result.quota;
+                        var quotaMessage = response.result.message;
                         var confirmationContent = $.mage.__('License "' + record.title + '"');
                         $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
-                            content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
+                            content: confirmationContent + '<p><b>' + quotaMessage + '</b></p>',
                             actions: {
                                 confirm: function () {
-                                    licenseAndSave(record);
+                                    if (quota > 0) {
+                                        licenseAndSave(record);
+                                    } else {
+                                        window.open(config.buyCreditsUrl);
+                                    }
                                 }
-                            }
+                            },
+                            buttons: [{
+                                text: $.mage.__('Cancel'),
+                                class: 'action-secondary action-dismiss',
+                                click: function () {
+                                    this.closeModal();
+                                }
+                            }, {
+                                text: quota > 0 ? $.mage.__('OK') : $.mage.__('Buy Credits'),
+                                class: 'action-primary action-accept',
+                                click: function () {
+                                    this.closeModal();
+                                    this.options.actions.confirm();
+                                }
+                            }]
                         })
                     },
 
