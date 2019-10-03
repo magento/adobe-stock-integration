@@ -7,7 +7,7 @@
 namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
 use AdobeStock\Api\Models\SearchParameters;
-use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
+use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
@@ -20,7 +20,6 @@ class Premium implements SearchParameterProviderInterface
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {
-        $searchParams->setFilterPremium('ALL');
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'premium_price_filter') {

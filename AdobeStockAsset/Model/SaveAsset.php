@@ -11,6 +11,7 @@ use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -19,7 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * Service for saving asset
  */
-class SaveAsset
+class SaveAsset implements SaveAssetInterface
 {
     /**
      * @var AssetRepositoryInterface
@@ -54,10 +55,7 @@ class SaveAsset
     }
 
     /**
-     * Save asset
-     *
-     * @param AssetInterface $asset
-     * @throws AlreadyExistsException
+     * @inheritdoc
      */
     public function execute(AssetInterface $asset): void
     {

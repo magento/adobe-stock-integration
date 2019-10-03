@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockImage\Model\GetRelatedImages;
+use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -30,7 +30,7 @@ class RelatedImages extends Action
     const HTTP_INTERNAL_ERROR = 500;
 
     /**
-     * @var GetRelatedImages
+     * @var GetRelatedImagesInterface
      */
     private $getRelatedImages;
 
@@ -43,12 +43,12 @@ class RelatedImages extends Action
      * RelatedImages constructor.
      *
      * @param Action\Context $context
-     * @param GetRelatedImages $getRelatedImages
+     * @param GetRelatedImagesInterface $getRelatedImages
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        GetRelatedImages $getRelatedImages,
+        GetRelatedImagesInterface $getRelatedImages,
         LoggerInterface $logger
     ) {
         parent::__construct($context);

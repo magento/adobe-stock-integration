@@ -319,6 +319,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Sets image URL
      *
      * @param string $url
+     * @return void
      */
     public function setUrl(string $url): void;
 

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAsset\Model\SaveAsset;
+use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -31,7 +31,7 @@ class SaveImage implements SaveImageInterface
     private $logger;
 
     /**
-     * @var SaveAsset
+     * @var SaveAssetInterface
      */
     private $saveAsset;
 
@@ -41,14 +41,13 @@ class SaveImage implements SaveImageInterface
     private $client;
 
     /**
-     * SaveImagePreview constructor.
-     * @param SaveAsset $saveAsset
+     * @param SaveAssetInterface $saveAsset
      * @param Storage $storage
      * @param LoggerInterface $logger
      * @param ClientInterface $client
      */
     public function __construct(
-        SaveAsset $saveAsset,
+        SaveAssetInterface $saveAsset,
         Storage $storage,
         LoggerInterface $logger,
         ClientInterface $client
@@ -65,7 +64,7 @@ class SaveImage implements SaveImageInterface
     public function execute(AssetInterface $asset, string $destinationPath): void
     {
         try {
-            $path = $this->storage->save($asset->getUrl(), $destinationPath);
+            $path = $this->storage->save($this->getUrl($asset), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset->execute($asset);
         } catch (\Exception $exception) {
@@ -73,5 +72,19 @@ class SaveImage implements SaveImageInterface
             $this->logger->critical($message);
             throw new CouldNotSaveException($message);
         }
+    }
+
+    /**
+     * Get full image url if asset is licensed or preview image url if not
+     *
+     * @param AssetInterface $asset
+     * @return string
+     */
+    private function getUrl(AssetInterface $asset): string
+    {
+        if ($asset->isLicensed() && $asset->getUrl()) {
+            return $asset->getUrl();
+        }
+        return $asset->getPreviewUrl();
     }
 }

@@ -16,11 +16,10 @@ use Psr\Log\LoggerInterface;
 use Magento\AdobeStockImage\Model\GetRelatedImages;
 
 /**
- * Test for GetRelatedSeries Model
+ * Test for GetRelatedImages Model
  */
-class GetRelatedSeriesTest extends TestCase
+class GetRelatedImagesTest extends TestCase
 {
-
     /**
      * @var MockObject|GetImageListInterface $getImageListInterface
      */
