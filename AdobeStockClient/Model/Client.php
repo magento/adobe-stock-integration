@@ -11,6 +11,7 @@ namespace Magento\AdobeStockClient\Model;
 use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Exception\StockApi;
+use AdobeStock\Api\Models\LicensePurchaseOptions;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
@@ -20,7 +21,6 @@ use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
-use Magento\AdobeStockClient\Model\StockFileToDocument;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
@@ -235,9 +235,15 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getQuotaConfirmationMessage(int $contentId): string
+    public function getQuotaInformation(int $contentId): array
     {
-        return $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
+        $licenseInfo = $this->getLicenseInfo($contentId);
+        $quota = $licenseInfo->getEntitlement()->getQuota();
+
+        return [
+            'message' => $licenseInfo->getPurchaseOptions()->getMessage(),
+            'quota' => $quota
+        ];
     }
 
     /**
