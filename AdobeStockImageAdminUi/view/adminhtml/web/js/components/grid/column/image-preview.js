@@ -508,7 +508,8 @@ define([
 
                     success: function (response) {
                         var quota = response.result.quota,
-                            confirmationContent = $.mage.__('License "' + record.title + '"');
+                            confirmationContent = $.mage.__('License "' + record.title + '"'),
+                            quotaMessage = response.result.message;
                         $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
