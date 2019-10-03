@@ -113,7 +113,7 @@ class Callback extends Action
             $userProfile = $this->getUserProfile();
             $userProfile->setName($tokenResponse->getName());
             $userProfile->setEmail($tokenResponse->getEmail());
-            $userProfile->setImage($userImage->getImages()[100]);
+            $userProfile->setImage($userImage);
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());

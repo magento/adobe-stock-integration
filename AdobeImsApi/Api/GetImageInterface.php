@@ -22,8 +22,8 @@ interface GetImageInterface
      * Retrieve user image from Adobe IMS
      *
      * @param string $accessToken
-     * @return UserImageInterface
-     * @throws AuthorizationException
+     * @param int $size
+     * @return string
      */
-    public function execute(string $accessToken): UserImageInterface;
+    public function execute(string $accessToken, int $size = 276): string;
 }

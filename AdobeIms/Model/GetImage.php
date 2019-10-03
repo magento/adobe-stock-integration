@@ -7,16 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
-use Magento\AdobeImsApi\Api\Data\UserImageInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\GetImageInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\AuthorizationException;
-use Magento\AdobeImsApi\Api\GetImageInterface;
-use Magento\AdobeImsApi\Api\Data\UserImageInterfaceFactory;
 
 /**
  * Get user image profile.
@@ -59,9 +55,9 @@ class GetImage implements GetImageInterface
     private $json;
 
     /**
-     * @var UserImageInterfaceFactory
+     * @var string $defaultImage
      */
-    private $userImageFactory;
+    private $defaultImage;
 
     /**
      * @param UserContextInterface $userContext
@@ -70,7 +66,7 @@ class GetImage implements GetImageInterface
      * @param CurlFactory $curlFactory
      * @param Config $config
      * @param Json $json
-     * @param UserImageInterfaceFactory $userImageInterfaceFactory
+     * @param string $defaultImage
      */
     public function __construct(
         UserContextInterface $userContext,
@@ -79,7 +75,7 @@ class GetImage implements GetImageInterface
         CurlFactory $curlFactory,
         Config $config,
         Json $json,
-        UserImageInterfaceFactory $userImageInterfaceFactory
+        string $defaultImage = ''
     ) {
         $this->userContext = $userContext;
         $this->logger = $logger;
@@ -87,37 +83,29 @@ class GetImage implements GetImageInterface
         $this->curlFactory = $curlFactory;
         $this->config = $config;
         $this->json = $json;
-        $this->userImageFactory = $userImageInterfaceFactory;
+        $this->defaultImage = $defaultImage;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(string $accessToken): UserImageInterface
+    public function execute(string $accessToken, int $size = 276): string
     {
         try {
             $curl = $this->curlFactory->create();
             $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
             $curl->addHeader('Authorization:', 'Bearer' . $accessToken);
             $curl->addHeader('cache-control', 'no-cache');
+
             $curl->get($this->getUserImageUrl());
+            $result = $this->json->unserialize($curl->getBody());
+            $this->defaultImage = $result['user']['images'][$size];
 
-                $result = $this->json->unserialize($curl->getBody());
-                $response = $result['user']['images'];
-
-            $response = $this->userImageFactory->create()
-                ->addData(is_array($response) ? ['images' => $response] : ['error' => __('The response is empty.')]);
-
-            if (empty($response->getImages())) {
-                throw new AuthorizationException(
-                    __('Authentication is failing. Error code: %1', $response->getError())
-                );
-            }
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Error during get adobe stock user image operation: ' . $e->getMessage());
         }
 
-        return $response;
+        return $this->defaultImage;
     }
 
     /**
