@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\GetQuota;
-use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 
 /**
  * Get quota test.
@@ -112,15 +113,23 @@ class GetQuotaTest extends TestCase
      */
     public function testExecute()
     {
-        $this->clientInterfaceMock->expects($this->once())
-            ->method('getQuotaInformation')
-            ->with(283415387)
-            ->willReturn(['message' => 'You have 0 licenses. Purchase on Adobe Stock?']);
+        /** @var UserQuotaInterface|MockObject $quotaInterface */
+        $quotaInterface = $this->createMock(UserQuotaInterface::class);
+        $quotaInterface->expects($this->once())->method('getMessage')->willReturn('message');
+        $quotaInterface->expects($this->once())->method('getImages')->willReturn(2);
+        $quotaInterface->expects($this->once())->method('getCredits')->willReturn(1);
+
         $data = [
             'success' => true,
-            'error_message' => '',
-            'result' => ['message' => 'You have 0 licenses. Purchase on Adobe Stock?']
+            'result' => [
+                'message' => 'message',
+                'credits' => 1,
+                'images' => 2
+            ]
         ];
+        $this->clientInterfaceMock->expects($this->once())
+            ->method('getQuota')
+            ->willReturn($quotaInterface);
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($data));
@@ -137,7 +146,7 @@ class GetQuotaTest extends TestCase
             'message' => new Phrase('An error occurred during get quota operation. Contact support.')
         ];
         $this->clientInterfaceMock->expects($this->once())
-            ->method('getQuotaInformation')
+            ->method('getQuota')
             ->willThrowException(new \Exception());
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->jsonObject->expects($this->once())->method('setData')
