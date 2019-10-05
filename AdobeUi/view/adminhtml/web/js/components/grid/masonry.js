@@ -68,11 +68,9 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
-
             if (!rows || !rows.length) {
                 return;
             }
-
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
@@ -86,7 +84,7 @@ define([
          */
         setEventListener: function () {
             var running = false,
-                handler = function() {
+                handler = function () {
                     this.containerWidth = window.innerWidth;
                     this.setLayoutStyles();
                 }.bind(this);
@@ -112,7 +110,7 @@ define([
         /**
          * Set layout styles inside the container
          */
-        setLayoutStyles: function() {
+        setLayoutStyles: function () {
             var containerWidth = parseInt(this.container.clientWidth, 10) - this.imageMargin,
                 row = [],
                 ratio = 0,
@@ -124,7 +122,7 @@ define([
 
             this.setMinRatio();
 
-            this.rows().forEach(function(image, index) {
+            this.rows().forEach(function (image, index) {
                 ratio += parseFloat((image.width / image.height).toFixed(2));
                 row.push(image);
 
@@ -134,7 +132,7 @@ define([
                     rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
                     isBottom = index + 1 === this.rows().length;
 
-                    row.forEach(function(img) {
+                    row.forEach(function (img) {
                         imageWidth = rowHeight * (img.width / img.height).toFixed(2);
                         this.setImageStyles(img, imageWidth, rowHeight);
                         this.setImageClass(img, {
@@ -149,6 +147,29 @@ define([
                     ratio = 0;
                     imageRowNumber++;
                 }
+            }.bind(this));
+        },
+
+        /**
+         * Wait for container to initialize
+         */
+        waitForContainer: function (callback) {
+            console.log(this.container);
+            if (typeof this.container === "undefined") {
+                setTimeout(function () {
+                    this.waitForContainer(callback);
+                }.bind(this), 500);
+            } else {
+                callback();
+            }
+        },
+
+        /**
+         * Set layout styles when container element is loaded.
+         */
+        setLayoutStylesWhenLoaded: function () {
+            this.waitForContainer(function () {
+                this.setLayoutStyles();
             }.bind(this));
         },
 
@@ -174,7 +195,7 @@ define([
          * @param {Object} img
          * @param {Object} classes
          */
-        setImageClass: function(img, classes){
+        setImageClass: function (img, classes) {
             if (!img.css) {
                 img.css = ko.observable(classes);
             }
@@ -184,7 +205,7 @@ define([
         /**
          * Set min ratio for images in layout
          */
-        setMinRatio: function() {
+        setMinRatio: function () {
             if (this.containerWidth <= 640) {
                 this.minRatio = 3;
             } else if (this.containerWidth <= 1280) {
