@@ -7,7 +7,7 @@
  */
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
 ?>
-<div data-bind="scope: 'adobe-login'" class="scalable">
+<div data-bind="scope: 'adobe-login'" class="adobe-login-container">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
 <script type="text/x-magento-init">
@@ -19,10 +19,13 @@ use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
                         "component": "Magento_AdobeStockAdminUi/js/signIn",
                         "template": "Magento_AdobeStockAdminUi/signIn",
                         "profileUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/profile') ?>",
-                        "userName": "<?= $block->escapeJs($block->getName()) ?>",
-                        "userEmail": "<?= $block->escapeJs($block->getEmail()) ?>",
                         "logoutUrl": "<?= /* @noEscape */ $block->getUrl('adobe_ims/user/logout') ?>",
-                        "isAuthorized": "<?= /* @noEscape */ $block->isAuthorizedJson() ?>",
+                        "user": {
+                            "isAuthorized": <?= /* @noEscape */ $block->isAuthorizedJson() ?>,
+                            "name": "<?= $block->escapeJs($block->getName()) ?>",
+                            "email": "<?= $block->escapeJs($block->getEmail()) ?>",
+                            "image": "<?= $block->escapeJs($block->getImage()) ?>"
+                        },
                         "loginConfig": {
                             "url": "<?= $block->escapeJs($block->getAuthUrl()) ?>",
                             "callbackParsingParams": {

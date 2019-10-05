@@ -13,10 +13,9 @@ define([
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html',
-    'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
     'mage/backend/tabs'
-], function (_, $, ko, translate, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, user, config) {
+], function (_, $, ko, translate, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, config) {
     'use strict';
 
     return imagePreview.extend({
@@ -556,20 +555,9 @@ define([
          * @param {Object} record
          */
         licenseProcess: function (record) {
-            if (user.isAuthorized()) {
-                this.showLicenseConfirmation(record);
-
-                return;
-            }
-
-            /**
-             * Opens authorization window of Adobe Stock
-             * then starts the authorization process
-             */
             this.login().login()
-                .then(function (result) {
-                    this.licenseProcess(record);
-                    messages.add('success', result.lastAuthSuccessMessage);
+                .then(function () {
+                    this.showLicenseConfirmation(record);
                 }.bind(this))
                 .catch(function (error) {
                     messages.add('error', error.message);

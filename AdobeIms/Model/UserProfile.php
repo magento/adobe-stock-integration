@@ -66,6 +66,22 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getImage(): ?string
+    {
+        return $this->getData(self::IMAGE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setImage(string $value): void
+    {
+        $this->setData(self::IMAGE, $value);
+    }
+
+    /**
      * @inheritdoc
      */
     public function setEmail(string $value): void

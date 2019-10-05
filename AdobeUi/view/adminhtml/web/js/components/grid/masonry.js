@@ -47,7 +47,7 @@ define([
              * Maximum image height value
              * @param int
              */
-            maxImageHeight: 240,
+            maxImageHeight: 240
         },
 
         /**
@@ -59,6 +59,7 @@ define([
                 .observe([
                     'rows'
                 ]);
+
             return this;
         },
 
@@ -76,6 +77,7 @@ define([
 
             this.setLayoutStyles();
             this.setEventListener();
+
             return this;
         },
 
