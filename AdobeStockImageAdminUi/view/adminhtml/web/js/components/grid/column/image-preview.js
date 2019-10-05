@@ -71,13 +71,14 @@ define([
                 record.model = ko.observable([]);
             }
 
-            if (!record.selectedSeries) {
-                record.selectedSeries = ko.observable(null);
+            if (!record.selectedRelated) {
+                record.selectedRelated = ko.observable(null);
             }
 
             record.keywordsLimit = ko.observable(this.keywordsLimit);
             record.canViewMoreKeywords = ko.observable(true);
-            record.selectedSeries(null);
+            record.selectedRelated(null);
+            record.selectedRelatedType = null;
         },
 
         /**
@@ -108,43 +109,43 @@ define([
         },
 
         /**
-         * Next series preview
+         * Next related image preview
          *
-         * @param {Object} currentSeries
          * @param {Object} record
          *
          * @return {void}
          */
-        nextSeries: function (currentSeries, record) {
-            var seriesList = record.series(),
-                nextSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) + 1,
-                nextSeries = seriesList[nextSeriesIndex];
+        nextRelated: function (record) {
+            var relatedList = record.selectedRelatedType === 'series' ? record.series() : record.model(),
+                currentRelated = record.selectedRelated(),
+                nextRelatedIndex = _.findLastIndex(relatedList, {id: currentRelated.id}) + 1,
+                nextRelated = relatedList[nextRelatedIndex];
 
-            if (typeof nextSeries === 'undefined') {
+            if (typeof nextRelated === 'undefined') {
                 return;
             }
 
-            this.switchImagePreviewToSeriesImage(nextSeries, record);
+            this.switchImagePreviewToRelatedImage(nextRelated, record);
         },
 
         /**
-         * Previous series preview
+         * Previous related preview
          *
-         * @param {Object} currentSeries
          * @param {Object} record
          *
          * @return {void}
          */
-        prevSeries: function (currentSeries, record) {
-            var seriesList = record.series(),
-                prevSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) - 1,
-                prevSeries = seriesList[prevSeriesIndex];
+        prevRelated: function (record) {
+            var relatedList = record.selectedRelatedType === 'series' ? record.series() : record.model(),
+                currentRelated = record.selectedRelated(),
+                prevRelatedIndex = _.findLastIndex(relatedList, {id: currentRelated.id}) - 1,
+                prevRelated = relatedList[prevRelatedIndex];
 
-            if (typeof prevSeries === 'undefined') {
+            if (typeof prevRelated === 'undefined') {
                 return;
             }
 
-            this.switchImagePreviewToSeriesImage(prevSeries, record);
+            this.switchImagePreviewToRelatedImage(prevRelated, record);
         },
 
         /**
@@ -593,24 +594,24 @@ define([
         /**
          * Get previous button disabled
          *
-         * @param {Object|null} currentSeries
          * @param {Object} record
          *
          * @return {Boolean}
          */
-        getPreviousSeriesButtonDisabled: function (currentSeries, record) {
-            var seriesList = record.series(),
-                prevSeriesIndex = 0,
-                prevSeries = null;
+        getPreviousRelatedButtonDisabled: function (record) {
+            var relatedList = record.selectedRelatedType === 'series' ? record.series() : record.model(),
+                currentRelated = record.selectedRelated(),
+                prevRelatedIndex,
+                prevRelated;
 
-            if (!currentSeries) {
+            if (!currentRelated || !record.selectedRelatedType) {
                 return true;
             }
 
-            prevSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) - 1;
-            prevSeries = seriesList[prevSeriesIndex];
+            prevRelatedIndex = _.findLastIndex(relatedList, {id: currentRelated.id}) - 1;
+            prevRelated = relatedList[prevRelatedIndex];
 
-            if (typeof prevSeries === 'undefined') {
+            if (typeof prevRelated === 'undefined') {
                 return true;
             }
 
@@ -620,24 +621,24 @@ define([
         /**
          * Get next button disabled
          *
-         * @param {Object|null} currentSeries
          * @param {Object} record
          *
          * @return {Boolean}
          */
-        getNextSeriesButtonDisabled: function (currentSeries, record) {
-            var seriesList = record.series(),
-                nextSeriesIndex = 0,
-                nextSeries = null;
+        getNextRelatedButtonDisabled: function (record) {
+            var relatedList = record.selectedRelatedType === 'series' ? record.series() : record.model(),
+                currentRelated = record.selectedRelated(),
+                nextRelatedIndex,
+                nextRelated;
 
-            if (!currentSeries) {
+            if (!currentRelated || !record.selectedRelatedType) {
                 return true;
             }
 
-            nextSeriesIndex = _.findLastIndex(seriesList, {id: currentSeries.id}) + 1;
-            nextSeries = seriesList[nextSeriesIndex];
+            nextRelatedIndex = _.findLastIndex(relatedList, {id: currentRelated.id}) + 1;
+            nextRelated = relatedList[nextRelatedIndex];
 
-            if (typeof nextSeries === 'undefined') {
+            if (typeof nextRelated === 'undefined') {
                 return true;
             }
 
@@ -645,31 +646,57 @@ define([
         },
 
         /**
+         * Switch image preview to related image
+         *
+         * @param {Object|null} relatedImage
+         * @param {Object} record
+         *
+         * @return {void}
+         */
+        switchImagePreviewToRelatedImage: function (relatedImage, record) {
+            if (!relatedImage) {
+                record.selectedRelated(null);
+
+                return;
+            }
+
+            if (!record.selectedRelated()) {
+                record.selectedRelated(relatedImage);
+
+                return;
+            }
+
+            if (record.selectedRelated().id === relatedImage.id) {
+                return;
+            }
+
+            record.selectedRelated(relatedImage);
+        },
+
+        /**
          * Switch image preview to series image
          *
-         * @param {Object|null} series
+         * @param {Object} series
          * @param {Object} record
          *
          * @return {void}
          */
         switchImagePreviewToSeriesImage: function (series, record) {
-            if (!series) {
-                record.selectedSeries(null);
+            record.selectedRelatedType = 'series';
+            this.switchImagePreviewToRelatedImage(series, record);
+        },
 
-                return;
-            }
-
-            if (!record.selectedSeries()) {
-                record.selectedSeries(series);
-
-                return;
-            }
-
-            if (record.selectedSeries().id === series.id) {
-                return;
-            }
-
-            record.selectedSeries(series);
-        }
+        /**
+         * Switch image preview to model image
+         *
+         * @param {Object} model
+         * @param {Object} record
+         *
+         * @return {void}
+         */
+        switchImagePreviewToModelImage: function (model, record) {
+            record.selectedRelatedType = 'model';
+            this.switchImagePreviewToRelatedImage(model, record);
+        },
     });
 });
