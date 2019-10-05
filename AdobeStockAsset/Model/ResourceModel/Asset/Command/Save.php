@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\Hydrator;
 
 /**
  * Save multiple asset service.
@@ -23,24 +24,33 @@ class Save
     private $resourceConnection;
 
     /**
+     * @var Hydrator $hydrator
+     */
+    private $hydrator;
+
+    /**
      * Save constructor.
+     *
      * @param ResourceConnection $resourceConnection
+     * @param Hydrator $hydrate
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        Hydrator $hydrate
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->hydrator = $hydrate;
     }
 
     /**
-     * Multiple save category
+     * Save asset
      *
-     * @param AssetInterface $assets
+     * @param AssetInterface $asset
      * @return void
      */
-    public function execute(AssetInterface $assets): void
+    public function execute(AssetInterface $asset): void
     {
-        $data = $assets->getData();
+        $data = $this->hydrator->extract($asset);
         $tableName = $this->resourceConnection->getTableName(
             AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
         );

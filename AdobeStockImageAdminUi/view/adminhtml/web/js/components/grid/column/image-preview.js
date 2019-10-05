@@ -6,23 +6,29 @@ define([
     'underscore',
     'jquery',
     'knockout',
-    'Magento_AdobeIms/js/action/authorization',
     'mage/translate',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
+    'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
+    'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html',
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
-], function (_, $, ko, authorizationAction, translate, imagePreview, messages, confirmation, prompt, user, config) {
+    'mage/backend/tabs'
+], function (_, $, ko, translate, authorizationAction, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, user, config) {
     'use strict';
 
     return imagePreview.extend({
         defaults: {
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
+            filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             inputValue: '',
             chipInputValue: '',
+            serieFilterValue: '',
+            modelFilterValue: '',
             keywordsLimit: 5,
             saveAvailable: true,
             searchValue: null,
@@ -30,7 +36,9 @@ define([
             statefull: {
                 visible: true,
                 sorting: true,
-                lastOpenedImage: true
+                lastOpenedImage: true,
+                serieFilterValue: true,
+                modelFilterValue: true
             },
             tracks: {
                 lastOpenedImage: true
@@ -38,40 +46,60 @@ define([
             modules: {
                 thumbnailComponent: '${ $.parentName }.thumbnail_url',
                 chips: '${ $.chipsProvider }',
-                searchChips: '${ $.searchChipsProvider }'
+                searchChips: '${ $.searchChipsProvider }',
+                filterChips: '${ $.filterChipsProvider }'
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
-                '${ $.provider }:params.search': 'hide',
+                '${ $.provider }:params.search': 'hide'
             },
             exports: {
                 inputValue: '${ $.provider }:params.search',
+                serieFilterValue: '${ $.provider }:params.filters.serie_id',
+                modelFilterValue: '${ $.provider }:params.filters.model_id',
                 chipInputValue: '${ $.searchChipsProvider }:value'
             }
+        },
+
+        /**
+         *
+         * @param {Object} record
+         * @private
+         */
+        _initRecord: function (record) {
+            if (!record.model || !record.series) {
+                record.series = ko.observable([]);
+                record.model = ko.observable([]);
+            }
+            record.keywordsLimit = ko.observable(this.keywordsLimit);
+            record.canViewMoreKeywords = ko.observable(true);
         },
 
         /**
          * @inheritDoc
          */
         next: function (record) {
-            this._super();
             this.hideAllKeywords(record);
+            this._super(record);
         },
 
         /**
          * @inheritDoc
          */
         prev: function (record) {
-            this._super();
             this.hideAllKeywords(record);
+            this._super(record);
         },
 
         /**
          * @inheritDoc
          */
-        hide: function (record) {
-            this._super();
+        show: function(record) {
+            this._initRecord(record);
             this.hideAllKeywords(record);
+            this._super(record);
+            this.loadRelatedImages(record);
+            this._updateHeight();
         },
 
         /**
@@ -84,7 +112,9 @@ define([
                     'visibility',
                     'height',
                     'inputValue',
-                    'chipInputValue'
+                    'chipInputValue',
+                    'serieFilterValue',
+                    'modelFilterValue'
                 ]);
             this.height.subscribe(function () {
                 this.thumbnailComponent().previewHeight(this.height());
@@ -98,18 +128,21 @@ define([
          *
          * @param record
          */
-        requestSeries: function (record) {
+        loadRelatedImages: function (record) {
             $.ajax({
                 type: 'GET',
-                url: config.seriesUrl,
+                url: config.relatedImagesUrl,
                 dataType: 'json',
+                showLoader: true,
                 data: {
-                    'serie_id': record.id,
+                    'image_id': record.id,
                     'limit': 4
-                },
+                }
             }).done(function (data) {
-                record.series(data.result.series);
-            });
+                record.series(data.result.same_series);
+                record.model(data.result.same_model);
+                this._updateHeight();
+            }.bind(this));
         },
 
         /**
@@ -186,12 +219,39 @@ define([
          * @returns {*[]}
          */
         getSeries: function (record) {
-            if (!record.series) {
-                record.series = ko.observableArray([]);
-                this.requestSeries(record);
-                this._updateHeight();
-            }
             return record.series;
+        },
+
+        /**
+         * Returns model to display under the image
+         *
+         * @param record
+         * @returns {*[]}
+         */
+        getModel: function (record) {
+            return record.model;
+        },
+
+        /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromSeries: function(record) {
+            this.serieFilterValue(record.id);
+            this.filterChips().set('applied', {'serie_id' : record.id.toString()})
+        },
+
+        /**
+         * Filter images from serie_id
+         *
+         * @param record
+         * @returns {*}
+         */
+        seeMoreFromModel: function(record) {
+            this.modelFilterValue(record.id);
+            this.filterChips().set('applied', {'model_id' : record.id.toString()})
         },
 
         /**
@@ -225,6 +285,8 @@ define([
          */
         viewAllKeywords: function (record) {
             record.keywordsLimit(record.keywords.length);
+            record.canViewMoreKeywords(false);
+            this._updateHeight();
         },
 
         /**
@@ -234,11 +296,8 @@ define([
          * @returns {*}
          */
         hideAllKeywords: function (record) {
-            if (record.canViewMoreKeywords && !record.canViewMoreKeywords()) {
-                record.keywordsLimit(this.keywordsLimit);
-                record.canViewMoreKeywords(true);
-            }
-
+            record.keywordsLimit(this.keywordsLimit);
+            record.canViewMoreKeywords(true);
         },
 
         /**
@@ -250,9 +309,6 @@ define([
         canViewMoreKeywords: function (record) {
             if (!record.canViewMoreKeywords) {
                 record.canViewMoreKeywords = ko.observable(true);
-            }
-            if (record.keywordsLimit() >= record.keywords.length) {
-                record.canViewMoreKeywords(false);
             }
             return record.canViewMoreKeywords();
         },
@@ -267,18 +323,17 @@ define([
         },
 
         /**
-         * Returns visibility for given record.
+         * Returns is_downloaded flag as observable for given record
          *
-         * @param {Object} record
-         * @return {*|boolean}
+         * @param record
+         * @returns {observable}
          */
-        isVisible: function (record) {
-            if (this.lastOpenedImage === record._rowIndex &&
-                (this.visibility()[record._rowIndex] === undefined || this.visibility()[record._rowIndex] === false)
-            ) {
-                this.show(record);
+        isDownloaded: function(record) {
+            if (!ko.isObservable((record.is_downloaded))){
+                record.is_downloaded = ko.observable(record.is_downloaded);
             }
-            return this.visibility()[record._rowIndex] || false;
+
+            return record.is_downloaded;
         },
 
         /**
@@ -309,6 +364,16 @@ define([
         },
 
         /**
+         * Locate downloaded image in media browser
+         *
+         * @param record
+         */
+        locate: function (record) {
+            $(config.adobeStockModalSelector).trigger('closeModal');
+            mediaGallery.locate(record.path);
+        },
+
+        /**
          * Save preview
          *
          * @param {Object} record
@@ -319,6 +384,9 @@ define([
                 title: 'Save Preview',
                 content: 'File Name',
                 value: this.generateImageName(record),
+                imageExtension: this.getImageExtension(record),
+                promptContentTmpl : adobePromptContentTmpl,
+                modalClass: 'adobe-stock-save-preview-prompt',
                 validation: true,
                 promptField: '[data-role="promptField"]',
                 validationRules: ['required-entry'],
@@ -337,7 +405,14 @@ define([
                     confirm: function (fileName) {
                         this.save(record, fileName, config.downloadPreviewUrl);
                     }.bind(this)
-                }
+                },
+                buttons: [{
+                    text: $.mage.__('Cancel'),
+                    class: 'action-secondary action-dismiss'
+                }, {
+                    text: $.mage.__('Confirm'),
+                    class: 'action-primary action-accept'
+                }]
             });
         },
 
@@ -351,7 +426,7 @@ define([
          */
         save: function (record, fileName, actionURI) {
             var mediaBrowser = $(config.mediaGallerySelector).data('mageMediabrowser'),
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName;
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record);
 
             $(config.adobeStockModalSelector).trigger('processStart');
 
@@ -365,6 +440,8 @@ define([
                 },
                 context: this,
                 success: function () {
+                    record.is_downloaded(1);
+                    record.path = destinationPath;
                     $(config.adobeStockModalSelector).trigger('processStop');
                     $(config.adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
@@ -384,9 +461,13 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            var imageType = record.content_type.match(/[^/]{1,4}$/),
-                imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
-            return imageName + '.' + imageType;
+            var imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return imageName;
+        },
+
+        getImageExtension: function (record) {
+            var imageType = record.content_type.match(/[^/]{1,4}$/);
+            return imageType;
         },
 
         /**
@@ -426,17 +507,36 @@ define([
                     context: this,
 
                     success: function (response) {
-                        var quotaInfo = response.result;
+                        var quota = response.result.quota;
+                        var quotaMessage = response.result.message;
                         var confirmationContent = $.mage.__('License "' + record.title + '"');
                         $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
-                            content: confirmationContent + '<p><b>' + quotaInfo + '</b></p>',
+                            content: confirmationContent + '<p><b>' + quotaMessage + '</b></p>',
                             actions: {
                                 confirm: function () {
-                                    licenseAndSave(record);
+                                    if (quota > 0) {
+                                        licenseAndSave(record);
+                                    } else {
+                                        window.open(config.buyCreditsUrl);
+                                    }
                                 }
-                            }
+                            },
+                            buttons: [{
+                                text: $.mage.__('Cancel'),
+                                class: 'action-secondary action-dismiss',
+                                click: function () {
+                                    this.closeModal();
+                                }
+                            }, {
+                                text: quota > 0 ? $.mage.__('OK') : $.mage.__('Buy Credits'),
+                                class: 'action-primary action-accept',
+                                click: function () {
+                                    this.closeModal();
+                                    this.options.actions.confirm();
+                                }
+                            }]
                         })
                     },
 

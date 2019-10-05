@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\Hydrator;
 
 /**
  * Save multiple category service.
@@ -23,14 +24,22 @@ class Save
     private $resourceConnection;
 
     /**
+     * @var Hydrator $hydrator
+     */
+    private $hydrator;
+
+    /**
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
+     * @param Hydrator $hydrator
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        Hydrator $hydrator
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->hydrator = $hydrator;
     }
 
     /**
@@ -41,7 +50,7 @@ class Save
      */
     public function execute(CategoryInterface $category): void
     {
-        $data = $category->getData();
+        $data = $this->hydrator->extract($category);
         $connection = $this->getConnection();
         $tableName = $this->resourceConnection->getTableName(
             CategoryResourceModel::ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME

@@ -139,6 +139,30 @@
                     <label translate="true">Isolated Assets</label>
                 </settings>
             </filterInput>
+            <filterInput name="serie_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages" provider="${ $.parentName }" sortOrder="70">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Serie Id</item>
+                        <item name="visible" xsi:type="boolean">false</item>
+                        <item name="dataScope" xsi:type="string">serie_id</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Serie Id</label>
+                </settings>
+            </filterInput>
+            <filterInput name="model_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages" provider="${ $.parentName }" sortOrder="80">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Model Id</item>
+                        <item name="visible" xsi:type="boolean">false</item>
+                        <item name="dataScope" xsi:type="string">model_id</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Model Id</label>
+                </settings>
+            </filterInput>
         </filters>
     </listingToolbar>
     <columns name="adobe_stock_images_columns" component="Magento_AdobeUi/js/components/grid/masonry">

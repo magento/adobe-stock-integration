@@ -31,8 +31,9 @@ define([
 
             config.downloadPreviewUrl = this.downloadPreviewUrl;
             config.licenseAndDownloadUrl = this.licenseAndDownloadUrl;
+            config.buyCreditsUrl = this.buyCreditsUrl;
             config.quotaUrl = this.quotaUrl;
-            config.seriesUrl = this.seriesUrl;
+            config.relatedImagesUrl = this.relatedImagesUrl;
 
             userQuota.images(this.userQuota.images);
             userQuota.credits(this.userQuota.credits);
@@ -43,7 +44,7 @@ define([
                 modalClass: 'adobe-stock-modal',
                 title: $t('Adobe Stock')
             }).on('openModal', function () {
-                this.masonry().setLayoutStyles();
+                this.masonry().setLayoutStylesWhenLoaded();
             }.bind(this)).applyBindings();
 
             return this;

@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAdminUi\Block\Adminhtml;
 
-use Magento\AdobeIms\Model\Config;
+use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
  * Adobe Stock sign in block
@@ -22,7 +23,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 class SignIn extends Template
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -42,30 +43,30 @@ class SignIn extends Template
     private $userProfileRepository;
 
     /**
-     * Json Serializer Instance
+     * JsonHexTag Serializer Instance
      *
-     * @var Json
+     * @var JsonHexTag
      */
     private $serializer;
 
     /**
      * SignIn constructor.
      *
-     * @param Config $config
-     * @param Context $context
-     * @param UserContextInterface $userContext
-     * @param UserAuthorizedInterface $userAuthorized
+     * @param ConfigInterface                $config
+     * @param Context                        $context
+     * @param UserContextInterface           $userContext
+     * @param UserAuthorizedInterface        $userAuthorized
      * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param Json $json
-     * @param array $data
+     * @param JsonHexTag                     $json
+     * @param array                          $data
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         Context $context,
         UserContextInterface $userContext,
         UserAuthorizedInterface $userAuthorized,
         UserProfileRepositoryInterface $userProfileRepository,
-        Json $json,
+        JsonHexTag $json,
         array $data = []
     ) {
         $this->config = $config;
@@ -116,6 +117,16 @@ class SignIn extends Template
     public function isAuthorizedJson(): string
     {
         return $this->isAuthorized() ? 'true' : 'false';
+    }
+
+    /**
+     * Returns response regexp pattern.
+     *
+     * @return string
+     */
+    public function getRegexpPattern(): string
+    {
+        return $this->serializer->serialize(Callback::RESPONSE_REGEXP_PATTERN);
     }
 
     /**

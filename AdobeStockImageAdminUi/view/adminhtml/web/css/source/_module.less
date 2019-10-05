@@ -8,6 +8,7 @@
     .title {
       font-weight: bold;
     }
+
     .info {
       width: ~"calc(40% - 30px)";
       float: right;
@@ -39,41 +40,133 @@
     }
 
     .keywords {
-
+      margin: 30px 0;
+      display: inline-block;
+      width: 100%;
       .title {
-        margin-top: 10px;
+        margin-bottom: 30px;
       }
 
       .keyword {
+        display: inline-block;
+        margin-right: 5px;
+        line-height: 40px;
         &.hide {
           display: none;
         }
-
-        display: inline-block;
-        margin: 15px 15px 15px 0;
-
         .value {
           font-size: 15px;
           text-transform: capitalize;
+          border: 1px solid #c6c1bb;
+          padding: 5px;
+          border-radius: 3px;
+          background-color: #f5f5f5;
+          color: #666666;
         }
+      }
+      button {
+        margin-left: 10px;
       }
     }
 
-    .series {
-      height: 120px;
+    .adobe-stock-tabs {
+      margin-top: 30px;
+    }
+
+    .adobe-stock-related-images-tab-content {
+      height: auto;
       vertical-align: middle;
-      .thumbnail {
-        display: inline-block;
-        margin: 10px 10px 10px 0;
-        img {
+      display: inline-block;
+      width: 100%;
+      .ui-tabs-panel {
+        margin-top: 30px;
+        padding: 0;
+        .thumbnail {
+          display: inline-block;
+          margin-right: 10px;
+          vertical-align: middle;
+          img {
+            max-height: 100px;
+            max-width: 150px;
+            width: auto;
+            height: auto;
+          }
+        }
+
+        .see-more-wrapper {
+          display: inline-block;
           max-height: 100px;
-          max-width: 160px;
+          text-align: center;
+          max-width: 140px;
+          vertical-align: middle;
+          width: 100%;
+          cursor: pointer;
+          .see-more-content {
+            padding: 30px;
+            .three-dots {
+              margin-bottom: 10px;
+              .dots {
+                content: "\22EE";
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                color: #fff;
+                background-color: #626160;
+                border-radius: 50%;
+                line-height: 1;
+                text-align: center;
+              }
+            }
+          }
         }
       }
-
     }
   }
 
+  //Start Save Prompt styling
+  .adobe-stock-save-preview-prompt {
+    .modal-inner-wrap {
+      max-width: 650px;
+      width: 100%;
+      .modal-header {
+        padding: 30px;
+        .modal-title {
+          margin: 0;
+        }
+        .action-close {
+          right: 30px;
+          top: 30px;
+          padding: 0;
+        }
+      }
+
+      .modal-content {
+        .prompt-message {
+          font-weight: bold;
+          margin-bottom: 15px;
+        }
+        .admin__field-wide {
+          margin-bottom: 0;
+        }
+        .image-ext {
+          position: absolute;
+          top: 0;
+          right: 0;
+          padding: 0.6rem 1rem 0.6rem;
+          color: #999;
+          cursor: default;
+        }
+      }
+      .modal-footer {
+        padding: 30px;
+        .action-dismiss {
+          margin-right: 35px;
+          color: #464646;
+        }
+      }
+    }
+  }
+  //End Save Prompt styling
   .admin__adobe-stock-image-checkbox {
     .admin__field-control._with-tooltip {
       .admin__form-field-label {
