@@ -154,7 +154,6 @@ define([
          * Wait for container to initialize
          */
         waitForContainer: function (callback) {
-            console.log(this.container);
             if (typeof this.container === "undefined") {
                 setTimeout(function () {
                     this.waitForContainer(callback);
