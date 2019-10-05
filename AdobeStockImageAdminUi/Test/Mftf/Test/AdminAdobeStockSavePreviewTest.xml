@@ -24,7 +24,7 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
     </test>

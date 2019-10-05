@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockUserReturnsToTheSameStateAfterSavingImagePreviewTest">
+    <test name="AdminAdobeStockListingStateTest">
         <annotations>
             <stories value="Admin user should be able return to the same state of image grid "/>
             <title value="Admin user should be able return to the same state of image grid after saving image preview"/>
             <description value="User returns to the same state of image grid after saving image preview. "/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -41,7 +41,7 @@
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters3"/>
         <actionGroup ref="AdminUserApplySafeSearchFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
         <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
