@@ -73,7 +73,7 @@ class GetQuota extends Action
             $responseContent = [
                 'success' => true,
                 'error_message' => '',
-                'result' => $this->client->getQuotaConfirmationMessage($contentId),
+                'result' => $this->client->getQuotaInformation($contentId)
             ];
 
         } catch (\Exception $exception) {

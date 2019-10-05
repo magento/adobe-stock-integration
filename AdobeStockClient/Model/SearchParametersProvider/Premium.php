@@ -20,7 +20,6 @@ class Premium implements SearchParameterProviderInterface
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {
-        $searchParams->setFilterPremium('ALL');
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'premium_price_filter') {
