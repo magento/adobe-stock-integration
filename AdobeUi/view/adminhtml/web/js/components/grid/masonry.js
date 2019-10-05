@@ -68,7 +68,6 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
-
             if (!rows || !rows.length) {
                 return;
             }
@@ -152,10 +151,11 @@ define([
         },
 
         /**
-         * Waits for container.
+         * Wait for container to initialize
          */
         waitForContainer: function (callback) {
-            if (this.imports.rows.length === 0 || typeof this.container === "undefined") {
+            console.log(this.container);
+            if (typeof this.container === "undefined") {
                 setTimeout(function () {
                     this.waitForContainer(callback);
                 }.bind(this), 500);
@@ -165,7 +165,7 @@ define([
         },
 
         /**
-         * Sets styles when elements are loaded.
+         * Set layout styles when container element is loaded.
          */
         setLayoutStylesWhenLoaded: function () {
             this.waitForContainer(function () {
