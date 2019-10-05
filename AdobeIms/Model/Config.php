@@ -73,11 +73,6 @@ class Config implements ConfigInterface
         return $this->scopeConfig->getValue(self::XML_PATH_TOKEN_URL);
     }
 
-    public function getDefaultProfileImage(): string
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_DEFAULT_PROFILE_IMAGE);
-    }
-
     /**
      * @inheritdoc
      */
@@ -121,14 +116,22 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getUserImageUrl(): string
+    public function getProfileImageUrl(): string
     {
         return str_replace(
             ['#{api_key}'],
             [$this->config->getApiKey()],
             $this->scopeConfig->getValue(self::XML_PATH_IMAGE_URL_PATTERN)
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDefaultProfileImage(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_DEFAULT_PROFILE_IMAGE);
     }
 }

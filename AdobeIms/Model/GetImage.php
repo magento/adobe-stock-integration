@@ -77,7 +77,7 @@ class GetImage implements GetImageInterface
             $curl->addHeader('Authorization:', 'Bearer' . $accessToken);
             $curl->addHeader('cache-control', 'no-cache');
 
-            $curl->get($this->config->getUserImageUrl());
+            $curl->get($this->config->getProfileImageUrl());
             $result = $this->json->unserialize($curl->getBody());
             $image = $result['user']['images'][$size];
 

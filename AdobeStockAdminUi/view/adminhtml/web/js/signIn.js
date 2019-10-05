@@ -3,25 +3,27 @@
  * See COPYING.txt for license details.
  */
 define([
+    'ko',
     'uiComponent',
     'jquery',
     'Magento_AdobeIms/js/action/authorization',
-    'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/user-quota',
     'Magento_AdobeStockAdminUi/js/config'
-], function (Component, $, login, user, userQuota, stockConfig) {
+], function (ko, Component, $, login, userQuota, stockConfig) {
     'use strict';
 
     return Component.extend({
 
         defaults: {
-            adobeStockModalSelector: '#adobe-stock-images-search-modal',
             profileUrl: 'adobe_ims/user/profile',
             logoutUrl: 'adobe_ims/user/logout',
-            userName: '',
-            userEmail: '',
-            image: '',
-            isAuthorized: false,
+            defaultProfileImage: 'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
+            user: {
+                isAuthorized: false,
+                name: '',
+                email: '',
+                image: ''
+            },
             loginConfig: {
                 url: 'https://ims-na1.adobelogin.com/ims/authorize',
                 callbackParsingParams: {
@@ -42,8 +44,16 @@ define([
             }
         },
 
-        user: user,
         userQuota: userQuota,
+
+        /**
+         * @inheritdoc
+         */
+        initObservable: function () {
+            this._super().observe(['user']);
+
+            return this;
+        },
 
         /**
          * Login to Adobe
@@ -54,12 +64,11 @@ define([
             var self = this; // TODO Please bind this properly
 
             return new window.Promise(function (resolve, reject) {
-                if (user.isAuthorized()) {
-                    reject(new Error('You are logged in.'))
+                if (self.user().isAuthorized) {
+                    return reject(new Error('You are logged in.'))
                 }
                 login(self.loginConfig)
                     .then(function (response) {
-                        user.isAuthorized(true);
                         self.loadUserProfile();
                         resolve(response);
                     })
@@ -67,26 +76,6 @@ define([
                         reject(error);
                     });
             });
-        },
-
-        /**
-         * @inheritdoc
-         */
-        initialize: function () {
-            this._super();
-
-            user.isAuthorized.subscribe(function () {
-                if (user.isAuthorized() && user.name() === '') {
-                    this.loadUserProfile();
-                }
-            }.bind(this));
-
-            user.name(this.userName);
-            user.email(this.userEmail);
-            user.image(this.image);
-            user.isAuthorized(this.isAuthorized === 'true');
-
-            return this;
         },
 
         /**
@@ -102,12 +91,14 @@ define([
                     form_key: window.FORM_KEY
                 },
                 dataType: 'json',
-                async: false,
                 context: this,
                 success: function (response) {
-                    user.name(response.result.name);
-                    user.email(response.result.email);
-                    user.image(response.result.image);
+                    this.user({
+                        isAuthorized: true,
+                        name: response.result.name,
+                        email: response.result.email,
+                        image: response.result.image
+                    });
                     this.getUserQuota();
                 },
                 error: function (response) {
@@ -127,7 +118,6 @@ define([
                     form_key: window.FORM_KEY
                 },
                 dataType: 'json',
-                async: false,
                 context: this,
                 success: function (response) {
                     userQuota.images(response.result.images);
@@ -143,7 +133,6 @@ define([
          * Logout from adobe account
          */
         logout: function () {
-            $(this.adobeStockModalSelector).trigger('processStart');
             $.ajax({
                 type: 'POST',
                 url: this.logoutUrl,
@@ -151,16 +140,17 @@ define([
                     form_key: window.FORM_KEY
                 },
                 dataType: 'json',
-                async: false,
                 context: this,
+                showLoader: true,
                 success: function () {
-                    $(this.adobeStockModalSelector).trigger('processStop');
-                    user.isAuthorized(false);
-                    user.name('');
-                    user.email('');
+                    this.user({
+                        isAuthorized: false,
+                        name: '',
+                        email: '',
+                        image: this.defaultProfileImage
+                    });
                 }.bind(this),
                 error: function (response) {
-                    $(this.adobeStockModalSelector).trigger('processStop');
                     return response.message;
                 }.bind(this)
             });

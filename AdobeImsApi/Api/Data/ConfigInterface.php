@@ -36,13 +36,6 @@ interface ConfigInterface
     public function getTokenUrl(): string;
 
     /**
-     * Returns default profile image.
-     *
-     * @return string
-     */
-    public function getDefaultProfileImage(): string;
-
-    /**
      * Retrieve auth URL
      *
      * @return string
@@ -70,5 +63,12 @@ interface ConfigInterface
      *
      * @return string
      */
-    public function getUserImageUrl(): string;
+    public function getProfileImageUrl(): string;
+
+    /**
+     * Returns default profile image.
+     *
+     * @return string
+     */
+    public function getDefaultProfileImage(): string;
 }
