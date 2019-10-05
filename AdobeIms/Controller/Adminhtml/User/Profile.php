@@ -49,7 +49,7 @@ class Profile extends Action
     private $logger;
 
     /**
-     * GetUserData constructor.
+     * Profile constructor.
      *
      * @param Action\Context $context
      * @param UserContextInterface $userContext

@@ -3,10 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'Magento_AdobeIms/js/config',
-    'Magento_AdobeIms/js/user'
-], function (config, user) {
+define([], function () {
     'use strict';
 
     /**
@@ -31,25 +28,16 @@ define([
         return output;
     }
 
-    return function () {
+    return function (config) {
         var authWindow;
-
-        /**
-         * If user have access tokens then reject authorization request
-         */
-        if (user.isAuthorized()) {
-            return new window.Promise(function (resolve, reject) {
-                reject(new Error('You are authorized.'));
-            });
-        }
 
         /**
          * Opens authorization window with special parameters
          */
         authWindow = window.adobeStockAuthWindow = window.open(
-            config.loginUrl,
+            config.url,
             '',
-            buildWindowParams(config.login.popupWindowParams || {width: 500, height: 300})
+            buildWindowParams(config.popupWindowParams || {width: 500, height: 300})
         );
 
         return new window.Promise(function (resolve, reject) {
@@ -84,22 +72,21 @@ define([
                 stopWatcherId = setTimeout(function () {
                     stopHandle();
                     reject(new Error('Time\'s up.'));
-                }, config.login.popupWindowTimeout || 60000);
+                }, config.popupWindowTimeout || 60000);
 
                 responseData = authWindow.document.body.innerText.match(
-                    config.login.callbackParsingParams.regexpPattern
+                    config.callbackParsingParams.regexpPattern
                 );
                 if (responseData) {
                     stopHandle();
 
-                    if (responseData[config.login.callbackParsingParams.codeIndex] === config.login.callbackParsingParams.successCode) {
-                        user.isAuthorized(true);
+                    if (responseData[config.callbackParsingParams.codeIndex] === config.callbackParsingParams.successCode) {
                         resolve({
                             isAuthorized: true,
-                            lastAuthSuccessMessage: responseData[config.login.callbackParsingParams.messageIndex]
+                            lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]
                         });
                     } else {
-                        reject(new Error(responseData[config.login.callbackParsingParams.messageIndex]));
+                        reject(new Error(responseData[config.callbackParsingParams.messageIndex]));
                     }
                 }
             }

@@ -7,7 +7,6 @@ define([
     'jquery',
     'knockout',
     'mage/translate',
-    'Magento_AdobeIms/js/action/authorization',
     'Magento_AdobeUi/js/components/grid/column/image-preview',
     'Magento_AdobeStockImageAdminUi/js/model/messages',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
@@ -17,7 +16,7 @@ define([
     'Magento_AdobeIms/js/user',
     'Magento_AdobeStockAdminUi/js/config',
     'mage/backend/tabs'
-], function (_, $, ko, translate, authorizationAction, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, user, config) {
+], function (_, $, ko, translate, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, user, config) {
     'use strict';
 
     return imagePreview.extend({
@@ -25,6 +24,7 @@ define([
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            loginProvider: 'name = adobe-login, ns = adobe-login',
             inputValue: '',
             chipInputValue: '',
             serieFilterValue: '',
@@ -47,7 +47,8 @@ define([
                 thumbnailComponent: '${ $.parentName }.thumbnail_url',
                 chips: '${ $.chipsProvider }',
                 searchChips: '${ $.searchChipsProvider }',
-                filterChips: '${ $.filterChipsProvider }'
+                filterChips: '${ $.filterChipsProvider }',
+                login: '${ $.loginProvider }',
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
@@ -507,9 +508,9 @@ define([
                     context: this,
 
                     success: function (response) {
-                        var quota = response.result.quota;
-                        var quotaMessage = response.result.message;
-                        var confirmationContent = $.mage.__('License "' + record.title + '"');
+                        var quota = response.result.quota,
+                            confirmationContent = $.mage.__('License "' + record.title + '"'),
+                            quotaMessage = response.result.message;
                         $(config.adobeStockModalSelector).trigger('processStop');
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
@@ -565,7 +566,7 @@ define([
              * Opens authorization window of Adobe Stock
              * then starts the authorization process
              */
-            authorizationAction()
+            this.login().login()
                 .then(function (result) {
                     this.licenseProcess(record);
                     messages.add('success', result.lastAuthSuccessMessage);
