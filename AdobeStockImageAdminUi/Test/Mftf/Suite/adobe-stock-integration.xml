@@ -19,13 +19,4 @@
             <group name="adobe_stock_integration"/>
         </include>
     </suite>
-    <suite name="adobe_stock_integration_suite2">
-        <before>
-        </before>
-        <after>
-        </after>
-        <include>
-            <test name="AdminAdobeStockListingStateTest"/>
-        </include>
-    </suite>
 </suites>
