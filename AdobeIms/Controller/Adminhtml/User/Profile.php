@@ -48,7 +48,6 @@ class Profile extends Action
      */
     private $logger;
 
-
     /**
      * Profile constructor.
      *
