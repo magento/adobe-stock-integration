@@ -44,7 +44,7 @@ define([
                 modalClass: 'adobe-stock-modal',
                 title: $t('Adobe Stock')
             }).on('openModal', function () {
-                this.masonry().setLayoutStyles();
+                this.masonry().setLayoutStylesWhenLoaded();
             }.bind(this)).applyBindings();
 
             return this;

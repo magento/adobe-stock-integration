@@ -29,7 +29,7 @@
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPear">
             <argument name="query" value="Interior"/>
         </actionGroup>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminImagePreviewKeywordSearchActionGroup" stepKey="searchByImageKeyword">
             <argument name="keyword" value="interior"/>
         </actionGroup>
@@ -39,7 +39,7 @@
             <argument name="resultValue" value="interior"/>
         </actionGroup>
 
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnImage"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="clickOnImage"/>
         <click selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="clickOnViewAlKeywords"/>
         <actionGroup ref="AdminImagePreviewKeywordSearchActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="window"/>
