@@ -65,6 +65,7 @@ define([
 
             styles['margin-bottom'] = this.previewRowId() === record.rowNumber ? this.previewHeight : 0;
             record.styles(styles);
+
             return record.styles;
         },
 

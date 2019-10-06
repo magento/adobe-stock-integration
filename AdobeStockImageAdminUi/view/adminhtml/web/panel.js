@@ -6,9 +6,8 @@
 define([
     'uiElement',
     'jquery',
-    'mage/translate',
-    'Magento_AdobeStockImageAdminUi/js/config'
-], function (Element, $, $t, config) {
+    'mage/translate'
+], function (Element, $, $t) {
     'use strict';
 
     return Element.extend({
@@ -27,12 +26,6 @@ define([
          */
         initialize: function () {
             this._super();
-
-            config.downloadPreviewUrl = this.downloadPreviewUrl;
-            config.licenseAndDownloadUrl = this.licenseAndDownloadUrl;
-            config.buyCreditsUrl = this.buyCreditsUrl;
-            config.confirmationUrl = this.confirmationUrl;
-            config.relatedImagesUrl = this.relatedImagesUrl;
 
             $(this.containerId).modal({
                 type: 'slide',

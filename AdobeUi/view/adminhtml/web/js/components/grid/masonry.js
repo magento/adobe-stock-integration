@@ -6,10 +6,10 @@ define([
     'Magento_Ui/js/grid/listing',
     'jquery',
     'ko'
-], function (Element, $, ko) {
+], function (Listing, $, ko) {
     'use strict';
 
-    return Element.extend({
+    return Listing.extend({
         defaults: {
             template: 'Magento_AdobeUi/grid/masonry',
             imports: {
@@ -156,7 +156,7 @@ define([
          * Wait for container to initialize
          */
         waitForContainer: function (callback) {
-            if (typeof this.container === "undefined") {
+            if (typeof this.container === 'undefined') {
                 setTimeout(function () {
                     this.waitForContainer(callback);
                 }.bind(this), 500);
@@ -225,6 +225,6 @@ define([
          */
         hasData: function () {
             return !!this.rows() && !!this.rows().length;
-        },
+        }
     });
 });
