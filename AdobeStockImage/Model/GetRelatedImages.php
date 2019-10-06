@@ -116,6 +116,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
                     'height' => $image->getCustomAttribute('height')->getValue(),
                     'category' => $image->getCustomAttribute('category')->getValue(),
                     'keywords' => $image->getCustomAttribute('keywords')->getValue(),
+                    'is_downloaded' => $image->getCustomAttribute('is_downloaded')->getValue(),
+                    'path' => $image->getCustomAttribute('path')->getValue()
                 ];
             }
             return $data;

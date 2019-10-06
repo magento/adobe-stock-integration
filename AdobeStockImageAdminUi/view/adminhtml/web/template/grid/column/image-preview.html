@@ -5,36 +5,24 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles($row())">
+<div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles()">
     <div class="container">
-        <div class="action-buttons preview-buttons" ifnot="$row().selectedRelated()">
-            <button class="action-previous" type="button" data-bind="click: function () { $col.prev($row()); }">
+        <div class="action-buttons preview-buttons">
+            <button class="action-previous" type="button" disable="$col.getPreviousButtonDisabled($row())" data-bind="click: function () { $col.prev($row()); }">
                 <span translate="'Previous'"/>
             </button>
-            <button class="action-next" type="button" data-bind="click: function () { $col.next($row()); }">
+            <button class="action-next" type="button" disable="$col.getNextButtonDisabled($row())" data-bind="click: function () { $col.next($row()); }">
                 <span translate="'Next'"/>
             </button>
             <button class="action-close" type="button" data-bind="click: function () { $col.hide($row()); }">
                 <span translate="'Close'"/>
             </button>
         </div>
-        <div class="action-buttons related-images-buttons" if="$row().selectedRelated()">
-            <button class="action-previous" type="button" disable="$col.getPreviousRelatedButtonDisabled($row())" data-bind="click: function () { $col.prevRelated($row()); }">
-                <span translate="'Previous'"/>
-            </button>
-            <button class="action-next" type="button" disable="$col.getNextRelatedButtonDisabled($row())" data-bind="click: function () { $col.nextRelated($row()); }">
-                <span translate="'Next'"/>
-            </button>
-            <button class="action-close" type="button" data-bind="click: function () { $col.hide($row()); }">
-                <span translate="'Close'"/>
-            </button>
-        </div>
-        <img class="preview" ifnot="$row().selectedRelated()" attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
-        <img class="preview" if="$row().selectedRelated()" attr="src: $col.getUrl($row().selectedRelated()), alt: $col.getTitle($row().selectedRelated())">
-        <div class="info" ifnot="$row().selectedRelated()">
-            <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
-            <div class="author" if="$col.getAuthor($row())">
-                <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
+        <img class="preview" attr="src: $col.displayedRecord().thumbnail_500_url, alt: $col.displayedRecord().title">
+        <div class="info">
+            <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"/>
+            <div class="author" if="$col.displayedRecord().creator_name">
+                <span translate="'By'" /><span text="' ' + $col.displayedRecord().creator_name" />
             </div>
             <ul class="messages" if="$col.getMessages().length > 0">
                 <!-- ko foreach: $col.getMessages() -->
@@ -47,60 +35,21 @@
                 </div>
                 <!-- /ko -->
             </ul>
-            <button class="action-secondary" type="button" data-bind="visible: !$col.isDownloaded($row())(), click: function(){ $col.savePreview($row()) }">
+            <button class="action-secondary" type="button" data-bind="visible: !$col.isDownloaded(), click: function(){ $col.savePreview() }">
                 <span translate="'Save Preview'"/>
             </button>
-            <button class="action-secondary" type="button" data-bind="visible: $col.isDownloaded($row())(), click: function(){ $col.locate($row()) }">
+            <button class="action-secondary" type="button" data-bind="visible: $col.isDownloaded(), click: function(){ $col.locate() }">
                 <span translate="'Locate'"/>
             </button>
             <button class="action-default primary"
                     type="button"
                     attr="title: $t('License and Save')"
-                    data-bind="click: function () { $col.licenseProcess($row()); }">
+                    data-bind="click: function () { $col.licenseProcess(); }">
                 <span translate="'License and Save'"></span>
             </button>
         </div>
-        <div class="info" if="$row().selectedRelated()">
-            <h3 class="title" text="$col.getTitle($row().selectedRelated())" if="$col.getTitle($row().selectedRelated())"/>
-            <div class="author" if="$col.getAuthor($row().selectedRelated())">
-                <span translate="'By'" /><span text="' ' + $col.getAuthor($row().selectedRelated())" />
-            </div>
-            <ul class="messages" if="$col.getMessages().length > 0">
-                <!-- ko foreach: $col.getMessages() -->
-                <div class="messages">
-                    <div attr="class: 'message message-'+code">
-                        <div data-ui-id="messages-message-error">
-                            <span data-bind="html: message"></span>
-                        </div>
-                    </div>
-                </div>
-                <!-- /ko -->
-            </ul>
-            <button class="action-secondary" type="button" data-bind="visible: !$col.isDownloaded($row().selectedRelated())(), click: function(){ $col.savePreview($row().selectedRelated()) }">
-                <span translate="'Save Preview'"/>
-            </button>
-            <button class="action-secondary" type="button" data-bind="visible: $col.isDownloaded($row().selectedRelated())(), click: function(){ $col.locate($row().selectedRelated()) }">
-                <span translate="'Locate'"/>
-            </button>
-            <button class="action-default primary"
-                    type="button"
-                    attr="title: $t('License and Save')"
-                    data-bind="click: function () { $col.licenseProcess($row().selectedRelated()); }">
-                <span translate="'License and Save'"></span>
-            </button>
-        </div>
-        <div class="attributes" ifnot="$row().selectedRelated()" data-role="image-attributes-value">
-            <!-- ko foreach: $col.getDisplayAttributes($row()) -->
-            <div class="attribute">
-                <span class="title" translate="name"/>
-                <div class="value">
-                    <span text="value" />
-                </div>
-            </div>
-            <!-- /ko -->
-        </div>
-        <div class="attributes" if="$row().selectedRelated()" data-role="image-attributes-value">
-            <!-- ko foreach: $col.getDisplayAttributes($row().selectedRelated()) -->
+        <div class="attributes" data-role="image-attributes-value">
+            <!-- ko foreach: $col.getDisplayAttributes() -->
             <div class="attribute">
                 <span class="title" translate="name"/>
                 <div class="value">
@@ -168,29 +117,16 @@
                 </div>
             </div>
         </div>
-        <div class="keywords" ifnot="$row().selectedRelated()">
+        <div class="keywords">
             <div class="title" translate="'Similar Keywords'"></div>
-            <!-- ko foreach: $col.getKeywords($row()) -->
-            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
+            <!-- ko foreach: $col.getKeywords() -->
+            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit()}">
                 <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
                     <span text="name"/>
                 </a>
             </div>
             <!-- /ko -->
-            <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
-                <span translate="'View all'"/>
-            </button>
-        </div>
-        <div class="keywords" if="$row().selectedRelated()">
-            <div class="title" translate="'Similar Keywords'"></div>
-            <!-- ko foreach: $col.getKeywords($row().selectedRelated()) -->
-            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row().selectedRelated())}">
-                <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
-                    <span text="name"/>
-                </a>
-            </div>
-            <!-- /ko -->
-            <button data-bind="visible: $col.canViewMoreKeywords($row().selectedRelated()), click: function(){ $col.viewAllKeywords($row().selectedRelated()) }">
+            <button data-bind="visible: $col.canViewMoreKeywords(), click: function(){ $col.viewAllKeywords() }">
                 <span translate="'View all'"/>
             </button>
         </div>
