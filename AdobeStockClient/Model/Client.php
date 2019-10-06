@@ -19,6 +19,8 @@ use AdobeStock\Api\Response\License;
 use Exception;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
+use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
@@ -103,7 +105,11 @@ class Client implements ClientInterface
     private $userQuotaFactory;
 
     /**
-     * Client constructor.
+     * @var LicenseConfirmationInterfaceFactory
+     */
+    private $licenseConfirmationFactory;
+
+    /**
      * @param ConfigInterface $clientConfig
      * @param ImsConfig $imsConfig
      * @param SearchResultFactory $searchResultFactory
@@ -116,6 +122,7 @@ class Client implements ClientInterface
      * @param UserContextInterface $userContext
      * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param StockFileToDocument $stockFileToDocument
+     * @param LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
      */
     public function __construct(
         ConfigInterface $clientConfig,
@@ -129,7 +136,8 @@ class Client implements ClientInterface
         UserProfileRepositoryInterface $userProfileRepository,
         UserContextInterface $userContext,
         UserQuotaInterfaceFactory $userQuotaFactory,
-        StockFileToDocument $stockFileToDocument
+        StockFileToDocument $stockFileToDocument,
+        LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
     ) {
         $this->clientConfig = $clientConfig;
         $this->imsConfig = $imsConfig;
@@ -143,6 +151,7 @@ class Client implements ClientInterface
         $this->userContext = $userContext;
         $this->userQuotaFactory = $userQuotaFactory;
         $this->stockFileToDocument = $stockFileToDocument;
+        $this->licenseConfirmationFactory = $licenseConfirmationFactory;
     }
 
     /**
@@ -214,15 +223,29 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getQuota(int $contentId = 0): UserQuotaInterface
+    public function getQuota(): UserQuotaInterface
     {
-        $quota = $this->getLicenseInfo($contentId)->getEntitlement()->getFullEntitlementQuota();
-        $message = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
+        $quota = $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
         /** @var UserQuotaInterface $userQuota */
         $userQuota = $this->userQuotaFactory->create();
         $userQuota->setImages((int) $quota->standard_credits_quota);
         $userQuota->setCredits((int) $quota->premium_credits_quota);
+
+        return $userQuota;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLicenseConfirmation(int $contentId): LicenseConfirmationInterface
+    {
+        $message = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
+        $canPurchase = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getPurchaseState() == "possible";
+        /** @var LicenseConfirmationInterface $userQuota */
+        $userQuota = $this->licenseConfirmationFactory->create();
         $userQuota->setMessage($message);
+        $userQuota->setCanLicense($canPurchase);
+
         return $userQuota;
     }
 

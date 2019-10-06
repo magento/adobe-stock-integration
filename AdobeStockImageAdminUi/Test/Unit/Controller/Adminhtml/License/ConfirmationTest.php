@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
+use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Confirmation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
@@ -16,13 +17,11 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\GetQuota;
-use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 
 /**
- * Get quota test.
+ * License confirmation test.
  */
-class GetQuotaTest extends TestCase
+class ConfirmationTest extends TestCase
 {
     /**
      * @var MockObject|ClientInterface $clientInterfaceMock
@@ -40,9 +39,9 @@ class GetQuotaTest extends TestCase
     private $context;
 
     /**
-     * @var GetQuota $getQuota
+     * @var Confirmation $confirmation
      */
-    private $getQuota;
+    private $confirmation;
 
     /**
      * @var MockObject $request
@@ -101,7 +100,7 @@ class GetQuotaTest extends TestCase
                 ]
             );
 
-        $this->getQuota = new GetQuota(
+        $this->confirmation = new Confirmation(
             $this->context,
             $this->clientInterfaceMock,
             $this->logger
@@ -113,27 +112,25 @@ class GetQuotaTest extends TestCase
      */
     public function testExecute()
     {
-        /** @var UserQuotaInterface|MockObject $quotaInterface */
-        $quotaInterface = $this->createMock(UserQuotaInterface::class);
-        $quotaInterface->expects($this->once())->method('getMessage')->willReturn('message');
-        $quotaInterface->expects($this->once())->method('getImages')->willReturn(2);
-        $quotaInterface->expects($this->once())->method('getCredits')->willReturn(1);
+        /** @var LicenseConfirmationInterface|MockObject $confirmation */
+        $confirmation = $this->createMock(LicenseConfirmationInterface::class);
+        $confirmation->expects($this->once())->method('getMessage')->willReturn('message');
+        $confirmation->expects($this->once())->method('getCanLicense')->willReturn(true);
 
         $data = [
             'success' => true,
             'result' => [
                 'message' => 'message',
-                'credits' => 1,
-                'images' => 2
+                'canLicense' => true
             ]
         ];
         $this->clientInterfaceMock->expects($this->once())
-            ->method('getQuota')
-            ->willReturn($quotaInterface);
+            ->method('getLicenseConfirmation')
+            ->willReturn($confirmation);
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($data));
-        $this->getQuota->execute();
+        $this->confirmation->execute();
     }
 
     /**
@@ -146,11 +143,11 @@ class GetQuotaTest extends TestCase
             'message' => new Phrase('An error occurred during get quota operation. Contact support.')
         ];
         $this->clientInterfaceMock->expects($this->once())
-            ->method('getQuota')
+            ->method('getLicenseConfirmation')
             ->willThrowException(new \Exception());
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($result));
-        $this->getQuota->execute();
+        $this->confirmation->execute();
     }
 }

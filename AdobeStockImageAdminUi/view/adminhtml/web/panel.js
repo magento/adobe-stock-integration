@@ -7,9 +7,8 @@ define([
     'uiElement',
     'jquery',
     'mage/translate',
-    'Magento_AdobeStockAdminUi/js/config',
-    'Magento_AdobeStockAdminUi/js/user-quota',
-], function (Element, $, $t, config, userQuota) {
+    'Magento_AdobeStockImageAdminUi/js/config'
+], function (Element, $, $t, config) {
     'use strict';
 
     return Element.extend({
@@ -18,7 +17,7 @@ define([
             masonryComponentPath: '',
             modules: {
                 masonry: '${$.masonryComponentPath}'
-            },
+            }
         },
 
         /**
@@ -32,11 +31,8 @@ define([
             config.downloadPreviewUrl = this.downloadPreviewUrl;
             config.licenseAndDownloadUrl = this.licenseAndDownloadUrl;
             config.buyCreditsUrl = this.buyCreditsUrl;
-            config.quotaUrl = this.quotaUrl;
+            config.confirmationUrl = this.confirmationUrl;
             config.relatedImagesUrl = this.relatedImagesUrl;
-
-            userQuota.images(this.userQuota.images);
-            userQuota.credits(this.userQuota.credits);
 
             $(this.containerId).modal({
                 type: 'slide',

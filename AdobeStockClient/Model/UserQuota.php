@@ -17,6 +17,9 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class UserQuota extends AbstractExtensibleModel implements UserQuotaInterface
 {
+    private const IMAGES = 'images';
+    private const CREDITS = 'credits';
+
     /**
      * @inheritdoc
      */
@@ -39,22 +42,6 @@ class UserQuota extends AbstractExtensibleModel implements UserQuotaInterface
     public function getCredits(): int
     {
         return $this->getData(self::CREDITS);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMessage(): string
-    {
-        return $this->getData(self::MESSAGE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setMessage(string $value): void
-    {
-        $this->setData(self::MESSAGE, $value);
     }
 
     /**

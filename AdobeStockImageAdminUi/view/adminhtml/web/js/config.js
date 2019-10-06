@@ -10,7 +10,7 @@ define([], function () {
         adobeStockModalSelector: '#adobe-stock-images-search-modal',
         downloadPreviewUrl: 'adobe_stock/preview/download',
         licenseAndDownloadUrl: 'adobe_stock/license/license',
-        quotaUrl: 'adobe_stock/license/getquota',
+        confirmationUrl: 'adobe_stock/license/confirmation',
         relatedImagesUrl: 'adobe_stock/preview/relatedimages'
     };
 });
