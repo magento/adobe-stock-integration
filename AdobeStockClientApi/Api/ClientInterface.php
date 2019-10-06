@@ -26,27 +26,12 @@ interface ClientInterface
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface;
 
     /**
-     * Gets license quota for current content from Adobe Stock API
+     * Gets  quota for current content from Adobe Stock API
      *
      * @param int $contentId
-     * @return int
-     */
-    public function getQuota(int $contentId): int;
-
-    /**
-     * Get quota information before licensing an image
-     *
-     * @param int $contentId
-     * @return array
-     */
-    public function getQuotaInformation(int $contentId): array;
-
-    /**
-     * Get full entitlement quota.
-     *
      * @return UserQuotaInterface
      */
-    public function getFullEntitlementQuota(): UserQuotaInterface;
+    public function getQuota(int $contentId = 0): UserQuotaInterface;
 
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.

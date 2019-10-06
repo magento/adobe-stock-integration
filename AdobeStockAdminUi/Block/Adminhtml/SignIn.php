@@ -10,11 +10,11 @@ namespace Magento\AdobeStockAdminUi\Block\Adminhtml;
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\Backend\Block\Template;
-use Magento\Backend\Block\Template\Context;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
@@ -109,6 +109,16 @@ class SignIn extends Template
         return $this->isAuthorized() ? $this->getUserProfile()->getEmail() : '';
     }
 
+    /**
+     * Return user image url
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getImage()
+    {
+        return $this->isAuthorized() ? $this->getUserProfile()->getImage() : $this->config->getDefaultProfileImage();
+    }
     /**
      * Authorized as a sting for json
      *

@@ -49,7 +49,7 @@ class Profile extends Action
     private $logger;
 
     /**
-     * GetUserData constructor.
+     * Profile constructor.
      *
      * @param Action\Context $context
      * @param UserContextInterface $userContext
@@ -77,7 +77,8 @@ class Profile extends Action
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
             $userData = [
                 'email' => $userProfile->getEmail(),
-                'name' => $userProfile->getName()
+                'name' => $userProfile->getName(),
+                'image' => $userProfile->getImage()
             ];
             $responseCode = self::HTTP_OK;
 

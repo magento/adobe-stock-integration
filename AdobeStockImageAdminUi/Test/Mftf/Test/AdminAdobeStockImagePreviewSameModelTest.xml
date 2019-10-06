@@ -7,13 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockImagePreviewImagesWithTheSameModelTest">
+    <test name="AdminAdobeStockImagePreviewSameModelTest">
         <annotations>
             <stories value="Cover scenario: User sees images with the same model as the currently viewed one"/>
             <title value="Admin should be able to see images with same model"/>
             <description value="User sees images with the same model"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_filters"/>
+            <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -26,8 +26,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForMaskDisappearAfterClick"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <click selector="{{AdobeStockImagePreviewSection.moreFromThisModel}}" stepKey="clickOnTabMoreForThisModel"/>
         <actionGroup ref="AssertNumberOfImagesUnderMoreForThisModelActionGroup" stepKey="assertImagesUnderMoreForThisModelCount">
             <argument name="imagesNumber" value="4"/>

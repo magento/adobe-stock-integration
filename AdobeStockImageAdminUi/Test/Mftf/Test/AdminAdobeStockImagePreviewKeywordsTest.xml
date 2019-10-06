@@ -26,7 +26,7 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <!-- Verify view all button and numbers of keywords-->
         <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>

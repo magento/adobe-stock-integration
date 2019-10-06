@@ -4,69 +4,78 @@
 //  */
 
 & when (@media-common = true) {
-    .adobe-sign-in-button {
-        border: none;
-        margin-right: 3%;
-        z-index: 99;
-        position: initial;
-        box-shadow: none !important;
-        float: right;
-        margin-top: -50px;
-        background: transparent;
-    }
+    .adobe-login-container {
+        .adobe-sign-in-button {
+            border: none;
+            margin-right: 3%;
+            z-index: 99;
+            position: initial;
+            box-shadow: none;
+            float: right;
+            margin-top: -50px;
+            background: transparent;
+            &:hover:active {
+                background: transparent;
+                color: #007bdb;
+            }
+        }
 
-    .user-profile-information {
-        padding-right: 50px;
-        margin-left: -10px;
-        padding: 10px;
-    }
+        .adobe-user-information {
+            float: right;
+            margin-right: -12%;
+            margin-top: -54px;
 
-    .adobe-profile-avatar {
-        float: left;
-        width: 30%;
-        padding-top: 6px;
-    }
+            .adobe-profile-image-small {
+                background-repeat: repeat-x;
+                margin-left: 20px;
+                margin-bottom: -14px;
+                border-radius: 50%;
+                width: 8%;
+            }
 
-    .adobe-user-data > li {
-        padding-bottom: 5px;
-    }
+            .adobe-user-name {
+                box-shadow: none;
+                border: 0px;
+                padding-left: 10px;
+            }
 
-    .adobe-user-data {
-        list-style: none;
-    }
+            .adobe-user-popup {
+                z-index: 282;
+                padding-left: 20px;
+                right: 53%;
+                min-width: 10px;
+                width: 80%;
 
-    .adobe-sign-in-button:hover:active {
-        background: transparent;
-        color: #007bdb;
-    }
+                .adobe-profile-image-large {
+                    float: left;
+                    width: 30%;
+                    padding-top: 5px;
+                    padding-right: 10px;
+                }
 
-    .adobe-user-name {
-        box-shadow: none !important;
-        border: 0px;
-    }
+                ul {
+                    list-style: none;
+                    li {
+                        padding-bottom: 5px;
+                    }
+                }
 
-    .adobe-sign-out-button {
-        float: left;
-        margin-top: 20px;
-        background: transparent;
-        padding-left: 0px;
-        border: none;
-        padding-bottom: 20px;
-    }
+                .adobe-stock-user-quota {
+                    padding-top: 15px;
+                }
 
-    .adobe-user-menu {
-        z-index: 282;
-        padding-left: 20px;
-        padding-right: 50px;
-    }
-
-    .adobe-sign-out-button:hover {
-        background: transparent;
-    }
-
-    .adobe-user-information {
-        float: right;
-        margin-right: 3%;
-        margin-top: -53px;
+                .adobe-sign-out-button {
+                    float: left;
+                    margin-top: 20px;
+                    background: transparent;
+                    padding-left: 0px;
+                    border: none;
+                    padding-bottom: 20px;
+                    &:hover {
+                        background: transparent;
+                    }
+                }
+            }
+        }
     }
 }
