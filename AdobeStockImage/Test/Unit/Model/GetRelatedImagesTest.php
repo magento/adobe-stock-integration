@@ -14,6 +14,7 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeStockImage\Model\GetRelatedImages;
+use Magento\Framework\Api\AttributeValue;
 
 /**
  * Test for GetRelatedImages Model
@@ -21,27 +22,27 @@ use Magento\AdobeStockImage\Model\GetRelatedImages;
 class GetRelatedImagesTest extends TestCase
 {
     /**
-     * @var MockObject|GetImageListInterface $getImageListInterface
+     * @var MockObject|GetImageListInterface
      */
     private $getImageListInterface;
 
     /**
-     * @var MockObject|SearchCriteriaBuilder $searchCriteriaBuilder
+     * @var MockObject|SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var MockObject|FilterBuilder $filterBuilder
+     * @var MockObject|FilterBuilder
      */
     private $filterBuilder;
 
     /**
-     * @var LoggerInterface|MockObject $logger
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
     /**
-     * @var GetRelatedImages $getRelatedSeries
+     * @var GetRelatedImages
      */
     private $getRelatedSeries;
 
@@ -126,61 +127,61 @@ class GetRelatedImagesTest extends TestCase
                         [
                             'id' => 1234556789,
                             'custom_attributes' => [
-                                'title' => new \Magento\Framework\Api\AttributeValue(
+                                'title' => new AttributeValue(
                                     [
                                         'attribute_code' => 'title',
                                         'value' => 'Some Title'
                                     ]
                                 ),
-                                'thumbnail_240_url' => new \Magento\Framework\Api\AttributeValue(
+                                'thumbnail_240_url' => new AttributeValue(
                                     [
                                         'attribute_code' => 'thumbnail_240_url',
                                         'value' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg'
                                     ]
                                 ),
-                                'thumbnail_500_url' => new \Magento\Framework\Api\AttributeValue(
+                                'thumbnail_500_url' => new AttributeValue(
                                     [
                                         'attribute_code' => 'thumbnail_500_url',
                                         'value' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg'
                                     ]
                                 ),
-                                'id' => new \Magento\Framework\Api\AttributeValue(
+                                'id' => new AttributeValue(
                                     [
                                         'attribute_code' => 'id',
                                         'value' => 123456789
                                     ]
                                 ),
-                                'creator_name' => new \Magento\Framework\Api\AttributeValue(
+                                'creator_name' => new AttributeValue(
                                     [
                                         'attribute_code' => 'creator_name',
                                         'value' => 'Author'
                                     ]
                                 ),
-                                'content_type' => new \Magento\Framework\Api\AttributeValue(
+                                'content_type' => new AttributeValue(
                                     [
                                         'attribute_code' => 'content_type',
                                         'value' => 'image/jpeg'
                                     ]
                                 ),
-                                'width' => new \Magento\Framework\Api\AttributeValue(
+                                'width' => new AttributeValue(
                                     [
                                         'attribute_code' => 'width',
                                         'value' => 1000
                                     ]
                                 ),
-                                'height' => new \Magento\Framework\Api\AttributeValue(
+                                'height' => new AttributeValue(
                                     [
                                         'attribute_code' => 'height',
                                         'value' => 1000
                                     ]
                                 ),
-                                'category' => new \Magento\Framework\Api\AttributeValue(
+                                'category' => new AttributeValue(
                                     [
                                         'attribute_code' => 'category',
                                         'value' => 123
                                     ]
                                 ),
-                                'keywords' => new \Magento\Framework\Api\AttributeValue(
+                                'keywords' => new AttributeValue(
                                     [
                                         'attribute_code' => 'keywords',
                                         'value' => [
@@ -196,6 +197,18 @@ class GetRelatedImagesTest extends TestCase
                                         ]
                                     ]
                                 ),
+                                'is_downloaded' => new AttributeValue(
+                                    [
+                                        'attribute_code' => 'is_downloaded',
+                                        'value' => 0
+                                    ]
+                                ),
+                                'path' => new AttributeValue(
+                                    [
+                                        'attribute_code' => 'path',
+                                        'value' => ''
+                                    ]
+                                )
                             ]
                         ]
                     )
@@ -212,6 +225,8 @@ class GetRelatedImagesTest extends TestCase
                             'width' => 1000,
                             'height' => 1000,
                             'category' => 123,
+                            'is_downloaded' => 0,
+                            'path' => '',
                             'keywords' => [
                                 [
                                     'name' => 'keyword #1'
@@ -236,6 +251,8 @@ class GetRelatedImagesTest extends TestCase
                             'width' => 1000,
                             'height' => 1000,
                             'category' => 123,
+                            'is_downloaded' => 0,
+                            'path' => '',
                             'keywords' => [
                                 [
                                     'name' => 'keyword #1'
