@@ -8,7 +8,13 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <referenceContainer name="root">
         <block class="Magento\AdobeStockImageAdminUi\Block\Adminhtml\Panel" name="stock.panel" template="Magento_AdobeStockImageAdminUi::panel.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
-            <block class="Magento\AdobeStockAdminUi\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdobeStockAdminUi::signIn.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images"/>
+            <block class="Magento\AdobeIms\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdobeIms::signIn.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
+                <arguments>
+                    <argument name="configProviders" xsi:type="array">
+                        <item name="adobe-stock" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SignInConfigProvider</item>
+                    </argument>
+                </arguments>
+            </block>
             <uiComponent name="adobe_stock_images_listing"/>
         </block>
     </referenceContainer>

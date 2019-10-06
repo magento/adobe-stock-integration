@@ -3,13 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
-    'ko',
     'uiComponent',
     'jquery',
-    'Magento_AdobeIms/js/action/authorization',
-    'Magento_AdobeStockAdminUi/js/user-quota',
-    'Magento_AdobeStockAdminUi/js/config'
-], function (ko, Component, $, login, userQuota, stockConfig) {
+    'Magento_AdobeIms/js/action/authorization'
+], function (Component, $, login) {
     'use strict';
 
     return Component.extend({
@@ -44,8 +41,6 @@ define([
             }
         },
 
-        userQuota: userQuota,
-
         /**
          * @inheritdoc
          */
@@ -65,7 +60,7 @@ define([
 
             return new window.Promise(function (resolve, reject) {
                 if (self.user().isAuthorized) {
-                    return reject(new Error('You are logged in.'))
+                    return resolve();
                 }
                 login(self.loginConfig)
                     .then(function (response) {
@@ -99,33 +94,10 @@ define([
                         email: response.result.email,
                         image: response.result.image
                     });
-                    this.getUserQuota();
                 },
                 error: function (response) {
                     return response.message;
                 }
-            });
-        },
-
-        /**
-         * Retrieves full user quota.
-         */
-        getUserQuota: function () {
-            $.ajax({
-                type: 'POST',
-                url: stockConfig.quotaUrl,
-                data: {
-                    form_key: window.FORM_KEY
-                },
-                dataType: 'json',
-                context: this,
-                success: function (response) {
-                    userQuota.images(response.result.images);
-                    userQuota.credits(response.result.credits);
-                }.bind(this),
-                error: function (response) {
-                    return response.message;
-                }.bind(this)
             });
         },
 

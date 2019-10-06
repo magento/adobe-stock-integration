@@ -26,13 +26,9 @@
                         "masonryComponentPath": "adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns",
                         "downloadPreviewUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/preview/download') ?>",
                         "licenseAndDownloadUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/license/license') ?>",
-                        "quotaUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/license/getquota') ?>",
+                        "confirmationUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/license/confirmation') ?>",
                         "relatedImagesUrl": "<?= /* @noEscape */ $block->getUrl('adobe_stock/preview/relatedimages') ?>",
-                        "buyCreditsUrl": "<?= /* @noEscape */ $block->getBuyCreditsUrl() ?>",
-                        "userQuota": {
-                            "images": "<?= /* @noEscape */ $block->getUserQuota()->getImages() ?>",
-                            "credits": "<?= /* @noEscape */ $block->getUserQuota()->getCredits() ?>"
-                        }
+                        "buyCreditsUrl": "<?= /* @noEscape */ $block->getBuyCreditsUrl() ?>"
                     }
                 }
             }

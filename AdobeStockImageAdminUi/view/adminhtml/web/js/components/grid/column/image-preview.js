@@ -13,7 +13,7 @@ define([
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html',
-    'Magento_AdobeStockAdminUi/js/config',
+    'Magento_AdobeStockImageAdminUi/js/config',
     'mage/backend/tabs'
 ], function (_, $, ko, translate, imagePreview, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl, config) {
     'use strict';
@@ -394,7 +394,7 @@ define([
                     mediaBrowser.reload(true);
                 },
                 error: function (response) {
-                    messages.add('error', response.responseJSON.message);
+                    messages.add('error', response.message);
                     messages.scheduleCleanup(3);
                 }
             });
@@ -450,7 +450,7 @@ define([
             $.ajax(
                 {
                     type: 'POST',
-                    url: config.quotaUrl,
+                    url: config.confirmationUrl,
                     dataType: 'json',
                     data: {
                         'media_id': record.id
@@ -459,15 +459,15 @@ define([
                     showLoader: true,
 
                     success: function (response) {
-                        var quota = response.result.quota,
-                            confirmationContent = $.mage.__('License "' + record.title + '"'),
-                            quotaMessage = response.result.message;
+                        var confirmationContent = $.mage.__('License "' + record.title + '"'),
+                            quotaMessage = response.result.message,
+                            canPurchase = response.result.canLicense;
                         confirmation({
                             title: $.mage.__('License Adobe Stock Image?'),
                             content: confirmationContent + '<p><b>' + quotaMessage + '</b></p>',
                             actions: {
                                 confirm: function () {
-                                    if (quota > 0) {
+                                    if (canPurchase) {
                                         licenseAndSave(record);
                                     } else {
                                         window.open(config.buyCreditsUrl);
@@ -481,7 +481,7 @@ define([
                                     this.closeModal();
                                 }
                             }, {
-                                text: quota > 0 ? $.mage.__('OK') : $.mage.__('Buy Credits'),
+                                text: canPurchase ? $.mage.__('OK') : $.mage.__('Buy Credits'),
                                 class: 'action-primary action-accept',
                                 click: function () {
                                     this.closeModal();

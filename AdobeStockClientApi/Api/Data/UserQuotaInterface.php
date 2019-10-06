@@ -14,10 +14,6 @@ namespace Magento\AdobeStockClientApi\Api\Data;
  */
 interface UserQuotaInterface
 {
-    const IMAGES = 'images';
-    const CREDITS = 'credits';
-    const  MESSAGE = 'message';
-
     /**
      * Get images quota of adobe stock account
      *
@@ -38,20 +34,6 @@ interface UserQuotaInterface
      * @return int
      */
     public function getCredits(): int;
-
-    /**
-     * Get message of user quota
-     *
-     * @return string
-     */
-    public function getMessage(): string;
-
-    /**
-     * Set message of user quota
-     *
-     * @param string $value
-     */
-    public function setMessage(string $value): void;
 
     /**
      * Set credits of adobe stock account
