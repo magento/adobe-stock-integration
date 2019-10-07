@@ -23,7 +23,7 @@ interface AssetRepositoryInterface
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $asset
      * @return void
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(AssetInterface $asset): void;
 
@@ -40,7 +40,9 @@ interface AssetRepositoryInterface
      * Get a list of assets
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface;
 
@@ -50,6 +52,7 @@ interface AssetRepositoryInterface
      * @param int $id
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function getById(int $id) : AssetInterface;
 

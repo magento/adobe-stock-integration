@@ -79,6 +79,11 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     const MEDIA_TYPE_ID = 'media_type_id';
 
     /**
+     * Media gallery id
+     */
+    const MEDIA_GALLERY_ID = 'media_gallery_id';
+
+    /**
      * Premium level id is an id of a media type entry related to the asset
      */
     const PREMIUM_LEVEL_ID = 'premium_level_id';
@@ -172,6 +177,21 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return void
      */
     public function setMediaTypeId(int $mediaTypeId): void;
+
+    /**
+     * Get media gallery id
+     *
+     * @return int|null
+     */
+    public function getMediaGalleryId(): ?int;
+
+    /**
+     * Set media gallery id
+     *
+     * @param int $mediaGalleryId
+     * @return void
+     */
+    public function setMediaGalleryId(int $mediaGalleryId): void;
 
     /**
      * Get category

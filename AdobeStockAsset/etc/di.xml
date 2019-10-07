@@ -20,7 +20,6 @@
     <preference for="Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface" type="Magento\AdobeStockAsset\Model\CreatorSearchResults"/>
 
     <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface" type="Magento\AdobeStockAsset\Model\AssetKeywordRepository"/>
 
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetListInterface" type="Magento\AdobeStockAsset\Model\GetAssetList"/>
     <preference for="Magento\AdobeStockAssetApi\Api\SaveAssetInterface" type="Magento\AdobeStockAsset\Model\SaveAsset"/>

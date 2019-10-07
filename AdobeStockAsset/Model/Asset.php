@@ -405,6 +405,22 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
+    public function getMediaGalleryId(): ?int
+    {
+        return $this->getData(self::MEDIA_GALLERY_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMediaGalleryId(int $mediaGalleryId): void
+    {
+        $this->setData(self::MEDIA_GALLERY_ID, $mediaGalleryId);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCreationDate(): string
     {
         return (string) $this->getData(self::CREATION_DATE);

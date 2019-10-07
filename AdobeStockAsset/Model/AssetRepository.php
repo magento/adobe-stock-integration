@@ -12,14 +12,19 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\Save;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
-use Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
+use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface as MediaAssetInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetInterfaceFactory;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface as SaveMediaAssetInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -63,21 +68,39 @@ class AssetRepository implements AssetRepositoryInterface
     private $searchResultFactory;
 
     /**
-     * @var AssetKeywordRepositoryInterface
+     * @var GetAssetKeywordsInterface
      */
-    private $assetKeywordRepository;
+    private $getAssetKeywords;
+
+    /**
+     * @var SaveAssetKeywordsInterface
+     */
+    private $saveAssetKeywords;
+
+    /**
+     * @var SaveMediaAssetInterface
+     */
+    private $saveMediaAsset;
+
+    /**
+     * @var MediaAssetInterfaceFactory
+     */
+    private $mediaAssetInterfaceFactory;
 
     /**
      * AssetRepository constructor.
      *
-     * @param ResourceModel $resource
-     * @param AssetCollectionFactory $collectionFactory
-     * @param AssetFactory $factory
-     * @param JoinProcessorInterface $joinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param ResourceModel                      $resource
+     * @param AssetCollectionFactory             $collectionFactory
+     * @param AssetFactory                       $factory
+     * @param JoinProcessorInterface             $joinProcessor
+     * @param CollectionProcessorInterface       $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
-     * @param Save $commandSave
-     * @param AssetKeywordRepositoryInterface $assetKeywordRepository
+     * @param Save                               $commandSave
+     * @param GetAssetKeywordsInterface          $getAssetKeywords
+     * @param SaveAssetKeywordsInterface         $saveAssetKeywords
+     * @param SaveMediaAssetInterface            $saveMediaAsset
+     * @param MediaAssetInterfaceFactory         $mediaAssetInterfaceFactory
      */
     public function __construct(
         ResourceModel $resource,
@@ -87,7 +110,10 @@ class AssetRepository implements AssetRepositoryInterface
         CollectionProcessorInterface $collectionProcessor,
         AssetSearchResultsInterfaceFactory $searchResultFactory,
         Save $commandSave,
-        AssetKeywordRepositoryInterface $assetKeywordRepository
+        GetAssetKeywordsInterface $getAssetKeywords,
+        SaveAssetKeywordsInterface $saveAssetKeywords,
+        SaveMediaAssetInterface $saveMediaAsset,
+        MediaAssetInterfaceFactory $mediaAssetInterfaceFactory
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -96,16 +122,46 @@ class AssetRepository implements AssetRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
         $this->assetSaveService = $commandSave;
-        $this->assetKeywordRepository = $assetKeywordRepository;
+        $this->getAssetKeywords = $getAssetKeywords;
+        $this->saveAssetKeywords = $saveAssetKeywords;
+        $this->saveMediaAsset = $saveMediaAsset;
+        $this->mediaAssetInterfaceFactory = $mediaAssetInterfaceFactory;
     }
 
     /**
-     * @inheritdoc
+     * Save asset
+     *
+     * @param AssetInterface $asset
+     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(AssetInterface $asset): void
     {
+        $mediaGalleryAssetId = $this->saveMediaGalleryAsset($asset);
+        $asset->setMediaGalleryId($mediaGalleryAssetId);
         $this->assetSaveService->execute($asset);
-        $this->assetKeywordRepository->saveAssetKeywords($asset);
+        $this->saveAssetKeywords->execute([$asset]);
+    }
+
+    /**
+     * Save media gallery asset based on the adobe asset data.
+     *
+     * @param AssetInterface $asset
+     *
+     * @return int
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
+    private function saveMediaGalleryAsset(AssetInterface $asset): int
+    {
+        /** @var MediaAssetInterface $mediaAsset */
+        $mediaAsset = $this->mediaAssetInterfaceFactory->create();
+        $mediaAsset->setPath($asset->getPath());
+        $mediaAsset->setTitle($asset->getTitle());
+        $mediaAsset->setHeight($asset->getHeight());
+        $mediaAsset->setWidth($asset->getWidth());
+        $mediaAsset->setContentType($asset->getContentType());
+
+        return $this->saveMediaAsset->execute($mediaAsset);
     }
 
     /**
@@ -121,28 +177,34 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
-        /** @var AssetCollection $collection */
-        $collection = $this->collectionFactory->create();
-        $this->joinProcessor->process(
-            $collection,
-            AssetInterface::class
-        );
+        try {
+            /** @var AssetCollection $collection */
+            $collection = $this->collectionFactory->create();
+            $this->joinProcessor->process(
+                $collection,
+                AssetInterface::class
+            );
 
-        $this->collectionProcessor->process($searchCriteria, $collection);
+            $this->collectionProcessor->process($searchCriteria, $collection);
 
-        $items = [];
-        /** @var AssetInterface $item */
-        foreach ($collection->getItems() as $item) {
-            $item->setKeywords($this->assetKeywordRepository->getAssetKeywords($item));
-            $items[] = $item;
+            $items = [];
+            /** @var AssetInterface $item */
+            foreach ($collection->getItems() as $item) {
+                $item->setKeywords($this->getAssetKeywords->execute($item->getId()));
+                $items[] = $item;
+            }
+
+            /** @var AssetSearchResultsInterface $searchResults */
+            $searchResults = $this->searchResultFactory->create();
+            $searchResults->setItems($items);
+            $searchResults->setSearchCriteria($searchCriteria);
+            $searchResults->setTotalCount($collection->getSize());
+
+            return $searchResults;
+        } catch (\Exception $exception) {
+            $message = __('An error occurred during get asset list: %1', $exception->getMessage());
+            throw new IntegrationException($message, $exception);
         }
-
-        /** @var AssetSearchResultsInterface $searchResults */
-        $searchResults = $this->searchResultFactory->create();
-        $searchResults->setItems($items);
-        $searchResults->setSearchCriteria($searchCriteria);
-        $searchResults->setTotalCount($collection->getSize());
-        return $searchResults;
     }
 
     /**
@@ -156,7 +218,14 @@ class AssetRepository implements AssetRepositoryInterface
         if (!$asset->getId()) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
         }
-        $asset->setKeywords($this->assetKeywordRepository->getAssetKeywords($asset));
+
+        try {
+            $asset->setKeywords($this->getAssetKeywords->execute($id));
+        } catch (\Exception $exception) {
+            $message = __('An error occurred during get asset by id: %1', $exception->getMessage());
+            throw new IntegrationException($message, $exception);
+        }
+
         return $asset;
     }
 

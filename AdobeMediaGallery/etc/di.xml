@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface" type="Magento\AdobeMediaGallery\Model\Keyword"/>
+    <preference for="Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface" type="Magento\AdobeMediaGallery\Model\Asset"/>
+
+    <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\GetById"/>
+    <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\Save"/>
+
+    <preference for="Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface" type="Magento\AdobeMediaGallery\Model\Keyword\Command\GetAssetKeywords"/>
+    <preference for="Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" type="Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords"/>
+    <preference for="Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface" type="Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetLinks"/>
+</config>
