@@ -5,6 +5,7 @@
       "admin_user_id": true,
       "name": true,
       "email": true,
+      "image": true,
       "account_type": true,
       "access_token": true,
       "refresh_token": true,

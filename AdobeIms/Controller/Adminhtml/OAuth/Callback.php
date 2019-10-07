@@ -21,6 +21,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
+use Magento\AdobeImsApi\Api\GetImageInterface;
 
 /**
  * Class Callback
@@ -70,19 +71,25 @@ class Callback extends Action
     private $logger;
 
     /**
-     * Callback constructor.
+     * @var GetImageInterface $getUserImage
+     */
+    private $getUserImage;
+
+    /**
      * @param Action\Context $context
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserProfileInterfaceFactory $userProfileFactory
      * @param GetTokenInterface $getToken
      * @param LoggerInterface $logger
+     * @param GetImage $getImage
      */
     public function __construct(
         Action\Context $context,
         UserProfileRepositoryInterface $userProfileRepository,
         UserProfileInterfaceFactory $userProfileFactory,
         GetTokenInterface $getToken,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        GetImageInterface $getImage
     ) {
         parent::__construct($context);
 
@@ -90,6 +97,7 @@ class Callback extends Action
         $this->userProfileFactory = $userProfileFactory;
         $this->getToken = $getToken;
         $this->logger = $logger;
+        $this->getUserImage = $getImage;
     }
 
     /**
@@ -101,10 +109,11 @@ class Callback extends Action
             $tokenResponse = $this->getToken->execute(
                 (string)$this->getRequest()->getParam('code')
             );
-
+            $userImage = $this->getUserImage->execute($tokenResponse->getAccessToken());
             $userProfile = $this->getUserProfile();
             $userProfile->setName($tokenResponse->getName());
             $userProfile->setEmail($tokenResponse->getEmail());
+            $userProfile->setImage($userImage);
             $userProfile->setUserId((int)$this->_auth->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());

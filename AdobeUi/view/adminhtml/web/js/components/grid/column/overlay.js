@@ -23,6 +23,7 @@ define([
 
                 return styles;
             }
+
             return {};
         }
     });
