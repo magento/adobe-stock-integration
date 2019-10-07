@@ -122,7 +122,7 @@ class Config implements ConfigInterface
     {
         return str_replace(
             ['#{api_key}'],
-            [$this->config->getApiKey()],
+            [$this->getApiKey()],
             $this->scopeConfig->getValue(self::XML_PATH_IMAGE_URL_PATTERN)
         );
     }
