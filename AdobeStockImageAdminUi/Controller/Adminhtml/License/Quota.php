@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Backend controller for retrieving license quota for the current user
  */
-class GetQuota extends Action
+class Quota extends Action
 {
     /**
      * Successful image download result code.
@@ -67,13 +67,14 @@ class GetQuota extends Action
     public function execute()
     {
         try {
-            $params = $this->getRequest()->getParams();
-            $contentId = (int)$params['media_id'];
+            $quota = $this->client->getQuota();
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'error_message' => '',
-                'result' => $this->client->getQuotaConfirmationMessage($contentId),
+                'result' => [
+                    'credits' => $quota->getCredits(),
+                    'images' => $quota->getImages()
+                ]
             ];
 
         } catch (\Exception $exception) {

@@ -36,7 +36,7 @@
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
             <argument name="query" value="Автомобили"/>
         </actionGroup>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnails"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.keyword('Авто')}}" stepKey="assertAttributeLocalized"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.attributeTitle('Транспорт')}}" stepKey="assertCategoryLocalized"/>
     </test>

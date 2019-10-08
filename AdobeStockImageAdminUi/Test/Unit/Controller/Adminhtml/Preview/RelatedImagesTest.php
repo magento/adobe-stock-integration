@@ -23,39 +23,38 @@ use Magento\Framework\Exception\IntegrationException;
  */
 class RelatedImagesTest extends TestCase
 {
-
     /**
-     * @var MockObject|LoggerInterface $logger
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
     /**
-     * @var MockObject|ActionContext $context
+     * @var MockObject|ActionContext
      */
     private $context;
 
     /**
-     * @var MockObject $request
+     * @var MockObject
      */
     private $request;
 
     /**
-     * @var MockObject $resultFactory
+     * @var MockObject
      */
     private $resultFactory;
 
     /**
-     * @var MockObject $jsonObject
+     * @var MockObject
      */
     private $jsonObject;
 
     /**
-     * @var RelatedImages $relatedImages
+     * @var RelatedImages
      */
     private $relatedImages;
 
     /**
-     * @var MockObject|GetRelatedImagesInterface $getRelatedImages
+     * @var MockObject|GetRelatedImagesInterface
      */
     private $getRelatedImages;
 

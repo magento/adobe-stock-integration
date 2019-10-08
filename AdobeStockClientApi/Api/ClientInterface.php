@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClientApi\Api;
 
+use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
@@ -26,27 +27,19 @@ interface ClientInterface
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface;
 
     /**
-     * Gets license quota for current content from Adobe Stock API
-     *
-     * @param int $contentId
-     * @return int
-     */
-    public function getQuota(int $contentId): int;
-
-    /**
-     * Get quota confirmation message before licensing an asset
-     *
-     * @param int $contentId
-     * @return string
-     */
-    public function getQuotaConfirmationMessage(int $contentId): string;
-
-    /**
-     * Get full entitlement quota.
+     * Get quota for current content from Adobe Stock API
      *
      * @return UserQuotaInterface
      */
-    public function getFullEntitlementQuota(): UserQuotaInterface;
+    public function getQuota(): UserQuotaInterface;
+
+    /**
+     * Get License confirmation
+     *
+     * @param int $contentId
+     * @return LicenseConfirmationInterface
+     */
+    public function getLicenseConfirmation(int $contentId): LicenseConfirmationInterface;
 
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.
