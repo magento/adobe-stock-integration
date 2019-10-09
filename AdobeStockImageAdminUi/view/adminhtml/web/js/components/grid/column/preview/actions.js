@@ -152,9 +152,10 @@ define([
          * License and save image
          *
          * @param {Object} record
+         * @param fileName
          */
-        licenseAndSave: function (record) {
-            this.save(record, this.generateImageName(record), this.preview().licenseAndDownloadUrl);
+        licenseAndSave: function (record, fileName) {
+            this.save(record, fileName, this.preview().licenseAndDownloadUrl);
         },
 
         /**
@@ -182,11 +183,11 @@ define([
                         this.getPrompt(
                             {
                                 'title': $.mage.__('License Adobe Stock Image?'),
-                                'content': confirmationContent + '<p><b>' + quotaMessage + '</b></p>',
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</p><br>' + $.mage.__('File Name') + '</b>',
                                 'visible': canPurchase,
                                 'actions': {
-                                    confirm: function () {
-                                        canPurchase ? licenseAndSave(record) : window.open(this.preview().buyCreditsUrl);
+                                    confirm: function (fileName) {
+                                        canPurchase ? licenseAndSave(record, fileName) : window.open(this.preview().buyCreditsUrl);
                                     }
                                 },
                                 'buttons': [{
@@ -196,12 +197,8 @@ define([
                                         this.closeModal();
                                     }
                                 }, {
-                                    text: canPurchase ? $.mage.__('OK') : $.mage.__('Buy Credits'),
+                                    text: canPurchase ? $.mage.__('Confirm') : $.mage.__('Buy Credits'),
                                     class: 'action-primary action-accept',
-                                    click: function () {
-                                        this.closeModal();
-                                        this.options.actions.confirm();
-                                    }
                                 }]
 
                             }
