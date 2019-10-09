@@ -14,7 +14,6 @@ use AdobeStock\Api\Request\License as LicenseRequest;
 use AdobeStock\Api\Response\License as LicenseResponse;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
-use Exception;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
@@ -25,6 +24,7 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
+use Exception;
 
 /**
  * Adapter for Adobe SDK
@@ -128,12 +128,15 @@ class Connection
     }
 
     /**
-     * @param \Exception $exception
+     * Handle Adobe Stock SDK exception
+     *
+     * @param Exception $exception
+     * @param string $message
      * @throws AuthenticationException
      * @throws AuthorizationException
      * @throws IntegrationException
      */
-    private function handleException(\Exception $exception, string $message): void
+    private function handleException(Exception $exception, string $message): void
     {
         if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
             throw new AuthenticationException( __('Adobe API Key is invalid!'));

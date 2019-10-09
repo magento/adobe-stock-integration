@@ -83,8 +83,7 @@ class ClientTest extends TestCase
                             && in_array('nb_results', $searchFiles->getResultColumns())
                             && $searchFiles->getSearchParams()->getWords() == $words;
                     }
-                ),
-                null
+                )
             );
         $this->connection->expects($this->once())
             ->method('getNextResponse')

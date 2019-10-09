@@ -82,14 +82,16 @@ class LogOut implements LogOutInterface
                 return true;
             }
 
-            if (empty($userProfile->getAccessToken()) && empty($userProfile->getRefreshToken())) {
+            $accessToken = $userProfile->getAccessToken();
+
+            if (empty($accessToken)) {
                 return true;
             }
 
             $curl = $this->curlFactory->create();
             $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
             $curl->addHeader('cache-control', 'no-cache');
-            $curl->get($this->config->getLogoutUrl($userProfile->getAccessToken()));
+            $curl->get($this->config->getLogoutUrl($accessToken));
 
             if ($curl->getStatus() === self::HTTP_FOUND) {
                 $userProfile->setAccessToken('');
