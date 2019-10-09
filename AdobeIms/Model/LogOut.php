@@ -8,6 +8,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
 
@@ -75,7 +76,15 @@ class LogOut implements LogOutInterface
     public function execute() : bool
     {
         try {
-            $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
+            try {
+                $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
+            } catch (NoSuchEntityException $exception) {
+                return true;
+            }
+
+            if (empty($userProfile->getAccessToken()) && empty($userProfile->getRefreshToken())) {
+                return true;
+            }
 
             $curl = $this->curlFactory->create();
             $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
