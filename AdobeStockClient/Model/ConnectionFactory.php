@@ -22,6 +22,7 @@ class ConnectionFactory
      * @param string $apiKey
      * @param string $productName
      * @param string $targetEnvironment
+     * @param HttpInterface|null $httpClient
      * @return AdobeStock
      */
     public function create(
