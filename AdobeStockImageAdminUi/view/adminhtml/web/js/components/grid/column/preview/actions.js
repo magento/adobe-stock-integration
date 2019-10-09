@@ -41,6 +41,15 @@ define([
         },
 
         /**
+         * Returns is_licensed flag as observable for given record
+         *
+         * @returns {observable}
+         */
+        isLicensed: function() {
+            return this.preview().displayedRecord().is_licensed;
+        },
+
+        /**
          * Locate downloaded image in media browser
          */
         locate: function () {
@@ -237,6 +246,15 @@ define([
                 .finally((function () {
                     messages.scheduleCleanup(this.messageDelay);
                 }).bind(this));
+        },
+
+        /**
+         * Returns license button title depending on the existing saved preview
+         *
+         * @returns {String}
+         */
+        getLicenseButtonTitle: function () {
+            return this.isDownloaded() ?  $.mage.__('License') : $.mage.__('License and Save')
         }
     });
 });

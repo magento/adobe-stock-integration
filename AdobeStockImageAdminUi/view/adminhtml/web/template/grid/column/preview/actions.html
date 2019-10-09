@@ -23,7 +23,7 @@
 </button>
 <button class="action-default primary"
         type="button"
-        attr="title: $t('License and Save')"
-        data-bind="click: function () { licenseProcess(); }">
-    <span translate="'License and Save'"></span>
+        attr="title: getLicenseButtonTitle()"
+        data-bind="visible: !isLicensed($row()), click: function () { licenseProcess(); }">
+    <span data-bind="text: getLicenseButtonTitle()"></span>
 </button>
