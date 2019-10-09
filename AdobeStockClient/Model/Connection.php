@@ -24,7 +24,6 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
-use Exception;
 
 /**
  * Adapter for Adobe SDK
@@ -130,20 +129,20 @@ class Connection
     /**
      * Handle Adobe Stock SDK exception
      *
-     * @param Exception $exception
+     * @param \Exception $exception
      * @param string $message
      * @throws AuthenticationException
      * @throws AuthorizationException
      * @throws IntegrationException
      */
-    private function handleException(Exception $exception, string $message): void
+    private function handleException(\Exception $exception, string $message): void
     {
         if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
-            throw new AuthenticationException( __('Adobe API Key is invalid!'));
+            throw new AuthenticationException(__('Adobe API Key is invalid!'));
         }
         if (strpos($exception->getMessage(), 'Oauth token is not valid') !== false) {
             $this->flushUserTokens->execute();
-            throw new AuthorizationException( __('Adobe API login has expired!'));
+            throw new AuthorizationException(__('Adobe API login has expired!'));
         }
         $phrase = __(
             $message . ': %error_message',
