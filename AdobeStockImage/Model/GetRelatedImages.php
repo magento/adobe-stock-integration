@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
@@ -19,7 +20,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class GetRelatedImages
  */
-class GetRelatedImages
+class GetRelatedImages implements GetRelatedImagesInterface
 {
     /**
      * @var GetImageListInterface
@@ -69,13 +70,7 @@ class GetRelatedImages
     }
 
     /**
-     * Get related images
-     *
-     * @param int $imageId
-     * @param int $limit
-     *
-     * @return array
-     * @throws IntegrationException
+     * @inheritdoc
      */
     public function execute(int $imageId, int $limit): array
     {
@@ -113,7 +108,16 @@ class GetRelatedImages
                 $data[] = [
                     'id' => $image->getId(),
                     'title' => $image->getCustomAttribute('title')->getValue(),
-                    'thumbnail_url' => $image->getCustomAttribute('thumbnail_240_url')->getValue()
+                    'thumbnail_url' => $image->getCustomAttribute('thumbnail_240_url')->getValue(),
+                    'thumbnail_500_url' => $image->getCustomAttribute('thumbnail_500_url')->getValue(),
+                    'creator_name' => $image->getCustomAttribute('creator_name')->getValue(),
+                    'content_type' => $image->getCustomAttribute('content_type')->getValue(),
+                    'width' => $image->getCustomAttribute('width')->getValue(),
+                    'height' => $image->getCustomAttribute('height')->getValue(),
+                    'category' => $image->getCustomAttribute('category')->getValue(),
+                    'keywords' => $image->getCustomAttribute('keywords')->getValue(),
+                    'is_downloaded' => $image->getCustomAttribute('is_downloaded')->getValue(),
+                    'path' => $image->getCustomAttribute('path')->getValue()
                 ];
             }
             return $data;

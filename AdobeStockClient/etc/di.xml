@@ -9,6 +9,7 @@
     <preference for="Magento\AdobeStockClientApi\Api\ClientInterface" type="Magento\AdobeStockClient\Model\Client"/>
     <preference for="Magento\AdobeStockClientApi\Api\Data\ConfigInterface" type="Magento\AdobeStockClient\Model\Config"/>
     <preference for="Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface" type="Magento\AdobeStockClient\Model\UserQuota"/>
+    <preference for="Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface" type="Magento\AdobeStockClient\Model\LicenseConfirmation"/>
     <type name="Magento\AdobeStockClient\Model\Config">
         <arguments>
             <argument name="searchResultFields" xsi:type="array">
@@ -60,6 +61,7 @@
                 <item name="colors_filter" xsi:type="string">setFilterColors</item>
                 <item name="serie_id" xsi:type="string">setSerieId</item>
                 <item name="model_id" xsi:type="string">setModelId</item>
+                <item name="premium_filter" xsi:type="string">setFilterPremium</item>
             </argument>
         </arguments>
     </type>

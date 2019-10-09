@@ -18,16 +18,15 @@ use Psr\Log\LoggerInterface;
  */
 class Profile extends Action
 {
-
     /**
      * Successful result code.
      */
-    const HTTP_OK = 200;
+    private const HTTP_OK = 200;
 
     /**
      * Internal server error response code.
      */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @see _isAllowed()
@@ -50,7 +49,7 @@ class Profile extends Action
     private $logger;
 
     /**
-     * GetUserData constructor.
+     * Profile constructor.
      *
      * @param Action\Context $context
      * @param UserContextInterface $userContext
@@ -78,7 +77,8 @@ class Profile extends Action
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
             $userData = [
                 'email' => $userProfile->getEmail(),
-                'name' => $userProfile->getName()
+                'name' => $userProfile->getName(),
+                'image' => $userProfile->getImage()
             ];
             $responseCode = self::HTTP_OK;
 

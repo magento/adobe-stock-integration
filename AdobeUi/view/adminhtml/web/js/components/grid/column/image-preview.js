@@ -5,7 +5,7 @@
 define([
     'underscore',
     'jquery',
-    'Magento_Ui/js/grid/columns/column',
+    'Magento_Ui/js/grid/columns/column'
 ], function (_, $, Column) {
     'use strict';
 
@@ -14,19 +14,51 @@ define([
             previewImageSelector: '[data-image-preview]',
             visibility: [],
             height: 0,
+            previewStyles: {},
+            displayedRecord: {},
             lastOpenedImage: null,
-            imports: {
-                records: '${ $.provider }:data.items'
+            modules: {
+                masonry: '${ $.parentName }',
+                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+            },
+            statefull: {
+                visible: true,
+                sorting: true,
+                lastOpenedImage: true
+            },
+            listens: {
+                '${ $.provider }:params.filters': 'hide',
+                '${ $.provider }:params.search': 'hide'
             }
+        },
+
+        /**
+         * Init observable variables
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'visibility',
+                    'height',
+                    'previewStyles',
+                    'displayedRecord',
+                    'lastOpenedImage'
+                ]);
+            this.height.subscribe(function () {
+                this.thumbnailComponent().previewHeight(this.height());
+            }, this);
+
+            return this;
         },
 
         /**
          * Next image preview
          *
-         * @param record
+         * @param {Object} record
          */
         next: function (record) {
-            var recordToShow = this.records[record._rowIndex + 1];
+            var recordToShow = this.getRecord(record._rowIndex + 1);
             recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
             this.show(recordToShow);
         },
@@ -34,12 +66,23 @@ define([
         /**
          * Previous image preview
          *
-         * @param record
+         * @param {Object} record
          */
         prev: function (record) {
-            var recordToShow = this.records[record._rowIndex - 1];
+            var recordToShow = this.getRecord(record._rowIndex - 1);
             recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
             this.show(recordToShow);
+        },
+
+        /**
+         * Get record
+         *
+         * @param {Integer} recordIndex
+         *
+         * @return {Object}
+         */
+        getRecord: function (recordIndex) {
+            return this.masonry().rows()[recordIndex];
         },
 
         /**
@@ -62,6 +105,7 @@ define([
                 img;
 
             this.hide();
+            this.displayedRecord(record);
 
             if (record.rowNumber) {
                 this._selectRow(record.rowNumber);
@@ -77,7 +121,7 @@ define([
             } else {
                 img.load(this._updateHeight.bind(this));
             }
-            this.lastOpenedImage = record;
+            this.lastOpenedImage(record._rowIndex);
         },
 
         /**
@@ -95,7 +139,7 @@ define([
         hide: function () {
             var visibility = this.visibility();
 
-            this.lastOpenedImage = null;
+            this.lastOpenedImage(null);
             visibility.fill(false);
             this.visibility(visibility);
             this.height(0);
@@ -109,8 +153,7 @@ define([
          * @return {*|boolean}
          */
         isVisible: function (record) {
-            if (this.lastOpenedImage
-                && this.lastOpenedImage._rowIndex === record._rowIndex
+            if (this.lastOpenedImage() === record._rowIndex
                 && (
                     this.visibility()[record._rowIndex] === undefined
                     || this.visibility()[record._rowIndex] === false
@@ -119,6 +162,30 @@ define([
                 this.show(record);
             }
             return this.visibility()[record._rowIndex] || false;
+        },
+
+        /**
+         * Get styles for preview
+         *
+         * @returns {Object}
+         */
+        getStyles: function () {
+            this.previewStyles({
+                'margin-top': '-' + this.height()
+            });
+
+            return this.previewStyles();
+        },
+
+        /**
+         * Scroll to preview window
+         */
+        scrollToPreview: function () {
+            $(this.previewImageSelector).get(0).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
         }
     });
 });

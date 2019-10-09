@@ -14,9 +14,6 @@ namespace Magento\AdobeStockClientApi\Api\Data;
  */
 interface UserQuotaInterface
 {
-    const IMAGES = 'images';
-    const CREDITS = 'credits';
-
     /**
      * Get images quota of adobe stock account
      *

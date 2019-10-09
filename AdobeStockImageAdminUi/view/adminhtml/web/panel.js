@@ -6,10 +6,8 @@
 define([
     'uiElement',
     'jquery',
-    'mage/translate',
-    'Magento_AdobeStockAdminUi/js/config',
-    'Magento_AdobeStockAdminUi/js/user-quota',
-], function (Element, $, $t, config, userQuota) {
+    'mage/translate'
+], function (Element, $, $t) {
     'use strict';
 
     return Element.extend({
@@ -18,7 +16,7 @@ define([
             masonryComponentPath: '',
             modules: {
                 masonry: '${$.masonryComponentPath}'
-            },
+            }
         },
 
         /**
@@ -29,21 +27,13 @@ define([
         initialize: function () {
             this._super();
 
-            config.downloadPreviewUrl = this.downloadPreviewUrl;
-            config.licenseAndDownloadUrl = this.licenseAndDownloadUrl;
-            config.quotaUrl = this.quotaUrl;
-            config.relatedImagesUrl = this.relatedImagesUrl;
-
-            userQuota.images(this.userQuota.images);
-            userQuota.credits(this.userQuota.credits);
-
             $(this.containerId).modal({
                 type: 'slide',
                 buttons: [],
                 modalClass: 'adobe-stock-modal',
                 title: $t('Adobe Stock')
             }).on('openModal', function () {
-                this.masonry().setLayoutStyles();
+                this.masonry().setLayoutStylesWhenLoaded();
             }.bind(this)).applyBindings();
 
             return this;

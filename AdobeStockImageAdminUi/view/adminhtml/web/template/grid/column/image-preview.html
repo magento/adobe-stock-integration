@@ -1,52 +1,36 @@
-
 <!--
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles($row())">
+<div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles()">
     <div class="container">
-        <div class="action-buttons">
-            <button class="action-previous" type="button" data-bind="click: function () { $col.prev($row()); }">
+        <div class="action-buttons preview-buttons">
+            <button class="action-previous" type="button" disable="$col.getPreviousButtonDisabled($row())" data-bind="click: function () { $col.prev($row()); }">
                 <span translate="'Previous'"/>
             </button>
-            <button class="action-next" type="button" data-bind="click: function () { $col.next($row()); }">
+            <button class="action-next" type="button" disable="$col.getNextButtonDisabled($row())" data-bind="click: function () { $col.next($row()); }">
                 <span translate="'Next'"/>
             </button>
             <button class="action-close" type="button" data-bind="click: function () { $col.hide($row()); }">
                 <span translate="'Close'"/>
             </button>
         </div>
-        <img class="preview" attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
+        <img class="preview" attr="src: $col.displayedRecord().thumbnail_500_url, alt: $col.displayedRecord().title">
         <div class="info">
-            <h3 class="title" text="$col.getTitle($row())" if="$col.getTitle($row())"/>
-            <div class="author" if="$col.getAuthor($row())">
-                <span translate="'By'" /><span text="' ' + $col.getAuthor($row())" />
+            <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"/>
+            <div class="author" if="$col.displayedRecord().creator_name">
+                <span translate="'By'" /><span text="' ' + $col.displayedRecord().creator_name" />
             </div>
-            <ul class="messages" if="$col.getMessages().length > 0">
-                <!-- ko foreach: $col.getMessages() -->
-                <div class="messages">
-                    <div attr="class: 'message message-'+code">
-                        <div data-ui-id="messages-message-error">
-                            <span data-bind="html: message"></span>
-                        </div>
-                    </div>
-                </div>
-                <!-- /ko -->
-            </ul>
-            <button class="action-secondary" type="button" data-bind="click: function(){ $col.savePreview($row()) }">
-                <span translate="'Save Preview'"/>
-            </button>
-            <button class="action-default primary"
-                    type="button"
-                    attr="title: $t('License and Save')"
-                    data-bind="click: function () { $col.licenseProcess($row()); }">
-                <span translate="'License and Save'"></span>
-            </button>
+
+            <!-- ko scope: actions -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+
         </div>
         <div class="attributes" data-role="image-attributes-value">
-            <!-- ko foreach: $col.getDisplayAttributes($row()) -->
+            <!-- ko foreach: $col.getDisplayAttributes() -->
             <div class="attribute">
                 <span class="title" translate="name"/>
                 <div class="value">
@@ -56,76 +40,12 @@
             <!-- /ko -->
         </div>
 
-        <div id="adobe-stock-tabs"
-             class="adobe-stock-tabs"
-             data-bind="mageInit: {
-                    'mage/backend/tabs': {
-                    active: 'series_content_' + $row().id,
-                    destination: '#adobe-stock-tabs-content',
-                    shadowTabs: [],
-                }
-            }">
-            <ul class="tabs-horiz">
-                <li>
-                    <a id="series_tab" attr="'href': '#series_content_' + $row().id">
-                        <span class="title" translate="'More from this series'"></span>
-                    </a>
-                </li>
-                <li>
-                    <a id="model_tab" attr="'href': '#model_content_' + $row().id">
-                        <span class="title" translate="'More from this model'"></span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div id="adobe-stock-tabs-content" class="adobe-stock-related-images-tab-content">
-            <div attr="'id': 'series_content_' + $row().id">
-                <!-- ko foreach: $col.getSeries($row()) -->
-                <div class="thumbnail">
-                    <img attr="src: thumbnail_url, alt: title">
-                </div>
-                <!-- /ko -->
-                <div class="see-more-wrapper" data-bind="click: function(){ $col.seeMoreFromSeries($row()) }">
-                    <div class="see-more-content">
-                        <div class="three-dots">
-                            <span class="dots"></span>
-                            <span class="dots"></span>
-                            <span class="dots"></span>
-                        </div>
-                        <a href="" class="see-more">See more</a>
-                    </div>
-                </div>
-            </div>
-            <div attr="'id': 'model_content_' + $row().id">
-                <!-- ko foreach: $col.getModel($row()) -->
-                <div class="thumbnail">
-                    <img attr="src: thumbnail_url, alt: title">
-                </div>
-                <!-- /ko -->
-                <div class="see-more-wrapper" data-bind="click: function(){ $col.seeMoreFromModel($row()) }">
-                    <div class="see-more-content">
-                        <div class="three-dots">
-                            <span class="dots"></span>
-                            <span class="dots"></span>
-                            <span class="dots"></span>
-                        </div>
-                        <a href="" class="see-more">See more</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="keywords">
-            <div class="title" translate="'Similar Keywords'"></div>
-            <!-- ko foreach: $col.getKeywords($row()) -->
-            <div class="keyword" data-bind="css: { 'hide': $index() >= $col.getKeywordsLimit($row())}">
-                <a href="" class="value" data-bind="click: function(){ $col.searchByKeyWord(name) }">
-                    <span text="name"/>
-                </a>
-            </div>
-            <!-- /ko -->
-            <button data-bind="visible: $col.canViewMoreKeywords($row()), click: function(){ $col.viewAllKeywords($row()) }">
-                <span translate="'View all'"/>
-            </button>
-        </div>
+        <!-- ko scope: related -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko scope: keywords -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
     </div>
 </div>
