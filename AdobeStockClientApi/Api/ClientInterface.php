@@ -44,11 +44,10 @@ interface ClientInterface
     /**
      * Perform a basic request to Adobe Stock API to check network connection, API key, etc.
      *
-     * @param string|null $apiKey
-     *
+     * @param string $apiKey
      * @return bool
      */
-    public function testConnection(string $apiKey = null): bool;
+    public function testConnection(string $apiKey): bool;
 
     /**
      * Invokes licensing image operation via Adobe Stock API
@@ -62,7 +61,7 @@ interface ClientInterface
      * Returns download URL for a licensed image
      *
      * @param int $contentId
-     * @return mixed
+     * @return string
      */
     public function getImageDownloadUrl(int $contentId): string;
 }
