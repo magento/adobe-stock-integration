@@ -121,7 +121,7 @@ class Connection
      *
      * @return string|null
      */
-    private function getAccessToken(): string
+    private function getAccessToken(): ?string
     {
         return $this->getAccessToken->execute();
     }
