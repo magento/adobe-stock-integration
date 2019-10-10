@@ -113,6 +113,26 @@ class ProfileTest extends TestCase
     }
 
     /**
+     * Execute with exception
+     */
+    public function testExecuteWithExecption()
+    {
+        $this->userContext->expects($this->once())->method('getUserId')->willReturn(null);
+        $this->userProfileRepository->expects($this->exactly(1))
+            ->method('getByUserId')
+            ->willThrowException(new \Exception());
+        $result = [
+            'success' => false,
+            'message' => __('An error occurred during get user data. Contact support.'),
+        ];
+        $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
+        $this->jsonObject->expects($this->once())->method('setData')
+            ->with($this->equalTo($result));
+        $this->profile->execute();
+
+    }
+
+    /**
      * User data provider
      */
     public function userDataProvider()

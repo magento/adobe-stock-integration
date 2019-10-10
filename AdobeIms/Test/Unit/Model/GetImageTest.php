@@ -111,6 +111,22 @@ class GetImageTest extends TestCase
     }
 
     /**
+     * Get Image with exception
+     */
+    public function testGetImageWithException()
+    {
+        $this->curlFactoryMock->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception());
+        $this->logger->expects($this->once())
+            ->method('critical')
+            ->with('Error during get adobe stock user image operation: ')
+            ->willReturnSelf();
+        $this->getImage->execute('code');
+
+    }
+
+    /**
      * Images data provider.
      *
      * @return array
