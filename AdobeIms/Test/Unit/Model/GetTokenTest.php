@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * User repository test.
+ * Get user token test
  */
 class GetTokenTest extends TestCase
 {
