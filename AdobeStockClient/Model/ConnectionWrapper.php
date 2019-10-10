@@ -22,13 +22,12 @@ use Magento\AdobeStockClient\Model\ConnectionFactory;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Adapter for Adobe SDK
  */
-class Connection
+class ConnectionWrapper
 {
     /**
      * @var ClientConfig

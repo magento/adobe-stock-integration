@@ -12,7 +12,8 @@ use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Magento\AdobeStockClient\Model\Client;
-use Magento\AdobeStockClient\Model\Connection;
+use Magento\AdobeStockClient\Model\ConnectionWrapper;
+use Magento\AdobeStockClient\Model\ConnectionWrapperFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -33,7 +34,7 @@ class ClientTest extends TestCase
     private $client;
 
     /**
-     * @var Connection|MockObject
+     * @var ConnectionWrapper|MockObject
      */
     private $connection;
 
@@ -42,14 +43,23 @@ class ClientTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(Connection::class)
+        $this->connection = $this->getMockBuilder(ConnectionWrapper::class)
             ->setMethods(['searchFilesInitialize', 'getNextResponse'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        /** @var ConnectionWrapperFactory|MockObject $connectionFactory */
+        $connectionFactory = $this->getMockBuilder(ConnectionWrapperFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->connection);
+
         $this->client = Bootstrap::getObjectManager()->create(
             Client::class,
             [
-                'connection' => $this->connection
+                'connectionFactory' => $connectionFactory
             ]
         );
     }
