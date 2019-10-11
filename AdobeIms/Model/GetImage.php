@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 
 /**
  * Get user image profile.
@@ -49,14 +50,14 @@ class GetImage implements GetImageInterface
      * @param LoggerInterface $logger
      * @param ScopeConfigInterface $scopeConfig
      * @param CurlFactory $curlFactory
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param Json $json
      */
     public function __construct(
         LoggerInterface $logger,
         ScopeConfigInterface $scopeConfig,
         CurlFactory $curlFactory,
-        Config $config,
+        ConfigInterface $config,
         Json $json
     ) {
         $this->logger = $logger;
