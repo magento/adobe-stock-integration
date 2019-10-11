@@ -129,7 +129,7 @@ define([
         showRelated: function (record) {
             this.keywords().hideAllKeywords();
             this.displayedRecord(record);
-            this._updateHeight();
+            this.updateHeight();
         },
 
         /**
@@ -155,7 +155,7 @@ define([
             }).done(function (data) {
                 record.series(data.result.same_series);
                 record.model(data.result.same_model);
-                this._updateHeight();
+                this.updateHeight();
             }.bind(this));
         },
 

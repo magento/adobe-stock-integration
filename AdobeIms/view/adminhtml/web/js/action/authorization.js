@@ -67,8 +67,6 @@ define([], function () {
                         return;
                     }
 
-                    clearInterval(watcherId);
-
                     /**
                      * If within 10 seconds the result is not received, then reject the request
                      */

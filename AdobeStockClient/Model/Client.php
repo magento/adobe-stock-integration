@@ -8,15 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
 
-use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Exception\StockApi;
-use AdobeStock\Api\Models\LicensePurchaseOptions;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License;
-use Exception;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
@@ -27,11 +24,8 @@ use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use Magento\Framework\Phrase;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
 use AdobeStock\Api\Request\License as LicenseRequest;
 use Psr\Log\LoggerInterface;
@@ -62,9 +56,9 @@ class Client implements ClientInterface
     private $localeResolver;
 
     /**
-     * @var Connection
+     * @var ConnectionWrapperFactory
      */
-    private $connection;
+    private $connectionFactory;
 
     /**
      * @var LicenseRequestFactory
@@ -93,9 +87,9 @@ class Client implements ClientInterface
 
     /**
      * @param ConfigInterface $config
-     * @param Connection $connection
+     * @param ConnectionWrapperFactory $connectionFactory
      * @param SearchResultFactory $searchResultFactory
-     * @param \Magento\AdobeStockClient\Model\SearchParameterProviderInterface $searchParametersProvider
+     * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
      * @param LicenseRequestFactory $licenseRequestFactory
      * @param LoggerInterface $logger
@@ -105,7 +99,7 @@ class Client implements ClientInterface
      */
     public function __construct(
         ConfigInterface $config,
-        Connection $connection,
+        ConnectionWrapperFactory $connectionFactory,
         SearchResultFactory $searchResultFactory,
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
@@ -116,7 +110,7 @@ class Client implements ClientInterface
         LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
     ) {
         $this->config = $config;
-        $this->connection = $connection;
+        $this->connectionFactory = $connectionFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
@@ -274,9 +268,9 @@ class Client implements ClientInterface
     /**
      * Initialize connection to the Adobe Stock service.
      */
-    private function getConnection(): Connection
+    private function getConnection(): ConnectionWrapper
     {
-        return $this->connection;
+        return $this->connectionFactory->create();
     }
 
     /**
