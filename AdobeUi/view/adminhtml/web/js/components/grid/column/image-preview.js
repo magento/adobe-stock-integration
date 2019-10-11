@@ -102,7 +102,8 @@ define([
          */
         show: function (record) {
             var visibility = this.visibility(),
-                img;
+                img,
+                isDisplayed = (this.displayedRecord()._rowIndex === record._rowIndex);
 
             this.hide();
             this.displayedRecord(record);
@@ -116,8 +117,8 @@ define([
             this.visibility(visibility);
 
             img = $(this.previewImageSelector + ' img');
-
-            if (img.get(0).complete) {
+            
+            if (img.get(0).complete && !isDisplayed) {
                 this.updateHeight();
                 this.scrollToPreview();
             } else {
