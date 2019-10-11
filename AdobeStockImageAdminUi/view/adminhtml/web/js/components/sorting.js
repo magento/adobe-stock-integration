@@ -17,6 +17,10 @@ define([
             listens: {
                 'selectedOption': 'applyChanges'
             },
+            statefull: {
+                selectedOption: true,
+                applied: true
+            },
             exports: {
                 applied: '${ $.provider }:params.sorting'
             }
