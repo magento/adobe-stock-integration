@@ -136,16 +136,16 @@ class SignInConfigProviderTest extends TestCase
     {
         return [
             [
-                true,
-                [
-                    'images' => 3,
-                    'credits' => 5
-                ]
-            ], [
                 false,
                 [
                     'images' => 0,
                     'credits' => 0
+                ]
+            ], [
+                true,
+                [
+                    'images' => 3,
+                    'credits' => 5
                 ]
             ]
         ];
