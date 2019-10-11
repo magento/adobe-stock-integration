@@ -13,6 +13,8 @@
             <title value="Admin should be able to see images with same series"/>
             <description value="User sees images with the same series"/>
             <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
