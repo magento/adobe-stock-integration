@@ -99,11 +99,11 @@ class LicenseTest extends TestCase
         $this->contextMock->expects($this->once())->method('getResultFactory')->willReturn($this->resultFactoryMock);
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->requestMock->expects($this->once())->method('getParams')->willReturn(
-                [
-                    'media_id' => 283415387,
-                    'destination_path' => 'destination_path'
-                ]
-            );
+            [
+                'media_id' => 283415387,
+                'destination_path' => 'destination_path'
+            ]
+        );
         $this->resultFactoryMock->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
 
         $this->sut = new License(
