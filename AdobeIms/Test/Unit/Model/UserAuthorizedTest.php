@@ -60,8 +60,8 @@ class UserAuthorizedTest extends TestCase
         $userProfileMock->expects($this->once())->method('getAccessToken')->willReturn('token');
         $userProfileMock->expects($this->exactly(2))
             ->method('getAccessTokenExpiresAt')
-            ->willReturn(strtotime('+1 day'));
+            ->willReturn(date('Y-m-d h:i:s'));
 
-        $this->userAuthorized->execute();
+        $this->assertEquals(true, $this->userAuthorized->execute());
     }
 }
