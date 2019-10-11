@@ -150,6 +150,10 @@ class LicenseTest extends TestCase
      * Testing the behavior if some exceptions are thrown
      *
      * @dataProvider exceptionsDataProvider
+     *
+     * @param $exception
+     * @param int $responseCode
+     * @param array $result
      */
     public function testNotFoundAsset($exception, int $responseCode, array $result)
     {
