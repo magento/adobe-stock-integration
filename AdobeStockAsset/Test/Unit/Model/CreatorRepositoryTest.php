@@ -155,12 +155,11 @@ class CreatorRepositoryTest extends TestCase
 
     /**
      * Test get By id with exception.
-     *
-     * @expectedException Magento\Framework\Exception\NoSuchEntityException
-     * @exceptedExceptionMessage Object with id 2 does not exist
      */
     public function testGetByIdWithException(): void
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $creatorMock = $this->createMock(\Magento\AdobeStockAsset\Model\Creator::class);
         $this->creatorFactory->expects($this->once())
             ->method('create')
