@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
+use AdobeStock\Api\Client\Http\HttpInterface;
 
 /**
  * Class ConnectionFactory
@@ -21,10 +22,15 @@ class ConnectionFactory
      * @param string $apiKey
      * @param string $productName
      * @param string $targetEnvironment
+     * @param HttpInterface|null $httpClient
      * @return AdobeStock
      */
-    public function create(string $apiKey, string $productName, string $targetEnvironment): AdobeStock
-    {
-        return new AdobeStock($apiKey, $productName, $targetEnvironment);
+    public function create(
+        string $apiKey,
+        string $productName,
+        string $targetEnvironment,
+        HttpInterface $httpClient = null
+    ): AdobeStock {
+        return new AdobeStock($apiKey, $productName, $targetEnvironment, $httpClient);
     }
 }

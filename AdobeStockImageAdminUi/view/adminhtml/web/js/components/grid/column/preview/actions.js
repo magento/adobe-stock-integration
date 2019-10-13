@@ -61,40 +61,33 @@ define([
          * Save preview
          */
         savePreview: function () {
-            prompt({
-                title: 'Save Preview',
-                content: 'File Name',
-                value: this.generateImageName(this.preview().displayedRecord()),
-                imageExtension: this.getImageExtension(this.preview().displayedRecord()),
-                promptContentTmpl: adobePromptContentTmpl,
-                modalClass: 'adobe-stock-save-preview-prompt',
-                validation: true,
-                promptField: '[data-role="promptField"]',
-                validationRules: ['required-entry'],
-                attributesForm: {
-                    novalidate: 'novalidate',
-                    action: '',
-                    onkeydown: 'return event.key != \'Enter\';'
-                },
-                attributesField: {
-                    name: 'name',
-                    'data-validate': '{required:true}',
-                    maxlength: '128'
-                },
-                context: this,
-                actions: {
-                    confirm: function (fileName) {
-                        this.save(this.preview().displayedRecord(), fileName, this.preview().downloadImagePreviewUrl);
-                    }.bind(this)
-                },
-                buttons: [{
-                    text: $.mage.__('Cancel'),
-                    class: 'action-secondary action-dismiss'
-                }, {
-                    text: $.mage.__('Confirm'),
-                    class: 'action-primary action-accept'
-                }]
-            });
+            this.getPrompt(
+                {
+                    'title': $.mage.__('Save Preview'),
+                    'content': $.mage.__('File Name'),
+                    'visible': true,
+                    'actions': {
+                        confirm: function (fileName) {
+                            this.save(
+                                this.preview().displayedRecord(),
+                                fileName,
+                                this.preview().downloadImagePreviewUrl
+                            );
+                        }.bind(this)
+                    },
+                    'buttons': [{
+                        text: $.mage.__('Cancel'),
+                        class: 'action-secondary action-dismiss',
+                        click: function () {
+                            this.closeModal();
+                        }
+                    }, {
+                        text: $.mage.__('Confirm'),
+                        class: 'action-primary action-accept'
+                    }]
+
+                }
+            );
         },
 
         /**
@@ -168,9 +161,10 @@ define([
          * License and save image
          *
          * @param {Object} record
+         * @param fileName
          */
-        licenseAndSave: function (record) {
-            this.save(record, this.generateImageName(record), this.preview().licenseAndDownloadUrl);
+        licenseAndSave: function (record, fileName) {
+            this.save(record, fileName, this.preview().licenseAndDownloadUrl);
         },
 
         /**
@@ -195,33 +189,29 @@ define([
                         var confirmationContent = $.mage.__('License "' + record.title + '"'),
                             quotaMessage = response.result.message,
                             canPurchase = response.result.canLicense;
-                        confirmation({
-                            title: $.mage.__('License Adobe Stock Image?'),
-                            content: confirmationContent + '<p><b>' + quotaMessage + '</b></p>',
-                            actions: {
-                                confirm: function () {
-                                    if (canPurchase) {
-                                        licenseAndSave(record);
-                                    } else {
-                                        window.open(this.preview().buyCreditsUrl);
+                        this.getPrompt(
+                            {
+                                'title': $.mage.__('License Adobe Stock Image?'),
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</p><br>' + $.mage.__('File Name') + '</b>',
+                                'visible': canPurchase,
+                                'actions': {
+                                    confirm: function (fileName) {
+                                        canPurchase ? licenseAndSave(record, fileName) : window.open(this.preview().buyCreditsUrl);
                                     }
-                                }
-                            },
-                            buttons: [{
-                                text: $.mage.__('Cancel'),
-                                class: 'action-secondary action-dismiss',
-                                click: function () {
-                                    this.closeModal();
-                                }
-                            }, {
-                                text: canPurchase ? $.mage.__('OK') : $.mage.__('Buy Credits'),
-                                class: 'action-primary action-accept',
-                                click: function () {
-                                    this.closeModal();
-                                    this.options.actions.confirm();
-                                }
-                            }]
-                        })
+                                },
+                                'buttons': [{
+                                    text: $.mage.__('Cancel'),
+                                    class: 'action-secondary action-dismiss',
+                                    click: function () {
+                                        this.closeModal();
+                                    }
+                                }, {
+                                    text: canPurchase ? $.mage.__('Confirm') : $.mage.__('Buy Credits'),
+                                    class: 'action-primary action-accept',
+                                }]
+
+                            }
+                        );
                     },
 
                     error: function (response) {
@@ -230,6 +220,37 @@ define([
                     }
                 }
             );
+        },
+
+        /**
+         * Return configured  prompt with input field.
+         */
+        getPrompt: function (data) {
+            prompt({
+                title: data.title,
+                content:  data.content,
+                value: this.generateImageName(this.preview().displayedRecord()),
+                imageExtension: this.getImageExtension(this.preview().displayedRecord()),
+                visible: data.visible,
+                promptContentTmpl: adobePromptContentTmpl,
+                modalClass: 'adobe-stock-save-preview-prompt',
+                validation: true,
+                promptField: '[data-role="promptField"]',
+                validationRules: ['required-entry'],
+                attributesForm: {
+                    novalidate: 'novalidate',
+                    action: '',
+                    onkeydown: 'return event.key != \'Enter\';'
+                },
+                attributesField: {
+                    name: 'name',
+                    'data-validate': '{required:true}',
+                    maxlength: '128'
+                },
+                context: this,
+                actions: data.actions,
+                buttons: data.buttons
+            });
         },
 
         /**

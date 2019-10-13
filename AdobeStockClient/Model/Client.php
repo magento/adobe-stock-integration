@@ -8,17 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
 
-use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Exception\StockApi;
-use AdobeStock\Api\Models\LicensePurchaseOptions;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License;
-use Exception;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
@@ -26,15 +21,11 @@ use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use Magento\Framework\Phrase;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
 use AdobeStock\Api\Request\License as LicenseRequest;
 use Psr\Log\LoggerInterface;
@@ -44,16 +35,6 @@ use Psr\Log\LoggerInterface;
  */
 class Client implements ClientInterface
 {
-    /**
-     * @var Config
-     */
-    private $clientConfig;
-
-    /**
-     * @var ImsConfig
-     */
-    private $imsConfig;
-
     /**
      * @var SearchResultFactory
      */
@@ -75,7 +56,7 @@ class Client implements ClientInterface
     private $localeResolver;
 
     /**
-     * @var ConnectionFactory
+     * @var ConnectionWrapperFactory
      */
     private $connectionFactory;
 
@@ -90,16 +71,6 @@ class Client implements ClientInterface
     private $logger;
 
     /**
-     * @var UserProfileRepositoryInterface
-     */
-    private $userProfileRepository;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
      * @var UserQuotaInterfaceFactory
      */
     private $userQuotaFactory;
@@ -110,45 +81,41 @@ class Client implements ClientInterface
     private $licenseConfirmationFactory;
 
     /**
-     * @param ConfigInterface $clientConfig
-     * @param ImsConfig $imsConfig
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @param ConfigInterface $config
+     * @param ConnectionWrapperFactory $connectionFactory
      * @param SearchResultFactory $searchResultFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
-     * @param ConnectionFactory $connectionFactory
      * @param LicenseRequestFactory $licenseRequestFactory
      * @param LoggerInterface $logger
-     * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param UserContextInterface $userContext
      * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param StockFileToDocument $stockFileToDocument
      * @param LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
      */
     public function __construct(
-        ConfigInterface $clientConfig,
-        ImsConfig $imsConfig,
+        ConfigInterface $config,
+        ConnectionWrapperFactory $connectionFactory,
         SearchResultFactory $searchResultFactory,
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
-        ConnectionFactory $connectionFactory,
         LicenseRequestFactory $licenseRequestFactory,
         LoggerInterface $logger,
-        UserProfileRepositoryInterface $userProfileRepository,
-        UserContextInterface $userContext,
         UserQuotaInterfaceFactory $userQuotaFactory,
         StockFileToDocument $stockFileToDocument,
         LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
     ) {
-        $this->clientConfig = $clientConfig;
-        $this->imsConfig = $imsConfig;
+        $this->config = $config;
+        $this->connectionFactory = $connectionFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->searchParametersProvider = $searchParametersProvider;
         $this->localeResolver = $localeResolver;
-        $this->connectionFactory = $connectionFactory;
         $this->licenseRequestFactory = $licenseRequestFactory;
         $this->logger = $logger;
-        $this->userProfileRepository = $userProfileRepository;
-        $this->userContext = $userContext;
         $this->userQuotaFactory = $userQuotaFactory;
         $this->stockFileToDocument = $stockFileToDocument;
         $this->licenseConfirmationFactory = $licenseConfirmationFactory;
@@ -164,20 +131,14 @@ class Client implements ClientInterface
         $connection = $this->getConnection();
 
         try {
-            $connection->searchFilesInitialize(
-                $this->getSearchRequest($searchCriteria),
-                $this->getAccessToken()
-            );
+            $connection->searchFilesInitialize($this->getSearchRequest($searchCriteria));
             $response = $connection->getNextResponse();
             /** @var StockFile $file */
             foreach ($response->getFiles() as $file) {
                 $items[] = $this->stockFileToDocument->convert($file);
             }
             $totalCount = $response->getNbResults();
-        } catch (Exception $exception) {
-            if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
-                throw new AuthenticationException(__($exception->getMessage()), $exception, $exception->getCode());
-            }
+        } catch (IntegrationException $exception) {
             $this->logger->critical($exception->getMessage());
         }
 
@@ -201,7 +162,7 @@ class Client implements ClientInterface
         /** @var LicenseRequest $licenseRequest */
         $licenseRequest = $this->licenseRequestFactory->create();
         $licenseRequest->setContentId($contentId)
-            ->setLocale($this->clientConfig->getLocale())
+            ->setLocale($this->config->getLocale())
             ->setLicenseState('STANDARD');
 
         return $licenseRequest;
@@ -217,7 +178,7 @@ class Client implements ClientInterface
      */
     private function getLicenseInfo(int $contentId): License
     {
-        return $this->getConnection()->getMemberProfile($this->getLicenseRequest($contentId), $this->getAccessToken());
+        return $this->getConnection()->getMemberProfile($this->getLicenseRequest($contentId));
     }
 
     /**
@@ -250,31 +211,19 @@ class Client implements ClientInterface
     }
 
     /**
-     * Performs image license request to Adobe Stock APi
-     *
-     * @param int $contentId
-     * @throws IntegrationException
-     * @throws StockApi
+     * @inheritdoc
      */
     public function licenseImage(int $contentId): void
     {
-        $licenseRequest = $this->getLicenseRequest($contentId);
-        $this->getConnection()->getContentLicense($licenseRequest, $this->getAccessToken());
+        $this->getConnection()->getContentLicense($this->getLicenseRequest($contentId));
     }
 
     /**
-     * Returns download URL for a licensed image
-     *
-     * @param int $contentId
-     * @return string
-     * @throws IntegrationException
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @inheritdoc
      */
     public function getImageDownloadUrl(int $contentId): string
     {
-        $licenseRequest = $this->getLicenseRequest($contentId);
-
-        return $this->getConnection()->downloadAssetUrl($licenseRequest, $this->getAccessToken());
+        return $this->getConnection()->downloadAssetUrl($this->getLicenseRequest($contentId));
     }
 
     /**
@@ -305,7 +254,7 @@ class Client implements ClientInterface
     {
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
-        foreach ($this->clientConfig->getSearchResultFields() as $field) {
+        foreach ($this->config->getSearchResultFields() as $field) {
             if (!isset($resultsColumns[$field])) {
                 $message = __('Cannot retrieve the field %1. It\'s not available in Adobe Stock SDK', $field);
                 $this->logger->critical($message);
@@ -318,90 +267,17 @@ class Client implements ClientInterface
 
     /**
      * Initialize connection to the Adobe Stock service.
-     *
-     * @param string $key
-     *
-     * @return AdobeStock
-     * @throws IntegrationException
      */
-    private function getConnection(string $key = null): AdobeStock
+    private function getConnection(): ConnectionWrapper
     {
-        try {
-            $apiKey = !empty($key) ? $key : (string) $this->imsConfig->getApiKey();
-            return $this->connectionFactory->create(
-                $apiKey,
-                (string) $this->clientConfig->getProductName(),
-                (string) $this->clientConfig->getTargetEnvironment()
-            );
-        } catch (Exception $exception) {
-            $message = __(
-                'An error occurred during Adobe Stock connection initialization: %error_message',
-                ['error_message' => $exception->getMessage()]
-            );
-            $this->processException($message, $exception);
-        }
+        return $this->connectionFactory->create();
     }
 
     /**
-     * Retrieve an access token for current user
-     *
-     * @return string|null
+     * @inheritdoc
      */
-    private function getAccessToken()
+    public function testConnection(string $apiKey): bool
     {
-        try {
-            return $this->userProfileRepository->getByUserId(
-                (int)$this->userContext->getUserId()
-            )->getAccessToken();
-        } catch (NoSuchEntityException $exception) {
-            return null;
-        }
-    }
-
-    /**
-     * Test connection to Adobe Stock API
-     *
-     * @param string $apiKey
-     *
-     * @return bool
-     */
-    public function testConnection(string $apiKey = null): bool
-    {
-        try {
-            $searchParams = new SearchParameters();
-            $searchRequest = new SearchFilesRequest();
-            $resultColumnArray = [];
-
-            $resultColumnArray[] = 'nb_results';
-
-            $searchRequest->setLocale('en_GB');
-            $searchRequest->setSearchParams($searchParams);
-            $searchRequest->setResultColumns($resultColumnArray);
-
-            $client = $this->getConnection($apiKey);
-            $client->searchFilesInitialize($searchRequest, $this->getAccessToken());
-
-            return (bool)$client->getNextResponse()->nb_results;
-        } catch (Exception $exception) {
-            $message = __(
-                'An error occurred during Adobe Stock API connection test: %error_message',
-                ['error_message' => $exception->getMessage()]
-            );
-            $this->logger->notice($message->render());
-            return false;
-        }
-    }
-
-    /**
-     * Handle SDK Exception and throw Magento exception instead
-     *
-     * @param Phrase $message
-     * @param Exception $exception
-     * @throws IntegrationException
-     */
-    private function processException(Phrase $message, Exception $exception)
-    {
-        $this->logger->critical($message->render());
-        throw new IntegrationException($message, $exception, $exception->getCode());
+        return $this->getConnection()->testApiKey($apiKey);
     }
 }

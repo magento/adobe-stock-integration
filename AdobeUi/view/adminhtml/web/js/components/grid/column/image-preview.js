@@ -116,21 +116,25 @@ define([
             this.visibility(visibility);
 
             img = $(this.previewImageSelector + ' img');
-            if(img.get(0).complete) {
-                this._updateHeight();
+
+            if (img.get(0).complete) {
+                this.updateHeight();
+                this.scrollToPreview();
             } else {
-                img.load(this._updateHeight.bind(this));
+                img.load(function () {
+                    this.updateHeight();
+                    this.scrollToPreview();
+                }.bind(this));
             }
             this.lastOpenedImage(record._rowIndex);
         },
 
         /**
-         * @private
+         * Update image preview section height
          */
-        _updateHeight: function () {
+        updateHeight: function () {
             this.height($(this.previewImageSelector).height() + 'px');
             this.visibility(this.visibility());
-            this.scrollToPreview();
         },
 
         /**

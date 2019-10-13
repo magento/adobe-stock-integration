@@ -10,6 +10,8 @@ namespace Magento\AdobeStockImageAdminUi\Model;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -68,16 +70,23 @@ class SignInConfigProvider implements ConfigProviderInterface
      */
     private function getUserQuota(): array
     {
-        if (!$this->userAuthorized->execute()) {
-            return [
-                'images' => 0,
-                'credits' => 0
-            ];
-        }
-        $quota = $this->client->getQuota();
-        return [
-            'images' => $quota->getImages(),
-            'credits' => $quota->getCredits()
+        $defaultQuota = [
+            'images' => 0,
+            'credits' => 0
         ];
+        if (!$this->userAuthorized->execute()) {
+            return $defaultQuota;
+        }
+        try {
+            $quota = $this->client->getQuota();
+            return [
+                'images' => $quota->getImages(),
+                'credits' => $quota->getCredits()
+            ];
+        } catch (AuthenticationException $exception) {
+            return $defaultQuota;
+        } catch (AuthorizationException $exception) {
+            return $defaultQuota;
+        }
     }
 }

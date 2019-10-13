@@ -1,16 +1,27 @@
-# AdobeStockImageAdminUi Module
+# Magento_AdobeStockImageAdminUi module
 
-The AdobeStockImageAdminUi module responsible for the admin panel UI implementation
-
-## Structure
-
-Beyond the [usual module file structure](https://devdocs.magento.com/guides/v2.2/architecture/archi_perspectives/components/modules/mod_intro.html) the module contains a directory `ReportXml`.
-[Report XML](https://devdocs.magento.com/guides/v2.2/advanced-reporting/report-xml.html) is a markup language used to build reports for Advanced Reporting.
-The language declares SQL queries using XML declaration.
-
-## Subscription Process
-
-## Analytics Settings
+The Magento_AdobeStockImageAdminUi module is responsible for the admin panel user interface (UI) implementation.
 
 ## Extensibility
 
+Extension developers can interact with the Magento_AdobeStockImageAdminUi module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/plugins.html).
+
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_AdobeStockImageAdminUi module.
+
+### Layouts
+
+This module interacts with the following layouts and layout handles in the `view/adminhtml/layout` directory:
+
+- `cms_wysiwyg_images_index`
+
+For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
+
+### UI components
+
+You can extend admin notifications using the `view/adminhtml/ui_component/adobe_stock_images_listing.xml` configuration file.
+
+For information about UI components in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.3/ui_comp_guide/bk-ui_comps.html).
+
+## Additional information
+
+For information about significant changes in patch releases, see [2.3.x Release information](https://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html).
