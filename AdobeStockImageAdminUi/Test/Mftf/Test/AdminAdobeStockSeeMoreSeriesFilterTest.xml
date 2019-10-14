@@ -8,11 +8,11 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockSeeMoreSeriesTest">
+    <test name="AdminAdobeStockSeeMoreSeriesFilterTest">
         <annotations>
-            <stories value="Admin User see more images from series tab"/>
-            <title value="Admin should be able to see more images from series tab"/>
-            <description value="Admin should be able to see more images from series tab"/>
+            <stories value="Admin User see more images from series filter"/>
+            <title value="Admin should be able to see more images from series filter"/>
+            <description value="Admin should be able to see more images from series filter"/>
             <severity value="CRITICAL"/>
         </annotations>
         <before>
@@ -24,9 +24,20 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+        <grabAttributeFrom selector="{{AdobeStockSection.firstImageId}}" userInput="data-id"
+                           stepKey="getFilteredId"/>
+        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersOpen"/>
+        <actionGroup ref="AssertIsNotVisibleAdobeStockFilterElementActionGroup" stepKey="checkSerieIdFilter">
+            <argument name="filterName" value="Serie Id"/>
+        </actionGroup>
+        <click selector="{{AdobeStockFilterSection.cancelFilters}}" stepKey="cancelFilters"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <click selector="{{AdobeStockImagePreviewSection.moreFromThisSerie}}" stepKey="clickOnTabMoreForThisSerie"/>
         <click selector="{{AdobeStockImagePreviewSection.seeMoreFromSerieImages}}" stepKey="clickOnSeeMoreLinkFromSerieImages"/>
         <waitForPageLoad stepKey="waitForSeeMoreLinkFromSerieImages"/>
+        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+            <argument name="resultValue" value="$getFilteredId"/>
+        </actionGroup>
     </test>
 </tests>
