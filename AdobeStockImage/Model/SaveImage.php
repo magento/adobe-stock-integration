@@ -64,6 +64,11 @@ class SaveImage implements SaveImageInterface
     public function execute(AssetInterface $asset, string $destinationPath): void
     {
         try {
+            /* If the asset has been already saved, delete the previous version */
+            if (!empty($asset->getPath())) {
+                $this->storage->delete($asset->getPath());
+            }
+
             $path = $this->storage->save($this->getUrl($asset), $destinationPath);
             $asset->setPath($path);
             $this->saveAsset->execute($asset);
