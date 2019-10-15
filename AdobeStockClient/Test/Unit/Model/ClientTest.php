@@ -205,7 +205,9 @@ class ClientTest extends TestCase
             ->method('getMemberProfile')
             ->willReturn($this->licenseResponse);
         $LicensePurchaseOptions = $this->createMock(LicensePurchaseOptions::class);
-        $this->licenseResponse->expects($this->exactly(2))->method('getPurchaseOptions')->willReturn($LicensePurchaseOptions);
+        $this->licenseResponse->expects($this->exactly(2))
+            ->method('getPurchaseOptions')
+            ->willReturn($LicensePurchaseOptions);
         $LicensePurchaseOptions->expects($this->once())
             ->method('getMessage')
             ->willReturn('License message');
@@ -268,7 +270,9 @@ class ClientTest extends TestCase
     private function setLicense(int $expectInvocation = 1)
     {
         $licenseRequest = $this->createMock(License::class);
-        $this->licenseRequestFactory->expects($this->exactly($expectInvocation))->method('create')->willReturn($licenseRequest);
+        $this->licenseRequestFactory->expects($this->exactly($expectInvocation))
+            ->method('create')
+            ->willReturn($licenseRequest);
         $licenseRequest->expects($this->exactly($expectInvocation))->method('setContentId')->willReturnSelf();
         $licenseRequest->expects($this->exactly($expectInvocation))->method('setLocale')->willReturnSelf();
         $licenseRequest->expects($this->exactly($expectInvocation))->method('setLicenseState')->willReturnSelf();
