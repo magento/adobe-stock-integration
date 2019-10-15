@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetExtensionInterface;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -18,14 +17,22 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class Asset extends AbstractExtensibleModel implements AssetInterface
 {
-    /**
-     * @inheritdoc
-     */
-    protected function _construct()
-    {
-        $this->_init(ResourceModel::class);
-    }
+    private const ID = 'id';
 
+    private const PATH = 'path';
+
+    private const TITLE = 'title';
+
+    private const CONTENT_TYPE = 'content_type';
+
+    private const WIDTH = 'width';
+
+    private const HEIGHT = 'height';
+
+    private const CREATED_AT = 'created_at';
+
+    private const UPDATED_AT = 'updated_at';
+    
     /**
      * @inheritdoc
      */
@@ -51,7 +58,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getPath(): ?string
+    public function getPath(): string
     {
         return (string) $this->getData(self::PATH);
     }

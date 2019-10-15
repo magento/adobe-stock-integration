@@ -16,7 +16,7 @@ interface SaveAssetLinksInterface
     /**
      * Save asset keywords links
      *
-     * @param int                $assetId
+     * @param int                                                       $assetId
      * @param \Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface[] $keywordIds
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException

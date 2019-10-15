@@ -9,3 +9,5 @@
 @import AdobeStockImage
 @import AdobeStockImageAdminUi
 @import AdobeStockImageApi
+@import AdobeStockMediaGalleryApi
+@import AdobeStockMediaGallery

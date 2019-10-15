@@ -30,20 +30,20 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
     /**
      * @var KeywordInterfaceFactory
      */
-    private $keywordFactory;
+    private $assetKeywordFactory;
 
     /**
      * GetAssetKeywords constructor.
      *
-     * @param ResourceConnection      $resourceConnection
-     * @param KeywordInterfaceFactory $keywordFactory
+     * @param ResourceConnection $resourceConnection
+     * @param KeywordInterfaceFactory $assetKeywordFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        KeywordInterfaceFactory $keywordFactory
+        KeywordInterfaceFactory $assetKeywordFactory
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->keywordFactory = $keywordFactory;
+        $this->assetKeywordFactory = $assetKeywordFactory;
     }
 
     /**
@@ -67,10 +67,13 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
 
             $keywords = [];
             foreach ($data as $keywordData) {
-                $keyword = $this->keywordFactory->create();
-                $keyword->setId($keywordData[KeywordInterface::ID]);
-                $keyword->setKeyword($keywordData[KeywordInterface::KEYWORD]);
-                $keywords[] = $keyword;
+                $insertData = [
+                    'data' => [
+                        $keywordData,
+                    ],
+                ];
+                $assetKeyword = $this->assetKeywordFactory->create($insertData);
+                $keywords[] = $assetKeyword;
             }
 
             return $keywords;

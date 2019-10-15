@@ -17,22 +17,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  */
 interface AssetInterface extends ExtensibleDataInterface
 {
-    const ID = 'id';
-
-    const PATH = 'path';
-
-    const TITLE = 'title';
-
-    const CONTENT_TYPE = 'content_type';
-
-    const WIDTH = 'width';
-
-    const HEIGHT = 'height';
-
-    const CREATED_AT = 'created_at';
-
-    const UPDATED_AT = 'updated_at';
-
     /**
      * Get ID
      *
@@ -51,9 +35,9 @@ interface AssetInterface extends ExtensibleDataInterface
     /**
      * Get Path
      *
-     * @return string|null
+     * @return string
      */
-    public function getPath(): ?string;
+    public function getPath(): string;
 
     /**
      * Set Path

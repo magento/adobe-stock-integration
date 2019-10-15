@@ -10,6 +10,7 @@ namespace Magento\AdobeMediaGallery\Model\Keyword\Command;
 use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -18,6 +19,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class SaveAssetKeywords implements SaveAssetKeywordsInterface
 {
     private const TABLE_KEYWORD = 'adobe_media_gallery_keyword';
+
+    private const ID = 'id';
+
+    private const KEYWORD = 'keyword';
 
     /**
      * @var ResourceConnection
@@ -46,29 +51,21 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     public function execute(array $keywords): array
     {
         try {
-            $values = [];
-            $bind = [];
-            $keywordNames = [];
             $data = [];
             /** @var KeywordInterface $keyword */
             foreach ($keywords as $keyword) {
-                $keywordNames[] = $keyword->getKeyword();
-                $data[KeywordInterface::ID] = $keyword->getId();
-                $data[KeywordInterface::KEYWORD] = $keyword->getKeyword();
-                $values[] = sprintf('(%s)', implode(',', array_pad([], count($data), '?')));
-                foreach ($data as $value) {
-                    $bind[] = $value;
-                }
+                $data[] = $keyword->getKeyword();
             }
 
-            $this->insertIgnore(
+            $connection = $this->resourceConnection->getConnection();
+            $connection->insertArray(
                 self::TABLE_KEYWORD,
-                array_keys($data),
-                implode(',', $values),
-                $bind
+                [self::KEYWORD],
+                $data,
+                AdapterInterface::INSERT_IGNORE
             );
 
-            return $this->getKeywordIds($keywordNames);
+            return $this->getKeywordIds($data);
         } catch (\Exception $exception) {
             $message = __('An error occurred during save asset keyword: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
@@ -76,32 +73,10 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     }
 
     /**
-     * Insert ignore query
-     *
-     * @param string $table
-     * @param array $columns
-     * @param string $values
-     * @param array $bind
-     */
-    private function insertIgnore(string $table, array $columns, string $values, array $bind): void
-    {
-        $connection = $this->resourceConnection->getConnection();
-
-        $connection->query(
-            sprintf(
-                'INSERT IGNORE INTO %s (%s) VALUES %s',
-                $connection->quoteIdentifier($this->resourceConnection->getTableName($table)),
-                join(',', array_map([$connection, 'quoteIdentifier'], $columns)),
-                $values
-            ),
-            $bind
-        );
-    }
-
-    /**
      * Select keywords by names
      *
      * @param string[] $keywords
+     *
      * @return int[]
      */
     private function getKeywordIds(array $keywords): array
@@ -109,8 +84,8 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from(['k' => $this->resourceConnection->getTableName(self::TABLE_KEYWORD)])
-            ->columns(KeywordInterface::ID)
-            ->where('k.' . KeywordInterface::KEYWORD . ' in (?)', $keywords);
+            ->columns(self::ID)
+            ->where('k.' . self::KEYWORD . ' in (?)', $keywords);
 
         return $connection->fetchCol($select);
     }

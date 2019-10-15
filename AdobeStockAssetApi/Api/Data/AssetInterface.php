@@ -15,52 +15,124 @@ namespace Magento\AdobeStockAssetApi\Api\Data;
  */
 interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**
+     * Asset Id
+     */
     const ID = 'id';
 
+    /**
+     * Asset save path
+     */
     const PATH = 'path';
 
+    /**
+     * Asset created at data
+     */
     const CREATED_AT = 'created_at';
 
+    /**
+     * Asset updated at date
+     */
     const UPDATED_AT = 'updated_at';
 
+    /**
+     * Asset category
+     */
     const CATEGORY = 'category';
 
+    /**
+     * The asset creator
+     */
     const CREATOR = 'creator';
 
+    /**
+     * Asset stock id
+     */
     const STOCK_ID = 'stock_id';
 
+    /**
+     * Is asset licensed
+     */
     const IS_LICENSED = 'is_licensed';
 
+    /**
+     * Asset title
+     */
     const TITLE = 'title';
 
+    /**
+     * Asset preview URL
+     */
     const PREVIEW_URL = 'preview_url';
 
+    /**
+     * Asset thumbnail url
+     */
     const THUMBNAIL_URL = 'thumbnail_url';
 
+    /**
+     * Asset preview width
+     */
     const PREVIEW_WIDTH = 'preview_width';
 
+    /**
+     * Asset preview height
+     */
     const PREVIEW_HEIGHT = 'preview_height';
 
+    /**
+     * Asset URL
+     */
     const URL = 'url';
 
+    /**
+     * Asset width
+     */
     const WIDTH = 'width';
 
+    /**
+     * Asset height
+     */
     const HEIGHT = 'height';
 
+    /**
+     * Asset country name
+     */
     const COUNTRY_NAME = 'country_name';
 
+    /**
+     * Asset details URL
+     */
     const DETAILS_URL = 'details_url';
 
+    /**
+     * Asset vector type
+     */
     const VECTOR_TYPE = 'vector_type';
 
+    /**
+     * Asset content type
+     */
     const CONTENT_TYPE = 'content_type';
 
+    /**
+     * Asset creation date
+     */
     const CREATION_DATE = 'creation_date';
 
+    /**
+     * Asset keywords
+     */
     const KEYWORDS = 'keywords';
 
+    /**
+     * Asset created at date
+     */
     const FIELD_CREATED_AT = 'created_at';
 
+    /**
+     * Asset update at
+     */
     const FIELD_UPDATED_AT = 'updated_at';
 
     /**
@@ -106,9 +178,9 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get Path
      *
-     * @return string|null
+     * @return string
      */
-    public function getPath(): ?string;
+    public function getPath(): string;
 
     /**
      * Set Path

@@ -3,6 +3,7 @@
         "column": {
             "id": true,
             "path": true,
+            "source": true,
             "title": true,
             "content_type": true,
             "width": true,

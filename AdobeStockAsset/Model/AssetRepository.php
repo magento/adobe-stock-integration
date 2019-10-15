@@ -18,6 +18,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
+use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface as MediaAssetInterface;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetInterfaceFactory;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface as SaveMediaAssetInterface;
@@ -83,6 +84,11 @@ class AssetRepository implements AssetRepositoryInterface
     private $saveMediaAsset;
 
     /**
+     * @var SaveAssetLinks
+     */
+    private $saveAssetLinks;
+
+    /**
      * @var MediaAssetInterfaceFactory
      */
     private $mediaAssetInterfaceFactory;
@@ -90,17 +96,18 @@ class AssetRepository implements AssetRepositoryInterface
     /**
      * AssetRepository constructor.
      *
-     * @param ResourceModel                      $resource
-     * @param AssetCollectionFactory             $collectionFactory
-     * @param AssetFactory                       $factory
-     * @param JoinProcessorInterface             $joinProcessor
-     * @param CollectionProcessorInterface       $collectionProcessor
+     * @param ResourceModel $resource
+     * @param AssetCollectionFactory $collectionFactory
+     * @param AssetFactory $factory
+     * @param JoinProcessorInterface $joinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
-     * @param Save                               $commandSave
-     * @param GetAssetKeywordsInterface          $getAssetKeywords
-     * @param SaveAssetKeywordsInterface         $saveAssetKeywords
-     * @param SaveMediaAssetInterface            $saveMediaAsset
-     * @param MediaAssetInterfaceFactory         $mediaAssetInterfaceFactory
+     * @param Save $commandSave
+     * @param GetAssetKeywordsInterface $getAssetKeywords
+     * @param SaveAssetKeywordsInterface $saveAssetKeywords
+     * @param SaveMediaAssetInterface $saveMediaAsset
+     * @param SaveAssetLinksInterface $saveAssetLinks
+     * @param MediaAssetInterfaceFactory $mediaAssetInterfaceFactory
      */
     public function __construct(
         ResourceModel $resource,
@@ -113,6 +120,7 @@ class AssetRepository implements AssetRepositoryInterface
         GetAssetKeywordsInterface $getAssetKeywords,
         SaveAssetKeywordsInterface $saveAssetKeywords,
         SaveMediaAssetInterface $saveMediaAsset,
+        SaveAssetLinksInterface $saveAssetLinks,
         MediaAssetInterfaceFactory $mediaAssetInterfaceFactory
     ) {
         $this->resource = $resource;
@@ -125,6 +133,7 @@ class AssetRepository implements AssetRepositoryInterface
         $this->getAssetKeywords = $getAssetKeywords;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->saveMediaAsset = $saveMediaAsset;
+        $this->saveAssetLinks = $saveAssetLinks;
         $this->mediaAssetInterfaceFactory = $mediaAssetInterfaceFactory;
     }
 
@@ -140,7 +149,8 @@ class AssetRepository implements AssetRepositoryInterface
         $mediaGalleryAssetId = $this->saveMediaGalleryAsset($asset);
         $asset->setMediaGalleryId($mediaGalleryAssetId);
         $this->assetSaveService->execute($asset);
-        $this->saveAssetKeywords->execute([$asset]);
+        $assetKeywords = $this->saveAssetKeywords->execute($asset->getKeywords());
+        $this->saveAssetLinks->execute($asset->getId(), $assetKeywords);
     }
 
     /**
@@ -153,13 +163,17 @@ class AssetRepository implements AssetRepositoryInterface
      */
     private function saveMediaGalleryAsset(AssetInterface $asset): int
     {
+        $data = [
+            'data' => [
+                'path' => $asset->getPath(),
+                'title' => $asset->getTitle(),
+                'height' => $asset->getHeight(),
+                'width' => $asset->getWidth(),
+                'content_type' => $asset->getContentType(),
+            ],
+        ];
         /** @var MediaAssetInterface $mediaAsset */
-        $mediaAsset = $this->mediaAssetInterfaceFactory->create();
-        $mediaAsset->setPath($asset->getPath());
-        $mediaAsset->setTitle($asset->getTitle());
-        $mediaAsset->setHeight($asset->getHeight());
-        $mediaAsset->setWidth($asset->getWidth());
-        $mediaAsset->setContentType($asset->getContentType());
+        $mediaAsset = $this->mediaAssetInterfaceFactory->create($data);
 
         return $this->saveMediaAsset->execute($mediaAsset);
     }

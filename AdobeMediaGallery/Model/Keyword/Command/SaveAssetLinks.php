@@ -10,6 +10,7 @@ namespace Magento\AdobeMediaGallery\Model\Keyword\Command;
 use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -42,7 +43,7 @@ class SaveAssetLinks implements SaveAssetLinksInterface
     /**
      * Save asset keywords links
      *
-     * @param int                $assetId
+     * @param int $assetId
      * @param KeywordInterface[] $keywordIds
      *
      * @throws CouldNotSaveException
@@ -51,45 +52,23 @@ class SaveAssetLinks implements SaveAssetLinksInterface
     {
         try {
             $values = [];
-            $bind = [];
             foreach ($keywordIds as $keywordId) {
-                $values[] = sprintf('(%s)', implode(',', ['?', '?']));
-                $bind[] = $assetId;
-                $bind[] = $keywordId;
+                $data[] = $assetId;
+                $data[] = $keywordId;
+                array_push($values, $data);
+                unset($data);
             }
 
-            $this->insertIgnore(
+            $connection = $this->resourceConnection->getConnection();
+            $connection->insertArray(
                 self::TABLE_ASSET_KEYWORD,
                 [self::FIELD_ASSET_ID, self::FIELD_KEYWORD_ID],
-                implode(',', $values),
-                $bind
+                $values,
+                AdapterInterface::INSERT_IGNORE
             );
         } catch(\Exception $exception) {
             $message = __('An error occurred during save asset keyword links: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }
-    }
-
-    /**
-     * Insert ignore query
-     *
-     * @param string $table
-     * @param array $columns
-     * @param string $values
-     * @param array $bind
-     */
-    private function insertIgnore(string $table, array $columns, string $values, array $bind): void
-    {
-        $connection = $this->resourceConnection->getConnection();
-
-        $connection->query(
-            sprintf(
-                'INSERT IGNORE INTO %s (%s) VALUES %s',
-                $connection->quoteIdentifier($this->resourceConnection->getTableName($table)),
-                join(',', array_map([$connection, 'quoteIdentifier'], $columns)),
-                $values
-            ),
-            $bind
-        );
     }
 }

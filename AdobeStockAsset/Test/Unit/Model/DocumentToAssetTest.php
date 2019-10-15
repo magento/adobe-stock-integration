@@ -69,9 +69,9 @@ class DocumentToAssetTest extends TestCase
         $this->categoryFactory = $this->getMockBuilder(CategoryInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-       // $this->keywordFactory = $this->getMockBuilder(KeywordInterfaceFactory::class)
-        //    ->disableOriginalConstructor()
-         //   ->getMock();
+        $this->keywordFactory = $this->getMockBuilder(KeywordInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $attributes = [
             'factory' => $this->assetFactory,
             'fields' => ['thumbnail_240_urll' => 'thumbnail_url', 'thumbnail_500_url' => 'preview_url'],

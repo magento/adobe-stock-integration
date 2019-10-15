@@ -33,7 +33,7 @@ class GetById implements GetByIdInterface
     /**
      * GetAssetById constructor.
      *
-     * @param ResourceConnection    $resourceConnection
+     * @param ResourceConnection $resourceConnection
      * @param AssetInterfaceFactory $assetFactory
      */
     public function __construct(
@@ -50,13 +50,11 @@ class GetById implements GetByIdInterface
      * @param int $assetId
      *
      * @return AssetInterface
-     * @throws \Zend_Db_Statement_Exception
      * @throws NoSuchEntityException
      */
     public function execute(int $assetId): AssetInterface
     {
         $connection = $this->resourceConnection->getConnection();
-
         $select = $connection->select()
             ->from(['amg' => self::TABLE_ADOBE_MEDIA_GALLERY])
             ->where('amg.id = ?', $assetId);
@@ -67,19 +65,9 @@ class GetById implements GetByIdInterface
             throw new NoSuchEntityException($message);
         }
 
-        foreach ($data as $assetData) {
-            /** @var AssetInterface $asset */
-            $asset = $this->assetFactory->create();
-            $asset->setId($assetData[AssetInterface::ID]);
-            $asset->setPath($assetData[AssetInterface::PATH]);
-            $asset->setTitle($assetData[AssetInterface::TITLE]);
-            $asset->setContentType($assetData[AssetInterface::CONTENT_TYPE]);
-            $asset->setWidth($assetData[AssetInterface::WIDTH]);
-            $asset->setHeight($assetData[AssetInterface::HEIGHT]);
-            $asset->setCreatedAt($assetData[AssetInterface::CREATED_AT]);
-            $asset->setUpdatedAt($assetData[AssetInterface::UPDATED_AT]);
-        }
+        /** @var AssetInterface $asset */
+        $mediaAsset = $this->assetFactory->create(reset($data));
 
-        return $asset;
+        return $mediaAsset;
     }
 }

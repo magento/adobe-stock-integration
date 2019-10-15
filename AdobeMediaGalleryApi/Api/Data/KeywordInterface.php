@@ -16,15 +16,12 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  */
 interface KeywordInterface extends ExtensibleDataInterface
 {
-    const ID = 'id';
-    const KEYWORD = 'keyword';
-
     /**
-     * Get the id
+     * Get ID
      *
-     * @return int
+     * @return int|null
      */
-    public function getId();
+    public function getId(): ?int;
 
     /**
      * Set the id

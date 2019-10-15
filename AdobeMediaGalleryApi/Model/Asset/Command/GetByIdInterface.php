@@ -20,7 +20,6 @@ interface GetByIdInterface
      * @param int $assetId
      *
      * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface
-     * @throws \Zend_Db_Statement_Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(int $assetId): \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
