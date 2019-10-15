@@ -118,8 +118,10 @@ define([
             img = $(this.previewImageSelector + ' img');
 
             if (img.get(0).complete) {
-                this.updateHeight();
-                this.scrollToPreview();
+                setTimeout(function () {
+                    this.updateHeight();
+                    this.scrollToPreview();
+                }.bind(this), 100);
             } else {
                 img.load(function () {
                     this.updateHeight();
@@ -133,7 +135,7 @@ define([
          * Update image preview section height
          */
         updateHeight: function () {
-            this.height($(this.previewImageSelector + ' img').height() + 'px');
+            this.height($(this.previewImageSelector).height() + 'px');
             this.visibility(this.visibility());
         },
 
