@@ -22,5 +22,12 @@
         <element name="recordsFound" type="text" selector="//*[@id='adobe-stock-images-search-modal']//*[text()='records found']/parent::div"/>
         <element name="selectedImagePreview" type="text" selector="//img[contains(@alt,'{{imageName}}')]" parameterized="true"/>
         <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
+        <element name="adobeSignIn" type="button" selector=".adobe-sign-in-button"/>
+        <element name="adobeImsPopupUserEmail" type="button" selector="#adobeid_username"/>
+        <element name="adobeImsPopUpUserPassword" type="button" selector="#adobeid_password"/>
+        <element name="adobeImsPopupUserSignIn" type="button" selector="#sign_in"/>
+        <element name="userImageSmall" type="text" selector=".adobe-profile-image-small"/>
+        <element name="userNameButton" type="button" selector=".adobe-user-name"/>
+        <element name="userSignOut" type="button" selector=".adobe-sign-out-button"/>
     </section>
 </sections>
