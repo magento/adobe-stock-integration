@@ -16,7 +16,7 @@
             <description value="Admin User is logged into Admin Panel and User signs out from Stock"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_grid"/>
-            <group value="adobe_stock_integration1"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

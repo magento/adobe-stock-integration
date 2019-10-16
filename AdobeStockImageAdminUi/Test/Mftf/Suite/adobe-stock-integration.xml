@@ -16,7 +16,7 @@
         <after>
         </after>
         <include>
-            <group name="adobe_stock_integration1"/>
+            <group name="adobe_stock_integration"/>
         </include>
     </suite>
 </suites>
