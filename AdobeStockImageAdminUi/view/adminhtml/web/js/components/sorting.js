@@ -12,10 +12,18 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/sorting',
             options: [],
+            previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             applied: {},
             selectedOption: '',
             listens: {
                 'selectedOption': 'applyChanges'
+            },
+            statefull: {
+                selectedOption: true,
+                applied: true
+            },
+            modules: {
+                preview: '${ $.previewProvider }'
             },
             exports: {
                 applied: '${ $.provider }:params.sorting'
@@ -61,6 +69,7 @@ define([
                 field: this.selectedOption(),
                 direction: 'desc',
             });
+            this.preview().hide();
         }
     });
 });
