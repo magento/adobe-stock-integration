@@ -186,7 +186,6 @@ define([
          * Switch image preview to related image
          *
          * @param {Object|null} relatedImage
-         * @param {Object} record
          */
         switchImagePreviewToRelatedImage: function (relatedImage) {
             if (!relatedImage) {
