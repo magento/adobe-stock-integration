@@ -188,7 +188,7 @@ define([
          * @param {Object|null} relatedImage
          * @param {Object} record
          */
-        switchImagePreviewToRelatedImage: function (relatedImage/*, record (unused param)*/) {
+        switchImagePreviewToRelatedImage: function (relatedImage) {
             if (!relatedImage) {
                 this.selectedRelatedType(null);
 
