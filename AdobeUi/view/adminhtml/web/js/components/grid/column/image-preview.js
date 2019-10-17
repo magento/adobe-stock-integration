@@ -118,10 +118,8 @@ define([
             img = $(this.previewImageSelector + ' img');
 
             if (img.get(0).complete) {
-                setTimeout(function () {
-                    this.updateHeight();
-                    this.scrollToPreview();
-                }.bind(this), 100);
+                this.updateHeight();
+                this.scrollToPreview();
             } else {
                 img.load(function () {
                     this.updateHeight();
