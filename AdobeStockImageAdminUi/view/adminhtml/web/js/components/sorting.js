@@ -18,6 +18,10 @@ define([
             listens: {
                 'selectedOption': 'applyChanges'
             },
+            statefull: {
+                selectedOption: true,
+                applied: true
+            },
             modules: {
                 preview: '${ $.previewProvider }'
             },

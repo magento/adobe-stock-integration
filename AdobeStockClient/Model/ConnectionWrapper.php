@@ -71,7 +71,7 @@ class ConnectionWrapper
 
     /**
      * @param ClientConfig $clientConfig
-     * @param \Magento\AdobeStockClient\Model\ConnectionFactory $connectionFactory
+     * @param ConnectionFactory $connectionFactory
      * @param ImsConfig $imsConfig
      * @param LoggerInterface $logger
      * @param GetAccessTokenInterface $getAccessToken
