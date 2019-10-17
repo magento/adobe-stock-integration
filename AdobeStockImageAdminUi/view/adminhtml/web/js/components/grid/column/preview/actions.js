@@ -17,6 +17,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/actions',
             loginProvider: 'name = adobe-login, ns = adobe-login',
+            // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
@@ -90,7 +91,8 @@ define([
          */
         save: function (record, fileName, actionURI) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record);
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
+                                  this.getImageExtension(record);
 
             $.ajax({
                 type: 'POST',
@@ -104,6 +106,7 @@ define([
                 context: this,
                 success: function () {
                     var displayedRecord = this.preview().displayedRecord();
+
                     displayedRecord.is_downloaded = 1;
                     displayedRecord.path = destinationPath;
                     this.preview().displayedRecord(displayedRecord);
@@ -125,6 +128,7 @@ define([
          */
         generateImageName: function (record) {
             var imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+
             return imageName;
         },
 
@@ -136,6 +140,7 @@ define([
          */
         getImageExtension: function (record) {
             var imageType = record.content_type.match(/[^/]{1,4}$/);
+
             return imageType;
         },
 
@@ -165,6 +170,7 @@ define([
          */
         showLicenseConfirmation: function (record) {
             var licenseAndSave = this.licenseAndSave.bind(this);
+
             $.ajax(
                 {
                     type: 'POST',
@@ -180,14 +186,18 @@ define([
                         var confirmationContent = $.mage.__('License "' + record.title + '"'),
                             quotaMessage = response.result.message,
                             canPurchase = response.result.canLicense;
+
                         this.getPrompt(
                             {
                                 'title': $.mage.__('License Adobe Stock Image?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</p><br>' + $.mage.__('File Name') + '</b>',
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</p><br>' +
+                                           $.mage.__('File Name') + '</b>',
                                 'visible': canPurchase,
                                 'actions': {
                                     confirm: function (fileName) {
-                                        canPurchase ? licenseAndSave(record, fileName) : window.open(this.preview().buyCreditsUrl);
+                                        canPurchase ?
+                                            licenseAndSave(record, fileName) :
+                                            window.open(this.preview().buyCreditsUrl);
                                     }
                                 },
                                 'buttons': [{
@@ -255,9 +265,9 @@ define([
                 .catch(function (error) {
                     messages.add('error', error.message);
                 })
-                .finally((function () {
+                .finally(function () {
                     messages.scheduleCleanup(this.messageDelay);
-                }).bind(this));
+                }.bind(this));
         }
     });
 });
