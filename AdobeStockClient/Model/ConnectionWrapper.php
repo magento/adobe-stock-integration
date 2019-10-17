@@ -172,7 +172,7 @@ class ConnectionWrapper
             $client->searchFilesInitialize($searchRequest);
 
             return (bool)$client->getNextResponse()->nb_results;
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return false;
         }
     }
