@@ -17,11 +17,15 @@ define([
          * @param {String} path
          */
         locate: function (path) {
-            var i, folderName, openFolderChildrenButton, imageFolder, locatedImage;
-            var imagePath = path.replace(/^\/+/, '');
-            var imagePathParts = imagePath.split('/');
-            var imageFilename = imagePath;
-            var imageFolderName = this.jsTreeRootFolderName;
+            var i,
+                folderName,
+                openFolderChildrenButton,
+                imageFolder,
+                locatedImage,
+                imagePath = path.replace(/^\/+/, ''),
+                imagePathParts = imagePath.split('/'),
+                imageFilename = imagePath,
+                imageFolderName = this.jsTreeRootFolderName;
 
             $.ajaxSetup({async: false});
 
