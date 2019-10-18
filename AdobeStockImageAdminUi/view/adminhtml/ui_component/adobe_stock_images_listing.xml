@@ -175,7 +175,7 @@
             <settings>
                 <label translate="true">Overlay</label>
                 <bodyTmpl>Magento_AdobeUi/grid/column/overlay</bodyTmpl>
-                <visible>false</visible>
+                <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
         </column>

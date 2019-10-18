@@ -25,6 +25,15 @@ define([
             }
 
             return {};
+        },
+
+        isLicensed: function (record) {
+            if (record.is_licensed) {
+                return "Licensed"
+            }
+            else  {
+                return "Not Licensed"
+            }
         }
     });
 });
