@@ -197,7 +197,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function isLicensed(): int
+    public function getIsLicensed(): int
     {
         return (int) $this->getData(self::IS_LICENSED);
     }
