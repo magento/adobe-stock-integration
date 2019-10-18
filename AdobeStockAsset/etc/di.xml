@@ -79,4 +79,18 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="AssetMapper" type="Magento\Framework\EntityManager\CompositeMapper">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="assetMapper" xsi:type="object">Magento\AdobeStockAsset\Model\Mapper\AssetMapper</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\EntityManager\MapperPool">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="Magento\AdobeStockAssetApi\Api\Data\AssetInterface" xsi:type="string">AssetMapper</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
