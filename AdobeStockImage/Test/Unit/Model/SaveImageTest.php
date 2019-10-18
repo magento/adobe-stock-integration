@@ -77,6 +77,14 @@ class SaveImageTest extends TestCase
             ->method('save')
             ->willReturn($path);
 
+        if (!empty($path)) {
+            $this->storage->expects($this->once())
+                ->method('delete');
+        } else {
+            $this->storage->expects($this->never())
+                ->method('delete');
+        }
+
         $asset = $this->getAsset($isLicensed, $path, $url);
 
         $this->saveAsset->expects($this->once())
@@ -96,7 +104,7 @@ class SaveImageTest extends TestCase
         $asset = $this->createMock(AssetInterface::class);
 
         $asset->expects($this->once())
-            ->method('isLicensed')
+            ->method('getIsLicensed')
             ->willReturn($isLicensed);
 
         if ($isLicensed) {
@@ -118,6 +126,10 @@ class SaveImageTest extends TestCase
             ->with($path)
             ->willReturn(null);
 
+        $asset->expects($this->atLeast(1))
+            ->method('getPath')
+            ->willReturn($path);
+
         return $asset;
     }
 
@@ -137,6 +149,11 @@ class SaveImageTest extends TestCase
             'preview asset' => [
                 'isLicensed' => 0,
                 'path' => 'path',
+                'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg'
+            ],
+            'asset with no path' => [
+                'isLicensed' => 0,
+                'path' => '',
                 'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg'
             ],
         ];

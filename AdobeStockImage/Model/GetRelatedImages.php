@@ -105,20 +105,16 @@ class GetRelatedImages implements GetRelatedImagesInterface
         try {
             /** @var Document $image */
             foreach ($images as $image) {
-                $data[] = [
-                    'id' => $image->getId(),
-                    'title' => $image->getCustomAttribute('title')->getValue(),
-                    'thumbnail_url' => $image->getCustomAttribute('thumbnail_240_url')->getValue(),
-                    'thumbnail_500_url' => $image->getCustomAttribute('thumbnail_500_url')->getValue(),
-                    'creator_name' => $image->getCustomAttribute('creator_name')->getValue(),
-                    'content_type' => $image->getCustomAttribute('content_type')->getValue(),
-                    'width' => $image->getCustomAttribute('width')->getValue(),
-                    'height' => $image->getCustomAttribute('height')->getValue(),
-                    'category' => $image->getCustomAttribute('category')->getValue(),
-                    'keywords' => $image->getCustomAttribute('keywords')->getValue(),
-                    'is_downloaded' => $image->getCustomAttribute('is_downloaded')->getValue(),
-                    'path' => $image->getCustomAttribute('path')->getValue()
-                ];
+                $itemData = [];
+                /** @var \Magento\Framework\Api\AttributeInterface $attribute */
+                foreach ($image->getCustomAttributes() as $attribute) {
+                    if ($attribute->getAttributeCode() === 'thumbnail_240_url') {
+                        $itemData['thumbnail_url'] = $attribute->getValue();
+                        continue;
+                    }
+                    $itemData[$attribute->getAttributeCode()] = $attribute->getValue();
+                }
+                $data[] = $itemData;
             }
             return $data;
         } catch (\Exception $exception) {
