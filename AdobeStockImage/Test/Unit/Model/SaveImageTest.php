@@ -104,7 +104,7 @@ class SaveImageTest extends TestCase
         $asset = $this->createMock(AssetInterface::class);
 
         $asset->expects($this->once())
-            ->method('isLicensed')
+            ->method('getIsLicensed')
             ->willReturn($isLicensed);
 
         if ($isLicensed) {

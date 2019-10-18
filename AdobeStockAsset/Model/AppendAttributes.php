@@ -20,7 +20,7 @@ use Magento\Framework\App\ResourceConnection;
 class AppendAttributes
 {
     const ATTRIBUTE_CODE_IS_DOWNLOADED = 'is_downloaded';
-    const ATTRIBUTE_CODE_IS_LICENSED = 'is_licensed';
+    const ATTRIBUTE_CODE_IS_LICENSED_LOCALLY = 'is_licensed_locally';
     const ATTRIBUTE_CODE_PATH = 'path';
 
     /**
@@ -84,7 +84,7 @@ class AppendAttributes
                     [
                         self::ATTRIBUTE_CODE_IS_DOWNLOADED => 0,
                         self::ATTRIBUTE_CODE_PATH => '',
-                        self::ATTRIBUTE_CODE_IS_LICENSED => 0
+                        self::ATTRIBUTE_CODE_IS_LICENSED_LOCALLY => 0
                     ]
                 );
                 continue;
@@ -95,7 +95,7 @@ class AppendAttributes
                 [
                     self::ATTRIBUTE_CODE_IS_DOWNLOADED => 1,
                     self::ATTRIBUTE_CODE_PATH => $assets[$item->getId()]->getPath(),
-                    self::ATTRIBUTE_CODE_IS_LICENSED => $assets[$item->getId()]->isLicensed() ?? 0
+                    self::ATTRIBUTE_CODE_IS_LICENSED_LOCALLY => $assets[$item->getId()]->getIsLicensed() ?? 0
                 ]
             );
         }

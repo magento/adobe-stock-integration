@@ -42,12 +42,21 @@ define([
         },
 
         /**
-         * Returns is_licensed flag as observable for given record
+         * Is asset licensed in adobe stock in context of currently logged in account
          *
          * @returns {observable}
          */
         isLicensed: function() {
             return this.preview().displayedRecord().is_licensed;
+        },
+
+        /**
+         * Is licensed version of asset saved locally
+         *
+         * @returns {observable}
+         */
+        isLicensedLocally: function() {
+            return this.preview().displayedRecord().is_licensed_locally;
         },
 
         /**
@@ -69,11 +78,7 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
-                            this.save(
-                                this.preview().displayedRecord(),
-                                fileName,
-                                this.preview().downloadImagePreviewUrl
-                            );
+                            this.save(this.preview().displayedRecord(), fileName);
                         }.bind(this)
                     },
                     'buttons': [{
@@ -96,16 +101,16 @@ define([
          *
          * @param {Object} record
          * @param {String} fileName
-         * @param {String} actionURI
+         * @param {boolean} license
          */
-        save: function (record, fileName, actionURI) {
+        save: function (record, fileName, license) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
                                   this.getImageExtension(record);
 
             $.ajax({
                 type: 'POST',
-                url: actionURI,
+                url: license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
                 dataType: 'json',
                 showLoader: true,
                 data: {
@@ -118,6 +123,11 @@ define([
 
                     displayedRecord.is_downloaded = 1;
                     displayedRecord.path = destinationPath;
+
+                    if (license) {
+                        displayedRecord.is_licensed = 1;
+                        displayedRecord.is_licensed_locally = 1;
+                    }
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
@@ -164,12 +174,12 @@ define([
 
         /**
          * License and save image
-         *
+         *s
          * @param {Object} record
          * @param fileName
          */
         licenseAndSave: function (record, fileName) {
-            this.save(record, fileName, this.preview().licenseAndDownloadUrl);
+            this.save(record, fileName, true);
         },
 
         /**

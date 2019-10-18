@@ -87,7 +87,7 @@ class SaveImage implements SaveImageInterface
      */
     private function getUrl(AssetInterface $asset): string
     {
-        if ($asset->isLicensed() && $asset->getUrl()) {
+        if ($asset->getIsLicensed() && $asset->getUrl()) {
             return $asset->getUrl();
         }
         return $asset->getPreviewUrl();
