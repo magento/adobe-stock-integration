@@ -20,6 +20,7 @@ define([
         success: ko.observable(false),
         message: ko.observable(''),
         visible: ko.observable(false),
+
         /**
          * @override
          */
@@ -30,7 +31,7 @@ define([
             }, this);
             if (!this.serverSuccess) {
                 this.visible(true);
-                this.message(this.defaultErrorMessage)
+                this.message(this.defaultErrorMessage);
             }
         },
         showMessage: function (success, message) {
@@ -38,6 +39,7 @@ define([
             this.success(success);
             this.visible(true);
         },
+
         /**
          * Send request to server to test connection to Adobe Stock API and display the result
          */
@@ -52,7 +54,7 @@ define([
                     this.showMessage(response.success === true, response.message);
                 }, this),
                 error: $.proxy(function() {
-                    this.showMessage(false, this.defaultErrorMessage)
+                    this.showMessage(false, this.defaultErrorMessage);
                 }, this)
             });
         }

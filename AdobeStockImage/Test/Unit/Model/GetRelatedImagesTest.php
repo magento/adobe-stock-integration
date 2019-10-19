@@ -125,7 +125,7 @@ class GetRelatedImagesTest extends TestCase
                 'relatedImagesProvider' => [
                     new \Magento\Framework\Api\Search\Document(
                         [
-                            'id' => 1234556789,
+                            'id' => 2,
                             'custom_attributes' => [
                                 'title' => new AttributeValue(
                                     [
@@ -148,7 +148,7 @@ class GetRelatedImagesTest extends TestCase
                                 'id' => new AttributeValue(
                                     [
                                         'attribute_code' => 'id',
-                                        'value' => 123456789
+                                        'value' => 2
                                     ]
                                 ),
                                 'creator_name' => new AttributeValue(
@@ -216,7 +216,7 @@ class GetRelatedImagesTest extends TestCase
                 'expectedResult' => [
                     'same_model' => [
                         [
-                            'id' => 1234556789,
+                            'id' => 2,
                             'title' => 'Some Title',
                             'thumbnail_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',
                             'thumbnail_500_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',
@@ -242,7 +242,7 @@ class GetRelatedImagesTest extends TestCase
                     ],
                     'same_series' => [
                         [
-                            'id' => 1234556789,
+                            'id' => 2,
                             'title' => 'Some Title',
                             'thumbnail_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',
                             'thumbnail_500_url' => 'https://t4.ftcdn.net/z6rPCvS5umPhRUNPa62iA2YYVG49yo2n.jpg',

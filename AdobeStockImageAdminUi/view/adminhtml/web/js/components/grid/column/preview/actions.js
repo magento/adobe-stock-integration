@@ -17,6 +17,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/actions',
             loginProvider: 'name = adobe-login, ns = adobe-login',
+            // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
@@ -41,6 +42,24 @@ define([
         },
 
         /**
+         * Is asset licensed in adobe stock in context of currently logged in account
+         *
+         * @returns {observable}
+         */
+        isLicensed: function() {
+            return this.preview().displayedRecord().is_licensed;
+        },
+
+        /**
+         * Is licensed version of asset saved locally
+         *
+         * @returns {observable}
+         */
+        isLicensedLocally: function() {
+            return this.preview().displayedRecord().is_licensed_locally;
+        },
+
+        /**
          * Locate downloaded image in media browser
          */
         locate: function () {
@@ -59,11 +78,7 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
-                            this.save(
-                                this.preview().displayedRecord(),
-                                fileName,
-                                this.preview().downloadImagePreviewUrl
-                            );
+                            this.save(this.preview().displayedRecord(), fileName);
                         }.bind(this)
                     },
                     'buttons': [{
@@ -86,15 +101,16 @@ define([
          *
          * @param {Object} record
          * @param {String} fileName
-         * @param {String} actionURI
+         * @param {boolean} license
          */
-        save: function (record, fileName, actionURI) {
+        save: function (record, fileName, license) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record);
+                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
+                                  this.getImageExtension(record);
 
             $.ajax({
                 type: 'POST',
-                url: actionURI,
+                url: license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
                 dataType: 'json',
                 showLoader: true,
                 data: {
@@ -104,8 +120,14 @@ define([
                 context: this,
                 success: function () {
                     var displayedRecord = this.preview().displayedRecord();
+
                     displayedRecord.is_downloaded = 1;
                     displayedRecord.path = destinationPath;
+
+                    if (license) {
+                        displayedRecord.is_licensed = 1;
+                        displayedRecord.is_licensed_locally = 1;
+                    }
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
@@ -125,6 +147,7 @@ define([
          */
         generateImageName: function (record) {
             var imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+
             return imageName;
         },
 
@@ -136,6 +159,7 @@ define([
          */
         getImageExtension: function (record) {
             var imageType = record.content_type.match(/[^/]{1,4}$/);
+
             return imageType;
         },
 
@@ -150,12 +174,12 @@ define([
 
         /**
          * License and save image
-         *
+         *s
          * @param {Object} record
          * @param fileName
          */
         licenseAndSave: function (record, fileName) {
-            this.save(record, fileName, this.preview().licenseAndDownloadUrl);
+            this.save(record, fileName, true);
         },
 
         /**
@@ -165,6 +189,7 @@ define([
          */
         showLicenseConfirmation: function (record) {
             var licenseAndSave = this.licenseAndSave.bind(this);
+
             $.ajax(
                 {
                     type: 'POST',
@@ -180,14 +205,18 @@ define([
                         var confirmationContent = $.mage.__('License "' + record.title + '"'),
                             quotaMessage = response.result.message,
                             canPurchase = response.result.canLicense;
+
                         this.getPrompt(
                             {
                                 'title': $.mage.__('License Adobe Stock Image?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</p><br>' + $.mage.__('File Name') + '</b>',
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</p><br>' +
+                                           $.mage.__('File Name') + '</b>',
                                 'visible': canPurchase,
                                 'actions': {
                                     confirm: function (fileName) {
-                                        canPurchase ? licenseAndSave(record, fileName) : window.open(this.preview().buyCreditsUrl);
+                                        canPurchase ?
+                                            licenseAndSave(record, fileName) :
+                                            window.open(this.preview().buyCreditsUrl);
                                     }
                                 },
                                 'buttons': [{
@@ -255,9 +284,18 @@ define([
                 .catch(function (error) {
                     messages.add('error', error.message);
                 })
-                .finally((function () {
+                .finally(function () {
                     messages.scheduleCleanup(this.messageDelay);
-                }).bind(this));
+                }.bind(this));
+        },
+
+        /**
+         * Returns license button title depending on the existing saved preview
+         *
+         * @returns {String}
+         */
+        getLicenseButtonTitle: function () {
+            return this.isDownloaded() ?  $.mage.__('License') : $.mage.__('License and Save')
         }
     });
 });

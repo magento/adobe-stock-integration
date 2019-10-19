@@ -71,7 +71,7 @@ class ConnectionWrapper
 
     /**
      * @param ClientConfig $clientConfig
-     * @param \Magento\AdobeStockClient\Model\ConnectionFactory $connectionFactory
+     * @param ConnectionFactory $connectionFactory
      * @param ImsConfig $imsConfig
      * @param LoggerInterface $logger
      * @param GetAccessTokenInterface $getAccessToken
@@ -172,7 +172,7 @@ class ConnectionWrapper
             $client->searchFilesInitialize($searchRequest);
 
             return (bool)$client->getNextResponse()->nb_results;
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return false;
         }
     }
