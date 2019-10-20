@@ -12,6 +12,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/sorting',
             options: [],
+            // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             applied: {},
             selectedOption: '',
@@ -57,7 +58,7 @@ define([
                             label: column.label
                         });
                     }
-                }.bind(this))
+                }.bind(this));
             }
         },
 

@@ -45,6 +45,7 @@ define([
          * @param {Number} delay in seconds
          */
         scheduleCleanup: function (delay) {
+            // eslint-disable-next-line no-unused-vars
             var timerId;
 
             delay = delay || 3;
