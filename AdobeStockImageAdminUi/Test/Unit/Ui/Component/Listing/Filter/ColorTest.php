@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model;
@@ -18,16 +17,48 @@ use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Ui\Component\Filters\Type\Input;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 
 /**
- * SignInConfigProviderTest test.
+ * ColorTest test.
  */
 class ColorTest extends TestCase
 {
-    /**
-     * @var MockObject|ContextInterface $contextInterface
-     */
-    private $contextInterface;
+    private const FILTER_NAME = 'colors_filter';
+
+    private const COLOR_PICKER_MODES = [
+        'full' => [
+            'showInput' => true,
+            'showInitial' => false,
+            'showPalette' => true,
+            'showAlpha' => true,
+            'showSelectionPalette' => true,
+        ],
+        'simple' => [
+            'showInput' => false,
+            'showInitial' => false,
+            'showPalette' => false,
+            'showAlpha' => false,
+            'showSelectionPalette' => true,
+        ],
+        'noalpha' => [
+            'showInput' => true,
+            'showInitial' => false,
+            'showPalette' => true,
+            'showAlpha' => false,
+            'showSelectionPalette' => true,
+        ],
+        'palette' => [
+            'showInput' => false,
+            'showInitial' => false,
+            'showPalette' => true,
+            'showPaletteOnly' => true,
+            'showAlpha' => false,
+            'showSelectionPalette' => false,
+        ]
+    ];
 
     /**
      * @var MockObject|UiComponentFactory $uiComponentFactory
@@ -50,52 +81,98 @@ class ColorTest extends TestCase
     private $colorModesProvider;
 
     /**
-     * @var Color
+     * Create Color filter object
      */
-    private $color;
-
-    /**
-     * Set Up
-     */
-    protected function setUp()
+    private function createObject(array $data, ContextInterface $context): Color
     {
-        $this->contextInterface = $this->createMock(ContextInterface::class);
+
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->filterModifier = $this->createMock(FilterModifier::class);
         $this->colorModesProvider = $this->createMock(ColorModesProvider::class);
-        $this->contextInterface->expects($this->once())
-            ->method('getFiltersParams')
-            ->willReturn(['placeholder' => true, 'colors_filter' => "#21ffff"]);
-        $this->color = new Color(
-            $this->contextInterface,
+        return new Color(
+            $context,
             $this->uiComponentFactory,
             $this->filterBuilder,
             $this->filterModifier,
             $this->colorModesProvider,
             [],
-            $this->getData()
+            $data
         );
+    }
+
+    /**
+     * Get context
+     *
+     * @param array $filterParams
+     * @return ContextInterface
+     */
+    private function getContext(array $filterParams): ContextInterface
+    {
+        $context = $this->createMock(ContextInterface::class);
+        $context->expects($this->once())
+            ->method('getFiltersParams')
+            ->willReturn($filterParams);
+        $context->expects($this->any())
+            ->method('getNamespace');
+
+        $processorMock = $this->createMock(Processor::class);
+        $context->expects($this->exactly(2))
+            ->method('getProcessor')
+            ->willReturn($processorMock);
+        $processorMock->expects($this->exactly(1))
+            ->method('register')
+            ->willReturn(null);
+
+        return $context;
     }
 
     /**
      * Prepare test
      *
      * @param array $testData
-     * @dataProvider getTestData
+     * @dataProvider colorPickerModeProvider
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testPrepare(array $testData)
+    public function testPrepare(?string $colorPickerMode, string $appliedValue): void
     {
-        $componentInterface = $this->createMock(UiComponentInterface::class);
+        $filter = $this->createMock(Filter::class);
+        $context = $this->getContext(
+            [
+                self::FILTER_NAME => $appliedValue
+            ]
+        );
+
+        $color = $this->createObject(
+            [
+                'config' => [
+                    'colorPickerMode' => $colorPickerMode
+                ],
+                'name' => self::FILTER_NAME
+            ],
+            $context
+        );
+
         $this->uiComponentFactory->expects($this->once())
             ->method('create')
-            ->willReturn($componentInterface);
-        $componentInterface->expects($this->once())
-            ->method('getContext')
-            ->willReturn($this->contextInterface);
-        $componentInterface->expects($this->exactly(2))
-            ->method('getData');
+            ->with(
+                self::FILTER_NAME,
+                Input::COMPONENT,
+                ['context' => $context]
+            )
+            ->willReturn($this->getWrappedComponent($context));
+
+        $this->verifyApplyFilter($appliedValue, $filter, $context);
+
+        $this->colorModesProvider->expects($this->once())
+            ->method('getModes')
+            ->willReturn(self::COLOR_PICKER_MODES);
+
+        $color->prepare();
+    }
+
+    private function verifyApplyFilter(string $appliedValue, Filter $filter, ContextInterface $context): void
+    {
         $this->filterBuilder->expects($this->once())
             ->method('setConditionType')
             ->willReturnSelf();
@@ -104,105 +181,53 @@ class ColorTest extends TestCase
             ->willReturnSelf();
         $this->filterBuilder->expects($this->once())
             ->method('setValue')
+            ->with(str_replace('#', '', $appliedValue))
             ->willReturnSelf();
-        $filterMock = $this->createMock(Filter::class);
+
         $this->filterBuilder->expects($this->once())
             ->method('create')
-            ->willReturn($filterMock);
-        $this->colorModesProvider->expects($this->once())
-            ->method('getModes')
-            ->willReturn($testData['modes']);
-        $dataProvider = $this->createMock(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class
-        );
-        $this->contextInterface->expects($this->exactly(2))
+            ->willReturn($filter);
+
+        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $context->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($dataProvider);
-        $dataProvider->expects($this->once())->method('addFilter');
-        $processorMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\Processor::class);
-        $this->contextInterface->expects($this->exactly(2))
-            ->method('getProcessor')
-            ->willReturn($processorMock);
-        $processorMock->expects($this->exactly(1))
-            ->method('register')
-            ->willReturn(null);
-
-        $this->color->prepare();
+        $dataProvider->expects($this->once())
+            ->method('addFilter')
+            ->with($filter);
     }
 
     /**
-     * Test data
+     * Get wrapped component
      *
-     * @return array
+     * @return MockObject|UiComponentInterface
      */
-    public function getTestData()
+    private function getWrappedComponent(ContextInterface $context): UiComponentInterface
     {
-        return
-            [
-                [
-                    [
-                        'modes' => [
-                            'full' => [
-                                'showInput' => true,
-                                'showInitial' => false,
-                                'showPalette' => true,
-                                'showAlpha' => true,
-                                'showSelectionPalette' => true,
-                            ],
-                            'simple' => [
-                                'showInput' => false,
-                                'showInitial' => false,
-                                'showPalette' => false,
-                                'showAlpha' => false,
-                                'showSelectionPalette' => true,
-                            ],
-                            'noalpha' => [
-                                'showInput' => true,
-                                'showInitial' => false,
-                                'showPalette' => true,
-                                'showAlpha' => false,
-                                'showSelectionPalette' => true,
-                            ],
-                            'palette' => [
-                                'showInput' => false,
-                                'showInitial' => false,
-                                'showPalette' => true,
-                                'showPaletteOnly' => true,
-                                'showAlpha' => false,
-                                'showSelectionPalette' => false,
-                            ],
-                        ]
-                    ]
-                ]
+        $wrappedComponent = $this->createMock(UiComponentInterface::class);
+        $wrappedComponent->expects($this->once())
+            ->method('prepare');
+        $wrappedComponent->expects($this->once())
+            ->method('getContext')
+            ->willReturn($context);
 
-            ];
+        return $wrappedComponent;
     }
 
     /**
-     * Data for Color class
+     * Data provider for testPrepare
      *
      * @return array
      */
-    private function getData()
+    public function colorPickerModeProvider(): array
     {
         return [
-            'config' => [
-                'component' => 'Magento_Ui/js/form/element/color-picker',
-                'template' => 'Magento_AdobeStockImageAdminUi/grid/filter/color',
-                'label' => 'Color',
-                'provider' => '${ $.parentName }',
-                'sortOrder' => '30',
-                'colorFormat' => 'HEX',
-                'dataScope' => 'colors_filter',
-                'placeholder' => 'HEX color',
+            [
+                'full', '#21ffff'
             ],
-            'name' => 'colors_filter',
-            'template' => 'Magento_AdobeStockImageAdminUi/grid/filter/color',
-            'provider' => '${ $.parentName }',
-            'sortOrder' => '30',
-            'js_config' => [
-                'extends' => 'adobe_stock_images_listing',
-            ],
+            [
+                null, '#ffffff'
+            ]
         ];
     }
 }
