@@ -24,27 +24,11 @@ interface KeywordInterface extends ExtensibleDataInterface
     public function getId(): ?int;
 
     /**
-     * Set the id
-     *
-     * @param int $value
-     * @return $this
-     */
-    public function setId($value);
-
-    /**
      * Get the keyword
      *
      * @return string
      */
     public function getKeyword() : string;
-
-    /**
-     * Set the keyword
-     *
-     * @param string $keyword
-     * @return void
-     */
-    public function setKeyword(string $keyword): void;
 
     /**
      * Get extension attributes

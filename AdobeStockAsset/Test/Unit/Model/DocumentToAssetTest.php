@@ -12,7 +12,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
-//use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;

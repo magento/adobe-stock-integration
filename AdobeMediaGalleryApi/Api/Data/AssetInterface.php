@@ -25,27 +25,11 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getId(): ?int;
 
     /**
-     * Set ID
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value): void;
-
-    /**
      * Get Path
      *
      * @return string
      */
     public function getPath(): string;
-
-    /**
-     * Set Path
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setPath(string $value): void;
 
     /**
      * Get title
@@ -55,14 +39,6 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getTitle(): string;
 
     /**
-     * Set title
-     *
-     * @param string $title
-     * @return void
-     */
-    public function setTitle(string $title): void;
-
-    /**
      * Get content type
      *
      * @return string
@@ -70,35 +46,11 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getContentType(): string;
 
     /**
-     * Set content type
-     *
-     * @param string $contentType
-     * @return void
-     */
-    public function setContentType(string $contentType): void;
-
-    /**
-     * Set full licensed asset's height
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setHeight(int $value): void;
-
-    /**
      * Retrieve full licensed asset's height
      *
      * @return int
      */
     public function getHeight(): int;
-
-    /**
-     * Set full licensed asset's width
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setWidth(int $value): void;
 
     /**
      * Retrieve full licensed asset's width
@@ -115,27 +67,11 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getCreatedAt(): string;
 
     /**
-     * Set created at
-     *
-     * @param string $createdAt
-     * @return void
-     */
-    public function setCreatedAt(string $createdAt): void;
-
-    /**
      * Get updated at
      *
      * @return string
      */
     public function getUpdatedAt(): string;
-
-    /**
-     * Return updated at
-     *
-     * @param string $updatedAt
-     * @return void
-     */
-    public function setUpdatedAt(string $updatedAt): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
