@@ -146,7 +146,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     const CREATOR_ID = 'creator_id';
 
     /**
-     * Media asset media gallery id
+     * Media gallery id is an id of a media asset id related to the asset
      */
     const MEDIA_GALLERY_ID = 'media_gallery_id';
 
