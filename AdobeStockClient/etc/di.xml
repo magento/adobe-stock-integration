@@ -52,6 +52,7 @@
                 <item name="words" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Words</item>
                 <item name="media_id" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\MediaId</item>
                 <item name="premium_price_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Premium</item>
+                <item name="similar" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Similar</item>
             </argument>
         </arguments>
     </type>
