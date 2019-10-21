@@ -17,6 +17,8 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 
 /**
  * Class StockFileToDocument
@@ -63,15 +65,15 @@ class StockFileToDocument
     public function convert(StockFile $file): DocumentInterface
     {
         $itemData = (array) $file;
-        $itemId = $itemData['id'];
+        $itemId = $itemData[AssetInterface::ID];
 
-        $category = (array) $itemData['category'];
+        $category = (array) $itemData[AssetInterface::CATEGORY];
 
-        $itemData['category'] = $category;
-        $itemData['category_id'] = $category['id'];
-        $itemData['category_name'] = $category['name'];
+        $itemData[AssetInterface::CATEGORY] = $category;
+        $itemData[AssetInterface::CATEGORY_ID] = $category[CategoryInterface::ID];
+        $itemData[AssetInterface::CATEGORY_NAME] = $category[CategoryInterface::NAME];
 
-        $attributes = $this->createAttributes('id', $itemData);
+        $attributes = $this->createAttributes(DocumentInterface::ID, $itemData);
 
         $item = $this->documentFactory->create();
         $item->setId($itemId);

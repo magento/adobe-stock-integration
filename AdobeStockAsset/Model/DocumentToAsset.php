@@ -48,9 +48,9 @@ class DocumentToAsset
             }
             $asset = $this->createEntity(
                 $data,
-                $this->mapping['factory'],
-                $this->mapping['fields'],
-                $this->mapping['children']
+                $this->mapping[AssetInterface::FACTORY],
+                $this->mapping[AssetInterface::FIELDS],
+                $this->mapping[AssetInterface::CHILDREN]
             );
             foreach ($data as $key => $value) {
                 $asset->setData($key, $value);
@@ -80,9 +80,9 @@ class DocumentToAsset
                 $childName,
                 $this->createEntity(
                     $data,
-                    $childMapping['factory'],
-                    $childMapping['fields'] ?? [],
-                    $childMapping['children'] ?? []
+                    $childMapping[AssetInterface::FACTORY],
+                    $childMapping[AssetInterface::FIELDS] ?? [],
+                    $childMapping[AssetInterface::CHILDREN] ?? []
                 )
             );
             unset($data[$childName]);

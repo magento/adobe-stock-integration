@@ -63,10 +63,21 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const FIELD_UPDATED_AT = 'updated_at';
 
+    const FACTORY = 'factory';
+
+    const FIELDS = 'fields';
+
+    const CHILDREN = 'children';
+
     /**
      * Category id is an id of a category entry related to the asset
      */
     const CATEGORY_ID = 'category_id';
+
+    /**
+     * Category name is an name of a category entry related to the asset
+     */
+    const CATEGORY_NAME = 'category_name';
 
     /**
      * Creator id is an id of a category entry related to the asset
@@ -187,6 +198,21 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return void
      */
     public function setCategoryId(int $categoryId): void;
+
+    /**
+     * Get category name
+     *
+     * @return string|null
+     */
+    public function getCategoryName(): ?string;
+
+    /**
+     * Set category
+     *
+     * @param string $categoryName
+     * @return void
+     */
+    public function setCategoryName(string $categoryName): void;
 
     /**
      * Get category

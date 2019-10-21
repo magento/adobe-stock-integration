@@ -85,6 +85,22 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
+    public function getCategoryName(): ?string
+    {
+        return $this->getData(self::CATEGORY_NAME);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCategoryName(string $categoryName): void
+    {
+        $this->setData(self::CATEGORY_NAME, $categoryName);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCategory(): ?CategoryInterface
     {
         return $this->getData(self::CATEGORY);
