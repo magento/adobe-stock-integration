@@ -8,6 +8,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
@@ -93,16 +94,16 @@ class LogOut implements LogOutInterface
             $curl->addHeader('cache-control', 'no-cache');
             $curl->get($this->config->getLogoutUrl($accessToken));
 
-            if ($curl->getStatus() === self::HTTP_FOUND) {
-                $userProfile->setAccessToken('');
-                $userProfile->setRefreshToken('');
-                $this->userProfileRepository->save($userProfile);
-                return true;
-            } else {
-                $logMessage = __('An error occurred during logout operation: %1');
-                $this->logger->critical($logMessage);
-                return false;
+            if ($curl->getStatus() !== self::HTTP_FOUND) {
+                throw new LocalizedException(
+                    __('An error occurred during logout operation.')
+                );
             }
+
+            $userProfile->setAccessToken('');
+            $userProfile->setRefreshToken('');
+            $this->userProfileRepository->save($userProfile);
+            return true;
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
             return false;
