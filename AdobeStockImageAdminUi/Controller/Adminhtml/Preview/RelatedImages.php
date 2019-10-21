@@ -20,6 +20,10 @@ use Psr\Log\LoggerInterface;
 class RelatedImages extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+    /**
      * Successful get related image result code.
      */
     const HTTP_OK = 200;
