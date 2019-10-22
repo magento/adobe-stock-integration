@@ -295,7 +295,7 @@ define([
          * @returns {String}
          */
         getLicenseButtonTitle: function () {
-            return this.isDownloaded() ?  $.mage.__('License') : $.mage.__('License and Save')
+            return this.isDownloaded() ?  $.mage.__('License') : $.mage.__('License and Save');
         }
     });
 });
