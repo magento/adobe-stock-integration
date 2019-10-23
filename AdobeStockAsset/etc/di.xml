@@ -20,7 +20,6 @@
     <preference for="Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface" type="Magento\AdobeStockAsset\Model\CreatorSearchResults"/>
 
     <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
-    <preference for="Magento\AdobeStockAssetApi\Api\AssetKeywordRepositoryInterface" type="Magento\AdobeStockAsset\Model\AssetKeywordRepository"/>
 
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetListInterface" type="Magento\AdobeStockAsset\Model\GetAssetList"/>
     <preference for="Magento\AdobeStockAssetApi\Api\SaveAssetInterface" type="Magento\AdobeStockAsset\Model\SaveAsset"/>
@@ -34,14 +33,11 @@
             </argument>
         </arguments>
     </type>
+
     <type name="Magento\AdobeStockAsset\Model\DocumentToAsset">
         <arguments>
             <argument name="mapping" xsi:type="array">
                 <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory</item>
-                <item name="fields" xsi:type="array">
-                    <item name="thumbnail_240_url" xsi:type="string">thumbnail_url</item>
-                    <item name="thumbnail_500_url" xsi:type="string">preview_url</item>
-                </item>
                 <item name="children" xsi:type="array">
                     <item name="creator" xsi:type="array">
                         <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory</item>
@@ -57,8 +53,18 @@
                             <item name="category_name" xsi:type="string">name</item>
                         </item>
                     </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset">
+        <arguments>
+            <argument name="mapping" xsi:type="array">
+                <item name="factory" xsi:type="object">Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory</item>
+                <item name="children" xsi:type="array">
                     <item name="keywords" xsi:type="array">
-                        <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory</item>
+                        <item name="factory" xsi:type="object">Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory</item>
                         <item name="fields" xsi:type="array">
                             <item name="keywords" xsi:type="array">
                                 <item name="name" xsi:type="string">keyword</item>
@@ -69,6 +75,7 @@
             </argument>
         </arguments>
     </type>
+
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">

@@ -11,7 +11,6 @@ use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Magento\Framework\Api\FilterBuilder;
 
 /**
@@ -23,11 +22,6 @@ class GetAssetByIdTest extends TestCase
      * @var MockObject|SearchCriteriaBuilder $searchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
-
-    /**
-     * @var MockObject|DocumentToAsset $documentToAsset
-     */
-    private $documentToAsset;
 
     /**
      * @var MockObject|FilterBuilder $filterBuilder
@@ -52,13 +46,11 @@ class GetAssetByIdTest extends TestCase
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->getAssetList = $this->createMock(GetAssetListInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
-        $this->documentToAsset = $this->createMock(DocumentToAsset::class);
 
         $this->getAssetById = new GetAssetById(
             $this->filterBuilder,
             $this->getAssetList,
-            $this->searchCriteriaBuilder,
-            $this->documentToAsset
+            $this->searchCriteriaBuilder
         );
     }
 
@@ -95,9 +87,6 @@ class GetAssetByIdTest extends TestCase
                 )
             ]
         );
-        $asset = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
-        $this->documentToAsset->expects($this->once())->method('convert')
-            ->willReturn($asset);
         $this->getAssetById->execute(12345678);
     }
 }
