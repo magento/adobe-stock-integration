@@ -58,10 +58,10 @@ class SaveTest extends WebapiAbstract
     {
         $this->saveAsset($data);
         /** @var Asset $asset */
-        $asset = $this->getSavedAsset($data[AssetInterface::ID]);
+        $asset = $this->getSavedAsset($data['id']);
         $uniqueData = [
-            AssetInterface::ID => $data[AssetInterface::ID],
-            AssetInterface::PATH => $data[AssetInterface::PATH],
+            'id' => $data['id'],
+            'media_gallery_id' => $data['media_gallery_id'],
         ];
 
         $this->assertArraySubset($uniqueData, $asset->getData());
@@ -73,35 +73,12 @@ class SaveTest extends WebapiAbstract
      */
     public function assetDataProvider(): array
     {
-        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
-            return [
-                [
-                    [
-                        AssetInterface::ID => (string) random_int(9999, 99999),
-                        AssetInterface::PATH => uniqid() . '/file-path.png',
-                        AssetInterface::WIDTH => '1000',
-                        AssetInterface::HEIGHT => '800',
-                    ]
-                ]
-            ];
-        }
-
         return [
             [
                 [
-                    AssetInterface::ID => (string) random_int(9999, 99999),
-                    AssetInterface::PATH => uniqid() . '/file-path.png',
-                    AssetInterface::WIDTH => '1000',
-                    AssetInterface::HEIGHT => '800',
-                    AssetInterface::MEDIA_TYPE_ID => null,
-                    AssetInterface::KEYWORDS => [],
-                    AssetInterface::TITLE => 'Title',
-                    AssetInterface::CONTENT_TYPE => '',
-                    AssetInterface::CREATION_DATE => '',
-                    AssetInterface::CREATED_AT => '',
-                    AssetInterface::UPDATED_AT => '',
-                    AssetInterface::IS_LICENSED => 1,
-                    'licensed' => 1,
+                   'id' => (string) random_int(9999, 99999),
+                    'creation_date' => '',
+                    'is_licensed' => 1,
                 ]
             ]
         ];
@@ -138,7 +115,7 @@ class SaveTest extends WebapiAbstract
     {
         /** @var Collection $collection */
         $collection = $this->assetCollectionFactory->create();
-        $collection->addFieldToFilter(AssetInterface::ID, $adobeId);
+        $collection->addFieldToFilter('id', $adobeId);
         /** @var AssetInterface $asset */
         $asset = $collection->getLastItem();
 
