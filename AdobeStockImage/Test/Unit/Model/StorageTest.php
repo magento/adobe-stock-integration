@@ -97,6 +97,11 @@ class StorageTest extends TestCase
     {
         $path = 'path';
 
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('isFile')
+            ->with($path)
+            ->willReturn(true);
+
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
