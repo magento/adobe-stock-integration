@@ -89,7 +89,11 @@ class TestConnection extends Field
      */
     public function isConnectionSuccessful(): bool
     {
-        return $this->client->testConnection($this->config->getApiKey());
+        if ($this->config->getApiKey()) {
+            return $this->client->testConnection($this->config->getApiKey());
+        }
+
+        return false;
     }
 
     /**

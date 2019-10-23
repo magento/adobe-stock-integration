@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Test\Integration\Model;
 
-use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use Magento\AdobeStockClient\Model\Client;
-use Magento\AdobeStockClient\Model\ConnectionFactory;
+use Magento\AdobeStockClient\Model\ConnectionWrapper;
+use Magento\AdobeStockClient\Model\ConnectionWrapperFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -34,7 +34,7 @@ class ClientTest extends TestCase
     private $client;
 
     /**
-     * @var AdobeStock|MockObject
+     * @var ConnectionWrapper|MockObject
      */
     private $connection;
 
@@ -43,17 +43,19 @@ class ClientTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(AdobeStock::class)
+        $this->connection = $this->getMockBuilder(ConnectionWrapper::class)
             ->setMethods(['searchFilesInitialize', 'getNextResponse'])
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionFactory = $this->getMockBuilder(ConnectionFactory::class)
-            ->setMethods(['create'])
+
+        /** @var ConnectionWrapperFactory|MockObject $connectionFactory */
+        $connectionFactory = $this->getMockBuilder(ConnectionWrapperFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->connection);
+
         $this->client = Bootstrap::getObjectManager()->create(
             Client::class,
             [
@@ -81,7 +83,6 @@ class ClientTest extends TestCase
         $response->expects($this->once())
             ->method('getNbResults')
             ->willReturn(3);
-
         $this->connection->expects($this->once())
             ->method('searchFilesInitialize')
             ->with(
@@ -92,8 +93,7 @@ class ClientTest extends TestCase
                             && in_array('nb_results', $searchFiles->getResultColumns())
                             && $searchFiles->getSearchParams()->getWords() == $words;
                     }
-                ),
-                null
+                )
             );
         $this->connection->expects($this->once())
             ->method('getNextResponse')

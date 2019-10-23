@@ -375,7 +375,7 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return int
      */
-    public function isLicensed(): int;
+    public function getIsLicensed(): int;
 
     /**
      * Set is licensed

@@ -152,7 +152,7 @@
 
       .modal-content {
         .prompt-message {
-          font-weight: bold;
+          font-weight: normal;
           margin-bottom: 15px;
         }
         .admin__field-wide {
@@ -165,6 +165,11 @@
           padding: 0.6rem 1rem 0.6rem;
           color: #999;
           cursor: default;
+        }
+        .admin__field-with-image-ext {
+          .admin__control-text {
+            padding-right: 5rem;
+          }
         }
       }
       .modal-footer {
@@ -185,6 +190,15 @@
 
       .admin__field-tooltip {
         margin: -5px 0 0 5px;
+      }
+    }
+  }
+
+  .masonry-image-grid {
+    + .admin__data-grid-header {
+      .selectmenu-items {
+        bottom: 100%;
+        top: auto;
       }
     }
   }

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
+namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
 
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
