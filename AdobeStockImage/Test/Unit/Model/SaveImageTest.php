@@ -55,7 +55,6 @@ class SaveImageTest extends TestCase
      */
     private $documentToAsset;
 
-
     /**
      * @var MockObject|GetAssetKeywordsInterface
      */

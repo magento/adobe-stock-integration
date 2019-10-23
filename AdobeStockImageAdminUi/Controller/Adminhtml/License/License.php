@@ -111,7 +111,7 @@ class License extends Action
                 $this->attributeFactory->create(
                     [
                         'data' => [
-                            AttributeInterface::ATTRIBUTE_CODE => 'media_gallery_id',
+                            AttributeInterface::ATTRIBUTE_CODE => 'is_licensed',
                             AttributeInterface::VALUE => 1,
                         ]
                     ]
