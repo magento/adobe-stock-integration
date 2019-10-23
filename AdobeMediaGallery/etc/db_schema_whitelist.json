@@ -1,10 +1,10 @@
 {
-    "adobe_media_gallery": {
+    "media_gallery_asset": {
         "column": {
             "id": true,
             "path": true,
-            "source": true,
             "title": true,
+            "source": true,
             "content_type": true,
             "width": true,
             "height": true,
@@ -12,38 +12,38 @@
             "updated_at": true
         },
         "index": {
-            "ADOBE_MEDIA_GALLERY_ID": true
+            "MEDIA_GALLERY_ID": true
         },
         "constraint": {
-            "ADOBE_MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT": true
+            "MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT": true
         }
     },
-    "adobe_media_gallery_keyword": {
+    "media_gallery_keyword": {
         "column": {
             "id": true,
             "keyword": true
         },
         "index": {
-            "ADOBE_MEDIA_GALLERY_KEYWORD_ID": true
+            "MEDIA_GALLERY_KEYWORD_ID": true
         },
         "constraint": {
-            "ADOBE_MEDIA_GALLERY_KEYWORD_KEYWORD": true,
+            "MEDIA_GALLERY_KEYWORD_KEYWORD": true,
             "PRIMARY": true
         }
     },
-    "adobe_media_gallery_asset_keyword": {
+    "media_gallery_asset_keyword": {
         "column": {
             "keyword_id": true,
             "asset_id": true
         },
         "index": {
-            "ADOBE_MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID": true,
-            "ADOBE_MEDIA_GALLERY_ASSET_KEYWORD_KEYWORD_ID": true
+            "MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID_INDEX": true,
+            "MEDIA_GALLERY_ASSET_KEYWORD_KEYWORD_ID_INDEX": true
         },
         "constraint": {
             "PRIMARY": true,
-            "ADOBE_MDA_GLR_ASSET_KEYWORD_KEYWORD_ID_ADOBE_MDA_GLR_KEYWORD_ID": true,
-            "ADOBE_MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID_ADOBE_STOCK_ASSET_ID": true
+            "MEDIA_GALLERY_KEYWORD_KEYWORD_ID_MEDIA_GALLERY_KEYWORD_ID": true,
+            "MEDIA_GALLERY_KEYWORD_ASSET_ID_ASSET_ID": true
         }
     }
 }

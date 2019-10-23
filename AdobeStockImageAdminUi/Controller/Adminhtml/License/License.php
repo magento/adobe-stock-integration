@@ -12,9 +12,11 @@ use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Api\AttributeInterfaceFactory;
 
 /**
  * Backend controller for licensing and downloading an image
@@ -24,17 +26,17 @@ class License extends Action
     /**
      * Successful image license and download result code.
      */
-    const HTTP_OK = 200;
+    private const HTTP_OK = 200;
 
     /**
      * Internal server error response code.
      */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * Download image failed response code.
      */
-    const HTTP_BAD_REQUEST = 400;
+    private const HTTP_BAD_REQUEST = 400;
 
     /**
      * @see _isAllowed()
@@ -62,6 +64,11 @@ class License extends Action
     private $saveImage;
 
     /**
+     * @var AttributeInterfaceFactory
+     */
+    private $attributeFactory;
+
+    /**
      * GetQuota constructor.
      *
      * @param Action\Context $context
@@ -72,6 +79,7 @@ class License extends Action
      */
     public function __construct(
         Action\Context $context,
+        AttributeInterfaceFactory $attributeFactory,
         ClientInterface $client,
         SaveImageInterface $saveImage,
         LoggerInterface $logger,
@@ -79,6 +87,7 @@ class License extends Action
     ) {
         parent::__construct($context);
 
+        $this->attributeFactory = $attributeFactory;
         $this->client = $client;
         $this->saveImage = $saveImage;
         $this->getAssetById = $getAssetById;
@@ -92,16 +101,31 @@ class License extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $contentId = (int)$params['media_id'];
-            $destinationPath = (string) $params['destination_path'];
-            $responseCode = self::HTTP_OK;
-            $this->client->licenseImage($contentId);
-            $asset = $this->getAssetById->execute($contentId);
-            $imageUrl = $this->client->getImageDownloadUrl($contentId);
-            $asset->setUrl($imageUrl);
-            $asset->setIsLicensed(1);
-            $this->saveImage->execute($asset, $destinationPath);
+            $contentId = (int) $params['media_id'];
 
+            $this->client->licenseImage($contentId);
+            $imageUrl = $this->client->getImageDownloadUrl($contentId);
+
+            $document = $this->getAssetById->execute($contentId);
+            $document->setCustomAttribute(
+                'is_licensed',
+                $this->attributeFactory->create(
+                    [
+                        'data' => [
+                            AttributeInterface::ATTRIBUTE_CODE => 'media_gallery_id',
+                            AttributeInterface::VALUE => 1,
+                        ]
+                    ]
+                )
+            );
+
+            $this->saveImage->execute(
+                $document,
+                $imageUrl,
+                (string) $params['destination_path']
+            );
+
+            $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
                 'message' => __('You have successfully licensed and downloaded the image.'),

@@ -28,7 +28,7 @@ interface KeywordInterface extends ExtensibleDataInterface
      *
      * @return string
      */
-    public function getKeyword() : string;
+    public function getKeyword(): string;
 
     /**
      * Get extension attributes
@@ -36,12 +36,4 @@ interface KeywordInterface extends ExtensibleDataInterface
      * @return \Magento\AdobeMediaGalleryApi\Api\Data\KeywordExtensionInterface|null
      */
     public function getExtensionAttributes(): KeywordExtensionInterface;
-
-    /**
-     * Set extension attributes
-     *
-     * @param \Magento\AdobeMediaGalleryApi\Api\Data\KeywordExtensionInterface $extensionAttributes
-     * @return void
-     */
-    public function setExtensionAttributes(KeywordExtensionInterface $extensionAttributes): void;
 }

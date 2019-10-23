@@ -34,9 +34,16 @@ interface AssetInterface extends ExtensibleDataInterface
     /**
      * Get title
      *
-     * @return string
+     * @return string|null
      */
-    public function getTitle(): string;
+    public function getTitle(): ?string;
+
+    /**
+     * Get source of the file
+     *
+     * @return string|null
+     */
+    public function getSource(): ?string;
 
     /**
      * Get content type
@@ -76,15 +83,7 @@ interface AssetInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null
+     * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetExtensionInterface|null
      */
     public function getExtensionAttributes(): AssetExtensionInterface;
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
-     * @return void
-     */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
 }

@@ -2,18 +2,14 @@
     "adobe_stock_asset": {
         "column": {
             "id": true,
-            "media_type_id": true,
             "media_gallery_id": true,
             "category_id": true,
             "creator_id": true,
             "is_licensed": true,
-            "creation_date": true,
-            "created_at": true,
-            "updated_at": true
+            "creation_date": true
         },
         "index": {
             "ADOBE_STOCK_ASSET_ID": true,
-            "ADOBE_STOCK_ASSET_MEDIA_TYPE_ID": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID": true,
             "ADOBE_STOCK_ASSET_CREATOR_ID": true
         },

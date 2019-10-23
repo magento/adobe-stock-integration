@@ -13,26 +13,20 @@ use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
- * Adobe Stock Asset
+ * Media Gallery Asset
  */
 class Asset extends AbstractExtensibleModel implements AssetInterface
 {
     private const ID = 'id';
-
     private const PATH = 'path';
-
     private const TITLE = 'title';
-
+    private const SOURCE = 'source';
     private const CONTENT_TYPE = 'content_type';
-
     private const WIDTH = 'width';
-
     private const HEIGHT = 'height';
-
     private const CREATED_AT = 'created_at';
-
     private const UPDATED_AT = 'updated_at';
-    
+
     /**
      * @inheritdoc
      */
@@ -58,9 +52,17 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        return (string) $this->getData(self::TITLE);
+        return $this->getData(self::TITLE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSource(): ?string
+    {
+        return $this->getData(self::SOURCE);
     }
 
     /**
@@ -109,13 +111,5 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function getExtensionAttributes(): AssetExtensionInterface
     {
         return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void
-    {
-        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

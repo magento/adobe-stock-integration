@@ -18,9 +18,8 @@ use Magento\Framework\Exception\NotFoundException;
  */
 class GetAssetKeywords implements GetAssetKeywordsInterface
 {
-    private const TABLE_KEYWORD = 'adobe_media_gallery_keyword';
-
-    private const TABLE_ASSET_KEYWORD = 'adobe_media_gallery_asset_keyword';
+    private const TABLE_KEYWORD = 'media_gallery_keyword';
+    private const TABLE_ASSET_KEYWORD = 'media_gallery_asset_keyword';
 
     /**
      * @var ResourceConnection
@@ -67,13 +66,7 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
 
             $keywords = [];
             foreach ($data as $keywordData) {
-                $insertData = [
-                    'data' => [
-                        $keywordData,
-                    ],
-                ];
-                $assetKeyword = $this->assetKeywordFactory->create($insertData);
-                $keywords[] = $assetKeyword;
+                $keywords[] = $this->assetKeywordFactory->create(['data' => $keywordData]);
             }
 
             return $keywords;

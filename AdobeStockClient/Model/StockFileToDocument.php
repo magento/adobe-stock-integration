@@ -71,13 +71,32 @@ class StockFileToDocument
         $itemData['category_id'] = $category['id'];
         $itemData['category_name'] = $category['name'];
 
-        $attributes = $this->createAttributes('id', $itemData);
+        $attributes = $this->createAttributes('id', $this->toArray($itemData));
 
         $item = $this->documentFactory->create();
         $item->setId($itemId);
         $item->setCustomAttributes($attributes);
 
         return $item;
+    }
+
+    /**
+     * Convert data to an associate array
+     *
+     * @param mixed $data
+     * @return array
+     */
+    private function toArray($data)
+    {
+        if(is_object($data) || is_array($data)) {
+            $array = [];
+            foreach((array) $data as $key => $item) {
+                $array[$key] = $this->toArray($item);
+            }
+            return $array;
+        }
+
+        return $data;
     }
 
     /**

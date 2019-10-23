@@ -18,10 +18,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
  */
 class SaveAssetKeywords implements SaveAssetKeywordsInterface
 {
-    private const TABLE_KEYWORD = 'adobe_media_gallery_keyword';
-
+    private const TABLE_KEYWORD = 'media_gallery_keyword';
     private const ID = 'id';
-
     private const KEYWORD = 'keyword';
 
     /**
@@ -57,6 +55,7 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
                 $data[] = $keyword->getKeyword();
             }
 
+            /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
             $connection = $this->resourceConnection->getConnection();
             $connection->insertArray(
                 self::TABLE_KEYWORD,

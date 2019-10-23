@@ -137,7 +137,7 @@ class LicenseTest extends TestCase
         $this->saveImageMock->expects($this->once())->method('execute')->with($this->assetMock, $destinationPath);
         $this->clientInterfaceMock->expects($this->once())->method('licenseImage')->with($mediaId);
 
-        $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(License::HTTP_OK);
+        $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($result));
 
@@ -164,7 +164,7 @@ class LicenseTest extends TestCase
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with($responseCode);
         $this->jsonObject->expects($this->once())->method('setData')->with($this->equalTo($result));
 
-        if ($responseCode === License::HTTP_INTERNAL_ERROR) {
+        if ($responseCode === 500) {
             $this->loggerMock->expects($this->once())->method('critical');
         }
 
@@ -181,7 +181,7 @@ class LicenseTest extends TestCase
         return [
             "Test the thrown exception if the asset couldn't be found" => [
                 new NotFoundException(new Phrase('Requested image doesn\'t exists.')),
-                License::HTTP_BAD_REQUEST,
+                400,
                 [
                     'success' => false,
                     'message' => new Phrase('Image not found. Could not be saved.')
@@ -189,7 +189,7 @@ class LicenseTest extends TestCase
             ],
             "Test the thrown exception if the asset couldn't be licensed or downloaded" => [
                 new LocalizedException(new Phrase('Failed to save the image.')),
-                License::HTTP_INTERNAL_ERROR,
+                500,
                 [
                     'success' => false,
                     'message' => new Phrase('An error occurred while image license and download. Contact support.')

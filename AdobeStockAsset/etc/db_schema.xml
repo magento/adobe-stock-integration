@@ -8,19 +8,13 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="adobe_stock_asset" resource="default" engine="innodb" comment="Adobe Stock Asset">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
-        <column xsi:type="int" name="media_type_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Media Type ID"/>
         <column xsi:type="int" name="media_gallery_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Media gallery ID"/>
         <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Category ID"/>
         <column xsi:type="int" name="creator_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Creator ID"/>
         <column xsi:type="int" name="is_licensed" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Is Licensed"/>
-        <column xsi:type="varchar" length="255" name="creation_date" nullable="true" comment="Creation Date"/>
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <column xsi:type="varchar" name="creation_date" length="255" nullable="true" comment="Creation Date"/>
         <index referenceId="ADB_STK_AST" indexType="btree">
             <column name="id"/>
-        </index>
-        <index referenceId="ADB_STK_MD_TP_ID_INDEX" indexType="btree">
-            <column name="media_type_id"/>
         </index>
         <index referenceId="ADB_STK_CT_ID_INDEX" indexType="btree">
             <column name="category_id"/>
@@ -33,7 +27,7 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_CATEGORY_ID_ADOBE_STOCK_CATEGORY_ID" table="adobe_stock_asset" column="category_id" referenceTable="adobe_stock_category" referenceColumn="id" onDelete="SET NULL"/>
         <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID" table="adobe_stock_asset" column="creator_id" referenceTable="adobe_stock_creator" referenceColumn="id" onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_MEDIA_GALLERY_ID_ADOBE_STOCK_CREATOR_ID" table="adobe_stock_asset" column="media_gallery_id" referenceTable="adobe_media_gallery" referenceColumn="id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_MEDIA_GALLERY_ID_ADOBE_STOCK_CREATOR_ID" table="adobe_stock_asset" column="media_gallery_id" referenceTable="media_gallery_asset" referenceColumn="id" onDelete="SET NULL"/>
     </table>
     <table name="adobe_stock_category" resource="default" engine="innodb" comment="Adobe Stock Category">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>

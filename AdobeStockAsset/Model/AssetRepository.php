@@ -16,12 +16,6 @@ use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface;
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface as MediaAssetInterface;
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetInterfaceFactory;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface as SaveMediaAssetInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -69,31 +63,6 @@ class AssetRepository implements AssetRepositoryInterface
     private $searchResultFactory;
 
     /**
-     * @var GetAssetKeywordsInterface
-     */
-    private $getAssetKeywords;
-
-    /**
-     * @var SaveAssetKeywordsInterface
-     */
-    private $saveAssetKeywords;
-
-    /**
-     * @var SaveMediaAssetInterface
-     */
-    private $saveMediaAsset;
-
-    /**
-     * @var SaveAssetLinks
-     */
-    private $saveAssetLinks;
-
-    /**
-     * @var MediaAssetInterfaceFactory
-     */
-    private $mediaAssetInterfaceFactory;
-
-    /**
      * AssetRepository constructor.
      *
      * @param ResourceModel $resource
@@ -103,11 +72,6 @@ class AssetRepository implements AssetRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
      * @param Save $commandSave
-     * @param GetAssetKeywordsInterface $getAssetKeywords
-     * @param SaveAssetKeywordsInterface $saveAssetKeywords
-     * @param SaveMediaAssetInterface $saveMediaAsset
-     * @param SaveAssetLinksInterface $saveAssetLinks
-     * @param MediaAssetInterfaceFactory $mediaAssetInterfaceFactory
      */
     public function __construct(
         ResourceModel $resource,
@@ -116,12 +80,7 @@ class AssetRepository implements AssetRepositoryInterface
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         AssetSearchResultsInterfaceFactory $searchResultFactory,
-        Save $commandSave,
-        GetAssetKeywordsInterface $getAssetKeywords,
-        SaveAssetKeywordsInterface $saveAssetKeywords,
-        SaveMediaAssetInterface $saveMediaAsset,
-        SaveAssetLinksInterface $saveAssetLinks,
-        MediaAssetInterfaceFactory $mediaAssetInterfaceFactory
+        Save $commandSave
     ) {
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
@@ -130,11 +89,6 @@ class AssetRepository implements AssetRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
         $this->assetSaveService = $commandSave;
-        $this->getAssetKeywords = $getAssetKeywords;
-        $this->saveAssetKeywords = $saveAssetKeywords;
-        $this->saveMediaAsset = $saveMediaAsset;
-        $this->saveAssetLinks = $saveAssetLinks;
-        $this->mediaAssetInterfaceFactory = $mediaAssetInterfaceFactory;
     }
 
     /**
@@ -146,44 +100,7 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function save(AssetInterface $asset): void
     {
-        $mediaGalleryAssetId = $this->saveMediaGalleryAsset($asset);
-        $asset->setMediaGalleryId($mediaGalleryAssetId);
         $this->assetSaveService->execute($asset);
-        $assetKeywords = $this->saveAssetKeywords->execute($asset->getKeywords());
-        $this->saveAssetLinks->execute($asset->getId(), $assetKeywords);
-    }
-
-    /**
-     * Save media gallery asset based on the adobe asset data.
-     *
-     * @param AssetInterface $asset
-     *
-     * @return int
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     */
-    private function saveMediaGalleryAsset(AssetInterface $asset): int
-    {
-        $data = [
-            'data' => [
-                'path' => $asset->getPath(),
-                'title' => $asset->getTitle(),
-                'height' => $asset->getHeight(),
-                'width' => $asset->getWidth(),
-                'content_type' => $asset->getContentType(),
-            ],
-        ];
-        /** @var MediaAssetInterface $mediaAsset */
-        $mediaAsset = $this->mediaAssetInterfaceFactory->create($data);
-
-        return $this->saveMediaAsset->execute($mediaAsset);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function delete(AssetInterface $asset): void
-    {
-        $this->resource->delete($asset);
     }
 
     /**
@@ -204,7 +121,6 @@ class AssetRepository implements AssetRepositoryInterface
             $items = [];
             /** @var AssetInterface $item */
             foreach ($collection->getItems() as $item) {
-                $item->setKeywords($this->getAssetKeywords->execute($item->getId()));
                 $items[] = $item;
             }
 
@@ -231,13 +147,6 @@ class AssetRepository implements AssetRepositoryInterface
         $this->resource->load($asset, $id);
         if (!$asset->getId()) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
-        }
-
-        try {
-            $asset->setKeywords($this->getAssetKeywords->execute($id));
-        } catch (\Exception $exception) {
-            $message = __('An error occurred during get asset by id: %1', $exception->getMessage());
-            throw new IntegrationException($message, $exception);
         }
 
         return $asset;

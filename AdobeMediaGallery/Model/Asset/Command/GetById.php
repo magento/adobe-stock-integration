@@ -18,7 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class GetById implements GetByIdInterface
 {
-    private const TABLE_ADOBE_MEDIA_GALLERY = 'adobe_media_gallery';
+    private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
 
     /**
      * @var ResourceConnection
@@ -56,18 +56,15 @@ class GetById implements GetByIdInterface
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
-            ->from(['amg' => self::TABLE_ADOBE_MEDIA_GALLERY])
+            ->from(['amg' => self::TABLE_MEDIA_GALLERY_ASSET])
             ->where('amg.id = ?', $assetId);
-        $data = $connection->query($select)->fetchAll();
+        $data = $connection->query($select)->fetch();
 
         if (empty($data)) {
             $message = __('There is no such media asset with "%1"', $assetId);
             throw new NoSuchEntityException($message);
         }
 
-        /** @var AssetInterface $asset */
-        $mediaAsset = $this->assetFactory->create(reset($data));
-
-        return $mediaAsset;
+        return $this->assetFactory->create(['data' => $data]);
     }
 }

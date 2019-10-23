@@ -21,6 +21,46 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class Asset extends AbstractExtensibleModel implements AssetInterface
 {
     /**
+     * Asset Id
+     */
+    private const ID = 'id';
+
+    /**
+     * Media gallery id is an id of a media asset id related to the asset
+     */
+    private const MEDIA_GALLERY_ID = 'media_gallery_id';
+
+    /**
+     * Is asset licensed
+     */
+    private const IS_LICENSED = 'is_licensed';
+
+    /**
+     * Asset creation date
+     */
+    private const CREATION_DATE = 'creation_date';
+
+    /**
+     * Category id is an id of a category entry related to the asset
+     */
+    private const CATEGORY_ID = 'category_id';
+
+    /**
+     * Creator id is an id of a category entry related to the asset
+     */
+    private const CREATOR_ID = 'creator_id';
+
+    /**
+     * Asset category
+     */
+    private const CATEGORY = 'category';
+
+    /**
+     * The asset creator
+     */
+    private const CREATOR = 'creator';
+
+    /**
      * @inheritdoc
      */
     protected function _construct()
@@ -48,22 +88,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setId($value): void
     {
         $this->setData(self::ID, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMediaTypeId(): ?int
-    {
-        return $this->getData(self::MEDIA_TYPE_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setMediaTypeId(int $mediaTypeId): void
-    {
-        $this->setData(self::MEDIA_TYPE_ID, $mediaTypeId);
     }
 
     /**
@@ -133,70 +157,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getKeywords(): array
-    {
-        return $this->getData(self::KEYWORDS) ?? [];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setKeywords(array $keywords): void
-    {
-        $this->setData(self::KEYWORDS, $keywords);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPremiumLevelId(): ?int
-    {
-        return $this->getData(self::PREMIUM_LEVEL_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPremiumLevelId(int $premiumLevelId): void
-    {
-        $this->setData(self::PREMIUM_LEVEL_ID, $premiumLevelId);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPath(): string
-    {
-        return (string) $this->getData(self::PATH);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPath(string $path): void
-    {
-        $this->setData(self::PATH, $path);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getStockId(): int
-    {
-        return (int) $this->getData(self::STOCK_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStockId(int $stockId): void
-    {
-        $this->setData(self::STOCK_ID, $stockId);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getIsLicensed(): int
     {
         return (int) $this->getData(self::IS_LICENSED);
@@ -213,201 +173,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getTitle(): string
+    public function getMediaGalleryId(): int
     {
-        return (string) $this->getData(self::TITLE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setTitle(string $title): void
-    {
-        $this->setData(self::TITLE, $title);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getUrl(): string
-    {
-        return (string) $this->getData(self::URL);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPreviewUrl(): string
-    {
-        return (string) $this->getData(self::PREVIEW_URL);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPreviewUrl(string $previewUrl): void
-    {
-        $this->setData(self::PREVIEW_URL, $previewUrl);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPreviewWidth(): int
-    {
-        return (int) $this->getData(self::PREVIEW_WIDTH);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPreviewWidth(int $previewWidth): void
-    {
-        $this->setData(self::PREVIEW_WIDTH, $previewWidth);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPreviewHeight(): int
-    {
-        return (int) $this->getData(self::PREVIEW_HEIGHT);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPreviewHeight(int $previewHeight): void
-    {
-        $this->setData(self::PREVIEW_HEIGHT, $previewHeight);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setUrl(string $url): void
-    {
-        $this->setData(self::URL, $url);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getThumbnailUrl(): string
-    {
-        return (string) $this->getData(self::THUMBNAIL_URL);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setThumbnailUrl(string $url): void
-    {
-        $this->setData(self::THUMBNAIL_URL, $url);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getWidth(): int
-    {
-        return (int) $this->getData(self::WIDTH);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setWidth(int $width): void
-    {
-        $this->setData(self::WIDTH, $width);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getHeight(): int
-    {
-        return (int) $this->getData(self::HEIGHT);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setHeight(int $height): void
-    {
-        $this->setData(self::HEIGHT, $height);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCountryName(): string
-    {
-        return (string) $this->getData(self::COUNTRY_NAME);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setCountryName(string $countryName): void
-    {
-        $this->setData(self::COUNTRY_NAME, $countryName);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDetailsUrl(): string
-    {
-        return (string) $this->getData(self::DETAILS_URL);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setDetailsUrl(string $detailsUrl): void
-    {
-        $this->setData(self::DETAILS_URL, $detailsUrl);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getVectorType(): string
-    {
-        return (string) $this->getData(self::VECTOR_TYPE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setVectorType(string $vectorType): void
-    {
-        $this->setData(self::VECTOR_TYPE, $vectorType);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentType(): string
-    {
-        return (string) $this->getData(self::CONTENT_TYPE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setContentType(string $contentType): void
-    {
-        $this->setData(self::CONTENT_TYPE, $contentType);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMediaGalleryId(): ?int
-    {
-        return $this->getData(self::MEDIA_GALLERY_ID);
+        return (int) $this->getData(self::MEDIA_GALLERY_ID);
     }
 
     /**
@@ -432,38 +200,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function setCreationDate(string $creationDate): void
     {
         $this->setData(self::CREATION_DATE, $creationDate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCreatedAt(): string
-    {
-        return (string) $this->getData(self::CREATED_AT);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setCreatedAt(string $createdAt): void
-    {
-        $this->setData(self::CREATED_AT, $createdAt);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getUpdatedAt(): string
-    {
-        return (string) $this->getData(self::UPDATED_AT);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setUpdatedAt(string $updatedAt): void
-    {
-        $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
     /**

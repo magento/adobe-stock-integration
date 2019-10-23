@@ -28,21 +28,11 @@ interface AssetRepositoryInterface
     public function save(AssetInterface $asset): void;
 
     /**
-     * Delete item
-     *
-     * @param AssetInterface $item
-     * @return void
-     * @throws \Exception
-     */
-    public function delete(AssetInterface $item): void;
-
-    /**
      * Get a list of assets
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      *
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface
-     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface;
 
@@ -52,7 +42,6 @@ interface AssetRepositoryInterface
      * @param int $id
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function getById(int $id) : AssetInterface;
 

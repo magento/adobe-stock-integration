@@ -20,20 +20,13 @@ use Psr\Log\LoggerInterface;
  */
 class Download extends Action
 {
-    /**
-     * Successful image download result code.
-     */
-    const HTTP_OK = 200;
+    private const HTTP_OK = 200;
 
-    /**
-     * Download image failed response code.
-     */
-    const HTTP_BAD_REQUEST = 400;
+    private const HTTP_BAD_REQUEST = 400;
 
-    /**
-     * Internal server error response code.
-     */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_INTERNAL_ERROR = 500;
+
+    private const IMAGE_URL_FIELD = 'thumbnail_500_url';
 
     /**
      * @see _isAllowed()
@@ -61,7 +54,6 @@ class Download extends Action
      * @param Action\Context $context
      * @param SaveImageInterface $saveImage
      * @param LoggerInterface $logger
-     * @param GetAssetByIdInterface $getAssetById
      */
     public function __construct(
         Action\Context $context,
@@ -83,10 +75,14 @@ class Download extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $mediaId = (int) $params['media_id'];
-            $destinationPath = (string) $params['destination_path'];
-            $asset = $this->getAssetById->execute($mediaId);
-            $this->saveImage->execute($asset, $destinationPath);
+
+            $document = $this->getAssetById->execute((int) $params['media_id']);
+
+            $this->saveImage->execute(
+                $document,
+                $document->getCustomAttribute(self::IMAGE_URL_FIELD)->getValue(),
+                (string) $params['destination_path']
+            );
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

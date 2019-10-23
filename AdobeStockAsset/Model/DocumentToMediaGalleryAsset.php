@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
- * Class DocumentToAsset
+ * Class DocumentToMediaGalleryAsset
  */
-class DocumentToAsset
+class DocumentToMediaGalleryAsset
 {
     /**
      * @var array
@@ -66,21 +66,18 @@ class DocumentToAsset
      * @param object $factory
      * @param array $fields
      * @param array $children
-     * @return object
+     * @return object|array
      */
     private function createEntity(array &$data, $factory, array $fields = [], array $children = [])
     {
-        $entity = $factory->create();
+        $entityData = [];
 
         foreach ($children as $childName => $childMapping) {
-            $entity->setData(
-                $childName,
-                $this->createEntity(
-                    $data,
-                    $childMapping['factory'],
-                    $childMapping['fields'] ?? [],
-                    $childMapping['children'] ?? []
-                )
+            $entityData[$childName] = $this->createEntity(
+                $data,
+                $childMapping['factory'],
+                $childMapping['fields'] ?? [],
+                $childMapping['children'] ?? []
             );
             unset($data[$childName]);
         }
@@ -88,17 +85,17 @@ class DocumentToAsset
             if (is_array($assetField) && is_array($data[$documentField])) {
                 $items = [];
                 foreach ($data[$documentField] as $itemData) {
-                    $itemData = (array) $itemData;
+                    $itemData = (array)$itemData;
                     $items[] = $this->createEntity($itemData, $factory, $assetField, $children);
                 }
                 return $items;
             } else {
                 $filedValue = isset($data[$documentField]) ? $data[$documentField] : null;
-                $entity->setData($assetField, $filedValue);
+                $entityData[$assetField] = $filedValue;
             }
             unset($data[$documentField]);
         }
 
-        return $entity;
+        return $factory->create(['data' => $entityData]);
     }
 }

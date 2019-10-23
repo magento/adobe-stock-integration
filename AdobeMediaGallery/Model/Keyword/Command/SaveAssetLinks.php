@@ -18,7 +18,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
  */
 class SaveAssetLinks implements SaveAssetLinksInterface
 {
-    private const TABLE_ASSET_KEYWORD = 'adobe_media_gallery_asset_keyword';
+    private const TABLE_ASSET_KEYWORD = 'media_gallery_asset_keyword';
 
     private const FIELD_ASSET_ID = 'asset_id';
 
@@ -53,12 +53,10 @@ class SaveAssetLinks implements SaveAssetLinksInterface
         try {
             $values = [];
             foreach ($keywordIds as $keywordId) {
-                $data[] = $assetId;
-                $data[] = $keywordId;
-                array_push($values, $data);
-                unset($data);
+                $values[] = [$assetId, $keywordId];
             }
 
+            /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
             $connection = $this->resourceConnection->getConnection();
             $connection->insertArray(
                 self::TABLE_ASSET_KEYWORD,
