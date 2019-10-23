@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
@@ -14,6 +13,7 @@ use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\License;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -23,6 +23,7 @@ use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * License test.
@@ -77,7 +78,7 @@ class LicenseTest extends TestCase
     /**
      * @var AssetInterface|MockObject
      */
-    private $assetMock;
+    private $documentMock;
 
     /**
      * @inheritdoc
@@ -90,28 +91,37 @@ class LicenseTest extends TestCase
         $this->contextMock = $this->createPartialMock(ActionContext::class, ['getRequest', 'getResultFactory']);
         $this->saveImageMock = $this->createMock(SaveImageInterface::class);
         $this->getAssetByIdMock = $this->createMock(GetAssetByIdInterface::class);
-        $this->assetMock = $this->createMock(AssetInterface::class);
+        $this->documentMock = $this->createMock(DocumentInterface::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)->disableOriginalConstructor()
             ->setMethods(['create'])->getMock();
         $this->jsonObject = $this->getMockBuilder(Json::class)->disableOriginalConstructor()->getMock();
 
-        $this->contextMock->expects($this->once())->method('getResultFactory')->willReturn($this->resultFactoryMock);
-        $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
-        $this->requestMock->expects($this->once())->method('getParams')->willReturn(
-            [
-                'media_id' => 283415387,
-                'destination_path' => 'destination_path'
-            ]
-        );
+        $this->contextMock->expects($this->once())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
+        $this->contextMock->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->requestMock);
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn(
+                [
+                    'media_id' => 283415387,
+                    'destination_path' => 'destination_path'
+                ]
+            );
         $this->resultFactoryMock->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
 
-        $this->sut = new License(
-            $this->contextMock,
-            $this->clientInterfaceMock,
-            $this->saveImageMock,
-            $this->loggerMock,
-            $this->getAssetByIdMock
+        $this->sut = (new ObjectManager($this))->getObject(
+            License::class,
+            [
+                'context' => $this->contextMock,
+                'client' => $this->clientInterfaceMock,
+                'saveImage' => $this->saveImageMock,
+                'logger' => $this->loggerMock,
+                'getAssetById' => $this->getAssetByIdMock
+            ]
         );
     }
 
@@ -126,19 +136,27 @@ class LicenseTest extends TestCase
         ];
 
         $mediaId = 283415387;
-        $isLicensed = 1;
         $destinationPath = 'destination_path';
         $imageUrl = 'http://image_url.jpg';
-        $this->getAssetByIdMock->expects($this->once())->method('execute')->with($mediaId)
-            ->willReturn($this->assetMock);
-        $this->clientInterfaceMock->expects($this->once())->method('getImageDownloadUrl')->willReturn($imageUrl);
-        $this->assetMock->expects($this->once())->method('setUrl')->with($imageUrl);
-        $this->assetMock->expects($this->once())->method('setIsLicensed')->with($isLicensed);
-        $this->saveImageMock->expects($this->once())->method('execute')->with($this->assetMock, $destinationPath);
-        $this->clientInterfaceMock->expects($this->once())->method('licenseImage')->with($mediaId);
+        $this->getAssetByIdMock->expects($this->once())
+            ->method('execute')
+            ->with($mediaId)
+            ->willReturn($this->documentMock);
+        $this->clientInterfaceMock->expects($this->once())
+            ->method('getImageDownloadUrl')
+            ->willReturn($imageUrl);
+        $this->saveImageMock->expects($this->once())
+            ->method('execute')
+            ->with($this->documentMock, $imageUrl, $destinationPath);
+        $this->clientInterfaceMock->expects($this->once())
+            ->method('licenseImage')
+            ->with($mediaId);
 
-        $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
-        $this->jsonObject->expects($this->once())->method('setData')
+        $this->jsonObject->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(200);
+        $this->jsonObject->expects($this->once())
+            ->method('setData')
             ->with($this->equalTo($result));
 
         $this->loggerMock->expects($this->never())->method('critical');
@@ -159,10 +177,16 @@ class LicenseTest extends TestCase
     {
         $mediaId = 283415387;
 
-        $this->getAssetByIdMock->expects($this->once())->method('execute')->with($mediaId)
+        $this->getAssetByIdMock->expects($this->once())
+            ->method('execute')
+            ->with($mediaId)
             ->willThrowException($exception);
-        $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with($responseCode);
-        $this->jsonObject->expects($this->once())->method('setData')->with($this->equalTo($result));
+        $this->jsonObject->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with($responseCode);
+        $this->jsonObject->expects($this->once())
+            ->method('setData')
+            ->with($this->equalTo($result));
 
         if ($responseCode === 500) {
             $this->loggerMock->expects($this->once())->method('critical');

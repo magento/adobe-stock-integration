@@ -37,12 +37,9 @@ class GetAssetById implements GetAssetByIdInterface
     private $filterBuilder;
 
     /**
-     * GetImageByAdobeId constructor.
-     *
      * @param FilterBuilder $filterBuilder
      * @param GetAssetListInterface $getAssetList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DocumentToAsset $documentToAsset
      */
     public function __construct(
         FilterBuilder $filterBuilder,

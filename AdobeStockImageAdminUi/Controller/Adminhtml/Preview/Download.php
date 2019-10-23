@@ -49,11 +49,10 @@ class Download extends Action
     private $saveImage;
 
     /**
-     * Download constructor.
-     *
      * @param Action\Context $context
      * @param SaveImageInterface $saveImage
      * @param LoggerInterface $logger
+     * @param GetAssetByIdInterface $getAssetById
      */
     public function __construct(
         Action\Context $context,

@@ -88,9 +88,9 @@ class StockFileToDocument
      */
     private function toArray($data)
     {
-        if(is_object($data) || is_array($data)) {
+        if (is_object($data) || is_array($data)) {
             $array = [];
-            foreach((array) $data as $key => $item) {
+            foreach ((array)$data as $key => $item) {
                 $array[$key] = $this->toArray($item);
             }
             return $array;

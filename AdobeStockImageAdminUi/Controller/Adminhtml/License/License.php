@@ -69,9 +69,8 @@ class License extends Action
     private $attributeFactory;
 
     /**
-     * GetQuota constructor.
-     *
      * @param Action\Context $context
+     * @param AttributeInterfaceFactory $attributeFactory
      * @param ClientInterface $client
      * @param SaveImageInterface $saveImage
      * @param LoggerInterface $logger
@@ -101,7 +100,7 @@ class License extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $contentId = (int) $params['media_id'];
+            $contentId = (int)$params['media_id'];
 
             $this->client->licenseImage($contentId);
             $imageUrl = $this->client->getImageDownloadUrl($contentId);
@@ -122,7 +121,7 @@ class License extends Action
             $this->saveImage->execute(
                 $document,
                 $imageUrl,
-                (string) $params['destination_path']
+                (string)$params['destination_path']
             );
 
             $responseCode = self::HTTP_OK;

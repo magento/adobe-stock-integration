@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
@@ -22,6 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords;
 use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetLinks;
+use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 
 /**
  * Class SaveImage
@@ -79,6 +79,11 @@ class SaveImage implements SaveImageInterface
     private $saveAssetLinks;
 
     /**
+     * @var GetAssetKeywordsInterface
+     */
+    private $getAssetKeywords;
+
+    /**
      * @param Storage $storage
      * @param GetByIdInterface $getMediaAssetById
      * @param AssetRepositoryInterface $assetRepository
@@ -88,7 +93,8 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToAsset $documentToAsset
      * @param LoggerInterface $logger
      * @param SaveAssetKeywords $saveAssetKeywords
-     * @param SaveAssetLinks $saveAssetLink
+     * @param SaveAssetLinks $saveAssetLinks
+     * @param GetAssetKeywordsInterface $getAssetKeywords
      */
     public function __construct(
         Storage $storage,
@@ -100,7 +106,8 @@ class SaveImage implements SaveImageInterface
         DocumentToAsset $documentToAsset,
         LoggerInterface $logger,
         SaveAssetKeywords $saveAssetKeywords,
-        SaveAssetLinks $saveAssetLinks
+        SaveAssetLinks $saveAssetLinks,
+        GetAssetKeywordsInterface $getAssetKeywords
     ) {
         $this->storage = $storage;
         $this->getMediaAssetById = $getMediaAssetById;
@@ -112,6 +119,7 @@ class SaveImage implements SaveImageInterface
         $this->logger = $logger;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->saveAssetLinks = $saveAssetLinks;
+        $this->getAssetKeywords = $getAssetKeywords;
     }
 
     /**
@@ -120,11 +128,12 @@ class SaveImage implements SaveImageInterface
     public function execute(DocumentInterface $document, string $url, string $destinationPath): void
     {
         try {
+            $pathAttribute = $document->getCustomAttribute('path');
             /* If the asset has been already saved, delete the previous version */
-            if (!empty($document->getCustomAttribute('path'))
-                && !empty($document->getCustomAttribute('path')->getValue())
+            if (!empty($pathAttribute)
+                && !empty($pathAttribute->getValue())
             ) {
-                $this->storage->delete($document->getCustomAttribute('path')->getValue());
+                $this->storage->delete($pathAttribute->getValue());
             }
 
             $path = $this->storage->save($url, $destinationPath);
@@ -142,8 +151,10 @@ class SaveImage implements SaveImageInterface
             $mediaGalleryAssetId = $mediaGalleryAssetId
                 ?: $this->getExistingMediaGalleryAsset($document->getId())->getId();
 
-            if (!empty($mediaGalleryAsset->getKeywords())) {
-                $keywordIds = $this->saveAssetKeywords->execute($mediaGalleryAsset->getKeywords());
+            $keywords = $this->getAssetKeywords->execute($mediaGalleryAssetId);
+
+            if (!empty($keywords)) {
+                $keywordIds = $this->saveAssetKeywords->execute($keywords);
                 $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordIds);
             }
 

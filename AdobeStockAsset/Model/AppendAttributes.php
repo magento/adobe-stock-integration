@@ -44,10 +44,10 @@ class AppendAttributes
     private $getMediaGalleryAssetById;
 
     /**
-     * AppendAttributes constructor.
      * @param ResourceConnection $resourceConnection
      * @param AttributeValueFactory $attributeValueFactory
      * @param LoadByIds $loadByIds
+     * @param GetByIdInterface $getMediaGalleryAssetById
      */
     public function __construct(
         ResourceConnection $resourceConnection,

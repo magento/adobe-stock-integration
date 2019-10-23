@@ -96,10 +96,12 @@ class Storage
      */
     public function delete(string $path): void
     {
+        $result = false;
         try {
-            if ($this->getMediaDirectory()->isFile($path)) {
-                $result = $this->getMediaDirectory()->delete($path);
+            if (!$this->getMediaDirectory()->isFile($path)) {
+                return;
             }
+            $result = $this->getMediaDirectory()->delete($path);
         } catch (Exception $exception) {
             $this->log->critical("Failed to delete the image. Exception: \n" . $exception);
         }
