@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeStockAsset\Model\DocumentToAsset;
@@ -21,7 +23,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords;
 use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetLinks;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 
 /**
  * Class SaveImage
@@ -79,11 +80,13 @@ class SaveImage implements SaveImageInterface
     private $saveAssetLinks;
 
     /**
-     * @var GetAssetKeywordsInterface
+     * @var KeywordInterfaceFactory
      */
-    private $getAssetKeywords;
+    private $keywordsFactory;
 
     /**
+     * SaveImage constructor.
+     *
      * @param Storage $storage
      * @param GetByIdInterface $getMediaAssetById
      * @param AssetRepositoryInterface $assetRepository
@@ -94,7 +97,7 @@ class SaveImage implements SaveImageInterface
      * @param LoggerInterface $logger
      * @param SaveAssetKeywords $saveAssetKeywords
      * @param SaveAssetLinks $saveAssetLinks
-     * @param GetAssetKeywordsInterface $getAssetKeywords
+     * @param KeywordInterfaceFactory $keywordInterfaceFactory
      */
     public function __construct(
         Storage $storage,
@@ -107,7 +110,7 @@ class SaveImage implements SaveImageInterface
         LoggerInterface $logger,
         SaveAssetKeywords $saveAssetKeywords,
         SaveAssetLinks $saveAssetLinks,
-        GetAssetKeywordsInterface $getAssetKeywords
+        KeywordInterfaceFactory $keywordsFactory
     ) {
         $this->storage = $storage;
         $this->getMediaAssetById = $getMediaAssetById;
@@ -119,7 +122,7 @@ class SaveImage implements SaveImageInterface
         $this->logger = $logger;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->saveAssetLinks = $saveAssetLinks;
-        $this->getAssetKeywords = $getAssetKeywords;
+        $this->keywordsFactory = $keywordsFactory;
     }
 
     /**
@@ -150,13 +153,9 @@ class SaveImage implements SaveImageInterface
 
             $mediaGalleryAssetId = $mediaGalleryAssetId
                 ?: $this->getExistingMediaGalleryAsset($document->getId())->getId();
-
-            $keywords = $this->getAssetKeywords->execute($mediaGalleryAssetId);
-
-            if (!empty($keywords)) {
-                $keywordIds = $this->saveAssetKeywords->execute($keywords);
-                $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordIds);
-            }
+            $keywords = $this->extractKeywordsFromDocument($document);
+            $keywordsIds = $this->saveAssetKeywords->execute($keywords);
+            $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordsIds);
 
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
@@ -182,5 +181,23 @@ class SaveImage implements SaveImageInterface
         } catch (NoSuchEntityException $exception) {
             return null;
         }
+    }
+
+    /**
+     * Extract keywords from document
+     *
+     * @param DocumentInterface $document
+     *
+     * @return KeywordInterface[]
+     */
+    private function extractKeywordsFromDocument(DocumentInterface $document): array
+    {
+        $data = $document->getCustomAttribute('keywords')->getValue();
+        $keywords = [];
+        foreach ($data as $item) {
+            $keywordData = [ 'keyword' => $item['name']];
+            $keywords[] = $this->keywordsFactory->create(['data' => $keywordData]);
+        }
+        return $keywords;
     }
 }
