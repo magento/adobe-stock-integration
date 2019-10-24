@@ -78,8 +78,7 @@ class DocumentToAssetTest extends TestCase
         array $creatorData,
         DocumentInterface $document,
         array $additionalData
-    ): void
-    {
+    ): void {
         $asset = $this->createMock(AssetInterface::class);
         $creator = $this->createMock(CreatorInterface::class);
         $category = $this->createMock(CategoryInterface::class);
