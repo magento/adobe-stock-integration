@@ -16,6 +16,7 @@ use AdobeStock\Api\Request\License as LicenseRequest;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License;
+use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
@@ -85,6 +86,11 @@ class Client implements ClientInterface
     private $config;
 
     /**
+     * @var UserAuthorizedInterface
+     */
+    private $authorized;
+
+    /**
      * @param ConfigInterface $config
      * @param ConnectionWrapperFactory $connectionFactory
      * @param SearchResultFactory $searchResultFactory
@@ -92,6 +98,7 @@ class Client implements ClientInterface
      * @param LocaleResolver $localeResolver
      * @param LicenseRequestFactory $licenseRequestFactory
      * @param LoggerInterface $logger
+     * @param UserAuthorizedInterface $authorized
      * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param StockFileToDocument $stockFileToDocument
      * @param LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
@@ -104,10 +111,12 @@ class Client implements ClientInterface
         LocaleResolver $localeResolver,
         LicenseRequestFactory $licenseRequestFactory,
         LoggerInterface $logger,
+        UserAuthorizedInterface $authorized,
         UserQuotaInterfaceFactory $userQuotaFactory,
         StockFileToDocument $stockFileToDocument,
         LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
     ) {
+        $this->authorized = $authorized;
         $this->config = $config;
         $this->connectionFactory = $connectionFactory;
         $this->searchResultFactory = $searchResultFactory;
@@ -200,7 +209,7 @@ class Client implements ClientInterface
     public function getLicenseConfirmation(int $contentId): LicenseConfirmationInterface
     {
         $message = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
-        $canPurchase = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getPurchaseState() == "possible";
+        $canPurchase = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getPurchaseState() == 'possible';
         /** @var LicenseConfirmationInterface $userQuota */
         $userQuota = $this->licenseConfirmationFactory->create();
         $userQuota->setMessage($message);
@@ -254,6 +263,9 @@ class Client implements ClientInterface
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
         foreach ($this->config->getSearchResultFields() as $field) {
+            if ($field === 'IS_LICENSED' && !$this->authorized->execute()) {
+                continue;
+            }
             if (!isset($resultsColumns[$field])) {
                 $message = __('Cannot retrieve the field %1. It\'s not available in Adobe Stock SDK', $field);
                 $this->logger->critical($message);

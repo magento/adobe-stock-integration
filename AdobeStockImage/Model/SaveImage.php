@@ -171,16 +171,12 @@ class SaveImage implements SaveImageInterface
      * Get media gallery asset if exists
      *
      * @param int $adobeStockAssetId
-     * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface|null
-     * @throws \Magento\Framework\Exception\IntegrationException
+     * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface
+     * @throws NoSuchEntityException
      */
-    private function getExistingMediaGalleryAsset(int $adobeStockAssetId): ?AssetInterface
+    private function getExistingMediaGalleryAsset(int $adobeStockAssetId): AssetInterface
     {
-        try {
-            $existingAdobeStockAsset = $this->assetRepository->getById($adobeStockAssetId);
-            return $this->getMediaAssetById->execute($existingAdobeStockAsset->getMediaGalleryId());
-        } catch (NoSuchEntityException $exception) {
-            return null;
-        }
+        $existingAdobeStockAsset = $this->assetRepository->getById($adobeStockAssetId);
+        return $this->getMediaAssetById->execute($existingAdobeStockAsset->getMediaGalleryId());
     }
 }

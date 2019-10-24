@@ -30,12 +30,12 @@ class DataProviderTest extends TestCase
     private $dataProvider;
 
     /**
-     * @var GetImageListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GetImageListInterface|MockObject
      */
     private $getImageListMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilder;
 

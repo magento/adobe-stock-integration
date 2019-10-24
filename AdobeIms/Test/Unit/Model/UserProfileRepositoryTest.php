@@ -12,8 +12,8 @@ use Magento\AdobeIms\Model\UserProfile;
 use Magento\AdobeIms\Model\UserProfileRepository;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * User repository test.
@@ -31,7 +31,7 @@ class UserProfileRepositoryTest extends TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject $resource
+     * @var ResourceUserProfile|MockObject $resource
      */
     private $resource;
 
