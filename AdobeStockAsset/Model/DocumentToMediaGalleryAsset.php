@@ -59,9 +59,11 @@ class DocumentToMediaGalleryAsset
         $keywordsData = [];
         foreach ($attributes as $attribute) {
             if ($attribute->getAttributeCode() === self::DOCUMENT_FIELD_KEYWORDS) {
-                $keywordsData[] = [
-                    self::ASSET_FIELD_KEYWORD_NAME => $attribute->getValue()[self::DOCUMENT_FIELD_KEYWORD_NAME]
-                ];
+                foreach ($attribute->getValue() as $keywordData) {
+                    $keywordsData[] = [
+                        self::ASSET_FIELD_KEYWORD_NAME => $keywordData[self::DOCUMENT_FIELD_KEYWORD_NAME]
+                    ];
+                }
                 continue;
             }
 

@@ -62,6 +62,14 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
+    public function setCategoryId(int $categoryId): void
+    {
+        $this->setData(self::CATEGORY_ID, $categoryId);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCategory(): ?CategoryInterface
     {
         return $this->getData(self::CATEGORY);
@@ -73,6 +81,14 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function getCreatorId(): ?int
     {
         return $this->getData(self::CREATOR_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCreatorId(int $creatorId): void
+    {
+        $this->setData(self::CREATOR_ID, $creatorId);
     }
 
     /**
