@@ -43,14 +43,6 @@ class Category extends AbstractExtensibleModel implements CategoryInterface
     /**
      * @inheritdoc
      */
-    public function setId($value): void
-    {
-        $this->setData(self::ID, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getName(): string
     {
         return (string) $this->getData(self::NAME);
@@ -59,24 +51,8 @@ class Category extends AbstractExtensibleModel implements CategoryInterface
     /**
      * @inheritdoc
      */
-    public function setName(string $value): void
-    {
-        $this->setData(self::NAME, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getExtensionAttributes(): CategoryExtensionInterface
     {
         return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void
-    {
-        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

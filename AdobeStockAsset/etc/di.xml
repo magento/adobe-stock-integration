@@ -19,8 +19,6 @@
     <preference for="Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface" type="Magento\AdobeStockAsset\Model\CreatorRepository"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface" type="Magento\AdobeStockAsset\Model\CreatorSearchResults"/>
 
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
-
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetListInterface" type="Magento\AdobeStockAsset\Model\GetAssetList"/>
     <preference for="Magento\AdobeStockAssetApi\Api\SaveAssetInterface" type="Magento\AdobeStockAsset\Model\SaveAsset"/>
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface" type="Magento\AdobeStockAsset\Model\GetAssetById"/>

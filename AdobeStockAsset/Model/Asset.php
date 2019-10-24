@@ -54,25 +54,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setId($value): void
-    {
-        $this->setData(self::ID, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCategoryId(): ?int
     {
         return $this->getData(self::CATEGORY_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setCategoryId(int $categoryId): void
-    {
-        $this->setData(self::CATEGORY_ID, $categoryId);
     }
 
     /**
@@ -86,25 +70,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCategory(CategoryInterface $category): void
-    {
-        $this->setData(self::CATEGORY, $category);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCreatorId(): ?int
     {
         return $this->getData(self::CREATOR_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setCreatorId(int $creatorId): void
-    {
-        $this->setData(self::CREATOR_ID, $creatorId);
     }
 
     /**
@@ -118,25 +86,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCreator(CreatorInterface $creator): void
-    {
-        $this->setData(self::CREATOR, $creator);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getIsLicensed(): int
     {
         return (int) $this->getData(self::IS_LICENSED);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setIsLicensed(int $isLicensed): void
-    {
-        $this->setData(self::IS_LICENSED, $isLicensed);
     }
 
     /**
@@ -150,14 +102,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setMediaGalleryId(int $mediaGalleryId): void
-    {
-        $this->setData(self::MEDIA_GALLERY_ID, $mediaGalleryId);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCreationDate(): string
     {
         return (string) $this->getData(self::CREATION_DATE);
@@ -166,24 +110,8 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCreationDate(string $creationDate): void
-    {
-        $this->setData(self::CREATION_DATE, $creationDate);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getExtensionAttributes(): AssetExtensionInterface
     {
         return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void
-    {
-        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
