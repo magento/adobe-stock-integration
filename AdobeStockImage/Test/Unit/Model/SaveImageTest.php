@@ -6,8 +6,8 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
+use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
@@ -56,11 +56,6 @@ class SaveImageTest extends TestCase
     private $documentToAsset;
 
     /**
-     * @var MockObject|GetAssetKeywordsInterface
-     */
-    private $getAssetKeywords;
-
-    /**
      * @var SaveImage
      */
     private $saveImage;
@@ -76,7 +71,6 @@ class SaveImageTest extends TestCase
         $this->saveAdobeStockAsset = $this->createMock(SaveAssetInterface::class);
         $this->documentToMediaGalleryAsset = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->documentToAsset = $this->createMock(DocumentToAsset::class);
-        $this->getAssetKeywords = $this->createMock(GetAssetKeywordsInterface::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -87,7 +81,6 @@ class SaveImageTest extends TestCase
                 'saveAdobeStockAsset' =>  $this->saveAdobeStockAsset,
                 'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAsset,
                 'documentToAsset' =>  $this->documentToAsset,
-                'getAssetKeywords' => $this->getAssetKeywords
             ]
         );
     }
@@ -122,11 +115,6 @@ class SaveImageTest extends TestCase
         $this->saveMediaAsset->expects($this->once())
             ->method('execute')
             ->willReturn($mediaGalleryAssetId);
-
-        $this->getAssetKeywords->expects($this->once())
-            ->method('execute')
-            ->with($mediaGalleryAssetId)
-            ->willReturn([]);
 
         $this->documentToAsset->expects($this->once())
             ->method('convert')
@@ -167,13 +155,23 @@ class SaveImageTest extends TestCase
     {
         $document = $this->createMock(DocumentInterface::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);
-        $pathAttribute->expects($this->any())
+        $pathAttribute->expects($this->at(0))
             ->method('getValue')
             ->willReturn($path);
-        $document->expects($this->any())
+        $document->expects($this->at(0))
             ->method('getCustomAttribute')
             ->with('path')
             ->willReturn($pathAttribute);
+
+        $keywordsAttribute = $this->createMock(AttributeInterface::class);
+        $keywordsMock = $this->createMock(KeywordInterface::class);
+        $keywordsAttribute->expects($this->at(1))
+            ->method('getValue')
+            ->willReturn([$keywordsMock]);
+        $document->expects($this->at(1))
+            ->method('getCustomAttribute')
+            ->with('keywords')
+            ->willReturn($keywordsAttribute);
 
         return $document;
     }

@@ -97,7 +97,7 @@ class SaveImage implements SaveImageInterface
      * @param LoggerInterface $logger
      * @param SaveAssetKeywords $saveAssetKeywords
      * @param SaveAssetLinks $saveAssetLinks
-     * @param KeywordInterfaceFactory $keywordInterfaceFactory
+     * @param KeywordInterfaceFactory $keywordsFactory
      */
     public function __construct(
         Storage $storage,
@@ -133,8 +133,8 @@ class SaveImage implements SaveImageInterface
         try {
             $pathAttribute = $document->getCustomAttribute('path');
             /* If the asset has been already saved, delete the previous version */
-            if (!empty($pathAttribute)
-                && !empty($pathAttribute->getValue())
+            if (null !== $pathAttribute
+                && $pathAttribute->getValue()
             ) {
                 $this->storage->delete($pathAttribute->getValue());
             }
@@ -150,12 +150,7 @@ class SaveImage implements SaveImageInterface
                 ]
             );
             $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
-
-            $mediaGalleryAssetId = $mediaGalleryAssetId
-                ?: $this->getExistingMediaGalleryAsset($document->getId())->getId();
-            $keywords = $this->extractKeywordsFromDocument($document);
-            $keywordsIds = $this->saveAssetKeywords->execute($keywords);
-            $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordsIds);
+            $this->processKeywords($document, $mediaGalleryAssetId);
 
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
@@ -167,19 +162,19 @@ class SaveImage implements SaveImageInterface
     }
 
     /**
-     * Get media gallery asset if exists
+     * Process save keywords.
      *
-     * @param int $adobeStockAssetId
-     * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface|null
-     * @throws \Magento\Framework\Exception\IntegrationException
+     * @param DocumentInterface $document
+     * @param int $mediaGalleryAssetId
+     *
+     * @throws CouldNotSaveException
      */
-    private function getExistingMediaGalleryAsset(int $adobeStockAssetId): ?AssetInterface
+    private function processKeywords(DocumentInterface $document, int $mediaGalleryAssetId): void
     {
-        try {
-            $existingAdobeStockAsset = $this->assetRepository->getById($adobeStockAssetId);
-            return $this->getMediaAssetById->execute($existingAdobeStockAsset->getMediaGalleryId());
-        } catch (NoSuchEntityException $exception) {
-            return null;
+        $keywords = $this->extractKeywordsFromDocument($document);
+        if (isset($keywords)) {
+            $keywordsIds = $this->saveAssetKeywords->execute($keywords);
+            $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordsIds);
         }
     }
 
@@ -188,15 +183,18 @@ class SaveImage implements SaveImageInterface
      *
      * @param DocumentInterface $document
      *
-     * @return KeywordInterface[]
+     * @return KeywordInterface[]|[]
      */
     private function extractKeywordsFromDocument(DocumentInterface $document): array
     {
-        $data = $document->getCustomAttribute('keywords')->getValue();
+        $keywordsAttribute = $document->getCustomAttribute('keywords');
+        $data = $keywordsAttribute->getValue();
         $keywords = [];
-        foreach ($data as $item) {
-            $keywordData = [ 'keyword' => $item['name']];
-            $keywords[] = $this->keywordsFactory->create(['data' => $keywordData]);
+        if (isset($data)) {
+            foreach ($data as $item) {
+                $keywordData = ['keyword' => $item['name']];
+                $keywords[] = $this->keywordsFactory->create(['data' => $keywordData]);
+            }
         }
         return $keywords;
     }
