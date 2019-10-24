@@ -76,7 +76,7 @@ class Processor
         try {
             /** @var AssetInterface $item */
             foreach ($this->assetRepository->getList($searchCriteria)->getItems() as $asset) {
-                $this->assetRepository->delete($asset);
+                $this->assetRepository->deleteById($asset->getId());
             }
         } catch (\Exception $exception) {
             $message = __('An error occurred during adobe stock asset delete: %1', $exception->getMessage());

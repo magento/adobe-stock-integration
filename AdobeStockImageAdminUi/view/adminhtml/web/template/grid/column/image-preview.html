@@ -17,18 +17,23 @@
                 <span translate="'Close'"/>
             </button>
         </div>
-        <img class="preview" attr="src: $col.displayedRecord().thumbnail_500_url, alt: $col.displayedRecord().title">
-        <div class="info">
-            <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"/>
-            <div class="author" if="$col.displayedRecord().creator_name">
-                <span translate="'By'" /><span text="' ' + $col.displayedRecord().creator_name" />
+
+        <div class="preview-row-content">
+            <img class="preview" attr="src: $col.displayedRecord().thumbnail_500_url, alt: $col.displayedRecord().title">
+            <div class="info">
+                <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"/>
+                <div class="author" if="$col.displayedRecord().creator_name">
+                    <span translate="'By'" /><span text="' ' + $col.displayedRecord().creator_name" />
+                </div>
+
+                <div class="actions">
+                    <!-- ko scope: actions -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!-- /ko -->
+                </div>
             </div>
-
-            <!-- ko scope: actions -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-
         </div>
+
         <div class="attributes" data-role="image-attributes-value">
             <!-- ko foreach: $col.getDisplayAttributes() -->
             <div class="attribute">
