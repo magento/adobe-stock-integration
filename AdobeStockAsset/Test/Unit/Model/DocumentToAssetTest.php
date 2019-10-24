@@ -10,10 +10,13 @@ namespace Magento\AdobeStockAsset\Test\Unit\Model;
 use Magento\AdobeStockAsset\Model\DocumentToAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,32 +26,22 @@ use PHPUnit\Framework\TestCase;
 class DocumentToAssetTest extends TestCase
 {
     /**
-     * @var $documentToAsset
+     * @var DocumentToAsset
      */
     private $documentToAsset;
 
     /**
-     * @var DocumentInterface|MockObject $document
-     */
-    private $document;
-
-    /**
-     * @var MockObject $creatorFactory
+     * @var CategoryInterfaceFactory|MockObject
      */
     private $creatorFactory;
 
     /**
-     * @var MockObject $categoryFactory
+     * @var CategoryInterfaceFactory|MockObject
      */
     private $categoryFactory;
 
     /**
-     * @var MockObject $keyworFactory
-     */
-    private $keywordFactory;
-
-    /**
-     * @var MockObject $assetFactory ;
+     * @var AssetInterfaceFactory|MockObject
      */
     private $assetFactory;
 
@@ -57,79 +50,118 @@ class DocumentToAssetTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->document = $this->getMockBuilder(\Magento\Framework\Api\Search\DocumentInterface::class)
-            ->getMockForAbstractClass();
-        $this->document->setId(280812991);
-        $this->assetFactory = $this->getMockBuilder(AssetInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->creatorFactory = $this->getMockBuilder(CreatorInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->categoryFactory = $this->getMockBuilder(CategoryInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->keywordFactory = $this->getMockBuilder(KeywordInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributes = [
-            'factory' => $this->assetFactory,
-            'fields' => ['thumbnail_240_urll' => 'thumbnail_url', 'thumbnail_500_url' => 'preview_url'],
-            'children' => [
-                'creator' => [
-                    'factory' => $this->creatorFactory,
-                    'fields' => ['creator_id' => 'id', 'creator_name' => 'name']
-                ],
-                'category' => [
-                    'factory' => $this->categoryFactory,
-                    'fields' => ['category_id' => 'id', 'category_name' => 'name'],
-                ],
+        $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
+        $this->creatorFactory = $this->createMock(CreatorInterfaceFactory::class);
+        $this->categoryFactory = $this->createMock(CategoryInterfaceFactory::class);
+
+        $this->documentToAsset = (new ObjectManager($this))->getObject(
+            DocumentToAsset::class,
+            [
+                'assetFactory' => $this->assetFactory,
+                'creatorFactory' => $this->creatorFactory,
+                'categoryFactory' => $this->categoryFactory,
             ]
-        ];
-        $this->document->setCustomAttributes($attributes);
-        $this->documentToAsset = new DocumentToAsset(($attributes));
+        );
     }
 
     /**
-     * Test convert.
+     * @dataProvider documentProvider
+     * @param array $assetData
+     * @param array $cateogryData
+     * @param array $creatorData
+     * @param DocumentInterface $document
+     * @param array $additionalData
      */
-    public function testConvert(): void
-    {
+    public function testConvert(
+        array $assetData,
+        array $cateogryData,
+        array $creatorData,
+        DocumentInterface $document,
+        array $additionalData
+    ): void {
+        $asset = $this->createMock(AssetInterface::class);
+        $creator = $this->createMock(CreatorInterface::class);
+        $category = $this->createMock(CategoryInterface::class);
+
+        $assetData['category'] = $category;
+        $assetData['creator'] = $creator;
+
         $this->assetFactory->expects($this->once())
             ->method('create')
-            ->willReturn(
-                $this->getMockBuilder(\Magento\AdobeStockAsset\Model\Asset::class)
-                    ->disableOriginalConstructor()
-                    ->getMock()
-            );
+            ->with(['data' => $assetData])
+            ->willReturn($asset);
         $this->categoryFactory->expects($this->once())
             ->method('create')
-            ->willReturn(
-                $this->getMockBuilder(\Magento\AdobeStockAsset\Model\Category::class)
-                    ->disableOriginalConstructor()
-                    ->getMock()
-            );
+            ->with(['data' => $cateogryData])
+            ->willReturn($category);
         $this->creatorFactory->expects($this->once())
             ->method('create')
-            ->willReturn(
-                $this->getMockBuilder(\Magento\AdobeStockAsset\Model\Creator::class)
-                    ->disableOriginalConstructor()
-                    ->getMock()
-            );
-        $this->document->expects($this->once())
-            ->method('getCustomAttributes')
-            ->willReturn(
+            ->with(['data' => $creatorData])
+            ->willReturn($creator);
+
+        $this->assertInstanceOf(AssetInterface::class, $this->documentToAsset->convert($document, $additionalData));
+    }
+
+    /**
+     * @return array
+     */
+    public function documentProvider(): array
+    {
+        return [
+            'case1' => [
+                'assetData' => [
+                    'id' => 1,
+                    'is_licensed' => 1,
+                    'media_gallery_id' => 5
+                ],
+                'categoryData' => [
+                    'id' => 2,
+                    'name' => 'The Category'
+                ],
+                'creatorData' => [
+                    'name' => 'Creator',
+                    'id' => 3,
+                ],
+                'document' => $this->getDocument(
+                    [
+                        'id' => 1,
+                        'category' => [
+                            'id' => 2,
+                            'name' => 'The Category'
+                        ],
+                        'creator_name' => 'Creator',
+                        'creator_id' => 3,
+                        'is_licensed' => 1
+                    ]
+                ),
                 [
-                    'id_field_name' => new \Magento\Framework\DataObject(
-                        ['_data' => ['attribute_code' => "id_field_name", 'value' => 'id']]
-                    )
+                    'media_gallery_id' => 5
                 ]
-            );
-        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
-            ->getMock();
-        $dataObjectMock->expects($this->any())->method('getAttributeCode')->willReturn('id_field_name');
-        $this->assertInstanceOf(AssetInterface::class, $this->documentToAsset->convert($this->document));
+            ]
+        ];
+    }
+
+    private function getDocument(array $attributes)
+    {
+        $document = $this->createMock(DocumentInterface::class);
+
+        $attributeMocks = [];
+
+        foreach ($attributes as $key => $value) {
+            $attribute = $this->createMock(AttributeInterface::class);
+            $attribute->expects($this->any())
+                ->method('getAttributeCode')
+                ->willReturn($key);
+            $attribute->expects($this->any())
+                ->method('getValue')
+                ->willReturn($value);
+            $attributeMocks[] = $attribute;
+        }
+
+        $document->expects($this->once())
+            ->method('getCustomAttributes')
+            ->willReturn($attributeMocks);
+
+        return $document;
     }
 }

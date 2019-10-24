@@ -19,22 +19,22 @@ use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 class SaveAssetTest extends TestCase
 {
     /**
-     * @var MockObject|AssetRepositoryInterface $assetRepository
+     * @var MockObject|AssetRepositoryInterface
      */
     private $assetRepository;
 
     /**
-     * @var MockObject|CreatorRepositoryInterface $creatorRepository
+     * @var MockObject|CreatorRepositoryInterface
      */
     private $creatorRepository;
 
     /**
-     * @var MockObject|CategoryRepositoryInterface $categoryRepository
+     * @var MockObject|CategoryRepositoryInterface
      */
     private $categoryRepository;
 
     /**
-     * @var SaveAsset $saveAsset
+     * @var SaveAsset
      */
     private $saveAsset;
 

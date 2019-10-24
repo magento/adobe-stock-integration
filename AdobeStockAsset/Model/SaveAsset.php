@@ -12,8 +12,6 @@ use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class SaveAsset

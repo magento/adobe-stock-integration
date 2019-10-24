@@ -70,6 +70,6 @@ define([
                     return response.message;
                 }
             });
-        },
+        }
     });
 });

@@ -27,14 +27,6 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getId() : ?int;
 
     /**
-     * Set the id
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value): void;
-
-    /**
      * Get the creator name
      *
      * @return string|null
@@ -42,25 +34,9 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getName(): ?string;
 
     /**
-     * Set the creator name
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setName(string $value): void;
-
-    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface
      */
     public function getExtensionAttributes(): CreatorExtensionInterface;
-
-    /**
-     * Set extension attributes
-     *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface $extensionAttributes
-     * @return void
-     */
-    public function setExtensionAttributes(CreatorExtensionInterface $extensionAttributes): void;
 }
