@@ -11,12 +11,6 @@
             margin: @admin__masonry_grid_image__space/2 -(@admin__masonry_grid_image__space/2);
             overflow: hidden;
 
-            .masonry-image-column {
-                &:hover .masonry-image-overlay {
-                    display: block;
-                }
-            }
-
             .no-data-message-container {
                 font-size: @data-grid__no-records__font-size;
                 padding: @data-grid__no-records__padding;
@@ -40,11 +34,10 @@
             }
         }
         &-overlay {
-            display: none;
             position: absolute;
             color: #fff;
             z-index: 10;
-            height: 3rem;
+            padding: .5rem;
             opacity: 0.6;
             background-color: #D5D5D5;
         }

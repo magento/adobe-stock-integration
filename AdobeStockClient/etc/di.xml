@@ -31,6 +31,7 @@
                 <item name="16" xsi:type="string">CONTENT_TYPE</item>
                 <item name="17" xsi:type="string">DETAILS_URL</item>
                 <item name="18" xsi:type="string">PREMIUM_LEVEL_ID</item>
+                <item name="19" xsi:type="string">IS_LICENSED</item>
             </argument>
         </arguments>
     </type>
