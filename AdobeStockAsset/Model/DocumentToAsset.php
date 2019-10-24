@@ -19,7 +19,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 class DocumentToAsset
 {
     private const DOCUMENT_FIELD_CATEGORY = 'category';
-    private const DOCUMENT_CREATOR_FIELDS = ['creator_id', 'creator_name'];
+    private const DOCUMENT_CREATOR_FIELDS = ['creator_id' => 'id', 'creator_name' => 'name'];
 
     private const ASSET_FIELD_CATEGORY = 'category';
     private const ASSET_FIELD_CREATOR = 'creator';
@@ -72,8 +72,8 @@ class DocumentToAsset
                 continue;
             }
 
-            if (in_array($attribute->getAttributeCode(), self::DOCUMENT_CREATOR_FIELDS)) {
-                $creatorData[$attribute->getAttributeCode()] = $attribute->getValue();
+            if (isset(self::DOCUMENT_CREATOR_FIELDS[$attribute->getAttributeCode()])) {
+                $creatorData[self::DOCUMENT_CREATOR_FIELDS[$attribute->getAttributeCode()]] = $attribute->getValue();
                 continue;
             }
 

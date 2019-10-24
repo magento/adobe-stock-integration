@@ -20,7 +20,7 @@ class DocumentToMediaGalleryAsset
     private const DOCUMENT_FIELD_KEYWORDS = 'keywords';
     private const DOCUMENT_FIELD_KEYWORD_NAME = 'name';
 
-    private const ASSET_FIELD_KEYWORDs = 'keywords';
+    private const ASSET_FIELD_KEYWORDS = 'keywords';
     private const ASSET_FIELD_KEYWORD_NAME = 'keyword';
 
     /**
@@ -77,7 +77,7 @@ class DocumentToMediaGalleryAsset
             $keywords[] = $this->keywordFactory->create(['data' => $keywordData]);
         }
 
-        $assetData[self::ASSET_FIELD_KEYWORDs] = $keywords;
+        $assetData[self::ASSET_FIELD_KEYWORDS] = $keywords;
 
         return $this->assetFactory->create(['data' => $assetData]);
     }
