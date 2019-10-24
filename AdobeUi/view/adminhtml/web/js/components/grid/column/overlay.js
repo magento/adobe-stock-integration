@@ -9,31 +9,23 @@ define([
 
     return Column.extend({
         /**
-         * Returns container styles to given record.
+         * If overlay should be visible
          *
-         * @param {Object} record - Data to be preprocessed.
-         * @returns {Object}
+         * @param {Object} row
+         * @returns {bool}
          */
-        getStyles: function (record) {
-            var styles;
-
-            if (record.styles) {
-                styles = record.styles();
-                delete styles.height;
-
-                return styles;
-            }
-
-            return {};
+        isVisible: function (row) {
+            return !!row[this.index];
         },
 
-        isLicensed: function (record) {
-            if (record.is_licensed) {
-                return "Licensed"
-            }
-            else  {
-                return "Not Licensed"
-            }
+        /**
+         * Get overlay label
+         *
+         * @param {Object} row
+         * @returns {String}
+         */
+        getLabel: function (row) {
+            return row[this.index];
         }
-    });
+    })
 });
