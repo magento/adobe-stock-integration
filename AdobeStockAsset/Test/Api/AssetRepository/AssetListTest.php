@@ -15,11 +15,11 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class AssetListTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/adobestock/asset/search';
+    private const RESOURCE_PATH = '/V1/adobestock/asset/search';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
-    const SERVICE_NAME = 'adobeStockAssetRepositoryV1';
+    private const SERVICE_NAME = 'adobeStockAssetRepositoryV1';
 
     /**
      * Test List

@@ -6,8 +6,7 @@
         "magento/framework": "*",
         "magento/module-adobe-stock-asset-api": "*",
         "magento/module-adobe-stock-client-api": "*",
-        "magento/module-config": "*",
-        "magento/module-payment": "*"
+        "magento/module-config": "*"
     },
     "type": "magento2-module",
     "license": [

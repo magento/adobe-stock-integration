@@ -94,6 +94,7 @@ class DataProviderTest extends TestCase
 
     /**
      * @dataProvider itemsDataProvider
+     * @param array $itemsData
      */
     public function testGetData(array $itemsData): void
     {
@@ -124,6 +125,7 @@ class DataProviderTest extends TestCase
     }
 
     /**
+     * @param array $itemsData
      * @return SearchResultInterface|MockObject
      */
     private function getSearchResult(array $itemsData): SearchResultInterface

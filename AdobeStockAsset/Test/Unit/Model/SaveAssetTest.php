@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImage\Test\Unit\Model;
+namespace Magento\AdobeStockAssset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\SaveAsset;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -64,7 +64,7 @@ class SaveAssetLinks implements SaveAssetLinksInterface
                 $values,
                 AdapterInterface::INSERT_IGNORE
             );
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $message = __('An error occurred during save asset keyword links: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }

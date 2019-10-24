@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\User;
 
-use Magento\Framework\Exception\NotFoundException;
-use PHPUnit\Framework\{MockObject\MockObject, TestCase};
-use Magento\AdobeImsApi\Api\LogOutInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\AdobeIms\Controller\Adminhtml\User\Logout;
+use Magento\AdobeImsApi\Api\LogOutInterface;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Exception\NotFoundException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Get logout test.
@@ -93,7 +93,7 @@ class LogoutTest extends TestCase
         $this->logoutInterfaceMock->expects($this->once())
             ->method('execute')
             ->willReturn(true);
-        $data = ['success' => true,];
+        $data = ['success' => true];
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($data));

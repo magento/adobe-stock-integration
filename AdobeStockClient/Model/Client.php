@@ -12,22 +12,21 @@ use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Exception\StockApi;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Models\StockFile;
+use AdobeStock\Api\Request\License as LicenseRequest;
+use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
-use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
-use AdobeStock\Api\Request\License as LicenseRequest;
 use Psr\Log\LoggerInterface;
 
 /**
