@@ -88,6 +88,10 @@ define([
                 },
                 dataType: 'json',
                 context: this,
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
                 success: function (response) {
                     this.user({
                         isAuthorized: true,
@@ -96,6 +100,10 @@ define([
                         image: response.result.image
                     });
                 },
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }

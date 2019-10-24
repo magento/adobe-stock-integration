@@ -167,7 +167,7 @@ define([
             ) {
                 this.show(record);
             }
-            
+
             return this.visibility()[record._rowIndex] || false;
         },
 

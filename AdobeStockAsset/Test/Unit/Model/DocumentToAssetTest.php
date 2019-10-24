@@ -78,7 +78,8 @@ class DocumentToAssetTest extends TestCase
         array $creatorData,
         DocumentInterface $document,
         array $additionalData
-    ): void {
+    ): void
+    {
         $asset = $this->createMock(AssetInterface::class);
         $creator = $this->createMock(CreatorInterface::class);
         $category = $this->createMock(CategoryInterface::class);
@@ -122,16 +123,18 @@ class DocumentToAssetTest extends TestCase
                     'name' => 'Creator',
                     'id' => 3,
                 ],
-                'document' => $this->getDocument([
-                    'id' => 1,
-                    'category' => [
-                        'id' => 2,
-                        'name' => 'The Category'
-                    ],
-                    'creator_name' => 'Creator',
-                    'creator_id' => 3,
-                    'is_licensed' => 1
-                ]),
+                'document' => $this->getDocument(
+                    [
+                        'id' => 1,
+                        'category' => [
+                            'id' => 2,
+                            'name' => 'The Category'
+                        ],
+                        'creator_name' => 'Creator',
+                        'creator_id' => 3,
+                        'is_licensed' => 1
+                    ]
+                ),
                 [
                     'media_gallery_id' => 5
                 ]

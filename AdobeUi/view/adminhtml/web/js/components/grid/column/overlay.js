@@ -27,5 +27,5 @@ define([
         getLabel: function (row) {
             return row[this.index];
         }
-    })
+    });
 });
