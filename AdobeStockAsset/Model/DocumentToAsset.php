@@ -10,13 +10,16 @@ namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
-use Magento\Payment\Gateway\Http\ConverterException;
 
 /**
  * Class DocumentToAsset
  */
 class DocumentToAsset
 {
+    private const FACTORY = 'factory';
+    private const FIELDS = 'fields';
+    private const CHILDREN = 'children';
+
     /**
      * @var array
      */
@@ -35,31 +38,29 @@ class DocumentToAsset
      * Convert search document to the asset object
      *
      * @param DocumentInterface $document
+     * @param array $additionalData
      * @return AssetInterface
-     * @throws ConverterException
      */
-    public function convert(DocumentInterface $document): AssetInterface
+    public function convert(DocumentInterface $document, array $additionalData = []): AssetInterface
     {
-        try {
-            $attributes = $document->getCustomAttributes();
-            $data = [];
-            foreach ($attributes as $attribute) {
-                $data[$attribute->getAttributeCode()] = $attribute->getValue();
-            }
-            $asset = $this->createEntity(
-                $data,
-                $this->mapping[AssetInterface::FACTORY],
-                $this->mapping[AssetInterface::FIELDS],
-                $this->mapping[AssetInterface::CHILDREN]
-            );
-            foreach ($data as $key => $value) {
-                $asset->setData($key, $value);
-            }
-            return $asset;
-        } catch (\Exception $exception) {
-            $message = __('Convert search document to asset failed: %1', $exception->getMessage());
-            throw new ConverterException($message, $exception);
+        $attributes = $document->getCustomAttributes();
+        $data = [];
+        foreach ($attributes as $attribute) {
+            $data[$attribute->getAttributeCode()] = $attribute->getValue();
         }
+        $asset = $this->createEntity(
+            $data,
+            $this->mapping[self::FACTORY],
+            $this->mapping[self::FIELDS] ?? [],
+            $this->mapping[self::CHILDREN] ?? []
+        );
+        foreach ($data as $key => $value) {
+            $asset->setData($key, $value);
+        }
+        foreach ($additionalData as $key => $value) {
+            $asset->setData($key, $value);
+        }
+        return $asset;
     }
 
     /**
@@ -80,9 +81,9 @@ class DocumentToAsset
                 $childName,
                 $this->createEntity(
                     $data,
-                    $childMapping[AssetInterface::FACTORY],
-                    $childMapping[AssetInterface::FIELDS] ?? [],
-                    $childMapping[AssetInterface::CHILDREN] ?? []
+                    $this->mapping[self::FACTORY],
+                    $this->mapping[self::FIELDS] ?? [],
+                    $this->mapping[self::CHILDREN] ?? []
                 )
             );
             unset($data[$childName]);

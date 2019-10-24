@@ -17,8 +17,6 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 
 /**
  * Class StockFileToDocument
@@ -65,21 +63,40 @@ class StockFileToDocument
     public function convert(StockFile $file): DocumentInterface
     {
         $itemData = (array) $file;
-        $itemId = $itemData[AssetInterface::ID];
+        $itemId = $itemData['id'];
 
-        $category = (array) $itemData[AssetInterface::CATEGORY];
+        $category = (array) $itemData['category'];
 
-        $itemData[AssetInterface::CATEGORY] = $category;
-        $itemData[AssetInterface::CATEGORY_ID] = $category[CategoryInterface::ID];
-        $itemData[AssetInterface::CATEGORY_NAME] = $category[CategoryInterface::NAME];
+        $itemData['category'] = $category;
+        $itemData['category_id'] = $category['id'];
+        $itemData['category_name'] = $category['name'];
 
-        $attributes = $this->createAttributes(DocumentInterface::ID, $itemData);
+        $attributes = $this->createAttributes('id', $this->toArray($itemData));
 
         $item = $this->documentFactory->create();
         $item->setId($itemId);
         $item->setCustomAttributes($attributes);
 
         return $item;
+    }
+
+    /**
+     * Convert data to an associate array
+     *
+     * @param mixed $data
+     * @return array
+     */
+    private function toArray($data)
+    {
+        if (is_object($data) || is_array($data)) {
+            $array = [];
+            foreach ((array)$data as $key => $item) {
+                $array[$key] = $this->toArray($item);
+            }
+            return $array;
+        }
+
+        return $data;
     }
 
     /**

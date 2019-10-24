@@ -11,6 +11,7 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClient\Model\SearchParametersProvider\Pagination;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,7 +43,7 @@ class PaginationTest extends TestCase
      */
     public function testApply(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getPageSize', 'getCurrentPage'])
             ->disableOriginalConstructor()
@@ -53,7 +54,7 @@ class PaginationTest extends TestCase
         $searchCriteriaMock->expects($this->once())
             ->method('getCurrentPage')
             ->willReturn(1);
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
+        /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setOffset', 'setLimit'])
             ->disableOriginalConstructor()

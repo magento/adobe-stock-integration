@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\RelatedImages;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\RelatedImages;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\Framework\Exception\IntegrationException;
 
 /**
  * RelatedImages test.
@@ -112,16 +112,14 @@ class RelatedImagesTest extends TestCase
     public function testExecute()
     {
         $relatedImages = [
-            'same_model' =>
-                [
+            'same_model' => [
                     [
                         'id' => 283415387,
                         'title' => 'Old and worn work gloves on large American flag - Labor day background',
                         'thumbnail_url' => 'https://t4.ftcdn.net/jpg/02/83/41/53/240_F_a62iA2YYVG49yo2n.jpg'
                     ]
                 ],
-            'same_series' =>
-                [
+            'same_series' => [
                     [
                         'id' => 283415387,
                         'title' => 'Old and worn work gloves on large American flag - Labor day background',

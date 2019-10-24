@@ -37,7 +37,12 @@ define([], function () {
         authWindow = window.adobeStockAuthWindow = window.open(
             config.url,
             '',
-            buildWindowParams(config.popupWindowParams || {width: 500, height: 300})
+            buildWindowParams(
+                config.popupWindowParams || {
+                    width: 500,
+                    height: 300
+                }
+            )
         );
 
         return new window.Promise(function (resolve, reject) {

@@ -8,16 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
 
-use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Quota;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Quota;
-use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 
 /**
  * Get quota test.

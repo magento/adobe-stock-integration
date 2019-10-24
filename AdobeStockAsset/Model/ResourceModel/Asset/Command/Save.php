@@ -18,6 +18,8 @@ use Magento\Framework\EntityManager\Hydrator;
  */
 class Save
 {
+    private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
+
     /**
      * @var ResourceConnection
      */
@@ -52,7 +54,7 @@ class Save
     {
         $data = $this->hydrator->extract($asset);
         $tableName = $this->resourceConnection->getTableName(
-            AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
+            self::ADOBE_STOCK_ASSET_TABLE_NAME
         );
 
         if (empty($data)) {

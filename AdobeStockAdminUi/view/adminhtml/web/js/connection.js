@@ -15,7 +15,7 @@ define([
             defaultErrorMessage: 'Connection test failed.',
             apiKeyInputId: 'system_adobe_stock_integration_api_key',
             url: '',
-            serverSuccess: false,
+            serverSuccess: false
         },
         success: ko.observable(false),
         message: ko.observable(''),
@@ -29,6 +29,7 @@ define([
             this.messageClass = ko.computed(function () {
                 return 'message-validation message message-' + (this.success() ? 'success' : 'error');
             }, this);
+
             if (!this.serverSuccess) {
                 this.visible(true);
                 this.message(this.defaultErrorMessage);
@@ -49,11 +50,13 @@ define([
                 type: 'POST',
                 url: this.url,
                 dataType: 'json',
-                data: { 'api_key': document.getElementById(this.apiKeyInputId).value },
-                success: $.proxy(function(response) {
+                data: {
+                    'api_key': document.getElementById(this.apiKeyInputId).value
+                },
+                success: $.proxy(function (response) {
                     this.showMessage(response.success === true, response.message);
                 }, this),
-                error: $.proxy(function() {
+                error: $.proxy(function () {
                     this.showMessage(false, this.defaultErrorMessage);
                 }, this)
             });

@@ -13,6 +13,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,12 +45,12 @@ class OrientationTest extends TestCase
      */
     public function testApplyWithPanoramicValue(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getFilterGroups'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
+        /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setFilterPanoromicOn', 'setOrientation'])
             ->disableOriginalConstructor()
@@ -88,12 +89,12 @@ class OrientationTest extends TestCase
      */
     public function testApplyWithoutPanoramicValue(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getFilterGroups'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
+        /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setFilterPanoromicOn', 'setOrientation'])
             ->disableOriginalConstructor()
