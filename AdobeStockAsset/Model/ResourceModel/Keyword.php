@@ -17,11 +17,11 @@ use Magento\Framework\App\ResourceConnection;
  */
 class Keyword
 {
-    const TABLE_ASSET_KEYWORD = 'adobe_stock_asset_keyword';
-    const TABLE_KEYWORD = 'adobe_stock_keyword';
+    private const TABLE_ASSET_KEYWORD = 'adobe_stock_asset_keyword';
+    private const TABLE_KEYWORD = 'adobe_stock_keyword';
 
-    const FIELD_ASSET_ID = 'asset_id';
-    const FIELD_KEYWORD_ID = 'keyword_id';
+    private const FIELD_ASSET_ID = 'asset_id';
+    private const FIELD_KEYWORD_ID = 'keyword_id';
 
     /**
      * @var ResourceConnection

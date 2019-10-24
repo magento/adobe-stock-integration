@@ -24,7 +24,7 @@ class LicensedOverlay extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $item['is_licensed'] ? 'Licensed' : '';
+                $item[$this->getData('name')] = isset($item['is_licensed']) && $item['is_licensed'] ? 'Licensed' : '';
             }
         }
 

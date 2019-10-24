@@ -52,7 +52,7 @@ define([
 
             if (columns && columns.elems().length > 0) {
                 columns.elems().map(function (column) {
-                    if (true === column.sortable) {
+                    if (column.sortable === true) {
                         this.options.push({
                             value: column.index,
                             label: column.label
@@ -68,7 +68,7 @@ define([
         applyChanges: function () {
             this.applied({
                 field: this.selectedOption(),
-                direction: 'desc',
+                direction: 'desc'
             });
             this.preview().hide();
         }

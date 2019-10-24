@@ -138,9 +138,9 @@ define([
          * @param {Object} record
          */
         loadRelatedImages: function (record) {
-            if (record.series && record.model
-                && record.series() && record.model()
-                && record.series().length && record.model().length) {
+            if (record.series && record.model &&
+                record.series() && record.model() &&
+                record.series().length && record.model().length) {
                 return;
             }
             $.ajax({

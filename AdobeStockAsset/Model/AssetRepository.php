@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\Save;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\Save;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;

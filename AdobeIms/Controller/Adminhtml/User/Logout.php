@@ -57,8 +57,7 @@ class Logout extends Action
             $response = [
                 'success' => true,
             ];
-        }
-        else {
+        } else {
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $response = [
                 'success' => false,

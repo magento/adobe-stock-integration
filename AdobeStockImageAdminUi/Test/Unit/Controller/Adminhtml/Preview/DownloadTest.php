@@ -9,19 +9,18 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\Download;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
+use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\Download;
-use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * DownloadTest

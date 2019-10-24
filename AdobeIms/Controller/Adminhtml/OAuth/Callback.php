@@ -71,7 +71,7 @@ class Callback extends Action
     private $logger;
 
     /**
-     * @var GetImageInterface $getUserImage
+     * @var GetImageInterface
      */
     private $getUserImage;
 
@@ -81,7 +81,7 @@ class Callback extends Action
      * @param UserProfileInterfaceFactory $userProfileFactory
      * @param GetTokenInterface $getToken
      * @param LoggerInterface $logger
-     * @param GetImage $getImage
+     * @param GetImageInterface $getImage
      */
     public function __construct(
         Action\Context $context,

@@ -14,6 +14,7 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ class SimpleFiltersTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
@@ -69,12 +70,12 @@ class SimpleFiltersTest extends TestCase
      */
     public function testApply(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getFilterGroups'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
+        /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setOrder', 'setWords'])
             ->disableOriginalConstructor()

@@ -14,8 +14,8 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Document to asset test.
@@ -28,7 +28,7 @@ class DocumentToAssetTest extends TestCase
     private $documentToAsset;
 
     /**
-     * @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject $document
+     * @var DocumentInterface|MockObject $document
      */
     private $document;
 
