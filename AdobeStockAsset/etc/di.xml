@@ -34,48 +34,6 @@
         </arguments>
     </type>
 
-    <type name="Magento\AdobeStockAsset\Model\DocumentToAsset">
-        <arguments>
-            <argument name="mapping" xsi:type="array">
-                <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory</item>
-                <item name="children" xsi:type="array">
-                    <item name="creator" xsi:type="array">
-                        <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory</item>
-                        <item name="fields" xsi:type="array">
-                            <item name="creator_id" xsi:type="string">id</item>
-                            <item name="creator_name" xsi:type="string">name</item>
-                        </item>
-                    </item>
-                    <item name="category" xsi:type="array">
-                        <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory</item>
-                        <item name="fields" xsi:type="array">
-                            <item name="category_id" xsi:type="string">id</item>
-                            <item name="category_name" xsi:type="string">name</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset">
-        <arguments>
-            <argument name="mapping" xsi:type="array">
-                <item name="factory" xsi:type="object">Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory</item>
-                <item name="children" xsi:type="array">
-                    <item name="keywords" xsi:type="array">
-                        <item name="factory" xsi:type="object">Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory</item>
-                        <item name="fields" xsi:type="array">
-                            <item name="keywords" xsi:type="array">
-                                <item name="name" xsi:type="string">keyword</item>
-                            </item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">

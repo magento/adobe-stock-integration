@@ -3,35 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 
 /**
  * Class DocumentToAsset
  */
 class DocumentToAsset
 {
-    private const FACTORY = 'factory';
-    private const FIELDS = 'fields';
-    private const CHILDREN = 'children';
+    private const DOCUMENT_FIELD_CATEGORY = 'category';
+    private const DOCUMENT_CREATOR_FIELDS = ['creator_id', 'creator_name'];
+
+    private const ASSET_FIELD_CATEGORY = 'category';
+    private const ASSET_FIELD_CREATOR = 'creator';
 
     /**
-     * @var array
+     * @var AssetInterfaceFactory
      */
-    private $mapping;
+    private $assetFactory;
 
     /**
-     * DocumentToAsset constructor.
-     * @param array $mapping
+     * @var CreatorInterfaceFactory
      */
-    public function __construct(array $mapping)
-    {
-        $this->mapping = $mapping;
+    private $creatorFactory;
+
+    /**
+     * @var CategoryInterfaceFactory
+     */
+    private $categoryFactory;
+
+    /**
+     * @param AssetInterfaceFactory $assetFactory
+     * @param CreatorInterfaceFactory $creatorFactory
+     * @param CategoryInterfaceFactory $categoryFactory
+     */
+    public function __construct(
+        AssetInterfaceFactory $assetFactory,
+        CreatorInterfaceFactory $creatorFactory,
+        CategoryInterfaceFactory $categoryFactory
+    ) {
+        $this->assetFactory = $assetFactory;
+        $this->creatorFactory = $creatorFactory;
+        $this->categoryFactory = $categoryFactory;
     }
 
     /**
@@ -44,65 +64,32 @@ class DocumentToAsset
     public function convert(DocumentInterface $document, array $additionalData = []): AssetInterface
     {
         $attributes = $document->getCustomAttributes();
-        $data = [];
+        $assetData = [];
+        $creatorData = [];
         foreach ($attributes as $attribute) {
-            $data[$attribute->getAttributeCode()] = $attribute->getValue();
-        }
-        $asset = $this->createEntity(
-            $data,
-            $this->mapping[self::FACTORY],
-            $this->mapping[self::FIELDS] ?? [],
-            $this->mapping[self::CHILDREN] ?? []
-        );
-        foreach ($data as $key => $value) {
-            $asset->setData($key, $value);
-        }
-        foreach ($additionalData as $key => $value) {
-            $asset->setData($key, $value);
-        }
-        return $asset;
-    }
-
-    /**
-     * Create asset data entity in recursive loop.
-     *
-     * @param array $data
-     * @param object $factory
-     * @param array $fields
-     * @param array $children
-     * @return object
-     */
-    private function createEntity(array &$data, $factory, array $fields = [], array $children = [])
-    {
-        $entity = $factory->create();
-
-        foreach ($children as $childName => $childMapping) {
-            $entity->setData(
-                $childName,
-                $this->createEntity(
-                    $data,
-                    $this->mapping[self::FACTORY],
-                    $this->mapping[self::FIELDS] ?? [],
-                    $this->mapping[self::CHILDREN] ?? []
-                )
-            );
-            unset($data[$childName]);
-        }
-        foreach ($fields as $documentField => $assetField) {
-            if (is_array($assetField) && is_array($data[$documentField])) {
-                $items = [];
-                foreach ($data[$documentField] as $itemData) {
-                    $itemData = (array) $itemData;
-                    $items[] = $this->createEntity($itemData, $factory, $assetField, $children);
-                }
-                return $items;
-            } else {
-                $filedValue = isset($data[$documentField]) ? $data[$documentField] : null;
-                $entity->setData($assetField, $filedValue);
+            if ($attribute->getAttributeCode() === self::DOCUMENT_FIELD_CATEGORY) {
+                $categoryData = $attribute->getValue();
+                continue;
             }
-            unset($data[$documentField]);
+
+            if (in_array($attribute->getAttributeCode(), self::DOCUMENT_CREATOR_FIELDS)) {
+                $creatorData[$attribute->getAttributeCode()] = $attribute->getValue();
+                continue;
+            }
+
+            $assetData[$attribute->getAttributeCode()] = $attribute->getValue();
         }
 
-        return $entity;
+        foreach ($additionalData as $key => $value) {
+            $assetData[$key] = $value;
+        }
+
+        $category = $this->categoryFactory->create(['data' => $categoryData]);
+        $assetData[self::ASSET_FIELD_CATEGORY] = $category;
+
+        $creator = $this->creatorFactory->create(['data' => $creatorData]);
+        $assetData[self::ASSET_FIELD_CREATOR] = $creator;
+
+        return $this->assetFactory->create(['data' => $assetData]);
     }
 }
