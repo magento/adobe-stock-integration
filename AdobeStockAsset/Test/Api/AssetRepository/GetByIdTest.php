@@ -78,7 +78,7 @@ class GetByIdTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 $this->_webApiCall($serviceInfo);
             } else {
-                $this->_webApiCall($serviceInfo, [AssetInterface::ID => $notExistedAssetId]);
+                $this->_webApiCall($serviceInfo, ['id' => $notExistedAssetId]);
             }
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
@@ -121,10 +121,10 @@ class GetByIdTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
             $assetResultData = $this->_webApiCall($serviceInfo);
         } else {
-            $assetResultData = $this->_webApiCall($serviceInfo, [AssetInterface::ID => $assetId]);
+            $assetResultData = $this->_webApiCall($serviceInfo, ['id' => $assetId]);
         }
 
-        self::assertEquals($assetId, $assetResultData[AssetInterface::ID]);
+        self::assertEquals($assetId, $assetResultData['id']);
     }
 
     /**

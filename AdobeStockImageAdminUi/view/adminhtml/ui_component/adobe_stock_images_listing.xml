@@ -231,4 +231,13 @@
             </settings>
         </column>
     </columns>
+    <listingToolbar name="listing_bottom" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
+        <paging name="listing_paging">
+            <settings>
+                <sizesConfig>
+                    <component>Magento_AdobeStockImageAdminUi/js/components/images-grid-sizes</component>
+                </sizesConfig>
+            </settings>
+        </paging>
+    </listingToolbar>
 </listing>
