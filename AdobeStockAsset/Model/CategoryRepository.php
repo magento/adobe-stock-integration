@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAsset\Model\ResourceModel\Category as Resource;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\Save;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\Save;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;

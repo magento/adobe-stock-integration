@@ -46,7 +46,7 @@ define([
          *
          * @returns {observable}
          */
-        isLicensed: function() {
+        isLicensed: function () {
             return this.preview().displayedRecord().is_licensed;
         },
 
@@ -55,7 +55,7 @@ define([
          *
          * @returns {observable}
          */
-        isLicensedLocally: function() {
+        isLicensedLocally: function () {
             return this.preview().displayedRecord().is_licensed_locally;
         },
 
@@ -101,7 +101,7 @@ define([
          *
          * @param {Object} record
          * @param {String} fileName
-         * @param {boolean} license
+         * @param {bool} license
          */
         save: function (record, fileName, license) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
@@ -146,9 +146,7 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            var imageName = record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
-
-            return imageName;
+            return record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
         },
 
         /**
@@ -158,9 +156,7 @@ define([
          * @return string
          */
         getImageExtension: function (record) {
-            var imageType = record.content_type.match(/[^/]{1,4}$/);
-
-            return imageType;
+            return record.content_type.match(/[^/]{1,4}$/);
         },
 
         /**
@@ -227,7 +223,7 @@ define([
                                     }
                                 }, {
                                     text: canPurchase ? $.mage.__('Confirm') : $.mage.__('Buy Credits'),
-                                    class: 'action-primary action-accept',
+                                    class: 'action-primary action-accept'
                                 }]
 
                             }

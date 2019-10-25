@@ -28,6 +28,7 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -38,9 +39,9 @@ use Psr\Log\LoggerInterface;
 class ClientTest extends TestCase
 {
     /**
-     * @var MockObject|ConfigInterface $configInterface
+     * @var MockObject|ConfigInterface $config
      */
-    private $configInterface;
+    private $config;
 
     /**
      * @var MockObject|ConnectionWrapperFactory $connectionFactory
@@ -75,7 +76,7 @@ class ClientTest extends TestCase
     /**
      * @var MockObject|UserQuotaInterfaceFactory
      */
-    private $userQuotaInterface;
+    private $userQuotaFactory;
 
     /**
      * @var MockObject|StockFileToDocument $stockFileToDocument
@@ -107,14 +108,15 @@ class ClientTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->configInterface = $this->createMock(ConfigInterface::class);
+
+        $this->config = $this->createMock(ConfigInterface::class);
         $this->connectionFactory = $this->createMock(ConnectionWrapperFactory::class);
         $this->searchResultFactory = $this->createMock(SearchResultFactory::class);
         $this->searchParametrProvider = $this->createMock(SearchParameterProviderInterface::class);
         $this->localeResolver = $this->createMock(LocaleResolver::class);
         $this->licenseRequestFactory = $this->createMock(LicenseRequestFactory::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->userQuotaInterface = $this->createMock(UserQuotaInterfaceFactory::class);
+        $this->userQuotaFactory = $this->createMock(UserQuotaInterfaceFactory::class);
         $this->stockFileToDocument = $this->createMock(StockFileToDocument::class);
         $this->licenseConfirmationFactory = $this->createMock(LicenseConfirmationInterfaceFactory::class);
 
@@ -122,17 +124,20 @@ class ClientTest extends TestCase
         $this->connectionFactory->expects($this->any())->method('create')->willReturn($this->connectionWrapper);
         $this->licenseResponse = $this->createMock(\AdobeStock\Api\Response\License::class);
 
-        $this->client = new Client(
-            $this->configInterface,
-            $this->connectionFactory,
-            $this->searchResultFactory,
-            $this->searchParametrProvider,
-            $this->localeResolver,
-            $this->licenseRequestFactory,
-            $this->logger,
-            $this->userQuotaInterface,
-            $this->stockFileToDocument,
-            $this->licenseConfirmationFactory
+        $this->client = (new ObjectManager($this))->getObject(
+            Client::class,
+            [
+                'config' => $this->config,
+                'connectionFactory' => $this->connectionFactory,
+                'searchResultFactory' => $this->searchResultFactory,
+                'searchParametersProvider' => $this->searchParametrProvider,
+                'localeResolver' => $this->localeResolver,
+                'licenseRequestFactory' => $this->licenseRequestFactory,
+                'logger' => $this->logger,
+                'userQuotaFactory' => $this->userQuotaFactory,
+                'stockFileToDocument' => $this->stockFileToDocument,
+                'licenseConfirmationFactory' => $this->licenseConfirmationFactory
+            ]
         );
     }
 
@@ -142,7 +147,7 @@ class ClientTest extends TestCase
     public function testSearch()
     {
         $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('ru_RU');
-        $this->configInterface->expects($this->once())
+        $this->config->expects($this->once())
             ->method('getSearchResultFields')
             ->willReturn(['nb_results' => 'NB_RESULTS']);
         $response = $this->createMock(SearchFilesResponse::class);
@@ -186,7 +191,7 @@ class ClientTest extends TestCase
             ->willReturn($this->createMock(\AdobeStock\Api\Models\LicenseEntitlementQuota::class));
         $this->setLicense();
         $quota = $this->createMock(\Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface::class);
-        $this->userQuotaInterface->expects($this->once())
+        $this->userQuotaFactory->expects($this->once())
             ->method('create')
             ->willReturn($quota);
         $quota->expects($this->once())->method('setImages')->willReturnSelf();

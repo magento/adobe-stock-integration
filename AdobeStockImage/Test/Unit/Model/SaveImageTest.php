@@ -87,9 +87,9 @@ class SaveImageTest extends TestCase
 
     /**
      * Verify that image can be saved.
-     * @param int $isLicensed
-     * @param string $path
-     * @param string $url
+     *
+     * @param DocumentInterface $document
+     * @param bool $delete
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @dataProvider assetProvider
      */

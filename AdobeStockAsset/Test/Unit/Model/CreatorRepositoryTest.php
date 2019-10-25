@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
+use Magento\AdobeStockAsset\Model\CreatorFactory;
 use Magento\AdobeStockAsset\Model\CreatorRepository;
-use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
-use Magento\AdobeStockAsset\Model\CreatorFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\Save;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\Save;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Category repository test.

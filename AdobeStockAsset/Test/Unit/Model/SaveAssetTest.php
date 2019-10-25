@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImage\Test\Unit\Model;
+namespace Magento\AdobeStockAssset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\SaveAsset;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,22 +19,22 @@ use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 class SaveAssetTest extends TestCase
 {
     /**
-     * @var MockObject|AssetRepositoryInterface $assetRepository
+     * @var MockObject|AssetRepositoryInterface
      */
     private $assetRepository;
 
     /**
-     * @var MockObject|CreatorRepositoryInterface $creatorRepository
+     * @var MockObject|CreatorRepositoryInterface
      */
     private $creatorRepository;
 
     /**
-     * @var MockObject|CategoryRepositoryInterface $categoryRepository
+     * @var MockObject|CategoryRepositoryInterface
      */
     private $categoryRepository;
 
     /**
-     * @var SaveAsset $saveAsset
+     * @var SaveAsset
      */
     private $saveAsset;
 

@@ -18,6 +18,8 @@ use Magento\Framework\EntityManager\Hydrator;
  */
 class Save
 {
+    private const ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME = 'adobe_stock_category';
+
     /**
      * @var ResourceConnection
      */
@@ -53,7 +55,7 @@ class Save
         $data = $this->hydrator->extract($category);
         $connection = $this->getConnection();
         $tableName = $this->resourceConnection->getTableName(
-            CategoryResourceModel::ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME
+            self::ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME
         );
         $data = $this->filterData($data, [CategoryInterface::ID, CategoryInterface::NAME]);
         if (empty($data)) {

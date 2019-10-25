@@ -30,12 +30,12 @@ class DataProviderTest extends TestCase
     private $dataProvider;
 
     /**
-     * @var GetImageListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GetImageListInterface|MockObject
      */
     private $getImageListMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilder;
 
@@ -94,6 +94,7 @@ class DataProviderTest extends TestCase
 
     /**
      * @dataProvider itemsDataProvider
+     * @param array $itemsData
      */
     public function testGetData(array $itemsData): void
     {
@@ -124,6 +125,7 @@ class DataProviderTest extends TestCase
     }
 
     /**
+     * @param array $itemsData
      * @return SearchResultInterface|MockObject
      */
     private function getSearchResult(array $itemsData): SearchResultInterface

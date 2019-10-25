@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImage\Test\Unit\Model;
+namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\GetAssetById;
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;

@@ -7,32 +7,32 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
+use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeIms\Model\UserProfile;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
-use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\TestCase;
 use Magento\AdobeImsApi\Api\Data\ConfigInterface;
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\AdobeIms\Model\UserProfile;
-use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Config data test.
  */
 class SignInTest extends TestCase
 {
-    const PROFILE_URL = 'https://url.test/';
-    const LOGOUT_URL = 'https://url.test/';
-    const AUTH_URL = '';
-    const DEFAULT_PROFILE_IMAGE = 'default_image.png';
+    private const PROFILE_URL = 'https://url.test/';
+    private const LOGOUT_URL = 'https://url.test/';
+    private const AUTH_URL = '';
+    private const DEFAULT_PROFILE_IMAGE = 'default_image.png';
 
     /**
      * @var ObjectManager

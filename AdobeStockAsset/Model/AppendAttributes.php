@@ -19,9 +19,9 @@ use Magento\Framework\App\ResourceConnection;
  */
 class AppendAttributes
 {
-    const ATTRIBUTE_CODE_IS_DOWNLOADED = 'is_downloaded';
-    const ATTRIBUTE_CODE_IS_LICENSED_LOCALLY = 'is_licensed_locally';
-    const ATTRIBUTE_CODE_PATH = 'path';
+    private const ATTRIBUTE_CODE_IS_DOWNLOADED = 'is_downloaded';
+    private const ATTRIBUTE_CODE_IS_LICENSED_LOCALLY = 'is_licensed_locally';
+    private const ATTRIBUTE_CODE_PATH = 'path';
 
     /**
      * @var AttributeValueFactory

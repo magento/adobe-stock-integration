@@ -28,10 +28,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $assetRepositoryMock;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|MockObject */
     protected $searchCriteriaBuilderMock;
 
-    /** @var  LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  LoggerInterface|MockObject */
     private $loggerMock;
 
     /**

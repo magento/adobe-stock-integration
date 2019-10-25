@@ -16,6 +16,7 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,12 +30,12 @@ class WordsTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
     /**
-     * @var Words|\PHPUnit_Framework_MockObject_MockObject
+     * @var Words|MockObject
      */
     private $words;
 
@@ -66,12 +67,12 @@ class WordsTest extends TestCase
      */
     public function testApplyWithRequestValue(string $requestValue, string $encodedValue)
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getFilterGroups'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParamsMock */
+        /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setWords'])
             ->disableOriginalConstructor()
@@ -114,12 +115,12 @@ class WordsTest extends TestCase
      */
     public function testApplyWithoutWordsField()
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getFilterGroups'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParamsMock */
+        /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setWords'])
             ->disableOriginalConstructor()
@@ -159,12 +160,12 @@ class WordsTest extends TestCase
      */
     public function testApplyWithEmptyWords()
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getFilterGroups'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParamsMock */
+        /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setWords'])
             ->disableOriginalConstructor()
@@ -205,12 +206,12 @@ class WordsTest extends TestCase
      */
     public function testApplyWithOnlyQuotes()
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getFilterGroups'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParamsMock */
+        /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setWords'])
             ->disableOriginalConstructor()
