@@ -132,11 +132,10 @@ class SaveImage implements SaveImageInterface
     {
         try {
             $pathAttribute = $document->getCustomAttribute('path');
+            $pathValue = $pathAttribute->getValue();
             /* If the asset has been already saved, delete the previous version */
-            if (null !== $pathAttribute
-                && $pathAttribute->getValue()
-            ) {
-                $this->storage->delete($pathAttribute->getValue());
+            if (null !== $pathAttribute && $pathValue) {
+                $this->storage->delete($pathValue);
             }
 
             $path = $this->storage->save($url, $destinationPath);
