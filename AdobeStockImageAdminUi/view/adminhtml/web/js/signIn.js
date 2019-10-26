@@ -67,6 +67,11 @@ define([
                 },
                 dataType: 'json',
                 context: this,
+
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
                 success: function (response) {
                     this.user({
                         isAuthorized: true,

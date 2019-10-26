@@ -47,11 +47,9 @@ class AddSearchButtonTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->layoutInterface = $this->getMockForAbstractClass(LayoutInterface::class);
-
-        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
-
-        $this->authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->layoutInterface = $this->createMock(LayoutInterface::class);
+        $this->config = $this->createMock(ConfigInterface::class);
+        $this->authorization = $this->createMock(AuthorizationInterface::class);
 
         $this->addSearchButton = (new ObjectManager($this))->getObject(
             AddSearchButton::class,
@@ -78,10 +76,7 @@ class AddSearchButtonTest extends TestCase
         /**
          * @var \Magento\Backend\Block\Widget\Container|MockObject $containerMock
          */
-        $containerMock = $this->getMockBuilder(Container::class)
-            ->setMethods(['addButton'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerMock = $this->createMock(Container::class);
         $containerMock->expects($this->once())
             ->method('addButton')
             ->with(...$this->getButtonConfig());
@@ -105,10 +100,7 @@ class AddSearchButtonTest extends TestCase
         /**
          * @var \Magento\Backend\Block\Widget\Container|MockObject $containerMock
          */
-        $containerMock = $this->getMockBuilder(Container::class)
-            ->setMethods(['addButton'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerMock = $this->createMock(Container::class);
         $containerMock->expects($this->never())
             ->method('addButton');
 

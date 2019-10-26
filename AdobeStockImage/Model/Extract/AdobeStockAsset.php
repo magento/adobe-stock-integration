@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\Extract;
+namespace Magento\AdobeStockImage\Model\Extract;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\Search\Document;

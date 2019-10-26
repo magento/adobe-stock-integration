@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Test\Unit\Model\Extract;
+namespace Magento\AdobeStockImage\Test\Unit\Model\Extract;
 
-use Magento\AdobeStockAsset\Model\Extract\AdobeStockAsset;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;

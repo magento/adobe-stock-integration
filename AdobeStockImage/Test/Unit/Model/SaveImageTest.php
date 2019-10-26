@@ -6,12 +6,11 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Magento\AdobeStockAsset\Model\Extract\AdobeStockAsset as DocumentToAsset;
-use Magento\AdobeStockAsset\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockAsset\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;

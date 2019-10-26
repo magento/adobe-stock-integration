@@ -96,7 +96,7 @@ class GetImageListTest extends TestCase
         $appliedFilterGroup = $this->getAppliedFilterGroup($appliedFilterNames);
 
         /** @var MockObject|SearchCriteriaInterface $searchCriteria */
-        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$appliedFilterGroup]);
@@ -104,7 +104,7 @@ class GetImageListTest extends TestCase
             ->method('setFilterGroups')
             ->with([$appliedFilterGroup, $this->getDefaultFilterGroup($appliedFilterNames)]);
 
-        $searchResult = $this->getMockForAbstractClass(SearchResultInterface::class);
+        $searchResult = $this->createMock(SearchResultInterface::class);
 
         $this->getAssetListMock->expects($this->once())
             ->method('execute')

@@ -77,10 +77,10 @@ class DownloadTest extends TestCase
      */
     protected function setUp()
     {
-        $this->saveImage = $this->getMockForAbstractClass(SaveImageInterface::class);
+        $this->saveImage = $this->createMock(SaveImageInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->getAssetById = $this->getMockForAbstractClass(GetAssetByIdInterface::class);
+        $this->getAssetById = $this->createMock(GetAssetByIdInterface::class);
         $this->document = $this->createMock(Document::class);
 
         $attribute = $this->createMock(AttributeInterface::class);
@@ -109,17 +109,12 @@ class DownloadTest extends TestCase
         $this->context->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->request);
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
         $this->saveImage->expects($this->once())->method('execute')->willReturn(null);
-        $this->jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
 
         $this->download = new Download(

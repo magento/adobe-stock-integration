@@ -93,9 +93,8 @@ class LicenseTest extends TestCase
         $this->getAssetByIdMock = $this->createMock(GetAssetByIdInterface::class);
         $this->documentMock = $this->createMock(Document::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
-        $this->jsonObject = $this->getMockBuilder(Json::class)->disableOriginalConstructor()->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->jsonObject = $this->createMock(Json::class);
 
         $this->contextMock->expects($this->once())
             ->method('getResultFactory')

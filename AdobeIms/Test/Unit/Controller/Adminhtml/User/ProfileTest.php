@@ -70,10 +70,7 @@ class ProfileTest extends TestCase
         $this->userProfileRepository = $this->createMock(UserProfileRepositoryInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->jsonObject = $this->createMock(Json::class);
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->action->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
