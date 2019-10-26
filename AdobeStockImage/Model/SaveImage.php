@@ -7,22 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
-use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\AdobeStockAsset\Model\DocumentToAsset;
-use Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset;
+use Magento\AdobeStockAsset\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockAsset\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockAsset\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords;
-use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetLinks;
 
 /**
  * Class SaveImage
@@ -65,6 +61,11 @@ class SaveImage implements SaveImageInterface
     private $documentToAsset;
 
     /**
+     * @var DocumentToKeywords
+     */
+    private $documentToKeywords;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -73,16 +74,6 @@ class SaveImage implements SaveImageInterface
      * @var SaveAssetKeywords
      */
     private $saveAssetKeywords;
-
-    /**
-     * @var SaveAssetLinks
-     */
-    private $saveAssetLinks;
-
-    /**
-     * @var KeywordInterfaceFactory
-     */
-    private $keywordsFactory;
 
     /**
      * SaveImage constructor.
@@ -96,8 +87,7 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToAsset $documentToAsset
      * @param LoggerInterface $logger
      * @param SaveAssetKeywords $saveAssetKeywords
-     * @param SaveAssetLinks $saveAssetLinks
-     * @param KeywordInterfaceFactory $keywordsFactory
+     * @param DocumentToKeywords $documentToKeywords
      */
     public function __construct(
         Storage $storage,
@@ -109,8 +99,7 @@ class SaveImage implements SaveImageInterface
         DocumentToAsset $documentToAsset,
         LoggerInterface $logger,
         SaveAssetKeywords $saveAssetKeywords,
-        SaveAssetLinks $saveAssetLinks,
-        KeywordInterfaceFactory $keywordsFactory
+        DocumentToKeywords $documentToKeywords
     ) {
         $this->storage = $storage;
         $this->getMediaAssetById = $getMediaAssetById;
@@ -121,8 +110,7 @@ class SaveImage implements SaveImageInterface
         $this->documentToAsset = $documentToAsset;
         $this->logger = $logger;
         $this->saveAssetKeywords = $saveAssetKeywords;
-        $this->saveAssetLinks = $saveAssetLinks;
-        $this->keywordsFactory = $keywordsFactory;
+        $this->documentToKeywords = $documentToKeywords;
     }
 
     /**
@@ -149,7 +137,12 @@ class SaveImage implements SaveImageInterface
                 ]
             );
             $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
-            $this->processKeywords($document, $mediaGalleryAssetId);
+
+            if (!$mediaGalleryAssetId) {
+                $mediaGalleryAssetId = $this->assetRepository->getById($document->getId())->getMediaGalleryId();
+            }
+
+            $this->saveAssetKeywords->execute($this->documentToKeywords->convert($document), $mediaGalleryAssetId);
 
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
@@ -158,43 +151,5 @@ class SaveImage implements SaveImageInterface
             $this->logger->critical($message);
             throw new CouldNotSaveException($message);
         }
-    }
-
-    /**
-     * Process save keywords.
-     *
-     * @param DocumentInterface $document
-     * @param int $mediaGalleryAssetId
-     *
-     * @throws CouldNotSaveException
-     */
-    private function processKeywords(DocumentInterface $document, int $mediaGalleryAssetId): void
-    {
-        $keywords = $this->extractKeywordsFromDocument($document);
-        if (isset($keywords)) {
-            $keywordsIds = $this->saveAssetKeywords->execute($keywords);
-            $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordsIds);
-        }
-    }
-
-    /**
-     * Extract keywords from document
-     *
-     * @param DocumentInterface $document
-     *
-     * @return KeywordInterface[]|[]
-     */
-    private function extractKeywordsFromDocument(DocumentInterface $document): array
-    {
-        $keywordsAttribute = $document->getCustomAttribute('keywords');
-        $data = $keywordsAttribute->getValue();
-        $keywords = [];
-        if (isset($data)) {
-            foreach ($data as $item) {
-                $keywordData = ['keyword' => $item['name']];
-                $keywords[] = $this->keywordsFactory->create(['data' => $keywordData]);
-            }
-        }
-        return $keywords;
     }
 }

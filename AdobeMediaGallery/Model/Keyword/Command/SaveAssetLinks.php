@@ -16,12 +16,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 /**
  * Class SaveAssetLinks
  */
-class SaveAssetLinks implements SaveAssetLinksInterface
+class SaveAssetLinks
 {
     private const TABLE_ASSET_KEYWORD = 'media_gallery_asset_keyword';
-
     private const FIELD_ASSET_ID = 'asset_id';
-
     private const FIELD_KEYWORD_ID = 'keyword_id';
 
     /**

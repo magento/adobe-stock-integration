@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model;
+namespace Magento\AdobeStockAsset\Model\Extract;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
@@ -14,9 +14,9 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 
 /**
- * Class DocumentToAsset
+ * Adoobe stock asset extractor
  */
-class DocumentToAsset
+class AdobeStockAsset
 {
     private const DOCUMENT_FIELD_CATEGORY = 'category';
     private const DOCUMENT_CREATOR_FIELDS = ['creator_id' => 'id', 'creator_name' => 'name'];
