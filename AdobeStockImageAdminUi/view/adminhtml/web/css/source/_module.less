@@ -4,6 +4,13 @@
 //  */
 
 & when (@media-common = true) {
+  .adobe-stock-images-search-modal-content {
+    .masonry-image-overlay {
+      background-color: #507DC8;
+      opacity: 1;
+    }
+  }
+
   .adobe-login-container {
     .adobe-user-information {
       .adobe-user-popup {
@@ -20,9 +27,19 @@
     }
 
     .info {
-      width: ~"calc(40% - 30px)";
-      float: right;
-      text-align: left;
+      float: left;
+      min-width: 40%;
+      padding-left: 40px;
+
+      .actions {
+        .lib-inline-block-space-container();
+
+        button {
+          & + button {
+            margin-left: 15px;
+          }
+        }
+      }
 
       .title {
         margin: 0 0 20px;
@@ -50,7 +67,7 @@
     }
 
     .keywords {
-      margin: 30px 0;
+      margin: 30px 0 20px 0;
       display: inline-block;
       width: 100%;
       .title {
@@ -146,7 +163,6 @@
         .action-close {
           right: 30px;
           top: 30px;
-          padding: 0;
         }
       }
 
@@ -165,6 +181,11 @@
           padding: 0.6rem 1rem 0.6rem;
           color: #999;
           cursor: default;
+        }
+        .admin__field-with-image-ext {
+          .admin__control-text {
+            padding-right: 5rem;
+          }
         }
       }
       .modal-footer {

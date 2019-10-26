@@ -12,6 +12,7 @@ use Magento\AdobeStockClient\Model\SearchParametersProviderComposite;
 use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,7 @@ class SearchParametersProviderCompositeTest extends TestCase
     private $searchParametersProviderComposite;
 
     /**
-     * @var SearchParameterProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchParameterProviderInterface|MockObject
      */
     private $searchParametersProviderMock;
 

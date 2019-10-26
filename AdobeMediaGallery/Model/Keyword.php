@@ -6,11 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model;
+namespace Magento\AdobeMediaGallery\Model;
 
-use Magento\AdobeStockAssetApi\Api\Data\KeywordExtensionInterface;
-use Magento\AdobeStockAssetApi\Api\Data\KeywordInterface;
-use Magento\AdobeStockAsset\Model\ResourceModel\Keyword as ResourceModel;
+use Magento\AdobeMediaGalleryApi\Api\Data\KeywordExtensionInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -18,12 +17,22 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class Keyword extends AbstractExtensibleModel implements KeywordInterface
 {
+    private const ID = 'id';
+
+    private const KEYWORD = 'keyword';
+
     /**
-     * Construct
+     * @inheritdoc
      */
-    protected function _construct()
+    public function getId(): ?int
     {
-        $this->_init(ResourceModel::class);
+        $id = $this->getData(self::ID);
+
+        if (!$id) {
+            return null;
+        }
+
+        return (int) $id;
     }
 
     /**
@@ -32,14 +41,6 @@ class Keyword extends AbstractExtensibleModel implements KeywordInterface
     public function getKeyword() : string
     {
         return (string)$this->getData(self::KEYWORD);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setKeyword(string $keyword): void
-    {
-        $this->setData(self::KEYWORD, $keyword);
     }
 
     /**

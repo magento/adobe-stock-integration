@@ -87,6 +87,7 @@ class GetImageListTest extends TestCase
     /**
      * Test 'execute' method of GetImageList class.
      *
+     * @param array $appliedFilterNames
      * @dataProvider appliedFilterNamesProvider
      * @throws LocalizedException
      */

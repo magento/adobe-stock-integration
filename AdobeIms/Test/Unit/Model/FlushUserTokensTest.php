@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\AdobeIms\Model\FlushUserTokens;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\AdobeIms\Model\FlushUserTokens;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,7 +46,6 @@ class FlushUserTokensTest extends TestCase
             $this->userContext,
             $this->userProfileRepository
         );
-
     }
 
     /**

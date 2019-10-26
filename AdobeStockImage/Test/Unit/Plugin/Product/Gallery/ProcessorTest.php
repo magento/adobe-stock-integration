@@ -28,10 +28,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $assetRepositoryMock;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|MockObject */
     protected $searchCriteriaBuilderMock;
 
-    /** @var  LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  LoggerInterface|MockObject */
     private $loggerMock;
 
     /**
@@ -125,8 +125,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private function setupSuccessAssetSearchAndDelete(): void
     {
+        $id = 42;
+
         $searchCriteriaMock = $this->getSearchCriteriaMock();
         $assetMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
+        $assetMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($id);
         $searchResultMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface::class);
         $searchResultMock->expects($this->once())->method('getItems')->willReturn([$assetMock]);
         $this->assetRepositoryMock->expects($this->once())
@@ -135,8 +140,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($searchResultMock);
 
         $this->assetRepositoryMock->expects($this->once())
-            ->method('delete')
-            ->with($assetMock);
+            ->method('deleteById')
+            ->with($id);
     }
 
     /**

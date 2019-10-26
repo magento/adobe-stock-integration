@@ -3,17 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\AdobeStockAsset\Model\DocumentToAsset;
+use Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset;
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
+use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords;
+use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetLinks;
 
 /**
  * Class SaveImage
@@ -26,52 +35,124 @@ class SaveImage implements SaveImageInterface
     private $storage;
 
     /**
+     * @var GetByIdInterface
+     */
+    private $getMediaAssetById;
+
+    /**
+     * @var AssetRepositoryInterface
+     */
+    private $assetRepository;
+
+    /**
+     * @var SaveInterface
+     */
+    private $saveMediaAsset;
+
+    /**
+     * @var SaveAssetInterface
+     */
+    private $saveAdobeStockAsset;
+
+    /**
+     * @var DocumentToMediaGalleryAsset
+     */
+    private $documentToMediaGalleryAsset;
+
+    /**
+     * @var DocumentToAsset
+     */
+    private $documentToAsset;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var SaveAssetInterface
+     * @var SaveAssetKeywords
      */
-    private $saveAsset;
+    private $saveAssetKeywords;
 
     /**
-     * @var ClientInterface
+     * @var SaveAssetLinks
      */
-    private $client;
+    private $saveAssetLinks;
 
     /**
-     * @param SaveAssetInterface $saveAsset
+     * @var KeywordInterfaceFactory
+     */
+    private $keywordsFactory;
+
+    /**
+     * SaveImage constructor.
+     *
      * @param Storage $storage
+     * @param GetByIdInterface $getMediaAssetById
+     * @param AssetRepositoryInterface $assetRepository
+     * @param SaveInterface $saveMediaAsset
+     * @param SaveAssetInterface $saveAdobeStockAsset
+     * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
+     * @param DocumentToAsset $documentToAsset
      * @param LoggerInterface $logger
-     * @param ClientInterface $client
+     * @param SaveAssetKeywords $saveAssetKeywords
+     * @param SaveAssetLinks $saveAssetLinks
+     * @param KeywordInterfaceFactory $keywordsFactory
      */
     public function __construct(
-        SaveAssetInterface $saveAsset,
         Storage $storage,
+        GetByIdInterface $getMediaAssetById,
+        AssetRepositoryInterface $assetRepository,
+        SaveInterface $saveMediaAsset,
+        SaveAssetInterface $saveAdobeStockAsset,
+        DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
+        DocumentToAsset $documentToAsset,
         LoggerInterface $logger,
-        ClientInterface $client
+        SaveAssetKeywords $saveAssetKeywords,
+        SaveAssetLinks $saveAssetLinks,
+        KeywordInterfaceFactory $keywordsFactory
     ) {
         $this->storage = $storage;
+        $this->getMediaAssetById = $getMediaAssetById;
+        $this->assetRepository = $assetRepository;
+        $this->saveMediaAsset = $saveMediaAsset;
+        $this->saveAdobeStockAsset = $saveAdobeStockAsset;
+        $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
+        $this->documentToAsset = $documentToAsset;
         $this->logger = $logger;
-        $this->saveAsset = $saveAsset;
-        $this->client = $client;
+        $this->saveAssetKeywords = $saveAssetKeywords;
+        $this->saveAssetLinks = $saveAssetLinks;
+        $this->keywordsFactory = $keywordsFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(AssetInterface $asset, string $destinationPath): void
+    public function execute(DocumentInterface $document, string $url, string $destinationPath): void
     {
         try {
+            $pathAttribute = $document->getCustomAttribute('path');
+            $pathValue = $pathAttribute->getValue();
             /* If the asset has been already saved, delete the previous version */
-            if (!empty($asset->getPath())) {
-                $this->storage->delete($asset->getPath());
+            if (null !== $pathAttribute && $pathValue) {
+                $this->storage->delete($pathValue);
             }
 
-            $path = $this->storage->save($this->getUrl($asset), $destinationPath);
-            $asset->setPath($path);
-            $this->saveAsset->execute($asset);
+            $path = $this->storage->save($url, $destinationPath);
+
+            $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert(
+                $document,
+                [
+                    'id' => null,
+                    'path' => $path,
+                    'source' => 'Adobe Stock'
+                ]
+            );
+            $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
+            $this->processKeywords($document, $mediaGalleryAssetId);
+
+            $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
+            $this->saveAdobeStockAsset->execute($asset);
         } catch (\Exception $exception) {
             $message = __('Image was not saved: %1', $exception->getMessage());
             $this->logger->critical($message);
@@ -80,16 +161,40 @@ class SaveImage implements SaveImageInterface
     }
 
     /**
-     * Get full image url if asset is licensed or preview image url if not
+     * Process save keywords.
      *
-     * @param AssetInterface $asset
-     * @return string
+     * @param DocumentInterface $document
+     * @param int $mediaGalleryAssetId
+     *
+     * @throws CouldNotSaveException
      */
-    private function getUrl(AssetInterface $asset): string
+    private function processKeywords(DocumentInterface $document, int $mediaGalleryAssetId): void
     {
-        if ($asset->getIsLicensed() && $asset->getUrl()) {
-            return $asset->getUrl();
+        $keywords = $this->extractKeywordsFromDocument($document);
+        if (isset($keywords)) {
+            $keywordsIds = $this->saveAssetKeywords->execute($keywords);
+            $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordsIds);
         }
-        return $asset->getPreviewUrl();
+    }
+
+    /**
+     * Extract keywords from document
+     *
+     * @param DocumentInterface $document
+     *
+     * @return KeywordInterface[]|[]
+     */
+    private function extractKeywordsFromDocument(DocumentInterface $document): array
+    {
+        $keywordsAttribute = $document->getCustomAttribute('keywords');
+        $data = $keywordsAttribute->getValue();
+        $keywords = [];
+        if (isset($data)) {
+            foreach ($data as $item) {
+                $keywordData = ['keyword' => $item['name']];
+                $keywords[] = $this->keywordsFactory->create(['data' => $keywordData]);
+            }
+        }
+        return $keywords;
     }
 }

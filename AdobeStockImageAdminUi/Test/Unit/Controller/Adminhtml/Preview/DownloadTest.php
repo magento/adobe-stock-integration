@@ -9,16 +9,18 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\Download;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\Download;
-use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * DownloadTest
@@ -26,9 +28,9 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class DownloadTest extends TestCase
 {
     /**
-     * @var MockObject|AssetInterface
+     * @var MockObject|DocumentInterface
      */
-    private $asset;
+    private $document;
 
     /**
      * @var MockObject|GetAssetByIdInterface
@@ -79,22 +81,34 @@ class DownloadTest extends TestCase
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $this->getAssetById = $this->getMockForAbstractClass(GetAssetByIdInterface::class);
-        $this->asset = $this->createMock(AssetInterface::class);
-        $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParams']
-        );
+        $this->document = $this->createMock(DocumentInterface::class);
+
+        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute->expects($this->once())
+            ->method('getValue')
+            ->willReturn('https://url');
+
+        $this->document->expects($this->once())
+            ->method('getCustomAttribute')
+            ->willReturn($attribute);
+
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->request->expects($this->once())
+            ->method('getParams')
+            ->willReturn(
+                [
+                    'isAjax' => 'true',
+                    'media_id' => 283415387,
+                    'destination_path' => '',
+                    'form_key' => 'PyXOATf2fL9Y8iZf'
+                ]
+            );
         $this->getAssetById->expects($this->once())
             ->method('execute')
-            ->willReturn($this->asset);
+            ->willReturn($this->document);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -107,16 +121,6 @@ class DownloadTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
-        $this->request->expects($this->once())
-            ->method('getParams')
-            ->willReturn(
-                [
-                'isAjax' => "true",
-                'media_id' => 283415387,
-                'destination_path' => "",
-                'form_key' => "PyXOATf2fL9Y8iZf"
-                ]
-            );
 
         $this->download = new Download(
             $this->context,
