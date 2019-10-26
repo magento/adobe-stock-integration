@@ -71,13 +71,13 @@ define([
         },
 
         /**
-         * Count number of images in Related Serie
+         * Check if the number of related series image is greater than 4 or not
          *
          * @param {Object} record
          * @returns boolean
          */
-        countSeriesImages: function(record) {
-            return (parseInt(record.series().length, 10) >= 4);
+        canShowMoreSeriesImages: function(record) {
+            return parseInt(record.series().length) >= this.preview().tabImagesLimit;
         },
 
         /**
@@ -91,13 +91,13 @@ define([
         },
 
         /**
-         * Count number of images in Related Model
+         * Check if the number of related model image is greater than 4 or not
          *
          * @param {Object} record
          * @returns boolean
          */
-        countModelImages: function(record) {
-            return (parseInt(record.model().length, 10) >= 4);
+        canShowMoreModelImages: function(record) {
+            return parseInt(record.model().length) >= this.preview().tabImagesLimit;
         },
 
         /**
