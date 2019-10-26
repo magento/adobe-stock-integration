@@ -23,7 +23,7 @@ use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -158,7 +158,7 @@ class ClientTest extends TestCase
         $this->stockFileToDocument->expects($this->once())
             ->method('convert')
             ->willReturn(
-                $this->createMock(DocumentInterface::class)
+                $this->createMock(Document::class)
             );
 
         $response->expects($this->once())->method('getNbResults')->willReturn(12);

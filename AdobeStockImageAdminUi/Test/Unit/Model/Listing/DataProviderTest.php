@@ -10,7 +10,7 @@ namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model\Listing;
 
 use Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -133,7 +133,7 @@ class DataProviderTest extends TestCase
         $items = [];
 
         foreach ($itemsData as $itemData) {
-            $item = $this->getMockForAbstractClass(DocumentInterface::class);
+            $item = $this->getMockForAbstractClass(Document::class);
             $attributes = [];
             foreach ($itemData as $key => $value) {
                 $attribute = $this->getMockForAbstractClass(AttributeInterface::class);

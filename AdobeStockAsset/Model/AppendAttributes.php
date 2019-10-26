@@ -10,7 +10,7 @@ namespace Magento\AdobeStockAsset\Model;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\LoadByIds;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\ResourceConnection;
 
@@ -117,11 +117,11 @@ class AppendAttributes
     /**
      * Add attributes to document
      *
-     * @param DocumentInterface $document
+     * @param Document $document
      * @param array $attributes [code => value]
-     * @return DocumentInterface
+     * @return Document
      */
-    private function addAttributes(DocumentInterface $document, array $attributes): DocumentInterface
+    private function addAttributes(Document $document, array $attributes): Document
     {
         $customAttributes = $document->getCustomAttributes();
 

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model\Extract;
 
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory;
 
 /**
@@ -33,11 +33,11 @@ class MediaGalleryAsset
     /**
      * Convert search document to the asset object
      *
-     * @param DocumentInterface $document
+     * @param Document $document
      * @param array $additionalData
      * @return AssetInterface
      */
-    public function convert(DocumentInterface $document, array $additionalData = []): AssetInterface
+    public function convert(Document $document, array $additionalData = []): AssetInterface
     {
         $assetData = [];
         foreach ($document->getCustomAttributes() as $attribute) {

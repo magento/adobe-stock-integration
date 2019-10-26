@@ -16,7 +16,7 @@ use Magento\AdobeStockAsset\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
 
@@ -116,7 +116,7 @@ class SaveImage implements SaveImageInterface
     /**
      * @inheritdoc
      */
-    public function execute(DocumentInterface $document, string $url, string $destinationPath): void
+    public function execute(Document $document, string $url, string $destinationPath): void
     {
         try {
             $pathAttribute = $document->getCustomAttribute('path');

@@ -19,9 +19,9 @@ interface GetAssetByIdInterface
      * Returns asset by Adobe ID
      *
      * @param int $adobeId
-     * @return \Magento\Framework\Api\Search\DocumentInterface
+     * @return \Magento\Framework\Api\Search\Document
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(int $adobeId): \Magento\Framework\Api\Search\DocumentInterface;
+    public function execute(int $adobeId): \Magento\Framework\Api\Search\Document;
 }

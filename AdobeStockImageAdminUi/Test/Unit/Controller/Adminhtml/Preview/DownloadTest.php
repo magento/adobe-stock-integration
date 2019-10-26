@@ -13,7 +13,7 @@ use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\Download;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\Framework\Api\AttributeInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -28,7 +28,7 @@ use Psr\Log\LoggerInterface;
 class DownloadTest extends TestCase
 {
     /**
-     * @var MockObject|DocumentInterface
+     * @var MockObject|Document
      */
     private $document;
 
@@ -81,7 +81,7 @@ class DownloadTest extends TestCase
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $this->getAssetById = $this->getMockForAbstractClass(GetAssetByIdInterface::class);
-        $this->document = $this->createMock(DocumentInterface::class);
+        $this->document = $this->createMock(Document::class);
 
         $attribute = $this->createMock(AttributeInterface::class);
         $attribute->expects($this->once())
