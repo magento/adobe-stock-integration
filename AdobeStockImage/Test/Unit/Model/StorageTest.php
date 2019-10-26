@@ -17,6 +17,11 @@ use Magento\AdobeStockImage\Model\Storage;
 class StorageTest extends TestCase
 {
     /**
+     * @var MockObject | \Magento\Framework\Filesystem\Directory\Write
+     */
+    private $mediaDirectoryMock;
+
+    /**
      * @var Storage
      */
     private $storage;
@@ -48,6 +53,7 @@ class StorageTest extends TestCase
         $this->httpsDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\Https::class);
         $this->fileSystemIoMock = $this->createMock(\Magento\Framework\Filesystem\Io\File::class);
         $this->logMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
         $this->storage = (new ObjectManager($this))->getObject(
             Storage::class,
@@ -66,10 +72,8 @@ class StorageTest extends TestCase
 
         $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
 
-        $mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
-
         $content = 'content';
-        $mediaDirectoryMock->expects($this->once())
+        $this->mediaDirectoryMock->expects($this->once())
             ->method('writeFile')
             ->withAnyParameters()
             ->willReturn($this->isType('integer'));
@@ -77,7 +81,7 @@ class StorageTest extends TestCase
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
-            ->willReturn($mediaDirectoryMock);
+            ->willReturn($this->mediaDirectoryMock);
 
         $this->httpsDriverMock->expects($this->once())
             ->method('fileGetContents')
@@ -87,5 +91,27 @@ class StorageTest extends TestCase
             '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg',
             $this->storage->save($imageUrl, '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg')
         );
+    }
+
+    public function testDelete()
+    {
+        $path = 'path';
+
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('isFile')
+            ->with($path)
+            ->willReturn(true);
+
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+            ->willReturn($this->mediaDirectoryMock);
+
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('delete')
+            ->with($path)
+            ->willReturn(true);
+
+        $this->storage->delete($path);
     }
 }

@@ -39,6 +39,7 @@ class ImagePreview extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->url = $url;
     }
+
     /**
      * @inheritdoc
      */

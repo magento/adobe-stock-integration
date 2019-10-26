@@ -110,7 +110,7 @@ class DeleteTest extends WebapiAbstract
         ];
 
         return (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfo, [AssetInterface::ID => $assetId])
+            $this->_webApiCall($serviceInfo, ['id' => $assetId])
             : $this->_webApiCall($serviceInfo);
     }
 

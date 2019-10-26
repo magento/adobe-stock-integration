@@ -20,6 +20,8 @@ use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
  * Adobe sign in block
+ *
+ * @api
  */
 class SignIn extends Template
 {

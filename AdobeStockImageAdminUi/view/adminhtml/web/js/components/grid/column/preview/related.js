@@ -15,6 +15,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/related',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             serieFilterValue: '',
             modelFilterValue: '',
@@ -84,9 +85,14 @@ define([
          *
          * @param {Object} record
          */
-        seeMoreFromSeries: function(record) {
+        seeMoreFromSeries: function (record) {
             this.serieFilterValue(record.id);
-            this.filterChips().set('applied', {'serie_id' : record.id.toString()})
+            this.filterChips().set(
+                'applied',
+                {
+                    'serie_id': record.id.toString()
+                }
+            );
         },
 
         /**
@@ -94,9 +100,14 @@ define([
          *
          * @param {Object} record
          */
-        seeMoreFromModel: function(record) {
+        seeMoreFromModel: function (record) {
             this.modelFilterValue(record.id);
-            this.filterChips().set('applied', {'model_id' : record.id.toString()})
+            this.filterChips().set(
+                'applied',
+                {
+                    'model_id': record.id.toString()
+                }
+            );
         },
 
         /**
@@ -106,7 +117,12 @@ define([
          */
         nextRelated: function (record) {
             var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
-                nextRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) + 1,
+                nextRelatedIndex = _.findLastIndex(
+                    relatedList,
+                    {
+                        id: this.preview().displayedRecord().id
+                    }
+                ) + 1,
                 nextRelated = relatedList[nextRelatedIndex];
 
             if (typeof nextRelated === 'undefined') {
@@ -123,7 +139,12 @@ define([
          */
         prevRelated: function (record) {
             var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
-                prevRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) - 1,
+                prevRelatedIndex = _.findLastIndex(
+                    relatedList,
+                    {
+                        id: this.preview().displayedRecord().id
+                    }
+                ) - 1,
                 prevRelated = relatedList[prevRelatedIndex];
 
             if (typeof prevRelated === 'undefined') {
@@ -141,21 +162,21 @@ define([
          * @return {Boolean}
          */
         getPreviousButtonDisabled: function (record) {
+            var relatedList, prevRelatedIndex, prevRelated;
+
             if (!this.selectedRelatedType()) {
                 return false;
             }
-            var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
-                prevRelatedIndex,
-                prevRelated;
-
-            prevRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) - 1;
+            relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model();
+            prevRelatedIndex = _.findLastIndex(
+                relatedList,
+                {
+                    id: this.preview().displayedRecord().id
+                }
+            ) - 1;
             prevRelated = relatedList[prevRelatedIndex];
 
-            if (typeof prevRelated === 'undefined') {
-                return true;
-            }
-
-            return false;
+            return typeof prevRelated === 'undefined';
         },
 
         /**
@@ -166,30 +187,29 @@ define([
          * @return {Boolean}
          */
         getNextButtonDisabled: function (record) {
+            var relatedList, nextRelatedIndex, nextRelated;
+
             if (!this.selectedRelatedType()) {
                 return false;
             }
-            var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
-                nextRelatedIndex,
-                nextRelated;
-
-            nextRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) + 1;
+            relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model();
+            nextRelatedIndex = _.findLastIndex(
+                relatedList,
+                {
+                    id: this.preview().displayedRecord().id
+                }
+            ) + 1;
             nextRelated = relatedList[nextRelatedIndex];
 
-            if (typeof nextRelated === 'undefined') {
-                return true;
-            }
-
-            return false;
+            return typeof nextRelated === 'undefined';
         },
 
         /**
          * Switch image preview to related image
          *
          * @param {Object|null} relatedImage
-         * @param {Object} record
          */
-        switchImagePreviewToRelatedImage: function (relatedImage, record) {
+        switchImagePreviewToRelatedImage: function (relatedImage) {
             if (!relatedImage) {
                 this.selectedRelatedType(null);
 

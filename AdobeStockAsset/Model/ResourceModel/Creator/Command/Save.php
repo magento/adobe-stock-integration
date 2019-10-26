@@ -18,6 +18,8 @@ use Magento\Framework\EntityManager\Hydrator;
  */
 class Save
 {
+    private const ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME = 'adobe_stock_creator';
+
     /**
      * @var ResourceConnection
      */
@@ -54,7 +56,7 @@ class Save
 
         $connection = $this->getConnection();
         $tableName = $this->resourceConnection->getTableName(
-            CreatorResourceModel::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME
+            self::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME
         );
         $data = $this->filterData($data, [CreatorInterface::ID, CreatorInterface::NAME]);
         if (empty($data)) {

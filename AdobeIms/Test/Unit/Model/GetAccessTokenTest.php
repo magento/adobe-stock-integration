@@ -12,8 +12,8 @@ use Magento\AdobeIms\Model\GetAccessToken;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Get user acces toke test
@@ -31,6 +31,9 @@ class GetAccessTokenTest extends TestCase
      */
     private $userProfile;
 
+    /**
+     * @var GetAccessToken
+     */
     private $getAccessToken;
 
     /**

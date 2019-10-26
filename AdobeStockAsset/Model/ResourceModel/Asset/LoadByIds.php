@@ -11,22 +11,18 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
-use Magento\Framework\EntityManager\Hydrator;
 
 /**
  * Save multiple asset service.
  */
 class LoadByIds
 {
+    private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
+
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var Hydrator $hydrator
-     */
-    private $hydrator;
 
     /**
      * @var AssetInterfaceFactory
@@ -36,16 +32,13 @@ class LoadByIds
     /**
      * @param AssetInterfaceFactory $factory
      * @param ResourceConnection $resourceConnection
-     * @param Hydrator $hydrate
      */
     public function __construct(
         AssetInterfaceFactory $factory,
-        ResourceConnection $resourceConnection,
-        Hydrator $hydrate
+        ResourceConnection $resourceConnection
     ) {
         $this->factory = $factory;
         $this->resourceConnection = $resourceConnection;
-        $this->hydrator = $hydrate;
     }
 
     /**
@@ -58,15 +51,14 @@ class LoadByIds
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
-            ->from(AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME)
+            ->from(self::ADOBE_STOCK_ASSET_TABLE_NAME)
             ->where('id in (?)', $ids);
         $data = $connection->fetchAssoc($select);
 
         $assets = [];
 
         foreach ($data as $id => $assetData) {
-            $asset = $this->factory->create();
-            $assets[$id] = $this->hydrator->hydrate($asset, $assetData);
+            $assets[$id] = $this->factory->create(['data' => $assetData]);
         }
 
         return $assets;

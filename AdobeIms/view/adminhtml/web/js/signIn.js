@@ -14,7 +14,8 @@ define([
         defaults: {
             profileUrl: 'adobe_ims/user/profile',
             logoutUrl: 'adobe_ims/user/logout',
-            defaultProfileImage: 'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
+            defaultProfileImage:
+              'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
             user: {
                 isAuthorized: false,
                 name: '',
@@ -87,6 +88,10 @@ define([
                 },
                 dataType: 'json',
                 context: this,
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
                 success: function (response) {
                     this.user({
                         isAuthorized: true,
@@ -95,6 +100,10 @@ define([
                         image: response.result.image
                     });
                 },
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }
@@ -124,7 +133,7 @@ define([
                 }.bind(this),
                 error: function (response) {
                     return response.message;
-                }.bind(this)
+                }
             });
         }
     });

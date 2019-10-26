@@ -8,10 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageApi\Api;
 
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * SaveImageInterface
@@ -23,9 +20,9 @@ interface SaveImageInterface
     /**
      * Save full image interface
      *
-     * @param AssetInterface $asset
+     * @param DocumentInterface $document
+     * @param string $url
      * @param string $destinationPath
-     * @return void
      */
-    public function execute(AssetInterface $asset, string $destinationPath): void;
+    public function execute(DocumentInterface $document, string $url, string $destinationPath): void;
 }

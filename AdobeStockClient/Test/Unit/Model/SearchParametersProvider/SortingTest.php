@@ -12,6 +12,7 @@ use Magento\AdobeStockClient\Model\SearchParametersProvider\Sorting;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,12 +44,12 @@ class SortingTest extends TestCase
      */
     public function testApplyWithFoundedField(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getSortOrders'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
+        /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setOrder'])
             ->disableOriginalConstructor()
@@ -75,12 +76,12 @@ class SortingTest extends TestCase
      */
     public function testApplyWithoutFoundedField(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['getSortOrders'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
+        /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->getMockBuilder(SearchParameters::class)
             ->setMethods(['setOrder'])
             ->disableOriginalConstructor()

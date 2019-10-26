@@ -37,7 +37,7 @@ define([
                 dataType: 'json',
                 context: this,
                 success: function (response) {
-                    this.userQuota(response.result)
+                    this.userQuota(response.result);
                 },
                 error: function (response) {
                     return response.message;
@@ -70,6 +70,6 @@ define([
                     return response.message;
                 }
             });
-        },
+        }
     });
 });

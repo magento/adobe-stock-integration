@@ -37,7 +37,12 @@ define([], function () {
         authWindow = window.adobeStockAuthWindow = window.open(
             config.url,
             '',
-            buildWindowParams(config.popupWindowParams || {width: 500, height: 300})
+            buildWindowParams(
+                config.popupWindowParams || {
+                    width: 500,
+                    height: 300
+                }
+            )
         );
 
         return new window.Promise(function (resolve, reject) {
@@ -60,6 +65,8 @@ define([], function () {
              * Start handle
              */
             function startHandle() {
+                var responseData;
+
                 try {
 
                     if (authWindow.document.domain !== document.domain ||
@@ -75,7 +82,7 @@ define([], function () {
                         reject(new Error('Time\'s up.'));
                     }, config.popupWindowTimeout || 60000);
 
-                    var responseData = authWindow.document.body.innerText.match(
+                    responseData = authWindow.document.body.innerText.match(
                         config.callbackParsingParams.regexpPattern
                     );
 
@@ -85,7 +92,8 @@ define([], function () {
 
                     stopHandle();
 
-                    if (responseData[config.callbackParsingParams.codeIndex] === config.callbackParsingParams.successCode) {
+                    if (responseData[config.callbackParsingParams.codeIndex] ===
+                        config.callbackParsingParams.successCode) {
                         resolve({
                             isAuthorized: true,
                             lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]

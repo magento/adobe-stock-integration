@@ -12,6 +12,7 @@ use Magento\AdobeStockClient\Model\StockFileToDocument;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -23,17 +24,17 @@ class StockFileToDocumentTest extends TestCase
     private $objectManager;
 
     /**
-     * @var StockFileToDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockFileToDocument|MockObject
      */
     private $stockFileToDocument;
 
     /**
-     * @var DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DocumentFactory|MockObject
      */
     private $documentFactory;
 
     /**
-     * @var AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeValueFactory|MockObject
      */
     private $attributeValueFactory;
 

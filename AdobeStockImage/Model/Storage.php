@@ -89,6 +89,29 @@ class Storage
     }
 
     /**
+     * Deletes the existing file
+     *
+     * @param string $path
+     * @throws LocalizedException
+     */
+    public function delete(string $path): void
+    {
+        $result = false;
+        try {
+            if (!$this->getMediaDirectory()->isFile($path)) {
+                return;
+            }
+            $result = $this->getMediaDirectory()->delete($path);
+        } catch (Exception $exception) {
+            $this->log->critical("Failed to delete the image. Exception: \n" . $exception);
+        }
+
+        if ($result === false) {
+            throw new LocalizedException(__('Failed to delete the image.'));
+        }
+    }
+
+    /**
      * Remove the protocol from the url to use it for DriverInterface::fileGetContents
      *
      * @param string $imageUrl

@@ -11,14 +11,13 @@ use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Client\Http\HttpInterface;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\License as LicenseRequest;
-use AdobeStock\Api\Response\License as LicenseResponse;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use AdobeStock\Api\Response\License as LicenseResponse;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
+use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
 use Magento\AdobeStockClientApi\Api\Data\ConfigInterface as ClientConfig;
-use Magento\AdobeStockClient\Model\ConnectionFactory;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
@@ -71,7 +70,7 @@ class ConnectionWrapper
 
     /**
      * @param ClientConfig $clientConfig
-     * @param \Magento\AdobeStockClient\Model\ConnectionFactory $connectionFactory
+     * @param ConnectionFactory $connectionFactory
      * @param ImsConfig $imsConfig
      * @param LoggerInterface $logger
      * @param GetAccessTokenInterface $getAccessToken
@@ -172,7 +171,7 @@ class ConnectionWrapper
             $client->searchFilesInitialize($searchRequest);
 
             return (bool)$client->getNextResponse()->nb_results;
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return false;
         }
     }

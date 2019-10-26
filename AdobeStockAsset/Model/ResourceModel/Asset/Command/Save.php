@@ -18,6 +18,8 @@ use Magento\Framework\EntityManager\Hydrator;
  */
 class Save
 {
+    private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
+
     /**
      * @var ResourceConnection
      */
@@ -52,7 +54,7 @@ class Save
     {
         $data = $this->hydrator->extract($asset);
         $tableName = $this->resourceConnection->getTableName(
-            AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
+            self::ADOBE_STOCK_ASSET_TABLE_NAME
         );
 
         if (empty($data)) {
@@ -60,15 +62,7 @@ class Save
         }
 
         $data = $this->filterData($data, array_keys($this->getConnection()->describeTable($tableName)));
-
-        $query = sprintf(
-            'INSERT INTO `%s` (%s) VALUES (%s)',
-            $tableName,
-            $this->getColumns(array_keys($data)),
-            $this->getValues(count($data))
-        );
-
-        $this->getConnection()->query($query, array_values($data));
+        $this->getConnection()->insertOnDuplicate($tableName, $data);
     }
 
     /**
@@ -91,29 +85,5 @@ class Save
     private function getConnection(): AdapterInterface
     {
         return $this->resourceConnection->getConnection();
-    }
-
-    /**
-     * Get columns query part
-     *
-     * @param array $columns
-     * @return string
-     */
-    private function getColumns(array $columns): string
-    {
-        $connection = $this->getConnection();
-        $sql = implode(', ', array_map([$connection, 'quoteIdentifier'], $columns));
-        return $sql;
-    }
-
-    /**
-     * Get values query part
-     *
-     * @param int $number
-     * @return string
-     */
-    private function getValues(int $number): string
-    {
-        return implode(',', array_pad([], $number, '?'));
     }
 }

@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\LoadByIds;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
@@ -19,8 +19,9 @@ use Magento\Framework\App\ResourceConnection;
  */
 class AppendAttributes
 {
-    const ATTRIBUTE_CODE_IS_DOWNLOADED = 'is_downloaded';
-    const ATTRIBUTE_CODE_PATH = 'path';
+    private const ATTRIBUTE_CODE_IS_DOWNLOADED = 'is_downloaded';
+    private const ATTRIBUTE_CODE_IS_LICENSED_LOCALLY = 'is_licensed_locally';
+    private const ATTRIBUTE_CODE_PATH = 'path';
 
     /**
      * @var AttributeValueFactory
@@ -38,19 +39,26 @@ class AppendAttributes
     private $loadByIds;
 
     /**
-     * AppendAttributes constructor.
+     * @var GetByIdInterface
+     */
+    private $getMediaGalleryAssetById;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param AttributeValueFactory $attributeValueFactory
      * @param LoadByIds $loadByIds
+     * @param GetByIdInterface $getMediaGalleryAssetById
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         AttributeValueFactory $attributeValueFactory,
-        LoadByIds $loadByIds
+        LoadByIds $loadByIds,
+        GetByIdInterface $getMediaGalleryAssetById
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->loadByIds = $loadByIds;
+        $this->getMediaGalleryAssetById = $getMediaGalleryAssetById;
     }
 
     /**
@@ -82,17 +90,23 @@ class AppendAttributes
                     $item,
                     [
                         self::ATTRIBUTE_CODE_IS_DOWNLOADED => 0,
-                        self::ATTRIBUTE_CODE_PATH => ''
+                        self::ATTRIBUTE_CODE_PATH => '',
+                        self::ATTRIBUTE_CODE_IS_LICENSED_LOCALLY => 0
                     ]
                 );
                 continue;
             }
 
+            $path = $this->getMediaGalleryAssetById->execute(
+                $assets[$item->getId()]->getMediaGalleryId()
+            )->getPath();
+
             $this->addAttributes(
                 $item,
                 [
                     self::ATTRIBUTE_CODE_IS_DOWNLOADED => 1,
-                    self::ATTRIBUTE_CODE_PATH => $assets[$item->getId()]->getPath()
+                    self::ATTRIBUTE_CODE_PATH => $path,
+                    self::ATTRIBUTE_CODE_IS_LICENSED_LOCALLY => $assets[$item->getId()]->getIsLicensed() ?? 0
                 ]
             );
         }

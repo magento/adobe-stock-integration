@@ -13,11 +13,11 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class SearchExecuteTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/adobestock/search';
+    private const RESOURCE_PATH = '/V1/adobestock/search';
 
-    const SERVICE_READ_NAME = 'adobeStockSearchV1';
+    private const SERVICE_READ_NAME = 'adobeStockSearchV1';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
