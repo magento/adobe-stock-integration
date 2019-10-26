@@ -9,6 +9,7 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\AdobeStockAsset\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockAsset\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockAsset\Model\Extract\Keywords as DocumentToKeywords;
@@ -18,7 +19,6 @@ use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords;
 
 /**
  * Class SaveImage
@@ -86,7 +86,7 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param DocumentToAsset $documentToAsset
      * @param LoggerInterface $logger
-     * @param SaveAssetKeywords $saveAssetKeywords
+     * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      */
     public function __construct(
@@ -98,7 +98,7 @@ class SaveImage implements SaveImageInterface
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         DocumentToAsset $documentToAsset,
         LoggerInterface $logger,
-        SaveAssetKeywords $saveAssetKeywords,
+        SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords
     ) {
         $this->storage = $storage;

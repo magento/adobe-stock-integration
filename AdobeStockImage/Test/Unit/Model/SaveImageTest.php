@@ -84,7 +84,7 @@ class SaveImageTest extends TestCase
         $this->documentToMediaGalleryAsset = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->documentToAsset = $this->createMock(DocumentToAsset::class);
         $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
-        $this->documentToKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
+        $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -178,23 +178,13 @@ class SaveImageTest extends TestCase
     {
         $document = $this->createMock(DocumentInterface::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);
-        $pathAttribute->expects($this->at(0))
+        $pathAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn($path);
-        $document->expects($this->at(0))
+        $document->expects($this->once())
             ->method('getCustomAttribute')
             ->with('path')
             ->willReturn($pathAttribute);
-
-        $keywordsAttribute = $this->createMock(AttributeInterface::class);
-        $keywordsMock = $this->createMock(KeywordInterface::class);
-        $keywordsAttribute->expects($this->at(1))
-            ->method('getValue')
-            ->willReturn([$keywordsMock]);
-        $document->expects($this->at(1))
-            ->method('getCustomAttribute')
-            ->with('keywords')
-            ->willReturn($keywordsAttribute);
 
         return $document;
     }
