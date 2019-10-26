@@ -36,9 +36,19 @@ define([
                 },
                 dataType: 'json',
                 context: this,
+
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
                 success: function (response) {
                     this.userQuota(response.result);
                 },
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }
@@ -66,6 +76,11 @@ define([
                     });
                     this.getUserQuota();
                 },
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }

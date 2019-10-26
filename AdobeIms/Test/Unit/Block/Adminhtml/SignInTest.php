@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Test\Unit\Model;
+namespace Magento\AdobeIms\Test\Unit\Block\Adminhtml;
 
 use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
