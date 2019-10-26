@@ -55,4 +55,12 @@ class Creator extends AbstractExtensibleModel implements CreatorInterface
     {
         return $this->_getExtensionAttributes();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(CreatorExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

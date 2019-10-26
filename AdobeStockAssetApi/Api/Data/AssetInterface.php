@@ -93,4 +93,12 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null
      */
     public function getExtensionAttributes(): AssetExtensionInterface;
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
 }

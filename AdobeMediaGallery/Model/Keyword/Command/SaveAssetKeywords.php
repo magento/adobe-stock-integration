@@ -28,25 +28,28 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     private $resourceConnection;
 
     /**
+     * @var SaveAssetLinks
+     */
+    private $saveAssetLinks;
+
+    /**
      * SaveAssetKeywords constructor.
      *
      * @param ResourceConnection $resourceConnection
+     * @param SaveAssetLinks $saveAssetLinks
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        SaveAssetLinks $saveAssetLinks
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->saveAssetLinks = $saveAssetLinks;
     }
 
     /**
-     * Save asset keywords.
-     *
-     * @param KeywordInterface[] $keywords
-     *
-     * @return int[]
-     * @throws CouldNotSaveException
+     * @inheritdoc
      */
-    public function execute(array $keywords): array
+    public function execute(array $keywords, int $assetId): void
     {
         try {
             $data = [];
@@ -64,7 +67,7 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
                 AdapterInterface::INSERT_IGNORE
             );
 
-            return $this->getKeywordIds($data);
+            $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
         } catch (\Exception $exception) {
             $message = __('An error occurred during save asset keyword: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);

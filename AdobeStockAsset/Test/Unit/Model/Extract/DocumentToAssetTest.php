@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Test\Unit\Model;
+namespace Magento\AdobeStockAsset\Test\Unit\Model\Extract;
 
-use Magento\AdobeStockAsset\Model\DocumentToAsset;
+use Magento\AdobeStockAsset\Model\Extract\AdobeStockAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 class DocumentToAssetTest extends TestCase
 {
     /**
-     * @var DocumentToAsset
+     * @var AdobeStockAsset
      */
     private $documentToAsset;
 
@@ -55,7 +55,7 @@ class DocumentToAssetTest extends TestCase
         $this->categoryFactory = $this->createMock(CategoryInterfaceFactory::class);
 
         $this->documentToAsset = (new ObjectManager($this))->getObject(
-            DocumentToAsset::class,
+            AdobeStockAsset::class,
             [
                 'assetFactory' => $this->assetFactory,
                 'creatorFactory' => $this->creatorFactory,
