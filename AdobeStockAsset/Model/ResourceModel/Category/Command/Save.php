@@ -15,7 +15,7 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
  */
 class Save
 {
-    private const ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME = 'adobe_stock_categoory';
+    private const ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME = 'adobe_stock_category';
     private const ID = 'id';
     private const NAME = 'name';
 

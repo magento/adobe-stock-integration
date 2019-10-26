@@ -133,8 +133,8 @@ define([
                     mediaBrowser.reload(true);
                 },
                 error: function (response) {
-                    messages.add('error', response.message);
-                    messages.scheduleCleanup(3);
+                    messages.add('error', response.responseJSON.message);
+                    messages.scheduleCleanup(this.messageDelay);
                 }
             });
         },
@@ -232,7 +232,7 @@ define([
 
                     error: function (response) {
                         messages.add('error', response.responseJSON.message);
-                        messages.scheduleCleanup(3);
+                        messages.scheduleCleanup(this.messageDelay);
                     }
                 }
             );
