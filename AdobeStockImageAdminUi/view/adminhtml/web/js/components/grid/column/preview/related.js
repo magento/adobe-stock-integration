@@ -176,7 +176,7 @@ define([
             ) - 1;
             prevRelated = relatedList[prevRelatedIndex];
 
-            return (typeof prevRelated === 'undefined');
+            return typeof prevRelated === 'undefined';
         },
 
         /**
@@ -201,7 +201,7 @@ define([
             ) + 1;
             nextRelated = relatedList[nextRelatedIndex];
 
-            return (typeof nextRelated === 'undefined');
+            return typeof nextRelated === 'undefined';
         },
 
         /**

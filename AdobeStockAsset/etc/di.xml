@@ -19,8 +19,6 @@
     <preference for="Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface" type="Magento\AdobeStockAsset\Model\CreatorRepository"/>
     <preference for="Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface" type="Magento\AdobeStockAsset\Model\CreatorSearchResults"/>
 
-    <preference for="Magento\AdobeStockAssetApi\Api\Data\KeywordInterface" type="Magento\AdobeStockAsset\Model\Keyword"/>
-
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetListInterface" type="Magento\AdobeStockAsset\Model\GetAssetList"/>
     <preference for="Magento\AdobeStockAssetApi\Api\SaveAssetInterface" type="Magento\AdobeStockAsset\Model\SaveAsset"/>
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface" type="Magento\AdobeStockAsset\Model\GetAssetById"/>
@@ -30,48 +28,6 @@
             <argument name="sensitive" xsi:type="array">
                 <item name="adobe_stock/integration/api_key" xsi:type="string">1</item>
                 <item name="adobe_stock/integration/private_key" xsi:type="string">1</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\AdobeStockAsset\Model\DocumentToAsset">
-        <arguments>
-            <argument name="mapping" xsi:type="array">
-                <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory</item>
-                <item name="children" xsi:type="array">
-                    <item name="creator" xsi:type="array">
-                        <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory</item>
-                        <item name="fields" xsi:type="array">
-                            <item name="creator_id" xsi:type="string">id</item>
-                            <item name="creator_name" xsi:type="string">name</item>
-                        </item>
-                    </item>
-                    <item name="category" xsi:type="array">
-                        <item name="factory" xsi:type="object">Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory</item>
-                        <item name="fields" xsi:type="array">
-                            <item name="category_id" xsi:type="string">id</item>
-                            <item name="category_name" xsi:type="string">name</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset">
-        <arguments>
-            <argument name="mapping" xsi:type="array">
-                <item name="factory" xsi:type="object">Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory</item>
-                <item name="children" xsi:type="array">
-                    <item name="keywords" xsi:type="array">
-                        <item name="factory" xsi:type="object">Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory</item>
-                        <item name="fields" xsi:type="array">
-                            <item name="keywords" xsi:type="array">
-                                <item name="name" xsi:type="string">keyword</item>
-                            </item>
-                        </item>
-                    </item>
-                </item>
             </argument>
         </arguments>
     </type>
