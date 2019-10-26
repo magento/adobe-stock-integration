@@ -71,6 +71,16 @@ define([
         },
 
         /**
+         * Count number of images in Related Serie
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        countSeriesImages: function(record) {
+            return (parseInt(record.series().length, 10) >= 4);
+        },
+
+        /**
          * Returns model to display under the image
          *
          * @param {Object} record
@@ -78,6 +88,16 @@ define([
          */
         getModel: function (record) {
             return record.model;
+        },
+
+        /**
+         * Count number of images in Related Model
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        countModelImages: function(record) {
+            return (parseInt(record.model().length, 10) >= 4);
         },
 
         /**
