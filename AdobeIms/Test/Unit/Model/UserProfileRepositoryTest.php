@@ -46,13 +46,8 @@ class UserProfileRepositoryTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->resource = $this->getMockBuilder(ResourceUserProfile::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save', 'load'])
-            ->getMock();
-        $this->entityFactory =  $this->getMockBuilder(UserProfileInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(ResourceUserProfile::class);
+        $this->entityFactory =  $this->createMock(UserProfileInterfaceFactory::class);
         $this->model = new UserProfileRepository(
             $this->resource,
             $this->entityFactory
@@ -76,7 +71,7 @@ class UserProfileRepositoryTest extends TestCase
      */
     public function testSaveWithException(): void
     {
-        $userProfile =  $this->getMockBuilder(UserProfile::class)->disableOriginalConstructor()->getMock();
+        $userProfile = $this->createMock(UserProfile::class);
         $this->resource->expects($this->once())
             ->method('save')
             ->with($userProfile)

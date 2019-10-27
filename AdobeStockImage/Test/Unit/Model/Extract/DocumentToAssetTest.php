@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Test\Unit\Model\Extract;
+namespace Magento\AdobeStockImage\Test\Unit\Model\Extract;
 
-use Magento\AdobeStockAsset\Model\Extract\AdobeStockAsset;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
@@ -15,7 +15,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\Framework\Api\AttributeInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,14 +69,14 @@ class DocumentToAssetTest extends TestCase
      * @param array $assetData
      * @param array $cateogryData
      * @param array $creatorData
-     * @param DocumentInterface $document
+     * @param Document $document
      * @param array $additionalData
      */
     public function testConvert(
         array $assetData,
         array $cateogryData,
         array $creatorData,
-        DocumentInterface $document,
+        Document $document,
         array $additionalData
     ): void {
         $asset = $this->createMock(AssetInterface::class);
@@ -143,7 +143,7 @@ class DocumentToAssetTest extends TestCase
 
     private function getDocument(array $attributes)
     {
-        $document = $this->createMock(DocumentInterface::class);
+        $document = $this->createMock(Document::class);
 
         $attributeMocks = [];
 
