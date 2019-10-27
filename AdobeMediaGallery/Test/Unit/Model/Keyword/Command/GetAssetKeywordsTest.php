@@ -51,40 +51,28 @@ class GetAssetKeywordsTest extends TestCase
         $this->assertInstanceOf( GetAssetKeywords::class, $this->sut);
     }
 
-    public function testFindOne()
+    /**
+     * @dataProvider cases()
+     */
+    public function testFind($databaseQueryResult, $expectedNumberOfFoundKeywords)
     {
-        $assetIdWithOneKeyword = 1;
-        $oneKeywordQueryResult = ['keywordRawData'];
-        $this->configureResourceConnectionStub($oneKeywordQueryResult);
+        $randomAssetId = 12345;
+        $this->configureResourceConnectionStub($databaseQueryResult);
         $this->configureAssetKeywordFactoryStub();
 
-        $keywords = $this->sut->execute($assetIdWithOneKeyword);
+        /** @var KeywordInterface[] $keywords */
+        $keywords = $this->sut->execute($randomAssetId);
 
-        $this->assertCount(1, $keywords);
+        $this->assertCount($expectedNumberOfFoundKeywords, $keywords);
     }
 
-    public function testFindSeveral()
+    public function cases()
     {
-        $assetIdWithSeveralKeywords = 1;
-        $severalKeywordsQueryResult = ['keywordRawData', 'anotherKeywordRawData'];
-        $this->configureResourceConnectionStub($severalKeywordsQueryResult);
-        $this->configureAssetKeywordFactoryStub();
-
-        $keywords = $this->sut->execute($assetIdWithSeveralKeywords);
-
-        $this->assertCount(2, $keywords);
-    }
-
-    public function testNotFound()
-    {
-        $assetIdWithoutKeywords = 1;
-        $emptyKeywordsCommandResponse = [];
-        $emptyQueryResult = [];
-        $this->configureResourceConnectionStub($emptyQueryResult);
-
-        $keywords = $this->sut->execute($assetIdWithoutKeywords);
-
-        $this->assertEquals($emptyKeywordsCommandResponse, $keywords);
+        return [
+            'not_found' => [[],0],
+            'find_one_keyword' => [['keywordRawData'],1],
+            'find_several_keywords' => [['keywordRawData', 'keywordRawData'],2],
+        ];
     }
 
     public function testNotFoundBecauseOfError()
