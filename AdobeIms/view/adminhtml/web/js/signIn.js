@@ -88,6 +88,7 @@ define([
                 },
                 dataType: 'json',
                 context: this,
+
                 /**
                  * @param {Object} response
                  * @returns void
@@ -100,6 +101,7 @@ define([
                         image: response.result.image
                     });
                 },
+
                 /**
                  * @param {Object} response
                  * @returns {String}
@@ -131,6 +133,11 @@ define([
                         image: this.defaultProfileImage
                     });
                 }.bind(this),
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }

@@ -45,15 +45,9 @@ class StockFileToDocumentTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->documentFactory = $this->getMockBuilder(DocumentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->documentFactory = $this->createMock(DocumentFactory::class);
+        $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
+        $logger = $this->createMock(LoggerInterface::class);
 
         $this->stockFileToDocument = $this->objectManager->getObject(
             StockFileToDocument::class,
@@ -73,16 +67,11 @@ class StockFileToDocumentTest extends TestCase
      */
     public function testConvert(StockFile $stockFile, array $attributesData)
     {
-        $item = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createMock(\Magento\Framework\Api\Search\Document::class);
 
         $i = 0;
         foreach ($attributesData as $attributeKey => $attributeValue) {
-            $attribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
-                ->setMethods(['setAttributeCode', 'setValue'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $attribute = $this->createMock(\Magento\Framework\Api\AttributeValue::class);
 
             $this->attributeValueFactory->expects($this->at($i))
                 ->method('create')

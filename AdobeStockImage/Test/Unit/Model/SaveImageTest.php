@@ -6,15 +6,14 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Magento\AdobeStockAsset\Model\Extract\AdobeStockAsset as DocumentToAsset;
-use Magento\AdobeStockAsset\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockAsset\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\Framework\Api\AttributeInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\AdobeStockImage\Model\SaveImage;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -104,12 +103,12 @@ class SaveImageTest extends TestCase
     /**
      * Verify that image can be saved.
      *
-     * @param DocumentInterface $document
+     * @param Document $document
      * @param bool $delete
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @dataProvider assetProvider
      */
-    public function testExecute(DocumentInterface $document, bool $delete)
+    public function testExecute(Document $document, bool $delete)
     {
         if ($delete) {
             $this->storage->expects($this->once())
@@ -172,11 +171,11 @@ class SaveImageTest extends TestCase
      * Get document
      *
      * @param string $path
-     * @return DocumentInterface|MockObject
+     * @return Document|MockObject
      */
-    private function getDocument(string $path = null): DocumentInterface
+    private function getDocument(string $path = null): Document
     {
-        $document = $this->createMock(DocumentInterface::class);
+        $document = $this->createMock(Document::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);
         $pathAttribute->expects($this->once())
             ->method('getValue')

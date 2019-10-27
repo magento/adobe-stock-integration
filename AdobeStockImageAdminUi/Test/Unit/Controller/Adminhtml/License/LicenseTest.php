@@ -13,7 +13,7 @@ use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\License;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -91,11 +91,10 @@ class LicenseTest extends TestCase
         $this->contextMock = $this->createPartialMock(ActionContext::class, ['getRequest', 'getResultFactory']);
         $this->saveImageMock = $this->createMock(SaveImageInterface::class);
         $this->getAssetByIdMock = $this->createMock(GetAssetByIdInterface::class);
-        $this->documentMock = $this->createMock(DocumentInterface::class);
+        $this->documentMock = $this->createMock(Document::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
-        $this->jsonObject = $this->getMockBuilder(Json::class)->disableOriginalConstructor()->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->jsonObject = $this->createMock(Json::class);
 
         $this->contextMock->expects($this->once())
             ->method('getResultFactory')

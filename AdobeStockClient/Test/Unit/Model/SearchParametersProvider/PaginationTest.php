@@ -44,10 +44,7 @@ class PaginationTest extends TestCase
     public function testApply(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getPageSize', 'getCurrentPage'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $searchCriteriaMock->expects($this->exactly(2))
             ->method('getPageSize')
             ->willReturn(20);
@@ -55,10 +52,7 @@ class PaginationTest extends TestCase
             ->method('getCurrentPage')
             ->willReturn(1);
         /** @var SearchParameters|MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setOffset', 'setLimit'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParameters = $this->createMock(SearchParameters::class);
         $searchParameters->expects($this->once())
             ->method('setLimit')
             ->with(20);

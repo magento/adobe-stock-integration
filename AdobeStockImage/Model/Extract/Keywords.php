@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\Extract;
+namespace Magento\AdobeStockImage\Model\Extract;
 
 use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 
 /**
@@ -38,10 +38,10 @@ class Keywords
     /**
      * Convert search document to the asset object
      *
-     * @param DocumentInterface $document
+     * @param Document $document
      * @return KeywordInterface[]
      */
-    public function convert(DocumentInterface $document): array
+    public function convert(Document $document): array
     {
         $attribute = $document->getCustomAttribute(self::DOCUMENT_FIELD_KEYWORDS);
 
