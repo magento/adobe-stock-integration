@@ -57,8 +57,8 @@ class SignIn extends Template
     /**
      * SignIn constructor.
      *
-     * @param ConfigInterface $config
      * @param Context $context
+     * @param ConfigInterface $config
      * @param UserContextInterface $userContext
      * @param UserAuthorizedInterface $userAuthorized
      * @param UserProfileRepositoryInterface $userProfileRepository
@@ -66,8 +66,8 @@ class SignIn extends Template
      * @param array $data
      */
     public function __construct(
-        ConfigInterface $config,
         Context $context,
+        ConfigInterface $config,
         UserContextInterface $userContext,
         UserAuthorizedInterface $userAuthorized,
         UserProfileRepositoryInterface $userProfileRepository,

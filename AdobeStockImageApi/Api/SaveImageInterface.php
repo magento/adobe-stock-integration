@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageApi\Api;
 
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 
 /**
  * SaveImageInterface
@@ -20,9 +20,9 @@ interface SaveImageInterface
     /**
      * Save full image interface
      *
-     * @param DocumentInterface $document
+     * @param Document $document
      * @param string $url
      * @param string $destinationPath
      */
-    public function execute(DocumentInterface $document, string $url, string $destinationPath): void;
+    public function execute(Document $document, string $url, string $destinationPath): void;
 }

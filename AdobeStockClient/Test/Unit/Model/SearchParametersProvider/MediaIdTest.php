@@ -46,23 +46,11 @@ class MediaIdTest extends TestCase
     public function testApply(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setMediaId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupItemMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterItemMock = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $filterGroupItemMock = $this->createMock(FilterGroup::class);
+        $filterItemMock = $this->createMock(Filter::class);
         $filterItemMock->expects($this->once())
             ->method('getField')
             ->willReturn('media_id');

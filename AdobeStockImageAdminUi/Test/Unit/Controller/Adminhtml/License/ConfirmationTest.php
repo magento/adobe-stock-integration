@@ -66,29 +66,16 @@ class ConfirmationTest extends TestCase
         $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParams']
-        );
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->context->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
         $this->request->expects($this->once())
             ->method('getParams')

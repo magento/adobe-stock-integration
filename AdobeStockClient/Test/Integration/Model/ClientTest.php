@@ -43,15 +43,10 @@ class ClientTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(ConnectionWrapper::class)
-            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connection = $this->createMock(ConnectionWrapper::class);
 
         /** @var ConnectionWrapperFactory|MockObject $connectionFactory */
-        $connectionFactory = $this->getMockBuilder(ConnectionWrapperFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connectionFactory = $this->createMock(ConnectionWrapperFactory::class);
         $connectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->connection);
@@ -73,10 +68,7 @@ class ClientTest extends TestCase
     {
         $words = 'pear';
 
-        $response = $this->getMockBuilder(SearchFilesResponse::class)
-            ->setMethods(['getFiles', 'getNbResults'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $response = $this->createMock(SearchFilesResponse::class);
         $response->expects($this->once())
             ->method('getFiles')
             ->willReturn($this->getStockFiles());

@@ -13,7 +13,7 @@ use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\Download;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\Framework\Api\AttributeInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -28,7 +28,7 @@ use Psr\Log\LoggerInterface;
 class DownloadTest extends TestCase
 {
     /**
-     * @var MockObject|DocumentInterface
+     * @var MockObject|Document
      */
     private $document;
 
@@ -77,11 +77,11 @@ class DownloadTest extends TestCase
      */
     protected function setUp()
     {
-        $this->saveImage = $this->getMockForAbstractClass(SaveImageInterface::class);
+        $this->saveImage = $this->createMock(SaveImageInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->getAssetById = $this->getMockForAbstractClass(GetAssetByIdInterface::class);
-        $this->document = $this->createMock(DocumentInterface::class);
+        $this->getAssetById = $this->createMock(GetAssetByIdInterface::class);
+        $this->document = $this->createMock(Document::class);
 
         $attribute = $this->createMock(AttributeInterface::class);
         $attribute->expects($this->once())
@@ -109,17 +109,12 @@ class DownloadTest extends TestCase
         $this->context->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->request);
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
         $this->saveImage->expects($this->once())->method('execute')->willReturn(null);
-        $this->jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
 
         $this->download = new Download(
@@ -147,7 +142,7 @@ class DownloadTest extends TestCase
      */
     public function testExecuteWithException()
     {
-        $result = ['success' => false, 'message' => new Phrase('An error occurred while image download. Contact support.')];
+        $result = ['success' => false, 'message' => new Phrase('An error occurred while image download.')];
         $this->saveImage->method('execute')->willThrowException(new CouldNotSaveException(new Phrase('Error')));
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->jsonObject->expects($this->once())->method('setData')

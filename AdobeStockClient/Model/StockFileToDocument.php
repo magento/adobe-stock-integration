@@ -12,7 +12,7 @@ use AdobeStock\Api\Models\StockFile;
 use Exception;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Phrase;
@@ -57,10 +57,10 @@ class StockFileToDocument
      * Convert a stock file object to a document object
      *
      * @param StockFile $file
-     * @return DocumentInterface
+     * @return Document
      * @throws IntegrationException
      */
-    public function convert(StockFile $file): DocumentInterface
+    public function convert(StockFile $file): Document
     {
         $itemData = (array) $file;
         $itemId = $itemData['id'];

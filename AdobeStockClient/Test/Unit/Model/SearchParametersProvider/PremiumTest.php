@@ -59,22 +59,10 @@ class PremiumTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->searchParametersMock = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setFilterPremium'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterGroupItemMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterItemMock = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $this->searchParametersMock = $this->createMock(SearchParameters::class);
+        $this->filterGroupItemMock = $this->createMock(FilterGroup::class);
+        $this->filterItemMock = $this->createMock(Filter::class);
 
         $this->sut = $this->objectManager->getObject(Premium::class);
     }

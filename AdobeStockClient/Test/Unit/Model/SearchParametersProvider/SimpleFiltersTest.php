@@ -52,10 +52,7 @@ class SimpleFiltersTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->setMethods(['encodeUrlParam'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->simpleFilters = $this->objectManager->getObject(
             SimpleFilters::class,
             [
@@ -71,23 +68,11 @@ class SimpleFiltersTest extends TestCase
     public function testApply(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setOrder', 'setWords'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupItemMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterItemMock = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $filterGroupItemMock = $this->createMock(FilterGroup::class);
+        $filterItemMock = $this->createMock(Filter::class);
         $filterItemMock->expects($this->exactly(2))
             ->method('getField')
             ->willReturn('words');

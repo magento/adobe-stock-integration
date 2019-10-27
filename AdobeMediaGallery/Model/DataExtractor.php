@@ -13,7 +13,7 @@ namespace Magento\AdobeMediaGallery\Model;
 class DataExtractor
 {
     /**
-     * Extract data from an object using available getters
+     * Extract data from an object using available getters (does not process extension attributes)
      *
      * @param object $object
      * @param string|null $interface

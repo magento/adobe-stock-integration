@@ -31,7 +31,7 @@ class Callback extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+    const ADMIN_RESOURCE = 'Magento_AdobeIms::login';
 
     /**
      * Constants of response

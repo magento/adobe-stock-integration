@@ -53,18 +53,9 @@ class TestConnectionTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->clientMock = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(['testConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stripTagsMock = $this->getMockBuilder(StripTags::class)
-            ->setMethods(['filter'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->clientMock = $this->createMock(ClientInterface::class);
+        $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
+        $this->stripTagsMock = $this->createMock(StripTags::class);
         $this->testConnection = $this->objectManager->getObject(
             TestConnection::class,
             [
@@ -83,10 +74,7 @@ class TestConnectionTest extends TestCase
         $this->clientMock->expects($this->once())
             ->method('testConnection')
             ->willReturn(true);
-        $jsonMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $jsonMock = $this->createMock(Json::class);
         $jsonMock->expects($this->once())
             ->method('setData')
             ->with(
@@ -110,10 +98,7 @@ class TestConnectionTest extends TestCase
         $this->clientMock->expects($this->once())
             ->method('testConnection')
             ->willReturn(false);
-        $jsonMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $jsonMock = $this->createMock(Json::class);
         $jsonMock->expects($this->once())
             ->method('setData')
             ->with(

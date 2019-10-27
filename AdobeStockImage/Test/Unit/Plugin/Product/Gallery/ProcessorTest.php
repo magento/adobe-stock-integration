@@ -46,10 +46,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->searchCriteriaBuilderMock = $this->createMock(
             SearchCriteriaBuilderFactory::class
         );
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->setMethods(['critical'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->model = new \Magento\AdobeStockImage\Plugin\Product\Gallery\Processor(
             $this->assetRepositoryMock,
