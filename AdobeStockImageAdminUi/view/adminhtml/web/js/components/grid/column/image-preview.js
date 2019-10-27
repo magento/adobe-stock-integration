@@ -139,7 +139,6 @@ define([
          * @param {Object} record
          */
         loadRelatedImages: function (record) {
-            var self = this;
             if (record.series && record.model &&
                 record.series() && record.model() &&
                 record.series().length && record.model().length) {
@@ -152,7 +151,7 @@ define([
                 showLoader: true,
                 data: {
                     'image_id': record.id,
-                    'limit': self.tabImagesLimit
+                    'limit': this.tabImagesLimit
                 }
             }).done(function (data) {
                 record.series(data.result.same_series);
