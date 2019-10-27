@@ -129,7 +129,7 @@ define([
         showRelated: function (record) {
             this.keywords().hideAllKeywords();
             this.displayedRecord(record);
-            this._updateHeight();
+            this.updateHeight();
         },
 
         /**
@@ -138,9 +138,9 @@ define([
          * @param {Object} record
          */
         loadRelatedImages: function (record) {
-            if (record.series && record.model
-                && record.series() && record.model()
-                && record.series().length && record.model().length) {
+            if (record.series && record.model &&
+                record.series() && record.model() &&
+                record.series().length && record.model().length) {
                 return;
             }
             $.ajax({
@@ -155,7 +155,7 @@ define([
             }).done(function (data) {
                 record.series(data.result.same_series);
                 record.model(data.result.same_model);
-                this._updateHeight();
+                this.updateHeight();
             }.bind(this));
         },
 

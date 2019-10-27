@@ -19,7 +19,7 @@ define([
             lastOpenedImage: null,
             modules: {
                 masonry: '${ $.parentName }',
-                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+                thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
             statefull: {
                 visible: true,
@@ -59,6 +59,7 @@ define([
          */
         next: function (record) {
             var recordToShow = this.getRecord(record._rowIndex + 1);
+
             recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
             this.show(recordToShow);
         },
@@ -70,6 +71,7 @@ define([
          */
         prev: function (record) {
             var recordToShow = this.getRecord(record._rowIndex - 1);
+
             recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
             this.show(recordToShow);
         },
@@ -116,21 +118,25 @@ define([
             this.visibility(visibility);
 
             img = $(this.previewImageSelector + ' img');
-            if(img.get(0).complete) {
-                this._updateHeight();
+
+            if (img.get(0).complete) {
+                this.updateHeight();
+                this.scrollToPreview();
             } else {
-                img.load(this._updateHeight.bind(this));
+                img.load(function () {
+                    this.updateHeight();
+                    this.scrollToPreview();
+                }.bind(this));
             }
             this.lastOpenedImage(record._rowIndex);
         },
 
         /**
-         * @private
+         * Update image preview section height
          */
-        _updateHeight: function () {
+        updateHeight: function () {
             this.height($(this.previewImageSelector).height() + 'px');
             this.visibility(this.visibility());
-            this.scrollToPreview();
         },
 
         /**
@@ -150,17 +156,18 @@ define([
          * Returns visibility for given record.
          *
          * @param {Object} record
-         * @return {*|boolean}
+         * @return {*|bool}
          */
         isVisible: function (record) {
-            if (this.lastOpenedImage() === record._rowIndex
-                && (
-                    this.visibility()[record._rowIndex] === undefined
-                    || this.visibility()[record._rowIndex] === false
+            if (this.lastOpenedImage() === record._rowIndex &&
+                (
+                    this.visibility()[record._rowIndex] === undefined ||
+                    this.visibility()[record._rowIndex] === false
                 )
             ) {
                 this.show(record);
             }
+
             return this.visibility()[record._rowIndex] || false;
         },
 

@@ -7,112 +7,47 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAsset\Model\ResourceModel\Creator as CreatorResourceModel;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\EntityManager\Hydrator;
+use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
 
 /**
- * Save multiple asset service.
+ * Save creator.
  */
 class Save
 {
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
+    private const ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME = 'adobe_stock_creator';
+    private const ID = 'id';
+    private const NAME = 'name';
 
     /**
-     * @var Hydrator $hydrator
+     * @var InsertIgnore
      */
-    private $hydrator;
+    private $insertIgnore;
 
     /**
-     * Save constructor.
-     *
-     * @param ResourceConnection $resourceConnection
-     * @param Hydrator $hydrator
+     * @param InsertIgnore $insertIgnore
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        Hydrator $hydrator
+        InsertIgnore $insertIgnore
     ) {
-        $this->resourceConnection = $resourceConnection;
-        $this->hydrator = $hydrator;
+        $this->insertIgnore = $insertIgnore;
     }
 
     /**
-     * Multiple save creators
+     * Save creator to database
      *
      * @param CreatorInterface $creator
      * @return void
      */
     public function execute(CreatorInterface $creator): void
     {
-        $data = $this->hydrator->extract($creator);
-
-        $connection = $this->getConnection();
-        $tableName = $this->resourceConnection->getTableName(
-            CreatorResourceModel::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME
+        $this->insertIgnore->execute(
+            $creator,
+            self::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME,
+            [
+                self::ID,
+                self::NAME
+            ]
         );
-        $data = $this->filterData($data, [CreatorInterface::ID, CreatorInterface::NAME]);
-        if (empty($data)) {
-            return;
-        }
-        $query = sprintf(
-            'INSERT IGNORE INTO `%s` (%s) VALUES (%s)',
-            $tableName,
-            $this->getColumns(array_keys($data)),
-            $this->getValues(count($data))
-        );
-
-        $connection->query($query, array_values($data));
-    }
-
-    /**
-     * Filter data to keep only data for columns specified
-     *
-     * @param array $data
-     * @param array $columns
-     * @return array
-     */
-    private function filterData(array $data, array $columns)
-    {
-        return array_intersect_key($data, array_flip($columns));
-    }
-
-    /**
-     * Retrieve DB adapter
-     *
-     * @return AdapterInterface
-     */
-    private function getConnection(): AdapterInterface
-    {
-        return $this->resourceConnection->getConnection();
-    }
-
-    /**
-     * Get columns query part
-     *
-     * @param array $columns
-     * @return string
-     */
-    private function getColumns(array $columns): string
-    {
-        $connection = $this->getConnection();
-        $sql = implode(', ', array_map([$connection, 'quoteIdentifier'], $columns));
-        return $sql;
-    }
-
-    /**
-     * Get values query part
-     *
-     * @param int $number
-     * @return string
-     */
-    private function getValues(int $number): string
-    {
-        return implode(',', array_pad([], $number, '?'));
     }
 }

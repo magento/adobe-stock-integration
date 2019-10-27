@@ -13,11 +13,11 @@ use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * User repository test.
+ * Get user token test
  */
 class GetTokenTest extends TestCase
 {
@@ -58,10 +58,7 @@ class GetTokenTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->tokenResponseFactoryMock = $this->createMock(TokenResponseInterfaceFactory::class);
         $this->getToken = new GetToken(
@@ -99,9 +96,7 @@ class GetTokenTest extends TestCase
         $this->jsonMock->expects($this->once())
             ->method('unserialize')
             ->willReturn(['string']);
-        $tokenResponse = $this->getMockBuilder(
-            \Magento\AdobeIms\Model\OAuth\TokenResponse::class
-        )->disableOriginalConstructor()->setMethods(['addData', 'getAccessToken', 'getRefreshToken'])->getMock();
+        $tokenResponse = $this->createMock(\Magento\AdobeIms\Model\OAuth\TokenResponse::class);
         $this->tokenResponseFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($tokenResponse);

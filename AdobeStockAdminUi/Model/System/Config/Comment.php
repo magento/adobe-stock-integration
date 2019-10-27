@@ -18,6 +18,8 @@ class Comment implements CommentInterface
 {
     private const REDIRECT_MCA = 'adobe_ims/oauth/callback';
 
+    private const REG_EXP_URL = '.*';
+
     /**
      * @var UrlInterface
      */
@@ -75,6 +77,6 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrlPattern(): string
     {
-        return str_replace('.', '\\\.', $this->getRedirectUrl());
+        return str_replace('.', '\\\.', $this->getRedirectUrl()) . self::REG_EXP_URL;
     }
 }

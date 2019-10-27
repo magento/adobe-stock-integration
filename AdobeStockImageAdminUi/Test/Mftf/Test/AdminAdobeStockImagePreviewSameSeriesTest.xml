@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockImagePreviewSameSeriesTest">
+        <annotations>
+            <stories value="Cover scenario: User sees images with the same series as the currently viewed one"/>
+            <title value="Admin should be able to see images with same series"/>
+            <description value="User sees images with the same series"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <conditionalClick selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" dependentSelector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" visible="false" stepKey="clickOnTabMoreForThisSeries"/>
+        <actionGroup ref="AssertNumberOfImagesUnderMoreForThisSeriesActionGroup" stepKey="assertImagesUnderMoreForThisSeriesCount">
+            <argument name="imagesNumber" value="4"/>
+        </actionGroup>
+    </test>
+</tests>

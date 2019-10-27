@@ -23,23 +23,15 @@ interface AssetRepositoryInterface
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $asset
      * @return void
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(AssetInterface $asset): void;
-
-    /**
-     * Delete item
-     *
-     * @param AssetInterface $item
-     * @return void
-     * @throws \Exception
-     */
-    public function delete(AssetInterface $item): void;
 
     /**
      * Get a list of assets
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface;

@@ -27,27 +27,11 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getId() : ?int;
 
     /**
-     * Set the id
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value): void;
-
-    /**
      * Get the creator name
      *
      * @return string|null
      */
     public function getName(): ?string;
-
-    /**
-     * Set the creator name
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setName(string $value): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

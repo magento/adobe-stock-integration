@@ -9,12 +9,13 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\LogOut;
-use PHPUnit\Framework\{MockObject\MockObject, TestCase};
+use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -60,22 +61,19 @@ class LogOutTest extends TestCase
     /**
      * Successful result code.
      */
-    const HTTP_FOUND = 302;
+    private const HTTP_FOUND = 302;
 
     /**
      * Error result code.
      */
-    const HTTP_ERROR = 500;
+    private const HTTP_ERROR = 500;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->userProfileInterfaceMock = $this->createMock(UserProfileInterface::class);
         $this->userProfileRepositoryInterfaceMock = $this->createMock(UserProfileRepositoryInterface::class);
         $this->userContextInterfaceMock = $this->createMock(UserContextInterface::class);

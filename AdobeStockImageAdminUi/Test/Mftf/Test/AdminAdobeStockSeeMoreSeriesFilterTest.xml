@@ -33,9 +33,9 @@
         </actionGroup>
         <click selector="{{AdobeStockFilterSection.cancelFilters}}" stepKey="cancelFilters"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
-        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSerie}}" stepKey="clickOnTabMoreForThisSerie"/>
-        <click selector="{{AdobeStockImagePreviewSection.seeMoreFromSerieImages}}" stepKey="clickOnSeeMoreLinkFromSerieImages"/>
-        <waitForPageLoad stepKey="waitForSeeMoreLinkFromSerieImages"/>
+        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
+        <click selector="{{AdobeStockImagePreviewSection.seeMoreFromSeriesImages}}" stepKey="clickOnSeeMoreLinkFromSeriesImages"/>
+        <waitForPageLoad stepKey="waitForSeeMoreLinkFromSeriesImages"/>
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="$getFilteredId"/>
         </actionGroup>

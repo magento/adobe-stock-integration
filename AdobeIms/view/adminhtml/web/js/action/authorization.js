@@ -37,7 +37,12 @@ define([], function () {
         authWindow = window.adobeStockAuthWindow = window.open(
             config.url,
             '',
-            buildWindowParams(config.popupWindowParams || {width: 500, height: 300})
+            buildWindowParams(
+                config.popupWindowParams || {
+                    width: 500,
+                    height: 300
+                }
+            )
         );
 
         return new window.Promise(function (resolve, reject) {
@@ -62,31 +67,45 @@ define([], function () {
             function startHandle() {
                 var responseData;
 
-                if (-1 === String(authWindow.origin).indexOf(window.location.host)) {
-                    return;
-                }
+                try {
 
-                /**
-                 * If within 10 seconds the result is not received, then reject the request
-                 */
-                stopWatcherId = setTimeout(function () {
+                    if (authWindow.document.domain !== document.domain ||
+                        authWindow.document.readyState !== 'complete') {
+                        return;
+                    }
+
+                    /**
+                     * If within 10 seconds the result is not received, then reject the request
+                     */
+                    stopWatcherId = setTimeout(function () {
+                        stopHandle();
+                        reject(new Error('Time\'s up.'));
+                    }, config.popupWindowTimeout || 60000);
+
+                    responseData = authWindow.document.body.innerText.match(
+                        config.callbackParsingParams.regexpPattern
+                    );
+
+                    if (!responseData) {
+                        return;
+                    }
+
                     stopHandle();
-                    reject(new Error('Time\'s up.'));
-                }, config.popupWindowTimeout || 60000);
 
-                responseData = authWindow.document.body.innerText.match(
-                    config.callbackParsingParams.regexpPattern
-                );
-                if (responseData) {
-                    stopHandle();
-
-                    if (responseData[config.callbackParsingParams.codeIndex] === config.callbackParsingParams.successCode) {
+                    if (responseData[config.callbackParsingParams.codeIndex] ===
+                        config.callbackParsingParams.successCode) {
                         resolve({
                             isAuthorized: true,
                             lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]
                         });
                     } else {
                         reject(new Error(responseData[config.callbackParsingParams.messageIndex]));
+                    }
+                } catch (e) {
+                    if (authWindow.closed) {
+                        clearTimeout(stopWatcherId);
+                        clearInterval(watcherId);
+                        reject(new Error('Authentication window was closed.'));
                     }
                 }
             }

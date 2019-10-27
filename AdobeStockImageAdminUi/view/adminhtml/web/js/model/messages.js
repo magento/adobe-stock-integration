@@ -42,9 +42,10 @@ define([
         /**
          * Schedule message cleanup
          *
-         * @param {Number} delay in seconds
+         * @param {Number} delay
          */
         scheduleCleanup: function (delay) {
+            // eslint-disable-next-line no-unused-vars
             var timerId;
 
             delay = delay || 3;
