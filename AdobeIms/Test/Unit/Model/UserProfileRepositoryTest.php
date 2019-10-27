@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\AdobeIms\Model\UserProfileRepository;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\AdobeIms\Model\UserProfile;
 use Magento\AdobeIms\Model\ResourceModel\UserProfile as ResourceUserProfile;
+use Magento\AdobeIms\Model\UserProfile;
+use Magento\AdobeIms\Model\UserProfileRepository;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * User repository test.
@@ -31,7 +31,7 @@ class UserProfileRepositoryTest extends TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject $resource
+     * @var ResourceUserProfile|MockObject $resource
      */
     private $resource;
 
@@ -46,13 +46,8 @@ class UserProfileRepositoryTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->resource = $this->getMockBuilder(ResourceUserProfile::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save', 'load'])
-            ->getMock();
-        $this->entityFactory =  $this->getMockBuilder(UserProfileInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(ResourceUserProfile::class);
+        $this->entityFactory =  $this->createMock(UserProfileInterfaceFactory::class);
         $this->model = new UserProfileRepository(
             $this->resource,
             $this->entityFactory
@@ -76,7 +71,7 @@ class UserProfileRepositoryTest extends TestCase
      */
     public function testSaveWithException(): void
     {
-        $userProfile =  $this->getMockBuilder(UserProfile::class)->disableOriginalConstructor()->getMock();
+        $userProfile = $this->createMock(UserProfile::class);
         $this->resource->expects($this->once())
             ->method('save')
             ->with($userProfile)

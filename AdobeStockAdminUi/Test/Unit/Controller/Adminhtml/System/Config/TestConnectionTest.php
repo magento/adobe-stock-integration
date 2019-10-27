@@ -13,6 +13,7 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Filter\StripTags;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,17 +28,17 @@ class TestConnectionTest extends TestCase
     private $objectManager;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
     private $clientMock;
 
     /**
-     * @var JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var StripTags|\PHPUnit_Framework_MockObject_MockObject
+     * @var StripTags|MockObject
      */
     private $stripTagsMock;
 
@@ -52,18 +53,9 @@ class TestConnectionTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->clientMock = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(['testConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stripTagsMock = $this->getMockBuilder(StripTags::class)
-            ->setMethods(['filter'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->clientMock = $this->createMock(ClientInterface::class);
+        $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
+        $this->stripTagsMock = $this->createMock(StripTags::class);
         $this->testConnection = $this->objectManager->getObject(
             TestConnection::class,
             [
@@ -82,10 +74,7 @@ class TestConnectionTest extends TestCase
         $this->clientMock->expects($this->once())
             ->method('testConnection')
             ->willReturn(true);
-        $jsonMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $jsonMock = $this->createMock(Json::class);
         $jsonMock->expects($this->once())
             ->method('setData')
             ->with(
@@ -109,10 +98,7 @@ class TestConnectionTest extends TestCase
         $this->clientMock->expects($this->once())
             ->method('testConnection')
             ->willReturn(false);
-        $jsonMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $jsonMock = $this->createMock(Json::class);
         $jsonMock->expects($this->once())
             ->method('setData')
             ->with(

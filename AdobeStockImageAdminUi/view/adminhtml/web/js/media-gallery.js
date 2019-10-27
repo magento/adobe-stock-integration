@@ -27,7 +27,9 @@ define([
                 imageFilename = imagePath,
                 imageFolderName = this.jsTreeRootFolderName;
 
-            $.ajaxSetup({async: false});
+            $.ajaxSetup({
+                async: false
+            });
 
             if (imagePathParts.length > 1) {
                 imageFilename = imagePathParts[imagePathParts.length - 1];
@@ -43,7 +45,7 @@ define([
                     }
 
                     //var folderSelector = ".jstree a:contains('" + folderName + "')";
-                    openFolderChildrenButton = $(".jstree a:contains('" + folderName + "')").prev('.jstree-icon');
+                    openFolderChildrenButton = $('.jstree a:contains("' + folderName + '")').prev('.jstree-icon');
 
                     // eslint-disable-next-line max-depth
                     if (openFolderChildrenButton.length) {
@@ -53,18 +55,20 @@ define([
             }
 
             //select folder
-            imageFolder = $(".jstree a:contains('" + imageFolderName + "')");
+            imageFolder = $('.jstree a:contains("' + imageFolderName + '")');
 
             if (imageFolder.length) {
                 imageFolder[0].click();
                 //select image
-                locatedImage = $("div[data-row='file']:has(img[alt=\"" + imageFilename + "\"])");
+                locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])');
 
                 if (locatedImage.length) {
                     locatedImage.click();
                 }
             }
-            $.ajaxSetup({async: true});
+            $.ajaxSetup({
+                async: true
+            });
         }
     };
 });

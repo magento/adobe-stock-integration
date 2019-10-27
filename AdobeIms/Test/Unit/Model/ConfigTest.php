@@ -10,6 +10,7 @@ namespace Magento\AdobeIms\Test\Unit\Model;
 use Magento\AdobeIms\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,7 @@ class ConfigTest extends TestCase
     private $config;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
@@ -40,10 +41,7 @@ class ConfigTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->config = $this->objectManager->getObject(
             Config::class,
             [

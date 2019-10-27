@@ -25,7 +25,7 @@ class Logout extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    const ADMIN_RESOURCE = 'Magento_AdobeIms::logout';
 
     /**
      * @var CurlFactory
@@ -57,8 +57,7 @@ class Logout extends Action
             $response = [
                 'success' => true,
             ];
-        }
-        else {
+        } else {
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $response = [
                 'success' => false,

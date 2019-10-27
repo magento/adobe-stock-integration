@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\RelatedImages;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\RelatedImages;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\Framework\Exception\IntegrationException;
 
 /**
  * RelatedImages test.
@@ -64,31 +64,18 @@ class RelatedImagesTest extends TestCase
     protected function setUp()
     {
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->getRelatedImages = $this->getMockForAbstractClass(GetRelatedImagesInterface::class);
+        $this->getRelatedImages = $this->createMock(GetRelatedImagesInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParams']
-        );
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->context->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
         $this->request->expects($this->once())
             ->method('getParams')
@@ -112,16 +99,14 @@ class RelatedImagesTest extends TestCase
     public function testExecute()
     {
         $relatedImages = [
-            'same_model' =>
-                [
+            'same_model' => [
                     [
                         'id' => 283415387,
                         'title' => 'Old and worn work gloves on large American flag - Labor day background',
                         'thumbnail_url' => 'https://t4.ftcdn.net/jpg/02/83/41/53/240_F_a62iA2YYVG49yo2n.jpg'
                     ]
                 ],
-            'same_series' =>
-                [
+            'same_series' => [
                     [
                         'id' => 283415387,
                         'title' => 'Old and worn work gloves on large American flag - Labor day background',

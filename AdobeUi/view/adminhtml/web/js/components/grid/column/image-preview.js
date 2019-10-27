@@ -19,7 +19,7 @@ define([
             lastOpenedImage: null,
             modules: {
                 masonry: '${ $.parentName }',
-                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+                thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
             statefull: {
                 visible: true,
@@ -156,17 +156,18 @@ define([
          * Returns visibility for given record.
          *
          * @param {Object} record
-         * @return {*|boolean}
+         * @return {*|bool}
          */
         isVisible: function (record) {
-            if (this.lastOpenedImage() === record._rowIndex
-                && (
-                    this.visibility()[record._rowIndex] === undefined
-                    || this.visibility()[record._rowIndex] === false
+            if (this.lastOpenedImage() === record._rowIndex &&
+                (
+                    this.visibility()[record._rowIndex] === undefined ||
+                    this.visibility()[record._rowIndex] === false
                 )
             ) {
                 this.show(record);
             }
+
             return this.visibility()[record._rowIndex] || false;
         },
 

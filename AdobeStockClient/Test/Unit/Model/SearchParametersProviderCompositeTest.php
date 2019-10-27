@@ -12,6 +12,7 @@ use Magento\AdobeStockClient\Model\SearchParametersProviderComposite;
 use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,7 @@ class SearchParametersProviderCompositeTest extends TestCase
     private $searchParametersProviderComposite;
 
     /**
-     * @var SearchParameterProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchParameterProviderInterface|MockObject
      */
     private $searchParametersProviderMock;
 
@@ -40,10 +41,7 @@ class SearchParametersProviderCompositeTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->searchParametersProviderMock =  $this->getMockBuilder(SearchParameterProviderInterface::class)
-            ->setMethods(['apply'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->searchParametersProviderMock =  $this->createMock(SearchParameterProviderInterface::class);
         $this->searchParametersProviderComposite = $this->objectManager->getObject(
             SearchParametersProviderComposite::class,
             [
@@ -58,13 +56,9 @@ class SearchParametersProviderCompositeTest extends TestCase
     public function testApply(): void
     {
         /** @var SearchCriteriaInterface $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters $searchParamsMock */
-        $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParamsMock = $this->createMock(SearchParameters::class);
         $this->searchParametersProviderMock->expects($this->once())
             ->method('apply')
             ->with($searchCriteriaMock, $searchParamsMock);

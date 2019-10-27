@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model;
+namespace Magento\AdobeStockImageAdminUi\Test\Unit\Ui\Component\Listing\Filter;
 
 use Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color;
 use Magento\Framework\Api\Filter;
@@ -82,6 +82,10 @@ class ColorTest extends TestCase
 
     /**
      * Create Color filter object
+     *
+     * @param array $data
+     * @param ContextInterface $context
+     * @return Color
      */
     private function createObject(array $data, ContextInterface $context): Color
     {
@@ -130,8 +134,9 @@ class ColorTest extends TestCase
     /**
      * Prepare test
      *
-     * @param array $testData
      * @dataProvider colorPickerModeProvider
+     * @param string|null $colorPickerMode
+     * @param string $appliedValue
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testPrepare(?string $colorPickerMode, string $appliedValue): void
@@ -200,6 +205,7 @@ class ColorTest extends TestCase
     /**
      * Get wrapped component
      *
+     * @param ContextInterface $context
      * @return MockObject|UiComponentInterface
      */
     private function getWrappedComponent(ContextInterface $context): UiComponentInterface

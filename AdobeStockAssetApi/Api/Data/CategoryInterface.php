@@ -27,27 +27,11 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getId() : ?int;
 
     /**
-     * Set the id
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value): void;
-
-    /**
      * Get the category name
      *
      * @return string
      */
     public function getName(): ?string;
-
-    /**
-     * Set the category name
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setName(string $value): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

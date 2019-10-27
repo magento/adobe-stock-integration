@@ -65,7 +65,7 @@ define([
 
         /**
          * Init component handler
-         * @param rows
+         * @param {Object} rows
          * @return {Object}
          */
         initComponent: function (rows) {
@@ -94,6 +94,7 @@ define([
             window.addEventListener('resize', function () {
                 if (!running) {
                     running = true;
+
                     if (window.requestAnimationFrame) {
                         window.requestAnimationFrame(function () {
                             handler();

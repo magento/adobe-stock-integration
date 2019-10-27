@@ -85,9 +85,14 @@ define([
          *
          * @param {Object} record
          */
-        seeMoreFromSeries: function(record) {
+        seeMoreFromSeries: function (record) {
             this.serieFilterValue(record.id);
-            this.filterChips().set('applied', {'serie_id' : record.id.toString()});
+            this.filterChips().set(
+                'applied',
+                {
+                    'serie_id': record.id.toString()
+                }
+            );
         },
 
         /**
@@ -95,9 +100,14 @@ define([
          *
          * @param {Object} record
          */
-        seeMoreFromModel: function(record) {
+        seeMoreFromModel: function (record) {
             this.modelFilterValue(record.id);
-            this.filterChips().set('applied', {'model_id' : record.id.toString()});
+            this.filterChips().set(
+                'applied',
+                {
+                    'model_id': record.id.toString()
+                }
+            );
         },
 
         /**
@@ -107,7 +117,12 @@ define([
          */
         nextRelated: function (record) {
             var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
-                nextRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) + 1,
+                nextRelatedIndex = _.findLastIndex(
+                    relatedList,
+                    {
+                        id: this.preview().displayedRecord().id
+                    }
+                ) + 1,
                 nextRelated = relatedList[nextRelatedIndex];
 
             if (typeof nextRelated === 'undefined') {
@@ -124,7 +139,12 @@ define([
          */
         prevRelated: function (record) {
             var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
-                prevRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) - 1,
+                prevRelatedIndex = _.findLastIndex(
+                    relatedList,
+                    {
+                        id: this.preview().displayedRecord().id
+                    }
+                ) - 1,
                 prevRelated = relatedList[prevRelatedIndex];
 
             if (typeof prevRelated === 'undefined') {
@@ -148,14 +168,15 @@ define([
                 return false;
             }
             relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model();
-            prevRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) - 1;
+            prevRelatedIndex = _.findLastIndex(
+                relatedList,
+                {
+                    id: this.preview().displayedRecord().id
+                }
+            ) - 1;
             prevRelated = relatedList[prevRelatedIndex];
 
-            if (typeof prevRelated === 'undefined') {
-                return true;
-            }
-
-            return false;
+            return typeof prevRelated === 'undefined';
         },
 
         /**
@@ -172,14 +193,15 @@ define([
                 return false;
             }
             relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model();
-            nextRelatedIndex = _.findLastIndex(relatedList, {id: this.preview().displayedRecord().id}) + 1;
+            nextRelatedIndex = _.findLastIndex(
+                relatedList,
+                {
+                    id: this.preview().displayedRecord().id
+                }
+            ) + 1;
             nextRelated = relatedList[nextRelatedIndex];
 
-            if (typeof nextRelated === 'undefined') {
-                return true;
-            }
-
-            return false;
+            return typeof nextRelated === 'undefined';
         },
 
         /**

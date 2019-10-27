@@ -14,8 +14,8 @@ use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -65,10 +65,7 @@ class GetImageTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->configInterface = $this->createMock(ConfigInterface::class);

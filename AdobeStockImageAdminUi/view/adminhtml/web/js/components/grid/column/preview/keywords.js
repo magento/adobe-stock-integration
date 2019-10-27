@@ -79,7 +79,7 @@ define([
         /**
          * Check if view all button is visible or not
          *
-         * @returns {boolean}
+         * @returns {bool}
          */
         canViewMoreKeywords: function () {
             return this.canViewMoreKeywords();

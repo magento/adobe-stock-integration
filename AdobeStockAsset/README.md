@@ -8,8 +8,6 @@ The Magento_AdobeStockAsset module creates the following tables in the database:
 
 - `adobe_stock_asset`
 - `adobe_stock_category`
-- `adobe_stock_asset_keyword`
-- `adobe_stock_keyword`
 - `adobe_stock_creator`
 
 Before disabling or uninstalling this module, note that the `Magento_AdobeStockImage` module depends on this module.
