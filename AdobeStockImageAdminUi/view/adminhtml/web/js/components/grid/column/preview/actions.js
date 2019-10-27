@@ -207,10 +207,17 @@ define([
                         this.getPrompt(
                             {
                                 'title': $.mage.__('License Adobe Stock Images?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>' + displayFieldName,
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>'
+                                    + displayFieldName,
                                 'visible': !this.isDownloaded(),
                                 'actions': {
                                     confirm: function (fileName) {
+                                        if (typeof fileName === 'undefined') {
+                                            var filePathArray = record.path.split('/'),
+                                                imageIndex = filePathArray.length - 1;
+                                            fileName = filePathArray[imageIndex]
+                                                .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                        }
                                         canPurchase ?
                                             licenseAndSave(record, fileName) :
                                             window.open(buyCreditsUrl);
