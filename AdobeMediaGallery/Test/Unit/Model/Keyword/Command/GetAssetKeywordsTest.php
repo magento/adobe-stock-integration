@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Test\Unit\Model\Keyword\Command;
@@ -35,7 +34,7 @@ class GetAssetKeywordsTest extends TestCase
      */
     private $assetKeywordFactoryStub;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionStub = $this->createMock(ResourceConnection::class);
         $this->assetKeywordFactoryStub = $this->createMock(KeywordInterfaceFactory::class);
@@ -46,15 +45,15 @@ class GetAssetKeywordsTest extends TestCase
         );
     }
 
-    public function testCanBeCreated()
-    {
-        $this->assertInstanceOf( GetAssetKeywords::class, $this->sut);
-    }
-
     /**
-     * @dataProvider cases()
+     * Posive test for the main case
+     *
+     * @dataProvider casesProvider()
+     * @param array $databaseQueryResult
+     * @param int $expectedNumberOfFoundKeywords
+     * @throws NotFoundException
      */
-    public function testFind($databaseQueryResult, $expectedNumberOfFoundKeywords)
+    public function testFind(array $databaseQueryResult, int $expectedNumberOfFoundKeywords): void
     {
         $randomAssetId = 12345;
         $this->configureResourceConnectionStub($databaseQueryResult);
@@ -66,7 +65,12 @@ class GetAssetKeywordsTest extends TestCase
         $this->assertCount($expectedNumberOfFoundKeywords, $keywords);
     }
 
-    public function cases()
+    /**
+     * Data provider for testFind
+     *
+     * @return array
+     */
+    public function casesProvider(): array
     {
         return [
             'not_found' => [[],0],
@@ -75,7 +79,12 @@ class GetAssetKeywordsTest extends TestCase
         ];
     }
 
-    public function testNotFoundBecauseOfError()
+    /**
+     * Negative test
+     *
+     * @throws NotFoundException
+     */
+    public function testNotFoundBecauseOfError(): void
     {
         $randomAssetId = 1;
 
@@ -93,7 +102,7 @@ class GetAssetKeywordsTest extends TestCase
      *
      * @param array $queryResult
      */
-    private function configureResourceConnectionStub(array $queryResult)
+    private function configureResourceConnectionStub(array $queryResult): void
     {
         $statementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
         $statementMock
