@@ -202,7 +202,9 @@ define([
                             quotaMessage = response.result.message,
                             canPurchase = response.result.canLicense,
                             buyCreditsUrl = this.preview().buyCreditsUrl,
-                            displayFieldName = !this.isDownloaded() ? '<b>' + $.mage.__('File Name') + '</b>' : '';
+                            displayFieldName = !this.isDownloaded() ? '<b>' + $.mage.__('File Name') + '</b>' : '',
+                            filePathArray = record.path.split('/'),
+                            imageIndex = filePathArray.length - 1;
 
                         this.getPrompt(
                             {
@@ -213,8 +215,6 @@ define([
                                 'actions': {
                                     confirm: function (fileName) {
                                         if (typeof fileName === 'undefined') {
-                                            var filePathArray = record.path.split('/'),
-                                                imageIndex = filePathArray.length - 1;
                                             fileName = filePathArray[imageIndex]
                                                 .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                         }
