@@ -73,10 +73,7 @@ class LogOutTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->userProfileInterfaceMock = $this->createMock(UserProfileInterface::class);
         $this->userProfileRepositoryInterfaceMock = $this->createMock(UserProfileRepositoryInterface::class);
         $this->userContextInterfaceMock = $this->createMock(UserContextInterface::class);

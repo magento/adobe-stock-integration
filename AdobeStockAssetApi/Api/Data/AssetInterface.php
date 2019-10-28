@@ -23,27 +23,11 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getId(): ?int;
 
     /**
-     * Set ID
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value): void;
-
-    /**
      * Get media gallery asset id
      *
      * @return int
      */
     public function getMediaGalleryId(): int;
-
-    /**
-     * Set media gallery id
-     *
-     * @param int $mediaGalleryId
-     * @return void
-     */
-    public function setMediaGalleryId(int $mediaGalleryId): void;
 
     /**
      * Get category
@@ -68,14 +52,6 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getCategory(): ?CategoryInterface;
 
     /**
-     * Set category
-     *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $category
-     * @return void
-     */
-    public function setCategory(CategoryInterface $category): void;
-
-    /**
      * Return the creator
      *
      * @return int|null
@@ -98,14 +74,6 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getCreator(): ?CreatorInterface;
 
     /**
-     * Set the creator
-     *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface $creator
-     * @return void
-     */
-    public function setCreator(CreatorInterface $creator): void;
-
-    /**
      * Is licensed
      *
      * @return int
@@ -113,27 +81,11 @@ interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getIsLicensed(): int;
 
     /**
-     * Set is licensed
-     *
-     * @param int $isLicensed
-     * @return void
-     */
-    public function setIsLicensed(int $isLicensed): void;
-
-    /**
      * Get creation date
      *
      * @return string
      */
     public function getCreationDate(): string;
-
-    /**
-     * Set creation date
-     *
-     * @param string $creationDate
-     * @return void
-     */
-    public function setCreationDate(string $creationDate): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

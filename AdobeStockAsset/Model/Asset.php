@@ -20,44 +20,13 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class Asset extends AbstractExtensibleModel implements AssetInterface
 {
-    /**
-     * Asset Id
-     */
     private const ID = 'id';
-
-    /**
-     * Media gallery id is an id of a media asset id related to the asset
-     */
     private const MEDIA_GALLERY_ID = 'media_gallery_id';
-
-    /**
-     * Is asset licensed
-     */
     private const IS_LICENSED = 'is_licensed';
-
-    /**
-     * Asset creation date
-     */
     private const CREATION_DATE = 'creation_date';
-
-    /**
-     * Category id is an id of a category entry related to the asset
-     */
     private const CATEGORY_ID = 'category_id';
-
-    /**
-     * Creator id is an id of a category entry related to the asset
-     */
     private const CREATOR_ID = 'creator_id';
-
-    /**
-     * Asset category
-     */
     private const CATEGORY = 'category';
-
-    /**
-     * The asset creator
-     */
     private const CREATOR = 'creator';
 
     /**
@@ -80,14 +49,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
         }
 
         return (int) $id;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setId($value): void
-    {
-        $this->setData(self::ID, $value);
     }
 
     /**
@@ -117,14 +78,6 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCategory(CategoryInterface $category): void
-    {
-        $this->setData(self::CATEGORY, $category);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCreatorId(): ?int
     {
         return $this->getData(self::CREATOR_ID);
@@ -149,25 +102,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setCreator(CreatorInterface $creator): void
-    {
-        $this->setData(self::CREATOR, $creator);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getIsLicensed(): int
     {
         return (int) $this->getData(self::IS_LICENSED);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setIsLicensed(int $isLicensed): void
-    {
-        $this->setData(self::IS_LICENSED, $isLicensed);
     }
 
     /**
@@ -181,25 +118,9 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function setMediaGalleryId(int $mediaGalleryId): void
-    {
-        $this->setData(self::MEDIA_GALLERY_ID, $mediaGalleryId);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCreationDate(): string
     {
         return (string) $this->getData(self::CREATION_DATE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setCreationDate(string $creationDate): void
-    {
-        $this->setData(self::CREATION_DATE, $creationDate);
     }
 
     /**

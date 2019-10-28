@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model;
+namespace Magento\AdobeStockImageAdminUi\Test\Unit\Ui\Component\Listing\Filter;
 
 use Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color;
 use Magento\Framework\Api\Filter;

@@ -35,6 +35,11 @@ define([
                 this.message(this.defaultErrorMessage);
             }
         },
+
+        /**
+         * @param {String} success
+         * @param {bool} message
+         */
         showMessage: function (success, message) {
             this.message(message);
             this.success(success);

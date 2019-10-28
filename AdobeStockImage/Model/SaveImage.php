@@ -7,21 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\AdobeStockAsset\Model\DocumentToAsset;
-use Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset;
+use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords;
-use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetLinks;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 
 /**
  * Class SaveImage
@@ -64,6 +61,11 @@ class SaveImage implements SaveImageInterface
     private $documentToAsset;
 
     /**
+     * @var DocumentToKeywords
+     */
+    private $documentToKeywords;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -74,16 +76,8 @@ class SaveImage implements SaveImageInterface
     private $saveAssetKeywords;
 
     /**
-     * @var SaveAssetLinks
-     */
-    private $saveAssetLinks;
-
-    /**
-     * @var GetAssetKeywordsInterface
-     */
-    private $getAssetKeywords;
-
-    /**
+     * SaveImage constructor.
+     *
      * @param Storage $storage
      * @param GetByIdInterface $getMediaAssetById
      * @param AssetRepositoryInterface $assetRepository
@@ -92,9 +86,8 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param DocumentToAsset $documentToAsset
      * @param LoggerInterface $logger
-     * @param SaveAssetKeywords $saveAssetKeywords
-     * @param SaveAssetLinks $saveAssetLinks
-     * @param GetAssetKeywordsInterface $getAssetKeywords
+     * @param SaveAssetKeywordsInterface $saveAssetKeywords
+     * @param DocumentToKeywords $documentToKeywords
      */
     public function __construct(
         Storage $storage,
@@ -105,9 +98,8 @@ class SaveImage implements SaveImageInterface
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         DocumentToAsset $documentToAsset,
         LoggerInterface $logger,
-        SaveAssetKeywords $saveAssetKeywords,
-        SaveAssetLinks $saveAssetLinks,
-        GetAssetKeywordsInterface $getAssetKeywords
+        SaveAssetKeywordsInterface $saveAssetKeywords,
+        DocumentToKeywords $documentToKeywords
     ) {
         $this->storage = $storage;
         $this->getMediaAssetById = $getMediaAssetById;
@@ -118,22 +110,20 @@ class SaveImage implements SaveImageInterface
         $this->documentToAsset = $documentToAsset;
         $this->logger = $logger;
         $this->saveAssetKeywords = $saveAssetKeywords;
-        $this->saveAssetLinks = $saveAssetLinks;
-        $this->getAssetKeywords = $getAssetKeywords;
+        $this->documentToKeywords = $documentToKeywords;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(DocumentInterface $document, string $url, string $destinationPath): void
+    public function execute(Document $document, string $url, string $destinationPath): void
     {
         try {
             $pathAttribute = $document->getCustomAttribute('path');
+            $pathValue = $pathAttribute->getValue();
             /* If the asset has been already saved, delete the previous version */
-            if (!empty($pathAttribute)
-                && !empty($pathAttribute->getValue())
-            ) {
-                $this->storage->delete($pathAttribute->getValue());
+            if (null !== $pathAttribute && $pathValue) {
+                $this->storage->delete($pathValue);
             }
 
             $path = $this->storage->save($url, $destinationPath);
@@ -148,15 +138,11 @@ class SaveImage implements SaveImageInterface
             );
             $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
 
-            $mediaGalleryAssetId = $mediaGalleryAssetId
-                ?: $this->getExistingMediaGalleryAsset($document->getId())->getId();
-
-            $keywords = $this->getAssetKeywords->execute($mediaGalleryAssetId);
-
-            if (!empty($keywords)) {
-                $keywordIds = $this->saveAssetKeywords->execute($keywords);
-                $this->saveAssetLinks->execute($mediaGalleryAssetId, $keywordIds);
+            if (!$mediaGalleryAssetId) {
+                $mediaGalleryAssetId = $this->assetRepository->getById($document->getId())->getMediaGalleryId();
             }
+
+            $this->saveAssetKeywords->execute($this->documentToKeywords->convert($document), $mediaGalleryAssetId);
 
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
@@ -165,18 +151,5 @@ class SaveImage implements SaveImageInterface
             $this->logger->critical($message);
             throw new CouldNotSaveException($message);
         }
-    }
-
-    /**
-     * Get media gallery asset if exists
-     *
-     * @param int $adobeStockAssetId
-     * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface
-     * @throws NoSuchEntityException
-     */
-    private function getExistingMediaGalleryAsset(int $adobeStockAssetId): AssetInterface
-    {
-        $existingAdobeStockAsset = $this->assetRepository->getById($adobeStockAssetId);
-        return $this->getMediaAssetById->execute($existingAdobeStockAsset->getMediaGalleryId());
     }
 }

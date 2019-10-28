@@ -86,4 +86,12 @@ interface AssetInterface extends ExtensibleDataInterface
      * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetExtensionInterface|null
      */
     public function getExtensionAttributes(): AssetExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\AdobeMediaGalleryApi\Api\Data\AssetExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
 }

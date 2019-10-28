@@ -17,13 +17,13 @@ $assetRepository = $objectManager->get(AssetRepositoryInterface::class);
 /** @var AssetInterfaceFactory $assetFactory */
 $assetFactory = $objectManager->get(AssetInterfaceFactory::class);
 /** @var AssetInterface $asset */
-$asset = $assetFactory->create();
-
-$asset->setId(1);
-$asset->setIsLicensed(1);
-$asset->setPreviewWidth(1);
-$asset->setPreviewHeight(1);
-$asset->setWidth(1);
-$asset->setHeight(1);
+$asset = $assetFactory->create(
+    [
+        'data' => [
+            'id' => 1,
+            'is_licensed' => 1
+        ]
+    ]
+);
 
 $assetRepository->save($asset);

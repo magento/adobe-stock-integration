@@ -43,25 +43,9 @@ class Creator extends AbstractExtensibleModel implements CreatorInterface
     /**
      * @inheritdoc
      */
-    public function setId($value): void
-    {
-        $this->setData(self::ID, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getName(): string
     {
         return (string) $this->getData(self::NAME);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setName(string $value): void
-    {
-        $this->setData(self::NAME, $value);
     }
 
     /**
