@@ -54,7 +54,7 @@ class LogoutTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logoutInterfaceMock = $this->createMock(LogOutInterface::class);
         $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);

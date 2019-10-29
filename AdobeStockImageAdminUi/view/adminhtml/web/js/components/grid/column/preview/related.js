@@ -71,6 +71,16 @@ define([
         },
 
         /**
+         * Check if the number of related series image is greater than 4 or not
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        canShowMoreSeriesImages: function(record) {
+            return parseInt(record.series().length) >= this.preview().tabImagesLimit;
+        },
+
+        /**
          * Returns model to display under the image
          *
          * @param {Object} record
@@ -78,6 +88,16 @@ define([
          */
         getModel: function (record) {
             return record.model;
+        },
+
+        /**
+         * Check if the number of related model image is greater than 4 or not
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        canShowMoreModelImages: function(record) {
+            return parseInt(record.model().length) >= this.preview().tabImagesLimit;
         },
 
         /**

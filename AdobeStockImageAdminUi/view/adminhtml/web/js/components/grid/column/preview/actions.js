@@ -200,19 +200,27 @@ define([
                     success: function (response) {
                         var confirmationContent = $.mage.__('License "' + record.title + '"'),
                             quotaMessage = response.result.message,
-                            canPurchase = response.result.canLicense;
+                            canPurchase = response.result.canLicense,
+                            buyCreditsUrl = this.preview().buyCreditsUrl,
+                            displayFieldName = !this.isDownloaded() ? '<b>' + $.mage.__('File Name') + '</b>' : '',
+                            filePathArray = record.path.split('/'),
+                            imageIndex = filePathArray.length - 1;
 
                         this.getPrompt(
                             {
-                                'title': $.mage.__('License Adobe Stock Image?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</p><br>' +
-                                           $.mage.__('File Name') + '</b>',
-                                'visible': canPurchase,
+                                'title': $.mage.__('License Adobe Stock Images?'),
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>'
+                                    + displayFieldName,
+                                'visible': !this.isDownloaded(),
                                 'actions': {
                                     confirm: function (fileName) {
+                                        if (typeof fileName === 'undefined') {
+                                            fileName = filePathArray[imageIndex]
+                                                .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                        }
                                         canPurchase ?
                                             licenseAndSave(record, fileName) :
-                                            window.open(this.preview().buyCreditsUrl);
+                                            window.open(buyCreditsUrl);
                                     }
                                 },
                                 'buttons': [{
