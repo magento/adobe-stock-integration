@@ -9,16 +9,15 @@ namespace Magento\AdobeMediaGallery\Model\Asset\Command;
 
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetListByPathInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetById
+ * Class GetListByIds
  */
-class GetById implements GetByIdInterface
+class GetListByPath implements GetListByPathInterface
 {
     private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
 
@@ -30,7 +29,7 @@ class GetById implements GetByIdInterface
     /**
      * @var AssetInterface
      */
-    private $assetFactory;
+    private $mediaAssetFactory;
 
     /**
      * @var LoggerInterface
@@ -38,51 +37,47 @@ class GetById implements GetByIdInterface
     private $logger;
 
     /**
-     * GetById constructor.
+     * GetListByPath constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param AssetInterfaceFactory $assetFactory
+     * @param AssetInterfaceFactory $mediaAssetFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        AssetInterfaceFactory $assetFactory,
+        AssetInterfaceFactory $mediaAssetFactory,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->assetFactory = $assetFactory;
+        $this->mediaAssetFactory = $mediaAssetFactory;
         $this->logger = $logger;
     }
 
     /**
-     * Get media asset.
+     * Return media asset asset list
      *
-     * @param int $mediaAssetId
+     * @param string $mediaFilePath
      *
-     * @return AssetInterface
-     * @throws NoSuchEntityException
+     * @return array
      * @throws IntegrationException
      */
-    public function execute(int $mediaAssetId): AssetInterface
+    public function execute(string $mediaFilePath): array
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
-                ->from(['amg' => self::TABLE_MEDIA_GALLERY_ASSET])
-                ->where('amg.id = ?', $mediaAssetId);
-            $data = $connection->query($select)->fetch();
+                ->from(self::TABLE_MEDIA_GALLERY_ASSET)
+                ->where('path in (?)', $mediaFilePath);
+            $data = $connection->fetchAssoc($select);
 
-            if (empty($data)) {
-                $message = __('There is no such media asset with "%1"', $mediaAssetId);
-                throw new NoSuchEntityException($message);
+            $mediaAssets = [];
+            foreach ($data as $id => $assetData) {
+                $mediaAssets[$id] = $this->mediaAssetFactory->create(['data' => $assetData]);
             }
 
-            return $this->assetFactory->create(['data' => $data]);
+            return $mediaAssets;
         } catch (\Exception $exception) {
-            $message = __(
-                'En error occurred during get media asset with id %id by id: %error',
-                ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
-            );
+            $message = __('An error occurred during get media asset list: %1', $exception->getMessage());
             $this->logger->critical($message);
             throw new IntegrationException($message, $exception);
         }

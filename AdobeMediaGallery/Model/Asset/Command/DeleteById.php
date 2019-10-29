@@ -8,17 +8,17 @@ declare(strict_types=1);
 namespace Magento\AdobeMediaGallery\Model\Asset\Command;
 
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByIdInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetById
+ * Class DeleteById
  */
-class GetById implements GetByIdInterface
+class DeleteById implements DeleteByIdInterface
 {
     private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
 
@@ -28,9 +28,9 @@ class GetById implements GetByIdInterface
     private $resourceConnection;
 
     /**
-     * @var AssetInterface
+     * @var GetByIdInterface
      */
-    private $assetFactory;
+    private $getMediaAssetById;
 
     /**
      * @var LoggerInterface
@@ -38,53 +38,46 @@ class GetById implements GetByIdInterface
     private $logger;
 
     /**
-     * GetById constructor.
+     * DeleteById constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param AssetInterfaceFactory $assetFactory
+     * @param GetByIdInterface $getMediaAssetById
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        AssetInterfaceFactory $assetFactory,
+        GetByIdInterface $getMediaAssetById,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->assetFactory = $assetFactory;
+        $this->getMediaAssetById = $getMediaAssetById;
         $this->logger = $logger;
     }
 
     /**
-     * Get media asset.
+     * Delete media asset by id
      *
      * @param int $mediaAssetId
      *
-     * @return AssetInterface
-     * @throws NoSuchEntityException
-     * @throws IntegrationException
+     * @return void
+     * @throws CouldNotDeleteException
      */
-    public function execute(int $mediaAssetId): AssetInterface
+    public function execute(int $mediaAssetId): void
     {
         try {
+            /** @var AssetInterface $mediaAsset */
+            $mediaAsset = $this->getMediaAssetById->execute($mediaAssetId);
+            /** @var AdapterInterface $connection */
             $connection = $this->resourceConnection->getConnection();
-            $select = $connection->select()
-                ->from(['amg' => self::TABLE_MEDIA_GALLERY_ASSET])
-                ->where('amg.id = ?', $mediaAssetId);
-            $data = $connection->query($select)->fetch();
-
-            if (empty($data)) {
-                $message = __('There is no such media asset with "%1"', $mediaAssetId);
-                throw new NoSuchEntityException($message);
-            }
-
-            return $this->assetFactory->create(['data' => $data]);
+            $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
+            $connection->delete($tableName, 'id = ' . $mediaAsset->getId());
         } catch (\Exception $exception) {
             $message = __(
-                'En error occurred during get media asset with id %id by id: %error',
+                'Could not delete media asset with id %id: %error',
                 ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
             );
             $this->logger->critical($message);
-            throw new IntegrationException($message, $exception);
+            throw new CouldNotDeleteException($message, $exception);
         }
     }
 }

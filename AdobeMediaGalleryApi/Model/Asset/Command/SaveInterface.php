@@ -11,8 +11,7 @@ namespace Magento\AdobeMediaGalleryApi\Model\Asset\Command;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 
 /**
- * Save media asset.
- *
+ * Save media asset
  * @api
  */
 interface SaveInterface
@@ -20,10 +19,10 @@ interface SaveInterface
     /**
      * Save media asset
      *
-     * @param \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface $asset
+     * @param \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface $mediaAsset
      *
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(AssetInterface $asset): int;
+    public function execute(AssetInterface $mediaAsset): int;
 }
