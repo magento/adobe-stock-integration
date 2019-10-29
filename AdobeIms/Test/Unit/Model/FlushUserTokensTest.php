@@ -37,7 +37,7 @@ class FlushUserTokensTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userContext = $this->createMock(UserContextInterface::class);
         $this->userProfileRepository = $this->createMock(UserProfileRepositoryInterface::class);

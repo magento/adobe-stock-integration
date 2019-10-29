@@ -192,6 +192,6 @@ class LogOutTest extends TestCase
             );
         $this->loggerInterfaceMock->expects($this->once())
             ->method('critical');
-        $this->assertEquals(false, $this->model->execute());
+        $this->assertFalse($this->model->execute());
     }
 }
