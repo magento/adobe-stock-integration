@@ -39,4 +39,12 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface
      */
     public function getExtensionAttributes(): CategoryExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void;
 }

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-use Elasticsearch\Endpoints\Get;
 use Magento\AdobeIms\Model\GetAccessToken;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
@@ -39,7 +38,7 @@ class GetAccessTokenTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userContext = $this->createMock(UserContextInterface::class);
         $this->userProfile = $this->createMock(UserProfileRepositoryInterface::class);

@@ -45,10 +45,7 @@ class WordsTest extends TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->setMethods(['encodeUrlParam'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->words = $this->objectManager->getObject(
             Words::class,
             [
@@ -68,26 +65,14 @@ class WordsTest extends TestCase
     public function testApplyWithRequestValue(string $requestValue, string $encodedValue)
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
-        $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setWords'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParamsMock = $this->createMock(SearchParameters::class);
+        $filterGroupMock = $this->createMock(FilterGroup::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
-        $filter = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filter = $this->createMock(Filter::class);
         $filter->expects($this->once())
             ->method('getField')
             ->willReturn('words');
@@ -116,26 +101,14 @@ class WordsTest extends TestCase
     public function testApplyWithoutWordsField()
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
-        $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setWords'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParamsMock = $this->createMock(SearchParameters::class);
+        $filterGroupMock = $this->createMock(FilterGroup::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
-        $filter = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filter = $this->createMock(Filter::class);
         $filter->expects($this->once())
             ->method('getField')
             ->willReturn('other_field');
@@ -161,26 +134,14 @@ class WordsTest extends TestCase
     public function testApplyWithEmptyWords()
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
-        $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setWords'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParamsMock = $this->createMock(SearchParameters::class);
+        $filterGroupMock = $this->createMock(FilterGroup::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
-        $filter = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filter = $this->createMock(Filter::class);
         $filter->expects($this->once())
             ->method('getField')
             ->willReturn('words');
@@ -207,26 +168,14 @@ class WordsTest extends TestCase
     public function testApplyWithOnlyQuotes()
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
-        $searchParamsMock = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setWords'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParamsMock = $this->createMock(SearchParameters::class);
+        $filterGroupMock = $this->createMock(FilterGroup::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
-        $filter = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filter = $this->createMock(Filter::class);
         $filter->expects($this->once())
             ->method('getField')
             ->willReturn('words');

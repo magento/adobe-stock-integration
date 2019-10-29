@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Test\Unit\Model;
+namespace Magento\AdobeIms\Test\Unit\Block\Adminhtml;
 
 use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
@@ -82,12 +82,10 @@ class SignInTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturn(self::PROFILE_URL);
@@ -95,12 +93,12 @@ class SignInTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($urlBuilderMock);
-        $this->userAuthorizedMock = $this->getMockBuilder(UserAuthorizedInterface::class)->getMock();
-        $this->userProfileRepositoryMock = $this->getMockBuilder(UserProfileRepositoryInterface::class)->getMock();
-        $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)->getMock();
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMock();
+        $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
+        $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->jsonHexTag = $this->objectManager->getObject(JsonHexTag::class);
-        $this->configProviderMock = $this->getMockBuilder(ConfigProviderInterface::class)->getMock();
+        $this->configProviderMock = $this->createMock(ConfigProviderInterface::class);
         $this->configMock->expects($this->once())
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);

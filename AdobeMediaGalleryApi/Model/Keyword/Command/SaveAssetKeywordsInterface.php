@@ -17,9 +17,8 @@ interface SaveAssetKeywordsInterface
      * Save asset keywords.
      *
      * @param \Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface[] $keywords
-     *
-     * @return int[]
+     * @param int $assetId
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $keywords): array;
+    public function execute(array $keywords, int $asssetId): void;
 }

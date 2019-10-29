@@ -73,10 +73,7 @@ class LogOutTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->userProfileInterfaceMock = $this->createMock(UserProfileInterface::class);
         $this->userProfileRepositoryInterfaceMock = $this->createMock(UserProfileRepositoryInterface::class);
         $this->userContextInterfaceMock = $this->createMock(UserContextInterface::class);
@@ -195,6 +192,6 @@ class LogOutTest extends TestCase
             );
         $this->loggerInterfaceMock->expects($this->once())
             ->method('critical');
-        $this->assertEquals(false, $this->model->execute());
+        $this->assertFalse($this->model->execute());
     }
 }
