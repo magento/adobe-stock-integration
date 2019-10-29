@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeImsApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface UserProfileInterface
  * @api
  */
-interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface UserProfileInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
