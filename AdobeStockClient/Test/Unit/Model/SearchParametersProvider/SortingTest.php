@@ -45,19 +45,10 @@ class SortingTest extends TestCase
     public function testApplyWithFoundedField(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getSortOrders'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sortOrderMock = $this->getMockBuilder(SortOrder::class)
-            ->setMethods(['getField'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $sortOrderMock = $this->createMock(SortOrder::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getSortOrders')
             ->willReturn([$sortOrderMock]);
@@ -77,19 +68,10 @@ class SortingTest extends TestCase
     public function testApplyWithoutFoundedField(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getSortOrders'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sortOrderMock = $this->getMockBuilder(SortOrder::class)
-            ->setMethods(['getField'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $sortOrderMock = $this->createMock(SortOrder::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getSortOrders')
             ->willReturn([$sortOrderMock]);

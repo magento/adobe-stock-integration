@@ -9,7 +9,7 @@ namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
@@ -54,7 +54,7 @@ class GetAssetById implements GetAssetByIdInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adobeId): DocumentInterface
+    public function execute(int $adobeId): Document
     {
         $mediaIdFilter = $this->filterBuilder->setField('media_id')
             ->setValue($adobeId)

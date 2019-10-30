@@ -55,4 +55,12 @@ class Category extends AbstractExtensibleModel implements CategoryInterface
     {
         return $this->_getExtensionAttributes();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

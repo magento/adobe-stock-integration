@@ -6,13 +6,14 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\AdobeStockAsset\Model\DocumentToAsset;
-use Magento\AdobeStockAsset\Model\DocumentToMediaGalleryAsset;
+use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\Framework\Api\AttributeInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\AdobeStockImage\Model\SaveImage;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -56,6 +57,16 @@ class SaveImageTest extends TestCase
     private $documentToAsset;
 
     /**
+     * @var MockObject|DocumentToKeywords
+     */
+    private $documentToKeywords;
+
+    /**
+     * @var MockObject|SaveAssetKeywordsInterface
+     */
+    private $saveAssetKeywords;
+
+    /**
      * @var SaveImage
      */
     private $saveImage;
@@ -71,6 +82,8 @@ class SaveImageTest extends TestCase
         $this->saveAdobeStockAsset = $this->createMock(SaveAssetInterface::class);
         $this->documentToMediaGalleryAsset = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->documentToAsset = $this->createMock(DocumentToAsset::class);
+        $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
+        $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -81,6 +94,8 @@ class SaveImageTest extends TestCase
                 'saveAdobeStockAsset' =>  $this->saveAdobeStockAsset,
                 'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAsset,
                 'documentToAsset' =>  $this->documentToAsset,
+                'documentToKeywords' => $this->documentToKeywords,
+                'saveAssetKeywords' => $this->saveAssetKeywords
             ]
         );
     }
@@ -88,12 +103,12 @@ class SaveImageTest extends TestCase
     /**
      * Verify that image can be saved.
      *
-     * @param DocumentInterface $document
+     * @param Document $document
      * @param bool $delete
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @dataProvider assetProvider
      */
-    public function testExecute(DocumentInterface $document, bool $delete)
+    public function testExecute(Document $document, bool $delete)
     {
         if ($delete) {
             $this->storage->expects($this->once())
@@ -115,6 +130,13 @@ class SaveImageTest extends TestCase
         $this->saveMediaAsset->expects($this->once())
             ->method('execute')
             ->willReturn($mediaGalleryAssetId);
+
+        $this->documentToKeywords->expects($this->once())
+            ->method('convert')
+            ->with($document);
+
+        $this->saveAssetKeywords->expects($this->once())
+            ->method('execute');
 
         $this->documentToAsset->expects($this->once())
             ->method('convert')
@@ -149,29 +171,19 @@ class SaveImageTest extends TestCase
      * Get document
      *
      * @param string $path
-     * @return DocumentInterface|MockObject
+     * @return Document|MockObject
      */
-    private function getDocument(string $path = null): DocumentInterface
+    private function getDocument(string $path = null): Document
     {
-        $document = $this->createMock(DocumentInterface::class);
+        $document = $this->createMock(Document::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);
-        $pathAttribute->expects($this->at(0))
+        $pathAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn($path);
-        $document->expects($this->at(0))
+        $document->expects($this->once())
             ->method('getCustomAttribute')
             ->with('path')
             ->willReturn($pathAttribute);
-
-        $keywordsAttribute = $this->createMock(AttributeInterface::class);
-        $keywordsMock = $this->createMock(KeywordInterface::class);
-        $keywordsAttribute->expects($this->at(1))
-            ->method('getValue')
-            ->willReturn([$keywordsMock]);
-        $document->expects($this->at(1))
-            ->method('getCustomAttribute')
-            ->with('keywords')
-            ->willReturn($keywordsAttribute);
 
         return $document;
     }

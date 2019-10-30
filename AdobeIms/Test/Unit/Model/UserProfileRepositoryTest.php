@@ -43,16 +43,11 @@ class UserProfileRepositoryTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->resource = $this->getMockBuilder(ResourceUserProfile::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save', 'load'])
-            ->getMock();
-        $this->entityFactory =  $this->getMockBuilder(UserProfileInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(ResourceUserProfile::class);
+        $this->entityFactory =  $this->createMock(UserProfileInterfaceFactory::class);
         $this->model = new UserProfileRepository(
             $this->resource,
             $this->entityFactory
@@ -70,13 +65,13 @@ class UserProfileRepositoryTest extends TestCase
 
     /**
      * Test save with exception.
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save user profile.
      */
     public function testSaveWithException(): void
     {
-        $userProfile =  $this->getMockBuilder(UserProfile::class)->disableOriginalConstructor()->getMock();
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('Could not save user profile.');
+
+        $userProfile = $this->createMock(UserProfile::class);
         $this->resource->expects($this->once())
             ->method('save')
             ->with($userProfile)
@@ -99,12 +94,12 @@ class UserProfileRepositoryTest extends TestCase
 
     /**
      * Test get user id with exception.
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The user profile wasn't found.
      */
     public function testGeWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The user profile wasn\'t found.');
+
         $entity = $this->objectManager->getObject(UserProfile::class);
         $this->entityFactory->method('create')
             ->willReturn($entity);

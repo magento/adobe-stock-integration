@@ -39,4 +39,12 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface
      */
     public function getExtensionAttributes(): CreatorExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(CreatorExtensionInterface $extensionAttributes): void;
 }

@@ -86,17 +86,11 @@ class CallbackTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->authMock = $this->getMockBuilder(\Magento\Backend\Model\Auth::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
-            ->getMock();
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->authMock = $this->createMock(\Magento\Backend\Model\Auth::class);
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->context = $this->objectManager->getObject(
             \Magento\Backend\App\Action\Context::class,
             [
@@ -104,12 +98,8 @@ class CallbackTest extends TestCase
                 'resultFactory' => $this->resultFactory
             ]
         );
-        $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'setUserId'])
-            ->getMock();
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->userMock = $this->createMock(\Magento\User\Model\User::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->userProfileRepositoryInterface = $this->createMock(UserProfileRepositoryInterface::class);
         $this->userProfileInterfaceFactory = $this->createMock(UserProfileInterfaceFactory::class);
         $this->getTokenInterface = $this->createMock(GetTokenInterface::class);
@@ -148,10 +138,7 @@ class CallbackTest extends TestCase
         $userProfileMock->expects($this->once())
             ->method('setAccessTokenExpiresAt');
         $userProfileMock->expects($this->once())->method('setImage');
-        $resultInterfaceMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setContents'])
-            ->getMock();
+        $resultInterfaceMock = $this->createMock(\Magento\Framework\Controller\Result\Raw::class);
         $this->userProfileRepositoryInterface->expects($this->once())
             ->method('save')
             ->willReturn(null);

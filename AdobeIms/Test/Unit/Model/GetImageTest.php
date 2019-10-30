@@ -61,14 +61,11 @@ class GetImageTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->configInterface = $this->createMock(ConfigInterface::class);
