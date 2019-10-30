@@ -1,6 +1,6 @@
 {
     "name": "magento/module-adobe-media-gallery",
-    "description": "Magento module responsible adobe media handling",
+    "description": "Magento module responsible for media handling",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
