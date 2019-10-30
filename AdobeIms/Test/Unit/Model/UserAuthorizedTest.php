@@ -36,7 +36,7 @@ class UserAuthorizedTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userContext = $this->createMock(UserContextInterface::class);
         $this->userProfile = $this->createMock(UserProfileRepositoryInterface::class);
@@ -62,6 +62,6 @@ class UserAuthorizedTest extends TestCase
             ->method('getAccessTokenExpiresAt')
             ->willReturn(date('Y-m-d H:i:s'));
 
-        $this->assertEquals(true, $this->userAuthorized->execute());
+        $this->assertTrue($this->userAuthorized->execute());
     }
 }

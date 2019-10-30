@@ -62,7 +62,7 @@ class ProfileTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->action = $this->createMock(\Magento\Backend\App\Action\Context::class);
 

@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeImsApi\Api;
 
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
+
 /**
  * Interface UserProfileRepositoryInterface
  * @api
@@ -21,7 +23,7 @@ interface UserProfileRepositoryInterface
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Magento\AdobeImsApi\Api\Data\UserProfileInterface $entity): void;
+    public function save(UserProfileInterface $entity): void;
 
     /**
      * Get user profile
@@ -30,7 +32,7 @@ interface UserProfileRepositoryInterface
      * @return \Magento\AdobeImsApi\Api\Data\UserProfileInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get(int $entityId): \Magento\AdobeImsApi\Api\Data\UserProfileInterface;
+    public function get(int $entityId): UserProfileInterface;
 
     /**
      * Get user profile by user ID
@@ -39,5 +41,5 @@ interface UserProfileRepositoryInterface
      * @return \Magento\AdobeImsApi\Api\Data\UserProfileInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getByUserId(int $userId): \Magento\AdobeImsApi\Api\Data\UserProfileInterface;
+    public function getByUserId(int $userId): UserProfileInterface;
 }

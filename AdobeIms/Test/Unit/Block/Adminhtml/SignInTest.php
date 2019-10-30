@@ -82,7 +82,7 @@ class SignInTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $urlBuilderMock = $this->createMock(UrlInterface::class);
