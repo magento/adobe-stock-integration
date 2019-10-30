@@ -8,17 +8,17 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
-use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\SaveImage;
+use Magento\AdobeStockImage\Model\Storage;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\AdobeStockImage\Model\SaveImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImage\Model\Storage;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -72,7 +72,7 @@ class SaveImageTest extends TestCase
     private $saveImage;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp()
     {

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeImsApi\Api\Data;
+namespace Magento\AdobeImsApi\Api;
 
 /**
  * Class Config

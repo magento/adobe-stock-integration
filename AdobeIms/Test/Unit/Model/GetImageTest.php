@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\GetImage;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;

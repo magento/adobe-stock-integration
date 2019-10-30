@@ -11,7 +11,7 @@ namespace Magento\AdobeStockClient\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockClientApi\Api\ConfigInterface;
 
 /**
  * Class Config

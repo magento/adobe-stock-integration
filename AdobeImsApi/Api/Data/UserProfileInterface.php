@@ -16,22 +16,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  */
 interface UserProfileInterface extends ExtensibleDataInterface
 {
-    /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
-    const ID = 'id';
-    const USER_ID = 'admin_user_id';
-    const NAME = 'name';
-    const EMAIL = 'email';
-    const IMAGE = 'image';
-    const ACCOUNT_TYPE = 'account_type';
-    const ACCESS_TOKEN = 'access_token';
-    const REFRESH_TOKEN = 'refresh_token';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
-    const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
-    /**#@-*/
-
     /**
      * Get ID
      *

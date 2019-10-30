@@ -52,7 +52,7 @@ class GetRelatedImagesTest extends TestCase
     private $fields;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp()
     {

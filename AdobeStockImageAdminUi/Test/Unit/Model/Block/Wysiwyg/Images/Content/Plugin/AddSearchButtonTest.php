@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model\Block\Wysiwyg\Images\Content\Plugin;
 
-use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\ConfigInterface;
 use Magento\AdobeStockImageAdminUi\Model\Block\Wysiwyg\Images\Content\Plugin\AddSearchButton;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -74,7 +74,7 @@ class AddSearchButtonTest extends TestCase
             ->willReturn(true);
 
         /**
-         * @var \Magento\Backend\Block\Widget\Container|MockObject $containerMock
+         * @var Container|MockObject $containerMock
          */
         $containerMock = $this->createMock(Container::class);
         $containerMock->expects($this->once())
@@ -98,7 +98,7 @@ class AddSearchButtonTest extends TestCase
             ->willReturn(false);
 
         /**
-         * @var \Magento\Backend\Block\Widget\Container|MockObject $containerMock
+         * @var Container|MockObject $containerMock
          */
         $containerMock = $this->createMock(Container::class);
         $containerMock->expects($this->never())

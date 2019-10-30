@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Model\Block\Wysiwyg\Images\Content\Plugin;
 
-use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\ConfigInterface;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\AuthorizationInterface;

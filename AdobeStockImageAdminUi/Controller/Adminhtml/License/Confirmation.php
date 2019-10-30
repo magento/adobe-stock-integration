@@ -62,7 +62,7 @@ class Confirmation extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {

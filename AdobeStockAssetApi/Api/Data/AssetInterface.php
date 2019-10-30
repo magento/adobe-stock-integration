@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Asset Interface
  *
  * @api
  */
-interface AssetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface AssetInterface extends ExtensibleDataInterface
 {
     /**
      * Get ID

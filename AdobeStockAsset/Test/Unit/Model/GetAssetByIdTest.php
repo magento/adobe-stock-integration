@@ -39,7 +39,7 @@ class GetAssetByIdTest extends TestCase
     private $getAssetList;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp()
     {

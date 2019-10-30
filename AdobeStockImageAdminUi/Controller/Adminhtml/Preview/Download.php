@@ -68,7 +68,7 @@ class Download extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {

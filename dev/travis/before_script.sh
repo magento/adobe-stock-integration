@@ -8,7 +8,7 @@ trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit
 
 # prepare for test suite
 
-if [[ $TEST_SUITE = "functional" ]] || [[ $TEST_SUITE = "api" ]] || [[ $TEST_SUITE = "integration" ]]; then
+if [[ ${TEST_SUITE} = "functional" ]] || [[ ${TEST_SUITE} = "api" ]] || [[ ${TEST_SUITE} = "integration" ]]; then
         echo "Installing Magento"
         php bin/magento setup:install -q \
             --language="en_US" \
@@ -25,7 +25,7 @@ if [[ $TEST_SUITE = "functional" ]] || [[ $TEST_SUITE = "api" ]] || [[ $TEST_SUI
             --admin-password="123123q"
 fi
 
-if [[ $TEST_SUITE = "functional" ]]; then
+if [[ ${TEST_SUITE} = "functional" ]]; then
         echo "Enabling production mode"
         php bin/magento deploy:mode:set production
 
@@ -48,7 +48,7 @@ if [[ $TEST_SUITE = "functional" ]]; then
         mftf generate:tests
 fi
 
-if [[ $TEST_SUITE = "api" ]]; then
+if [[ ${TEST_SUITE} = "api" ]]; then
         echo "Prepare api-functional tests for running"
         cd dev/tests/api-functional
 
@@ -65,7 +65,7 @@ if [[ $TEST_SUITE = "api" ]]; then
         php bin/magento cache:flush
 fi
 
-if [[ $TEST_SUITE = "unit" ]]; then
+if [[ ${TEST_SUITE} = "unit" ]]; then
       echo "Prepare unit tests for runining"
       composer require "mustache/mustache":"~2.5"
       composer require "php-coveralls/php-coveralls":"^1.0"

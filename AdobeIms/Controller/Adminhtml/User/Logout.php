@@ -9,6 +9,7 @@ namespace Magento\AdobeIms\Controller\Adminhtml\User;
 
 use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
@@ -17,9 +18,7 @@ use Magento\Framework\HTTP\Client\CurlFactory;
  */
 class Logout extends Action
 {
-    /**
-     * Internal server error response code.
-     */
+    private const HTTP_INTERNAL_SUCCESS = 200;
     private const HTTP_INTERNAL_ERROR = 500;
 
     /**
@@ -33,13 +32,11 @@ class Logout extends Action
     private $logout;
 
     /**
-     * SignOut constructor.
-     *
-     * @param Action\Context $context
+     * @param Context $context
      * @param LogOutInterface $logOut
      */
     public function __construct(
-        Action\Context $context,
+        Context $context,
         LogOutInterface $logOut
     ) {
         parent::__construct($context);
@@ -47,13 +44,13 @@ class Logout extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
         $logout = $this->logout->execute();
         if ($logout) {
-            $responseCode = 200;
+            $responseCode = self::HTTP_INTERNAL_SUCCESS;
             $response = [
                 'success' => true,
             ];

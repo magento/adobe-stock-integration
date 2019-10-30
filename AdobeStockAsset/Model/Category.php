@@ -18,6 +18,9 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class Category extends AbstractExtensibleModel implements CategoryInterface
 {
+    private const ID = 'id';
+    private const NAME = 'name';
+
     /**
      * @inheritdoc
      */

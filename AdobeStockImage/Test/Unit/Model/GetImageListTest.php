@@ -64,7 +64,7 @@ class GetImageListTest extends TestCase
     private $filterBuilderMock;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp()
     {
