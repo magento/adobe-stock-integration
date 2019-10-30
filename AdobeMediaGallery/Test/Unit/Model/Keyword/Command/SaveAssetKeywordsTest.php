@@ -43,6 +43,11 @@ class SaveAssetKeywordsTest extends TestCase
     private $saveAssetLinksMock;
 
     /**
+     * @var Select|MockObject
+     */
+    private $selectMock;
+
+    /**
      * SetUp
      */
     public function setUp(): void
@@ -52,6 +57,7 @@ class SaveAssetKeywordsTest extends TestCase
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->selectMock = $this->createMock(Select::class);
 
         $this->sut = new SaveAssetKeywords(
             $this->resourceConnectionMock,
@@ -70,15 +76,19 @@ class SaveAssetKeywordsTest extends TestCase
      */
     public function testAssetKeywordsSave(array $keywords, int $assetId, array $items): void
     {
-        $this->prepareResourceConnection();
-        $this->connectionMock->expects($this->once())
-            ->method('insertArray')
-            ->with(
-                'media_gallery_keyword',
-                ['keyword'],
-                $items,
-                2
-            );
+        $expectedCalls = (int) (count($keywords));
+
+        if ($expectedCalls) {
+            $this->prepareResourceConnection();
+            $this->connectionMock->expects($this->once())
+                ->method('insertArray')
+                ->with(
+                    'media_gallery_keyword',
+                    ['keyword'],
+                    $items,
+                    2
+                );
+        }
 
         $this->sut->execute($keywords, $assetId);
     }
@@ -90,12 +100,14 @@ class SaveAssetKeywordsTest extends TestCase
      */
     public function testAssetNotSavingCausedByError(): void
     {
+        $keyword = new DataObject(['keyword' => 'keyword-1']);
+
         $this->resourceConnectionMock
             ->method('getConnection')
             ->willThrowException((new \Exception()));
         $this->expectException(CouldNotSaveException::class);
 
-        $this->sut->execute([], 1);
+        $this->sut->execute([$keyword], 1);
     }
 
     /**
@@ -103,14 +115,13 @@ class SaveAssetKeywordsTest extends TestCase
      */
     private function prepareResourceConnection(): void
     {
-        $selectStub = $this->createMock(Select::class);
-        $selectStub->method('from')->willReturnSelf();
-        $selectStub->method('columns')->with('id')->willReturnSelf();
-        $selectStub->method('where')->willReturnSelf();
+        $this->selectMock->method('from')->willReturnSelf();
+        $this->selectMock->method('columns')->with('id')->willReturnSelf();
+        $this->selectMock->method('where')->willReturnSelf();
 
         $this->connectionMock
             ->method('select')
-            ->willReturn($selectStub);
+            ->willReturn($this->selectMock);
         $this->connectionMock
             ->method('fetchCol')
             ->willReturn([['id'=> 1], ['id' => 2]]);

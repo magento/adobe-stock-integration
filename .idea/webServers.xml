@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="8915f2b2-97ab-43d3-bb35-776d3d6ef4a4" name="stock.docker" url="http://localhost">
+        <fileTransfer host="localhost" port="2306" rootFolder="/home/dev/sites/stock" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="2306" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
