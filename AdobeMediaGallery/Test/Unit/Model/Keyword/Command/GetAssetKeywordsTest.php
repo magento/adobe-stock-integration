@@ -93,6 +93,7 @@ class GetAssetKeywordsTest extends TestCase
             ->willThrowException((new \Exception()));
 
         $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('An error occurred during get asset keywords: ');
 
         $this->sut->execute($randomAssetId);
     }

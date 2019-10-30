@@ -86,6 +86,7 @@ class SaveAssetLinksTest extends TestCase
             ->method('getConnection')
             ->willThrowException((new \Exception()));
         $this->expectException(CouldNotSaveException::class);
+        $this->expectExceptionMessage('An error occurred during save asset keyword links: ');
 
         $this->sut->execute(1, [1, 2]);
     }
