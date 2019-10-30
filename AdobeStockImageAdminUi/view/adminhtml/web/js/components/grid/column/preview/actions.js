@@ -17,8 +17,6 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/actions',
             loginProvider: 'name = adobe-login, ns = adobe-login',
-            // eslint-disable-next-line max-len
-            previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
@@ -28,7 +26,7 @@ define([
             messageDelay: 5,
             modules: {
                 login: '${ $.loginProvider }',
-                preview: '${ $.previewProvider }'
+                preview: '${ $.parentName }.preview'
             }
         },
 
