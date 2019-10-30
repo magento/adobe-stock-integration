@@ -12,6 +12,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeIms\Controller\Adminhtml\User\Profile;
@@ -23,7 +24,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ProfileTest extends TestCase
 {
-
     /**
      * @var MockObject|UserProfileRepositoryInterface $userProfileRepository
      */
@@ -117,7 +117,7 @@ class ProfileTest extends TestCase
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(null);
         $this->userProfileRepository->expects($this->exactly(1))
             ->method('getByUserId')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new NoSuchEntityException());
         $result = [
             'success' => false,
             'message' => __('An error occurred during get user data. Contact support.'),

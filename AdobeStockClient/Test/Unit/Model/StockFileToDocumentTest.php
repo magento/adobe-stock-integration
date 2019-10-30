@@ -9,7 +9,9 @@ namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use AdobeStock\Api\Models\StockFile;
 use Magento\AdobeStockClient\Model\StockFileToDocument;
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -67,11 +69,11 @@ class StockFileToDocumentTest extends TestCase
      */
     public function testConvert(StockFile $stockFile, array $attributesData)
     {
-        $item = $this->createMock(\Magento\Framework\Api\Search\Document::class);
+        $item = $this->createMock(Document::class);
 
         $i = 0;
         foreach ($attributesData as $attributeKey => $attributeValue) {
-            $attribute = $this->createMock(\Magento\Framework\Api\AttributeValue::class);
+            $attribute = $this->createMock(AttributeValue::class);
 
             $this->attributeValueFactory->expects($this->at($i))
                 ->method('create')

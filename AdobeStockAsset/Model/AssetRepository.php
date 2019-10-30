@@ -19,6 +19,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -96,7 +97,6 @@ class AssetRepository implements AssetRepositoryInterface
      *
      * @param AssetInterface $asset
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(AssetInterface $asset): void
     {

@@ -15,6 +15,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -95,7 +96,7 @@ class Callback extends Action
     /**
      * @inheritdoc
      */
-    public function execute(): \Magento\Framework\Controller\ResultInterface
+    public function execute(): ResultInterface
     {
         try {
             $tokenResponse = $this->getToken->execute(

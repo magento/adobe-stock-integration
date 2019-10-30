@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Block\Adminhtml;
 
-use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;

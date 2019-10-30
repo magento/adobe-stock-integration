@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model\Extract;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\Framework\Api\Search\Document;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
+use Magento\Framework\Api\Search\Document;
 
 /**
  * Adoobe stock asset extractor
@@ -66,6 +66,7 @@ class AdobeStockAsset
         $attributes = $document->getCustomAttributes();
         $assetData = [];
         $creatorData = [];
+        $categoryData = [];
         foreach ($attributes as $attribute) {
             if ($attribute->getAttributeCode() === self::DOCUMENT_FIELD_CATEGORY) {
                 $categoryData = $attribute->getValue();
@@ -84,11 +85,15 @@ class AdobeStockAsset
             $assetData[$key] = $value;
         }
 
-        $category = $this->categoryFactory->create(['data' => $categoryData]);
-        $assetData[self::ASSET_FIELD_CATEGORY] = $category;
+        if (!empty($categoryData)) {
+            $category = $this->categoryFactory->create(['data' => $categoryData]);
+            $assetData[self::ASSET_FIELD_CATEGORY] = $category;
+        }
 
-        $creator = $this->creatorFactory->create(['data' => $creatorData]);
-        $assetData[self::ASSET_FIELD_CREATOR] = $creator;
+        if (!empty($creatorData)) {
+            $creator = $this->creatorFactory->create(['data' => $creatorData]);
+            $assetData[self::ASSET_FIELD_CREATOR] = $creator;
+        }
 
         return $this->assetFactory->create(['data' => $assetData]);
     }

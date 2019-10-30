@@ -8,10 +8,9 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Block\Adminhtml;
 
 use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
-use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeIms\Model\UserProfile;
-use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;

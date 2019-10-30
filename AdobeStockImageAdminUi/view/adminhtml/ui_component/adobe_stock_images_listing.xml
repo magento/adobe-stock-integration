@@ -201,7 +201,8 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" component="Magento_AdobeUi/js/components/grid/column/image">
+        <column name="thumbnail_url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image"
+                component="Magento_AdobeUi/js/components/grid/column/image">
             <settings>
                 <label translate="true">Thumbnail Image</label>
                 <bodyTmpl>Magento_AdobeUi/grid/column/image</bodyTmpl>

@@ -17,22 +17,20 @@
                 text-align: center;
             }
         }
+
         &-column {
             overflow: hidden;
             margin: @admin__masonry_grid_image__space/2;
             float: left;
             background-color: #ffffff;
+
             img {
                 cursor: pointer;
                 height: 100%;
                 width: 100%;
             }
-            &:first-child .masonry-image-preview .preview-buttons .action-previous ,
-            &:last-child .masonry-image-preview .preview-buttons .action-next {
-                opacity: .5;
-                pointer-events: none;
-            }
         }
+
         &-overlay {
             position: absolute;
             color: #fff;
@@ -41,6 +39,7 @@
             opacity: 0.6;
             background-color: #D5D5D5;
         }
+
         &-preview {
             position: absolute;
             left: 0;
@@ -49,27 +48,7 @@
             background-color: #ffffff;
             width: 100%;
             padding: 0 0 30px;
-            .action-buttons {
-                text-align: right;
-                .action {
-                    &-close {
-                        position: static;
-                        padding: 30px;
-                    }
-                    &-previous,
-                    &-next {
-                        background: transparent;
-                        border: none;
-                        margin: 0;
-                        white-space: nowrap;
-                    }
-                    &-close,
-                    &-previous,
-                    &-next {
-                        font-size: 2rem;
-                    }
-                }
-            }
+
             .container {
                 max-width: 880px;
                 margin: auto;
@@ -97,24 +76,23 @@
             }
         }
     }
+
     .masonry-sorting {
         display: inline-block;
+
         select {
             border: none;
             background-image: url(../images/arrows-bg.svg);
             padding-right: 2.2rem;
+
             &:active {
                 background-image+: url('../images/arrows-bg.svg');
             }
         }
     }
+
     .masonry-results-number {
         display: inline-block;
         margin-right: 1.4rem;
-    }
-    .admin__form-field {
-        .colorpicker-input {
-            min-width: 70%;
-        }
     }
 }

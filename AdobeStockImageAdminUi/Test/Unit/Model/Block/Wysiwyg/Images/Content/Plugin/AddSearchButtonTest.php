@@ -74,7 +74,7 @@ class AddSearchButtonTest extends TestCase
             ->willReturn(true);
 
         /**
-         * @var \Magento\Backend\Block\Widget\Container|MockObject $containerMock
+         * @var Container|MockObject $containerMock
          */
         $containerMock = $this->createMock(Container::class);
         $containerMock->expects($this->once())
@@ -98,7 +98,7 @@ class AddSearchButtonTest extends TestCase
             ->willReturn(false);
 
         /**
-         * @var \Magento\Backend\Block\Widget\Container|MockObject $containerMock
+         * @var Container|MockObject $containerMock
          */
         $containerMock = $this->createMock(Container::class);
         $containerMock->expects($this->never())
