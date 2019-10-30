@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\ConfigInterface;
 
 /**
  * Class Config

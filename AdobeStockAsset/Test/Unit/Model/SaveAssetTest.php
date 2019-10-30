@@ -39,7 +39,7 @@ class SaveAssetTest extends TestCase
     private $saveAsset;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp()
     {

@@ -72,7 +72,7 @@ class SaveImageTest extends TestCase
     private $saveImage;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp()
     {

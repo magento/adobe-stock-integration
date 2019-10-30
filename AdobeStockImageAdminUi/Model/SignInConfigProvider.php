@@ -67,6 +67,7 @@ class SignInConfigProvider implements ConfigProviderInterface
      * Get user quota information
      *
      * @return array
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     private function getUserQuota(): array
     {
@@ -83,9 +84,7 @@ class SignInConfigProvider implements ConfigProviderInterface
                 'images' => $quota->getImages(),
                 'credits' => $quota->getCredits()
             ];
-        } catch (AuthenticationException $exception) {
-            return $defaultQuota;
-        } catch (AuthorizationException $exception) {
+        } catch (AuthenticationException | AuthorizationException $exception) {
             return $defaultQuota;
         }
     }

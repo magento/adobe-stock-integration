@@ -9,7 +9,6 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\Hydrator;
 

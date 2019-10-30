@@ -62,7 +62,7 @@ class Quota extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {

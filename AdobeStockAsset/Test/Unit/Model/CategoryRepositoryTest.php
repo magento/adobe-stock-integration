@@ -66,7 +66,7 @@ class CategoryRepositoryTest extends TestCase
     private $commandSave;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp(): void
     {

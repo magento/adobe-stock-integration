@@ -16,9 +16,6 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface;
  */
 interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    const ID = 'id';
-    const NAME = 'name';
-
     /**
      * Get the id
      *

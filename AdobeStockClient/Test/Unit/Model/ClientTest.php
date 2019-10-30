@@ -18,7 +18,7 @@ use Magento\AdobeStockClient\Model\ConnectionWrapper;
 use Magento\AdobeStockClient\Model\ConnectionWrapperFactory;
 use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\AdobeStockClient\Model\StockFileToDocument;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;

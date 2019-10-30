@@ -18,6 +18,9 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class Creator extends AbstractExtensibleModel implements CreatorInterface
 {
+    private const ID = 'id';
+    private const NAME = 'name';
+
     /**
      * @inheritdoc
      */

@@ -41,7 +41,7 @@ class UserAuthorized implements UserAuthorizedInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute(int $adminUserId = null): bool
     {
