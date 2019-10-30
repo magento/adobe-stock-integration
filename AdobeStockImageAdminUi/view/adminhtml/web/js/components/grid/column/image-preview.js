@@ -142,7 +142,6 @@ define([
             if (record.series && record.model &&
                 record.series() && record.model() &&
                 record.series().length && record.model().length) {
-                this.updateHeight();
                 return;
             }
             $.ajax({
