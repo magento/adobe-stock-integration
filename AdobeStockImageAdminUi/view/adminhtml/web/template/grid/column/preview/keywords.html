@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="keywords" afterRender="function () { $col.updateHeight() }">
+<div class="keywords">
     <div class="title" translate="'Similar Keywords'"></div>
     <!-- ko foreach: getKeywords($col.displayedRecord()) -->
         <div class="keyword" data-bind="css: { 'hide': $index() >= $parent.getKeywordsLimit()}">
