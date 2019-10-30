@@ -12,9 +12,8 @@ define([
     return Column.extend({
         defaults: {
             previewImageSelector: '[data-image-preview]',
-            visibility: [],
+            visibile: null,
             height: 0,
-            previewStyles: {},
             displayedRecord: {},
             lastOpenedImage: null,
             modules: {
@@ -39,9 +38,8 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'visibility',
+                    'visibile',
                     'height',
-                    'previewStyles',
                     'displayedRecord',
                     'lastOpenedImage'
                 ]);
@@ -103,31 +101,14 @@ define([
          * @param {Object} record
          */
         show: function (record) {
-            var visibility = this.visibility(),
-                img;
-
             this.hide();
             this.displayedRecord(record);
+            this._selectRow(record.rowNumber || null);
+            this.visibile(record._rowIndex);
 
-            if (record.rowNumber) {
-                this._selectRow(record.rowNumber);
-            }
+            this.updateHeight();
+            this.scrollToPreview();
 
-            visibility[record._rowIndex] = true;
-
-            this.visibility(visibility);
-
-            img = $(this.previewImageSelector + ' img');
-
-            if (img.get(0).complete) {
-                this.updateHeight();
-                this.scrollToPreview();
-            } else {
-                img.load(function () {
-                    this.updateHeight();
-                    this.scrollToPreview();
-                }.bind(this));
-            }
             this.lastOpenedImage(record._rowIndex);
         },
 
@@ -136,18 +117,14 @@ define([
          */
         updateHeight: function () {
             this.height($(this.previewImageSelector).height() + 'px');
-            this.visibility(this.visibility());
         },
 
         /**
          * Close image preview
          */
         hide: function () {
-            var visibility = this.visibility();
-
             this.lastOpenedImage(null);
-            visibility.fill(false);
-            this.visibility(visibility);
+            this.visibile(null);
             this.height(0);
             this._selectRow(null);
         },
@@ -160,15 +137,12 @@ define([
          */
         isVisible: function (record) {
             if (this.lastOpenedImage() === record._rowIndex &&
-                (
-                    this.visibility()[record._rowIndex] === undefined ||
-                    this.visibility()[record._rowIndex] === false
-                )
+                this.visibile() === null
             ) {
                 this.show(record);
             }
 
-            return this.visibility()[record._rowIndex] || false;
+            return this.visibile() === record._rowIndex || false;
         },
 
         /**
@@ -177,11 +151,9 @@ define([
          * @returns {Object}
          */
         getStyles: function () {
-            this.previewStyles({
+            return {
                 'margin-top': '-' + this.height()
-            });
-
-            return this.previewStyles();
+            };
         },
 
         /**
