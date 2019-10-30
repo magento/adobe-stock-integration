@@ -101,13 +101,24 @@ define([
          * @param {Object} record
          */
         show: function (record) {
+            var img;
+
             this.hide();
             this.displayedRecord(record);
             this._selectRow(record.rowNumber || null);
             this.visibile(record._rowIndex);
 
-            this.updateHeight();
-            this.scrollToPreview();
+            img = $(this.previewImageSelector + ' img');
+
+            if (img.get(0).complete) {
+                this.updateHeight();
+                this.scrollToPreview();
+            } else {
+                img.load(function () {
+                    this.updateHeight();
+                    this.scrollToPreview();
+                }.bind(this));
+            }
 
             this.lastOpenedImage(record._rowIndex);
         },
