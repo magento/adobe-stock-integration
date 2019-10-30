@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockClientApi\Api\Data;
+namespace Magento\AdobeStockClientApi\Api;
 
 /**
  * Class Config

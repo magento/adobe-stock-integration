@@ -18,7 +18,7 @@ use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;

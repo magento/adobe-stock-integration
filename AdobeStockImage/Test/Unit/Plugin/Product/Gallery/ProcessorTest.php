@@ -57,8 +57,6 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test afterRemoveImage if file path is null.
-     *
-     * @throws \ReflectionException
      */
     public function testAfterRemoveImageIfPathIsNull()
     {

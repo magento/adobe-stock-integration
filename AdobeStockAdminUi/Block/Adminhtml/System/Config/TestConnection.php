@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config;
 
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Backend\Block\Template\Context;

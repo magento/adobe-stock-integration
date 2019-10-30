@@ -6,6 +6,7 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -80,7 +81,7 @@ class StorageTest extends TestCase
 
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+            ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
 
         $this->httpsDriverMock->expects($this->once())
@@ -104,7 +105,7 @@ class StorageTest extends TestCase
 
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+            ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
 
         $this->mediaDirectoryMock->expects($this->once())

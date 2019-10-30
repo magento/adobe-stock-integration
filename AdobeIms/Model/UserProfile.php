@@ -17,6 +17,22 @@ use Magento\AdobeImsApi\Api\Data\UserProfileExtensionInterface;
  */
 class UserProfile extends AbstractExtensibleModel implements UserProfileInterface
 {
+    /**#@+
+     * Constants for keys of data array. Identical to the name of the getter in snake case
+     */
+    private const ID = 'id';
+    private const USER_ID = 'admin_user_id';
+    private const NAME = 'name';
+    private const EMAIL = 'email';
+    private const IMAGE = 'image';
+    private const ACCOUNT_TYPE = 'account_type';
+    private const ACCESS_TOKEN = 'access_token';
+    private const REFRESH_TOKEN = 'refresh_token';
+    private const CREATED_AT = 'created_at';
+    private const UPDATED_AT = 'updated_at';
+    private const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
+    /**#@-*/
+
     /**
      * @inheritdoc
      */
@@ -66,7 +82,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getImage(): ?string
     {
@@ -74,7 +90,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setImage(string $value): void
     {

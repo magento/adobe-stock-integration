@@ -5,10 +5,19 @@
 
 & when (@media-common = true) {
     .adobe-stock-images-search-modal-content {
+        .masonry-image-column {
+            &:first-child .masonry-image-preview .preview-buttons .action-previous,
+            &:last-child .masonry-image-preview .preview-buttons .action-next {
+                opacity: .5;
+                pointer-events: none;
+            }
+        }
+
         .masonry-image-overlay {
             background-color: #507DC8;
             opacity: 1;
         }
+
         .adobe-login-container {
             .adobe-user-information {
                 .adobe-user-popup {
@@ -18,6 +27,7 @@
                 }
             }
         }
+
         .masonry-image-grid {
             + .admin__data-grid-header {
                 .selectmenu-items {
@@ -26,6 +36,7 @@
                 }
             }
         }
+
         .masonry-image-preview {
             .title {
                 font-weight: bold;
@@ -60,6 +71,31 @@
                 }
             }
 
+            .action-buttons {
+                text-align: right;
+
+                .action {
+                    &-close {
+                        position: static;
+                        padding: 30px;
+                    }
+
+                    &-previous,
+                    &-next {
+                        background: transparent;
+                        border: none;
+                        margin: 0;
+                        white-space: nowrap;
+                    }
+
+                    &-close,
+                    &-previous,
+                    &-next {
+                        font-size: 2rem;
+                    }
+                }
+            }
+
             .attributes {
                 .attribute {
                     display: inline-block;
@@ -75,6 +111,7 @@
                 margin: 30px 0 20px 0;
                 display: inline-block;
                 width: 100%;
+
                 .title {
                     margin-bottom: 30px;
                 }
@@ -83,9 +120,11 @@
                     display: inline-block;
                     margin-right: 5px;
                     line-height: 40px;
+
                     &.hide {
                         display: none;
                     }
+
                     .value {
                         font-size: 15px;
                         text-transform: capitalize;
@@ -96,6 +135,7 @@
                         color: #666666;
                     }
                 }
+
                 button {
                     margin-left: 10px;
                 }
@@ -110,13 +150,16 @@
                 vertical-align: middle;
                 display: inline-block;
                 width: 100%;
+
                 .ui-tabs-panel {
                     margin-top: 30px;
                     padding: 0;
+
                     .thumbnail {
                         display: inline-block;
                         margin-right: 10px;
                         vertical-align: middle;
+
                         img {
                             max-height: 100px;
                             max-width: 150px;
@@ -124,6 +167,7 @@
                             height: auto;
                         }
                     }
+
                     .see-more-wrapper {
                         display: inline-block;
                         max-height: 100px;
@@ -132,10 +176,13 @@
                         vertical-align: middle;
                         width: 100%;
                         cursor: pointer;
+
                         .see-more-content {
                             padding: 30px;
+
                             .three-dots {
                                 margin-bottom: 10px;
+
                                 .dots {
                                     content: "\22EE";
                                     display: inline-block;
@@ -153,65 +200,80 @@
                 }
             }
         }
+
+        .admin__form-field {
+            .colorpicker-input {
+                min-width: 70%;
+            }
+        }
     }
 
-  //Start Save Prompt styling
-  .adobe-stock-save-preview-prompt {
-    .modal-inner-wrap {
-      max-width: 650px;
-      width: 100%;
-      .modal-header {
-        padding: 30px;
-        .modal-title {
-          margin: 0;
-        }
-        .action-close {
-          right: 30px;
-          top: 30px;
-        }
-      }
+    //Start Save Prompt styling
+    .adobe-stock-save-preview-prompt {
+        .modal-inner-wrap {
+            max-width: 650px;
+            width: 100%;
 
-      .modal-content {
-        .prompt-message {
-          font-weight: normal;
-          margin-bottom: 15px;
-        }
-        .admin__field-wide {
-          margin-bottom: 0;
-        }
-        .image-ext {
-          position: absolute;
-          top: 0;
-          right: 0;
-          padding: 0.6rem 1rem 0.6rem;
-          color: #999;
-          cursor: default;
-        }
-        .admin__field-with-image-ext {
-          .admin__control-text {
-            padding-right: 5rem;
-          }
-        }
-      }
-      .modal-footer {
-        padding: 30px;
-        .action-dismiss {
-          margin-right: 35px;
-          color: #464646;
-        }
-      }
-    }
-  }
-  //End Save Prompt styling
-  .admin__adobe-stock-image-checkbox {
-    .admin__field-control._with-tooltip {
-      .admin__form-field-label {
-        display: inline-block;
-      }
+            .modal-header {
+                padding: 30px;
 
-      .admin__field-tooltip {
-        margin: -5px 0 0 5px;
-      }
+                .modal-title {
+                    margin: 0;
+                }
+
+                .action-close {
+                    right: 30px;
+                    top: 30px;
+                }
+            }
+
+            .modal-content {
+                .prompt-message {
+                    font-weight: normal;
+                    margin-bottom: 15px;
+                }
+
+                .admin__field-wide {
+                    margin-bottom: 0;
+                }
+
+                .image-ext {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    padding: 0.6rem 1rem 0.6rem;
+                    color: #999;
+                    cursor: default;
+                }
+
+                .admin__field-with-image-ext {
+                    .admin__control-text {
+                        padding-right: 5rem;
+                    }
+                }
+            }
+
+            .modal-footer {
+                padding: 30px;
+
+                .action-dismiss {
+                    margin-right: 35px;
+                    color: #464646;
+                }
+            }
+        }
     }
-  }
+
+    //End Save Prompt styling
+    .admin__adobe-stock-image-checkbox {
+        .admin__field-control._with-tooltip {
+            .admin__form-field-label {
+                display: inline-block;
+            }
+
+            .admin__field-tooltip {
+                margin: -5px 0 0 5px;
+            }
+        }
+    }
 }

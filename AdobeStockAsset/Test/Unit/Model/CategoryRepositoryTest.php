@@ -17,6 +17,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,7 +67,7 @@ class CategoryRepositoryTest extends TestCase
     private $commandSave;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp(): void
     {
@@ -149,12 +150,10 @@ class CategoryRepositoryTest extends TestCase
 
     /**
      * Test get By id with exception.
-     *
-     * @expectedException Magento\Framework\Exception\NoSuchEntityException
-     * @exceptedExceptionMessage Object with id 2 does not exist
      */
     public function testGetByIdWithException(): void
     {
+        $this->expectException(NoSuchEntityException::class);
         $categoryMock = $this->createMock(\Magento\AdobeStockAsset\Model\Category::class);
         $this->categoryFactory->expects($this->once())
             ->method('create')

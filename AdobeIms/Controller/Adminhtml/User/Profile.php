@@ -11,6 +11,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -69,7 +70,7 @@ class Profile extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
@@ -88,7 +89,7 @@ class Profile extends Action
                 'result' => $userData
             ];
 
-        } catch (\Exception $exception) {
+        } catch (NoSuchEntityException $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $logMessage = __('An error occurred during get user data operation: %1', $exception->getMessage());
             $this->logger->critical($logMessage);
