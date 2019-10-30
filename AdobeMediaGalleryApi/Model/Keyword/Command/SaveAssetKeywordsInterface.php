@@ -9,7 +9,6 @@ namespace Magento\AdobeMediaGalleryApi\Model\Keyword\Command;
 
 /**
  * Interface SaveAssetKeywordsInterface
- * @api
  */
 interface SaveAssetKeywordsInterface
 {

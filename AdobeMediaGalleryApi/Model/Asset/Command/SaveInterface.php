@@ -11,8 +11,7 @@ namespace Magento\AdobeMediaGalleryApi\Model\Asset\Command;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 
 /**
- * Save media asset
- * @api
+ * Interface SaveInterface
  */
 interface SaveInterface
 {

@@ -9,17 +9,16 @@ declare(strict_types=1);
 namespace Magento\AdobeMediaGalleryApi\Model\Asset\Command;
 
 /**
- * Get media asset list
- * @api
+ * Interface GetByPathInterface
  */
-interface GetListByPathInterface
+interface GetByPathInterface
 {
     /**
      * Get media asset list
      *
      * @param string $mediaFilePath
      *
-     * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface[]
+     * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface
      */
-    public function execute(string $mediaFilePath): array;
+    public function execute(string $mediaFilePath): \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 }

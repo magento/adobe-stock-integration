@@ -9,17 +9,20 @@ namespace Magento\AdobeMediaGallery\Model\Asset\Command;
 
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetListByPathInterface;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class GetListByIds
  */
-class GetListByPath implements GetListByPathInterface
+class GetByPath implements GetByPathInterface
 {
     private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
+
+    private const MEDIA_GALLERY_ASSET_PATH = 'path';
 
     /**
      * @var ResourceConnection
@@ -37,7 +40,7 @@ class GetListByPath implements GetListByPathInterface
     private $logger;
 
     /**
-     * GetListByPath constructor.
+     * GetByPath constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param AssetInterfaceFactory $mediaAssetFactory
@@ -58,22 +61,24 @@ class GetListByPath implements GetListByPathInterface
      *
      * @param string $mediaFilePath
      *
-     * @return array
+     * @return AssetInterface
      * @throws IntegrationException
      */
-    public function execute(string $mediaFilePath): array
+    public function execute(string $mediaFilePath): AssetInterface
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
                 ->from(self::TABLE_MEDIA_GALLERY_ASSET)
-                ->where('path in (?)', $mediaFilePath);
-            $data = $connection->fetchAssoc($select);
+                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' in (?)', $mediaFilePath);
+            $data = $connection->query($select)->fetch();
 
-            $mediaAssets = [];
-            foreach ($data as $id => $assetData) {
-                $mediaAssets[$id] = $this->mediaAssetFactory->create(['data' => $assetData]);
+            if (empty($data)) {
+                $message = __('There is no such media asset with path "%1"', $mediaFilePath);
+                throw new NoSuchEntityException($message);
             }
+
+            $mediaAssets = $this->mediaAssetFactory->create(['data' => $data]);
 
             return $mediaAssets;
         } catch (\Exception $exception) {

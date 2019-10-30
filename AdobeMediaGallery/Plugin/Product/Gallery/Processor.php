@@ -8,12 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Plugin\Product\Gallery;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetListByPathInterface;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByIdInterface;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Processor as ProcessorSubject;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -22,14 +19,9 @@ use Psr\Log\LoggerInterface;
 class Processor
 {
     /**
-     * @var GetListByPathInterface
+     * @var DeleteByPathInterface
      */
-    private $getMediaListByPath;
-
-    /**
-     * @var DeleteByIdInterface
-     */
-    private $deleteMediaAssetById;
+    private $deleteMediaAssetByPath;
 
     /**
      * @var LoggerInterface
@@ -39,17 +31,14 @@ class Processor
     /**
      * Processor constructor.
      *
-     * @param GetListByPathInterface $getMediaListByPath
-     * @param DeleteByIdInterface $deleteMediaAssetById
+     * @param DeleteByPathInterface $deleteMediaAssetByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
-        GetListByPathInterface $getMediaListByPath,
-        DeleteByIdInterface $deleteMediaAssetById,
+        DeleteByPathInterface $deleteMediaAssetByPath,
         LoggerInterface $logger
     ) {
-        $this->getMediaListByPath = $getMediaListByPath;
-        $this->deleteMediaAssetById = $deleteMediaAssetById;
+        $this->deleteMediaAssetByPath = $deleteMediaAssetByPath;
         $this->logger = $logger;
     }
 
@@ -70,14 +59,10 @@ class Processor
         }
 
         try {
-            $mediaAssetList = $this->getMediaListByPath->execute($file);
-        } catch (NoSuchEntityException $exception) {
-            return $result;
-        }
-
-        /** @var AssetInterface $mediaAsse */
-        foreach ($mediaAssetList as $mediaAsset) {
-            $this->deleteMediaAssetById->execute($mediaAsset->getId());
+            $this->deleteMediaAssetByPath->execute($file);
+        } catch (\Exception $exception) {
+            $message = __('An error occurred during media asset delete at media processor: %1', $exception->getMessage());
+            $this->logger->critical($message->render());
         }
 
         return $result;

@@ -9,17 +9,16 @@ declare(strict_types=1);
 namespace Magento\AdobeMediaGalleryApi\Model\Asset\Command;
 
 /**
- * Interface DeleteByIdInterface
- * @api
+ * Interface DeleteByPathInterface
  */
-interface DeleteByIdInterface
+interface DeleteByPathInterface
 {
     /**
-     * Delete media asset by id
+     * Delete media asset by path
      *
-     * @param int $mediaAssetId
+     * @param string $mediaAssetPath
      *
      * @return void
      */
-    public function execute(int $mediaAssetId): void;
+    public function execute(string $mediaAssetPath): void;
 }

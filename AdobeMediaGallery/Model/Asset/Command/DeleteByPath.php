@@ -7,30 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Model\Asset\Command;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByIdInterface;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class DeleteById
+ * Class DeleteByPath
  */
-class DeleteById implements DeleteByIdInterface
+class DeleteByPath implements DeleteByPathInterface
 {
     private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
+
+    private const MEDIA_GALLERY_ASSET_PATH = 'path';
 
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var GetByIdInterface
-     */
-    private $getMediaAssetById;
 
     /**
      * @var LoggerInterface
@@ -41,40 +36,35 @@ class DeleteById implements DeleteByIdInterface
      * DeleteById constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param GetByIdInterface $getMediaAssetById
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetByIdInterface $getMediaAssetById,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->getMediaAssetById = $getMediaAssetById;
         $this->logger = $logger;
     }
 
     /**
-     * Delete media asset by id
+     * Delete media asset by path
      *
-     * @param int $mediaAssetId
+     * @param string $mediaAssetPath
      *
      * @return void
      * @throws CouldNotDeleteException
      */
-    public function execute(int $mediaAssetId): void
+    public function execute(string $mediaAssetPath): void
     {
         try {
-            /** @var AssetInterface $mediaAsset */
-            $mediaAsset = $this->getMediaAssetById->execute($mediaAssetId);
             /** @var AdapterInterface $connection */
             $connection = $this->resourceConnection->getConnection();
-            $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
-            $connection->delete($tableName, 'id = ' . $mediaAsset->getId());
+            $tableName = $connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
+            $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_PATH . ' = ?' => $mediaAssetPath]);
         } catch (\Exception $exception) {
             $message = __(
-                'Could not delete media asset with id %id: %error',
-                ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
+                'Could not delete media asset with path %path: %error',
+                ['path' => $mediaAssetPath, 'error' => $exception->getMessage()]
             );
             $this->logger->critical($message);
             throw new CouldNotDeleteException($message, $exception);

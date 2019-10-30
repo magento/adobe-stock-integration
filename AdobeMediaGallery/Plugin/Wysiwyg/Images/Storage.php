@@ -8,13 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Plugin\Wysiwyg\Images;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetListByPathInterface;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByIdInterface;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByPathInterface;
+use Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage as StorageSubject;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Exception\ValidatorException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -23,24 +22,19 @@ use Psr\Log\LoggerInterface;
 class Storage
 {
     /**
-     * @var GetListByPathInterface
+     * @var GetByPathInterface
      */
-    private $getMediaListByPath;
+    private $getMediaAssetByPath;
 
     /**
-     * @var DeleteByIdInterface
+     * @var DeleteByPathInterface
      */
-    private $deleteMediaAssetById;
+    private $deleteMediaAssetByPath;
 
     /**
      * @var Filesystem
      */
-    protected $filesystem;
-
-    /**
-     * @var ReadInterface
-     */
-    private $mediaDirectory;
+    private $filesystem;
 
     /**
      * @var LoggerInterface
@@ -50,19 +44,19 @@ class Storage
     /**
      * Storage constructor.
      *
-     * @param GetListByPathInterface $getMediaListByPath
-     * @param DeleteByIdInterface $deleteMediaAssetById
+     * @param GetByPathInterface $getMediaAssetByPath
+     * @param DeleteByPathInterface $deleteMediaAssetByPath
      * @param Filesystem $filesystem
      * @param LoggerInterface $logger
      */
     public function __construct(
-        GetListByPathInterface $getMediaListByPath,
-        DeleteByIdInterface $deleteMediaAssetById,
+        GetByPathInterface $getMediaAssetByPath,
+        DeleteByPathInterface $deleteMediaAssetByPath,
         Filesystem $filesystem,
         LoggerInterface $logger
     ) {
-        $this->getMediaListByPath = $getMediaListByPath;
-        $this->deleteMediaAssetById = $deleteMediaAssetById;
+        $this->getMediaAssetByPath = $getMediaAssetByPath;
+        $this->deleteMediaAssetByPath = $deleteMediaAssetByPath;
         $this->filesystem = $filesystem;
         $this->logger = $logger;
     }
@@ -75,7 +69,7 @@ class Storage
      * @param $target
      *
      * @return mixed
-     * @throws \Magento\Framework\Exception\ValidatorException
+     * @throws ValidatorException
      */
     public function afterDeleteFile(StorageSubject $subject, $result, $target)
     {
@@ -84,18 +78,14 @@ class Storage
         }
 
         $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($target);
-        $mediaAssetList = $this->getMediaListByPath->execute($relativePath);
-        if (!isset($mediaAssetList)) {
+        if (!$relativePath) {
             return $result;
         }
 
         try {
-            /** @var AssetInterface $mediaAsse */
-            foreach ($mediaAssetList as $mediaAsset) {
-                $this->deleteMediaAssetById->execute($mediaAsset->getId());
-            }
+            $this->deleteMediaAssetByPath->execute($relativePath);
         } catch (\Exception $exception) {
-            $message = __('An error occurred during media asset delete: %1', $exception->getMessage());
+            $message = __('An error occurred during media asset delete at wysiwyg: %1', $exception->getMessage());
             $this->logger->critical($message->render());
         }
 

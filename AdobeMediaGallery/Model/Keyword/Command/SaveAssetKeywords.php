@@ -47,7 +47,11 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     }
 
     /**
-     * @inheritdoc
+     * Save asset keywords.
+     *
+     * @param KeywordInterface[] $keywords
+     * @param int $assetId
+     * @throws CouldNotSaveException
      */
     public function execute(array $keywords, int $assetId): void
     {

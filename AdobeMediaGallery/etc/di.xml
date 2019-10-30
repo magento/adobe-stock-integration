@@ -11,8 +11,8 @@
 
     <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\GetById"/>
     <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\Save"/>
-    <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetListByPathInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\GetListByPath"/>
-    <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByIdInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\DeleteById"/>
+    <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByPathInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\GetByPath"/>
+    <preference for="Magento\AdobeMediaGalleryApi\Model\Asset\Command\DeleteByPathInterface" type="Magento\AdobeMediaGallery\Model\Asset\Command\DeleteByPath"/>
 
     <preference for="Magento\AdobeMediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface" type="Magento\AdobeMediaGallery\Model\Keyword\Command\GetAssetKeywords"/>
     <preference for="Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" type="Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords"/>

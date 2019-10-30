@@ -73,7 +73,7 @@ class GetById implements GetByIdInterface
             $data = $connection->query($select)->fetch();
 
             if (empty($data)) {
-                $message = __('There is no such media asset with "%1"', $mediaAssetId);
+                $message = __('There is no such media asset with id "%1"', $mediaAssetId);
                 throw new NoSuchEntityException($message);
             }
 

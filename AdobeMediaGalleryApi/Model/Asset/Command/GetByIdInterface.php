@@ -9,8 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeMediaGalleryApi\Model\Asset\Command;
 
 /**
- * Get media asset by id
- * @api
+ * Interface GetByIdInterface
  */
 interface GetByIdInterface
 {
