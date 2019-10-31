@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\UrlInterface;
-use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\AdobeStockClientApi\Api\ConfigInterface;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class Config
@@ -38,7 +38,7 @@ class Config implements ConfigInterface
     private $url;
 
     /**
-     * @var ProductMetadataInterface 
+     * @var ProductMetadataInterface
      */
     private $metadataInterface;
 
@@ -52,14 +52,14 @@ class Config implements ConfigInterface
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-	UrlInterface $url,
-	ProductMetadataInterface $metadataInterface,
+        UrlInterface $url,
+        ProductMetadataInterface $metadataInterface,
         array $searchResultFields = []
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
-	$this->searchResultFields = $searchResultFields;
-	$this->metadataInterface = $metadataInterface;
+        $this->searchResultFields = $searchResultFields;
+        $this->metadataInterface = $metadataInterface;
     }
 
     /**
@@ -78,8 +78,8 @@ class Config implements ConfigInterface
      * @return string|null
      */
     public function getProductName() : ?string
-    {	
-         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME) . '/' . $this->metadataInterface->getVersion();
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME) . '/' . $this->metadataInterface->getVersion();
     }
 
     /**
