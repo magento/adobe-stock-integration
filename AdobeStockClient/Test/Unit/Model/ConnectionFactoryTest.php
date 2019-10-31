@@ -30,7 +30,7 @@ class ConnectionFactoryTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->connectionFactory = $this->objectManager->getObject(ConnectionFactory::class);

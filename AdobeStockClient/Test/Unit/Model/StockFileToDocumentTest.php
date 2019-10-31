@@ -43,7 +43,7 @@ class StockFileToDocumentTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -67,7 +67,7 @@ class StockFileToDocumentTest extends TestCase
      *
      * @dataProvider convertDataProvider
      */
-    public function testConvert(StockFile $stockFile, array $attributesData)
+    public function testConvert(StockFile $stockFile, array $attributesData): void
     {
         $item = $this->createMock(Document::class);
 
@@ -106,7 +106,7 @@ class StockFileToDocumentTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public function convertDataProvider(): array
     {
         /** @var StockFile $stockFile */
         $stockFile = new StockFile([]);
