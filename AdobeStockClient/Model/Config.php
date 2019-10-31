@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\AdobeStockClientApi\Api\ConfigInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Class Config
@@ -37,19 +38,28 @@ class Config implements ConfigInterface
     private $url;
 
     /**
-     * Config constructor.
+     * @var ProductMetadataInterface 
+     */
+    private $metadataInterface;
+
+    /**
+     * Constructor
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
+     * @param ProductMetadataInterface $metadataInterface
      * @param array $searchResultFields
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        UrlInterface $url,
+	UrlInterface $url,
+	ProductMetadataInterface $metadataInterface,
         array $searchResultFields = []
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
-        $this->searchResultFields = $searchResultFields;
+	$this->searchResultFields = $searchResultFields;
+	$this->metadataInterface = $metadataInterface;
     }
 
     /**
@@ -68,8 +78,8 @@ class Config implements ConfigInterface
      * @return string|null
      */
     public function getProductName() : ?string
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME);
+    {	
+         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME) . '/' . $this->metadataInterface->getVersion();
     }
 
     /**

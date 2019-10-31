@@ -11,7 +11,7 @@
             <integration>
                 <enabled>1</enabled>
                 <environment>PROD</environment>
-                <product_name>magento-adobe-stock-integration</product_name>
+                <product_name>Magento</product_name>
             </integration>
         </adobe_stock>
     </default>
