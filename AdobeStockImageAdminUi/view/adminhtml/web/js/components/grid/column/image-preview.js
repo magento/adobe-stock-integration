@@ -154,8 +154,8 @@ define([
                     'limit': this.tabImagesLimit
                 }
             }).done(function (data) {
-                record.series(data.result.same_series);
-                record.model(data.result.same_model);
+                record.series(data.result['same_series']);
+                record.model(data.result['same_model']);
                 this.updateHeight();
             }.bind(this));
         },
@@ -173,7 +173,7 @@ define([
                 },
                 {
                     name: 'File type',
-                    value: this.displayedRecord().content_type.toUpperCase()
+                    value: this.displayedRecord()['content_type'].toUpperCase()
                 },
                 {
                     name: 'Category',

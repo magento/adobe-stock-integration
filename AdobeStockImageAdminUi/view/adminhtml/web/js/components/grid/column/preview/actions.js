@@ -36,7 +36,7 @@ define([
          * @returns {observable}
          */
         isDownloaded: function () {
-            return this.preview().displayedRecord().is_downloaded;
+            return this.preview().displayedRecord()['is_downloaded'];
         },
 
         /**
@@ -45,7 +45,7 @@ define([
          * @returns {observable}
          */
         isLicensed: function () {
-            return this.preview().displayedRecord().is_licensed;
+            return this.preview().displayedRecord()['is_licensed'];
         },
 
         /**
@@ -54,7 +54,7 @@ define([
          * @returns {observable}
          */
         isLicensedLocally: function () {
-            return this.preview().displayedRecord().is_licensed_locally;
+            return this.preview().displayedRecord()['is_licensed_locally'];
         },
 
         /**
@@ -119,12 +119,12 @@ define([
                 success: function () {
                     var displayedRecord = this.preview().displayedRecord();
 
-                    displayedRecord.is_downloaded = 1;
+                    displayedRecord['is_downloaded'] = 1;
                     displayedRecord.path = destinationPath;
 
                     if (license) {
-                        displayedRecord.is_licensed = 1;
-                        displayedRecord.is_licensed_locally = 1;
+                        displayedRecord['is_licensed'] = 1;
+                        displayedRecord['is_licensed_locally'] = 1;
                     }
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
@@ -154,7 +154,7 @@ define([
          * @return string
          */
         getImageExtension: function (record) {
-            return record.content_type.match(/[^/]{1,4}$/);
+            return record['content_type'].match(/[^/]{1,4}$/);
         },
 
         /**
@@ -207,8 +207,8 @@ define([
                         this.getPrompt(
                             {
                                 'title': $.mage.__('License Adobe Stock Images?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>'
-                                    + displayFieldName,
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>' +
+                                    displayFieldName,
                                 'visible': !this.isDownloaded(),
                                 'actions': {
                                     confirm: function (fileName) {
