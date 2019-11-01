@@ -34,11 +34,6 @@ class DeleteTest extends TestCase
     public $fileSystemMock;
 
     /**
-     * @var MockObject | \Magento\Framework\Filesystem\DriverInterface
-     */
-    private $httpsDriverMock;
-
-    /**
      * @var MockObject | \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -50,7 +45,6 @@ class DeleteTest extends TestCase
     {
 
         $this->fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->httpsDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\Https::class);
         $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
@@ -58,7 +52,6 @@ class DeleteTest extends TestCase
             Delete::class,
             [
                 'filesystem'   => $this->fileSystemMock,
-                'driver'       => $this->httpsDriverMock,
                 'logger'          => $this->logger,
             ]
         );

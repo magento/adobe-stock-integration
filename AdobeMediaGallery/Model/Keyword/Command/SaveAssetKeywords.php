@@ -58,16 +58,18 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
                 $data[] = $keyword->getKeyword();
             }
 
-            /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
-            $connection = $this->resourceConnection->getConnection();
-            $connection->insertArray(
-                self::TABLE_KEYWORD,
-                [self::KEYWORD],
-                $data,
-                AdapterInterface::INSERT_IGNORE
-            );
+            if (!empty($data)) {
+                /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
+                $connection = $this->resourceConnection->getConnection();
+                $connection->insertArray(
+                    self::TABLE_KEYWORD,
+                    [self::KEYWORD],
+                    $data,
+                    AdapterInterface::INSERT_IGNORE
+                );
 
-            $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
+                $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
+            }
         } catch (\Exception $exception) {
             $message = __('An error occurred during save asset keyword: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);

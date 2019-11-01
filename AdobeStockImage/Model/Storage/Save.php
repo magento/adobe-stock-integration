@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
+use Magento\Framework\Filesystem\DriverInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,7 +26,7 @@ class Save
     private $filesystem;
 
     /**
-     * @var Https
+     * @var DriverInterface
      */
     private $driver;
 

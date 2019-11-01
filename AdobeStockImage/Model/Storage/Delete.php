@@ -11,8 +11,6 @@ namespace Magento\AdobeStockImage\Model\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Driver\Https;
-use Magento\Framework\Filesystem\DriverInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -26,11 +24,6 @@ class Delete
     private $filesystem;
 
     /**
-     * @var DriverInterface
-     */
-    private $driver;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -38,16 +31,13 @@ class Delete
     /**
      * Storage constructor.
      * @param Filesystem $filesystem
-     * @param Https $driver
      * @param LoggerInterface $logger
      */
     public function __construct(
         Filesystem $filesystem,
-        Https $driver,
         LoggerInterface $logger
     ) {
         $this->filesystem = $filesystem;
-        $this->driver = $driver;
         $this->logger = $logger;
     }
 

@@ -132,7 +132,7 @@ class AssetRepository implements AssetRepositoryInterface
 
             return $searchResults;
         } catch (\Exception $exception) {
-            $message = __('An error occurred during get asset list: %1', $exception->getMessage());
+            $message = __('An error occurred during get asset list: %error', ['error' => $exception->getMessage()]);
             throw new IntegrationException($message, $exception);
         }
     }

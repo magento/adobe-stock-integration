@@ -32,7 +32,7 @@ define([
                 type: 'POST',
                 url: this.quotaUrl,
                 data: {
-                    form_key: window.FORM_KEY
+                    'form_key': window.FORM_KEY
                 },
                 dataType: 'json',
                 context: this,
@@ -63,7 +63,7 @@ define([
                 type: 'POST',
                 url: this.profileUrl,
                 data: {
-                    form_key: window.FORM_KEY
+                    'form_key': window.FORM_KEY
                 },
                 dataType: 'json',
                 context: this,
