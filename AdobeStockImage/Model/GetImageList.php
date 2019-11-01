@@ -14,12 +14,19 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class GetImageList
  */
 class GetImageList implements GetImageListInterface
 {
+
+    /**
+     * Config path for default gallery filter value
+     */	
+    private const XML_PATH_DEFAULT_GALLERY_ID_PATH = 'adobe_stock/integration/default_gallery_id';
+    
     /**
      * @var GetAssetListInterface
      */
@@ -41,9 +48,9 @@ class GetImageList implements GetImageListInterface
     private $filterBuilder;
 
     /**
-     * @var string $defaultGalleryId
+     * @var ScopeCOnfigInterface $config
      */
-    private $defaultGalleryId;
+    private $config;
 
     /**
      * GetImageList constructor.
@@ -51,21 +58,21 @@ class GetImageList implements GetImageListInterface
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param GetAssetListInterface $getAssetList
      * @param FilterBuilder $filterBuilder
+     * @param ScopeConfigInterface
      * @param array $defaultFilters
-     * @param string $defaultGalleryId
      */
     public function __construct(
         FilterGroupBuilder $filterGroupBuilder,
         GetAssetListInterface $getAssetList,
-        FilterBuilder $filterBuilder,
-        array $defaultFilters = [],
-        string $defaultGalleryId
+	FilterBuilder $filterBuilder,
+	ScopeConfigInterface $scopeConfigInterface,
+        array $defaultFilters = []
     ) {
         $this->getAssetList = $getAssetList;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->defaultFilters = $defaultFilters;
-        $this->filterBuilder = $filterBuilder;
-        $this->defaultGalleryId = $defaultGalleryId;
+	$this->filterBuilder = $filterBuilder;
+	$this->config = $scopeConfigInterface;
     }
 
     /**
@@ -73,7 +80,7 @@ class GetImageList implements GetImageListInterface
      */
     public function execute(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $searchCriteria = $this->setCuratedFilter($searchCriteria);
+        $searchCriteria = $this->setDefaultGallery($searchCriteria);
         $searchCriteria = $this->setDefaultFilters($searchCriteria);
 
         return $this->getAssetList->execute($searchCriteria);
@@ -85,16 +92,16 @@ class GetImageList implements GetImageListInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchCriteriaInterface
      */
-    private function setCuratedFilter(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
+    private function setDefaultGallery(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
         if (count($searchCriteria->getFilterGroups()) === 0) {
-            $curateFilter = $this->filterBuilder
+            $galleryFilter = $this->filterBuilder
                ->setField('gallery_id')
                ->setConditionType('like')
-               ->setValue($this->defaultGalleryId)
+               ->setValue($this->config->getValue(self::XML_PATH_DEFAULT_GALLERY_ID_PATH))
                ->create();
 
-            $filterGroup = $this->filterGroupBuilder->setFilters([$curateFilter])->create();
+            $filterGroup = $this->filterGroupBuilder->setFilters([$galleryFilter])->create();
             $searchCriteria->setFilterGroups([$filterGroup]);
         }
         return $searchCriteria;

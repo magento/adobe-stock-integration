@@ -9,7 +9,9 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\AdobeStockImage\Model\GetImageList;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -17,8 +19,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\Filter;
 
 /**
  * Test for Magento\AdobeStockImage\Model\GetImageList Model.
@@ -97,7 +97,7 @@ class GetImageListTest extends TestCase
 
         /** @var MockObject|SearchCriteriaInterface $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
-        $searchCriteria->expects($this->once())
+        $searchCriteria->expects($this->exactly(2))
             ->method('getFilterGroups')
             ->willReturn([$appliedFilterGroup]);
         $searchCriteria->expects($this->once())
