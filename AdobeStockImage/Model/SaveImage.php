@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeMediaGallery\Model\Keyword\Command\SaveAssetKeywords;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
@@ -79,7 +78,7 @@ class SaveImage implements SaveImageInterface
     private $logger;
 
     /**
-     * @var SaveAssetKeywords
+     * @var SaveAssetKeywordsInterface
      */
     private $saveAssetKeywords;
 
