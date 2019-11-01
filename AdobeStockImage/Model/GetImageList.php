@@ -24,9 +24,9 @@ class GetImageList implements GetImageListInterface
 
     /**
      * Config path for default gallery filter value
-     */	
+     */
     private const XML_PATH_DEFAULT_GALLERY_ID_PATH = 'adobe_stock/integration/default_gallery_id';
-    
+
     /**
      * @var GetAssetListInterface
      */
@@ -48,7 +48,7 @@ class GetImageList implements GetImageListInterface
     private $filterBuilder;
 
     /**
-     * @var ScopeCOnfigInterface $config
+     * @var ScopeConfigInterface $config
      */
     private $config;
 
@@ -64,15 +64,15 @@ class GetImageList implements GetImageListInterface
     public function __construct(
         FilterGroupBuilder $filterGroupBuilder,
         GetAssetListInterface $getAssetList,
-	FilterBuilder $filterBuilder,
-	ScopeConfigInterface $scopeConfigInterface,
+        FilterBuilder $filterBuilder,
+        ScopeConfigInterface $scopeConfigInterface,
         array $defaultFilters = []
     ) {
         $this->getAssetList = $getAssetList;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->defaultFilters = $defaultFilters;
-	$this->filterBuilder = $filterBuilder;
-	$this->config = $scopeConfigInterface;
+        $this->filterBuilder = $filterBuilder;
+        $this->config = $scopeConfigInterface;
     }
 
     /**
@@ -87,19 +87,28 @@ class GetImageList implements GetImageListInterface
     }
 
     /**
-     * Set Curated filter if not set other filters.
+     * Set 'gallery_id' filter if not set other 'words' filter.
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchCriteriaInterface
      */
     private function setDefaultGallery(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
-        if (count($searchCriteria->getFilterGroups()) === 0) {
+        $isSetWordsFilter = false;
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() === 'words') {
+                    $isSetWordsFilter = true;
+                }
+            }
+        }
+
+        if (!$isSetWordsFilter) {
             $galleryFilter = $this->filterBuilder
-               ->setField('gallery_id')
-               ->setConditionType('like')
-               ->setValue($this->config->getValue(self::XML_PATH_DEFAULT_GALLERY_ID_PATH))
-               ->create();
+                ->setField('gallery_id')
+                ->setConditionType('like')
+                ->setValue($this->config->getValue(self::XML_PATH_DEFAULT_GALLERY_ID_PATH))
+                ->create();
 
             $filterGroup = $this->filterGroupBuilder->setFilters([$galleryFilter])->create();
             $searchCriteria->setFilterGroups([$filterGroup]);
