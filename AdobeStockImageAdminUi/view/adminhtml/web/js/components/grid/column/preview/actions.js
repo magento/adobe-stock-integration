@@ -86,8 +86,7 @@ define([
                         class: 'action-secondary action-dismiss',
 
                         /**
-                         * Cancel button click handler
-                         *
+                         * Close modal on button click
                          */
                         click: function () {
                             this.closeModal();
@@ -167,13 +166,17 @@ define([
         },
 
         /**
-         * Generate meaningful name image file
+         * Generate meaningful name image file,
+         * allow only alphanumerics, dashes, and underscores
          *
          * @param {Object} record
          * @return string
          */
         generateImageName: function (record) {
-            return record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return record.title.substring(0, 32)
+                .replace(/[^a-zA-Z0-9_]/g, '-')
+                .replace(/-{2,}/g, '-')
+                .toLowerCase();
         },
 
         /**
