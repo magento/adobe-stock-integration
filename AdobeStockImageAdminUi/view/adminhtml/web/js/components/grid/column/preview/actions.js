@@ -222,38 +222,59 @@ define([
                             buyCreditsUrl = this.preview().buyCreditsUrl,
                             displayFieldName = !this.isDownloaded() ? '<b>' + $.mage.__('File Name') + '</b>' : '',
                             filePathArray = record.path.split('/'),
-                            imageIndex = filePathArray.length - 1;
+                            imageIndex = filePathArray.length - 1,
+                            title = $.mage.__('License Adobe Stock Images?'),
+                            cancelText = $.mage.__('Cancel'),
+                            baseContent = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>';
 
-                        this.getPrompt(
-                            {
-                                'title': $.mage.__('License Adobe Stock Images?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>' +
-                                    displayFieldName,
-                                'visible': !this.isDownloaded(),
-                                'actions': {
-                                    confirm: function (fileName) {
-                                        if (typeof fileName === 'undefined') {
-                                            fileName = filePathArray[imageIndex]
-                                                .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                        if (canPurchase) {
+                            this.getPrompt(
+                                {
+                                    'title': title,
+                                    'content': baseContent + displayFieldName,
+                                    'visible': !this.isDownloaded(),
+                                    'actions': {
+                                        confirm: function (fileName) {
+                                            if (typeof fileName === 'undefined') {
+                                                fileName = filePathArray[imageIndex]
+                                                    .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                            }
+                                            licenseAndSave(record, fileName);
                                         }
-                                        canPurchase ?
-                                            licenseAndSave(record, fileName) :
-                                            window.open(buyCreditsUrl);
-                                    }
-                                },
-                                'buttons': [{
-                                    text: $.mage.__('Cancel'),
+                                    },
+                                    'buttons': [{
+                                        text: cancelText,
+                                        class: 'action-secondary action-dismiss',
+                                        click: function () {
+                                            this.closeModal();
+                                        }
+                                    }, {
+                                        text: $.mage.__('Confirm'),
+                                        class: 'action-primary action-accept'
+                                    }]
+
+                                }
+                            );
+                        } else {
+                            confirmation({
+                                title: title,
+                                content: baseContent,
+                                buttons: [{
+                                    text: cancelText,
                                     class: 'action-secondary action-dismiss',
                                     click: function () {
                                         this.closeModal();
                                     }
-                                }, {
-                                    text: canPurchase ? $.mage.__('Confirm') : $.mage.__('Buy Credits'),
-                                    class: 'action-primary action-accept'
+                                },{
+                                    text: $.mage.__('Buy Credits'),
+                                    class: 'action-primary action-accept',
+                                    click: function () {
+                                        window.open(buyCreditsUrl);
+                                        this.closeModal();
+                                    }
                                 }]
-
-                            }
-                        );
+                            });
+                        }
                     },
 
                     error: function (response) {
