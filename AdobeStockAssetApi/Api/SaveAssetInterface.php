@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+
 /**
  * Save asset and all it's relations
  *
@@ -21,5 +23,5 @@ interface SaveAssetInterface
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $asset
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function execute(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface $asset): void;
+    public function execute(AssetInterface $asset): void;
 }
