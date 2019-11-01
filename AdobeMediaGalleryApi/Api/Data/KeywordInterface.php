@@ -12,7 +12,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface KeywordInterface
- * @api
  */
 interface KeywordInterface extends ExtensibleDataInterface
 {

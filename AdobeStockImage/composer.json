@@ -6,7 +6,9 @@
         "magento/framework": "*",
         "magento/module-adobe-stock-asset-api": "*",
         "magento/module-adobe-stock-image-api": "*",
-        "magento/module-adobe-media-gallery-api": "*",
+        "magento/module-adobe-media-gallery-api": "*"
+    },
+    "suggest": {
         "magento/module-catalog": "*"
     },
     "type": "magento2-module",

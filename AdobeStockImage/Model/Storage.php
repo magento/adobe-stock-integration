@@ -16,7 +16,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\Filesystem\Io\File;
 use Psr\Log\LoggerInterface;
 
 /**

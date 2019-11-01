@@ -151,7 +151,16 @@ define([
                  * @param {Object} response
                  */
                 error: function (response) {
-                    messages.add('error', response.responseJSON.message);
+                    var message;
+
+                    if (typeof response.responseJSON === 'undefined' ||
+                        typeof response.responseJSON.message === 'undefined'
+                    ) {
+                        message = 'There was an error on attempt to save the image!';
+                    } else {
+                        message = response.responseJSON.message;
+                    }
+                    messages.add('error', message);
                     messages.scheduleCleanup(this.messageDelay);
                 }
             });
