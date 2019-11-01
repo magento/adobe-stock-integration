@@ -9,10 +9,11 @@
         "magento/module-adobe-stock-asset-api": "*",
         "magento/module-adobe-stock-image-api": "*",
         "magento/module-adobe-stock-client-api": "*",
-        "magento/module-adobe-ui": "*",
         "magento/module-backend": "*",
-        "magento/module-cms": "*",
         "magento/module-ui": "*"
+    },
+    "suggest": {
+        "magento/module-cms": "*"
     },
     "type": "magento2-module",
     "license": [

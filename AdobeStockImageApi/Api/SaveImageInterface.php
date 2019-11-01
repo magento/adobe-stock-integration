@@ -12,7 +12,6 @@ use Magento\Framework\Api\Search\Document;
 
 /**
  * SaveImageInterface
- *
  * @api
  */
 interface SaveImageInterface
@@ -23,6 +22,8 @@ interface SaveImageInterface
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function execute(Document $document, string $url, string $destinationPath): void;
 }

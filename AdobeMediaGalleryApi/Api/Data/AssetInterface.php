@@ -13,7 +13,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Asset Interface
  *
- * @api
  */
 interface AssetInterface extends ExtensibleDataInterface
 {
