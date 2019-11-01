@@ -10,10 +10,10 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Class GetImageList
@@ -41,23 +41,31 @@ class GetImageList implements GetImageListInterface
     private $filterBuilder;
 
     /**
+     * @var string $defaultGalleryId
+     */
+    private $defaultGalleryId;
+
+    /**
      * GetImageList constructor.
      *
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param GetAssetListInterface $getAssetList
      * @param FilterBuilder $filterBuilder
      * @param array $defaultFilters
+     * @param string $defaultGalleryId
      */
     public function __construct(
         FilterGroupBuilder $filterGroupBuilder,
         GetAssetListInterface $getAssetList,
         FilterBuilder $filterBuilder,
-        array $defaultFilters = []
+        array $defaultFilters = [],
+        string $defaultGalleryId
     ) {
         $this->getAssetList = $getAssetList;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->defaultFilters = $defaultFilters;
         $this->filterBuilder = $filterBuilder;
+        $this->defaultGalleryId = $defaultGalleryId;
     }
 
     /**
@@ -65,8 +73,31 @@ class GetImageList implements GetImageListInterface
      */
     public function execute(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
+        $searchCriteria = $this->setCuratedFilter($searchCriteria);
         $searchCriteria = $this->setDefaultFilters($searchCriteria);
+
         return $this->getAssetList->execute($searchCriteria);
+    }
+
+    /**
+     * Set Curated filter if not set other filters.
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchCriteriaInterface
+     */
+    private function setCuratedFilter(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
+    {
+        if (count($searchCriteria->getFilterGroups()) === 0) {
+            $curateFilter = $this->filterBuilder
+               ->setField('gallery_id')
+               ->setConditionType('like')
+               ->setValue($this->defaultGalleryId)
+               ->create();
+
+            $filterGroup = $this->filterGroupBuilder->setFilters([$curateFilter])->create();
+            $searchCriteria->setFilterGroups([$filterGroup]);
+        }
+        return $searchCriteria;
     }
 
     /**
@@ -75,7 +106,7 @@ class GetImageList implements GetImageListInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchCriteriaInterface
      */
-    private function setDefaultFilters(SearchCriteriaInterface $searchCriteria)
+    private function setDefaultFilters(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
         $filterGroups = $searchCriteria->getFilterGroups();
         $appliedFilters = $this->getAppliedFilters($filterGroups);

@@ -33,8 +33,9 @@
                     <item name="condition" xsi:type="string">eq</item>
                     <item name="field" xsi:type="string">ALL</item>
                 </item>
-            </argument>
-        </arguments>
+	  </argument>
+	  <argument name="defaultGalleryId" xsi:type="string">Kqy5H45lnKzkC5I8JGFXYVwr2ltNwMe7</argument>
+     </arguments>
     </type>
     <type name="Magento\AdobeStockImage\Model\Storage">
         <arguments>
