@@ -158,7 +158,7 @@ define([
                     ) {
                         message = 'There was an error on attempt to save the image!';
                     } else {
-                        message = response.responseJSON.message
+                        message = response.responseJSON.message;
                     }
                     messages.add('error', message);
                     messages.scheduleCleanup(this.messageDelay);
