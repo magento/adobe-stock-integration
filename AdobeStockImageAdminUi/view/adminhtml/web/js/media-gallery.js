@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'Magento_Ui/js/modal/confirm'
+], function ($, confirm) {
     'use strict';
 
     return {
@@ -64,8 +65,26 @@ define([
 
                 if (locatedImage.length) {
                     locatedImage.click();
+                } else {
+                    confirm({
+                        title: $.mage.__('Image location error'),
+                        content: $.mage.__('The image cannot be located!'),
+                        buttons: [{
+                            text: $.mage.__('Okay'),
+                            class: 'action-primary',
+                            attr: {},
+
+                            /**
+                             * Close modal on button click
+                             */
+                            click: function (event) {
+                                this.closeModal(event);
+                            }
+                        }]
+                    });
                 }
             }
+
             $.ajaxSetup({
                 async: true
             });
