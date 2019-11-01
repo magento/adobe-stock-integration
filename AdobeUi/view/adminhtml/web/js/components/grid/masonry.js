@@ -72,7 +72,7 @@ define([
             if (!rows || !rows.length) {
                 return;
             }
-            this.imageMargin = parseInt(this.imageMargin);
+            this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
             this.setLayoutStyles();
@@ -114,7 +114,7 @@ define([
          * Set layout styles inside the container
          */
         setLayoutStyles: function () {
-            var containerWidth = parseInt(this.container.clientWidth),
+            var containerWidth = parseInt(this.container.clientWidth, 10),
                 rowImages = [],
                 ratio = 0,
                 rowHeight = 0,
@@ -205,8 +205,8 @@ define([
                 img.styles = ko.observable();
             }
             img.styles({
-                width: parseInt(width) + 'px',
-                height: parseInt(height) + 'px'
+                width: parseInt(width, 10) + 'px',
+                height: parseInt(height, 10) + 'px'
             });
         },
 

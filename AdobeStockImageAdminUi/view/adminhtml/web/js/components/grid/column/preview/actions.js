@@ -1,7 +1,9 @@
+// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// jscs:enable
 define([
     'uiComponent',
     'jquery',
@@ -36,7 +38,7 @@ define([
          * @returns {observable}
          */
         isDownloaded: function () {
-            return this.preview().displayedRecord().is_downloaded;
+            return this.preview().displayedRecord()['is_downloaded'];
         },
 
         /**
@@ -45,7 +47,7 @@ define([
          * @returns {observable}
          */
         isLicensed: function () {
-            return this.preview().displayedRecord().is_licensed;
+            return this.preview().displayedRecord()['is_licensed'];
         },
 
         /**
@@ -54,7 +56,7 @@ define([
          * @returns {observable}
          */
         isLicensedLocally: function () {
-            return this.preview().displayedRecord().is_licensed_locally;
+            return this.preview().displayedRecord()['is_licensed_locally'];
         },
 
         /**
@@ -82,6 +84,11 @@ define([
                     'buttons': [{
                         text: $.mage.__('Cancel'),
                         class: 'action-secondary action-dismiss',
+
+                        /**
+                         * Cancel button click handler
+                         *
+                         */
                         click: function () {
                             this.closeModal();
                         }
@@ -116,20 +123,33 @@ define([
                     'destination_path': destinationPath
                 },
                 context: this,
+
+                /**
+                 * Success handler for Adobe Stock preview or licensed image
+                 * download
+                 *
+                 */
                 success: function () {
                     var displayedRecord = this.preview().displayedRecord();
 
-                    displayedRecord.is_downloaded = 1;
+                    displayedRecord['is_downloaded'] = 1;
                     displayedRecord.path = destinationPath;
 
                     if (license) {
-                        displayedRecord.is_licensed = 1;
-                        displayedRecord.is_licensed_locally = 1;
+                        displayedRecord['is_licensed'] = 1;
+                        displayedRecord['is_licensed_locally'] = 1;
                     }
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
                 },
+
+                /**
+                 * Error handler for Adobe Stock preview or licensed image
+                 * download
+                 *
+                 * @param {Object} response
+                 */
                 error: function (response) {
                     messages.add('error', response.responseJSON.message);
                     messages.scheduleCleanup(this.messageDelay);
@@ -154,7 +174,7 @@ define([
          * @return string
          */
         getImageExtension: function (record) {
-            return record.content_type.match(/[^/]{1,4}$/);
+            return record['content_type'].match(/[^/]{1,4}$/);
         },
 
         /**
@@ -207,8 +227,8 @@ define([
                         this.getPrompt(
                             {
                                 'title': $.mage.__('License Adobe Stock Images?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>'
-                                    + displayFieldName,
+                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>' +
+                                    displayFieldName,
                                 'visible': !this.isDownloaded(),
                                 'actions': {
                                     confirm: function (fileName) {
