@@ -70,7 +70,7 @@ class GetByPath implements GetByPathInterface
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
                 ->from(self::TABLE_MEDIA_GALLERY_ASSET)
-                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' in (?)', $mediaFilePath);
+                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' = ?', $mediaFilePath);
             $data = $connection->query($select)->fetch();
 
             if (empty($data)) {

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Model\Asset\Command;
 
-use Magento\AdobeMediaGallery\Model\DataExtractor;
+use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -27,7 +27,7 @@ class Save implements SaveInterface
     private $resourceConnection;
 
     /**
-     * @var DataExtractor
+     * @var DataExtractorInterface
      */
     private $extractor;
 
@@ -40,12 +40,12 @@ class Save implements SaveInterface
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param DataExtractor $extractor
+     * @param DataExtractorInterface $extractor
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DataExtractor $extractor,
+        DataExtractorInterface $extractor,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;

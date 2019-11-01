@@ -7,19 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Model;
 
+use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
+
 /**
  * Extract data from an object using available getters
  */
-class DataExtractor
+class DataExtractor implements DataExtractorInterface
 {
     /**
-     * Extract data from an object using available getters (does not process extension attributes)
-     *
-     * @param object $object
-     * @param string|null $interface
-     * @return array
+     * @inheritdoc
      */
-    public function extract($object, string $interface = null)
+    public function extract($object, string $interface = null): array
     {
         $data = [];
 
