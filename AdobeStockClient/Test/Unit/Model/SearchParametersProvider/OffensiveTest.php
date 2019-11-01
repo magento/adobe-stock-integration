@@ -34,7 +34,7 @@ class OffensiveTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->offensive = $this->objectManager->getObject(Offensive::class);

@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
+use Magento\Framework\Api\Search\Document;
+
 /**
  * Get asset by Adobe ID
  *
@@ -23,5 +25,5 @@ interface GetAssetByIdInterface
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(int $adobeId): \Magento\Framework\Api\Search\Document;
+    public function execute(int $adobeId): Document;
 }
