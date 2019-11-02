@@ -4,18 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdobeStockImage\Test\Unit\Model;
+namespace Magento\AdobeStockImage\Test\Unit\Model\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImage\Model\Storage;
+use Magento\AdobeStockImage\Model\Storage\Save;
 
 /**
- * Test for Storage Model
+ * Test for the storage save functionality
  */
-class StorageTest extends TestCase
+class SaveTest extends TestCase
 {
     /**
      * @var MockObject | \Magento\Framework\Filesystem\Directory\Write
@@ -23,9 +24,9 @@ class StorageTest extends TestCase
     private $mediaDirectoryMock;
 
     /**
-     * @var Storage
+     * @var Save
      */
-    private $storage;
+    private $save;
 
     /**
      * @var MockObject | \Magento\Framework\Filesystem
@@ -45,74 +46,86 @@ class StorageTest extends TestCase
     /**
      * @var MockObject | \Psr\Log\LoggerInterface
      */
-    private $logMock;
+    private $logger;
 
+    /**
+     * Initialize base test objects
+     */
     public function setUp()
     {
 
         $this->fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->httpsDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\Https::class);
         $this->fileSystemIoMock = $this->createMock(\Magento\Framework\Filesystem\Io\File::class);
-        $this->logMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
-        $this->storage = (new ObjectManager($this))->getObject(
-            Storage::class,
+        $this->save = (new ObjectManager($this))->getObject(
+            Save::class,
             [
                 'filesystem'   => $this->fileSystemMock,
                 'driver'       => $this->httpsDriverMock,
                 'fileSystemIo' => $this->fileSystemIoMock,
-                'log'          => $this->logMock,
+                'logger'          => $this->logger,
             ]
         );
     }
 
+    /**
+     * Test image preview save
+     */
     public function testSavePreview()
     {
-        /** @var Storage $storageMock */
-
         $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
 
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($this->mediaDirectoryMock);
+
         $content = 'content';
+        $this->httpsDriverMock->expects($this->once())
+            ->method('fileGetContents')
+            ->willReturn($content);
+
         $this->mediaDirectoryMock->expects($this->once())
             ->method('writeFile')
             ->withAnyParameters()
             ->willReturn($this->isType('integer'));
 
+        $this->assertSame(
+            '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg',
+            $this->save->execute($imageUrl, '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg')
+        );
+    }
+
+    /**
+     * Assume that save action will thrown an Exception
+     */
+    public function testExceptionOnSaveExecution()
+    {
+        $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
+
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
 
+        $content = 'content';
         $this->httpsDriverMock->expects($this->once())
             ->method('fileGetContents')
             ->willReturn($content);
 
-        $this->assertSame(
-            '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg',
-            $this->storage->save($imageUrl, '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg')
-        );
-    }
-
-    public function testDelete()
-    {
-        $path = 'path';
-
         $this->mediaDirectoryMock->expects($this->once())
-            ->method('isFile')
-            ->with($path)
-            ->willReturn(true);
+            ->method('writeFile')
+            ->withAnyParameters()
+            ->willThrowException(new \Exception());
 
-        $this->fileSystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::MEDIA)
-            ->willReturn($this->mediaDirectoryMock);
+        $this->expectException(CouldNotSaveException::class);
+        $this->logger->expects($this->once())
+            ->method('critical')
+            ->willReturnSelf();
 
-        $this->mediaDirectoryMock->expects($this->once())
-            ->method('delete')
-            ->with($path)
-            ->willReturn(true);
-
-        $this->storage->delete($path);
+        $this->save->execute($imageUrl, '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg');
     }
 }

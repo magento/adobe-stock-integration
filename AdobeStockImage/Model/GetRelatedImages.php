@@ -87,7 +87,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
             }
             return $relatedImageGroups;
         } catch (\Exception $exception) {
-            $message = __('Get related images list failed: %s', $exception->getMessage());
+            $message = __('Get related images list failed: %error', ['error' => $exception->getMessage()]);
             throw new IntegrationException($message, $exception);
         }
     }
@@ -120,8 +120,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
         } catch (\Exception $exception) {
             throw new SerializationException(
                 __(
-                    'An error occurred during related images serialization: %s',
-                    $exception->getMessage()
+                    'An error occurred during related images serialization: %error',
+                    ['error' => $exception->getMessage()]
                 )
             );
         }

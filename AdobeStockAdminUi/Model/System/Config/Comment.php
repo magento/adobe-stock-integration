@@ -49,14 +49,9 @@ class Comment implements CommentInterface
             ['io_link' => '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>']
         );
 
-        $notes = __(
-            'Redirect URI: %uri <br><br>Pattern: %pattern',
-            [
-                'uri' => $this->getRedirectUrl(),
-                'pattern' => $this->getRedirectUrlPattern(),
-            ]
-        );
-
+        $redirectUri = __('Redirect URI: %redirect_uri', ['redirect_uri' => $this->getRedirectUrl()]);
+        $pattern = __('Pattern: %pattern', ['pattern' => $this->getRedirectUrlPattern()]);
+        $notes = $redirectUri . '<br><br>' . $pattern;
         return $message . '<br><br>' . $notes;
     }
 
