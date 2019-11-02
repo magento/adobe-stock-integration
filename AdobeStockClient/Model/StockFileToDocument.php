@@ -84,9 +84,9 @@ class StockFileToDocument
      * Convert data to an associate array
      *
      * @param object|array $data
-     * @return array
+     * @return mixed
      */
-    private function toArray($data): array
+    private function toArray($data)
     {
         if (is_object($data) || is_array($data)) {
             $array = [];

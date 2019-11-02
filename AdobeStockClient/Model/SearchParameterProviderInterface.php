@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
 
+use AdobeStock\Api\Exception\StockApi as StockApiException;
 use AdobeStock\Api\Models\SearchParameters;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
@@ -22,6 +23,7 @@ interface SearchParameterProviderInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchParameters $searchParams
      * @return SearchParameters
+     * @throws StockApiException
      */
     public function apply(
         SearchCriteriaInterface $searchCriteria,
