@@ -11,7 +11,9 @@ use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GetById
@@ -31,40 +33,58 @@ class GetById implements GetByIdInterface
     private $assetFactory;
 
     /**
-     * GetAssetById constructor.
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * GetById constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param AssetInterfaceFactory $assetFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        AssetInterfaceFactory $assetFactory
+        AssetInterfaceFactory $assetFactory,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->assetFactory = $assetFactory;
+        $this->logger = $logger;
     }
 
     /**
      * Get media asset.
      *
-     * @param int $assetId
+     * @param int $mediaAssetId
      *
      * @return AssetInterface
      * @throws NoSuchEntityException
+     * @throws IntegrationException
      */
-    public function execute(int $assetId): AssetInterface
+    public function execute(int $mediaAssetId): AssetInterface
     {
-        $connection = $this->resourceConnection->getConnection();
-        $select = $connection->select()
-            ->from(['amg' => self::TABLE_MEDIA_GALLERY_ASSET])
-            ->where('amg.id = ?', $assetId);
-        $data = $connection->query($select)->fetch();
+        try {
+            $connection = $this->resourceConnection->getConnection();
+            $select = $connection->select()
+                ->from(['amg' => self::TABLE_MEDIA_GALLERY_ASSET])
+                ->where('amg.id = ?', $mediaAssetId);
+            $data = $connection->query($select)->fetch();
 
-        if (empty($data)) {
-            $message = __('There is no such media asset with "%1"', $assetId);
-            throw new NoSuchEntityException($message);
+            if (empty($data)) {
+                $message = __('There is no such media asset with id "%1"', $mediaAssetId);
+                throw new NoSuchEntityException($message);
+            }
+
+            return $this->assetFactory->create(['data' => $data]);
+        } catch (\Exception $exception) {
+            $message = __(
+                'En error occurred during get media asset with id %id by id: %error',
+                ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
+            );
+            $this->logger->critical($message);
+            throw new IntegrationException($message, $exception);
         }
-
-        return $this->assetFactory->create(['data' => $data]);
     }
 }

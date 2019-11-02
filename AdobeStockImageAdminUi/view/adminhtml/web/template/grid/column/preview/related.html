@@ -29,7 +29,7 @@
 <div id="adobe-stock-tabs-content" class="adobe-stock-related-images-tab-content">
     <div attr="'id': 'series_content_' + $row().id">
         <!-- ko foreach: getSeries($row()) -->
-            <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToSeriesImage($data, $row()) }">
+            <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToSeriesImage($data) }">
                 <img attr="src: thumbnail_url, alt: title">
             </div>
         <!-- /ko -->
@@ -48,7 +48,7 @@
     </div>
     <div attr="'id': 'model_content_' + $row().id">
         <!-- ko foreach: getModel($row()) -->
-            <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToModelImage($data, $row()) }">
+            <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToModelImage($data) }">
                 <img attr="src: thumbnail_url, alt: title">
             </div>
         <!-- /ko -->

@@ -69,8 +69,8 @@ define([
          *
          * @return {Boolean}
          */
-        getPreviousButtonDisabled: function (record) {
-            return this.related().getPreviousButtonDisabled(record);
+        cannotViewPrevious: function (record) {
+            return this.related().cannotViewPrevious(record);
         },
 
         /**
@@ -80,15 +80,15 @@ define([
          *
          * @return {Boolean}
          */
-        getNextButtonDisabled: function (record) {
-            return this.related().getNextButtonDisabled(record);
+        cannotViewNext: function (record) {
+            return this.related().cannotViewNext(record);
         },
 
         /**
          * @inheritdoc
          */
         next: function (record) {
-            if (this.related().selectedRelatedType()) {
+            if (this.related().selectedTab()) {
                 this.related().nextRelated(record);
 
                 return;
@@ -101,7 +101,7 @@ define([
          * @inheritdoc
          */
         prev: function (record) {
-            if (this.related().selectedRelatedType()) {
+            if (this.related().selectedTab()) {
                 this.related().prevRelated(record);
 
                 return;
@@ -114,7 +114,7 @@ define([
          * @inheritdoc
          */
         show: function (record) {
-            this.related().selectedRelatedType(null);
+            this.related().selectedTab(null);
             this.related().initRecord(record);
             this.keywords().hideAllKeywords();
             this.displayedRecord(record);
@@ -154,8 +154,8 @@ define([
                     'limit': this.tabImagesLimit
                 }
             }).done(function (data) {
-                record.series(data.result.same_series);
-                record.model(data.result.same_model);
+                record.series(data.result['same_series']);
+                record.model(data.result['same_model']);
                 this.updateHeight();
             }.bind(this));
         },
@@ -173,7 +173,7 @@ define([
                 },
                 {
                     name: 'File type',
-                    value: this.displayedRecord().content_type.toUpperCase()
+                    value: this.displayedRecord()['content_type'].toUpperCase()
                 },
                 {
                     name: 'Category',

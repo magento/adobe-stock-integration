@@ -13,7 +13,8 @@ use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SaveImage;
-use Magento\AdobeStockImage\Model\Storage;
+use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
+use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -27,9 +28,14 @@ use Psr\Log\LoggerInterface;
 class SaveImageTest extends TestCase
 {
     /**
-     * @var MockObject|Storage
+     * @var MockObject|StorageSave
      */
-    private $storage;
+    private $storageSave;
+
+    /**
+     * @var MockObject|StorageDelete
+     */
+    private $storageDelete;
 
     /**
      * @var MockObject|LoggerInterface
@@ -76,7 +82,8 @@ class SaveImageTest extends TestCase
      */
     public function setUp()
     {
-        $this->storage = $this->createMock(Storage::class);
+        $this->storageSave = $this->createMock(StorageSave::class);
+        $this->storageDelete = $this->createMock(StorageDelete::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->saveMediaAsset = $this->createMock(SaveInterface::class);
         $this->saveAdobeStockAsset = $this->createMock(SaveAssetInterface::class);
@@ -88,7 +95,8 @@ class SaveImageTest extends TestCase
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
             [
-                'storage' => $this->storage,
+                'storageSave' => $this->storageSave,
+                'storageDelete' => $this->storageDelete,
                 'logger' => $this->logger,
                 'saveMediaAsset' =>  $this->saveMediaAsset,
                 'saveAdobeStockAsset' =>  $this->saveAdobeStockAsset,
@@ -111,15 +119,15 @@ class SaveImageTest extends TestCase
     public function testExecute(Document $document, bool $delete)
     {
         if ($delete) {
-            $this->storage->expects($this->once())
-                ->method('delete');
+            $this->storageDelete->expects($this->once())
+                ->method('execute');
         } else {
-            $this->storage->expects($this->never())
-                ->method('delete');
+            $this->storageDelete->expects($this->never())
+                ->method('execute');
         }
 
-        $this->storage->expects($this->once())
-            ->method('save');
+        $this->storageSave->expects($this->once())
+            ->method('execute');
 
         $this->documentToMediaGalleryAsset->expects($this->once())
             ->method('convert')

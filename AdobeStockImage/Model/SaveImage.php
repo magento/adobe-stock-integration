@@ -13,6 +13,8 @@ use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterfac
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
+use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
@@ -26,9 +28,14 @@ use Psr\Log\LoggerInterface;
 class SaveImage implements SaveImageInterface
 {
     /**
-     * @var Storage
+     * @var StorageSave
      */
-    private $storage;
+    private $storageSave;
+
+    /**
+     * @var StorageDelete
+     */
+    private $storageDelete;
 
     /**
      * @var GetByIdInterface
@@ -71,14 +78,15 @@ class SaveImage implements SaveImageInterface
     private $logger;
 
     /**
-     * @var SaveAssetKeywords
+     * @var SaveAssetKeywordsInterface
      */
     private $saveAssetKeywords;
 
     /**
      * SaveImage constructor.
      *
-     * @param Storage $storage
+     * @param StorageSave $storageSave
+     * @param StorageDelete $storageDelete
      * @param GetByIdInterface $getMediaAssetById
      * @param AssetRepositoryInterface $assetRepository
      * @param SaveInterface $saveMediaAsset
@@ -90,7 +98,8 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToKeywords $documentToKeywords
      */
     public function __construct(
-        Storage $storage,
+        StorageSave $storageSave,
+        StorageDelete $storageDelete,
         GetByIdInterface $getMediaAssetById,
         AssetRepositoryInterface $assetRepository,
         SaveInterface $saveMediaAsset,
@@ -101,7 +110,8 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords
     ) {
-        $this->storage = $storage;
+        $this->storageSave = $storageSave;
+        $this->storageDelete = $storageDelete;
         $this->getMediaAssetById = $getMediaAssetById;
         $this->assetRepository = $assetRepository;
         $this->saveMediaAsset = $saveMediaAsset;
@@ -123,10 +133,10 @@ class SaveImage implements SaveImageInterface
             $pathValue = $pathAttribute->getValue();
             /* If the asset has been already saved, delete the previous version */
             if (null !== $pathAttribute && $pathValue) {
-                $this->storage->delete($pathValue);
+                $this->storageDelete->execute($pathValue);
             }
 
-            $path = $this->storage->save($url, $destinationPath);
+            $path = $this->storageSave->execute($url, $destinationPath);
 
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert(
                 $document,
@@ -147,9 +157,9 @@ class SaveImage implements SaveImageInterface
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
         } catch (\Exception $exception) {
-            $message = __('Image was not saved: %1', $exception->getMessage());
+            $message = __('Image was not saved: %error', ['error' => $exception->getMessage()]);
             $this->logger->critical($message);
-            throw new CouldNotSaveException($message);
+            throw new CouldNotSaveException($message, $exception);
         }
     }
 }
