@@ -107,7 +107,7 @@ class ConnectionWrapperTest extends TestCase
     public function testApiKey(): void
     {
         $this->adobeStockMock->expects($this->once())->method('searchFilesInitialize')->willReturnSelf();
-        $nextResponse = new\AdobeStock\Api\Response\SearchFiles();
+        $nextResponse = newSearchFiles();
         $nextResponse->setNbResults(12);
         $this->adobeStockMock->expects($this->exactly(1))
             ->method('getNextResponse')

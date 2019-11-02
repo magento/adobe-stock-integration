@@ -10,6 +10,7 @@ namespace Magento\AdobeIms\Controller\Adminhtml\User;
 use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
@@ -24,7 +25,7 @@ class Logout extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeIms::logout';
+    public const ADMIN_RESOURCE = 'Magento_AdobeIms::logout';
 
     /**
      * @var CurlFactory
@@ -60,7 +61,7 @@ class Logout extends Action
                 'success' => false,
             ];
         }
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($response);

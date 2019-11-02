@@ -7,6 +7,9 @@
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\SaveAsset;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
@@ -41,7 +44,7 @@ class SaveAssetTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->assetRepository = $this->createMock(AssetRepositoryInterface::class);
         $this->creatorRepository = $this->createMock(CreatorRepositoryInterface::class);
@@ -54,13 +57,13 @@ class SaveAssetTest extends TestCase
         );
     }
 
-    public function testExecute()
+    public function testExecute(): void
     {
         $categoryId = 5;
         $creatorId = 5;
 
-        $asset = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
-        $categoryMock = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\CategoryInterface::class);
+        $asset = $this->createMock(AssetInterface::class);
+        $categoryMock = $this->createMock(CategoryInterface::class);
         $categoryMock->expects($this->once())->method('getId')
             ->willReturn($categoryId);
         $asset->expects($this->once())
@@ -69,7 +72,7 @@ class SaveAssetTest extends TestCase
         $asset->expects($this->once())
             ->method('setCategoryId')
             ->with($categoryId);
-        $creatorInterface = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\CreatorInterface::class);
+        $creatorInterface = $this->createMock(CreatorInterface::class);
         $this->categoryRepository->expects($this->once())->method('save')
             ->with($categoryMock)
             ->willReturn($categoryMock);

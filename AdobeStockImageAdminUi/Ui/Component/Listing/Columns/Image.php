@@ -46,7 +46,7 @@ class Image extends Column
     /**
      * @inheritdoc
      */
-    public function prepare()
+    public function prepare(): void
     {
         parent::prepare();
         $this->setData(

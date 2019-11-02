@@ -45,7 +45,7 @@ class GetByIdTest extends WebapiAbstract
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->assetCollectionFactory = $this->objectManager->get(CollectionFactory::class);
@@ -57,7 +57,7 @@ class GetByIdTest extends WebapiAbstract
      * @return void
      * @throws \Exception
      */
-    public function testGetNoSuchEntityException()
+    public function testGetNoSuchEntityException(): void
     {
         $notExistedAssetId = -1;
         $serviceInfo = [
@@ -103,7 +103,7 @@ class GetByIdTest extends WebapiAbstract
      *
      * @return void
      */
-    public function testGetAssetById()
+    public function testGetAssetById(): void
     {
         $assetId = $this->getAssetId();
         $serviceInfo = [
@@ -147,7 +147,7 @@ class GetByIdTest extends WebapiAbstract
      *
      * @return void
      */
-    public static function assetFixtureProvider()
+    public static function assetFixtureProvider(): void
     {
         require __DIR__ . '/../../_files/asset.php';
     }

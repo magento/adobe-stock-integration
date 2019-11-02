@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Pricing filter options provider
  */
-class Options implements \Magento\Framework\Data\OptionSourceInterface
+class Options implements OptionSourceInterface
 {
     /**
      * Get options

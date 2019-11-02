@@ -163,7 +163,7 @@ class Client implements ClientInterface
      *
      * @param int $contentId
      * @return LicenseRequest
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @throws StockApi
      */
     private function getLicenseRequest(int $contentId): LicenseRequest
     {

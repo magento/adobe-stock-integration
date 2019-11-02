@@ -17,6 +17,7 @@ use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -80,7 +81,7 @@ class SaveImageTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->storageSave = $this->createMock(StorageSave::class);
         $this->storageDelete = $this->createMock(StorageDelete::class);
@@ -113,10 +114,10 @@ class SaveImageTest extends TestCase
      *
      * @param Document $document
      * @param bool $delete
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws CouldNotSaveException
      * @dataProvider assetProvider
      */
-    public function testExecute(Document $document, bool $delete)
+    public function testExecute(Document $document, bool $delete): void
     {
         if ($delete) {
             $this->storageDelete->expects($this->once())

@@ -24,14 +24,6 @@ interface UserProfileInterface extends ExtensibleDataInterface
     public function getId();
 
     /**
-     * Set ID
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value);
-
-    /**
      * Get user ID
      *
      * @return int

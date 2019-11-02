@@ -8,6 +8,11 @@ namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\GetAssetById;
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\SearchCriteria;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -41,7 +46,7 @@ class GetAssetByIdTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->getAssetList = $this->createMock(GetAssetListInterface::class);
@@ -54,32 +59,32 @@ class GetAssetByIdTest extends TestCase
         );
     }
 
-    public function testExecute()
+    public function testExecute(): void
     {
         $this->filterBuilder->expects($this->once())->method('setField')->willReturnSelf();
         $this->filterBuilder->expects($this->once())->method('setValue')->willReturnSelf();
         $this->filterBuilder->expects($this->once())
             ->method('create')
-            ->willReturn($this->createMock(\Magento\Framework\Api\Filter::class));
+            ->willReturn($this->createMock(Filter::class));
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('addFilter')
             ->willReturn($this->searchCriteriaBuilder);
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn(
-                $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class)
+                $this->createMock(SearchCriteria::class)
             );
-        $searchResultMock = $this->createMock(\Magento\Framework\Api\Search\SearchResultInterface::class);
+        $searchResultMock = $this->createMock(SearchResultInterface::class);
         $this->getAssetList->expects($this->once())
             ->method('execute')
             ->willReturn($searchResultMock);
         $searchResultMock->expects($this->once())->method('getItems')->willReturn(
             [
-                new \Magento\Framework\Api\Search\Document(
+                new Document(
                     [
                         'id' => 123455678,
                         'custom_attributes' => [
-                            'id_field_name' => new \Magento\Framework\Api\AttributeValue(
+                            'id_field_name' => new AttributeValue(
                                 ['attribute_code' => 'id_field_name']
                             )
                         ]

@@ -50,7 +50,7 @@ class DeleteByPathTest extends TestCase
     /**
      * Initialize basic test class mocks
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
@@ -75,7 +75,7 @@ class DeleteByPathTest extends TestCase
     /**
      * Test delete media asset by path command
      */
-    public function testSuccessfulDeleteByIdExecution()
+    public function testSuccessfulDeleteByIdExecution(): void
     {
         $tableName = 'media_gallery_asset';
         $this->adapter->expects($this->once())
@@ -92,7 +92,7 @@ class DeleteByPathTest extends TestCase
     /**
      * Assume that delete action will thrown an Exception
      */
-    public function testExceptionOnDeleteExecution()
+    public function testExceptionOnDeleteExecution(): void
     {
         $tableName = 'media_gallery_asset';
         $this->adapter->expects($this->once())

@@ -46,14 +46,18 @@ class Processor
      * Remove media asset image after the product gallery image remove
      *
      * @param ProcessorSubject $subject
-     * @param $result
+     * @param ProcessorSubject $result
      * @param Product $product
-     * @param $file
+     * @param string $file
      *
-     * @return mixed
+     * @return ProcessorSubject
      */
-    public function afterRemoveImage(ProcessorSubject $subject, $result, Product $product, $file)
-    {
+    public function afterRemoveImage(
+        ProcessorSubject $subject,
+        ProcessorSubject $result,
+        Product $product,
+        $file
+    ): ProcessorSubject {
         if (!is_string($file)) {
             return $result;
         }

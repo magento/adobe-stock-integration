@@ -118,15 +118,9 @@ class AssetRepository implements AssetRepositoryInterface
 
             $this->collectionProcessor->process($searchCriteria, $collection);
 
-            $items = [];
-            /** @var AssetInterface $item */
-            foreach ($collection->getItems() as $item) {
-                $items[] = $item;
-            }
-
             /** @var AssetSearchResultsInterface $searchResults */
             $searchResults = $this->searchResultFactory->create();
-            $searchResults->setItems($items);
+            $searchResults->setItems($collection->getItems());
             $searchResults->setSearchCriteria($searchCriteria);
             $searchResults->setTotalCount($collection->getSize());
 

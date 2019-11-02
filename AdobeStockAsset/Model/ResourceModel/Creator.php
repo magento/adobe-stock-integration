@@ -29,7 +29,7 @@ class Creator extends AbstractDb
     /**
      * Initialize with table name and primary field
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(self::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME, 'id');
     }

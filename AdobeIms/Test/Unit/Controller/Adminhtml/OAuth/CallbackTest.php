@@ -65,7 +65,7 @@ class CallbackTest extends TestCase
     private $callback;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject $request
+     * @var MockObject $request
      */
     private $request;
 
@@ -98,7 +98,7 @@ class CallbackTest extends TestCase
         $this->authMock = $this->createMock(Auth::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context = $this->objectManager->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'auth' => $this->authMock,
                 'resultFactory' => $this->resultFactory

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
+use AdobeStock\Api\Exception\StockApi;
 use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -19,7 +20,7 @@ class ContentType implements SearchParameterProviderInterface
 {
     /**
      * @inheritdoc
-     * @throws \AdobeStock\Api\Exception\StockApi
+     * @throws StockApi
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {

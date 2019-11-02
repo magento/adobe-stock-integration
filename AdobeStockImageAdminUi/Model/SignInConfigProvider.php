@@ -12,6 +12,7 @@ use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -67,7 +68,7 @@ class SignInConfigProvider implements ConfigProviderInterface
      * Get user quota information
      *
      * @return array
-     * @throws \Magento\Framework\Exception\IntegrationException
+     * @throws IntegrationException
      */
     private function getUserQuota(): array
     {

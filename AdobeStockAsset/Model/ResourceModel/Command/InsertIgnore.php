@@ -9,7 +9,6 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Command;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\EntityManager\Hydrator;
 
 /**
  * Universal insert ignore command
@@ -22,35 +21,23 @@ class InsertIgnore
     private $resourceConnection;
 
     /**
-     * @var Hydrator $hydrator
-     */
-    private $hydrator;
-
-    /**
-     * Save constructor.
-     *
      * @param ResourceConnection $resourceConnection
-     * @param Hydrator $hydrator
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        Hydrator $hydrator
+        ResourceConnection $resourceConnection
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->hydrator = $hydrator;
     }
 
     /**
      * Extract data from object and insert to columns of table
      *
-     * @param object $object
+     * @param array $data
      * @param string $tableName
      * @param array $columns
      */
-    public function execute($object, string $tableName, array $columns): void
+    public function execute(array $data, string $tableName, array $columns): void
     {
-        $data = $this->hydrator->extract($object);
-
         $data = $this->filterData($data, $columns);
         if (empty($data)) {
             return;
@@ -72,7 +59,7 @@ class InsertIgnore
      * @param array $columns
      * @return array
      */
-    private function filterData(array $data, array $columns)
+    private function filterData(array $data, array $columns): array
     {
         return array_intersect_key($data, array_flip($columns));
     }
