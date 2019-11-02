@@ -301,6 +301,8 @@ define([
          * Return configured  prompt with input field.
          */
         getPrompt: function (data) {
+            var regex = new RegExp('[a-zA-Z0-9_-]');
+
             prompt({
                 title: data.title,
                 content:  data.content,
@@ -325,6 +327,17 @@ define([
                 context: this,
                 actions: data.actions,
                 buttons: data.buttons
+            });
+
+            /* Allow only alphanumeric, dash, and underscore on filename input keypress */
+            $('input[data-role="promptField"]').bind('keypress', function (event) {
+                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+
+                if (!regex.test(key)) {
+                    event.preventDefault();
+
+                    return false;
+                }
             });
         },
 
