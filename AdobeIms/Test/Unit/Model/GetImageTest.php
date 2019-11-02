@@ -29,11 +29,6 @@ class GetImageTest extends TestCase
     private $objectManager;
 
     /**
-     * @var ScopeConfigInterface|MockObject $config
-     */
-    private $configMock;
-
-    /**
      * @var CurlFactory|MockObject $curlFactoryMock
      */
     private $curlFactoryMock;
@@ -64,7 +59,6 @@ class GetImageTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->logger = $this->createMock(LoggerInterface::class);
@@ -72,7 +66,6 @@ class GetImageTest extends TestCase
 
         $this->getImage = new GetImage(
             $this->logger,
-            $this->configMock,
             $this->curlFactoryMock,
             $this->configInterface,
             $this->jsonMock

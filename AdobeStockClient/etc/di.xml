@@ -63,8 +63,8 @@
                 <item name="colors_filter" xsi:type="string">setFilterColors</item>
                 <item name="serie_id" xsi:type="string">setSerieId</item>
                 <item name="model_id" xsi:type="string">setModelId</item>
-		 <item name="premium_filter" xsi:type="string">setFilterPremium</item>
-	       	 <item name="gallery_id" xsi:type="string">setGalleryId</item>
+                <item name="premium_filter" xsi:type="string">setFilterPremium</item>
+                <item name="gallery_id" xsi:type="string">setGalleryId</item>
             </argument>
         </arguments>
     </type>
