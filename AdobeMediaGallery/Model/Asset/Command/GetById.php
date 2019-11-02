@@ -68,7 +68,7 @@ class GetById implements GetByIdInterface
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
-                ->from(['amg' => self::TABLE_MEDIA_GALLERY_ASSET])
+                ->from(['amg' => $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)])
                 ->where('amg.id = ?', $mediaAssetId);
             $data = $connection->query($select)->fetch();
 

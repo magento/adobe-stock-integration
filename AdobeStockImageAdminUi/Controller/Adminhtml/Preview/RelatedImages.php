@@ -21,7 +21,7 @@ class RelatedImages extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * Successful get related image result code.

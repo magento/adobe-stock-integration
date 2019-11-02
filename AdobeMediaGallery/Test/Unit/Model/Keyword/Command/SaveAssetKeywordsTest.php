@@ -83,7 +83,7 @@ class SaveAssetKeywordsTest extends TestCase
             $this->connectionMock->expects($this->once())
                 ->method('insertArray')
                 ->with(
-                    'media_gallery_keyword',
+                    'prefix_media_gallery_keyword',
                     ['keyword'],
                     $items,
                     2
@@ -125,9 +125,13 @@ class SaveAssetKeywordsTest extends TestCase
         $this->connectionMock
             ->method('fetchCol')
             ->willReturn([['id'=> 1], ['id' => 2]]);
-        $this->resourceConnectionMock->expects($this->exactly(2))
+        $this->resourceConnectionMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
+        $this->resourceConnectionMock->expects($this->any())
+            ->method('getTableName')
+            ->with('media_gallery_keyword')
+            ->willReturn('prefix_media_gallery_keyword');
     }
 
     /**

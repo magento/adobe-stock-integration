@@ -24,7 +24,7 @@ class Category extends AbstractExtensibleModel implements CategoryInterface
     /**
      * @inheritdoc
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(CategoryResourceModel::class);
     }

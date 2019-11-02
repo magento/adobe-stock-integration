@@ -52,7 +52,7 @@ class SignInConfigProviderTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
         $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
@@ -74,7 +74,7 @@ class SignInConfigProviderTest extends TestCase
      * @param bool $userIsAuthorized
      * @param array $userQuota
      */
-    public function testGettingUserQuota(bool $userIsAuthorized, array $userQuota)
+    public function testGettingUserQuota(bool $userIsAuthorized, array $userQuota): void
     {
         $quotaUrl = 'http://site.com/adobe_stock/license/quota';
         $expectedResult = [
@@ -106,7 +106,7 @@ class SignInConfigProviderTest extends TestCase
      * @param $exception
      * @param array $userQuota
      */
-    public function testGettingUserQuotaOnExceptions($exception, array $userQuota)
+    public function testGettingUserQuotaOnExceptions($exception, array $userQuota): void
     {
         $userIsAuthorized = true;
         $quotaUrl = 'http://site.com/adobe_stock/license/quota';

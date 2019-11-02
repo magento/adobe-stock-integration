@@ -20,7 +20,7 @@ class Collection extends AbstractCollection
     /**
      * @inheritdoc
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(UserProfileModel::class, UserProfileResource::class);
     }

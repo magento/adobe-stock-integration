@@ -19,7 +19,6 @@ class Isolated implements SearchParameterProviderInterface
 {
     /**
      * @inheritdoc
-     * @throws \AdobeStock\Api\Exception\StockApi
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {

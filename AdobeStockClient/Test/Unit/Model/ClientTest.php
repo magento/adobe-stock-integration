@@ -101,7 +101,7 @@ class ClientTest extends TestCase
     private $connectionWrapper;
 
     /**
-     * @var \AdobeStock\Api\Response\License|MockObject $licenseResponse
+     * @var ResponseLicense|MockObject $licenseResponse
      */
     private $licenseResponse;
 

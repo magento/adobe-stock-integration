@@ -41,7 +41,7 @@ class Config implements ConfigInterface
      *
      * @return bool
      */
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED);
     }

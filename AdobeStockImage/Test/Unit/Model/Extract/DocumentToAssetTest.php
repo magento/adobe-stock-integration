@@ -141,7 +141,11 @@ class DocumentToAssetTest extends TestCase
         ];
     }
 
-    private function getDocument(array $attributes)
+    /**
+     * @param array $attributes
+     * @return Document|MockObject
+     */
+    private function getDocument(array $attributes): Document
     {
         $document = $this->createMock(Document::class);
 

@@ -65,13 +65,13 @@ class Storage
      * Delete media data after the image delete action from Wysiwyg
      *
      * @param StorageSubject $subject
-     * @param $result
-     * @param $target
+     * @param StorageSubject $result
+     * @param string $target
      *
-     * @return mixed
+     * @return StorageSubject
      * @throws ValidatorException
      */
-    public function afterDeleteFile(StorageSubject $subject, $result, $target)
+    public function afterDeleteFile(StorageSubject $subject, StorageSubject $result, $target): StorageSubject
     {
         if (!is_string($target)) {
             return $result;

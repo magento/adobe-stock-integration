@@ -25,7 +25,7 @@ class TestConnection extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Config::config_system';
+    public const ADMIN_RESOURCE = 'Magento_Config::config_system';
 
     /**
      * @var JsonFactory

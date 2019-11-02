@@ -19,11 +19,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class Sorting implements SearchParameterProviderInterface
 {
     /**
-     * Apply sorting
-     *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @param SearchParameters $searchParams
-     * @return SearchParameters
+     * @inheritdoc
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {

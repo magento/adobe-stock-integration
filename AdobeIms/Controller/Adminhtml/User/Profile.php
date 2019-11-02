@@ -32,7 +32,7 @@ class Profile extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeIms::profile';
+    public const ADMIN_RESOURCE = 'Magento_AdobeIms::profile';
 
     /**
      * @var UserContextInterface

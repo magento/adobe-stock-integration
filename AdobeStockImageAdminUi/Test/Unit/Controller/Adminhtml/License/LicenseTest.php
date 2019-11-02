@@ -83,7 +83,7 @@ class LicenseTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
@@ -127,7 +127,7 @@ class LicenseTest extends TestCase
     /**
      * Test if the image is licensed and downloaded successfully
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $result = [
             'success' => true,
@@ -172,7 +172,7 @@ class LicenseTest extends TestCase
      * @param int $responseCode
      * @param array $result
      */
-    public function testNotFoundAsset($exception, int $responseCode, array $result)
+    public function testNotFoundAsset($exception, int $responseCode, array $result): void
     {
         $mediaId = 283415387;
 

@@ -44,7 +44,7 @@ class SaveTest extends WebapiAbstract
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->assetCollectionFactory = $this->objectManager->get(CollectionFactory::class);
@@ -54,7 +54,7 @@ class SaveTest extends WebapiAbstract
      * @param array $data
      * @dataProvider assetDataProvider
      */
-    public function testSave(array $data)
+    public function testSave(array $data): void
     {
         $this->saveAsset($data);
         /** @var Asset $asset */

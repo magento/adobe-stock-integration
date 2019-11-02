@@ -44,7 +44,7 @@ class DeleteTest extends WebapiAbstract
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->assetCollectionFactory = $this->objectManager->get(CollectionFactory::class);
@@ -53,7 +53,7 @@ class DeleteTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture assetFixtureProvider
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         $response = $this->deleteAsset($this->getAssetId());
 
@@ -70,7 +70,7 @@ class DeleteTest extends WebapiAbstract
      * @return void
      * @throws \Exception
      */
-    public function testDeleteWithException()
+    public function testDeleteWithException(): void
     {
         try {
             $notExistedAssetId = -1;
@@ -119,7 +119,7 @@ class DeleteTest extends WebapiAbstract
      *
      * @return void
      */
-    public static function assetFixtureProvider()
+    public static function assetFixtureProvider(): void
     {
         require __DIR__ . '/../../_files/asset.php';
     }
