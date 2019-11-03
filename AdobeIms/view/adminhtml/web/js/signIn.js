@@ -5,8 +5,9 @@
 define([
     'uiComponent',
     'jquery',
-    'Magento_AdobeIms/js/action/authorization'
-], function (Component, $, login) {
+    'Magento_AdobeIms/js/action/authorization',
+    'uiRegistry'
+], function (Component, $, login, uiRegistry) {
     'use strict';
 
     return Component.extend({
@@ -14,8 +15,9 @@ define([
         defaults: {
             profileUrl: 'adobe_ims/user/profile',
             logoutUrl: 'adobe_ims/user/logout',
+            dataProvider: 'adobe_stock_images_listing.adobe_stock_images_listing_data_source',
             defaultProfileImage:
-              'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
+                'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
             user: {
                 isAuthorized: false,
                 name: '',
@@ -58,13 +60,13 @@ define([
          */
         login: function () {
             var self = this; // TODO Please bind this properly
-
             return new window.Promise(function (resolve, reject) {
                 if (self.user().isAuthorized) {
                     return resolve();
                 }
                 login(self.loginConfig)
                     .then(function (response) {
+                        self.reloadGridData(self.dataProvider);
                         self.loadUserProfile();
                         resolve(response);
                     })
@@ -83,6 +85,7 @@ define([
             $.ajax({
                 type: 'POST',
                 url: this.profileUrl,
+                showLoader: true,
                 data: {
                     'form_key': window.FORM_KEY
                 },
@@ -116,6 +119,7 @@ define([
          * Logout from adobe account
          */
         logout: function () {
+            var self = this;
             $.ajax({
                 type: 'POST',
                 url: this.logoutUrl,
@@ -126,6 +130,7 @@ define([
                 context: this,
                 showLoader: true,
                 success: function () {
+                    self.reloadGridData(self.dataProvider);
                     this.user({
                         isAuthorized: false,
                         name: '',
@@ -142,6 +147,19 @@ define([
                     return response.message;
                 }
             });
+        },
+
+        /**
+         * Reload Grid Data
+         * @param {String} dataprovider
+         */
+        reloadGridData: function (dataprovider) {
+            if (dataprovider) {
+                var target = uiRegistry.get(dataprovider);
+                if (target && typeof target === 'object') {
+                    target.set('params.t ', Date.now());
+                }
+            }
         }
     });
 });
