@@ -31,13 +31,7 @@
         <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
         <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
         <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
-
-        <click selector="{{AdobeStockSection.userNameButton}}" stepKey="openAccountMenu"/>
-        <see userInput="AVAILABLE" selector="{{AdobeStockSection.userQuota}}" stepKey="seeAvailableText"/>
-        <see userInput="Credits" selector="{{AdobeStockSection.userQuota}}" stepKey="seeCreditsText"/>
-        <see userInput="Images" selector="{{AdobeStockSection.userQuota}}" stepKey="seeImagesText"/>
-        <click selector="{{AdobeStockSection.userNameButton}}" stepKey="closeAccountMenu"/>
-
+        <actionGroup ref="AdminAdobeStockSignedInViewCreditsActionGroup" stepKey="viewCreditsInfo"/>
         <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="LogOut"/>
         <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserNotLogged"/>
     </test>

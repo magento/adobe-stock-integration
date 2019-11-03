@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAdobeStockSignedInViewCreditsActionGroup">
+        <click selector="{{AdobeStockSection.userNameButton}}" stepKey="openAccountMenu"/>
+        <see userInput="AVAILABLE" selector="{{AdobeStockSection.userQuota}}" stepKey="seeAvailableText"/>
+        <see userInput="Credits" selector="{{AdobeStockSection.userQuota}}" stepKey="seeCreditsText"/>
+        <see userInput="Images" selector="{{AdobeStockSection.userQuota}}" stepKey="seeImagesText"/>
+        <click selector="{{AdobeStockSection.userNameButton}}" stepKey="closeAccountMenu"/>
+    </actionGroup>
+</actionGroups>
