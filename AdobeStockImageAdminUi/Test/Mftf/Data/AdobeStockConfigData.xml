@@ -29,4 +29,7 @@
     <entity name="AdobeStockConfigDataSignInPasswordData">
         <data key="value">{{_ENV.ADOBE_STOCK_USER_PASSWORD}}</data>
     </entity>
+    <entity name="AdobeStockConfigDataLicensedImage1">
+        <data key="value">{{_ENV.ADOBE_STOCK_LICENSED_IMAGE_1}}</data>
+    </entity>
 </entities>
