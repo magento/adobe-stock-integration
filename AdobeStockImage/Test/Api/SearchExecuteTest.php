@@ -47,8 +47,8 @@ class SearchExecuteTest extends WebapiAbstract
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertTrue($response['total_count'] > 0);
-        $this->assertTrue(count($response['items']) > 0);
+        $this->assertGreaterThan(0, $response['total_count']);
+        $this->assertGreaterThan(0, count($response['items']));
 
         $this->assertNotNull($response['items'][0]['id']);
     }

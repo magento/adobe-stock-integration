@@ -48,7 +48,7 @@ class DocumentToAssetTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
         $this->creatorFactory = $this->createMock(CreatorInterfaceFactory::class);

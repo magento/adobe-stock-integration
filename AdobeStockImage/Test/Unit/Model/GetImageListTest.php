@@ -66,7 +66,7 @@ class GetImageListTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->getAssetListMock = $this->createMock(GetAssetListInterface::class);
