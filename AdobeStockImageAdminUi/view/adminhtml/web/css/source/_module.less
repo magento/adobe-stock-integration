@@ -27,11 +27,13 @@
             &-preview {
                 position: fixed;
                 z-index: 999;
+
                 .container {
                     padding-top: 0;
                 }
             }
         }
+
         .masonry-image-column {
             &:first-child .masonry-image-preview .preview-buttons .action-previous,
             &:last-child .masonry-image-preview .preview-buttons .action-next {
@@ -178,15 +180,19 @@
                     padding: 0;
 
                     .thumbnail {
-                        display: inline-block;
+                        display: inline-flex;
+                        justify-content: center;
+                        position: relative;
+                        height: 100px;
+                        width: 150px;
+                        overflow: hidden;
                         margin-right: 10px;
                         vertical-align: middle;
 
                         img {
-                            max-height: 100px;
-                            max-width: 150px;
+                            position: absolute;
                             width: auto;
-                            height: auto;
+                            max-width: initial;
                         }
                     }
 
