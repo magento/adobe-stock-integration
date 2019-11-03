@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
+use Magento\Framework\Api\Search\SearchResultInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -21,9 +22,19 @@ use Magento\Framework\Exception\LocalizedException;
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
+     * @var SearchResultInterfaceFactory
+     */
+    private $searchResultFactory;
+
+    /**
      * @var GetImageListInterface
      */
     private $getImageList;
+
+    /**
+     * @var string|null
+     */
+    private $errorMessage;
 
     /**
      * DataProvider constructor.
@@ -47,6 +58,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
+        SearchResultInterfaceFactory $searchResultFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -61,16 +73,50 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $meta,
             $data
         );
+        $this->searchResultFactory = $searchResultFactory;
         $this->getImageList = $getImageList;
     }
 
     /**
+     * @return string|null
+     */
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setErrorMessage(string $message): void
+    {
+        $this->errorMessage = $message;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getData()
+    {
+        $recordsData = $this->searchResultToOutput($this->getSearchResult());
+        $errorMessage = ['errorMessage' => $this->getErrorMessage()];
+
+        return array_merge($recordsData, $errorMessage);
+    }
+
+    /**
      * @inheritdoc
-     *
-     * @throws LocalizedException
      */
     public function getSearchResult()
     {
-        return $this->getImageList->execute($this->getSearchCriteria());
+        try {
+            $searchResult = $this->getImageList->execute($this->getSearchCriteria());
+        } catch (LocalizedException $exception) {
+            $this->setErrorMessage($exception->getMessage());
+            $searchResult = $this->searchResultFactory->create();
+            $searchResult->setItems([]);
+        }
+
+        return $searchResult;
     }
 }
