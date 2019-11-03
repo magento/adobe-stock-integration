@@ -13,7 +13,6 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
