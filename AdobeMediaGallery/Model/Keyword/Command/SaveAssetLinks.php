@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeMediaGallery\Model\Keyword\Command;
 
+use Exception;
 use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -55,15 +56,17 @@ class SaveAssetLinks
                 $values[] = [$assetId, $keywordId];
             }
 
-            /** @var Mysql $connection */
-            $connection = $this->resourceConnection->getConnection();
-            $connection->insertArray(
-                $this->resourceConnection->getTableName(self::TABLE_ASSET_KEYWORD),
-                [self::FIELD_ASSET_ID, self::FIELD_KEYWORD_ID],
-                $values,
-                AdapterInterface::INSERT_IGNORE
-            );
-        } catch (\Exception $exception) {
+            if (!empty($values)) {
+                /** @var Mysql $connection */
+                $connection = $this->resourceConnection->getConnection();
+                $connection->insertArray(
+                    $this->resourceConnection->getTableName(self::TABLE_ASSET_KEYWORD),
+                    [self::FIELD_ASSET_ID, self::FIELD_KEYWORD_ID],
+                    $values,
+                    AdapterInterface::INSERT_IGNORE
+                );
+            }
+        } catch (Exception $exception) {
             $message = __('An error occurred during save asset keyword links: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }
