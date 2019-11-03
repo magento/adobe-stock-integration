@@ -15,11 +15,9 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/related',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
-            // eslint-disable-next-line max-len
-            previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             serieFilterValue: '',
             modelFilterValue: '',
-            selectedRelatedType: null,
+            selectedTab: null,
             statefull: {
                 serieFilterValue: true,
                 modelFilterValue: true
@@ -27,7 +25,7 @@ define([
             modules: {
                 chips: '${ $.chipsProvider }',
                 filterChips: '${ $.filterChipsProvider }',
-                preview: '${ $.previewProvider }'
+                preview: '${ $.parentName }.preview'
             },
             exports: {
                 serieFilterValue: '${ $.provider }:params.filters.serie_id',
@@ -54,7 +52,7 @@ define([
                 .observe([
                     'serieFilterValue',
                     'modelFilterValue',
-                    'selectedRelatedType'
+                    'selectedTab'
                 ]);
 
             return this;
@@ -71,6 +69,16 @@ define([
         },
 
         /**
+         * Check if the number of related series image is greater than 4 or not
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        canShowMoreSeriesImages: function (record) {
+            return parseInt(record.series().length, 10) >= this.preview().tabImagesLimit;
+        },
+
+        /**
          * Returns model to display under the image
          *
          * @param {Object} record
@@ -78,6 +86,16 @@ define([
          */
         getModel: function (record) {
             return record.model;
+        },
+
+        /**
+         * Check if the number of related model image is greater than 4 or not
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        canShowMoreModelImages: function (record) {
+            return parseInt(record.model().length, 10) >= this.preview().tabImagesLimit;
         },
 
         /**
@@ -116,7 +134,7 @@ define([
          * @param {Object} record
          */
         nextRelated: function (record) {
-            var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
+            var relatedList = this.selectedTab() === 'series' ? record.series() : record.model(),
                 nextRelatedIndex = _.findLastIndex(
                     relatedList,
                     {
@@ -129,7 +147,7 @@ define([
                 return;
             }
 
-            this.switchImagePreviewToRelatedImage(nextRelated, record);
+            this.switchImagePreviewToRelatedImage(nextRelated);
         },
 
         /**
@@ -138,7 +156,7 @@ define([
          * @param {Object} record
          */
         prevRelated: function (record) {
-            var relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model(),
+            var relatedList = this.selectedTab() === 'series' ? record.series() : record.model(),
                 prevRelatedIndex = _.findLastIndex(
                     relatedList,
                     {
@@ -151,7 +169,7 @@ define([
                 return;
             }
 
-            this.switchImagePreviewToRelatedImage(prevRelated, record);
+            this.switchImagePreviewToRelatedImage(prevRelated);
         },
 
         /**
@@ -161,13 +179,13 @@ define([
          *
          * @return {Boolean}
          */
-        getPreviousButtonDisabled: function (record) {
+        cannotViewPrevious: function (record) {
             var relatedList, prevRelatedIndex, prevRelated;
 
-            if (!this.selectedRelatedType()) {
+            if (!this.selectedTab()) {
                 return false;
             }
-            relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model();
+            relatedList = this.selectedTab() === 'series' ? record.series() : record.model();
             prevRelatedIndex = _.findLastIndex(
                 relatedList,
                 {
@@ -186,13 +204,13 @@ define([
          *
          * @return {Boolean}
          */
-        getNextButtonDisabled: function (record) {
+        cannotViewNext: function (record) {
             var relatedList, nextRelatedIndex, nextRelated;
 
-            if (!this.selectedRelatedType()) {
+            if (!this.selectedTab()) {
                 return false;
             }
-            relatedList = this.selectedRelatedType() === 'series' ? record.series() : record.model();
+            relatedList = this.selectedTab() === 'series' ? record.series() : record.model();
             nextRelatedIndex = _.findLastIndex(
                 relatedList,
                 {
@@ -211,7 +229,7 @@ define([
          */
         switchImagePreviewToRelatedImage: function (relatedImage) {
             if (!relatedImage) {
-                this.selectedRelatedType(null);
+                this.selectedTab(null);
 
                 return;
             }
@@ -226,23 +244,21 @@ define([
         /**
          * Switch image preview to series image
          *
-         * @param {Object} series
          * @param {Object} record
          */
-        switchImagePreviewToSeriesImage: function (series, record) {
-            this.selectedRelatedType('series');
-            this.switchImagePreviewToRelatedImage(series, record);
+        switchImagePreviewToSeriesImage: function (record) {
+            this.selectedTab('series');
+            this.switchImagePreviewToRelatedImage(record);
         },
 
         /**
          * Switch image preview to model image
          *
-         * @param {Object} model
          * @param {Object} record
          */
-        switchImagePreviewToModelImage: function (model, record) {
-            this.selectedRelatedType('model');
-            this.switchImagePreviewToRelatedImage(model, record);
+        switchImagePreviewToModelImage: function (record) {
+            this.selectedTab('model');
+            this.switchImagePreviewToRelatedImage(record);
         }
     });
 });

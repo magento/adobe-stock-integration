@@ -11,6 +11,7 @@ use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -54,10 +55,10 @@ class SaveAssetLinks
                 $values[] = [$assetId, $keywordId];
             }
 
-            /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
+            /** @var Mysql $connection */
             $connection = $this->resourceConnection->getConnection();
             $connection->insertArray(
-                self::TABLE_ASSET_KEYWORD,
+                $this->resourceConnection->getTableName(self::TABLE_ASSET_KEYWORD),
                 [self::FIELD_ASSET_ID, self::FIELD_KEYWORD_ID],
                 $values,
                 AdapterInterface::INSERT_IGNORE

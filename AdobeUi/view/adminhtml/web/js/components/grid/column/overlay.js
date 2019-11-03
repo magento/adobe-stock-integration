@@ -13,7 +13,7 @@ define([
          * If overlay should be visible
          *
          * @param {Object} row
-         * @returns {bool}
+         * @returns {Boolean}
          */
         isVisible: function (row) {
             return !!row[this.index];

@@ -18,7 +18,7 @@ class UserProfile extends AbstractDb
     /**
      * @inheritdoc
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init('adobe_user_profile', 'id');
     }

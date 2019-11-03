@@ -13,6 +13,7 @@ use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
@@ -41,7 +42,7 @@ class License extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
      * @var GetAssetByIdInterface
@@ -94,7 +95,7 @@ class License extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
@@ -146,7 +147,7 @@ class License extends Action
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);

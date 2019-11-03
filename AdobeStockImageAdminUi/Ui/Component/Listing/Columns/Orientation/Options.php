@@ -8,17 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Orientation filter options provider
  */
-class Options implements \Magento\Framework\Data\OptionSourceInterface
+class Options implements OptionSourceInterface
 {
     /**
      * Get options
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             [

@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+use Magento\Framework\Api\SearchResultsInterface;
+
 /**
  * Interface AssetSearchResultsInterface
  * @api
  */
-interface AssetSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface AssetSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get assets list.

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
@@ -22,7 +21,7 @@ class RelatedImages extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * Successful get related image result code.
@@ -61,7 +60,7 @@ class RelatedImages extends Action
         $this->logger = $logger;
     }
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {

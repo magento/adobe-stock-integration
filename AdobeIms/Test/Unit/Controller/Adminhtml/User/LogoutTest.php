@@ -11,7 +11,9 @@ namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\User;
 use Magento\AdobeIms\Controller\Adminhtml\User\Logout;
 use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -54,12 +56,12 @@ class LogoutTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logoutInterfaceMock = $this->createMock(LogOutInterface::class);
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->context = $this->createMock(ActionContext::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
@@ -76,7 +78,7 @@ class LogoutTest extends TestCase
     /**
      * Verify that user can be logout
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $this->logoutInterfaceMock->expects($this->once())
             ->method('execute')
@@ -92,7 +94,7 @@ class LogoutTest extends TestCase
      * Verify that return will be false if there is an error in logout.
      * @throws NotFoundException
      */
-    public function testExecuteWithError()
+    public function testExecuteWithError(): void
     {
         $result = [
             'success' => false,

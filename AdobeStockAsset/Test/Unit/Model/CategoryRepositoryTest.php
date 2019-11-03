@@ -9,14 +9,18 @@ namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\CategoryFactory;
 use Magento\AdobeStockAsset\Model\CategoryRepository;
+use Magento\AdobeStockAsset\Model\Category;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\Save;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,9 +70,9 @@ class CategoryRepositoryTest extends TestCase
     private $commandSave;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resourceModel = $this->createMock(ResourceModel::class);
         $this->commandSave = $this->createMock(Save::class);
@@ -95,9 +99,9 @@ class CategoryRepositoryTest extends TestCase
     public function testGetList(): void
     {
         /** @var MockObject|SearchCriteriaInterface $searchCriteria */
-        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
-        $collection = $this->createMock(\Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection::class);
+        $collection = $this->createMock(Collection::class);
         $this->categoryCollectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($collection);
@@ -110,7 +114,7 @@ class CategoryRepositoryTest extends TestCase
             ->method('process')
             ->with($searchCriteria, $collection)
             ->willReturn(null);
-        $searchResults = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface::class);
+        $searchResults = $this->createMock(CategorySearchResultsInterface::class);
         $this->categorySearchResultsInterfaceFactory->expects($this->once())
             ->method('create')
             ->willReturn($searchResults);
@@ -134,7 +138,7 @@ class CategoryRepositoryTest extends TestCase
      */
     public function testGetById(): void
     {
-        $categoryMock = $this->createMock(\Magento\AdobeStockAsset\Model\Category::class);
+        $categoryMock = $this->createMock(Category::class);
         $this->categoryFactory->expects($this->once())
             ->method('create')
             ->willReturn($categoryMock);
@@ -149,13 +153,11 @@ class CategoryRepositoryTest extends TestCase
 
     /**
      * Test get By id with exception.
-     *
-     * @expectedException Magento\Framework\Exception\NoSuchEntityException
-     * @exceptedExceptionMessage Object with id 2 does not exist
      */
     public function testGetByIdWithException(): void
     {
-        $categoryMock = $this->createMock(\Magento\AdobeStockAsset\Model\Category::class);
+        $this->expectException(NoSuchEntityException::class);
+        $categoryMock = $this->createMock(Category::class);
         $this->categoryFactory->expects($this->once())
             ->method('create')
             ->willReturn($categoryMock);

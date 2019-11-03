@@ -13,12 +13,12 @@ use AdobeStock\Api\Request\License as LicenseRequest;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License as LicenseResponse;
 use AdobeStock\Api\Response\SearchFiles;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface as ImsConfig;
+use Magento\AdobeImsApi\Api\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeStockClient\Model\ConnectionFactory;
 use Magento\AdobeStockClient\Model\ConnectionWrapper;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -76,7 +76,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->connectionFactory = $this->createMock(ConnectionFactory::class);
         $this->configInterface = $this->createMock(ConfigInterface::class);
@@ -107,7 +107,7 @@ class ConnectionWrapperTest extends TestCase
     public function testApiKey(): void
     {
         $this->adobeStockMock->expects($this->once())->method('searchFilesInitialize')->willReturnSelf();
-        $nextResponse = new\AdobeStock\Api\Response\SearchFiles();
+        $nextResponse = new SearchFiles();
         $nextResponse->setNbResults(12);
         $this->adobeStockMock->expects($this->exactly(1))
             ->method('getNextResponse')
@@ -118,7 +118,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Search file initialize
      */
-    public function testSearchFilesInitialize()
+    public function testSearchFilesInitialize(): void
     {
         $this->imsConfig->expects($this->once())->method('getApiKey')->willReturn('key');
         $searchFileRequest = new SearchFilesRequest();
@@ -136,7 +136,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Search file initialize with exception.
      */
-    public function testSearchFilesInitializeException()
+    public function testSearchFilesInitializeException(): void
     {
         $this->expectExceptionMessage('Failed to initialize Adobe Stock search files request: New error');
         $this->imsConfig->expects($this->once())->method('getApiKey')->willReturn('key');
@@ -152,7 +152,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Nest response test
      */
-    public function testGetNextResponse()
+    public function testGetNextResponse(): void
     {
         $this->imsConfig->expects($this->once())->method('getApiKey')->willReturn('key');
         $this->adobeStockMock->expects($this->once())->method('getNextResponse')->willReturn(new SearchFiles());
@@ -162,7 +162,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Next response with exception
      */
-    public function testGetNextResponseWithException()
+    public function testGetNextResponseWithException(): void
     {
         $this->expectExceptionMessage('Failed to retrieve Adobe Stock search files results: New error');
         $this->imsConfig->expects($this->once())->method('getApiKey')->willReturn('key');
@@ -175,7 +175,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Get member profile test
      */
-    public function testGetMemberProfile()
+    public function testGetMemberProfile(): void
     {
         $this->setTokens();
         $this->adobeStockMock->expects($this->once())
@@ -187,7 +187,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Get member profile with exception
      */
-    public function testGetMemberProfileWithException()
+    public function testGetMemberProfileWithException(): void
     {
         $this->expectExceptionMessage('Failed to retrieve Adobe Stock member profile');
         $this->setTokens();
@@ -203,7 +203,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Test get Content license
      */
-    public function testGetContentLicense()
+    public function testGetContentLicense(): void
     {
         $this->setTokens();
         $this->adobeStockMock->expects($this->once())
@@ -218,7 +218,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Test get Content license with exception
      */
-    public function testGetContentLicenseWithException()
+    public function testGetContentLicenseWithException(): void
     {
         $this->expectExceptionMessage('Failed to retrieve Adobe Stock content license');
         $this->setTokens();
@@ -231,7 +231,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Download asset url test
      */
-    public function testDownloadAssetUrl()
+    public function testDownloadAssetUrl(): void
     {
         $this->setTokens();
         $this->adobeStockMock->expects($this->once())
@@ -243,7 +243,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Download asset url with exception
      */
-    public function testDownloadAssetUrlWithExeption()
+    public function testDownloadAssetUrlWithExeption(): void
     {
         $this->expectExceptionMessage('Failed to retrieve Adobe Stock asset download URL');
         $this->setTokens();
@@ -256,7 +256,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * If invalid token ensure that tokens flushed
      */
-    public function testFlushTokens()
+    public function testFlushTokens(): void
     {
         $this->expectExceptionMessage('Adobe API login has expired!');
         $this->setTokens();
@@ -270,7 +270,7 @@ class ConnectionWrapperTest extends TestCase
     /**
      * Ste's tokens
      */
-    private function setTokens()
+    private function setTokens(): void
     {
         $this->imsConfig->expects($this->once())->method('getApiKey')->willReturn('key');
         $this->getAccessToken->expects($this->once())->method('execute')->willReturn('token');

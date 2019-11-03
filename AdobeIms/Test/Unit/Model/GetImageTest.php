@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\GetImage;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
@@ -61,7 +61,7 @@ class GetImageTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->configMock = $this->createMock(ScopeConfigInterface::class);
@@ -110,7 +110,7 @@ class GetImageTest extends TestCase
     /**
      * Get Image with exception
      */
-    public function testGetImageWithException()
+    public function testGetImageWithException(): void
     {
         $this->curlFactoryMock->expects($this->once())
             ->method('create')
@@ -128,7 +128,7 @@ class GetImageTest extends TestCase
      *
      * @return array
      */
-    public function imagesDataProvider()
+    public function imagesDataProvider(): array
     {
         return [
             [

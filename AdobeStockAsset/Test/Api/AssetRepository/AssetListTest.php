@@ -28,7 +28,7 @@ class AssetListTest extends WebapiAbstract
      *
      * @return void
      */
-    public function testGetList()
+    public function testGetList(): void
     {
         $searchCriteria = [
             'searchCriteria' => [
@@ -78,7 +78,7 @@ class AssetListTest extends WebapiAbstract
      *
      * @return void
      */
-    public static function assetFixtureProvider()
+    public static function assetFixtureProvider(): void
     {
         require __DIR__ . '/../../_files/asset.php';
     }

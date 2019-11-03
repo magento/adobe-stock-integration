@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\GetToken;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeIms\Model\OAuth\TokenResponse;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
+use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -54,7 +56,7 @@ class GetTokenTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->configMock = $this->createMock(ConfigInterface::class);
@@ -74,7 +76,7 @@ class GetTokenTest extends TestCase
      */
     public function testExecute(): void
     {
-        $curl = $this->createMock(\Magento\Framework\HTTP\Client\Curl::class);
+        $curl = $this->createMock(Curl::class);
         $this->curlFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($curl);
@@ -96,7 +98,7 @@ class GetTokenTest extends TestCase
         $this->jsonMock->expects($this->once())
             ->method('unserialize')
             ->willReturn(['string']);
-        $tokenResponse = $this->createMock(\Magento\AdobeIms\Model\OAuth\TokenResponse::class);
+        $tokenResponse = $this->createMock(TokenResponse::class);
         $this->tokenResponseFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($tokenResponse);

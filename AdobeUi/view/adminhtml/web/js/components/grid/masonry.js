@@ -114,43 +114,61 @@ define([
          * Set layout styles inside the container
          */
         setLayoutStyles: function () {
-            var containerWidth = parseInt(this.container.clientWidth, 10) - this.imageMargin,
-                row = [],
+            var containerWidth = parseInt(this.container.clientWidth, 10),
+                rowImages = [],
                 ratio = 0,
-                imageWidth = 0,
                 rowHeight = 0,
                 calcHeight = 0,
-                isBottom = false,
-                imageRowNumber = 1;
+                isLastRow = false,
+                rowNumber = 1;
 
             this.setMinRatio();
 
             this.rows().forEach(function (image, index) {
                 ratio += parseFloat((image.width / image.height).toFixed(2));
-                row.push(image);
+                rowImages.push(image);
 
-                if (ratio >= this.minRatio || index + 1 === this.rows().length) {
-                    ratio = Math.max(ratio, this.minRatio);
-                    calcHeight = (containerWidth - this.imageMargin * (row.length - 1)) / ratio;
-                    rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
-                    isBottom = index + 1 === this.rows().length;
-
-                    row.forEach(function (img) {
-                        imageWidth = rowHeight * (img.width / img.height).toFixed(2);
-                        this.setImageStyles(img, imageWidth, rowHeight);
-                        this.setImageClass(img, {
-                            bottom: isBottom
-                        });
-                        img.rowNumber = imageRowNumber;
-                    }.bind(this));
-
-                    row[0].firstInRow = true;
-                    row[row.length - 1].lastInRow = true;
-                    row = [];
-                    ratio = 0;
-                    imageRowNumber++;
+                if (ratio < this.minRatio && index + 1 !== this.rows().length) {
+                    // Row has more space for images and the image is not the last one - proceed to the next iteration
+                    return;
                 }
+
+                ratio = Math.max(ratio, this.minRatio);
+                calcHeight = (containerWidth - this.imageMargin * rowImages.length) / ratio;
+                rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
+                isLastRow = index + 1 === this.rows().length;
+
+                this.assignImagesToRow(rowImages, rowNumber, rowHeight, isLastRow);
+
+                rowImages = [];
+                ratio = 0;
+                rowNumber++;
+
             }.bind(this));
+        },
+
+        /**
+         * Apply styles, css classes and add properties for images in the row
+         *
+         * @param {Object[]} images
+         * @param {Number} rowNumber
+         * @param {Number} rowHeight
+         * @param {Boolean} isLastRow
+         */
+        assignImagesToRow: function (images, rowNumber, rowHeight, isLastRow) {
+            var imageWidth;
+
+            images.forEach(function (img) {
+                imageWidth = rowHeight * (img.width / img.height).toFixed(2);
+                this.setImageStyles(img, imageWidth, rowHeight);
+                this.setImageClass(img, {
+                    bottom: isLastRow
+                });
+                img.rowNumber = rowNumber;
+            }.bind(this));
+
+            images[0].firstInRow = true;
+            images[images.length - 1].lastInRow = true;
         },
 
         /**
@@ -179,29 +197,30 @@ define([
          * Set styles for every image in layout
          *
          * @param {Object} img
-         * @param {Number} imageWidth
-         * @param {Number} rowHeight
+         * @param {Number} width
+         * @param {Number} height
          */
-        setImageStyles: function (img, imageWidth, rowHeight) {
+        setImageStyles: function (img, width, height) {
             if (!img.styles) {
                 img.styles = ko.observable();
             }
             img.styles({
-                width: parseInt(imageWidth, 10) + 'px',
-                height: parseInt(rowHeight, 10) + 'px'
+                width: parseInt(width, 10) + 'px',
+                height: parseInt(height, 10) + 'px'
             });
         },
 
         /**
+         * Set css classes to and an image
          *
-         * @param {Object} img
+         * @param {Object} image
          * @param {Object} classes
          */
-        setImageClass: function (img, classes) {
-            if (!img.css) {
-                img.css = ko.observable(classes);
+        setImageClass: function (image, classes) {
+            if (!image.css) {
+                image.css = ko.observable(classes);
             }
-            img.css(classes);
+            image.css(classes);
         },
 
         /**

@@ -64,9 +64,9 @@ class GetImageListTest extends TestCase
     private $filterBuilderMock;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->getAssetListMock = $this->createMock(GetAssetListInterface::class);
@@ -91,7 +91,7 @@ class GetImageListTest extends TestCase
      * @dataProvider appliedFilterNamesProvider
      * @throws LocalizedException
      */
-    public function testWithDefaultFilters(array $appliedFilterNames)
+    public function testWithDefaultFilters(array $appliedFilterNames): void
     {
         $appliedFilterGroup = $this->getAppliedFilterGroup($appliedFilterNames);
 
@@ -119,7 +119,7 @@ class GetImageListTest extends TestCase
      *
      * @return array
      */
-    public function appliedFilterNamesProvider()
+    public function appliedFilterNamesProvider(): array
     {
         return [
             [
@@ -148,7 +148,7 @@ class GetImageListTest extends TestCase
         $filters = [];
 
         foreach ($appliedFilterNames as $field) {
-            /** @var \Magento\Framework\Api\Filter|MockObject $filter */
+            /** @var Filter|MockObject $filter */
             $filter = $this->createMock(Filter::class);
             $filter->expects($this->once())
                 ->method('getField')

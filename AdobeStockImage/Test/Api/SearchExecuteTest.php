@@ -5,6 +5,8 @@
  */
 namespace Magento\AdobeStockImage\Test\Api;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -20,19 +22,18 @@ class SearchExecuteTest extends WebapiAbstract
     private const SERVICE_VERSION = 'V1';
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
-    public function testSearchExecute()
+    public function testSearchExecute(): void
     {
-
         $searchCriteria = $this->getSearchData();
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
@@ -52,7 +53,10 @@ class SearchExecuteTest extends WebapiAbstract
         $this->assertNotNull($response['items'][0]['id']);
     }
 
-    private function getSearchData()
+    /**
+     * @return array
+     */
+    private function getSearchData(): array
     {
         $searchCriteria = [
             'searchCriteria' => [

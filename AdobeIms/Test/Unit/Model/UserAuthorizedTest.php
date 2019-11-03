@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\UserAuthorized;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,7 +37,7 @@ class UserAuthorizedTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userContext = $this->createMock(UserContextInterface::class);
         $this->userProfile = $this->createMock(UserProfileRepositoryInterface::class);
@@ -52,7 +53,7 @@ class UserAuthorizedTest extends TestCase
     public function testExecute(): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(\Magento\AdobeImsApi\Api\Data\UserProfileInterface::class);
+        $userProfileMock = $this->createMock(UserProfileInterface::class);
         $this->userProfile->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($userProfileMock);
@@ -62,6 +63,6 @@ class UserAuthorizedTest extends TestCase
             ->method('getAccessTokenExpiresAt')
             ->willReturn(date('Y-m-d H:i:s'));
 
-        $this->assertEquals(true, $this->userAuthorized->execute());
+        $this->assertTrue($this->userAuthorized->execute());
     }
 }

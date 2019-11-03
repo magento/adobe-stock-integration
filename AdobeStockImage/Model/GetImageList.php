@@ -75,7 +75,7 @@ class GetImageList implements GetImageListInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchCriteriaInterface
      */
-    private function setDefaultFilters(SearchCriteriaInterface $searchCriteria)
+    private function setDefaultFilters(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
         $filterGroups = $searchCriteria->getFilterGroups();
         $appliedFilters = $this->getAppliedFilters($filterGroups);

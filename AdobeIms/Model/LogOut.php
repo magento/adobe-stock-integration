@@ -6,7 +6,7 @@ namespace Magento\AdobeIms\Model;
 
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeImsApi\Api\LogOutInterface;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;

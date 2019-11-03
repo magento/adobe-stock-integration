@@ -6,6 +6,10 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\SearchCriteria;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\IntegrationException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -52,9 +56,9 @@ class GetRelatedImagesTest extends TestCase
     private $fields;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->logger = $this->createMock(LoggerInterface::class);
@@ -78,7 +82,7 @@ class GetRelatedImagesTest extends TestCase
      * @throws IntegrationException
      * @dataProvider relatedImagesDataProvider
      */
-    public function testExecute($relatedImagesProvider, $expectedResult)
+    public function testExecute($relatedImagesProvider, $expectedResult): void
     {
         $this->filterBuilder->expects($this->any())
             ->method('setField')
@@ -89,7 +93,7 @@ class GetRelatedImagesTest extends TestCase
         $this->filterBuilder->expects($this->any())
             ->method('create')
             ->willReturn(
-                $this->createMock(\Magento\Framework\Api\Filter::class)
+                $this->createMock(Filter::class)
             );
         $this->searchCriteriaBuilder->expects($this->any())
             ->method('addFilter')
@@ -100,9 +104,9 @@ class GetRelatedImagesTest extends TestCase
         $this->searchCriteriaBuilder->expects($this->any())
             ->method('create')
             ->willReturn(
-                $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class)
+                $this->createMock(SearchCriteria::class)
             );
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\Search\SearchResultInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchResultInterface::class);
         $this->getImageListInterface->expects($this->any())
             ->method('execute')
             ->willReturn($searchCriteriaMock);
@@ -123,7 +127,7 @@ class GetRelatedImagesTest extends TestCase
         return [
             [
                 'relatedImagesProvider' => [
-                    new \Magento\Framework\Api\Search\Document(
+                    new Document(
                         [
                             'id' => 2,
                             'custom_attributes' => [

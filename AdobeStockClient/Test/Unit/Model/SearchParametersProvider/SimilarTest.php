@@ -13,6 +13,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,7 +34,7 @@ class SimilarTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->similar = $this->objectManager->getObject(Similar::class);
@@ -44,9 +45,9 @@ class SimilarTest extends TestCase
      */
     public function testApply(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
+        /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->createMock(SearchParameters::class);
         $filterGroupItemMock = $this->createMock(FilterGroup::class);
         $filterItemMock = $this->createMock(Filter::class);

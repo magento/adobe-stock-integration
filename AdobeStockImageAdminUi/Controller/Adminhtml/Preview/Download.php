@@ -11,6 +11,7 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
@@ -31,7 +32,7 @@ class Download extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * @var GetAssetByIdInterface
@@ -68,7 +69,7 @@ class Download extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
@@ -104,7 +105,7 @@ class Download extends Action
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);

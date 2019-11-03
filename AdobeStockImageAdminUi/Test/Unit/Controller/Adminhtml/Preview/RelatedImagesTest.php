@@ -11,7 +11,9 @@ namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\Preview;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview\RelatedImages;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -61,16 +63,16 @@ class RelatedImagesTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->getRelatedImages = $this->createMock(GetRelatedImagesInterface::class);
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->context = $this->createMock(ActionContext::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->context->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
-        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
@@ -96,7 +98,7 @@ class RelatedImagesTest extends TestCase
     /**
      * Verify that image relatedImages loaded.
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $relatedImages = [
             'same_model' => [
@@ -129,7 +131,7 @@ class RelatedImagesTest extends TestCase
     /**
      * Verify that image relatedImages with exception
      */
-    public function testExecuteWithException()
+    public function testExecuteWithException(): void
     {
         $result = [
             'success' => false,

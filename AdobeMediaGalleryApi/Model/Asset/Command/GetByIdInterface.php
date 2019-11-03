@@ -9,18 +9,18 @@ declare(strict_types=1);
 namespace Magento\AdobeMediaGalleryApi\Model\Asset\Command;
 
 /**
- * Get media asset by id.
- * @api
+ * Interface GetByIdInterface
  */
 interface GetByIdInterface
 {
     /**
-     * Get media asset by id.
+     * Get media asset by id
      *
-     * @param int $assetId
+     * @param int $mediaAssetId
      *
      * @return \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
-    public function execute(int $assetId): \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
+    public function execute(int $mediaAssetId): \Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface;
 }
