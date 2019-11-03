@@ -3,9 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/grid/columns/column',
-    'ko'
-], function (Column, ko) {
+    'Magento_Ui/js/grid/columns/column'
+], function (Column) {
     'use strict';
 
     return Column.extend({
