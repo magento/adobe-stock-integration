@@ -69,7 +69,7 @@ class GetByPath implements GetByPathInterface
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
-                ->from(self::TABLE_MEDIA_GALLERY_ASSET)
+                ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
                 ->where(self::MEDIA_GALLERY_ASSET_PATH . ' = ?', $mediaFilePath);
             $data = $connection->query($select)->fetch();
 

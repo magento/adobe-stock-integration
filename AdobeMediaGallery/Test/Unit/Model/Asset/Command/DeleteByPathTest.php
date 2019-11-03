@@ -13,6 +13,7 @@ use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Psr\Log\LoggerInterface;
@@ -22,18 +23,21 @@ use Psr\Log\LoggerInterface;
  */
 class DeleteByPathTest extends TestCase
 {
+    private const TABLE_NAME = 'media_gallery_asset';
+    private const FILE_PATH = 'test-file-path/test.jpg';
+
     /**
      * @var DeleteByPath
      */
     private $deleteMediaAssetByPath;
 
     /**
-     * @var AdapterInterface
+     * @var AdapterInterface|MockObject
      */
     private $adapter;
 
     /**
-     * @var LoggerInterface
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
@@ -50,7 +54,7 @@ class DeleteByPathTest extends TestCase
     /**
      * Initialize basic test class mocks
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
@@ -67,47 +71,38 @@ class DeleteByPathTest extends TestCase
         $resourceConnection->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->adapter);
-
-        $this->mediaAssetTable = 'media_gallery_asset';
-        $this->testFilePath = 'test-file-path/test.jpg';
+        $resourceConnection->expects($this->once())
+            ->method('getTableName')
+            ->with(self::TABLE_NAME)
+            ->willReturn('prefix_' . self::TABLE_NAME);
     }
 
     /**
      * Test delete media asset by path command
      */
-    public function testSuccessfulDeleteByIdExecution()
+    public function testSuccessfulDeleteByIdExecution(): void
     {
-        $tableName = 'media_gallery_asset';
-        $this->adapter->expects($this->once())
-            ->method('getTableName')
-            ->with($this->mediaAssetTable)
-            ->willReturn($this->mediaAssetTable);
         $this->adapter->expects($this->once())
             ->method('delete')
-            ->with($tableName, ['path = ?' => $this->testFilePath]);
+            ->with('prefix_' . self::TABLE_NAME, ['path = ?' => self::FILE_PATH]);
 
-        $this->deleteMediaAssetByPath->execute($this->testFilePath);
+        $this->deleteMediaAssetByPath->execute(self::FILE_PATH);
     }
 
     /**
      * Assume that delete action will thrown an Exception
      */
-    public function testExceptionOnDeleteExecution()
+    public function testExceptionOnDeleteExecution(): void
     {
-        $tableName = 'media_gallery_asset';
-        $this->adapter->expects($this->once())
-            ->method('getTableName')
-            ->with($this->mediaAssetTable)
-            ->willReturn($this->mediaAssetTable);
         $this->adapter->expects($this->once())
             ->method('delete')
-            ->with($tableName, ['path = ?' => $this->testFilePath])
+            ->with('prefix_' . self::TABLE_NAME, ['path = ?' => self::FILE_PATH])
             ->willThrowException(new \Exception());
 
         $this->expectException(CouldNotDeleteException::class);
         $this->logger->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
-        $this->deleteMediaAssetByPath->execute($this->testFilePath);
+        $this->deleteMediaAssetByPath->execute(self::FILE_PATH);
     }
 }

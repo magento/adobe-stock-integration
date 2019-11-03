@@ -11,6 +11,7 @@ use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -59,10 +60,10 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
             }
 
             if (!empty($data)) {
-                /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
+                /** @var Mysql $connection */
                 $connection = $this->resourceConnection->getConnection();
                 $connection->insertArray(
-                    self::TABLE_KEYWORD,
+                    $this->resourceConnection->getTableName(self::TABLE_KEYWORD),
                     [self::KEYWORD],
                     $data,
                     AdapterInterface::INSERT_IGNORE

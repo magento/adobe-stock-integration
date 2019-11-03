@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command;
 
+use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
 
@@ -16,8 +17,6 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
 class Save
 {
     private const ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME = 'adobe_stock_creator';
-    private const ID = 'id';
-    private const NAME = 'name';
 
     /**
      * @var InsertIgnore
@@ -25,12 +24,20 @@ class Save
     private $insertIgnore;
 
     /**
+     * @var DataExtractorInterface
+     */
+    private $dataExtractor;
+
+    /**
      * @param InsertIgnore $insertIgnore
+     * @param DataExtractorInterface $dataExtractor
      */
     public function __construct(
-        InsertIgnore $insertIgnore
+        InsertIgnore $insertIgnore,
+        DataExtractorInterface $dataExtractor
     ) {
         $this->insertIgnore = $insertIgnore;
+        $this->dataExtractor = $dataExtractor;
     }
 
     /**
@@ -41,13 +48,11 @@ class Save
      */
     public function execute(CreatorInterface $creator): void
     {
+        $data = $this->dataExtractor->extract($creator, CreatorInterface::class);
         $this->insertIgnore->execute(
-            $creator,
+            $data,
             self::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME,
-            [
-                self::ID,
-                self::NAME
-            ]
+            array_keys($data)
         );
     }
 }

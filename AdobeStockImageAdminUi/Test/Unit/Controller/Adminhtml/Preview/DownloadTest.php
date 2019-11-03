@@ -16,6 +16,7 @@ use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -75,11 +76,11 @@ class DownloadTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->saveImage = $this->createMock(SaveImageInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->context = $this->createMock(ActionContext::class);
         $this->getAssetById = $this->createMock(GetAssetByIdInterface::class);
         $this->document = $this->createMock(Document::class);
 
@@ -109,7 +110,7 @@ class DownloadTest extends TestCase
         $this->context->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->request);
-        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
@@ -128,7 +129,7 @@ class DownloadTest extends TestCase
     /**
      * Verify that image can be downloaded
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $result = ['success' => true, 'message' => new Phrase('You have successfully downloaded the image.')];
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(200);
@@ -140,7 +141,7 @@ class DownloadTest extends TestCase
     /**
      * Verify that exception will throw is image not available.
      */
-    public function testExecuteWithException()
+    public function testExecuteWithException(): void
     {
         $result = ['success' => false, 'message' => new Phrase('An error occurred while image download.')];
         $this->saveImage->method('execute')->willThrowException(new CouldNotSaveException(new Phrase('Error')));

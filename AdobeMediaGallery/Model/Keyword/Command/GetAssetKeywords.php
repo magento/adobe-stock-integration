@@ -59,7 +59,7 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
             $connection = $this->resourceConnection->getConnection();
 
             $select = $connection->select()
-                ->from(['k' => self::TABLE_KEYWORD])
+                ->from(['k' => $this->resourceConnection->getTableName(self::TABLE_KEYWORD)])
                 ->join(['ak' => self::TABLE_ASSET_KEYWORD], 'k.id = ak.keyword_id')
                 ->where('ak.asset_id = ?', $assetId);
             $data = $connection->query($select)->fetchAll();

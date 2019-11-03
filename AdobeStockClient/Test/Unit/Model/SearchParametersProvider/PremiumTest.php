@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PremiumTest extends TestCase
 {
-    const FILTER_TYPE = 'premium_price_filter';
+    public const FILTER_TYPE = 'premium_price_filter';
 
     /**
      * @var ObjectManager

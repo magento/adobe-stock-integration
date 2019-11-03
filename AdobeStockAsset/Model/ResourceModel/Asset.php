@@ -30,7 +30,7 @@ class Asset extends AbstractDb
     /**
      * Initialize with table name and primary field
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(self::ADOBE_STOCK_ASSET_TABLE_NAME, 'id');
     }

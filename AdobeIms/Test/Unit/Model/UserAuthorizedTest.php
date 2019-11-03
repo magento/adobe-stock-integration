@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\UserAuthorized;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -52,7 +53,7 @@ class UserAuthorizedTest extends TestCase
     public function testExecute(): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(\Magento\AdobeImsApi\Api\Data\UserProfileInterface::class);
+        $userProfileMock = $this->createMock(UserProfileInterface::class);
         $this->userProfile->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($userProfileMock);

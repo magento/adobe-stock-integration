@@ -10,6 +10,7 @@ namespace Magento\AdobeStockImageAdminUi\Test\Unit\Ui\Component\Listing\Filter;
 use Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -137,7 +138,7 @@ class ColorTest extends TestCase
      * @dataProvider colorPickerModeProvider
      * @param string|null $colorPickerMode
      * @param string $appliedValue
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testPrepare(?string $colorPickerMode, string $appliedValue): void
     {

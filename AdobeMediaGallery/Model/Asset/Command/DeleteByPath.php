@@ -59,7 +59,7 @@ class DeleteByPath implements DeleteByPathInterface
         try {
             /** @var AdapterInterface $connection */
             $connection = $this->resourceConnection->getConnection();
-            $tableName = $connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
+            $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
             $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_PATH . ' = ?' => $mediaAssetPath]);
         } catch (\Exception $exception) {
             $message = __(

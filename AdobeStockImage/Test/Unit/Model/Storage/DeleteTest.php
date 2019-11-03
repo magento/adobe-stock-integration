@@ -6,12 +6,16 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model\Storage;
 
+use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockImage\Model\Storage\Delete;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for the storage delete functionality
@@ -19,7 +23,7 @@ use Magento\AdobeStockImage\Model\Storage\Delete;
 class DeleteTest extends TestCase
 {
     /**
-     * @var MockObject | \Magento\Framework\Filesystem\Directory\Write
+     * @var MockObject | Write
      */
     private $mediaDirectoryMock;
 
@@ -29,24 +33,23 @@ class DeleteTest extends TestCase
     private $delete;
 
     /**
-     * @var MockObject | \Magento\Framework\Filesystem
+     * @var MockObject | Filesystem
      */
     public $fileSystemMock;
 
     /**
-     * @var MockObject | \Psr\Log\LoggerInterface
+     * @var MockObject | LoggerInterface
      */
     private $logger;
 
     /**
      * Initialize basic test object
      */
-    public function setUp()
+    public function setUp(): void
     {
-
-        $this->fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->fileSystemMock = $this->createMock(Filesystem::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->mediaDirectoryMock = $this->createMock(Write::class);
 
         $this->delete = (new ObjectManager($this))->getObject(
             Delete::class,
@@ -60,7 +63,7 @@ class DeleteTest extends TestCase
     /**
      * Test storage delete action
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $path = 'path';
 
@@ -85,7 +88,7 @@ class DeleteTest extends TestCase
     /**
      * Assume that delete action will thrown an Exception
      */
-    public function testExceptionOnDeleteExecution()
+    public function testExceptionOnDeleteExecution(): void
     {
         $path = 'path';
 
@@ -102,7 +105,7 @@ class DeleteTest extends TestCase
         $this->mediaDirectoryMock->expects($this->once())
             ->method('delete')
             ->with($path)
-            ->willThrowException(new \Exception());
+            ->willThrowException(new Exception());
 
         $this->expectException(CouldNotDeleteException::class);
         $this->logger->expects($this->once())

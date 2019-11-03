@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Content Type Photo filter options provider
  */
-class Options implements \Magento\Framework\Data\OptionSourceInterface
+class Options implements OptionSourceInterface
 {
     /**
      * Get options

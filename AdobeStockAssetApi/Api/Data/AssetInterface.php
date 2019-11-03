@@ -39,14 +39,6 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getCategoryId(): ?int;
 
     /**
-     * Set category
-     *
-     * @param int $categoryId
-     * @return void
-     */
-    public function setCategoryId(int $categoryId): void;
-
-    /**
      * Get category
      *
      * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface|null
@@ -59,14 +51,6 @@ interface AssetInterface extends ExtensibleDataInterface
      * @return int|null
      */
     public function getCreatorId(): ?int;
-
-    /**
-     * Set the creator
-     *
-     * @param int $creatorId
-     * @return void
-     */
-    public function setCreatorId(int $creatorId): void;
 
     /**
      * Return the creator

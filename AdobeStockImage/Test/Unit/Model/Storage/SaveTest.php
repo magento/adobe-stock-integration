@@ -6,12 +6,19 @@
 
 namespace Magento\AdobeStockImage\Test\Unit\Model\Storage;
 
+use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Driver\Https;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockImage\Model\Storage\Save;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for the storage save functionality
@@ -19,7 +26,7 @@ use Magento\AdobeStockImage\Model\Storage\Save;
 class SaveTest extends TestCase
 {
     /**
-     * @var MockObject | \Magento\Framework\Filesystem\Directory\Write
+     * @var MockObject | Write
      */
     private $mediaDirectoryMock;
 
@@ -29,36 +36,35 @@ class SaveTest extends TestCase
     private $save;
 
     /**
-     * @var MockObject | \Magento\Framework\Filesystem
+     * @var MockObject | Filesystem
      */
     public $fileSystemMock;
 
     /**
-     * @var MockObject | \Magento\Framework\Filesystem\DriverInterface
+     * @var MockObject | DriverInterface
      */
     private $httpsDriverMock;
 
     /**
-     * @var MockObject | \Magento\Framework\Filesystem\Io\File
+     * @var MockObject | File
      */
     private $fileSystemIoMock;
 
     /**
-     * @var MockObject | \Psr\Log\LoggerInterface
+     * @var MockObject | LoggerInterface
      */
     private $logger;
 
     /**
      * Initialize base test objects
      */
-    public function setUp()
+    public function setUp(): void
     {
-
-        $this->fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->httpsDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\Https::class);
-        $this->fileSystemIoMock = $this->createMock(\Magento\Framework\Filesystem\Io\File::class);
-        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->fileSystemMock = $this->createMock(Filesystem::class);
+        $this->httpsDriverMock = $this->createMock(Https::class);
+        $this->fileSystemIoMock = $this->createMock(File::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->mediaDirectoryMock = $this->createMock(Write::class);
 
         $this->save = (new ObjectManager($this))->getObject(
             Save::class,
@@ -74,7 +80,7 @@ class SaveTest extends TestCase
     /**
      * Test image preview save
      */
-    public function testSavePreview()
+    public function testSavePreview(): void
     {
         $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
 
@@ -102,7 +108,7 @@ class SaveTest extends TestCase
     /**
      * Assume that save action will thrown an Exception
      */
-    public function testExceptionOnSaveExecution()
+    public function testExceptionOnSaveExecution(): void
     {
         $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
 
@@ -119,7 +125,7 @@ class SaveTest extends TestCase
         $this->mediaDirectoryMock->expects($this->once())
             ->method('writeFile')
             ->withAnyParameters()
-            ->willThrowException(new \Exception());
+            ->willThrowException(new Exception());
 
         $this->expectException(CouldNotSaveException::class);
         $this->logger->expects($this->once())

@@ -110,7 +110,7 @@ class GetImageTest extends TestCase
     /**
      * Get Image with exception
      */
-    public function testGetImageWithException()
+    public function testGetImageWithException(): void
     {
         $this->curlFactoryMock->expects($this->once())
             ->method('create')
@@ -128,7 +128,7 @@ class GetImageTest extends TestCase
      *
      * @return array
      */
-    public function imagesDataProvider()
+    public function imagesDataProvider(): array
     {
         return [
             [
