@@ -16,15 +16,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class AssetListTest extends WebapiAbstract
 {
     private const RESOURCE_PATH = '/V1/adobestock/asset/search';
-
-    private const SERVICE_VERSION = 'V1';
-
-    private const SERVICE_NAME = 'adobeStockAssetRepositoryV1';
+    private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
 
     /**
      * Test List
      *
-     * @magentoApiDataFixture assetFixtureProvider
+     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
      *
      * @return void
      */
@@ -71,15 +68,5 @@ class AssetListTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['id']);
         $this->assertEquals('1', $response['items'][0]['id']);
-    }
-
-    /**
-     * Asset fixture provider
-     *
-     * @return void
-     */
-    public static function assetFixtureProvider(): void
-    {
-        require __DIR__ . '/../../_files/asset.php';
     }
 }

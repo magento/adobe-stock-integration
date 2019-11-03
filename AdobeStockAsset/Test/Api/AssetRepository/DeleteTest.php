@@ -22,12 +22,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class DeleteTest extends WebapiAbstract
 {
     private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
-
-    private const SERVICE_VERSION = 'V1';
-
     private const RESOURCE_PATH = '/V1/adobestock/asset';
-
-    private const SERVICE_OPERATION = 'DeleteById';
 
     /**
      * @var ObjectManagerInterface
@@ -51,7 +46,7 @@ class DeleteTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture assetFixtureProvider
+     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
      */
     public function testDelete(): void
     {
@@ -99,29 +94,18 @@ class DeleteTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . DIRECTORY_SEPARATOR . $assetId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $assetId,
                 'httpMethod'   => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION
+                'operation' => self::SERVICE_NAME . 'DeleteById'
             ],
         ];
 
-        return (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfo, ['id' => $assetId])
+        return (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
+            ? $this->_webApiCall($serviceInfo, ['id' => $assetId])
             : $this->_webApiCall($serviceInfo);
-    }
-
-    /**
-     * Asset fixture provider
-     *
-     * @return void
-     */
-    public static function assetFixtureProvider(): void
-    {
-        require __DIR__ . '/../../_files/asset.php';
     }
 
     /**
