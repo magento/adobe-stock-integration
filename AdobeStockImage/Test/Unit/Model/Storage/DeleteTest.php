@@ -45,7 +45,7 @@ class DeleteTest extends TestCase
     /**
      * Initialize basic test object
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fileSystemMock = $this->createMock(Filesystem::class);
         $this->logger = $this->createMock(LoggerInterface::class);
