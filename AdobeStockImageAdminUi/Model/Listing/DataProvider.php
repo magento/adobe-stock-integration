@@ -14,7 +14,6 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\Framework\Api\Search\SearchResultInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -23,27 +22,22 @@ use Magento\Framework\Exception\LocalizedException;
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
-     * @var SearchResultInterfaceFactory
-     */
-    private $searchResultFactory;
-
-    /**
      * @var GetImageListInterface
      */
     private $getImageList;
 
     /**
      * DataProvider constructor.
-     * @param string                $name
-     * @param string                $primaryFieldName
-     * @param string                $requestFieldName
-     * @param ReportingInterface    $reporting
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param ReportingInterface $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param RequestInterface      $request
-     * @param FilterBuilder         $filterBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
      * @param GetImageListInterface $getImageList
-     * @param array                 $meta
-     * @param array                 $data
+     * @param array $meta
+     * @param array $data
      */
     public function __construct(
         string $name,
@@ -54,7 +48,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
-        SearchResultInterfaceFactory $searchResultFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -69,7 +62,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $meta,
             $data
         );
-        $this->searchResultFactory = $searchResultFactory;
         $this->getImageList = $getImageList;
     }
 
