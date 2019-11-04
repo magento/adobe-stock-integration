@@ -414,6 +414,15 @@ define([
          */
         getLicenseButtonTitle: function () {
             return this.isDownloaded() ?  $.mage.__('License') : $.mage.__('License and Save');
+        },
+
+        /**
+         * Returns image name of previously saved preview image
+         *
+         * @returns {String}
+         */
+        getImageName: function () {
+            return this.preview().displayedRecord()['path'].split('/').pop();
         }
     });
 });

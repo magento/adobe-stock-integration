@@ -12,6 +12,6 @@
         <grabValueFrom selector="{{AdobeStockImagePreviewSection.generatedImageName}}" stepKey="generatedImage" />
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMaskDiapered1" />
-        <seeElement selector="{{AdobeStockSection.selectedImagePreview({$generatedImage})}}" stepKey="assertSavedImage" />
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$generatedImage})}}" stepKey="assertSavedImage" />
     </actionGroup>
 </actionGroups>

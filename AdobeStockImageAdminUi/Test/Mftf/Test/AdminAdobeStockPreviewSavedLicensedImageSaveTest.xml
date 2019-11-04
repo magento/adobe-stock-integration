@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockLicensedImageSaveTest">
+    <test name="AdminAdobeStockPreviewSavedLicensedImageSaveTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="User saves licensed image into Magento Media Gallery"/>
             <title value="Adobe Stock Licensed Image Save"/>
-            <description value="User saves previously licensed image into Magento Media Gallery"/>
+            <description value="User saves previously saved preview and licensed image into Magento Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_license"/>
             <group value="adobe_stock_integration"/>
@@ -37,8 +37,11 @@
             <argument name="query" value="{{AdobeStockConfigDataLicensedImage1.value}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
-        <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="saveLicensedImage"/>
+        <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.locatePreviewedImage}}" stepKey="grabPreviewImageFileName"/>
+        <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForConfirmationModal"/>
-        <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertLicensedImageSaved"/>
+        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabPreviewImageFileName})}}" stepKey="assertSavedImage" />
     </test>
 </tests>
