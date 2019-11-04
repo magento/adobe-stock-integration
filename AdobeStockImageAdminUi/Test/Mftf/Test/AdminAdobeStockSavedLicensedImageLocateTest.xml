@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockSavedLicensedImageLocateTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="User locates saved and licensed image inside Media Gallery"/>
+            <title value="Adobe Stock Saved Licensed Image Locate"/>
+            <description value="User can locate previously saved and licensed image in Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_license"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+            <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
+            <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
+            <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
+            <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+            <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
+            <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserLoggedOut"/>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
+            <argument name="query" value="{{AdobeStockConfigDataSavedLicensedImage1.value}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
+        <grabAttributeFrom userInput="name" selector="{{AdobeStockImagePreviewSection.locateImage}}" stepKey="grabImageFileName"/>
+        <click selector="{{AdobeStockImagePreviewSection.locateImage}}" stepKey="clickLocate"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
+    </test>
+</tests>
