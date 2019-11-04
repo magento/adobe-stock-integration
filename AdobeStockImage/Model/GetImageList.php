@@ -95,7 +95,8 @@ class GetImageList implements GetImageListInterface
     private function setDefaultGallery(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
         $isSetWordsFilter = false;
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+        $filterGroups = $searchCriteria->getFilterGroups();
+        foreach ($filterGroups as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'words') {
                     $isSetWordsFilter = true;
@@ -104,14 +105,14 @@ class GetImageList implements GetImageListInterface
         }
 
         if (!$isSetWordsFilter) {
-            $galleryFilter = $this->filterBuilder
+            $galleryFilter[] = $this->filterBuilder
                 ->setField('gallery_id')
                 ->setConditionType('like')
                 ->setValue($this->config->getValue(self::XML_PATH_DEFAULT_GALLERY_ID_PATH))
                 ->create();
 
-            $filterGroup = $this->filterGroupBuilder->setFilters([$galleryFilter])->create();
-            $searchCriteria->setFilterGroups([$filterGroup]);
+            $filterGroups[] = $this->filterGroupBuilder->setFilters($galleryFilter)->create();
+            $searchCriteria->setFilterGroups($filterGroups);
         }
         return $searchCriteria;
     }
