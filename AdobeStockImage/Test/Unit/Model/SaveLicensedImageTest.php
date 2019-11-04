@@ -20,9 +20,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class SaveLicensedImageTestTest
+ * Class SaveLicensedImageTest
  */
-class SaveLicensedImageTestTest extends TestCase
+class SaveLicensedImageTest extends TestCase
 {
     /**
      * @var SaveLicensed
