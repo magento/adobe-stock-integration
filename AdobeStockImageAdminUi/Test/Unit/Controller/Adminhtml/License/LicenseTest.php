@@ -7,13 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
 
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\License;
-use Magento\AdobeStockImageApi\Api\SaveImageInterface;
+use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -66,19 +63,9 @@ class LicenseTest extends TestCase
     private $jsonObject;
 
     /**
-     * @var SaveImageInterface|MockObject
+     * @var SaveLicensedImageInterface|MockObject
      */
-    private $saveImageMock;
-
-    /**
-     * @var GetAssetByIdInterface|MockObject
-     */
-    private $getAssetByIdMock;
-
-    /**
-     * @var AssetInterface|MockObject
-     */
-    private $documentMock;
+    private $saveLicensedImageMock;
 
     /**
      * @inheritdoc
@@ -89,9 +76,7 @@ class LicenseTest extends TestCase
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->contextMock = $this->createMock(ActionContext::class);
         $this->contextMock = $this->createPartialMock(ActionContext::class, ['getRequest', 'getResultFactory']);
-        $this->saveImageMock = $this->createMock(SaveImageInterface::class);
-        $this->getAssetByIdMock = $this->createMock(GetAssetByIdInterface::class);
-        $this->documentMock = $this->createMock(Document::class);
+        $this->saveLicensedImageMock = $this->createMock(SaveLicensedImageInterface::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultFactoryMock = $this->createMock(ResultFactory::class);
         $this->jsonObject = $this->createMock(Json::class);
@@ -110,16 +95,18 @@ class LicenseTest extends TestCase
                     'destination_path' => 'destination_path'
                 ]
             );
-        $this->resultFactoryMock->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with('json')
+            ->willReturn($this->jsonObject);
 
         $this->sut = (new ObjectManager($this))->getObject(
             License::class,
             [
                 'context' => $this->contextMock,
                 'client' => $this->clientInterfaceMock,
-                'saveImage' => $this->saveImageMock,
+                'saveLicensedImage' => $this->saveLicensedImageMock,
                 'logger' => $this->loggerMock,
-                'getAssetById' => $this->getAssetByIdMock
             ]
         );
     }
@@ -136,17 +123,10 @@ class LicenseTest extends TestCase
 
         $mediaId = 283415387;
         $destinationPath = 'destination_path';
-        $imageUrl = 'http://image_url.jpg';
-        $this->getAssetByIdMock->expects($this->once())
+
+        $this->saveLicensedImageMock->expects($this->once())
             ->method('execute')
-            ->with($mediaId)
-            ->willReturn($this->documentMock);
-        $this->clientInterfaceMock->expects($this->once())
-            ->method('getImageDownloadUrl')
-            ->willReturn($imageUrl);
-        $this->saveImageMock->expects($this->once())
-            ->method('execute')
-            ->with($this->documentMock, $imageUrl, $destinationPath);
+            ->with($mediaId, $destinationPath);
         $this->clientInterfaceMock->expects($this->once())
             ->method('licenseImage')
             ->with($mediaId);
@@ -176,8 +156,8 @@ class LicenseTest extends TestCase
     {
         $mediaId = 283415387;
 
-        $this->getAssetByIdMock->expects($this->once())
-            ->method('execute')
+        $this->clientInterfaceMock->expects($this->once())
+            ->method('licenseImage')
             ->with($mediaId)
             ->willThrowException($exception);
         $this->jsonObject->expects($this->once())

@@ -8,11 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
-use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockImageApi\Api\SaveImageInterface;
+use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
 use Magento\Backend\App\Action;
-use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\AttributeInterfaceFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -24,19 +21,8 @@ use Psr\Log\LoggerInterface;
  */
 class SaveLicensed extends Action
 {
-    /**
-     * Successful licensed image download result code.
-     */
     private const HTTP_OK = 200;
-
-    /**
-     * Internal server error response code.
-     */
     private const HTTP_INTERNAL_ERROR = 500;
-
-    /**
-     * Download image failed response code.
-     */
     private const HTTP_BAD_REQUEST = 400;
 
     /**
@@ -45,52 +31,28 @@ class SaveLicensed extends Action
     public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
-     * @var GetAssetByIdInterface
-     */
-    private $getAssetById;
-
-    /**
-     * @var ClientInterface
-     */
-    private $client;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var SaveImageInterface
-     */
-    private $saveImage;
-
-    /**
      * @var AttributeInterfaceFactory
      */
-    private $attributeFactory;
+    private $saveLicensedImage;
 
     /**
      * @param Action\Context $context
-     * @param AttributeInterfaceFactory $attributeFactory
-     * @param ClientInterface $client
-     * @param SaveImageInterface $saveImage
+     * @param SaveLicensedImageInterface $saveLicensedImage
      * @param LoggerInterface $logger
-     * @param GetAssetByIdInterface $getAssetById
      */
     public function __construct(
         Action\Context $context,
-        AttributeInterfaceFactory $attributeFactory,
-        ClientInterface $client,
-        SaveImageInterface $saveImage,
-        LoggerInterface $logger,
-        GetAssetByIdInterface $getAssetById
+        SaveLicensedImageInterface $saveLicensedImage,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->attributeFactory = $attributeFactory;
-        $this->client = $client;
-        $this->saveImage = $saveImage;
-        $this->getAssetById = $getAssetById;
+        $this->saveLicensedImage = $saveLicensedImage;
         $this->logger = $logger;
     }
 
@@ -101,26 +63,9 @@ class SaveLicensed extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $contentId = (int) $params['media_id'];
 
-            $imageUrl = $this->client->getImageDownloadUrl($contentId);
-
-            $document = $this->getAssetById->execute($contentId);
-            $document->setCustomAttribute(
-                'is_licensed',
-                $this->attributeFactory->create(
-                    [
-                        'data' => [
-                            AttributeInterface::ATTRIBUTE_CODE => 'is_licensed',
-                            AttributeInterface::VALUE => 1,
-                        ]
-                    ]
-                )
-            );
-
-            $this->saveImage->execute(
-                $document,
-                $imageUrl,
+            $this->saveLicensedImage->execute(
+                (int) $params['media_id'],
                 (string) $params['destination_path']
             );
 

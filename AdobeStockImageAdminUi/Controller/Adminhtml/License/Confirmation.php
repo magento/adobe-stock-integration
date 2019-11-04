@@ -19,14 +19,7 @@ use Psr\Log\LoggerInterface;
  */
 class Confirmation extends Action
 {
-    /**
-     * Successful image download result code.
-     */
     private const HTTP_OK = 200;
-
-    /**
-     * Internal server error response code.
-     */
     private const HTTP_INTERNAL_ERROR = 500;
 
     /**

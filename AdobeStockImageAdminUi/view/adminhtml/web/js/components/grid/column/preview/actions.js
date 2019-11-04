@@ -108,8 +108,6 @@ define([
          * @param {String} fileName
          * @param {bool} license
          * @param {bool} isLicensed
-         *
-         * @returns {void}
          */
         save: function (record, fileName, license, isLicensed) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
