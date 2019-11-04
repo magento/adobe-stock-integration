@@ -8,10 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeImsApi\Api;
 
-use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
-use Magento\AdobeImsApi\Api\Data\UserImageInterface;
-use Magento\Framework\Exception\AuthorizationException;
-
 /**
  * Interface GetImageInterface
  * @api

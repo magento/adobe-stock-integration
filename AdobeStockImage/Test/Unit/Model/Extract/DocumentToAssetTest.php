@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model\Extract;
 
-use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -48,7 +48,7 @@ class DocumentToAssetTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
         $this->creatorFactory = $this->createMock(CreatorInterfaceFactory::class);
@@ -141,7 +141,11 @@ class DocumentToAssetTest extends TestCase
         ];
     }
 
-    private function getDocument(array $attributes)
+    /**
+     * @param array $attributes
+     * @return Document|MockObject
+     */
+    private function getDocument(array $attributes): Document
     {
         $document = $this->createMock(Document::class);
 

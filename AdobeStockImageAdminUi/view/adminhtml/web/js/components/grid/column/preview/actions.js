@@ -1,7 +1,9 @@
+// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// jscs:enable
 define([
     'uiComponent',
     'jquery',
@@ -17,8 +19,6 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/actions',
             loginProvider: 'name = adobe-login, ns = adobe-login',
-            // eslint-disable-next-line max-len
-            previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
@@ -28,7 +28,7 @@ define([
             messageDelay: 5,
             modules: {
                 login: '${ $.loginProvider }',
-                preview: '${ $.previewProvider }'
+                preview: '${ $.parentName }.preview'
             }
         },
 
@@ -38,7 +38,7 @@ define([
          * @returns {observable}
          */
         isDownloaded: function () {
-            return this.preview().displayedRecord().is_downloaded;
+            return this.preview().displayedRecord()['is_downloaded'];
         },
 
         /**
@@ -47,7 +47,7 @@ define([
          * @returns {observable}
          */
         isLicensed: function () {
-            return this.preview().displayedRecord().is_licensed;
+            return this.preview().displayedRecord()['is_licensed'];
         },
 
         /**
@@ -56,7 +56,7 @@ define([
          * @returns {observable}
          */
         isLicensedLocally: function () {
-            return this.preview().displayedRecord().is_licensed_locally;
+            return this.preview().displayedRecord()['is_licensed_locally'];
         },
 
         /**
@@ -84,6 +84,10 @@ define([
                     'buttons': [{
                         text: $.mage.__('Cancel'),
                         class: 'action-secondary action-dismiss',
+
+                        /**
+                         * Close modal on button click
+                         */
                         click: function () {
                             this.closeModal();
                         }
@@ -118,35 +122,61 @@ define([
                     'destination_path': destinationPath
                 },
                 context: this,
+
+                /**
+                 * Success handler for Adobe Stock preview or licensed image
+                 * download
+                 *
+                 */
                 success: function () {
                     var displayedRecord = this.preview().displayedRecord();
 
-                    displayedRecord.is_downloaded = 1;
+                    displayedRecord['is_downloaded'] = 1;
                     displayedRecord.path = destinationPath;
 
                     if (license) {
-                        displayedRecord.is_licensed = 1;
-                        displayedRecord.is_licensed_locally = 1;
+                        displayedRecord['is_licensed'] = 1;
+                        displayedRecord['is_licensed_locally'] = 1;
                     }
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
                 },
+
+                /**
+                 * Error handler for Adobe Stock preview or licensed image
+                 * download
+                 *
+                 * @param {Object} response
+                 */
                 error: function (response) {
-                    messages.add('error', response.responseJSON.message);
+                    var message;
+
+                    if (typeof response.responseJSON === 'undefined' ||
+                        typeof response.responseJSON.message === 'undefined'
+                    ) {
+                        message = 'There was an error on attempt to save the image!';
+                    } else {
+                        message = response.responseJSON.message;
+                    }
+                    messages.add('error', message);
                     messages.scheduleCleanup(this.messageDelay);
                 }
             });
         },
 
         /**
-         * Generate meaningful name image file
+         * Generate meaningful name image file,
+         * allow only alphanumerics, dashes, and underscores
          *
          * @param {Object} record
          * @return string
          */
         generateImageName: function (record) {
-            return record.title.substring(0, 32).replace(/\s+/g, '-').toLowerCase();
+            return record.title.substring(0, 32)
+                .replace(/[^a-zA-Z0-9_]/g, '-')
+                .replace(/-{2,}/g, '-')
+                .toLowerCase();
         },
 
         /**
@@ -156,7 +186,7 @@ define([
          * @return string
          */
         getImageExtension: function (record) {
-            return record.content_type.match(/[^/]{1,4}$/);
+            return record['content_type'].match(/[^/]{1,4}$/);
         },
 
         /**
@@ -204,38 +234,59 @@ define([
                             buyCreditsUrl = this.preview().buyCreditsUrl,
                             displayFieldName = !this.isDownloaded() ? '<b>' + $.mage.__('File Name') + '</b>' : '',
                             filePathArray = record.path.split('/'),
-                            imageIndex = filePathArray.length - 1;
+                            imageIndex = filePathArray.length - 1,
+                            title = $.mage.__('License Adobe Stock Images?'),
+                            cancelText = $.mage.__('Cancel'),
+                            baseContent = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>';
 
-                        this.getPrompt(
-                            {
-                                'title': $.mage.__('License Adobe Stock Images?'),
-                                'content': '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>'
-                                    + displayFieldName,
-                                'visible': !this.isDownloaded(),
-                                'actions': {
-                                    confirm: function (fileName) {
-                                        if (typeof fileName === 'undefined') {
-                                            fileName = filePathArray[imageIndex]
-                                                .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                        if (canPurchase) {
+                            this.getPrompt(
+                                {
+                                    'title': title,
+                                    'content': baseContent + displayFieldName,
+                                    'visible': !this.isDownloaded(),
+                                    'actions': {
+                                        confirm: function (fileName) {
+                                            if (typeof fileName === 'undefined') {
+                                                fileName = filePathArray[imageIndex]
+                                                    .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                            }
+                                            licenseAndSave(record, fileName);
                                         }
-                                        canPurchase ?
-                                            licenseAndSave(record, fileName) :
-                                            window.open(buyCreditsUrl);
-                                    }
-                                },
-                                'buttons': [{
-                                    text: $.mage.__('Cancel'),
+                                    },
+                                    'buttons': [{
+                                        text: cancelText,
+                                        class: 'action-secondary action-dismiss',
+                                        click: function () {
+                                            this.closeModal();
+                                        }
+                                    }, {
+                                        text: $.mage.__('Confirm'),
+                                        class: 'action-primary action-accept'
+                                    }]
+
+                                }
+                            );
+                        } else {
+                            confirmation({
+                                title: title,
+                                content: baseContent,
+                                buttons: [{
+                                    text: cancelText,
                                     class: 'action-secondary action-dismiss',
                                     click: function () {
                                         this.closeModal();
                                     }
-                                }, {
-                                    text: canPurchase ? $.mage.__('Confirm') : $.mage.__('Buy Credits'),
-                                    class: 'action-primary action-accept'
+                                },{
+                                    text: $.mage.__('Buy Credits'),
+                                    class: 'action-primary action-accept',
+                                    click: function () {
+                                        window.open(buyCreditsUrl);
+                                        this.closeModal();
+                                    }
                                 }]
-
-                            }
-                        );
+                            });
+                        }
                     },
 
                     error: function (response) {
@@ -250,6 +301,8 @@ define([
          * Return configured  prompt with input field.
          */
         getPrompt: function (data) {
+            var regex = new RegExp('[a-zA-Z0-9_-]');
+
             prompt({
                 title: data.title,
                 content:  data.content,
@@ -259,7 +312,7 @@ define([
                 promptContentTmpl: adobePromptContentTmpl,
                 modalClass: 'adobe-stock-save-preview-prompt',
                 validation: true,
-                promptField: '[data-role="promptField"]',
+                promptField: '[data-role="adobe-stock-image-name-field"]',
                 validationRules: ['required-entry'],
                 attributesForm: {
                     novalidate: 'novalidate',
@@ -274,6 +327,17 @@ define([
                 context: this,
                 actions: data.actions,
                 buttons: data.buttons
+            });
+
+            /* Allow only alphanumeric, dash, and underscore on filename input keypress */
+            $('input[data-role="adobe-stock-image-name-field"]').bind('keypress', function (event) {
+                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+
+                if (!regex.test(key)) {
+                    event.preventDefault();
+
+                    return false;
+                }
             });
         },
 

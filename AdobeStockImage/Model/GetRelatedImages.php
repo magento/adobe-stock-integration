@@ -10,6 +10,7 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
@@ -87,7 +88,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
             }
             return $relatedImageGroups;
         } catch (\Exception $exception) {
-            $message = __('Get related images list failed: %s', $exception->getMessage());
+            $message = __('Get related images list failed: %error', ['error' => $exception->getMessage()]);
             throw new IntegrationException($message, $exception);
         }
     }
@@ -106,7 +107,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
             /** @var Document $image */
             foreach ($images as $image) {
                 $itemData = [];
-                /** @var \Magento\Framework\Api\AttributeInterface $attribute */
+                /** @var AttributeInterface $attribute */
                 foreach ($image->getCustomAttributes() as $attribute) {
                     if ($attribute->getAttributeCode() === 'thumbnail_240_url') {
                         $itemData['thumbnail_url'] = $attribute->getValue();
@@ -120,8 +121,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
         } catch (\Exception $exception) {
             throw new SerializationException(
                 __(
-                    'An error occurred during related images serialization: %s',
-                    $exception->getMessage()
+                    'An error occurred during related images serialization: %error',
+                    ['error' => $exception->getMessage()]
                 )
             );
         }

@@ -42,7 +42,7 @@ class WordsTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->createMock(Escaper::class);
@@ -62,7 +62,7 @@ class WordsTest extends TestCase
      * @throws StockApi
      * @dataProvider requestValuesDataProvider
      */
-    public function testApplyWithRequestValue(string $requestValue, string $encodedValue)
+    public function testApplyWithRequestValue(string $requestValue, string $encodedValue): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
@@ -98,7 +98,7 @@ class WordsTest extends TestCase
      *
      * @throws StockApi
      */
-    public function testApplyWithoutWordsField()
+    public function testApplyWithoutWordsField(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
@@ -131,7 +131,7 @@ class WordsTest extends TestCase
      *
      * @throws StockApi
      */
-    public function testApplyWithEmptyWords()
+    public function testApplyWithEmptyWords(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
@@ -165,7 +165,7 @@ class WordsTest extends TestCase
      *
      * @throws StockApi
      */
-    public function testApplyWithOnlyQuotes()
+    public function testApplyWithOnlyQuotes(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);

@@ -12,10 +12,13 @@
             "updated_at": true
         },
         "index": {
-            "MEDIA_GALLERY_ID": true
+            "MEDIA_GALLERY_ID": true,
+            "MEDIA_GALLERY_ASSET_ID": true
         },
         "constraint": {
-            "MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT": true
+            "MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT": true,
+            "PRIMARY": true,
+            "MEDIA_GALLERY_ASSET_PATH": true
         }
     },
     "media_gallery_keyword": {
@@ -38,12 +41,16 @@
         },
         "index": {
             "MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID_INDEX": true,
-            "MEDIA_GALLERY_ASSET_KEYWORD_KEYWORD_ID_INDEX": true
+            "MEDIA_GALLERY_ASSET_KEYWORD_KEYWORD_ID_INDEX": true,
+            "MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID": true,
+            "MEDIA_GALLERY_ASSET_KEYWORD_KEYWORD_ID": true
         },
         "constraint": {
             "PRIMARY": true,
             "MEDIA_GALLERY_KEYWORD_KEYWORD_ID_MEDIA_GALLERY_KEYWORD_ID": true,
-            "MEDIA_GALLERY_KEYWORD_ASSET_ID_ASSET_ID": true
+            "MEDIA_GALLERY_KEYWORD_ASSET_ID_ASSET_ID": true,
+            "MEDIA_GALLERY_ASSET_KEYWORD_KEYWORD_ID_MEDIA_GALLERY_KEYWORD_ID": true,
+            "MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID_MEDIA_GALLERY_ASSET_ID": true
         }
     }
 }

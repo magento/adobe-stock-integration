@@ -19,6 +19,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -96,7 +97,6 @@ class AssetRepository implements AssetRepositoryInterface
      *
      * @param AssetInterface $asset
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(AssetInterface $asset): void
     {
@@ -118,21 +118,15 @@ class AssetRepository implements AssetRepositoryInterface
 
             $this->collectionProcessor->process($searchCriteria, $collection);
 
-            $items = [];
-            /** @var AssetInterface $item */
-            foreach ($collection->getItems() as $item) {
-                $items[] = $item;
-            }
-
             /** @var AssetSearchResultsInterface $searchResults */
             $searchResults = $this->searchResultFactory->create();
-            $searchResults->setItems($items);
+            $searchResults->setItems($collection->getItems());
             $searchResults->setSearchCriteria($searchCriteria);
             $searchResults->setTotalCount($collection->getSize());
 
             return $searchResults;
         } catch (\Exception $exception) {
-            $message = __('An error occurred during get asset list: %1', $exception->getMessage());
+            $message = __('An error occurred during get asset list: %error', ['error' => $exception->getMessage()]);
             throw new IntegrationException($message, $exception);
         }
     }
@@ -157,6 +151,6 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function deleteById(int $id): void
     {
-        $this->delete($this->getById($id));
+        $this->resource->delete($this->getById($id));
     }
 }

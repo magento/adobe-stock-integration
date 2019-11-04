@@ -9,7 +9,6 @@ namespace Magento\AdobeMediaGalleryApi\Model\Keyword\Command;
 
 /**
  * Interface SaveAssetKeywordsInterface
- * @api
  */
 interface SaveAssetKeywordsInterface
 {
@@ -20,5 +19,5 @@ interface SaveAssetKeywordsInterface
      * @param int $assetId
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $keywords, int $asssetId): void;
+    public function execute(array $keywords, int $assetId): void;
 }

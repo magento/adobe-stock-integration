@@ -83,8 +83,8 @@ class StockFileToDocument
     /**
      * Convert data to an associate array
      *
-     * @param mixed $data
-     * @return array
+     * @param object|array $data
+     * @return mixed
      */
     private function toArray($data)
     {
@@ -147,7 +147,7 @@ class StockFileToDocument
      * @param Exception $exception
      * @throws IntegrationException
      */
-    private function processException(Phrase $message, Exception $exception)
+    private function processException(Phrase $message, Exception $exception): void
     {
         $this->logger->critical($message->render());
         throw new IntegrationException($message, $exception, $exception->getCode());

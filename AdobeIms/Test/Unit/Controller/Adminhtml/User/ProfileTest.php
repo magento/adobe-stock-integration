@@ -8,10 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\User;
 
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeIms\Controller\Adminhtml\User\Profile;
@@ -23,7 +27,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ProfileTest extends TestCase
 {
-
     /**
      * @var MockObject|UserProfileRepositoryInterface $userProfileRepository
      */
@@ -35,7 +38,7 @@ class ProfileTest extends TestCase
     private $userContext;
 
     /**
-     * @var MockObject|Action\Context $action
+     * @var MockObject|Context $action
      */
     private $action;
 
@@ -64,13 +67,13 @@ class ProfileTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->action = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->action = $this->createMock(Context::class);
 
-        $this->userContext = $this->createMock(\Magento\Authorization\Model\UserContextInterface::class);
+        $this->userContext = $this->createMock(UserContextInterface::class);
         $this->userProfileRepository = $this->createMock(UserProfileRepositoryInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->jsonObject = $this->createMock(Json::class);
-        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->action->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
@@ -89,12 +92,12 @@ class ProfileTest extends TestCase
      *
      * @dataProvider userDataProvider
      * @param array $result
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function testExecute(array $result): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(\Magento\AdobeImsApi\Api\Data\UserProfileInterface::class);
+        $userProfileMock = $this->createMock(UserProfileInterface::class);
         $userProfileMock->expects($this->once())->method('getEmail')->willReturn('exaple@adobe.com');
         $userProfileMock->expects($this->once())->method('getName')->willReturn('Smith');
         $userProfileMock->expects($this->once())->method('getImage')->willReturn('https://adobe.com/sample-image.png');
@@ -112,12 +115,12 @@ class ProfileTest extends TestCase
     /**
      * Execute with exception
      */
-    public function testExecuteWithExecption()
+    public function testExecuteWithExecption(): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(null);
         $this->userProfileRepository->expects($this->exactly(1))
             ->method('getByUserId')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new NoSuchEntityException());
         $result = [
             'success' => false,
             'message' => __('An error occurred during get user data. Contact support.'),
@@ -131,8 +134,10 @@ class ProfileTest extends TestCase
 
     /**
      * User data provider
+     *
+     * @return array
      */
-    public function userDataProvider()
+    public function userDataProvider(): array
     {
         return
             [

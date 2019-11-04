@@ -9,8 +9,10 @@ namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use AdobeStock\Api\Models\LicenseEntitlement;
 use AdobeStock\Api\Models\LicensePurchaseOptions;
+use AdobeStock\Api\Models\LicenseEntitlementQuota;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\License;
+use AdobeStock\Api\Response\License as ResponseLicense;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use Magento\AdobeStockClient\Model\Client;
@@ -18,7 +20,7 @@ use Magento\AdobeStockClient\Model\ConnectionWrapper;
 use Magento\AdobeStockClient\Model\ConnectionWrapperFactory;
 use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\AdobeStockClient\Model\StockFileToDocument;
-use Magento\AdobeStockClientApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
@@ -99,16 +101,15 @@ class ClientTest extends TestCase
     private $connectionWrapper;
 
     /**
-     * @var \AdobeStock\Api\Response\License|MockObject $licenseResponse
+     * @var ResponseLicense|MockObject $licenseResponse
      */
     private $licenseResponse;
 
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
-
         $this->config = $this->createMock(ConfigInterface::class);
         $this->connectionFactory = $this->createMock(ConnectionWrapperFactory::class);
         $this->searchResultFactory = $this->createMock(SearchResultFactory::class);
@@ -120,9 +121,9 @@ class ClientTest extends TestCase
         $this->stockFileToDocument = $this->createMock(StockFileToDocument::class);
         $this->licenseConfirmationFactory = $this->createMock(LicenseConfirmationInterfaceFactory::class);
 
-        $this->connectionWrapper = $this->createMock(\Magento\AdobeStockClient\Model\ConnectionWrapper::class);
+        $this->connectionWrapper = $this->createMock(ConnectionWrapper::class);
         $this->connectionFactory->expects($this->any())->method('create')->willReturn($this->connectionWrapper);
-        $this->licenseResponse = $this->createMock(\AdobeStock\Api\Response\License::class);
+        $this->licenseResponse = $this->createMock(ResponseLicense::class);
 
         $this->client = (new ObjectManager($this))->getObject(
             Client::class,
@@ -144,7 +145,7 @@ class ClientTest extends TestCase
     /**
      * Search test
      */
-    public function testSearch()
+    public function testSearch(): void
     {
         $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('ru_RU');
         $this->config->expects($this->once())
@@ -179,7 +180,7 @@ class ClientTest extends TestCase
     /**
      * Test get user quota
      */
-    public function testGetQuota()
+    public function testGetQuota(): void
     {
         $this->connectionWrapper->expects($this->once())
             ->method('getMemberProfile')
@@ -188,9 +189,9 @@ class ClientTest extends TestCase
         $this->licenseResponse->expects($this->once())->method('getEntitlement')->willReturn($licenseEntitielement);
         $licenseEntitielement->expects($this->once())
             ->method('getFullEntitlementQuota')
-            ->willReturn($this->createMock(\AdobeStock\Api\Models\LicenseEntitlementQuota::class));
+            ->willReturn($this->createMock(LicenseEntitlementQuota::class));
         $this->setLicense();
-        $quota = $this->createMock(\Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface::class);
+        $quota = $this->createMock(UserQuotaInterface::class);
         $this->userQuotaFactory->expects($this->once())
             ->method('create')
             ->willReturn($quota);
@@ -203,7 +204,7 @@ class ClientTest extends TestCase
     /**
      * Get license confirmation test
      */
-    public function testGetLicenseConfirmation()
+    public function testGetLicenseConfirmation(): void
     {
 
         $this->connectionWrapper->expects($this->exactly(2))
@@ -219,7 +220,7 @@ class ClientTest extends TestCase
         $LicensePurchaseOptions->expects($this->once())
             ->method('getPurchaseState')
             ->willReturn('possible');
-        $quota = $this->createMock(\Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface::class);
+        $quota = $this->createMock(LicenseConfirmationInterface::class);
         $this->licenseConfirmationFactory->expects($this->once())
             ->method('create')
             ->willReturn($quota);
@@ -235,7 +236,7 @@ class ClientTest extends TestCase
     /**
      * License image test
      */
-    public function testLicenseImage()
+    public function testLicenseImage(): void
     {
         $this->connectionWrapper->expects($this->once())
             ->method('getContentLicense')
@@ -247,7 +248,7 @@ class ClientTest extends TestCase
     /**
      *  Test get image Download Url
      */
-    public function testGetImageDownloadUrl()
+    public function testGetImageDownloadUrl(): void
     {
         $this->connectionWrapper->expects($this->once())
             ->method('downloadAssetUrl')
@@ -259,7 +260,7 @@ class ClientTest extends TestCase
     /**
      * Test for test connection method
      */
-    public function testTestConnection()
+    public function testTestConnection(): void
     {
         $this->connectionWrapper->expects($this->once())
             ->method('testApiKey')
@@ -272,7 +273,7 @@ class ClientTest extends TestCase
      *
      * @param int $expectInvocation
      */
-    private function setLicense(int $expectInvocation = 1)
+    private function setLicense(int $expectInvocation = 1): void
     {
         $licenseRequest = $this->createMock(License::class);
         $this->licenseRequestFactory->expects($this->exactly($expectInvocation))

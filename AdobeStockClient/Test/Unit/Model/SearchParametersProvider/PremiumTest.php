@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PremiumTest extends TestCase
 {
-    const FILTER_TYPE = 'premium_price_filter';
+    private const FILTER_TYPE = 'premium_price_filter';
 
     /**
      * @var ObjectManager
@@ -56,7 +56,7 @@ class PremiumTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
@@ -77,7 +77,7 @@ class PremiumTest extends TestCase
      */
     public function testApply(string $filterName, string $filterValue): void
     {
-        $invokedTimes = (int) ($filterName === static::FILTER_TYPE);
+        $invokedTimes = (int) ($filterName === self::FILTER_TYPE);
         $this->filterItemMock->expects($this->once())
             ->method('getField')
             ->willReturn($filterName);
@@ -107,7 +107,7 @@ class PremiumTest extends TestCase
     {
         return [
             [
-                'name' => static::FILTER_TYPE,
+                'name' => self::FILTER_TYPE,
                 'value' => '123'
             ], [
                 'name' => 'offensive_filter',

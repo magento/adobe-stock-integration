@@ -50,7 +50,7 @@ class TestConnectionTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->clientMock = $this->createMock(ClientInterface::class);

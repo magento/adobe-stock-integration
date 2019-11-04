@@ -7,16 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
+use Magento\AdobeStockAsset\Model\Creator;
 use Magento\AdobeStockAsset\Model\CreatorFactory;
 use Magento\AdobeStockAsset\Model\CreatorRepository;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\Save;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -67,7 +71,7 @@ class CreatorRepositoryTest extends TestCase
     private $commandSave;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setUp(): void
     {
@@ -97,10 +101,10 @@ class CreatorRepositoryTest extends TestCase
     {
         /** @var MockObject|SearchCriteriaInterface $searchCriteria */
         $searchCriteria = $this->createMock(
-            \Magento\Framework\Api\SearchCriteriaInterface::class
+            SearchCriteriaInterface::class
         );
         $collection = $this->createMock(
-            \Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection::class
+            Collection::class
         );
         $this->creatorCollectionFactory->expects($this->once())
             ->method('create')
@@ -115,7 +119,7 @@ class CreatorRepositoryTest extends TestCase
             ->with($searchCriteria, $collection)
             ->willReturn(null);
         $searchResults = $this->createMock(
-            \Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface::class
+            CreatorSearchResultsInterface::class
         );
         $this->creatorSearchResultInterfaceFactory->expects($this->once())
             ->method('create')
@@ -140,7 +144,7 @@ class CreatorRepositoryTest extends TestCase
      */
     public function testGetById(): void
     {
-        $creatorMock = $this->createMock(\Magento\AdobeStockAsset\Model\Creator::class);
+        $creatorMock = $this->createMock(Creator::class);
         $this->creatorFactory->expects($this->once())
             ->method('create')
             ->willReturn($creatorMock);
@@ -158,9 +162,9 @@ class CreatorRepositoryTest extends TestCase
      */
     public function testGetByIdWithException(): void
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
 
-        $creatorMock = $this->createMock(\Magento\AdobeStockAsset\Model\Creator::class);
+        $creatorMock = $this->createMock(Creator::class);
         $this->creatorFactory->expects($this->once())
             ->method('create')
             ->willReturn($creatorMock);

@@ -9,16 +9,14 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
 use Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface CategoryInterface
  * @api
  */
-interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface CategoryInterface extends ExtensibleDataInterface
 {
-    const ID = 'id';
-    const NAME = 'name';
-
     /**
      * Get the id
      *

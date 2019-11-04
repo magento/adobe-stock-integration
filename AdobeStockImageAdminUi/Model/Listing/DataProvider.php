@@ -11,6 +11,7 @@ namespace Magento\AdobeStockImageAdminUi\Model\Listing;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\Search\SearchResultInterfaceFactory;
@@ -107,7 +108,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     /**
      * @inheritdoc
      */
-    public function getSearchResult()
+    public function getSearchResult(): SearchResultInterface
     {
         try {
             $searchResult = $this->getImageList->execute($this->getSearchCriteria());

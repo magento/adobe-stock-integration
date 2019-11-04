@@ -8,17 +8,19 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
-use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\SaveImage;
+use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
+use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\AdobeStockImage\Model\SaveImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImage\Model\Storage;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,9 +29,14 @@ use Psr\Log\LoggerInterface;
 class SaveImageTest extends TestCase
 {
     /**
-     * @var MockObject|Storage
+     * @var MockObject|StorageSave
      */
-    private $storage;
+    private $storageSave;
+
+    /**
+     * @var MockObject|StorageDelete
+     */
+    private $storageDelete;
 
     /**
      * @var MockObject|LoggerInterface
@@ -72,11 +79,12 @@ class SaveImageTest extends TestCase
     private $saveImage;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->storage = $this->createMock(Storage::class);
+        $this->storageSave = $this->createMock(StorageSave::class);
+        $this->storageDelete = $this->createMock(StorageDelete::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->saveMediaAsset = $this->createMock(SaveInterface::class);
         $this->saveAdobeStockAsset = $this->createMock(SaveAssetInterface::class);
@@ -88,7 +96,8 @@ class SaveImageTest extends TestCase
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
             [
-                'storage' => $this->storage,
+                'storageSave' => $this->storageSave,
+                'storageDelete' => $this->storageDelete,
                 'logger' => $this->logger,
                 'saveMediaAsset' =>  $this->saveMediaAsset,
                 'saveAdobeStockAsset' =>  $this->saveAdobeStockAsset,
@@ -105,21 +114,21 @@ class SaveImageTest extends TestCase
      *
      * @param Document $document
      * @param bool $delete
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws CouldNotSaveException
      * @dataProvider assetProvider
      */
-    public function testExecute(Document $document, bool $delete)
+    public function testExecute(Document $document, bool $delete): void
     {
         if ($delete) {
-            $this->storage->expects($this->once())
-                ->method('delete');
+            $this->storageDelete->expects($this->once())
+                ->method('execute');
         } else {
-            $this->storage->expects($this->never())
-                ->method('delete');
+            $this->storageDelete->expects($this->never())
+                ->method('execute');
         }
 
-        $this->storage->expects($this->once())
-            ->method('save');
+        $this->storageSave->expects($this->once())
+            ->method('execute');
 
         $this->documentToMediaGalleryAsset->expects($this->once())
             ->method('convert')
@@ -170,10 +179,10 @@ class SaveImageTest extends TestCase
     /**
      * Get document
      *
-     * @param string $path
+     * @param string|null $path
      * @return Document|MockObject
      */
-    private function getDocument(string $path = null): Document
+    private function getDocument(?string $path = null): Document
     {
         $document = $this->createMock(Document::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);

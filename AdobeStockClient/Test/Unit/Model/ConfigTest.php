@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    private const CONFIG_XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
-
     private const CONFIG_XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
 
     private const CONFIG_XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
@@ -42,7 +40,7 @@ class ConfigTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);

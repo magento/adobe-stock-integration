@@ -34,7 +34,7 @@ class MediaIdTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->mediaId = $this->objectManager->getObject(MediaId::class);
