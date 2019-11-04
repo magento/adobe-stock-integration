@@ -151,6 +151,6 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function deleteById(int $id): void
     {
-        $this->delete($this->getById($id));
+        $this->resource->delete($this->getById($id));
     }
 }

@@ -5,8 +5,13 @@
  */
 namespace Magento\AdobeStockImage\Test\Api;
 
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -16,61 +21,62 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class SearchExecuteTest extends WebapiAbstract
 {
     private const RESOURCE_PATH = '/V1/adobestock/search';
-
-    private const SERVICE_READ_NAME = 'adobeStockSearchV1';
-
-    private const SERVICE_VERSION = 'V1';
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
+    private const SERVICE_NAME = 'adobeStockImageApiGetImageListV1';
 
     public function testSearchExecute(): void
     {
-        $searchCriteria = $this->getSearchData();
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+
+        $searchCriteriaBuilder->setPageSize(2);
+        $searchCriteriaBuilder->setCurrentPage(1);
+
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+        /** @var FilterGroupBuilder $filterGroupBuilder */
+        $filterGroupBuilder = Bootstrap::getObjectManager()->create(FilterGroupBuilder::class);
+        $filterGroup = $filterGroupBuilder->addFilter(
+            $filterBuilder->setField('orientation_filter')
+                ->setValue('PANORAMIC')
+                ->create()
+        )->create();
+
+        /** @var SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField('id')
+            ->setDirection(SortOrder::SORT_DESC)
+            ->create();
+
+        $searchCriteria = $searchCriteriaBuilder->create();
+
+        $searchCriteria->setSortOrders([$sortOrder]);
+        $searchCriteria->setRequestName('adobe_stock_images_listing_data_source');
+        $searchCriteria->setFilterGroups([$filterGroup]);
+
+        $requestData = ['searchCriteria' => $searchCriteria->__toArray()];
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => self::SERVICE_READ_NAME,
-                'operation' => self::SERVICE_READ_NAME . 'execute',
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertArrayHasKey('search_criteria', $response);
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
 
-        $this->assertTrue($response['total_count'] > 0);
-        $this->assertTrue(count($response['items']) > 0);
+        $this->assertGreaterThan(0, $response['total_count']);
+        $this->assertGreaterThan(0, count($response['items']));
 
         $this->assertNotNull($response['items'][0]['id']);
-    }
-
-    /**
-     * @return array
-     */
-    private function getSearchData(): array
-    {
-        $searchCriteria = [
-            'searchCriteria' => [
-                'sort_orders' => [
-                    [
-                        'field' => 'id',
-                        'direction' => 'DESC'
-                    ]
-                ],
-                'current_page' => 1,
-                'page_size' => 2,
-            ],
-        ];
-
-        return $searchCriteria;
     }
 }
