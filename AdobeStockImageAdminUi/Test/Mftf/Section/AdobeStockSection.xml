@@ -30,5 +30,6 @@
         <element name="userImageSmall" type="text" selector=".adobe-profile-image-small"/>
         <element name="userNameButton" type="button" selector=".adobe-user-name"/>
         <element name="userSignOut" type="button" selector=".adobe-sign-out-button"/>
+        <element name="deleteMediaButton" type="button" selector="button#delete_files"/>
     </section>
 </sections>
