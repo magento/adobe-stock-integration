@@ -12,7 +12,7 @@
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="User saves licensed image into Magento Media Gallery"/>
-            <title value="Adobe Stock Licensed Image Save"/>
+            <title value="Adobe Stock Previewed Licensed Image Save"/>
             <description value="User saves previously saved preview and licensed image into Magento Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_license"/>
@@ -37,10 +37,10 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
-            <argument name="query" value="{{AdobeStockConfigDataLicensedImage1.value}}"/>
+            <argument name="query" value="{{AdobeStockConfigDataSavedLicensedImage1.value}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
-        <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.locatePreviewedImage}}" stepKey="grabPreviewImageFileName"/>
+        <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.locateImage}}" userInput="name" stepKey="grabPreviewImageFileName"/>
         <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForConfirmationModal"/>
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>

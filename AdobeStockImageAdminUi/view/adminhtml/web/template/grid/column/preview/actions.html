@@ -19,7 +19,7 @@
     <span translate="'Save Preview'"/>
 </button>
 <button class="action-secondary" type="button" data-bind="visible: isDownloaded() && !isLicensed(), click: function(){ locate() }">
-    <span attr="name: getImageName() translate="'Locate'"/>
+    <span attr="name: getImageName()" translate="'Locate'"/>
 </button>
 <button class="action-default primary"
         type="button"
@@ -30,4 +30,3 @@
 <button class="action-default primary" type="button" data-bind="visible: isLicensed(), click: function () { saveLicensed(); }">
     <span translate="'Save'"></span>
 </button>
-
