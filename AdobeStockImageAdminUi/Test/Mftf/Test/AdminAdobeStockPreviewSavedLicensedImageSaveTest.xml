@@ -28,10 +28,13 @@
             <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
         </before>
         <after>
-            <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="LogOut"/>
+            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
+                <argument name="generatedImageName" value="{$grabPreviewImageFileName}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserLoggedOut"/>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
             <argument name="query" value="{{AdobeStockConfigDataLicensedImage1.value}}"/>
