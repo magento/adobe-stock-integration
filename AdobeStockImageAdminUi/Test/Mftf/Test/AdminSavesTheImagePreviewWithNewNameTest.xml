@@ -29,6 +29,6 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="openTheSaveImagePreviewPopup"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="saveImagePreview"/>
-        <actionGroup ref="AdminAssertImageIsVisibleInMediaGalleryActionGroup" stepKey="checkIfTheSavedImagesIsAvailable"/>
+        <actionGroup ref="AssertAdminImageIsVisibleInMediaGalleryActionGroup" stepKey="checkIfTheSavedImagesIsAvailable"/>
     </test>
 </tests>
