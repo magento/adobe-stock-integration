@@ -14,7 +14,7 @@
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
         <waitForElementVisible selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="waitForShowHideButton" />
-        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="HideEditor" />
+        <conditionalClick selector="{{CmsWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{CmsWYSIWYGSection.InsertImageBtn}}" visible="false" stepKey="HideEditor" />
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImageButton" />
         <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImage" />
         <waitForPageLoad stepKey="waitForMediaGallery"/>
