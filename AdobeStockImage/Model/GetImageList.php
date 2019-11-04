@@ -9,23 +9,18 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
+use Magento\AdobeStockImageApi\Api\ConfigInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class GetImageList
  */
 class GetImageList implements GetImageListInterface
 {
-
-    /**
-     * Config path for default gallery filter value
-     */
-    private const XML_PATH_DEFAULT_GALLERY_ID_PATH = 'adobe_stock/integration/default_gallery_id';
 
     /**
      * @var GetAssetListInterface
@@ -48,7 +43,7 @@ class GetImageList implements GetImageListInterface
     private $filterBuilder;
 
     /**
-     * @var ScopeConfigInterface $config
+     * @var ConfigInterface $config
      */
     private $config;
 
@@ -58,21 +53,21 @@ class GetImageList implements GetImageListInterface
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param GetAssetListInterface $getAssetList
      * @param FilterBuilder $filterBuilder
-     * @param ScopeConfigInterface
+     * @param ConfigInterface
      * @param array $defaultFilters
      */
     public function __construct(
         FilterGroupBuilder $filterGroupBuilder,
         GetAssetListInterface $getAssetList,
         FilterBuilder $filterBuilder,
-        ScopeConfigInterface $scopeConfigInterface,
+        ConfigInterface $configInterface,
         array $defaultFilters = []
     ) {
         $this->getAssetList = $getAssetList;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->defaultFilters = $defaultFilters;
         $this->filterBuilder = $filterBuilder;
-        $this->config = $scopeConfigInterface;
+        $this->config = $configInterface;
     }
 
     /**
@@ -107,8 +102,8 @@ class GetImageList implements GetImageListInterface
         if (!$isSetWordsFilter) {
             $galleryFilter[] = $this->filterBuilder
                 ->setField('gallery_id')
-                ->setConditionType('like')
-                ->setValue($this->config->getValue(self::XML_PATH_DEFAULT_GALLERY_ID_PATH))
+                ->setConditionType('eq')
+                ->setValue($this->config->getDefaultGalleryId())
                 ->create();
 
             $filterGroups[] = $this->filterGroupBuilder->setFilters($galleryFilter)->create();
