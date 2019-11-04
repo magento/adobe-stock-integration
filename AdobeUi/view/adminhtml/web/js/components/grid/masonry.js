@@ -255,7 +255,7 @@ define([
          * @returns {String|null}
          */
         getErrorMessage: function () {
-            return this.errorMessage()
+            return this.errorMessage();
         }
     });
 });

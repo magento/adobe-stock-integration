@@ -33,11 +33,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     private $getImageList;
 
     /**
-     * @var string|null
-     */
-    private $errorMessage;
-
-    /**
      * DataProvider constructor.
      * @param string                $name
      * @param string                $primaryFieldName
@@ -79,30 +74,19 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * @return string|null
-     */
-    public function getErrorMessage(): ?string
-    {
-        return $this->errorMessage;
-    }
-
-    /**
-     * @param string $message
-     */
-    public function setErrorMessage(string $message): void
-    {
-        $this->errorMessage = $message;
-    }
-
-    /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getData()
     {
-        $recordsData = $this->searchResultToOutput($this->getSearchResult());
-        $errorMessage = ['errorMessage' => $this->getErrorMessage()];
-
-        return array_merge($recordsData, $errorMessage);
+        try {
+            return $this->searchResultToOutput($this->getSearchResult());
+        } catch (LocalizedException $exception) {
+            return [
+                'items' => [],
+                'totalRecords' => 0,
+                'errorMessage' => $exception->getMessage()
+            ];
+        }
     }
 
     /**
@@ -110,14 +94,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      */
     public function getSearchResult(): SearchResultInterface
     {
-        try {
-            $searchResult = $this->getImageList->execute($this->getSearchCriteria());
-        } catch (LocalizedException $exception) {
-            $this->setErrorMessage($exception->getMessage());
-            $searchResult = $this->searchResultFactory->create();
-            $searchResult->setItems([]);
-        }
-
-        return $searchResult;
+        return $this->getImageList->execute($this->getSearchCriteria());
     }
 }
