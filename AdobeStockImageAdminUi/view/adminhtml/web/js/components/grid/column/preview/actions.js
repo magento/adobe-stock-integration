@@ -306,6 +306,8 @@ define([
          * Return configured  prompt with input field.
          */
         getPrompt: function (data) {
+            var regex = new RegExp('[a-zA-Z0-9_-]');
+
             prompt({
                 title: data.title,
                 content:  data.content,
@@ -315,7 +317,7 @@ define([
                 promptContentTmpl: adobePromptContentTmpl,
                 modalClass: 'adobe-stock-save-preview-prompt',
                 validation: true,
-                promptField: '[data-role="promptField"]',
+                promptField: '[data-role="adobe-stock-image-name-field"]',
                 validationRules: ['required-entry'],
                 attributesForm: {
                     novalidate: 'novalidate',
@@ -330,6 +332,17 @@ define([
                 context: this,
                 actions: data.actions,
                 buttons: data.buttons
+            });
+
+            /* Allow only alphanumeric, dash, and underscore on filename input keypress */
+            $('input[data-role="adobe-stock-image-name-field"]').bind('keypress', function (event) {
+                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+
+                if (!regex.test(key)) {
+                    event.preventDefault();
+
+                    return false;
+                }
             });
         },
 

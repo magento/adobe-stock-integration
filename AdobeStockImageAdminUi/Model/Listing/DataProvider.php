@@ -28,16 +28,16 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * DataProvider constructor.
-     * @param string                $name
-     * @param string                $primaryFieldName
-     * @param string                $requestFieldName
-     * @param ReportingInterface    $reporting
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param ReportingInterface $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param RequestInterface      $request
-     * @param FilterBuilder         $filterBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
      * @param GetImageListInterface $getImageList
-     * @param array                 $meta
-     * @param array                 $data
+     * @param array $meta
+     * @param array $data
      */
     public function __construct(
         string $name,
@@ -67,8 +67,22 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * @inheritdoc
-     *
-     * @throws LocalizedException
+     */
+    public function getData()
+    {
+        try {
+            return $this->searchResultToOutput($this->getSearchResult());
+        } catch (LocalizedException $exception) {
+            return [
+                'items' => [],
+                'totalRecords' => 0,
+                'errorMessage' => $exception->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getSearchResult(): SearchResultInterface
     {

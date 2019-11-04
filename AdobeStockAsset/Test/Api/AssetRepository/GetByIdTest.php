@@ -23,11 +23,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class GetByIdTest extends WebapiAbstract
 {
     private const RESOURCE_PATH = '/V1/adobestock/asset';
-
-    private const SERVICE_VERSION = 'V1';
-
     private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
-
     private const SERVICE_OPERATION = 'GetById';
 
     /**
@@ -67,7 +63,6 @@ class GetByIdTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION
             ],
         ];
@@ -99,7 +94,7 @@ class GetByIdTest extends WebapiAbstract
     /**
      * Test get by ID
      *
-     * @magentoApiDataFixture assetFixtureProvider
+     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
      *
      * @return void
      */
@@ -113,7 +108,6 @@ class GetByIdTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION,
             ],
         ];
@@ -140,15 +134,5 @@ class GetByIdTest extends WebapiAbstract
         $asset = $collection->getLastItem();
 
         return (int) $asset->getId();
-    }
-
-    /**
-     * Asset fixture provider
-     *
-     * @return void
-     */
-    public static function assetFixtureProvider(): void
-    {
-        require __DIR__ . '/../../_files/asset.php';
     }
 }

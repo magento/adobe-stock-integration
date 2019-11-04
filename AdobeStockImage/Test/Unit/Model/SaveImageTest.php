@@ -81,7 +81,7 @@ class SaveImageTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->storageSave = $this->createMock(StorageSave::class);
         $this->storageDelete = $this->createMock(StorageDelete::class);
@@ -179,10 +179,10 @@ class SaveImageTest extends TestCase
     /**
      * Get document
      *
-     * @param string $path
+     * @param string|null $path
      * @return Document|MockObject
      */
-    private function getDocument(string $path = null): Document
+    private function getDocument(?string $path = null): Document
     {
         $document = $this->createMock(Document::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);

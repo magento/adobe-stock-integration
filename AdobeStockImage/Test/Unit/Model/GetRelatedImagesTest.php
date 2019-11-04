@@ -58,7 +58,7 @@ class GetRelatedImagesTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->logger = $this->createMock(LoggerInterface::class);
