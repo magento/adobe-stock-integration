@@ -23,6 +23,7 @@ define([
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
+            saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
@@ -47,7 +48,7 @@ define([
          * @returns {observable}
          */
         isLicensed: function () {
-            return this.preview().displayedRecord()['is_licensed'];
+            return this.preview().displayedRecord()['is_licensed'] && !this.isLicensedLocally();
         },
 
         /**
@@ -106,15 +107,20 @@ define([
          * @param {Object} record
          * @param {String} fileName
          * @param {bool} license
+         * @param {bool} isLicensed
+         *
+         * @returns {void}
          */
-        save: function (record, fileName, license) {
+        save: function (record, fileName, license, isLicensed) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
+                requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
+                    license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
                                   this.getImageExtension(record);
 
             $.ajax({
                 type: 'POST',
-                url: license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
+                url: requestUrl,
                 dataType: 'json',
                 showLoader: true,
                 data: {
@@ -134,10 +140,11 @@ define([
                     displayedRecord['is_downloaded'] = 1;
                     displayedRecord.path = destinationPath;
 
-                    if (license) {
+                    if (license || isLicensed) {
                         displayedRecord['is_licensed'] = 1;
                         displayedRecord['is_licensed_locally'] = 1;
                     }
+
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
@@ -342,6 +349,51 @@ define([
                 .finally(function () {
                     messages.scheduleCleanup(this.messageDelay);
                 }.bind(this));
+        },
+
+        /**
+         * Save licensed
+         *
+         * @returns {void}
+         */
+        saveLicensed: function () {
+            if (!this.login().user().isAuthorized) {
+                return;
+            }
+
+            if (!this.isLicensed()) {
+                return;
+            }
+
+            this.getPrompt(
+                {
+                    'title': $.mage.__('Save'),
+                    'content': $.mage.__('File Name'),
+                    'visible': true,
+                    'actions': {
+                        confirm: function (fileName) {
+                            this.save(this.preview().displayedRecord(), fileName, false, true);
+                        }.bind(this)
+                    },
+                    'buttons': [
+                        {
+                            text: $.mage.__('Cancel'),
+                            class: 'action-secondary action-dismiss',
+
+                            /**
+                             * Close modal on button click
+                             */
+                            click: function () {
+                                this.closeModal();
+                            }
+                        },
+                        {
+                            text: $.mage.__('Confirm'),
+                            class: 'action-primary action-accept'
+                        }
+                    ]
+                }
+            );
         },
 
         /**
