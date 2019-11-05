@@ -18,7 +18,7 @@
 <button class="action-secondary" type="button" data-bind="visible: !isDownloaded() && !isLicensed(), click: function(){ savePreview() }">
     <span translate="'Save Preview'"/>
 </button>
-<button class="action-secondary" type="button" data-bind="visible: isDownloaded() && !isLicensed(), click: function(){ locate() }">
+<button class="action-secondary" type="button" data-bind="visible: isDownloaded(), click: function(){ locate() }">
     <span translate="'Locate'"/>
 </button>
 <button class="action-default primary"
