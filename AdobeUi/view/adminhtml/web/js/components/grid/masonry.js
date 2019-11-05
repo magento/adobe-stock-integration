@@ -11,7 +11,7 @@ define([
 
     return Listing.extend({
         defaults: {
-            template: 'Magento_Ui/grid/masonry',
+            template: 'Magento_AdobeUi/grid/masonry',
             imports: {
                 rows: '${ $.provider }:data.items',
                 errorMessage: '${ $.provider }:data.errorMessage'
