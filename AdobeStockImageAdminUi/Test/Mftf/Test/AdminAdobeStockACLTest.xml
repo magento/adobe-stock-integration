@@ -18,10 +18,10 @@
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminBefore"/>
         </before>
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminAfter"/>
             <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
             <waitForPageLoad stepKey="waitForRolesGridLoad" />
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
@@ -66,7 +66,8 @@
         </actionGroup>
 
         <!-- verify that user can access to adobe stock image -->
-        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openAdobeStockPopup"/>
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithAccess"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithAccess"/>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
 
@@ -87,7 +88,8 @@
         </actionGroup>
 
         <!-- verify that user can't access to adobe stock image -->
-        <actionGroup ref="AssertAdminUserHaveNoAccessToAdobeStockActionGroup" stepKey="tryOpenAdobeStockPopup"/>
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutAccess"/>
+        <dontSeeElement selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="dontSeeAdobeStockSearchButton" />
         <actionGroup ref="logout" stepKey="logoutFromCreatedUser"/>
     </test>
 </tests>
