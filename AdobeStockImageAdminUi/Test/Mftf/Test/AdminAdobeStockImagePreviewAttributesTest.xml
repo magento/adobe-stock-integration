@@ -43,7 +43,7 @@
         </actionGroup>
         <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
-        <waitForPageLoad stepKey="waitForNextImageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
 
         <!-- Assert that file # attribute changed "-->
         <assertNotContains actual="$getFileAttributeValue"
