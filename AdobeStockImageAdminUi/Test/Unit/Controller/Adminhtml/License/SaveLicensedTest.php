@@ -3,39 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
 
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\License;
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\SaveLicensed;
+use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
 use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * License test.
+ * Class SaveLicensedTest
  */
-class LicenseTest extends TestCase
+class SaveLicensedTest extends TestCase
 {
     /**
-     * @var License
+     * @var SaveLicensed
      */
     private $sut;
-
-    /**
-     * @var ClientInterface|MockObject
-     */
-    private $clientInterfaceMock;
 
     /**
      * @var LoggerInterface|MockObject
@@ -72,7 +72,6 @@ class LicenseTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->contextMock = $this->createMock(ActionContext::class);
         $this->contextMock = $this->createPartialMock(ActionContext::class, ['getRequest', 'getResultFactory']);
@@ -101,35 +100,30 @@ class LicenseTest extends TestCase
             ->willReturn($this->jsonObject);
 
         $this->sut = (new ObjectManager($this))->getObject(
-            License::class,
+            SaveLicensed::class,
             [
                 'context' => $this->contextMock,
-                'client' => $this->clientInterfaceMock,
                 'saveLicensedImage' => $this->saveLicensedImageMock,
-                'logger' => $this->loggerMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
 
     /**
-     * Test if the image is licensed and downloaded successfully
+     * Test
      */
     public function testExecute(): void
     {
         $result = [
             'success' => true,
-            'message' => new Phrase('You have successfully licensed and downloaded the image.')
+            'message' => new Phrase('You have successfully downloaded the licensed image.')
         ];
 
         $mediaId = 283415387;
         $destinationPath = 'destination_path';
-
         $this->saveLicensedImageMock->expects($this->once())
             ->method('execute')
             ->with($mediaId, $destinationPath);
-        $this->clientInterfaceMock->expects($this->once())
-            ->method('licenseImage')
-            ->with($mediaId);
 
         $this->jsonObject->expects($this->once())
             ->method('setHttpResponseCode')
@@ -155,10 +149,11 @@ class LicenseTest extends TestCase
     public function testNotFoundAsset($exception, int $responseCode, array $result): void
     {
         $mediaId = 283415387;
+        $destinationPath = 'destination_path';
 
-        $this->clientInterfaceMock->expects($this->once())
-            ->method('licenseImage')
-            ->with($mediaId)
+        $this->saveLicensedImageMock->expects($this->once())
+            ->method('execute')
+            ->with($mediaId, $destinationPath)
             ->willThrowException($exception);
         $this->jsonObject->expects($this->once())
             ->method('setHttpResponseCode')
@@ -190,12 +185,12 @@ class LicenseTest extends TestCase
                     'message' => new Phrase('Image not found. Could not be saved.')
                 ]
             ],
-            "Test the thrown exception if the asset couldn't be licensed or downloaded" => [
+            "Test the thrown exception if the asset couldn't downloaded" => [
                 new LocalizedException(new Phrase('Failed to save the image.')),
                 500,
                 [
                     'success' => false,
-                    'message' => new Phrase('An error occurred while image license and download. Contact support.')
+                    'message' => new Phrase('An error occurred while licensed image download. Contact support.')
                 ]
             ]
         ];

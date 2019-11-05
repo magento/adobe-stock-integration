@@ -45,7 +45,7 @@ class AddSearchButtonTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->layoutInterface = $this->createMock(LayoutInterface::class);
         $this->config = $this->createMock(ConfigInterface::class);

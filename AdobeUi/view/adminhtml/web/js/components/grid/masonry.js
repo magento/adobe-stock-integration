@@ -13,7 +13,8 @@ define([
         defaults: {
             template: 'Magento_AdobeUi/grid/masonry',
             imports: {
-                rows: '${ $.provider }:data.items'
+                rows: '${ $.provider }:data.items',
+                errorMessage: '${ $.provider }:data.errorMessage'
             },
             listens: {
                 'rows': 'initComponent'
@@ -47,7 +48,24 @@ define([
              * Maximum image height value
              * @param int
              */
-            maxImageHeight: 240
+            maxImageHeight: 240,
+
+            /**
+             * The value is minimum image width to height ratio when container width is less than the key
+             * @param {Object}
+             */
+            containerWidthToMinRatio: {
+                640: 3,
+                1280: 5,
+                1920: 8
+            },
+
+            /**
+             * Default minimal image width to height ratio.
+             * Applied when container width is greater than max width in the containerWidthToMinRatio matrix.
+             * @param int
+             */
+            defaultMinRatio: 10
         },
 
         /**
@@ -57,7 +75,8 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'rows'
+                    'rows',
+                    'errorMessage'
                 ]);
 
             return this;
@@ -227,15 +246,17 @@ define([
          * Set min ratio for images in layout
          */
         setMinRatio: function () {
-            if (this.containerWidth <= 640) {
-                this.minRatio = 3;
-            } else if (this.containerWidth <= 1280) {
-                this.minRatio = 5;
-            } else if (this.containerWidth <= 1920) {
-                this.minRatio = 8;
-            } else {
-                this.minRatio = 10;
+            var minRatio = null;
+
+            for (var width in this.containerWidthToMinRatio) {
+                if (this.containerWidthToMinRatio.hasOwnProperty(width) &&
+                    this.containerWidth <= width
+                ) {
+                    minRatio = this.containerWidthToMinRatio[width]
+                }
             }
+
+            this.minRatio = minRatio ? minRatio : this.defaultMinRatio;
         },
 
         /**
@@ -245,6 +266,15 @@ define([
          */
         hasData: function () {
             return !!this.rows() && !!this.rows().length;
+        },
+
+        /**
+         * Returns error message returned by the data provider
+         *
+         * @returns {String|null}
+         */
+        getErrorMessageUnsanitizedHtml: function () {
+            return this.errorMessage();
         }
     });
 });

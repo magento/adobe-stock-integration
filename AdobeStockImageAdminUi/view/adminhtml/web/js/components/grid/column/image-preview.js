@@ -13,6 +13,7 @@ define([
         defaults: {
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
+            saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
             relatedImagesUrl: 'adobe_stock/preview/relatedimages',
             buyCreditsUrl: 'https://stock.adobe.com/',

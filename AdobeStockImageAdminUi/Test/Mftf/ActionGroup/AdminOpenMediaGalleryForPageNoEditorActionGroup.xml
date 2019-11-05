@@ -13,10 +13,11 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="waitForShowHideButton" />
-        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="HideEditor" />
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImageButton" />
         <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImage" />
-        <waitForPageLoad stepKey="waitForMediaGallery"/>
+        <!-- wait for initial media gallery load, where the gallery chrome loads (and triggers loading modal) -->
+        <waitForPageLoad stepKey="waitForMediaGalleryInitialLoad"/>
+        <!-- wait for second media gallery load, where the gallery images load (and triggers loading modal once more) -->
+        <waitForPageLoad stepKey="waitForMediaGallerySecondaryLoad"/>
     </actionGroup>
 </actionGroups>

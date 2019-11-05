@@ -56,7 +56,7 @@ class QuotaTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
@@ -79,7 +79,7 @@ class QuotaTest extends TestCase
     /**
      * Verify that Quota can be retrieved
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         /** @var UserQuotaInterface|MockObject $quota */
         $quota = $this->createMock(UserQuotaInterface::class);
@@ -105,7 +105,7 @@ class QuotaTest extends TestCase
     /**
      * Verify that exception will throw if quota not available.
      */
-    public function testExecuteWithException()
+    public function testExecuteWithException(): void
     {
         $result = [
             'success' => false,

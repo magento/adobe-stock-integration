@@ -29,6 +29,9 @@
         <element name="adobeImsPopupUserSignIn" type="button" selector="#sign_in"/>
         <element name="userImageSmall" type="text" selector=".adobe-profile-image-small"/>
         <element name="userNameButton" type="button" selector=".adobe-user-name"/>
+        <element name="userQuota" type="block" selector=".adobe-stock-user-quota"/>
         <element name="userSignOut" type="button" selector=".adobe-sign-out-button"/>
+        <element name="sortDropdown" type="button" selector="div[class='masonry-sorting'] select"/>
+        <element name="sortOption" type="button" selector="//div[@class='masonry-sorting'] //option[@value='{{sortOption}}']" parameterized="true"/>
     </section>
 </sections>
