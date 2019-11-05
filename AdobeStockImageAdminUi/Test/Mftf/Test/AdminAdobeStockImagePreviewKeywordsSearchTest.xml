@@ -26,7 +26,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPear">
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForInterior">
             <argument name="query" value="Interior"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
