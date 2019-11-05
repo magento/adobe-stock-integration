@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\AdobeStockAssetApi\Api\Data\ConfigInterface;
+use Magento\AdobeStockAssetApi\Api\ConfigInterface;
 
 /**
  * Class Config
@@ -41,7 +41,7 @@ class Config implements ConfigInterface
      *
      * @return bool
      */
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED);
     }

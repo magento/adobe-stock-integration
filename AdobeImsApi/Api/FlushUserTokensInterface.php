@@ -18,7 +18,6 @@ interface FlushUserTokensInterface
      * Remove access and refresh tokens for the specified user or current user
      *
      * @param int $adminUserId
-     * @return bool
      */
     public function execute(int $adminUserId = null): void;
 }

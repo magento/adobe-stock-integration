@@ -5,10 +5,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
+            <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source
+            </item>
         </item>
     </argument>
     <settings>
@@ -25,7 +27,8 @@
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Magento_AdobeStockImageAdminUi::save_preview_images</aclResource>
-        <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider" name="adobe_stock_images_listing_data_source">
+        <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider"
+                      name="adobe_stock_images_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>
@@ -48,11 +51,15 @@
         <container name="sorting" component="Magento_AdobeStockImageAdminUi/js/components/sorting">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</item>
+                    <item name="provider" xsi:type="string">
+                        adobe_stock_images_listing.adobe_stock_images_listing_data_source
+                    </item>
                     <item name="displayArea" xsi:type="string">sorting</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                     <item name="deps" xsi:type="array">
-                        <item name="0" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns</item>
+                        <item name="0" xsi:type="string">
+                            adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns
+                        </item>
                     </item>
                 </item>
             </argument>
@@ -79,7 +86,9 @@
                     <dataScope>orientation_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color" template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }" sortOrder="30">
+            <filterInput name="colors_filter" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"
+                         template="Magento_AdobeStockImageAdminUi/grid/filter/color" provider="${ $.parentName }"
+                         sortOrder="30">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Color</item>
@@ -101,7 +110,10 @@
                     <dataScope>premium_price_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterInput name="offensive_filter" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox" template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox" provider="${ $.parentName }" sortOrder="50">
+            <filterInput name="offensive_filter"
+                         class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox"
+                         template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox" provider="${ $.parentName }"
+                         sortOrder="50">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Safe search</item>
@@ -117,7 +129,10 @@
                     <label translate="true">Safe search</label>
                 </settings>
             </filterInput>
-            <filterInput name="isolated_filter" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox" template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox" provider="${ $.parentName }" sortOrder="60">
+            <filterInput name="isolated_filter"
+                         class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox"
+                         template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox" provider="${ $.parentName }"
+                         sortOrder="60">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Isolated Assets</item>
@@ -131,7 +146,9 @@
                             <item name="true" xsi:type="string">Isolated Only</item>
                         </item>
                         <item name="tooltip" xsi:type="array">
-                            <item name="description" xsi:type="string" translate="true">Isolated assets have subjects appear alone on a solid background.</item>
+                            <item name="description" xsi:type="string" translate="true">Isolated assets have subjects
+                                appear alone on a solid background.
+                            </item>
                         </item>
                     </item>
                 </argument>
@@ -139,7 +156,9 @@
                     <label translate="true">Isolated Assets</label>
                 </settings>
             </filterInput>
-            <filterInput name="serie_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages" provider="${ $.parentName }" sortOrder="70">
+            <filterInput name="serie_id"
+                         class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages"
+                         provider="${ $.parentName }" sortOrder="70">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Serie Id</item>
@@ -151,7 +170,9 @@
                     <label translate="true">Serie Id</label>
                 </settings>
             </filterInput>
-            <filterInput name="model_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages" provider="${ $.parentName }" sortOrder="80">
+            <filterInput name="model_id"
+                         class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages"
+                         provider="${ $.parentName }" sortOrder="80">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Model Id</item>
@@ -171,15 +192,17 @@
                 <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
             </item>
         </argument>
-        <column name="overlay" component="Magento_AdobeUi/js/components/grid/column/overlay">
+        <column name="overlay" component="Magento_AdobeUi/js/components/grid/column/overlay"
+                class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\LicensedOverlay">
             <settings>
                 <label translate="true">Overlay</label>
                 <bodyTmpl>Magento_AdobeUi/grid/column/overlay</bodyTmpl>
-                <visible>false</visible>
+                <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" component="Magento_AdobeUi/js/components/grid/column/image">
+        <column name="thumbnail_url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image"
+                component="Magento_AdobeUi/js/components/grid/column/image">
             <settings>
                 <label translate="true">Thumbnail Image</label>
                 <bodyTmpl>Magento_AdobeUi/grid/column/image</bodyTmpl>
@@ -187,7 +210,8 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
+        <column name="preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview"
+                component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
             <settings>
                 <label translate="true">Image Preview</label>
                 <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image-preview</bodyTmpl>

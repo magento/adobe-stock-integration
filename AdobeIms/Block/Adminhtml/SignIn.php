@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Block\Adminhtml;
 
-use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
@@ -20,10 +19,17 @@ use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
  * Adobe sign in block
+ *
+ * @api
  */
 class SignIn extends Template
 {
     private const DATA_ARGUMENT_KEY_CONFIG_PROVIDERS = 'configProviders';
+    private const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
+    private const RESPONSE_CODE_INDEX = 1;
+    private const RESPONSE_MESSAGE_INDEX = 2;
+    private const RESPONSE_SUCCESS_CODE = 'success';
+    private const RESPONSE_ERROR_CODE = 'error';
 
     /**
      * @var ConfigInterface
@@ -55,8 +61,8 @@ class SignIn extends Template
     /**
      * SignIn constructor.
      *
-     * @param ConfigInterface $config
      * @param Context $context
+     * @param ConfigInterface $config
      * @param UserContextInterface $userContext
      * @param UserAuthorizedInterface $userAuthorized
      * @param UserProfileRepositoryInterface $userProfileRepository
@@ -64,8 +70,8 @@ class SignIn extends Template
      * @param array $data
      */
     public function __construct(
-        ConfigInterface $config,
         Context $context,
+        ConfigInterface $config,
         UserContextInterface $userContext,
         UserAuthorizedInterface $userAuthorized,
         UserProfileRepositoryInterface $userProfileRepository,
@@ -111,11 +117,11 @@ class SignIn extends Template
             'loginConfig' => [
                 'url' => $this->config->getAuthUrl(),
                 'callbackParsingParams' => [
-                    'regexpPattern' => Callback::RESPONSE_REGEXP_PATTERN,
-                    'codeIndex' => Callback::RESPONSE_CODE_INDEX,
-                    'messageIndex' => Callback::RESPONSE_MESSAGE_INDEX,
-                    'successCode' => Callback::RESPONSE_SUCCESS_CODE,
-                    'errorCode' => Callback::RESPONSE_ERROR_CODE
+                    'regexpPattern' => self::RESPONSE_REGEXP_PATTERN,
+                    'codeIndex' => self::RESPONSE_CODE_INDEX,
+                    'messageIndex' => self::RESPONSE_MESSAGE_INDEX,
+                    'successCode' => self::RESPONSE_SUCCESS_CODE,
+                    'errorCode' => self::RESPONSE_ERROR_CODE
                 ]
             ]
         ];

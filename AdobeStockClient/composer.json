@@ -6,9 +6,8 @@
         "magento/framework": "*",
         "magento/module-adobe-ims-api": "*",
         "magento/module-adobe-stock-client-api": "*",
-        "magento/module-authorization": "*",
         "magento/module-config": "*",
-        "astock/stock-api-libphp": "1.1.1"
+        "astock/stock-api-libphp": "^1.1.2"
     },
     "type": "magento2-module",
     "license": [

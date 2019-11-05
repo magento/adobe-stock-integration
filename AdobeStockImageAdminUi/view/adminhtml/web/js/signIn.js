@@ -32,13 +32,23 @@ define([
                 type: 'POST',
                 url: this.quotaUrl,
                 data: {
-                    form_key: window.FORM_KEY
+                    'form_key': window.FORM_KEY
                 },
                 dataType: 'json',
                 context: this,
+
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
                 success: function (response) {
                     this.userQuota(response.result);
                 },
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }
@@ -53,10 +63,15 @@ define([
                 type: 'POST',
                 url: this.profileUrl,
                 data: {
-                    form_key: window.FORM_KEY
+                    'form_key': window.FORM_KEY
                 },
                 dataType: 'json',
                 context: this,
+
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
                 success: function (response) {
                     this.user({
                         isAuthorized: true,
@@ -66,10 +81,15 @@ define([
                     });
                     this.getUserQuota();
                 },
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }
             });
-        },
+        }
     });
 });

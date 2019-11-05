@@ -10,6 +10,7 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
 
@@ -18,20 +19,13 @@ use Psr\Log\LoggerInterface;
  */
 class Confirmation extends Action
 {
-    /**
-     * Successful image download result code.
-     */
-    const HTTP_OK = 200;
-
-    /**
-     * Internal server error response code.
-     */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_OK = 200;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
      * @var ClientInterface
@@ -62,7 +56,7 @@ class Confirmation extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
@@ -89,7 +83,7 @@ class Confirmation extends Action
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);

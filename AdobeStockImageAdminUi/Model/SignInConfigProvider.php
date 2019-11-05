@@ -12,6 +12,7 @@ use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -67,6 +68,7 @@ class SignInConfigProvider implements ConfigProviderInterface
      * Get user quota information
      *
      * @return array
+     * @throws IntegrationException
      */
     private function getUserQuota(): array
     {
@@ -83,9 +85,7 @@ class SignInConfigProvider implements ConfigProviderInterface
                 'images' => $quota->getImages(),
                 'credits' => $quota->getCredits()
             ];
-        } catch (AuthenticationException $exception) {
-            return $defaultQuota;
-        } catch (AuthorizationException $exception) {
+        } catch (AuthenticationException | AuthorizationException $exception) {
             return $defaultQuota;
         }
     }

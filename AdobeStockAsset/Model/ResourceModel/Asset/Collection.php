@@ -20,7 +20,7 @@ class Collection extends AbstractCollection
     /**
      * Define model & resource model
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(
             Model::class,

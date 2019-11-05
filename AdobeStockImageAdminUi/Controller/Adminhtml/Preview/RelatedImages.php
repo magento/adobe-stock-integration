@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
@@ -19,15 +18,13 @@ use Psr\Log\LoggerInterface;
  */
 class RelatedImages extends Action
 {
-    /**
-     * Successful get related image result code.
-     */
-    const HTTP_OK = 200;
+    private const HTTP_OK = 200;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
-     * Internal server error response code.
+     * @see _isAllowed()
      */
-    const HTTP_INTERNAL_ERROR = 500;
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * @var GetRelatedImagesInterface
@@ -56,7 +53,7 @@ class RelatedImages extends Action
         $this->logger = $logger;
     }
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {

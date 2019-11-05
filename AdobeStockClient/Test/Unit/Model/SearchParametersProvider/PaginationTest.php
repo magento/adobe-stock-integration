@@ -11,6 +11,7 @@ use AdobeStock\Api\Models\SearchParameters;
 use Magento\AdobeStockClient\Model\SearchParametersProvider\Pagination;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,7 +32,7 @@ class PaginationTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->pagination = $this->objectManager->getObject(Pagination::class);
@@ -42,22 +43,16 @@ class PaginationTest extends TestCase
      */
     public function testApply(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getPageSize', 'getCurrentPage'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $searchCriteriaMock->expects($this->exactly(2))
             ->method('getPageSize')
             ->willReturn(20);
         $searchCriteriaMock->expects($this->once())
             ->method('getCurrentPage')
             ->willReturn(1);
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setOffset', 'setLimit'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var SearchParameters|MockObject $searchParameters */
+        $searchParameters = $this->createMock(SearchParameters::class);
         $searchParameters->expects($this->once())
             ->method('setLimit')
             ->with(20);

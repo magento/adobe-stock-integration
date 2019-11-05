@@ -9,6 +9,8 @@ namespace Magento\AdobeIms\Controller\Adminhtml\User;
 
 use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
@@ -17,15 +19,13 @@ use Magento\Framework\HTTP\Client\CurlFactory;
  */
 class Logout extends Action
 {
-    /**
-     * Internal server error response code.
-     */
+    private const HTTP_INTERNAL_SUCCESS = 200;
     private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeIms::logout';
 
     /**
      * @var CurlFactory
@@ -33,13 +33,11 @@ class Logout extends Action
     private $logout;
 
     /**
-     * SignOut constructor.
-     *
-     * @param Action\Context $context
+     * @param Context $context
      * @param LogOutInterface $logOut
      */
     public function __construct(
-        Action\Context $context,
+        Context $context,
         LogOutInterface $logOut
     ) {
         parent::__construct($context);
@@ -47,24 +45,23 @@ class Logout extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
         $logout = $this->logout->execute();
         if ($logout) {
-            $responseCode = 200;
+            $responseCode = self::HTTP_INTERNAL_SUCCESS;
             $response = [
                 'success' => true,
             ];
-        }
-        else {
+        } else {
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $response = [
                 'success' => false,
             ];
         }
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($response);

@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
+use Magento\Framework\Api\SearchResultsInterface;
+
 /**
  * Interface CreatorSearchResultsInterface
  * @api
  */
-interface CreatorSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface CreatorSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get category list.

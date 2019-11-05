@@ -39,10 +39,11 @@ class ImagePreview extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->url = $url;
     }
+
     /**
      * @inheritdoc
      */
-    public function prepare()
+    public function prepare(): void
     {
         parent::prepare();
         $this->setData(
@@ -52,6 +53,7 @@ class ImagePreview extends Column
                 [
                     'downloadImagePreviewUrl' => $this->url->getUrl('adobe_stock/preview/download'),
                     'licenseAndDownloadUrl' => $this->url->getUrl('adobe_stock/license/license'),
+                    'saveLicensedAndDownloadUrl' => $this->url->getUrl('adobe_stock/license/saveLicensed'),
                     'confirmationUrl' => $this->url->getUrl('adobe_stock/license/confirmation'),
                     'relatedImagesUrl' => $this->url->getUrl('adobe_stock/preview/relatedimages'),
                     'buyCreditsUrl' => 'https://stock.adobe.com/'

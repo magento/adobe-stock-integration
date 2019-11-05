@@ -12,6 +12,7 @@ use Magento\AdobeStockAsset\Model\GetAssetList;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,7 +41,7 @@ class GetAssetListTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientMock = $this->createMock(ClientInterface::class);
         $this->urlMock = $this->createMock(UrlInterface::class);
@@ -56,9 +57,9 @@ class GetAssetListTest extends TestCase
 
     /**
      * Test execute method
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $documentSearchResults = $this->createMock(SearchResultInterface::class);

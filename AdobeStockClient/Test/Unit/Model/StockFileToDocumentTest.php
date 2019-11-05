@@ -9,9 +9,12 @@ namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use AdobeStock\Api\Models\StockFile;
 use Magento\AdobeStockClient\Model\StockFileToDocument;
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -23,36 +26,30 @@ class StockFileToDocumentTest extends TestCase
     private $objectManager;
 
     /**
-     * @var StockFileToDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockFileToDocument|MockObject
      */
     private $stockFileToDocument;
 
     /**
-     * @var DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DocumentFactory|MockObject
      */
     private $documentFactory;
 
     /**
-     * @var AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeValueFactory|MockObject
      */
     private $attributeValueFactory;
 
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->documentFactory = $this->getMockBuilder(DocumentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->documentFactory = $this->createMock(DocumentFactory::class);
+        $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
+        $logger = $this->createMock(LoggerInterface::class);
 
         $this->stockFileToDocument = $this->objectManager->getObject(
             StockFileToDocument::class,
@@ -70,18 +67,13 @@ class StockFileToDocumentTest extends TestCase
      *
      * @dataProvider convertDataProvider
      */
-    public function testConvert(StockFile $stockFile, array $attributesData)
+    public function testConvert(StockFile $stockFile, array $attributesData): void
     {
-        $item = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createMock(Document::class);
 
         $i = 0;
         foreach ($attributesData as $attributeKey => $attributeValue) {
-            $attribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
-                ->setMethods(['setAttributeCode', 'setValue'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $attribute = $this->createMock(AttributeValue::class);
 
             $this->attributeValueFactory->expects($this->at($i))
                 ->method('create')
@@ -114,7 +106,7 @@ class StockFileToDocumentTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public function convertDataProvider(): array
     {
         /** @var StockFile $stockFile */
         $stockFile = new StockFile([]);

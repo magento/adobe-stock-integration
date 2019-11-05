@@ -8,7 +8,7 @@ addons:
       - mysql-client-core-5.6
       - mysql-client-5.6
       - postfix
-  firefox: "46.0"
+  firefox: latest
   hosts:
     - magento2.travis
 services:
@@ -16,7 +16,9 @@ services:
   - elasticsearch
 language: php
 php:
+  - '7.1'
   - '7.2'
+  - '7.3'
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
@@ -31,7 +33,6 @@ env:
 matrix:
   fast_finish: true
 cache:
-  apt: true
   directories:
     - $HOME/.composer/cache
     - $HOME/.nvm

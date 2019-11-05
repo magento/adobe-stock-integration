@@ -8,9 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Controller\Adminhtml\OAuth;
 
-use DateInterval;
-use DateTime;
-use Exception;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
@@ -18,8 +15,10 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeImsApi\Api\GetImageInterface;
 
@@ -31,24 +30,18 @@ class Callback extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+    public const ADMIN_RESOURCE = 'Magento_AdobeIms::login';
 
     /**
      * Constants of response
      *
      * RESPONSE_TEMPLATE - template of response
-     * RESPONSE_REGEXP_PATTERN - RegExp pattern of response (JavaScript)
-     * RESPONSE_CODE_INDEX index of response code
-     * RESPONSE_MESSAGE_INDEX index of response message
      * RESPONSE_SUCCESS_CODE success code
      * RESPONSE_ERROR_CODE error code
      */
-    const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
-    const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
-    const RESPONSE_CODE_INDEX = 1;
-    const RESPONSE_MESSAGE_INDEX = 2;
-    const RESPONSE_SUCCESS_CODE = 'success';
-    const RESPONSE_ERROR_CODE = 'error';
+    private const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
+    private const RESPONSE_SUCCESS_CODE = 'success';
+    private const RESPONSE_ERROR_CODE = 'error';
 
     /**
      * @var UserProfileRepositoryInterface
@@ -71,7 +64,7 @@ class Callback extends Action
     private $logger;
 
     /**
-     * @var GetImageInterface $getUserImage
+     * @var GetImageInterface
      */
     private $getUserImage;
 
@@ -81,7 +74,7 @@ class Callback extends Action
      * @param UserProfileInterfaceFactory $userProfileFactory
      * @param GetTokenInterface $getToken
      * @param LoggerInterface $logger
-     * @param GetImage $getImage
+     * @param GetImageInterface $getImage
      */
     public function __construct(
         Action\Context $context,
@@ -103,7 +96,7 @@ class Callback extends Action
     /**
      * @inheritdoc
      */
-    public function execute(): \Magento\Framework\Controller\ResultInterface
+    public function execute(): ResultInterface
     {
         try {
             $tokenResponse = $this->getToken->execute(
@@ -128,19 +121,13 @@ class Callback extends Action
                 self::RESPONSE_SUCCESS_CODE,
                 __('Authorization was successful')
             );
-        } catch (AuthorizationException $e) {
+        } catch (AuthorizationException | CouldNotSaveException $e) {
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_ERROR_CODE,
                 $e->getMessage()
             );
-        } catch (CouldNotSaveException $e) {
-            $response = sprintf(
-                self::RESPONSE_TEMPLATE,
-                self::RESPONSE_ERROR_CODE,
-                $e->getMessage()
-            );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
@@ -167,7 +154,7 @@ class Callback extends Action
             return $this->userProfileRepository->getByUserId(
                 (int)$this->_auth->getUser()->getId()
             );
-        } catch (Exception $e) {
+        } catch (NoSuchEntityException $e) {
             return $this->userProfileFactory->create();
         }
     }
@@ -177,12 +164,12 @@ class Callback extends Action
      *
      * @param int $expiresIn
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     private function getExpiresTime(int $expiresIn): string
     {
-        $dateTime = new DateTime();
-        $dateTime->add(new DateInterval(sprintf('PT%dS', $expiresIn / 1000)));
+        $dateTime = new \DateTime();
+        $dateTime->add(new \DateInterval(sprintf('PT%dS', $expiresIn / 1000)));
         return $dateTime->format('Y-m-d H:i:s');
     }
 }

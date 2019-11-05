@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-use Elasticsearch\Endpoints\Get;
 use Magento\AdobeIms\Model\GetAccessToken;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Get user acces toke test
@@ -31,12 +31,15 @@ class GetAccessTokenTest extends TestCase
      */
     private $userProfile;
 
+    /**
+     * @var GetAccessToken
+     */
     private $getAccessToken;
 
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userContext = $this->createMock(UserContextInterface::class);
         $this->userProfile = $this->createMock(UserProfileRepositoryInterface::class);
@@ -56,7 +59,7 @@ class GetAccessTokenTest extends TestCase
     public function testExecute(?string $token): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(\Magento\AdobeImsApi\Api\Data\UserProfileInterface::class);
+        $userProfileMock = $this->createMock(UserProfileInterface::class);
         $this->userProfile->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($userProfileMock);
@@ -68,7 +71,7 @@ class GetAccessTokenTest extends TestCase
     /**
      * Test execute with exception
      */
-    public function testExecuteWIthException()
+    public function testExecuteWIthException(): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
         $this->userProfile->expects($this->exactly(1))
@@ -80,8 +83,10 @@ class GetAccessTokenTest extends TestCase
 
     /**
      * Data provider for get acces token method.
+     *
+     * @return array
      */
-    public function expectedDataProvider()
+    public function expectedDataProvider(): array
     {
         return
             [

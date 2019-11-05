@@ -16,11 +16,21 @@
         <element name="searchButton" type="button" selector="#words + button.action-submit"/>
         <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" parameterized="true"/>
         <element name="firstImageAfterSearch" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] img"/>
+        <element name="firstImageId" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] div[class='masonry-image-block']"/>
         <element name="gridSpinner" type="text" selector="//div[contains(@id, 'adobe-stock-images-search-modal')]//div[@class='spinner']"/>
         <element name="modalError" type="text" selector="//aside[contains(@class, 'modal-popup')]//div[@class='modal-content']//div[text()='Something went wrong.']"/>
         <element name="countGridImages" type="text" selector="//div[@class='masonry-image-grid']/div[contains(.,data-repeat-index)]"/>
         <element name="recordsFound" type="text" selector="//*[@id='adobe-stock-images-search-modal']//*[text()='records found']/parent::div"/>
         <element name="selectedImagePreview" type="text" selector="//img[contains(@alt,'{{imageName}}')]" parameterized="true"/>
         <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
+        <element name="adobeSignIn" type="button" selector=".adobe-sign-in-button"/>
+        <element name="adobeImsPopupUserEmail" type="button" selector="#adobeid_username"/>
+        <element name="adobeImsPopUpUserPassword" type="button" selector="#adobeid_password"/>
+        <element name="adobeImsPopupUserSignIn" type="button" selector="#sign_in"/>
+        <element name="userImageSmall" type="text" selector=".adobe-profile-image-small"/>
+        <element name="userNameButton" type="button" selector=".adobe-user-name"/>
+        <element name="userSignOut" type="button" selector=".adobe-sign-out-button"/>
+        <element name="sortDropdown" type="button" selector="div[class='masonry-sorting'] select"/>
+        <element name="sortOption" type="button" selector="//div[@class='masonry-sorting'] //option[@value='{{sortOption}}']" parameterized="true"/>
     </section>
 </sections>

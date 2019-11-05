@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\AdobeIms\Model\FlushUserTokens;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\AdobeIms\Model\FlushUserTokens;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,7 +38,7 @@ class FlushUserTokensTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userContext = $this->createMock(UserContextInterface::class);
         $this->userProfileRepository = $this->createMock(UserProfileRepositoryInterface::class);
@@ -47,7 +47,6 @@ class FlushUserTokensTest extends TestCase
             $this->userContext,
             $this->userProfileRepository
         );
-
     }
 
     /**
@@ -56,7 +55,7 @@ class FlushUserTokensTest extends TestCase
     public function testExecute(): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(\Magento\AdobeImsApi\Api\Data\UserProfileInterface::class);
+        $userProfileMock = $this->createMock(UserProfileInterface::class);
         $this->userProfileRepository->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($userProfileMock);

@@ -7,28 +7,33 @@
 <div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles()">
     <div class="container">
         <div class="action-buttons preview-buttons">
-            <button class="action-previous" type="button" disable="$col.getPreviousButtonDisabled($row())" data-bind="click: function () { $col.prev($row()); }">
+            <button class="action-previous" type="button" disable="$col.cannotViewPrevious($row())" data-bind="click: function () { $col.prev($row()); }">
                 <span translate="'Previous'"/>
             </button>
-            <button class="action-next" type="button" disable="$col.getNextButtonDisabled($row())" data-bind="click: function () { $col.next($row()); }">
+            <button class="action-next" type="button" disable="$col.cannotViewNext($row())" data-bind="click: function () { $col.next($row()); }">
                 <span translate="'Next'"/>
             </button>
             <button class="action-close" type="button" data-bind="click: function () { $col.hide($row()); }">
                 <span translate="'Close'"/>
             </button>
         </div>
-        <img class="preview" attr="src: $col.displayedRecord().thumbnail_500_url, alt: $col.displayedRecord().title">
-        <div class="info">
-            <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"/>
-            <div class="author" if="$col.displayedRecord().creator_name">
-                <span translate="'By'" /><span text="' ' + $col.displayedRecord().creator_name" />
+
+        <div class="preview-row-content">
+            <img class="preview" attr="src: $col.displayedRecord().thumbnail_500_url, alt: $col.displayedRecord().title">
+            <div class="info">
+                <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"/>
+                <div class="author" if="$col.displayedRecord().creator_name">
+                    <span translate="'By'" /><span text="' ' + $col.displayedRecord().creator_name" />
+                </div>
+
+                <div class="actions">
+                    <!-- ko scope: actions -->
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!-- /ko -->
+                </div>
             </div>
-
-            <!-- ko scope: actions -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-
         </div>
+
         <div class="attributes" data-role="image-attributes-value">
             <!-- ko foreach: $col.getDisplayAttributes() -->
             <div class="attribute">
@@ -40,12 +45,12 @@
             <!-- /ko -->
         </div>
 
-        <!-- ko scope: related -->
+        <div class="related-container" ko-scope="related">
             <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        </div>
 
-        <!-- ko scope: keywords -->
+        <div class="keywords-container" ko-scope="keywords">
             <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        </div>
     </div>
 </div>

@@ -11,6 +11,7 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
@@ -20,25 +21,15 @@ use Psr\Log\LoggerInterface;
  */
 class Download extends Action
 {
-    /**
-     * Successful image download result code.
-     */
-    const HTTP_OK = 200;
-
-    /**
-     * Download image failed response code.
-     */
-    const HTTP_BAD_REQUEST = 400;
-
-    /**
-     * Internal server error response code.
-     */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_OK = 200;
+    private const HTTP_BAD_REQUEST = 400;
+    private const HTTP_INTERNAL_ERROR = 500;
+    private const IMAGE_URL_FIELD = 'thumbnail_500_url';
 
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
      * @var GetAssetByIdInterface
@@ -56,8 +47,6 @@ class Download extends Action
     private $saveImage;
 
     /**
-     * Download constructor.
-     *
      * @param Action\Context $context
      * @param SaveImageInterface $saveImage
      * @param LoggerInterface $logger
@@ -77,16 +66,20 @@ class Download extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
         try {
             $params = $this->getRequest()->getParams();
-            $mediaId = (int) $params['media_id'];
-            $destinationPath = (string) $params['destination_path'];
-            $asset = $this->getAssetById->execute($mediaId);
-            $this->saveImage->execute($asset, $destinationPath);
+
+            $document = $this->getAssetById->execute((int) $params['media_id']);
+
+            $this->saveImage->execute(
+                $document,
+                $document->getCustomAttribute(self::IMAGE_URL_FIELD)->getValue(),
+                (string) $params['destination_path']
+            );
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
@@ -105,11 +98,11 @@ class Download extends Action
             $this->logger->critical($logMessage);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while image download. Contact support.'),
+                'message' => __('An error occurred while image download.'),
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);

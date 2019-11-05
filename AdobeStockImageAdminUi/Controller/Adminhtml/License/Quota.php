@@ -18,20 +18,13 @@ use Psr\Log\LoggerInterface;
  */
 class Quota extends Action
 {
-    /**
-     * Successful image download result code.
-     */
-    const HTTP_OK = 200;
-
-    /**
-     * Internal server error response code.
-     */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_OK = 200;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
      * @var ClientInterface
@@ -62,7 +55,7 @@ class Quota extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {

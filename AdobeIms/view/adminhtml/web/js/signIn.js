@@ -84,10 +84,15 @@ define([
                 type: 'POST',
                 url: this.profileUrl,
                 data: {
-                    form_key: window.FORM_KEY
+                    'form_key': window.FORM_KEY
                 },
                 dataType: 'json',
                 context: this,
+
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
                 success: function (response) {
                     this.user({
                         isAuthorized: true,
@@ -96,6 +101,11 @@ define([
                         image: response.result.image
                     });
                 },
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }
@@ -110,7 +120,7 @@ define([
                 type: 'POST',
                 url: this.logoutUrl,
                 data: {
-                    form_key: window.FORM_KEY
+                    'form_key': window.FORM_KEY
                 },
                 dataType: 'json',
                 context: this,
@@ -123,6 +133,11 @@ define([
                         image: this.defaultProfileImage
                     });
                 }.bind(this),
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
                 error: function (response) {
                     return response.message;
                 }

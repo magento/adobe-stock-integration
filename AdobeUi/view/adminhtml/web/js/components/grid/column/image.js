@@ -16,7 +16,7 @@ define([
             previewHeight: 0,
             fields: {
                 id: 'id',
-                url: 'thumbnail_240_url'
+                url: 'url'
             }
         },
 

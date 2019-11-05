@@ -13,15 +13,13 @@ define([
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/keywords',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
-            // eslint-disable-next-line max-len
-            previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = ${ $.ns }',
             defaultKeywordsLimit: 5,
             keywordsLimit: 5,
             canViewMoreKeywords: true,
             modules: {
                 searchChips: '${ $.searchChipsProvider }',
                 chips: '${ $.chipsProvider }',
-                preview: '${ $.previewProvider }'
+                preview: '${ $.parentName }.preview'
             },
             exports: {
                 inputValue: '${ $.provider }:params.search',
@@ -74,15 +72,6 @@ define([
         hideAllKeywords: function () {
             this.keywordsLimit(this.defaultKeywordsLimit);
             this.canViewMoreKeywords(true);
-        },
-
-        /**
-         * Check if view all button is visible or not
-         *
-         * @returns {boolean}
-         */
-        canViewMoreKeywords: function () {
-            return this.canViewMoreKeywords();
         },
 
         /**

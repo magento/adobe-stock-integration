@@ -8,16 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
 
-use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
+use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Quota;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Quota;
-use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 
 /**
  * Get quota test.
@@ -57,22 +56,17 @@ class QuotaTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->context = $this->createMock(ActionContext::class);
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
 
         $this->quota = new Quota(
@@ -85,7 +79,7 @@ class QuotaTest extends TestCase
     /**
      * Verify that Quota can be retrieved
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         /** @var UserQuotaInterface|MockObject $quota */
         $quota = $this->createMock(UserQuotaInterface::class);
@@ -111,7 +105,7 @@ class QuotaTest extends TestCase
     /**
      * Verify that exception will throw if quota not available.
      */
-    public function testExecuteWithException()
+    public function testExecuteWithException(): void
     {
         $result = [
             'success' => false,

@@ -9,19 +9,19 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Test\Integration\Model;
 
 use AdobeStock\Api\Models\StockFile;
-use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
+use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use Magento\AdobeStockClient\Model\Client;
 use Magento\AdobeStockClient\Model\ConnectionWrapper;
 use Magento\AdobeStockClient\Model\ConnectionWrapperFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Test client for communication to Adobe Stock API.
@@ -43,15 +43,10 @@ class ClientTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(ConnectionWrapper::class)
-            ->setMethods(['searchFilesInitialize', 'getNextResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connection = $this->createMock(ConnectionWrapper::class);
 
         /** @var ConnectionWrapperFactory|MockObject $connectionFactory */
-        $connectionFactory = $this->getMockBuilder(ConnectionWrapperFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connectionFactory = $this->createMock(ConnectionWrapperFactory::class);
         $connectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->connection);
@@ -73,10 +68,7 @@ class ClientTest extends TestCase
     {
         $words = 'pear';
 
-        $response = $this->getMockBuilder(SearchFilesResponse::class)
-            ->setMethods(['getFiles', 'getNbResults'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $response = $this->createMock(SearchFilesResponse::class);
         $response->expects($this->once())
             ->method('getFiles')
             ->willReturn($this->getStockFiles());
@@ -109,6 +101,7 @@ class ClientTest extends TestCase
     }
 
     /**
+     * @param string $words
      * @return SearchCriteriaInterface
      */
     private function getSearchCriteria(string $words): SearchCriteriaInterface

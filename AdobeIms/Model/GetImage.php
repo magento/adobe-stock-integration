@@ -12,7 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 
 /**
  * Get user image profile.
@@ -68,7 +68,7 @@ class GetImage implements GetImageInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute(string $accessToken, int $size = 276): string
     {

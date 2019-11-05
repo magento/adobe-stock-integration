@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
+use Magento\Framework\Api\Search\Document;
+
 /**
  * Get asset by Adobe ID
  *
@@ -19,10 +21,9 @@ interface GetAssetByIdInterface
      * Returns asset by Adobe ID
      *
      * @param int $adobeId
-     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetInterface
+     * @return \Magento\Framework\Api\Search\Document
      * @throws \Magento\Framework\Exception\NotFoundException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Payment\Gateway\Http\ConverterException
      */
-    public function execute(int $adobeId): \Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+    public function execute(int $adobeId): Document;
 }

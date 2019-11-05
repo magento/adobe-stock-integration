@@ -17,6 +17,8 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
  */
 class LoadByIds
 {
+    private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
+
     /**
      * @var ResourceConnection
      */
@@ -42,14 +44,14 @@ class LoadByIds
     /**
      * Load assets by ids
      *
-     * @param \int[] $ids
+     * @param int[] $ids
      * @return AssetInterface[]
      */
     public function execute(array $ids): array
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
-            ->from(AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME)
+            ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME))
             ->where('id in (?)', $ids);
         $data = $connection->fetchAssoc($select);
 

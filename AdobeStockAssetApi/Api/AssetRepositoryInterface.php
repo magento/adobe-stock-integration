@@ -8,9 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
+use Exception;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Interface AssetRepositoryInterface
@@ -23,18 +26,9 @@ interface AssetRepositoryInterface
      *
      * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $asset
      * @return void
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws CouldNotSaveException
      */
     public function save(AssetInterface $asset): void;
-
-    /**
-     * Delete item
-     *
-     * @param AssetInterface $item
-     * @return void
-     * @throws \Exception
-     */
-    public function delete(AssetInterface $item): void;
 
     /**
      * Get a list of assets
@@ -49,7 +43,7 @@ interface AssetRepositoryInterface
      *
      * @param int $id
      * @return \Magento\AdobeStockAssetApi\Api\Data\AssetInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getById(int $id) : AssetInterface;
 
@@ -58,7 +52,7 @@ interface AssetRepositoryInterface
      *
      * @param int $id
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteById(int $id): void;
 }

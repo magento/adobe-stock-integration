@@ -8,8 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
 
+use Exception;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Confirmation;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\ResultFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
@@ -61,34 +64,21 @@ class ConfirmationTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParams']
-        );
+        $this->context = $this->createMock(ActionContext::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->context->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
         $this->request->expects($this->once())
             ->method('getParams')
@@ -110,7 +100,7 @@ class ConfirmationTest extends TestCase
     /**
      * Verify that Quota can be retrieved
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         /** @var LicenseConfirmationInterface|MockObject $confirmation */
         $confirmation = $this->createMock(LicenseConfirmationInterface::class);
@@ -136,7 +126,7 @@ class ConfirmationTest extends TestCase
     /**
      * Verify that exception will throw if quota not available.
      */
-    public function testExecuteWithException()
+    public function testExecuteWithException(): void
     {
         $result = [
             'success' => false,
@@ -144,7 +134,7 @@ class ConfirmationTest extends TestCase
         ];
         $this->clientInterfaceMock->expects($this->once())
             ->method('getLicenseConfirmation')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new Exception());
         $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($result));
