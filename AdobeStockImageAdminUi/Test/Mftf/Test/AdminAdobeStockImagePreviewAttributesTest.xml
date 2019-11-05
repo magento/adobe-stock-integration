@@ -41,20 +41,12 @@
         <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeFile">
             <argument name="attributeName" value="File #"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('Dimensions')}}" stepKey="getDimensionAttributeValue"/>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File type')}}" stepKey="getFileTypeAttributeValue"/>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('Category')}}" stepKey="getCategoryAttributeValue"/>
         <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
+        <waitForPageLoad stepKey="waitForNextImageLoad"/>
 
-        <!-- Assert that image attributes changed "-->
-        <assertNotContains actual="$getDimensionAttributeValue"
-                           expected="AdobeStockImagePreviewSection.attribute('Dimensions')" expectedType="string"
-                           stepKey="assertAttributeDimensionChanged"/>
-        <assertNotContains actual="$getDimensionAttributeValue"
-                           expected="AdobeStockImagePreviewSection.attribute('Category')" expectedType="string"
-                           stepKey="assertAttributeCategoryChanged"/>
-        <assertNotContains actual="$getDimensionAttributeValue"
+        <!-- Assert that file # attribute changed "-->
+        <assertNotContains actual="$getFileAttributeValue"
                            expected="AdobeStockImagePreviewSection.attribute('File #')" expectedType="string"
                            stepKey="assertAttributeFileChanged"/>
     </test>
