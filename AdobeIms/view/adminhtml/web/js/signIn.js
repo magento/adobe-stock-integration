@@ -14,7 +14,6 @@ define([
         defaults: {
             profileUrl: 'adobe_ims/user/profile',
             logoutUrl: 'adobe_ims/user/logout',
-            dataProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing_data_source, ns = adobe_stock_images_listing',
             defaultProfileImage:
                 'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
             user: {
@@ -22,9 +21,6 @@ define([
                 name: '',
                 email: '',
                 image: ''
-            },
-            modules: {
-                source: '${ $.dataProvider }'
             },
             loginConfig: {
                 url: 'https://ims-na1.adobelogin.com/ims/authorize',
@@ -68,7 +64,6 @@ define([
                 }
                 login(self.loginConfig)
                     .then(function (response) {
-                        self.source().set('params.t ', Date.now());
                         self.loadUserProfile();
                         resolve(response);
                     })
@@ -121,7 +116,6 @@ define([
          * Logout from adobe account
          */
         logout: function () {
-            var self = this;
             $.ajax({
                 type: 'POST',
                 url: this.logoutUrl,
@@ -132,7 +126,6 @@ define([
                 context: this,
                 showLoader: true,
                 success: function () {
-                    self.source().set('params.t ', Date.now());
                     this.user({
                         isAuthorized: false,
                         name: '',
