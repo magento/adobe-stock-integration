@@ -30,15 +30,15 @@
         <after>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
-            <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserLoggedOut"/>
+            <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertAdobeUserLoggedOut"/>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
-            <argument name="query" value="{{AdobeStockConfigDataSavedLicensedImage1.value}}"/>
+            <argument name="query" value="{{AdobeStockConfigDataPreviewedLicensedSavedImage.value}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
-        <grabAttributeFrom userInput="name" selector="{{AdobeStockImagePreviewSection.locateImage}}" stepKey="grabImageFileName"/>
+        <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.locateImage}}" userInput="name" stepKey="grabImageFileName"/>
         <click selector="{{AdobeStockImagePreviewSection.locateImage}}" stepKey="clickLocate"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
         <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />

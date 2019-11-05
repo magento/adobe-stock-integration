@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockImagePreviewSection">
         <element name="save" type="block" selector="//button[@class='action-secondary']//span[text()='Save Preview']"/>
-        <element name="locateImage" type="block" selector="//button[@class='action-secondary']//span[text()='Locate')]"/>
+        <element name="locateImage" type="button" selector="//button[@class='action-secondary']//span[text()='Locate']"/>
         <element name="saveLicensedImage" type="block" selector="//button[@class='action-default primary']//span[text()='Save']"/>
         <element name="image" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="navigation" type="button" selector="//div[@class='masonry-image-preview']//div[contains(@class, 'action-buttons')]/button[@class='action-{{type}}']" parameterized="true"/>
