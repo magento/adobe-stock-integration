@@ -14,6 +14,7 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -42,7 +43,7 @@ class DataProviderTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->getImageListMock = $this->createMock(GetImageListInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
@@ -108,6 +109,33 @@ class DataProviderTest extends TestCase
         $data = [
             'items' => $itemsData,
             'totalRecords' => count($itemsData)
+        ];
+
+        $this->assertEquals($data, $this->dataProvider->getData());
+    }
+
+    /**
+     * Verify LocalizedExceptions messages are returned in errorMessage data node
+     */
+    public function testGetDataException(): void
+    {
+        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $searchCriteria->expects($this->once())
+            ->method('setRequestName')
+            ->with('adobe_stock_images_listing_data_source');
+
+        $this->searchCriteriaBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($searchCriteria);
+
+        $this->getImageListMock->expects($this->once())
+            ->method('execute')
+            ->willThrowException(new LocalizedException(__('Localized error')));
+
+        $data = [
+            'items' => [],
+            'totalRecords' => 0,
+            'errorMessage' => 'Localized error'
         ];
 
         $this->assertEquals($data, $this->dataProvider->getData());

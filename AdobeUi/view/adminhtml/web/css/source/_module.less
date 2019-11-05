@@ -3,6 +3,7 @@
 //  * See COPYING.txt for license details.
 //  */
 @admin__masonry_grid_image__space: 20px;
+@admin__masonry_overlay_background_color: #507DC8;
 
 & when (@media-common = true) {
     .masonry-image {
@@ -11,7 +12,8 @@
             margin: @admin__masonry_grid_image__space/2 -(@admin__masonry_grid_image__space/2);
             overflow: hidden;
 
-            .no-data-message-container {
+            .no-data-message-container,
+            .error-message-container {
                 font-size: @data-grid__no-records__font-size;
                 padding: @data-grid__no-records__padding;
                 text-align: center;
@@ -36,8 +38,10 @@
             color: #fff;
             z-index: 10;
             padding: .5rem;
-            opacity: 0.6;
-            background-color: #D5D5D5;
+            opacity: 1;
+            width: 80px;
+            background-color: @admin__masonry_overlay_background_color;
+            text-align: center;
         }
 
         &-preview {

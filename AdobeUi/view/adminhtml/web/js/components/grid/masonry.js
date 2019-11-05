@@ -13,7 +13,8 @@ define([
         defaults: {
             template: 'Magento_AdobeUi/grid/masonry',
             imports: {
-                rows: '${ $.provider }:data.items'
+                rows: '${ $.provider }:data.items',
+                errorMessage: '${ $.provider }:data.errorMessage'
             },
             listens: {
                 'rows': 'initComponent'
@@ -57,7 +58,8 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'rows'
+                    'rows',
+                    'errorMessage'
                 ]);
 
             return this;
@@ -245,6 +247,15 @@ define([
          */
         hasData: function () {
             return !!this.rows() && !!this.rows().length;
+        },
+
+        /**
+         * Returns error message returned by the data provider
+         *
+         * @returns {String|null}
+         */
+        getErrorMessage: function () {
+            return this.errorMessage();
         }
     });
 });

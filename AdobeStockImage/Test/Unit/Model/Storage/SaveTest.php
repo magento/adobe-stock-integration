@@ -58,7 +58,7 @@ class SaveTest extends TestCase
     /**
      * Initialize base test objects
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fileSystemMock = $this->createMock(Filesystem::class);
         $this->httpsDriverMock = $this->createMock(Https::class);
