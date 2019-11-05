@@ -18,6 +18,6 @@
         <waitForElementVisible selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
         <waitForPageLoad stepKey="waitForMaskDisappeared"/>
-        <dontSeeElement selector="{{AdobeStockSection.mediaGalleryImage({{generatedImageName}})}}" stepKey="verifyImageIsDeleted"/>
+        <dontSeeElement selector="{{AdobeStockSection.mediaGalleryImage({$generatedImageName})}}" stepKey="verifyImageIsDeleted"/>
     </actionGroup>
 </actionGroups>
