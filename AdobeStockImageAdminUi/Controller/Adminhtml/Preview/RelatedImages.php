@@ -18,20 +18,13 @@ use Psr\Log\LoggerInterface;
  */
 class RelatedImages extends Action
 {
+    private const HTTP_OK = 200;
+    private const HTTP_INTERNAL_ERROR = 500;
+
     /**
      * @see _isAllowed()
      */
     public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
-
-    /**
-     * Successful get related image result code.
-     */
-    private const HTTP_OK = 200;
-
-    /**
-     * Internal server error response code.
-     */
-    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @var GetRelatedImagesInterface
