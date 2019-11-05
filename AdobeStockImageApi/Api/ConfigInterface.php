@@ -19,5 +19,5 @@ interface ConfigInterface
      *
      * @return string|null
      */
-    public function getDefaultGalleryId():? string;
+    public function getDefaultGalleryId(): ?string;
 }

@@ -110,6 +110,7 @@ class GetImageListTest extends TestCase
         /** @var MockObject|SearchCriteriaInterface $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $appliedFilterGroup = $this->getAppliedFilterGroup($appliedFilterNames);
+        $this->config->expects($this->once())->method('getDefaultGalleryId')->willReturn('galleryidvalue');
 
         foreach ($appliedFilterNames as $appliedFilter) {
             if ($appliedFilter !== 'words') {
@@ -242,9 +243,10 @@ class GetImageListTest extends TestCase
      * @param FilterGroup $appliedFilters
      * @return void
      */
-    private function applyDefaultGalleryFilter(SearchCriteriaInterface $searchCriteria, FilterGroup $appliedFilters): void
-    {
-        $this->config->expects($this->once())->method('getDefaultGalleryId')->willReturn('galleryidvalue');
+    private function applyDefaultGalleryFilter(
+        SearchCriteriaInterface $searchCriteria,
+        FilterGroup $appliedFilters
+    ): void {
         $this->filterBuilderMock->expects($this->at(0))
             ->method('setField')
             ->willReturnSelf();

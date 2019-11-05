@@ -21,6 +21,10 @@ use Magento\Framework\Api\Search\SearchResultInterface;
  */
 class GetImageList implements GetImageListInterface
 {
+    /**
+     * Filters which skips gallery filter
+     */
+    private const SKIP_GALLERY_FILTERS = ['words', 'model_id', 'serie_id'];
 
     /**
      * @var GetAssetListInterface
@@ -53,7 +57,7 @@ class GetImageList implements GetImageListInterface
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param GetAssetListInterface $getAssetList
      * @param FilterBuilder $filterBuilder
-     * @param ConfigInterface
+     * @param ConfigInterface $configInterface
      * @param array $defaultFilters
      */
     public function __construct(
@@ -89,21 +93,27 @@ class GetImageList implements GetImageListInterface
      */
     private function setDefaultGallery(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
-        $isSetWordsFilter = false;
+        $galleryId = $this->config->getDefaultGalleryId();
+        if (empty($galleryId)) {
+            return $searchCriteria;
+        }
+
+        $skipGalleryFilter = false;
         $filterGroups = $searchCriteria->getFilterGroups();
         foreach ($filterGroups as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'words') {
-                    $isSetWordsFilter = true;
+                $field = $filter->getField();
+                if (in_array($field, self::SKIP_GALLERY_FILTERS)) {
+                    $skipGalleryFilter = true;
                 }
             }
         }
 
-        if (!$isSetWordsFilter) {
+        if (!$skipGalleryFilter) {
             $galleryFilter[] = $this->filterBuilder
                 ->setField('gallery_id')
                 ->setConditionType('eq')
-                ->setValue($this->config->getDefaultGalleryId())
+                ->setValue($galleryId)
                 ->create();
 
             $filterGroups[] = $this->filterGroupBuilder->setFilters($galleryFilter)->create();

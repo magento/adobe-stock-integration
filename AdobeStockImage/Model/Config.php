@@ -16,7 +16,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class Config implements ConfigInterface
 {
-
     /**
      * Config path for default gallery filter value
      */
@@ -26,11 +25,6 @@ class Config implements ConfigInterface
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
-
-    /**
-     * @var UrlInterface
-     */
-    private $url;
 
     /**
      * Config constructor.
@@ -45,7 +39,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getDefaultGalleryId():? string
+    public function getDefaultGalleryId(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_DEFAULT_GALLERY_ID_PATH);
     }
