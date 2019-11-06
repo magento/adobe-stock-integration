@@ -5,7 +5,7 @@
 define([
     'jquery',
     'Magento_Ui/js/grid/columns/column'
-], function (_, $, Column) {
+], function ($, Column) {
     'use strict';
 
     return Column.extend({

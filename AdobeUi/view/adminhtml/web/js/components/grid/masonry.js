@@ -5,8 +5,9 @@
 define([
     'Magento_Ui/js/grid/listing',
     'jquery',
-    'ko'
-], function (Listing, $, ko) {
+    'ko',
+    'underscore'
+], function (Listing, $, ko, _) {
     'use strict';
 
     return Listing.extend({
