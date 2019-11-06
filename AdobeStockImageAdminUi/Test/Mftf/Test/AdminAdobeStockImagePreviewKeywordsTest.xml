@@ -42,7 +42,9 @@
         <dontSeeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonDisappears"/>
         <!-- Verify that keywords closed after navigate to next image -->
         <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="navigateToPreviousImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
         <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
