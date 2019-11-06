@@ -10,7 +10,8 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Save multiple asset service.
@@ -30,34 +31,55 @@ class Save
     private $dataExtractor;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Save constructor.
+     *
      * @param ResourceConnection $resourceConnection
      * @param DataExtractorInterface $dataExtractor
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DataExtractorInterface $dataExtractor
+        DataExtractorInterface $dataExtractor,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->dataExtractor = $dataExtractor;
+        $this->logger = $logger;
     }
 
     /**
-     * Save asset
+     * Save asset action.
      *
      * @param AssetInterface $asset
-     * @return void
+     *
+     * @throws CouldNotSaveException
      */
     public function execute(AssetInterface $asset): void
     {
-        $data = $this->dataExtractor->extract($asset, AssetInterface::class);
-        $tableName = $this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME);
+        try {
+            $data = $this->dataExtractor->extract($asset, AssetInterface::class);
 
-        if (empty($data)) {
-            return;
+            if (empty($data)) {
+                return;
+            }
+
+            $connection = $this->resourceConnection->getConnection();
+            $tableName = $this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME);
+            $saveData = $this->filterData($data, array_keys($connection->describeTable($tableName)));
+            $connection->insertOnDuplicate($tableName, $saveData);
+        } catch (\Exception $exception) {
+            $message = __(
+                'An error occurred during adobe stock asset save: %error',
+                ['error' => $exception->getMessage()]
+            );
+            $this->logger->critical($message);
+            throw new CouldNotSaveException($message, $exception);
         }
-
-        $data = $this->filterData($data, array_keys($this->getConnection()->describeTable($tableName)));
-        $this->getConnection()->insertOnDuplicate($tableName, $data);
     }
 
     /**
@@ -70,15 +92,5 @@ class Save
     private function filterData(array $data, array $columns): array
     {
         return array_intersect_key($data, array_flip($columns));
-    }
-
-    /**
-     * Retrieve DB adapter
-     *
-     * @return AdapterInterface
-     */
-    private function getConnection(): AdapterInterface
-    {
-        return $this->resourceConnection->getConnection();
     }
 }
