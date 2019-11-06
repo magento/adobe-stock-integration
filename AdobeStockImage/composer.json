@@ -4,10 +4,10 @@
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "102.0.*",
-        "magento/module-adobe-stock-client-api": "100.0.*",
-        "magento/module-adobe-stock-asset-api": "100.0.*",
-        "magento/module-adobe-stock-image-api": "100.0.*",
-        "magento/module-adobe-media-gallery-api": "100.0.*"
+        "magento/module-adobe-stock-client-api": "1.*.*",
+        "magento/module-adobe-stock-asset-api": "1.*.*",
+        "magento/module-adobe-stock-image-api": "1.*.*",
+        "magento/module-adobe-media-gallery-api": "1.*.*"
     },
     "suggest": {
         "magento/module-catalog": "103.0.*"
@@ -25,5 +25,5 @@
             "Magento\\AdobeStockImage\\": ""
         }
     },
-    "version": "100.0.0"
+    "version": "1.0.0"
 }
