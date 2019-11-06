@@ -9,7 +9,10 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\AdobeStockImage\Model\GetImageList;
+use Magento\AdobeStockImageApi\Api\ConfigInterface;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -17,8 +20,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\Filter;
 
 /**
  * Test for Magento\AdobeStockImage\Model\GetImageList Model.
@@ -64,6 +65,16 @@ class GetImageListTest extends TestCase
     private $filterBuilderMock;
 
     /**
+     * @var ConfigInterface $config
+     */
+    private $config;
+
+    /**
+     * @var bool $isAppliedGalleryFilter
+     */
+    private $isAppliedGalleryFilter = false;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -72,6 +83,7 @@ class GetImageListTest extends TestCase
         $this->getAssetListMock = $this->createMock(GetAssetListInterface::class);
         $this->filterGroupBuilderMock = $this->createMock(FilterGroupBuilder::class);
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
+        $this->config = $this->createMock(ConfigInterface::class);
 
         $this->getImageListModel = $objectManager->getObject(
             GetImageList::class,
@@ -79,7 +91,8 @@ class GetImageListTest extends TestCase
                 'getAssetList' => $this->getAssetListMock,
                 'filterGroupBuilder' => $this->filterGroupBuilderMock,
                 'filterBuilder' => $this->filterBuilderMock,
-                'defaultFilters' => self::DEFAULT_FILTERS
+                'defaultFilters' => self::DEFAULT_FILTERS,
+                'config' => $this->config
             ]
         );
     }
@@ -93,14 +106,22 @@ class GetImageListTest extends TestCase
      */
     public function testWithDefaultFilters(array $appliedFilterNames): void
     {
-        $appliedFilterGroup = $this->getAppliedFilterGroup($appliedFilterNames);
 
         /** @var MockObject|SearchCriteriaInterface $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
-        $searchCriteria->expects($this->once())
+        $appliedFilterGroup = $this->getAppliedFilterGroup($appliedFilterNames);
+        $this->config->expects($this->once())->method('getDefaultGalleryId')->willReturn('galleryidvalue');
+
+        foreach ($appliedFilterNames as $appliedFilter) {
+            if ($appliedFilter !== 'words') {
+                $this->applyDefaultGalleryFilter($searchCriteria, $appliedFilterGroup);
+            }
+        }
+
+        $searchCriteria->expects($this->any())
             ->method('getFilterGroups')
             ->willReturn([$appliedFilterGroup]);
-        $searchCriteria->expects($this->once())
+        $searchCriteria->expects($this->at($this->isAppliedGalleryFilter ? 1 : 2))
             ->method('setFilterGroups')
             ->with([$appliedFilterGroup, $this->getDefaultFilterGroup($appliedFilterNames)]);
 
@@ -132,7 +153,7 @@ class GetImageListTest extends TestCase
                 ['premium_price_filter']
             ],
             [
-                []
+                ['']
             ]
         ];
     }
@@ -150,7 +171,7 @@ class GetImageListTest extends TestCase
         foreach ($appliedFilterNames as $field) {
             /** @var Filter|MockObject $filter */
             $filter = $this->createMock(Filter::class);
-            $filter->expects($this->once())
+            $filter->expects($this->exactly(2))
                 ->method('getField')
                 ->willReturn($field);
             $filters[] = $filter;
@@ -158,7 +179,7 @@ class GetImageListTest extends TestCase
 
         /** @var FilterGroup|MockObject $filterGroup */
         $filterGroup = $this->createMock(FilterGroup::class);
-        $filterGroup->expects($this->once())
+        $filterGroup->expects($this->exactly(2))
             ->method('getFilters')
             ->willReturn($filters);
 
@@ -174,7 +195,7 @@ class GetImageListTest extends TestCase
     private function getDefaultFilterGroup(array $appliedFilterNames): FilterGroup
     {
         $filters = [];
-        $filterBuilderCallIndex = 0;
+        $filterBuilderCallIndex = $this->isAppliedGalleryFilter ? 4 : 0;
 
         foreach (self::DEFAULT_FILTERS as $defaultFilter) {
             if (!in_array($defaultFilter['type'], $appliedFilterNames)) {
@@ -204,14 +225,57 @@ class GetImageListTest extends TestCase
         /** @var FilterGroup|MockObject $filterGroup */
         $filterGroup = $this->createMock(FilterGroup::class);
 
-        $this->filterGroupBuilderMock->expects($this->once())
+        $this->filterGroupBuilderMock->expects($this->at($this->isAppliedGalleryFilter ? 2 : 0))
             ->method('setFilters')
             ->with($filters)
             ->willReturnSelf();
-        $this->filterGroupBuilderMock->expects($this->once())
+        $this->filterGroupBuilderMock->expects($this->at($this->isAppliedGalleryFilter ? 3 : 1))
             ->method('create')
             ->willReturn($filterGroup);
 
         return $filterGroup;
+    }
+
+    /**
+     * Set's filter group with 'gallery_id' filter
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param FilterGroup $appliedFilters
+     * @return void
+     */
+    private function applyDefaultGalleryFilter(
+        SearchCriteriaInterface $searchCriteria,
+        FilterGroup $appliedFilters
+    ): void {
+        $this->filterBuilderMock->expects($this->at(0))
+            ->method('setField')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->at(1))
+            ->method('setConditionType')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->at(2))
+            ->method('setValue')
+            ->willReturnSelf();
+
+        $filter = $this->createMock(Filter::class);
+
+        $this->filterBuilderMock->expects($this->at(3))
+            ->method('create')
+            ->willReturn($filter);
+
+        $filterGroup = $this->createMock(FilterGroup::class);
+
+        $this->filterGroupBuilderMock->expects($this->at(0))
+            ->method('setFilters')
+            ->with([$filter])
+            ->willReturnSelf();
+        $this->filterGroupBuilderMock->expects($this->at(1))
+            ->method('create')
+            ->willReturn($filterGroup);
+        $searchCriteria->expects($this->at(1))
+            ->method('setFilterGroups')
+            ->with([$filterGroup, $appliedFilters]);
+
+        $this->isAppliedGalleryFilter = true;
     }
 }
