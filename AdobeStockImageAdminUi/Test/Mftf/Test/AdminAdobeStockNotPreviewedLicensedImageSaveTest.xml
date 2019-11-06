@@ -5,15 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockPreviewSavedLicensedImageSaveTest">
+    <test name="AdminAdobeStockNotPreviewedLicensedImageSaveTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="User saves licensed image into Magento Media Gallery"/>
-            <title value="Adobe Stock Previewed Licensed Image Save"/>
-            <description value="User saves previously saved preview and licensed image into Magento Media Gallery"/>
+            <title value="Adobe Stock Not Previewed Licensed Image Save"/>
+            <description value="User saves previously licensed image into Magento Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_license"/>
             <group value="adobe_stock_integration"/>
@@ -28,23 +27,25 @@
             <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
-                <argument name="generatedImageName" value="{$grabPreviewImageFileName}"/>
+                <argument name="generatedImageName" value="{$grabImageFileName}"/>
             </actionGroup>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserLoggedOut"/>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
-            <argument name="query" value="{{AdobeStockConfigDataSavedLicensedImage1.value}}"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotPreviewedLicensedImageToSave">
+            <argument name="query" value="{{AdobeStockConfigDataNotPreviewedLicensedNotSavedImage.value}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
-        <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.locateImage}}" userInput="name" stepKey="grabPreviewImageFileName"/>
         <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForConfirmationModal"/>
+        <waitForPageLoad stepKey="waitForPromptModal" />
+        <grabValueFrom selector="{{AdobeStockImagePreviewSection.generatedImageName}}" stepKey="grabImageFileName" />
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabPreviewImageFileName})}}" stepKey="assertSavedImage" />
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
     </test>
 </tests>
