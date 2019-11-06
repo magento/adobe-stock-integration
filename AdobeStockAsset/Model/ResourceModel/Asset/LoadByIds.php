@@ -10,7 +10,6 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 
 /**
  * Save multiple asset service.
@@ -18,6 +17,8 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 class LoadByIds
 {
     private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
+
+    private const ADOBE_STOCK_ASSET_ID = 'id';
 
     /**
      * @var ResourceConnection
@@ -52,7 +53,7 @@ class LoadByIds
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME))
-            ->where('id in (?)', $ids);
+            ->where(self::ADOBE_STOCK_ASSET_ID . ' in (?)', $ids);
         $data = $connection->fetchAssoc($select);
 
         $assets = [];

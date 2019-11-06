@@ -29,13 +29,15 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.image}}" userInput="src" stepKey="getCurrentImageUrl"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="NavigateToNextImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <!-- Assert that User switched to the next image "-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getCurrentImageUrl)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToNextImage"/>
         <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.image}}" userInput="src"
                            stepKey="getImageUrlAfterSwitchedToNextImage"/>
-        <!-- Assert that User switched to the previous image "-->
         <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="NavigateToPreviousImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
+        <!-- Assert that User switched to the previous image "-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getImageUrlAfterSwitchedToNextImage)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToPreviousImage"/>
         <!-- Assert that User can close preview "-->
