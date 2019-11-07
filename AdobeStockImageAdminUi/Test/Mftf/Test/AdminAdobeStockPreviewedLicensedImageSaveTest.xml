@@ -12,7 +12,7 @@
             <features value="AdobeStockImagePanel"/>
             <stories value="User saves licensed image into Magento Media Gallery"/>
             <title value="Adobe Stock Previewed Licensed Image Save"/>
-            <description value="User saves previously saved preview and licensed image into Magento Media Gallery"/>
+            <description value="User saves previously saved preview and licensed image, into Magento Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_license"/>
             <group value="adobe_stock_integration"/>
@@ -25,6 +25,13 @@
             <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
             <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
             <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotPreviewedLicensedImageToPreview">
+                <argument name="query" value="{{AdobeStockConfigDataNotPreviewedLicensedNotSavedImage.value}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
+            <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+            <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
         </before>
         <after>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
@@ -37,8 +44,9 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
+        <!-- Image preview is saved in the <before/> node -->
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPreviewedLicensedImageToSave">
-            <argument name="query" value="{{AdobeStockConfigDataPreviewedLicensedNotSavedImage.value}}"/>
+            <argument name="query" value="{{AdobeStockConfigDataNotPreviewedLicensedNotSavedImage.value}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
         <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.locateImage}}" userInput="name" stepKey="grabImageFileName"/>

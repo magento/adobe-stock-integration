@@ -32,7 +32,4 @@
     <entity name="AdobeStockConfigDataNotPreviewedLicensedNotSavedImage">
         <data key="value">{{_ENV.ADOBE_STOCK_NOT_PREVIEWED_LICENSED_NOT_SAVED_IMAGE}}</data>
     </entity>
-    <entity name="AdobeStockConfigDataPreviewedLicensedNotSavedImage">
-        <data key="value">{{_ENV.ADOBE_STOCK_PREVIEWED_LICENSED_NOT_SAVED_IMAGE}}</data>
-    </entity>
 </entities>
