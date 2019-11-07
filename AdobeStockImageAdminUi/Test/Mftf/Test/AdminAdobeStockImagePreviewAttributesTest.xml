@@ -10,10 +10,12 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockImagePreviewAttributesTest">
         <annotations>
-            <stories value="Admin User see images preview attributes"/>
-            <title value="Admin should be able to see images attributes in the image preview"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #3] User views the image details"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/24"/>
+            <title value="User views the image details"/>
             <description value="Admin should be able to see images attributes in the image preview"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
