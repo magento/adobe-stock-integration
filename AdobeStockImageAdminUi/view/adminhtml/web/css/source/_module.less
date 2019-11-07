@@ -1,7 +1,7 @@
-// /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
-//  */
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 & when (@media-common = true) {
     .adobe-stock-images-search-modal-content {
@@ -30,6 +30,12 @@
 
                 .container {
                     padding-top: 0;
+                    .preview-buttons {
+                        /* Align image preview actions uniformly to the right edge */
+                        .action-previous, .action-next, .action-close {
+                            padding: 30px 0 30px 30px;
+                        }
+                    }
                 }
             }
         }
@@ -302,6 +308,25 @@
 
             .admin__field-tooltip {
                 margin: -5px 0 0 5px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .adobe-stock-images-search-modal-content {
+        .masonry-image-preview {
+            .container {
+                margin: 0 60px;
+                .preview-row-content {
+                    .info {
+                        .actions {
+                            .action-secondary {
+                                margin-bottom: 8px;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
