@@ -3,14 +3,14 @@
     "description": "Magento module responsible for the images handling implementation",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-adobe-stock-client-api": "1.*.*",
-        "magento/module-adobe-stock-asset-api": "1.*.*",
-        "magento/module-adobe-stock-image-api": "1.*.*",
-        "magento/module-adobe-media-gallery-api": "1.*.*"
+        "magento/framework": "*",
+        "magento/module-adobe-stock-client-api": "*",
+        "magento/module-adobe-stock-asset-api": "*",
+        "magento/module-adobe-stock-image-api": "*",
+        "magento/module-adobe-media-gallery-api": "*"
     },
     "suggest": {
-        "magento/module-catalog": "103.0.*"
+        "magento/module-catalog": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -24,6 +24,5 @@
         "psr-4": {
             "Magento\\AdobeStockImage\\": ""
         }
-    },
-    "version": "1.0.0"
+    }
 }
