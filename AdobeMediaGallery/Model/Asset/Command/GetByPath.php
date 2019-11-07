@@ -74,7 +74,7 @@ class GetByPath implements GetByPathInterface
             $data = $connection->query($select)->fetch();
 
             if (empty($data)) {
-                $message = __('There is no such media asset with path "%1"', $mediaFilePath);
+                $message = __('There is no such media asset with path "%path"', ['path' => $mediaFilePath]);
                 throw new NoSuchEntityException($message);
             }
 
@@ -82,7 +82,10 @@ class GetByPath implements GetByPathInterface
 
             return $mediaAssets;
         } catch (\Exception $exception) {
-            $message = __('An error occurred during get media asset list: %1', $exception->getMessage());
+            $message = __(
+                'An error occurred during get media asset list: %error',
+                ['error' => $exception->getMessage()]
+            );
             $this->logger->critical($message);
             throw new IntegrationException($message, $exception);
         }
