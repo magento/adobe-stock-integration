@@ -10,10 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockImagePreviewKeywordsTest">
         <annotations>
-            <stories value="Admin User Sees keywords in the image preview "/>
-            <title value="Admin should be able to see keywords in the image preview"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #34] User sees current image tags"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/349"/>
+            <title value="User sees current image tags"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579522"/>
             <description value="Admin should be able to able to see keywords in the image preview"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>

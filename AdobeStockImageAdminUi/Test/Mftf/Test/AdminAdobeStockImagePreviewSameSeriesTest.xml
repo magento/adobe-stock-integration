@@ -9,8 +9,11 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockImagePreviewSameSeriesTest">
         <annotations>
-            <stories value="Cover scenario: User sees images with the same series as the currently viewed one"/>
-            <title value="Admin should be able to see images with same series"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #29] User sees images from the same series as the currently viewed image"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/324"/>
+            <title value="User sees images from the same series as the currently viewed image"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579509"/>
             <description value="User sees images with the same series"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_preview"/>

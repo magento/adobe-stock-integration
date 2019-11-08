@@ -11,8 +11,10 @@
     <test name="AdminAdobeStockSignedInCreditsVisibleTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
-            <stories value="Admin user can view credits and images available when signed in to Adobe Stock"/>
-            <title value="Admin user can view credits and images available when signed in to Adobe Stock"/>
+            <stories value="[Story #35] User sees credits available on their account"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/356"/>
+            <title value="User sees credits available on their account"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579523"/>
             <description value="Admin user can view credits and images available when signed in to Adobe Stock"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_grid"/>

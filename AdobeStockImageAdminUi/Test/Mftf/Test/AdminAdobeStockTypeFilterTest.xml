@@ -9,10 +9,13 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockTypeFilterTest">
         <annotations>
-            <stories value="Cover scenario: User filters images by type"/>
-            <title value="Admin should be able to filters images by type"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #9] User filters images by type"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/32"/>
+            <title value="User filters images by type"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3216729"/>
             <description value="Admin should be able to filters images by type"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>

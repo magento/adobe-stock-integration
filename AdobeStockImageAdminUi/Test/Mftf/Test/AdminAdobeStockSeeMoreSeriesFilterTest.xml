@@ -10,8 +10,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockSeeMoreSeriesFilterTest">
         <annotations>
-            <stories value="Admin User see more images from series filter"/>
-            <title value="Admin should be able to see more images from series filter"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #31] User searches for images from the same series as the currently viewed one"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/346"/>
+            <title value="User searches for images from the same series as the currently viewed one"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579513"/>
             <description value="Admin should be able to see more images from series filter"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_filters"/>
