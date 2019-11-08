@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Category\Command;
 
-use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
 
