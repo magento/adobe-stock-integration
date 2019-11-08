@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;

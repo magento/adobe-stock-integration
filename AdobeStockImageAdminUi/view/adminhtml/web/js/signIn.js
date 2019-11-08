@@ -21,7 +21,7 @@ define([
             modules: {
                 source: '${ $.dataProvider }',
                 preview: '${ $.previewProvider }'
-            },
+            }
         },
 
         /**

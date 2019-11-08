@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\LoadByIds;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;

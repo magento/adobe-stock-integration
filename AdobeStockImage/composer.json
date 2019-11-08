@@ -7,7 +7,7 @@
         "magento/module-adobe-stock-client-api": "*",
         "magento/module-adobe-stock-asset-api": "*",
         "magento/module-adobe-stock-image-api": "*",
-        "magento/module-adobe-media-gallery-api": "*"
+        "magento/module-media-gallery-api": "*"
     },
     "suggest": {
         "magento/module-catalog": "*"
