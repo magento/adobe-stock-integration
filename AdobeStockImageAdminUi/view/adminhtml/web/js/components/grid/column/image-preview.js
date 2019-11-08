@@ -36,7 +36,8 @@ define([
                 },
                 {
                     component: 'Magento_AdobeStockImageAdminUi/js/components/grid/column/preview/actions',
-                    name: '${ $.name }_actions'
+                    name: '${ $.name }_actions',
+                    provider: '${ $.provider }'
                 }
             ]
         },

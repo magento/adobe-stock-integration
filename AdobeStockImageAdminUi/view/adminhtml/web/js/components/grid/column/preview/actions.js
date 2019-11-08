@@ -29,7 +29,8 @@ define([
             messageDelay: 5,
             modules: {
                 login: '${ $.loginProvider }',
-                preview: '${ $.parentName }.preview'
+                preview: '${ $.parentName }.preview',
+                source: '${ $.provider }'
             }
         },
 
@@ -114,7 +115,7 @@ define([
                 requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
                     license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
-                                  this.getImageExtension(record);
+                    this.getImageExtension(record);
 
             $.ajax({
                 type: 'POST',
@@ -142,7 +143,8 @@ define([
                         displayedRecord['is_licensed'] = 1;
                         displayedRecord['is_licensed_locally'] = 1;
                     }
-
+                    this.source().set('params.t ', Date.now());
+                    this.preview().hide();
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
