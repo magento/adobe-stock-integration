@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model\Extract;
 
-use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\Framework\Api\Search\Document;
-use Magento\AdobeMediaGalleryApi\Api\Data\KeywordInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 
 /**
  * Keywords extractor

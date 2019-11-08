@@ -16,7 +16,6 @@ services:
   - elasticsearch
 language: php
 php:
-  - '7.1'
   - '7.2'
   - '7.3'
 env:
@@ -25,11 +24,7 @@ env:
     - NODE_JS_VERSION=8
     - MAGENTO_HOST_NAME="magento2.travis"
   matrix:
-    - TEST_SUITE=static
     - TEST_SUITE=unit
-    - TEST_SUITE=integration
-#    - TEST_SUITE=api
-#    - TEST_SUITE=functional
 matrix:
   fast_finish: true
 cache:
@@ -49,21 +44,10 @@ install:
   - composer config repositories.ext path "../ext/*/*/*"
   - composer require magento/adobe-stock-integration
 before_script:
-  - echo "vendor/magento/module-adobe-stock-*" > dev/tests/static/testsuite/Magento/Test/Php/_files/whitelist/common.txt
-  - sed -i 's/name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/name="TESTCODESTYLE_IS_FULL_SCAN" value="1"/g' dev/tests/static/phpunit.xml.dist
   - cp ../ext/magento/adobe-stock-integration/dev/tests/unit/phpunit.xml dev/tests/unit/phpunit.xml
-  - cp ../ext/magento/adobe-stock-integration/dev/tests/integration/phpunit.xml dev/tests/integration/phpunit.xml
-  - cp ../ext/magento/adobe-stock-integration/dev/tests/api/phpunit.xml dev/tests/api-functional/phpunit.xml
-  - cp ../ext/magento/adobe-stock-integration/dev/tests/acceptance/.env dev/tests/acceptance/.env
   - cp -f ../ext/magento/adobe-stock-integration/dev/travis/before_script.sh dev/travis/before_script.sh
-  - cp dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php
-  - cp dev/tests/api-functional/config/install-config-mysql.php.dist dev/tests/api-functional/config/install-config-mysql.php
   - ./dev/travis/before_script.sh
 script:
-  - if [ $TEST_SUITE == 'static' ]; then phpunit --configuration dev/tests/static/phpunit.xml.dist dev/tests/static/testsuite/Magento/Test/Php/LiveCodeTest.php; fi
   - if [ $TEST_SUITE == 'unit' ]; then phpunit --configuration dev/tests/unit/phpunit.xml; fi
-  - if [ $TEST_SUITE == 'integration' ]; then phpunit -c dev/tests/integration; fi
-  - if [ $TEST_SUITE == 'api' ]; then phpunit -c dev/tests/api-functional; fi
-  - if [ $TEST_SUITE == 'functional' ]; then codecept run functional --verbose --steps -g AdobeStockIntegration -c dev/tests/acceptance/codeception.yml; fi
 after_success:
   - if [ $TEST_SUITE == 'unit' ]; then cd ../ && travis_retry coveralls; fi

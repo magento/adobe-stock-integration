@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\GetByIdInterface;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;

@@ -3,7 +3,7 @@
     "description": "Magento module responsible for Adobe Stock assets handling on Magento side",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*"
+        "magento/framework": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -17,6 +17,5 @@
         "psr-4": {
             "Magento\\AdobeStockAssetApi\\": ""
         }
-    },
-    "version": "1.0.0"
+    }
 }

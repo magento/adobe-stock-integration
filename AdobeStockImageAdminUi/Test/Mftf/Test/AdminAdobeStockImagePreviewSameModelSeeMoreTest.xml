@@ -9,8 +9,10 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockImagePreviewSameModelSeeMoreTest">
         <annotations>
-            <stories value="Cover scenario: User sees images with the same model as the currently viewed one, then clicks the see more button to filter images"/>
-            <title value="Admin should be able to see grid filtered by images with the same model"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #32] User searches for images with the same model as the currently viewed one"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/347"/>
+            <title value="User searches for images from the same model as the currently viewed one"/>
             <description value="User sees images with the same model filtered grid"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_preview"/>

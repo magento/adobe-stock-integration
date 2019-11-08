@@ -11,9 +11,13 @@
     <test name="AdminAdobeStockSignInSignOutTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
-            <stories value="Admin User is logged into Admin Panel and User signs out from Stock"/>
-            <title value="Admin User is logged into Admin Panel and User signs out from Stock"/>
-            <description value="Admin User is logged into Admin Panel and User signs out from Stock"/>
+            <stories value="[Story #21] Adobe Sign-in"/>
+            <stories value="[Story #36] User signs out from Stock"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/308"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/389"/>
+            <title value="Admin User is logged into Admin Panel and User signs in and out from Stock"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579351"/>
+            <description value="Admin User is logged into Admin Panel and User signs in and out from Stock"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_grid"/>
             <group value="adobe_stock_integration"/>

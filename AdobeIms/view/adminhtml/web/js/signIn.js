@@ -15,7 +15,7 @@ define([
             profileUrl: 'adobe_ims/user/profile',
             logoutUrl: 'adobe_ims/user/logout',
             defaultProfileImage:
-              'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
+                'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
             user: {
                 isAuthorized: false,
                 name: '',
@@ -83,6 +83,7 @@ define([
             $.ajax({
                 type: 'POST',
                 url: this.profileUrl,
+                showLoader: true,
                 data: {
                     'form_key': window.FORM_KEY
                 },
