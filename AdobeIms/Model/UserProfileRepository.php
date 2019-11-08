@@ -21,6 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class UserProfileRepository implements UserProfileRepositoryInterface
 {
     private const ID = 'id';
+    private const ADMIN_USER_ID = 'admin_user_id';
 
     /**
      * @var ResourceModel\UserProfile
@@ -88,7 +89,7 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     public function getByUserId(int $userId): UserProfileInterface
     {
         $entity = $this->entityFactory->create();
-        $this->resource->load($entity, $userId, self::ID);
+        $this->resource->load($entity, $userId, self::ADMIN_USER_ID);
         if (!$entity->getId()) {
             throw new NoSuchEntityException(__('The user profile wasn\'t found.'));
         }
