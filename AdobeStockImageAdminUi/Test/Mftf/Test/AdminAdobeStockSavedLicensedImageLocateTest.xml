@@ -26,9 +26,23 @@
             <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
             <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
             <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
+                <argument name="query" value="{{AdobeStockConfigDataPreviewedLicensedSavedImage.value}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
+            <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
+            <waitForPageLoad stepKey="waitForPromptModal"/>
+            <grabValueFrom selector="{{AdobeStockImagePreviewSection.generatedImageName}}" stepKey="grabSaveImageFileName"/>
+            <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+            <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
+            <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="assertSavedImage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
         </before>
         <after>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
+                <argument name="generatedImageName" value="{$grabImageFileName}"/>
+            </actionGroup>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertAdobeUserLoggedOut"/>
@@ -41,7 +55,7 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
         <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.locateImage}}" userInput="name" stepKey="grabImageFileName"/>
         <click selector="{{AdobeStockImagePreviewSection.locateImage}}" stepKey="clickLocate"/>
-        <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
+        <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage"/>
     </test>
 </tests>
