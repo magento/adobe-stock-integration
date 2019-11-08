@@ -5,7 +5,7 @@
 define([
     'jquery',
     'uiLayout',
-    'Magento_AdobeUi/js/components/grid/column/image-preview'
+    'Magento_Ui/js/components/grid/column/image-preview'
 ], function ($, layout, imagePreview) {
     'use strict';
 
