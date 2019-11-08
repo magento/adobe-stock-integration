@@ -10,10 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockLocalizationTest">
         <annotations>
-            <stories value="User sees stock image attributes localized"/>
-            <title value="Admin should be able to sees stock image attributes localized"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #18] User sees stock image attributes localized"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/41"/>
+            <title value="User sees stock image attributes localized"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218880"/>
             <description value="Admin should be able to sees stock image attributes localized"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <group value="adobe_stock_integration_general"/>
             <group value="adobe_stock_integration"/>
         </annotations>
