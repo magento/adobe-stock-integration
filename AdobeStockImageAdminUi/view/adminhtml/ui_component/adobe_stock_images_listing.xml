@@ -171,24 +171,24 @@
             </filterInput>
         </filters>
     </listingToolbar>
-    <columns name="adobe_stock_images_columns" component="Magento_Ui/js/components/grid/masonry">
+    <columns name="adobe_stock_images_columns" component="Magento_Ui/js/grid/masonry" template="ui/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
             </item>
         </argument>
-        <column name="overlay" component="Magento_Ui/js/components/grid/column/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\LicensedOverlay">
+        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\LicensedOverlay">
             <settings>
                 <label translate="true">Overlay</label>
-                <bodyTmpl>Magento_Ui/grid/column/overlay</bodyTmpl>
+                <bodyTmpl>ui/grid/columns/overlay</bodyTmpl>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_Ui/js/components/grid/column/image">
+        <column name="thumbnail_url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_Ui/js/grid/columns/image">
             <settings>
                 <label translate="true">Thumbnail Image</label>
-                <bodyTmpl>Magento_Ui/grid/column/image</bodyTmpl>
+                <bodyTmpl>ui/grid/columns/image</bodyTmpl>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
