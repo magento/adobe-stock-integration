@@ -27,7 +27,7 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_CATEGORY_ID_ADOBE_STOCK_CATEGORY_ID" table="adobe_stock_asset" column="category_id" referenceTable="adobe_stock_category" referenceColumn="id" onDelete="SET NULL"/>
         <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID" table="adobe_stock_asset" column="creator_id" referenceTable="adobe_stock_creator" referenceColumn="id" onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_MEDIA_GALLERY_ID_ADOBE_STOCK" table="adobe_stock_asset" column="media_gallery_id" referenceTable="media_gallery_asset" referenceColumn="id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="ADOBE_STOCK_ASSET_MEDIA_GALLERY_ID_MEDIA_GALLERY_ASSET_ID" table="adobe_stock_asset" column="media_gallery_id" referenceTable="media_gallery_asset" referenceColumn="id" onDelete="CASCADE"/>
     </table>
     <table name="adobe_stock_category" resource="default" engine="innodb" comment="Adobe Stock Category">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
