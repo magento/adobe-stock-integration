@@ -58,7 +58,7 @@ define([
          */
         login: function () {
             var self = this; // TODO Please bind this properly
-            
+
             return new window.Promise(function (resolve, reject) {
                 if (self.user().isAuthorized) {
                     return resolve();
