@@ -44,7 +44,7 @@ class GetImageTest extends TestCase
     private $jsonMock;
 
     /**
-     * @var LoggerInterface $logger
+     * @var LoggerInterface|MockObject $logger
      */
     private $logger;
 
