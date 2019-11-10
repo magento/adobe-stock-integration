@@ -19,7 +19,7 @@ define([
             buyCreditsUrl: 'https://stock.adobe.com/',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            tabImagesLimit: 4,
+            tabImagesLimit: 5,
             modules: {
                 keywords: '${ $.name }_keywords',
                 related: '${ $.name }_related',
@@ -155,8 +155,8 @@ define([
                     'limit': this.tabImagesLimit
                 }
             }).done(function (data) {
-                record.series(data.result['same_series']);
-                record.model(data.result['same_model']);
+                record.series(data.result['same_series'].splice(1));
+                record.model(data.result['same_model'].splice(1));
                 this.updateHeight();
             }.bind(this));
         },
