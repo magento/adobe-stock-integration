@@ -25,6 +25,7 @@ env:
     - MAGENTO_HOST_NAME="magento2.travis"
   matrix:
     - TEST_SUITE=unit
+    - TEST_SUITE=phpstan
 matrix:
   fast_finish: true
 cache:
@@ -49,5 +50,6 @@ before_script:
   - ./dev/travis/before_script.sh
 script:
   - if [ $TEST_SUITE == 'unit' ]; then phpunit --configuration dev/tests/unit/phpunit.xml; fi
+  - if [ $TEST_SUITE == 'phpstan' ]; then composer require --dev phpstan/phpstan fooman/phpstan-magento2-magic-methods && phpstan analyse -l 0 ../ext -a dev/tests/api-functional/framework/autoload.php ; fi
 after_success:
   - if [ $TEST_SUITE == 'unit' ]; then cd ../ && travis_retry coveralls; fi
