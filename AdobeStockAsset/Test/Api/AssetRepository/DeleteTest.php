@@ -67,8 +67,8 @@ class DeleteTest extends WebapiAbstract
      */
     public function testDeleteWithException(): void
     {
+        $notExistedAssetId = -1;
         try {
-            $notExistedAssetId = -1;
             $this->deleteAsset($notExistedAssetId);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
