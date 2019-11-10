@@ -52,7 +52,7 @@ class DeleteTest extends WebapiAbstract
     {
         $response = $this->deleteAsset($this->getAssetId());
 
-        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+        if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
             $this->assertSame([], $response);
         } else {
             $this->assertNull($response);
@@ -72,11 +72,11 @@ class DeleteTest extends WebapiAbstract
             $this->deleteAsset($notExistedAssetId);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($notExistedAssetId, $errorData['parameters'][0]);
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            } elseif (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
             } else {
                 throw $e;
@@ -103,7 +103,7 @@ class DeleteTest extends WebapiAbstract
             ],
         ];
 
-        return (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
+        return (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_SOAP)
             ? $this->_webApiCall($serviceInfo, ['id' => $assetId])
             : $this->_webApiCall($serviceInfo);
     }
