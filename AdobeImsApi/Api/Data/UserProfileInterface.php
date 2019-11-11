@@ -79,7 +79,7 @@ interface UserProfileInterface extends ExtensibleDataInterface
      * Set's user profile image.
      *
      * @param string $value
-     * @return void|null
+     * @return void
      */
     public function setImage(string $value): void;
 

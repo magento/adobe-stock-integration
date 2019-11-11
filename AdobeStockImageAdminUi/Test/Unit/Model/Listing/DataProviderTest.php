@@ -143,9 +143,9 @@ class DataProviderTest extends TestCase
 
     /**
      * @param array $itemsData
-     * @return SearchResultInterface|MockObject
+     * @return MockObject
      */
-    private function getSearchResult(array $itemsData): SearchResultInterface
+    private function getSearchResult(array $itemsData): MockObject
     {
         $items = [];
 

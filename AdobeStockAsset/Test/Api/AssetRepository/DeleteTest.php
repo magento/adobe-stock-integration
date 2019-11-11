@@ -30,7 +30,7 @@ class DeleteTest extends WebapiAbstract
     private $objectManager;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
     private $assetCollectionFactory;
 

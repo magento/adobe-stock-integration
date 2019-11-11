@@ -32,7 +32,7 @@ class GetByIdTest extends WebapiAbstract
     private $objectManager;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
     private $assetCollectionFactory;
 

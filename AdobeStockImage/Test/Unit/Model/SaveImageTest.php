@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
@@ -180,9 +181,9 @@ class SaveImageTest extends TestCase
      * Get document
      *
      * @param string|null $path
-     * @return Document|MockObject
+     * @return MockObject
      */
-    private function getDocument(?string $path = null): Document
+    private function getDocument(?string $path = null): MockObject
     {
         $document = $this->createMock(Document::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);
