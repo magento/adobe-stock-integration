@@ -19,7 +19,7 @@ define([
             buyCreditsUrl: 'https://stock.adobe.com/',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            tabImagesLimit: 5,
+            tabImagesLimit: 4,
             modules: {
                 keywords: '${ $.name }_keywords',
                 related: '${ $.name }_related',
@@ -152,7 +152,7 @@ define([
                 showLoader: true,
                 data: {
                     'image_id': record.id,
-                    'limit': this.tabImagesLimit
+                    'limit': this.tabImagesLimit + 1
                 }
             }).done(function (data) {
                 record.series(data.result['same_series'].splice(1));

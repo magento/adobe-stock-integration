@@ -17,7 +17,6 @@ define([
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             serieFilterValue: '',
             modelFilterValue: '',
-            relatedPreviewLimit: 4,
             selectedTab: null,
             statefull: {
                 serieFilterValue: true,
@@ -76,7 +75,7 @@ define([
          * @returns boolean
          */
         canShowMoreSeriesImages: function (record) {
-            return parseInt(record.series().length, 10) >= this.relatedPreviewLimit;
+            return parseInt(record.series().length, 10) >= this.preview().tabImagesLimit;
         },
 
         /**
@@ -96,7 +95,7 @@ define([
          * @returns boolean
          */
         canShowMoreModelImages: function (record) {
-            return parseInt(record.model().length, 10) >= this.relatedPreviewLimit;
+            return parseInt(record.model().length, 10) >= this.preview().tabImagesLimit;
         },
 
         /**
