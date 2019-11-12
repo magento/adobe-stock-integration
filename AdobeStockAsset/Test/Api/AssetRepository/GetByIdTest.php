@@ -32,7 +32,7 @@ class GetByIdTest extends WebapiAbstract
     private $objectManager;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
     private $assetCollectionFactory;
 
@@ -70,19 +70,19 @@ class GetByIdTest extends WebapiAbstract
         $expectedMessage = 'Object with id "%1" does not exist.';
 
         try {
-            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $this->_webApiCall($serviceInfo);
             } else {
                 $this->_webApiCall($serviceInfo, ['id' => $notExistedAssetId]);
             }
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($expectedMessage, $errorData['message']);
                 self::assertEquals($notExistedAssetId, $errorData['parameters'][0]);
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            } elseif (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault($e, $expectedMessage, 'env:Sender', [1 => $notExistedAssetId]);
             } else {
@@ -112,7 +112,7 @@ class GetByIdTest extends WebapiAbstract
             ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+        if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
             $assetResultData = $this->_webApiCall($serviceInfo);
         } else {
             $assetResultData = $this->_webApiCall($serviceInfo, ['id' => $assetId]);

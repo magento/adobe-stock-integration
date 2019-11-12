@@ -81,7 +81,7 @@ class GetToken implements GetTokenInterface
         );
 
         $tokenResponse = $this->json->unserialize($curl->getBody());
-        /** @var TokenResponse $tokenResponse */
+        /** @var TokenResponseInterface $tokenResponse */
         $tokenResponse = $this->tokenResponseFactory->create()
             ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')]);
 
