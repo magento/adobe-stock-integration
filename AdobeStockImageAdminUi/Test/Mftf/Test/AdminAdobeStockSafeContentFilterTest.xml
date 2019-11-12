@@ -29,7 +29,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPear">
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForCars">
             <argument name="query" value="cars"/>
         </actionGroup>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithoutSafeFilter"/>
