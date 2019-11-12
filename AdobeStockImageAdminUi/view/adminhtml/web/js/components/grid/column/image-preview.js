@@ -32,7 +32,8 @@ define([
                 },
                 {
                     component: 'Magento_AdobeStockImageAdminUi/js/components/grid/column/preview/related',
-                    name: '${ $.name }_related'
+                    name: '${ $.name }_related',
+                    provider: '${ $.provider }'
                 },
                 {
                     component: 'Magento_AdobeStockImageAdminUi/js/components/grid/column/preview/actions',
