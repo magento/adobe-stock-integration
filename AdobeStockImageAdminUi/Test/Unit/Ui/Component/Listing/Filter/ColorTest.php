@@ -177,7 +177,7 @@ class ColorTest extends TestCase
         $color->prepare();
     }
 
-    private function verifyApplyFilter(string $appliedValue, Filter $filter, ContextInterface $context): void
+    private function verifyApplyFilter(string $appliedValue, Filter $filter, MockObject $context): void
     {
         $this->filterBuilder->expects($this->once())
             ->method('setConditionType')
@@ -207,9 +207,9 @@ class ColorTest extends TestCase
      * Get wrapped component
      *
      * @param ContextInterface $context
-     * @return MockObject|UiComponentInterface
+     * @return MockObject
      */
-    private function getWrappedComponent(ContextInterface $context): UiComponentInterface
+    private function getWrappedComponent(ContextInterface $context): MockObject
     {
         $wrappedComponent = $this->createMock(UiComponentInterface::class);
         $wrappedComponent->expects($this->once())

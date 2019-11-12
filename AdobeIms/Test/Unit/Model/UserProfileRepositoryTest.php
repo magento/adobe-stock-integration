@@ -62,7 +62,10 @@ class UserProfileRepositoryTest extends TestCase
     public function testSave(): void
     {
         $userProfile = $this->objectManager->getObject(UserProfile::class);
-        $this->assertNull($this->model->save($userProfile));
+        $this->resource->expects($this->once())
+            ->method('save')
+            ->with($userProfile);
+        $this->model->save($userProfile);
     }
 
     /**

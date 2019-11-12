@@ -28,7 +28,7 @@ class Logout extends Action
     public const ADMIN_RESOURCE = 'Magento_AdobeIms::logout';
 
     /**
-     * @var CurlFactory
+     * @var LogOutInterface
      */
     private $logout;
 

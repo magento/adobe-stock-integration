@@ -19,6 +19,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\User\Api\Data\UserInterface;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeImsApi\Api\GetImageInterface;
 
@@ -107,7 +108,7 @@ class Callback extends Action
             $userProfile->setName($tokenResponse->getName());
             $userProfile->setEmail($tokenResponse->getEmail());
             $userProfile->setImage($userImage);
-            $userProfile->setUserId((int)$this->_auth->getUser()->getId());
+            $userProfile->setUserId((int)$this->getUser()->getId());
             $userProfile->setAccessToken($tokenResponse->getAccessToken());
             $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
             $userProfile->setAccessTokenExpiresAt(
@@ -152,11 +153,25 @@ class Callback extends Action
     {
         try {
             return $this->userProfileRepository->getByUserId(
-                (int)$this->_auth->getUser()->getId()
+                (int)$this->getUser()->getId()
             );
         } catch (NoSuchEntityException $e) {
             return $this->userProfileFactory->create();
         }
+    }
+
+    /**
+     * Get Authorised User
+     *
+     * @return UserInterface
+     */
+    private function getUser(): UserInterface
+    {
+        if (!$this->_auth->getUser() instanceof UserInterface) {
+            throw new \RuntimeException('Auth user object must be an instance of UserInterface');
+        }
+
+        return $this->_auth->getUser();
     }
 
     /**
