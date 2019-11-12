@@ -21,10 +21,6 @@ define([
                 chips: '${ $.chipsProvider }',
                 preview: '${ $.parentName }.preview'
             },
-            exports: {
-                inputValue: '${ $.provider }:params.search',
-                chipInputValue: '${ $.searchChipsProvider }:value'
-            }
         },
 
         /**
@@ -79,8 +75,7 @@ define([
          */
         searchByKeyWord: function (keyword) {
             _.invoke(this.chips().elems(), 'clear');
-            this.inputValue(keyword);
-            this.chipInputValue(keyword);
+            _.invoke(this.chips().elems(), 'apply', keyword);
         }
     });
 });
