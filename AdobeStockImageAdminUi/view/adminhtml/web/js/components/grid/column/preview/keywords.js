@@ -20,7 +20,7 @@ define([
                 searchChips: '${ $.searchChipsProvider }',
                 chips: '${ $.chipsProvider }',
                 preview: '${ $.parentName }.preview'
-            },
+            }
         },
 
         /**
