@@ -144,7 +144,6 @@ define([
                         displayedRecord['is_licensed_locally'] = 1;
                     }
                     this.source().set('params.t ', Date.now());
-                    this.preview().hide();
                     this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
