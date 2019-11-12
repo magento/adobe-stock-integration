@@ -175,10 +175,12 @@ class SignInTest extends TestCase
             $result = $this->signInBlock->getComponentJsonConfig();
 
             self::assertEquals(
-                $this->jsonHexTag->serialize(array_replace_recursive(
-                    $this->getDefaultComponentConfig($userData),
-                    $this->getConfigProvideConfig()
-                )),
+                $this->jsonHexTag->serialize(
+                    array_replace_recursive(
+                        $this->getDefaultComponentConfig($userData),
+                        $this->getConfigProvideConfig()
+                    )
+                ),
                 $result
             );
         }

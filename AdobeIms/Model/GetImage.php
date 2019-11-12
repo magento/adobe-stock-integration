@@ -40,7 +40,6 @@ class GetImage implements GetImageInterface
      */
     private $json;
 
-
     /**
      * @param LoggerInterface $logger
      * @param CurlFactory $curlFactory
