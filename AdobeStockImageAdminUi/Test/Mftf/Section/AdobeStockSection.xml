@@ -27,7 +27,7 @@
         <element name="adobeImsPopupUserEmail" type="button" selector="#adobeid_username"/>
         <element name="adobeImsPopUpUserPassword" type="button" selector="#adobeid_password"/>
         <element name="adobeImsPopupUserSignIn" type="button" selector="#sign_in"/>
-        <element name="adobeSkipAddPhoneNumber" type="button" selector="#skip"/>
+        <element name="adobeSkipAddPhoneNumber" type="button" selector="#cancelBtn"/>
         <element name="userImageSmall" type="text" selector=".adobe-profile-image-small"/>
         <element name="userNameButton" type="button" selector=".adobe-user-name"/>
         <element name="userQuota" type="block" selector=".adobe-stock-user-quota"/>
