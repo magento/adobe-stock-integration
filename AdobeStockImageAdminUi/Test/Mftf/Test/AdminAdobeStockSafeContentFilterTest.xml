@@ -34,7 +34,7 @@
         </actionGroup>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithoutSafeFilter"/>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AdminUserApplySafeSearchFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AdminUserApplySafeSearchFilterActionGroup" stepKey="applySafeSearchFilter"/>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
         <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutSafeFilter</actualResult>
