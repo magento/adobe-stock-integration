@@ -15,7 +15,7 @@
         </div>
     <!-- /ko -->
 </ul>
-<button class="action-secondary" type="button" data-bind="visible: !isDownloaded(), click: function(){ savePreview() }">
+<button class="action-secondary" type="button" data-bind="visible: !isDownloaded() && !isLicensed(), click: function(){ savePreview() }">
     <span translate="'Save Preview'"/>
 </button>
 <button class="action-secondary" type="button" data-bind="visible: isDownloaded(), click: function(){ locate() }">
@@ -24,6 +24,10 @@
 <button class="action-default primary"
         type="button"
         attr="title: getLicenseButtonTitle()"
-        data-bind="visible: !isLicensedLocally(), click: function () { licenseProcess(); }">
+        data-bind="visible: !isLicensedLocally() && !isLicensed(), click: function () { licenseProcess(); }">
     <span data-bind="text: getLicenseButtonTitle()"></span>
 </button>
+<button class="action-default primary" type="button" data-bind="visible: isLicensed(), click: function () { saveLicensed(); }">
+    <span translate="'Save'"></span>
+</button>
+

@@ -5,8 +5,9 @@
 define([
     'Magento_Ui/js/grid/listing',
     'jquery',
-    'ko'
-], function (Listing, $, ko) {
+    'ko',
+    'underscore'
+], function (Listing, $, ko, _) {
     'use strict';
 
     return Listing.extend({
@@ -48,7 +49,24 @@ define([
              * Maximum image height value
              * @param int
              */
-            maxImageHeight: 240
+            maxImageHeight: 240,
+
+            /**
+             * The value is minimum image width to height ratio when container width is less than the key
+             * @param {Object}
+             */
+            containerWidthToMinRatio: {
+                640: 3,
+                1280: 5,
+                1920: 8
+            },
+
+            /**
+             * Default minimal image width to height ratio.
+             * Applied when container width is greater than max width in the containerWidthToMinRatio matrix.
+             * @param int
+             */
+            defaultMinRatio: 10
         },
 
         /**
@@ -71,7 +89,7 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
-            if (!rows || !rows.length) {
+            if (!rows.length) {
                 return;
             }
             this.imageMargin = parseInt(this.imageMargin, 10);
@@ -182,7 +200,7 @@ define([
                     this.waitForContainer(callback);
                 }.bind(this), 500);
             } else {
-                callback();
+                setTimeout(callback, 0);
             }
         },
 
@@ -229,15 +247,23 @@ define([
          * Set min ratio for images in layout
          */
         setMinRatio: function () {
-            if (this.containerWidth <= 640) {
-                this.minRatio = 3;
-            } else if (this.containerWidth <= 1280) {
-                this.minRatio = 5;
-            } else if (this.containerWidth <= 1920) {
-                this.minRatio = 8;
-            } else {
-                this.minRatio = 10;
-            }
+            var minRatio = _.find(
+                this.containerWidthToMinRatio,
+
+                /**
+                 * Find the minimal ratio for container width in the matrix
+                 *
+                 * @param {Number} ratio
+                 * @param {Number} width
+                 * @returns {Boolean}
+                 */
+                function (ratio, width) {
+                    return this.containerWidth <= width;
+                },
+                this
+            );
+
+            this.minRatio = minRatio ? minRatio : this.defaultMinRatio;
         },
 
         /**
@@ -254,7 +280,7 @@ define([
          *
          * @returns {String|null}
          */
-        getErrorMessage: function () {
+        getErrorMessageUnsanitizedHtml: function () {
             return this.errorMessage();
         }
     });

@@ -32,11 +32,13 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- verify that user can search adobe stock image in ru_RU locale -->
-        <actionGroup ref="AdminAdobeStockOpenSearchModalActionGroup" stepKey="openSearchModal"/>
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
             <argument name="query" value="Автомобили"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <!-- TODO: the following assertion/requirement on the specific keyword we expect wont work as we have no guarantee on the exact keyword to use as the image could be random -->
         <seeElement selector="{{AdobeStockImagePreviewSection.keyword('Авто')}}" stepKey="assertAttributeLocalized"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.attributeTitle('Транспорт')}}" stepKey="assertCategoryLocalized"/>
     </test>

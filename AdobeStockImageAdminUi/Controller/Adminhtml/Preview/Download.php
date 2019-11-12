@@ -22,11 +22,8 @@ use Psr\Log\LoggerInterface;
 class Download extends Action
 {
     private const HTTP_OK = 200;
-
     private const HTTP_BAD_REQUEST = 400;
-
     private const HTTP_INTERNAL_ERROR = 500;
-
     private const IMAGE_URL_FIELD = 'thumbnail_500_url';
 
     /**

@@ -9,7 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\AdobeStockImageApi\Api\GetImageListInterface" type="Magento\AdobeStockImage\Model\GetImageList"/>
     <preference for="Magento\AdobeStockImageApi\Api\SaveImageInterface" type="Magento\AdobeStockImage\Model\SaveImage"/>
+    <preference for="Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface" type="Magento\AdobeStockImage\Model\SaveLicensedImage"/>
     <preference for="Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface" type="Magento\AdobeStockImage\Model\GetRelatedImages"/>
+    <preference for="Magento\AdobeStockImageApi\Api\ConfigInterface" type="Magento\AdobeStockImage\Model\Config"/>
 
     <type name="Magento\AdobeStockImage\Model\GetImageList">
         <arguments>

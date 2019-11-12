@@ -26,11 +26,6 @@ class GetImage implements GetImageInterface
     private $logger;
 
     /**
-     * @var  ScopeConfigInterface $scopeConfig
-     */
-    private $scopeConfig;
-
-    /**
      * @var CurlFactory
      */
     private $curlFactory;
@@ -48,20 +43,17 @@ class GetImage implements GetImageInterface
 
     /**
      * @param LoggerInterface $logger
-     * @param ScopeConfigInterface $scopeConfig
      * @param CurlFactory $curlFactory
      * @param ConfigInterface $config
      * @param Json $json
      */
     public function __construct(
         LoggerInterface $logger,
-        ScopeConfigInterface $scopeConfig,
         CurlFactory $curlFactory,
         ConfigInterface $config,
         Json $json
     ) {
         $this->logger = $logger;
-        $this->scopeConfig = $scopeConfig;
         $this->curlFactory = $curlFactory;
         $this->config = $config;
         $this->json = $json;

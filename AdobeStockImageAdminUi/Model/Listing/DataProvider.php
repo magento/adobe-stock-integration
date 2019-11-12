@@ -15,11 +15,12 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
  * DataProvider of customer addresses for customer address grid.
  */
-class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
+class DataProvider extends UiComponentDataProvider
 {
     /**
      * @var GetImageListInterface

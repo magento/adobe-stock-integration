@@ -43,7 +43,7 @@ class DataProviderTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->getImageListMock = $this->createMock(GetImageListInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);

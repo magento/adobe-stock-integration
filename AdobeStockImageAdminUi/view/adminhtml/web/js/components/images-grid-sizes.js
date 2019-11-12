@@ -14,6 +14,11 @@ define([
             maxSize: 64
         },
 
+        exports: {
+            value: '${ $.provider }:params.paging.page',
+            options: '${ $.provider }:params.paging.options'
+        },
+
         sizes: {
             '32': {
                 value: 32,
