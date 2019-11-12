@@ -15,11 +15,11 @@
             <title value="Admin is able to set the image name on saving the image preview"/>
             <description value="Admin is able to set the image name on saving the image preview"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_general"/>
+            <group value="adobe_stock_integration_filters"/>
+            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteSelectedAdobeStockImagePreviewActionGroup" stepKey="removeSavedPreview"/>

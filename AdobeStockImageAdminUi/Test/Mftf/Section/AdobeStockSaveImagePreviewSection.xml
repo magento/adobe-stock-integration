@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockSaveImagePreviewSection">
         <element name="name" type="text" selector=".adobe-stock-save-preview-prompt input.admin__control-text[name='name']"/>
-        <element name="mediaImage" type="text" selector="img[alt='{{name}}.jpeg']" parameterized="true"/>
+        <element name="mediaImage" type="text" selector=".main-col .filecnt img[alt='{{name}}.jpeg']" parameterized="true"/>
     </section>
 </sections>
