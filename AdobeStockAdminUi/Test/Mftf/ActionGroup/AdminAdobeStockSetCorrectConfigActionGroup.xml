@@ -8,19 +8,17 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAdobeStockSetConfigActionGroup">
+    <actionGroup name="AdminAdobeStockSetCorrectConfigActionGroup">
         <arguments>
             <argument name="enabled" type="string" defaultValue="{{AdobeStockConfigDataEnabled.value}}"/>
-            <argument name="apiKey" type="string"/>
-            <argument name="privateKey" type="string"/>
         </arguments>
         <amOnPage url="{{AdminConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{AdminConfigSystemSection.adobeStockIntegration}}" stepKey="scrollToAdobeStockIntegrationSection"/>
         <conditionalClick stepKey="expandAdobeStockIntegrationTab" selector="{{AdminConfigSystemSection.adobeStockIntegration}}" dependentSelector="{{AdminConfigSystemSection.isEnabledField}}" visible="false" />
         <selectOption userInput="{{enabled}}" selector="{{AdminConfigSystemSection.isEnabledField}}" stepKey="enableOrDisableAdobeStock"/>
-        <fillField userInput="{{apiKey}}" selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="enterAdobeStockApiKey"/>
-        <fillField userInput="{{privateKey}}" selector="{{AdminConfigSystemSection.privateKeyField}}" stepKey="enterAdobeStockPrivateKey"/>
+        <fillField userInput="{{_CREDS.magento/ADOBE_STOCK_API_KEY}}" selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="enterAdobeStockApiKey"/>
+        <fillField userInput="{{_CREDS.magento/ADOBE_STOCK_PRIVATE_KEY}}" selector="{{AdminConfigSystemSection.privateKeyField}}" stepKey="enterAdobeStockPrivateKey"/>
         <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveConfiguration"/>
         <waitForPageLoad stepKey="waitForConfigurationToSave"/>
     </actionGroup>
