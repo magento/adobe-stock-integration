@@ -17,7 +17,10 @@ define([
          */
         getStyles: function (record) {
             var height = record.styles()['height'].replace('px', '');
-            return {top: (height - 50) + 'px'};
+
+            return {
+                top: (height - 50) + 'px'
+            };
         }
     });
 });
