@@ -15,13 +15,13 @@
             'col-xs-10': hasChild('listing_massaction'),
             'col-xs-12': !hasChild('listing_massaction')">
             <div class="row">
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <div class="masonry-results-number" ko-scope="requestChild('listing_paging')">
                         <render args="totalTmpl"/>
                     </div>
                     <each args="getRegion('sorting')" render=""/>
                 </div>
-                <div class="col-xs-8" ko-scope="requestChild('listing_paging')">
+                <div class="col-xs-7" ko-scope="requestChild('listing_paging')">
                     <div render=""/>
                 </div>
             </div>
