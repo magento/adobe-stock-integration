@@ -8,7 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockImagePreviewSection">
-        <element name="save" type="block" selector="//button[@class='action-secondary']/span[contains(.,'Save Preview')]"/>
+        <element name="savePreview" type="button" selector="//button[@class='action-secondary']//span[text()='Save Preview']"/>
+        <element name="locateImage" type="button" selector="//button[@class='action-secondary']//span[text()='Locate']"/>
         <element name="image" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="navigation" type="button" selector="//div[@class='masonry-image-preview']//div[contains(@class, 'action-buttons')]/button[@class='action-{{type}}']" parameterized="true"/>
         <element name="attribute" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='{{type}}']/parent::div//div[@class='value']//span" parameterized="true"/>
