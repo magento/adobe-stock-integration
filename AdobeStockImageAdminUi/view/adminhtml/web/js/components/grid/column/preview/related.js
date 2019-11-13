@@ -65,7 +65,12 @@ define([
          * @returns {*[]}
          */
         getSeries: function (record) {
-            return record.series;
+            if (this.preview().displayedRecord().series) {
+                return this.preview().displayedRecord().series();
+            }
+            else {
+                return record.series;
+            }
         },
 
         /**
@@ -75,7 +80,12 @@ define([
          * @returns boolean
          */
         canShowMoreSeriesImages: function (record) {
-            return parseInt(record.series().length, 10) >= this.preview().tabImagesLimit;
+            if (this.preview().displayedRecord().series) {
+                return parseInt(this.preview().displayedRecord().series().length, 10) >= this.preview().tabImagesLimit;
+            }
+            else {
+                return parseInt(record.series().length, 10) >= this.preview().tabImagesLimit;
+            }
         },
 
         /**
@@ -85,7 +95,12 @@ define([
          * @returns {*[]}
          */
         getModel: function (record) {
-            return record.model;
+            if (this.preview().displayedRecord().model) {
+                return this.preview().displayedRecord().model();
+            }
+            else {
+                return record.model;
+            }
         },
 
         /**
@@ -95,7 +110,12 @@ define([
          * @returns boolean
          */
         canShowMoreModelImages: function (record) {
-            return parseInt(record.model().length, 10) >= this.preview().tabImagesLimit;
+            if (this.preview().displayedRecord().model) {
+                return parseInt(this.preview().displayedRecord().model().length, 10) >= this.preview().tabImagesLimit;
+            }
+            else {
+                return parseInt(record.model().length, 10) >= this.preview().tabImagesLimit;
+            }
         },
 
         /**
