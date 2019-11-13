@@ -31,6 +31,7 @@
         </after>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <!-- Verify view all button and numbers of keywords-->
+        <scrollTo selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="scrollToViewAllButton" />
         <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>
         <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCount">
@@ -40,7 +41,7 @@
         <click selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="clickOnViewAlKeywords"/>
         <!-- Verify that keywords expanded -->
         <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterClickViewAll">
-            <argument name="keywordsNumber" value="28"/>
+            <argument name="keywordsNumber" value="50"/>
         </actionGroup>
         <dontSeeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonDisappears"/>
         <!-- Verify that keywords closed after navigate to next image -->
