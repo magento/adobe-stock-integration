@@ -10,7 +10,7 @@
     <test name="AdminAdobeStockPreviewedNotLicensedImageLocateTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
-            <stories value="User locates preview saved image inside Media Gallery"/>
+            <stories value="User locates preview image in the Media Gallery"/>
             <title value="Adobe Stock Preview Saved Image Locate"/>
             <description value="User can locate previously preview saved and unlicensed image in Media Gallery"/>
             <severity value="CRITICAL"/>
@@ -39,9 +39,6 @@
         </before>
         <after>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
-                <argument name="generatedImageName" value="{$grabImageFileName}"/>
-            </actionGroup>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertAdobeUserLoggedOut"/>
@@ -56,5 +53,8 @@
         <click selector="{{AdobeStockImagePreviewSection.locateImage}}" stepKey="clickLocate"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
         <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage"/>
+        <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
+            <argument name="generatedImageName" value="{$grabImageFileName}"/>
+        </actionGroup>
     </test>
 </tests>
