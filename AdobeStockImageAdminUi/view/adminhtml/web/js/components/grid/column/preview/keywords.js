@@ -12,12 +12,10 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/keywords',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
-            searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
             defaultKeywordsLimit: 5,
             keywordsLimit: 5,
             canViewMoreKeywords: true,
             modules: {
-                searchChips: '${ $.searchChipsProvider }',
                 chips: '${ $.chipsProvider }',
                 preview: '${ $.parentName }.preview'
             }
