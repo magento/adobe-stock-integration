@@ -11,7 +11,7 @@
     <suite name="adobe_stock_integration_suite">
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminAdobeStockSetCorrectConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
         </after>

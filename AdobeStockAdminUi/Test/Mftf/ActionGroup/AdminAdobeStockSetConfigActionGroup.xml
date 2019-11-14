@@ -11,8 +11,8 @@
     <actionGroup name="AdminAdobeStockSetConfigActionGroup">
         <arguments>
             <argument name="enabled" type="string" defaultValue="{{AdobeStockConfigDataEnabled.value}}"/>
-            <argument name="apiKey" type="string"/>
-            <argument name="privateKey" type="string"/>
+            <argument name="apiKey" type="string" defaultValue="{{AdobeStockConfigDataApiKey.value}}"/>
+            <argument name="privateKey" type="string" defaultValue="{{AdobeStockConfigDataPrivateKey.value}}"/>
         </arguments>
         <amOnPage url="{{AdminConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>

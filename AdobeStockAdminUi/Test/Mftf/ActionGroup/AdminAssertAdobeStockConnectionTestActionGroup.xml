@@ -12,7 +12,7 @@
         <fillField userInput="blahblahblah" selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="enterIncorrectAdobeStockApiKey"/>
         <click selector="{{AdminConfigSystemSection.testConnectionButton}}" stepKey="testConnection"/>
         <see selector="{{AdminConfigSystemSection.errorMessage}}" userInput="Connection Failed!" stepKey="seeConnectionFailedMethod"/>
-        <fillField userInput="{{_CREDS.magento/ADOBE_STOCK_API_KEY}}" selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="enterAdobeStockApiKey"/>
+        <fillField userInput="{{AdobeStockConfigDataApiKey.value}}" selector="{{AdminConfigSystemSection.apiKeyField}}" stepKey="enterAdobeStockApiKey"/>
         <click selector="{{AdminConfigSystemSection.testConnectionButton}}" stepKey="testConnection1"/>
         <see selector="{{AdminConfigSystemSection.successMessage}}" userInput="Connection Successful!" stepKey="seeConnectionSuccessfulMessage"/>
     </actionGroup>
