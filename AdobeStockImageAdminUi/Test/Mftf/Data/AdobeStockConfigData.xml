@@ -30,6 +30,6 @@
         <data key="value">{{_CREDS.magento/ADOBE_STOCK_USER_PASSWORD}}</data>
     </entity>
     <entity name="AdobeStockConfigDataUnlicensedImage">
-        <data key="value">{{_ENV.ADOBE_STOCK_UNLICENSED_IMAGE}}</data>
+        <data key="value">{{_CREDS.magento/ADOBE_STOCK_UNLICENSED_IMAGE}}</data>
     </entity>
 </entities>
