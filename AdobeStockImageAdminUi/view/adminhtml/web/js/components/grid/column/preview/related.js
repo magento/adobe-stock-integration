@@ -87,7 +87,7 @@ define([
                 }
             }).done(function (data) {
                 var relatedImages = this.relatedImages();
-                
+
                 relatedImages.series[record.id] = data.result['same_series'];
                 relatedImages.model[record.id] = data.result['same_model'];
                 this.relatedImages(relatedImages);
