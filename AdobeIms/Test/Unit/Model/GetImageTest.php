@@ -76,9 +76,10 @@ class GetImageTest extends TestCase
      * Test save.
      *
      * @dataProvider imagesDataProvider
-     * @param array $testData
+     * @param array $expectedResult
+     * @param string $expectedImageUrl
      */
-    public function testExecute(array $testData): void
+    public function testExecute(array $expectedResult, string $expectedImageUrl): void
     {
         $curl = $this->createMock(Curl::class);
         $this->curlFactoryMock->expects($this->once())
@@ -95,9 +96,9 @@ class GetImageTest extends TestCase
             ->willReturn(null);
         $this->jsonMock->expects($this->once())
             ->method('unserialize')
-            ->willReturn($testData['expected_result']);
+            ->willReturn($expectedResult);
 
-        $this->assertEquals($testData['expected_image_url'], $this->getImage->execute('code'));
+        $this->assertEquals($expectedImageUrl, $this->getImage->execute('code'));
     }
 
     /**
@@ -113,7 +114,6 @@ class GetImageTest extends TestCase
             ->with('Error during get adobe stock user image operation: ')
             ->willReturnSelf();
         $this->getImage->execute('code');
-
     }
 
     /**
@@ -125,22 +125,20 @@ class GetImageTest extends TestCase
     {
         return [
             [
-                [
-                    'expected_result' => [
-                        'user' => [
-                            'images' => [
-                                50 => 'https://mir-s3-cdn-cf.behance.net/user/50/61269e393218159.5d8e3b72bcfb9.jpg',
-                                100 => 'https://mir-s3-cdn-cf.behance.net/user/100/61269e393218159.5d8e3b72bcfb9.jpg',
-                                115 => 'https://mir-s3-cdn-cf.behance.net/user/115/61269e393218159.5d8e3b72bcfb9.jpg',
-                                230 => 'https://mir-s3-cdn-cf.behance.net/user/230/61269e393218159.5d8e3b72bcfb9.jpg',
-                                138 => 'https://mir-s3-cdn-cf.behance.net/user/138/61269e393218159.5d8e3b72bcfb9.jpg',
-                                276 => 'https://mir-s3-cdn-cf.behance.net/user/276/61269e393218159.5d8e3b72bcfb9.jpg',
-                            ],
+                'expected_result' => [
+                    'user' => [
+                        'images' => [
+                            50 => 'https://mir-s3-cdn-cf.behance.net/user/50/61269e393218159.5d8e3b72bcfb9.jpg',
+                            100 => 'https://mir-s3-cdn-cf.behance.net/user/100/61269e393218159.5d8e3b72bcfb9.jpg',
+                            115 => 'https://mir-s3-cdn-cf.behance.net/user/115/61269e393218159.5d8e3b72bcfb9.jpg',
+                            230 => 'https://mir-s3-cdn-cf.behance.net/user/230/61269e393218159.5d8e3b72bcfb9.jpg',
+                            138 => 'https://mir-s3-cdn-cf.behance.net/user/138/61269e393218159.5d8e3b72bcfb9.jpg',
+                            276 => 'https://mir-s3-cdn-cf.behance.net/user/276/61269e393218159.5d8e3b72bcfb9.jpg',
                         ],
-                        'http_code' => 200,
                     ],
-                    'expected_image_url' => 'https://mir-s3-cdn-cf.behance.net/user/276/61269e393218159.5d8e3b72bcfb9.jpg'
-                ]
+                    'http_code' => 200,
+                ],
+                'expected_image_url' => 'https://mir-s3-cdn-cf.behance.net/user/276/61269e393218159.5d8e3b72bcfb9.jpg'
             ]
         ];
     }
