@@ -64,8 +64,10 @@ define([
          * Locate downloaded image in media browser
          */
         locate: function () {
+            var image = mediaGallery.locate(this.preview().displayedRecord().path);
+
             $(this.preview().adobeStockModalSelector).trigger('closeModal');
-            mediaGallery.locate(this.preview().displayedRecord().path);
+            image ? image.click() : mediaGallery.notLocated();
         },
 
         /**
@@ -79,7 +81,8 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
-                            this.save(this.preview().displayedRecord(), fileName);
+                            var displayedRecord = this.preview().displayedRecord();
+                            this.checkImage(fileName, displayedRecord) ? this.save(displayedRecord, fileName) : '';
                         }.bind(this)
                     },
                     'buttons': [{
@@ -246,17 +249,20 @@ define([
 
                         if (canPurchase) {
                             this.getPrompt(
-                                {
+                                 {
                                     'title': title,
                                     'content': baseContent + displayFieldName,
                                     'visible': !this.isDownloaded(),
                                     'actions': {
                                         confirm: function (fileName) {
+                                            var displayedRecord = this.preview().displayedRecord();
+
                                             if (typeof fileName === 'undefined') {
                                                 fileName = filePathArray[imageIndex]
-                                                    .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                                 .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
-                                            licenseAndSave(record, fileName);
+                                            this.checkImage(fileName, displayedRecord) ?
+                                             licenseAndSave(record, fileName) : '';
                                         }
                                     },
                                     'buttons': [{
@@ -300,6 +306,36 @@ define([
                     }
                 }
             );
+        },
+
+        /**
+         * Check if the image with same filename exists.
+         */
+        checkImage: function (fileName, record) {
+            var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
+                path = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record),
+                image = mediaGallery.locate(path);
+
+            if (image) {
+                confirmation({
+                    title: $.mage.__('The image cannot be saved'),
+                    content: $.mage.__('The image with same name exists in the media gallery.'),
+                    buttons: [{
+                        text: $.mage.__('Okay'),
+                        class: 'action-primary',
+                        attr: {},
+
+                        /**
+                         * Close modal on button click
+                         */
+                        click: function (event) {
+                            this.closeModal(event);
+                        }
+                    }]
+                });
+            } else {
+                return true;
+            }
         },
 
         /**
