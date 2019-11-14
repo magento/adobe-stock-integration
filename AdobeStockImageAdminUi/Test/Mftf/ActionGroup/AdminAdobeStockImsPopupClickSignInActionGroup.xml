@@ -11,6 +11,6 @@
     <actionGroup name="AdminAdobeStockImsPopupClickSignInActionGroup">
         <click selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="clickOnSignInButton"/>
         <switchToNextTab stepKey="switchToTab"/>
-        <waitForPageLoad stepKey="waitForLoad"/>
+        <waitForPageLoad stepKey="waitForGridToReload" time="20"/>
     </actionGroup>
 </actionGroups>

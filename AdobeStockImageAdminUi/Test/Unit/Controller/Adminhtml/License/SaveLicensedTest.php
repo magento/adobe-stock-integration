@@ -142,11 +142,11 @@ class SaveLicensedTest extends TestCase
      *
      * @dataProvider exceptionsDataProvider
      *
-     * @param $exception
+     * @param LocalizedException $exception
      * @param int $responseCode
      * @param array $result
      */
-    public function testNotFoundAsset($exception, int $responseCode, array $result): void
+    public function testNotFoundAsset(LocalizedException $exception, int $responseCode, array $result): void
     {
         $mediaId = 283415387;
         $destinationPath = 'destination_path';

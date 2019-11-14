@@ -53,7 +53,7 @@ class FlushUserTokens implements FlushUserTokensInterface
             $userProfile->setAccessToken('');
             $userProfile->setRefreshToken('');
             $this->userProfileRepository->save($userProfile);
-        } catch (\Exception $e) {
+        } catch (\Exception $e) { //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             // User profile and tokens are not present in the system
         }
     }

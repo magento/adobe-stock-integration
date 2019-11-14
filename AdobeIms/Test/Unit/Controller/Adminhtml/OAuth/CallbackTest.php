@@ -126,11 +126,9 @@ class CallbackTest extends TestCase
      */
     public function testExecute(): void
     {
-        $this->authMock->expects($this->exactly(2))
-            ->method('getUser')
+        $this->authMock->method('getUser')
             ->will($this->returnValue($this->userMock));
-        $this->userMock->expects($this->exactly(2))
-            ->method('getId')
+        $this->userMock->method('getId')
             ->willReturn(1);
         $userProfileMock = $this->createMock(UserProfileInterface::class);
         $this->getImage->expects($this->once())->method('execute')->willReturn('https://image.url/image.png');
