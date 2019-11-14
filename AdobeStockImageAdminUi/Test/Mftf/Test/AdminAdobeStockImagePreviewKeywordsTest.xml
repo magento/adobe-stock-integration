@@ -29,22 +29,28 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForCars">
+            <argument name="query" value="cars"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <!-- Verify view all button and numbers of keywords-->
-        <scrollTo selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="scrollToViewAllButton" />
+        <executeJS function="document.querySelector('.keywords').scrollIntoView()" stepKey="scrollToKeywords"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>
         <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCount">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
+        <executeJS function="return document.querySelector('.keywords').childElementCount;" stepKey="expandedKeywordsCount"/>
         <!-- Click view all keywords -->
         <click selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="clickOnViewAlKeywords"/>
         <!-- Verify that keywords expanded -->
-        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterClickViewAll">
-            <argument name="keywordsNumber" value="50"/>
-        </actionGroup>
+        <assertGreaterThan stepKey="assertKeywordsExpanded">
+            <actualResult type="variable">expandedKeywordsCount</actualResult>
+            <expectedResult type="string">5</expectedResult>
+        </assertGreaterThan>
         <dontSeeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonDisappears"/>
         <!-- Verify that keywords closed after navigate to next image -->
+        <executeJS function="document.querySelector('.action-next').scrollIntoView()" stepKey="scrollToActions"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="navigateToPreviousImage"/>
