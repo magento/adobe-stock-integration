@@ -76,7 +76,7 @@ interface AssetInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface|null
+     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetExtensionInterface
      */
     public function getExtensionAttributes(): AssetExtensionInterface;
 

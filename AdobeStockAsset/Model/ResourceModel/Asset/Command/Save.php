@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
-use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Exception\CouldNotSaveException;

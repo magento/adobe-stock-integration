@@ -17,7 +17,7 @@
             "PRIMARY": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID_ADOBE_STOCK_CATEGORY_ID": true,
             "ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID": true,
-            "ADOBE_STOCK_ASSET_MEDIA_GALLERY_ID_ADOBE_STOCK": true
+            "ADOBE_STOCK_ASSET_MEDIA_GALLERY_ID_MEDIA_GALLERY_ASSET_ID": true
         }
     },
     "adobe_stock_category": {

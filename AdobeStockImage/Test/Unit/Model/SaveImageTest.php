@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\AdobeMediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
@@ -180,9 +181,9 @@ class SaveImageTest extends TestCase
      * Get document
      *
      * @param string|null $path
-     * @return Document|MockObject
+     * @return MockObject
      */
-    private function getDocument(?string $path = null): Document
+    private function getDocument(?string $path = null): MockObject
     {
         $document = $this->createMock(Document::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);

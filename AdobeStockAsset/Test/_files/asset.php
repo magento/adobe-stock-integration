@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
-use Magento\AdobeMediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
-use Magento\AdobeMediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
+use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;

@@ -103,10 +103,10 @@ class SignInConfigProviderTest extends TestCase
      *
      * @dataProvider exceptionsDataProvider
      *
-     * @param $exception
+     * @param \Exception $exception
      * @param array $userQuota
      */
-    public function testGettingUserQuotaOnExceptions($exception, array $userQuota): void
+    public function testGettingUserQuotaOnExceptions(\Exception $exception, array $userQuota): void
     {
         $userIsAuthorized = true;
         $quotaUrl = 'http://site.com/adobe_stock/license/quota';

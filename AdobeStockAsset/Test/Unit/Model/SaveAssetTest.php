@@ -6,7 +6,7 @@
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
-use Magento\AdobeMediaGalleryApi\Model\DataExtractorInterface;
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAsset\Model\SaveAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;

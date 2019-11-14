@@ -72,7 +72,7 @@ class LogOut implements LogOutInterface
     }
 
     /**
-     * @return bool
+     * @inheritDoc
      */
     public function execute() : bool
     {

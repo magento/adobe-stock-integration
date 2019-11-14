@@ -12,18 +12,12 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/keywords',
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
-            searchChipsProvider: 'componentType = keyword_search, ns = ${ $.ns }',
             defaultKeywordsLimit: 5,
             keywordsLimit: 5,
             canViewMoreKeywords: true,
             modules: {
-                searchChips: '${ $.searchChipsProvider }',
                 chips: '${ $.chipsProvider }',
                 preview: '${ $.parentName }.preview'
-            },
-            exports: {
-                inputValue: '${ $.provider }:params.search',
-                chipInputValue: '${ $.searchChipsProvider }:value'
             }
         },
 
@@ -64,6 +58,7 @@ define([
             this.keywordsLimit(record.keywords.length);
             this.canViewMoreKeywords(false);
             this.preview().updateHeight();
+            this.preview().scrollToPreview();
         },
 
         /**
@@ -79,8 +74,7 @@ define([
          */
         searchByKeyWord: function (keyword) {
             _.invoke(this.chips().elems(), 'clear');
-            this.inputValue(keyword);
-            this.chipInputValue(keyword);
+            _.invoke(this.chips().elems(), 'apply', keyword);
         }
     });
 });

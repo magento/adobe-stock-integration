@@ -36,7 +36,7 @@ class SaveLicensed extends Action
     private $logger;
 
     /**
-     * @var AttributeInterfaceFactory
+     * @var SaveLicensedImageInterface
      */
     private $saveLicensedImage;
 

@@ -10,8 +10,10 @@
     <test name="AdminAdobeStockPanelTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
-            <stories value="Access Adobe Stock Image panel via the Admin"/>
-            <title value="Admin should be able to access Adobe Stock Image panel"/>
+            <stories value="[Story #1] User accesses stock images from Magento Admin"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/22"/>
+            <title value="User accesses Stock images from Magento"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3198694"/>
             <description value="Admin should be able to access Adobe Stock Image panel"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_general"/>
