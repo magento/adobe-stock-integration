@@ -16,8 +16,11 @@ define([
          * @returns {Object}
          */
         getStyles: function (record) {
-            var height = record.styles()['height'].replace('px', '');
-            return {top: (height - 50) + 'px'};
+            var height = record.styles().height().replace('px', '') - 50;
+
+            return {
+                top: height + 'px'
+            };
         }
     });
 });

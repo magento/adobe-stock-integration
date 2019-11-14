@@ -64,6 +64,7 @@ define([
             this.keywordsLimit(record.keywords.length);
             this.canViewMoreKeywords(false);
             this.preview().updateHeight();
+            this.preview().scrollToPreview();
         },
 
         /**
