@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<div id="adobe-stock-tabs"
+<div if="getSeries($row()).length || getModel($row()).length"
+     id="adobe-stock-tabs"
      class="adobe-stock-tabs"
      data-bind="mageInit: {
                     'mage/backend/tabs': {
@@ -26,7 +27,9 @@
         </li>
     </ul>
 </div>
-<div id="adobe-stock-tabs-content" class="adobe-stock-related-images-tab-content">
+<div if="getSeries($row()).length || getModel($row()).length"
+     id="adobe-stock-tabs-content"
+     class="adobe-stock-related-images-tab-content">
     <div attr="'id': 'series_content_' + $row().id">
         <!-- ko foreach: getSeries($row()) -->
             <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToSeriesImage($data) }">

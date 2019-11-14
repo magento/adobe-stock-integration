@@ -134,17 +134,15 @@ define([
                  *
                  */
                 success: function () {
-                    var displayedRecord = this.preview().displayedRecord();
-
-                    displayedRecord['is_downloaded'] = 1;
-                    displayedRecord.path = destinationPath;
+                    record['is_downloaded'] = 1;
+                    record.path = destinationPath;
 
                     if (license || isLicensed) {
-                        displayedRecord['is_licensed'] = 1;
-                        displayedRecord['is_licensed_locally'] = 1;
+                        record['is_licensed'] = 1;
+                        record['is_licensed_locally'] = 1;
                     }
+                    this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
-                    this.preview().displayedRecord(displayedRecord);
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
                 },

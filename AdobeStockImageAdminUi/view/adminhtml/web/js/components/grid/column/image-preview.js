@@ -19,7 +19,6 @@ define([
             buyCreditsUrl: 'https://stock.adobe.com/',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
-            tabImagesLimit: 4,
             modules: {
                 keywords: '${ $.name }_keywords',
                 related: '${ $.name }_related',
@@ -117,11 +116,10 @@ define([
          */
         show: function (record) {
             this.related().selectedTab(null);
-            this.related().initRecord(record);
             this.keywords().hideAllKeywords();
             this.displayedRecord(record);
             this._super(record);
-            this.loadRelatedImages(record);
+            this.related().loadRelatedImages(record);
         },
 
         /**
@@ -136,38 +134,15 @@ define([
         },
 
         /**
-         * Get image related image series.
-         *
-         * @param {Object} record
-         */
-        loadRelatedImages: function (record) {
-            if (record.series && record.model &&
-                record.series() && record.model() &&
-                record.series().length && record.model().length) {
-                return;
-            }
-            $.ajax({
-                type: 'GET',
-                url: this.relatedImagesUrl,
-                dataType: 'json',
-                showLoader: true,
-                data: {
-                    'image_id': record.id,
-                    'limit': this.tabImagesLimit
-                }
-            }).done(function (data) {
-                record.series(data.result['same_series']);
-                record.model(data.result['same_model']);
-                this.updateHeight();
-            }.bind(this));
-        },
-
-        /**
          * Returns attributes to display under the preview image
          *
          * @returns {*[]}
          */
         getDisplayAttributes: function () {
+            if (!this.displayedRecord()) {
+                return [];
+            }
+
             return [
                 {
                     name: 'Dimensions',
