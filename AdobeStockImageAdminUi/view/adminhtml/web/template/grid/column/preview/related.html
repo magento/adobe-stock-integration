@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div if="getSeries($row()).length || getModel($row()).length"
+<div if="isLoaded($row())"
      id="adobe-stock-tabs"
      class="adobe-stock-tabs"
      data-bind="mageInit: {
@@ -27,7 +27,7 @@
         </li>
     </ul>
 </div>
-<div if="getSeries($row()).length || getModel($row()).length"
+<div if="isLoaded($row())"
      id="adobe-stock-tabs-content"
      class="adobe-stock-related-images-tab-content">
     <div attr="'id': 'series_content_' + $row().id">
