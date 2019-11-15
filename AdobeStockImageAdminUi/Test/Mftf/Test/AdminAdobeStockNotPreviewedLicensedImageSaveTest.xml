@@ -28,9 +28,6 @@
         </before>
         <after>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
-                <argument name="generatedImageName" value="{$grabImageFileName}"/>
-            </actionGroup>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserLoggedOut"/>
@@ -38,7 +35,7 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotPreviewedLicensedImageToSave">
-            <argument name="query" value="{{AdobeStockConfigDataNotPreviewedLicensedNotSavedImage.value}}"/>
+            <argument name="query" value="{{AdobeStockConfigDataLicensedImage.value}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
         <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
@@ -47,5 +44,8 @@
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
         <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
+        <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
+            <argument name="generatedImageName" value="{$grabImageFileName}"/>
+        </actionGroup>
     </test>
 </tests>

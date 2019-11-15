@@ -11,13 +11,19 @@
         <arguments>
             <argument name="generatedImageName" type="string"/>
         </arguments>
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({{generatedImageName}})}}" stepKey="seeImageToDelete"/>
-        <click selector="{{AdobeStockSection.mediaGalleryImage({{generatedImageName}})}}" stepKey="clickImageToDelete"/>
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}" stepKey="seeImageToDelete"/>
+        <click selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}" stepKey="clickImageToDelete"/>
+        <!-- Click image again, incase image was already selected and above step unselected the image by clicking it -->
+        <conditionalClick
+            visible="false"
+            dependentSelector="{{AdobeStockSection.mediaGalleryDeleteButton}}"
+            selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}"
+            stepKey="clickImageToDeleteAgain"/>
         <waitForElementVisible selector="{{AdobeStockSection.mediaGalleryDeleteButton}}" stepKey="waitForDeleteButton"/>
         <click selector="{{AdobeStockSection.mediaGalleryDeleteButton}}" stepKey="clickDeleteButton"/>
         <waitForElementVisible selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
         <waitForPageLoad stepKey="waitForMaskDisappeared"/>
-        <dontSeeElement selector="{{AdobeStockSection.mediaGalleryImage({$generatedImageName})}}" stepKey="verifyImageIsDeleted"/>
+        <dontSeeElement selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}" stepKey="assertImageIsDeleted"/>
     </actionGroup>
 </actionGroups>

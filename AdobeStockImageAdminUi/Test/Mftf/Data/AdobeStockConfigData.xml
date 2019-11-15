@@ -29,7 +29,7 @@
     <entity name="AdobeStockConfigDataSignInPasswordData">
         <data key="value">{{_CREDS.magento/ADOBE_STOCK_USER_PASSWORD}}</data>
     </entity>
-    <entity name="AdobeStockConfigDataNotPreviewedLicensedNotSavedImage">
-        <data key="value">{{_ENV.ADOBE_STOCK_NOT_PREVIEWED_LICENSED_NOT_SAVED_IMAGE}}</data>
+    <entity name="AdobeStockConfigDataLicensedImage">
+        <data key="value">{{_CREDS.magento/ADOBE_STOCK_LICENSED_IMAGE}}</data>
     </entity>
 </entities>
