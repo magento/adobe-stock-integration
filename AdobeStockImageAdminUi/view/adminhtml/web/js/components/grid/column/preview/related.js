@@ -6,18 +6,22 @@ define([
     'uiComponent',
     'underscore',
     'jquery',
-    'ko',
     'mage/backend/tabs'
-], function (Component, _, $, ko) {
+], function (Component, _, $) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/related',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            tabImagesLimit: 4,
             serieFilterValue: '',
             modelFilterValue: '',
             selectedTab: null,
+            relatedImages: {
+                series: {},
+                model: {}
+            },
             statefull: {
                 serieFilterValue: true,
                 modelFilterValue: true
@@ -34,16 +38,6 @@ define([
         },
 
         /**
-         * @param {Object} record
-         */
-        initRecord: function (record) {
-            if (!record.model || !record.series) {
-                record.series = ko.observable([]);
-                record.model = ko.observable([]);
-            }
-        },
-
-        /**
          * Init observable variables
          * @return {Object}
          */
@@ -52,10 +46,53 @@ define([
                 .observe([
                     'serieFilterValue',
                     'modelFilterValue',
-                    'selectedTab'
+                    'selectedTab',
+                    'relatedImages'
                 ]);
 
             return this;
+        },
+
+        /**
+         * Check if related images are present for the record
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        isLoaded: function (record) {
+            return this.getSeries(record).length || this.getModel(record).length;
+        },
+
+        /**
+         * Get image related image series.s
+         *
+         * @param {Object} record
+         */
+        loadRelatedImages: function (record) {
+            var series = this.getSeries(record),
+                model = this.getModel(record);
+
+            if (series && series.length ||
+                model && model.length
+            ) {
+                return;
+            }
+            $.ajax({
+                type: 'GET',
+                url: this.preview().relatedImagesUrl,
+                dataType: 'json',
+                data: {
+                    'image_id': record.id,
+                    'limit': this.tabImagesLimit
+                }
+            }).done(function (data) {
+                var relatedImages = this.relatedImages();
+
+                relatedImages.series[record.id] = data.result['same_series'];
+                relatedImages.model[record.id] = data.result['same_model'];
+                this.relatedImages(relatedImages);
+                this.preview().updateHeight();
+            }.bind(this));
         },
 
         /**
@@ -65,7 +102,7 @@ define([
          * @returns {*[]}
          */
         getSeries: function (record) {
-            return record.series;
+            return this.relatedImages().series[record.id] || [];
         },
 
         /**
@@ -75,7 +112,7 @@ define([
          * @returns boolean
          */
         canShowMoreSeriesImages: function (record) {
-            return parseInt(record.series().length, 10) >= this.preview().tabImagesLimit;
+            return this.getSeries(record).length >= this.tabImagesLimit;
         },
 
         /**
@@ -85,7 +122,7 @@ define([
          * @returns {*[]}
          */
         getModel: function (record) {
-            return record.model;
+            return this.relatedImages().model[record.id] || [];
         },
 
         /**
@@ -95,7 +132,7 @@ define([
          * @returns boolean
          */
         canShowMoreModelImages: function (record) {
-            return parseInt(record.model().length, 10) >= this.preview().tabImagesLimit;
+            return this.getModel(record).length >= this.tabImagesLimit;
         },
 
         /**
@@ -134,7 +171,7 @@ define([
          * @param {Object} record
          */
         nextRelated: function (record) {
-            var relatedList = this.selectedTab() === 'series' ? record.series() : record.model(),
+            var relatedList = this.selectedTab() === 'series' ? this.getSeries(record) : this.getModel(record),
                 nextRelatedIndex = _.findLastIndex(
                     relatedList,
                     {
@@ -156,7 +193,7 @@ define([
          * @param {Object} record
          */
         prevRelated: function (record) {
-            var relatedList = this.selectedTab() === 'series' ? record.series() : record.model(),
+            var relatedList = this.selectedTab() === 'series' ? this.getSeries(record) : this.getModel(record),
                 prevRelatedIndex = _.findLastIndex(
                     relatedList,
                     {
@@ -185,7 +222,7 @@ define([
             if (!this.selectedTab()) {
                 return false;
             }
-            relatedList = this.selectedTab() === 'series' ? record.series() : record.model();
+            relatedList = this.selectedTab() === 'series' ? this.getSeries(record) : this.getModel(record);
             prevRelatedIndex = _.findLastIndex(
                 relatedList,
                 {
@@ -210,7 +247,7 @@ define([
             if (!this.selectedTab()) {
                 return false;
             }
-            relatedList = this.selectedTab() === 'series' ? record.series() : record.model();
+            relatedList = this.selectedTab() === 'series' ? this.getSeries(record) : this.getModel(record);
             nextRelatedIndex = _.findLastIndex(
                 relatedList,
                 {

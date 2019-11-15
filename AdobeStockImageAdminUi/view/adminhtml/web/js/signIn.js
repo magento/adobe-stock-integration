@@ -47,7 +47,6 @@ define([
                 }
                 auth(self.loginConfig)
                     .then(function (response) {
-                        self.preview().hide();
                         self.source().set('params.t ', Date.now());
                         self.loadUserProfile();
                         resolve(response);
@@ -72,7 +71,6 @@ define([
                 context: this,
                 showLoader: true,
                 success: function () {
-                    this.preview().hide();
                     this.source().set('params.t ', Date.now());
                     this.user({
                         isAuthorized: false,
