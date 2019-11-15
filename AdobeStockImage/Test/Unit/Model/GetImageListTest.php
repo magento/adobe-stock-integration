@@ -65,7 +65,7 @@ class GetImageListTest extends TestCase
     private $filterBuilderMock;
 
     /**
-     * @var ConfigInterface $config
+     * @var ConfigInterface|MockObject
      */
     private $config;
 
@@ -239,12 +239,12 @@ class GetImageListTest extends TestCase
     /**
      * Set's filter group with 'gallery_id' filter
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param MockObject $searchCriteria
      * @param FilterGroup $appliedFilters
      * @return void
      */
     private function applyDefaultGalleryFilter(
-        SearchCriteriaInterface $searchCriteria,
+        MockObject $searchCriteria,
         FilterGroup $appliedFilters
     ): void {
         $this->filterBuilderMock->expects($this->at(0))

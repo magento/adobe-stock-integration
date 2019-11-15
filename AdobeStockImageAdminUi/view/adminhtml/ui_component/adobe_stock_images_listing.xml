@@ -177,10 +177,10 @@
                 <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
             </item>
         </argument>
-        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\LicensedOverlay">
+        <column name="overlay" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\LicensedOverlay">
             <settings>
                 <label translate="true">Overlay</label>
-                <bodyTmpl>ui/grid/columns/overlay</bodyTmpl>
+                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/overlay</bodyTmpl>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>

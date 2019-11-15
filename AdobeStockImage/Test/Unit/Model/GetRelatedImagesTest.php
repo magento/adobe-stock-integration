@@ -77,12 +77,12 @@ class GetRelatedImagesTest extends TestCase
     /**
      * Check if related images can be executed.
      *
-     * @param $relatedImagesProvider
-     * @param $expectedResult
+     * @param array $relatedImagesProvider
+     * @param array $expectedResult
      * @throws IntegrationException
      * @dataProvider relatedImagesDataProvider
      */
-    public function testExecute($relatedImagesProvider, $expectedResult): void
+    public function testExecute(array $relatedImagesProvider, array $expectedResult): void
     {
         $this->filterBuilder->expects($this->any())
             ->method('setField')
