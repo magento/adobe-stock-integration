@@ -83,7 +83,14 @@ define([
                     'actions': {
                         confirm: function (fileName) {
                             var displayedRecord = this.preview().displayedRecord();
-                            this.checkImage(fileName, displayedRecord) ? this.save(displayedRecord, fileName) : '';
+
+                            if (!this.checkImage(fileName, displayedRecord)) {
+                                throw new Error('Image with the same name already exists');
+                            }
+                            $.ajaxSetup({
+                                async: true
+                            });
+                            this.save(displayedRecord, fileName);
                         }.bind(this)
                     },
                     'buttons': [{
@@ -146,8 +153,8 @@ define([
                     }
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
-                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
+                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
                 },
 
                 /**
@@ -312,8 +319,8 @@ define([
          */
         checkImage: function (fileName, record) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
-                path = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record),
-                image = mediaGallery.locate(path);
+                          path = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record),
+            image = mediaGallery.locate(path);
 
             if (image) {
                 confirmation({
@@ -321,7 +328,7 @@ define([
                     content: $.mage.__('The image with same name exists in the media gallery.'),
                     buttons: [{
                         text: $.mage.__('Okay'),
-                        class: 'action-primary',
+                        class: 'action-primary action-dissmis',
                         attr: {},
 
                         /**
