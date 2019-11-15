@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\DB\Adapter\DuplicateException;
 
 /**
  * Class Save
@@ -91,7 +92,7 @@ class Save
         $path = ($path[0] === '/') ? '.' : $path[0];
         $verifyDuplicateName = $mediaDirectory->search($imageName[0], $path[0]);
         if (count($verifyDuplicateName) > 0) {
-            throw new \Exception('Image with the same file name already exits.');
+            throw new DuplicateException('Image with the same file name already exits.');
         }
         return false;
     }

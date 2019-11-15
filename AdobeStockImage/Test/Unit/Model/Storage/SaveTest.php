@@ -7,6 +7,7 @@
 namespace Magento\AdobeStockImage\Test\Unit\Model\Storage;
 
 use Exception;
+use Magento\AdobeStockImage\Model\Storage\Save;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
@@ -17,7 +18,6 @@ use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImage\Model\Storage\Save;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -89,10 +89,13 @@ class SaveTest extends TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
 
-        $content = 'content';
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('search')
+            ->withAnyParameters()
+            ->will($this->returnValue([]));
         $this->httpsDriverMock->expects($this->once())
             ->method('fileGetContents')
-            ->willReturn($content);
+            ->willReturn('content');
 
         $this->mediaDirectoryMock->expects($this->once())
             ->method('writeFile')
@@ -100,8 +103,8 @@ class SaveTest extends TestCase
             ->willReturn($this->isType('integer'));
 
         $this->assertSame(
-            '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg',
-            $this->save->execute($imageUrl, '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg')
+            '/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg',
+            $this->save->execute($imageUrl, '/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg')
         );
     }
 
@@ -116,22 +119,22 @@ class SaveTest extends TestCase
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
-
-        $content = 'content';
-        $this->httpsDriverMock->expects($this->once())
-            ->method('fileGetContents')
-            ->willReturn($content);
-
         $this->mediaDirectoryMock->expects($this->once())
-            ->method('writeFile')
+            ->method('search')
             ->withAnyParameters()
-            ->willThrowException(new Exception());
+            ->will($this->returnValue(['240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg']));
+
+        $this->httpsDriverMock->expects($this->never())
+             ->method('fileGetContents');
+
+        $this->mediaDirectoryMock->expects($this->never())
+            ->method('writeFile');
 
         $this->expectException(CouldNotSaveException::class);
         $this->logger->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
 
-        $this->save->execute($imageUrl, '240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg');
+        $this->save->execute($imageUrl, '/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg');
     }
 }
