@@ -267,9 +267,15 @@ define([
                                                 fileName = filePathArray[imageIndex]
                                                  .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
-                                            this.checkImage(fileName, displayedRecord) ?
-                                             licenseAndSave(record, fileName) : '';
-                                        }
+
+                                            if (!this.checkImage(fileName, displayedRecord)) {
+                                                throw new Error('Image with the same name already exists');
+                                            }
+                                            $.ajaxSetup({
+                                                async: true
+                                            });
+                                            licenseAndSave(record, fileName);
+                                        }.bind(this)
                                     },
                                     'buttons': [{
                                         text: cancelText,
@@ -319,8 +325,8 @@ define([
          */
         checkImage: function (fileName, record) {
             var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
-                          path = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record),
-            image = mediaGallery.locate(path);
+                path = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' + this.getImageExtension(record),
+                image = mediaGallery.locate(path);
 
             if (image) {
                 confirmation({

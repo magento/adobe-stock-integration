@@ -98,7 +98,7 @@ class Download extends Action
             $this->logger->critical($logMessage);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while image download.'),
+                'message' => __('An error occurred while image download.'. $exception->getMessage()),
             ];
         }
 

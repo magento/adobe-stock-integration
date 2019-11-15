@@ -11,6 +11,7 @@ namespace Magento\AdobeStockImage\Model\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Psr\Log\LoggerInterface;
@@ -63,8 +64,10 @@ class Save
     {
         try {
             $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-            $fileContents = $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl));
-            $mediaDirectory->writeFile($destinationPath, $fileContents);
+            if (!$this->isImageDuplicate($destinationPath, $mediaDirectory)) {
+                $fileContents = $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl));
+                $mediaDirectory->writeFile($destinationPath, $fileContents);
+            }
         } catch (\Exception $exception) {
             $message = __('Failed to save the image: %error', ['error' => $exception->getMessage()]);
             $this->logger->critical($message);
@@ -72,6 +75,25 @@ class Save
         }
 
         return $destinationPath;
+    }
+
+    /**
+     * Check if same file name exist in current path.
+     *
+     * @param string $destinationPath
+     * @param WriteInterface $mediaDirectory
+     * @return bool
+     */
+    private function isImageDuplicate(string $destinationPath, $mediaDirectory): bool
+    {
+        preg_match('/([^\/]+)\.[a-zA-Z]{3,4}/', $destinationPath, $imageName);
+        preg_match('/[\/]*.*[\/]/', $destinationPath, $path);
+        $path = ($path[0] === '/') ? '.' : $path[0];
+        $verifyDuplicateName = $mediaDirectory->search($imageName[0], $path[0]);
+        if (count($verifyDuplicateName) > 0) {
+            throw new \Exception('Image with the same file name already exits.');
+        }
+        return false;
     }
 
     /**
