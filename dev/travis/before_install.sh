@@ -66,8 +66,8 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
     fi
     if [ ! -f "${HOME}/drivers/chromedriver" ]; then
         pushd "${HOME}/drivers"
-        # TODO: factor out the version to travis env var
-        wget http://chromedriver.storage.googleapis.com/78.0.3904.70/chromedriver_linux64.zip
+        CHROME_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        wget "http://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip"
         unzip chromedriver_linux64.zip
         rm chromedriver_linux64.zip
         popd
