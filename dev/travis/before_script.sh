@@ -82,8 +82,9 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
     # travis matrix, for example:
     # headless chrome: https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-the-chrome-addon-in-the-headless-mode
     # headless firefox: https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-the-firefox-addon-in-headless-mode
+    CHROME_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
     sh ./vendor/se/selenium-server-standalone/bin/selenium-server-standalone -port 4444 -host 127.0.0.1 \
-        -Dwebdriver.chrome.driver="${HOME}/drivers/chromedriver" \
+        -Dwebdriver.chrome.driver="${HOME}/drivers/chromedriver-${CHROME_VERSION}" \
         -Dwebdriver.chrome.logfile="${TRAVIS_BUILD_DIR}/chromedriver.log" \
         -trustAllSSLCertificate &> ~/selenium.log &
 fi

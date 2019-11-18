@@ -23,7 +23,7 @@ phpenv rehash;
 test -n "$GITHUB_TOKEN" && composer config github-oauth.github.com "$GITHUB_TOKEN" || true
 
 composer config --global http-basic.repo.magento.com "$MAGENTO_USERNAME" "$MAGENTO_PASSWORD"
-# TODO: we should specify a particular SHA/branch here
+# clone latest magento2 repo
 git clone --depth 1 https://github.com/magento/magento2
 
 if [[ ${TEST_SUITE} = "functional" ]]; then
@@ -61,14 +61,17 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
     sudo service apache2 restart
 
     # Install chromedriver to power chrome
+    # get latest stable version of chromedriver, and ensure we have that
+    CHROME_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
     if [ ! -d "${HOME}/drivers" ]; then
         mkdir -p "${HOME}/drivers"
     fi
-    if [ ! -f "${HOME}/drivers/chromedriver" ]; then
+    if [ ! -f "${HOME}/drivers/chromedriver-${CHROME_VERSION}" ]; then
         pushd "${HOME}/drivers"
-        CHROME_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        rm -rf *
         wget "http://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip"
         unzip chromedriver_linux64.zip
+        mv chromedriver "chromedriver-${CHROME_VERSION}"
         rm chromedriver_linux64.zip
         popd
     fi
