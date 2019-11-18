@@ -35,8 +35,7 @@ env:
     - TEST_SUITE=static
     # List out subsets of functional tests to run separately to fit under travis timeout (50mins)
     # TODO: this is hacky, is there a better way?
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters_part_one
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters_part_two
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_preview
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_configuration
@@ -49,9 +48,7 @@ jobs:
   # only run MFTF tests on PHP 7.3
   exclude:
     - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters_part_one
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters_part_two
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
     - php: '7.1'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
     - php: '7.1'
@@ -65,9 +62,7 @@ jobs:
     - php: '7.1'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
     - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters_part_one
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters_part_two
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
     - php: '7.2'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
     - php: '7.2'
