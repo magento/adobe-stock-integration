@@ -10,6 +10,9 @@ trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit
 pushd magento2
 if [[ ${TEST_SUITE} = "unit" ]]; then
     echo "Prepare unit tests for runining"
+    pushd dev/tests/unit
+    cp -f ${TRAVIS_BUILD_DIR}/dev/tests/unit/phpunit.xml phpunit.xml
+    popd
     composer require "mustache/mustache":"~2.5"
     composer require "php-coveralls/php-coveralls":"^1.0"
 fi
@@ -55,7 +58,6 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
     export DISPLAY=:1.0
 
     pushd dev/tests/acceptance
-
     cp ./.htaccess.sample ./.htaccess
     cp -f ${TRAVIS_BUILD_DIR}/dev/tests/acceptance/.env .env
     sed -e "s?%MAGENTO_PROTOCOL%?${MAGENTO_PROTOCOL}?g" --in-place ./.env
