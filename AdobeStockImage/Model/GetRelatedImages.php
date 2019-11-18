@@ -10,12 +10,9 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
-use Magento\Framework\Api\AttributeInterface;
-use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\SerializationException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -49,10 +46,17 @@ class GetRelatedImages implements GetRelatedImagesInterface
     private $fields;
 
     /**
+     * @var SerializeImageAsset
+     */
+    private $serializeImageAsset;
+
+    /**
      * GetRelatedImages constructor.
+     *
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
+     * @param SerializeImageAsset $serializeImageAsset
      * @param LoggerInterface $logger
      * @param array $fields
      */
@@ -60,18 +64,26 @@ class GetRelatedImages implements GetRelatedImagesInterface
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
+        SerializeImageAsset $serializeImageAsset,
         LoggerInterface $logger,
         array $fields = []
     ) {
         $this->getImageList = $getImageList;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->serializeImageAsset = $serializeImageAsset;
         $this->logger = $logger;
         $this->fields = $fields;
     }
 
     /**
-     * @inheritdoc
+     * Retrieve array of related images categorized by relation.
+     *
+     * @param int $imageId
+     * @param int $limit
+     *
+     * @return array
+     * @throws IntegrationException
      */
     public function execute(int $imageId, int $limit): array
     {
@@ -82,49 +94,15 @@ class GetRelatedImages implements GetRelatedImagesInterface
                 $searchCriteria = $this->searchCriteriaBuilder->addFilter($filter)
                     ->setPageSize($limit)
                     ->create();
-                $relatedImageGroups[$key] = $this->serializeRelatedImages(
+                $relatedImageGroups[$key] = $this->serializeImageAsset->execute(
                     $this->getImageList->execute($searchCriteria)->getItems()
                 );
             }
             return $relatedImageGroups;
         } catch (\Exception $exception) {
             $message = __('Get related images list failed: %error', ['error' => $exception->getMessage()]);
+            $this->logger->critical($exception);
             throw new IntegrationException($message, $exception);
-        }
-    }
-
-    /**
-     * Serialize related image data.
-     *
-     * @param Document[] $images
-     * @return array
-     * @throws SerializationException
-     */
-    private function serializeRelatedImages(array $images): array
-    {
-        $data = [];
-        try {
-            /** @var Document $image */
-            foreach ($images as $image) {
-                $itemData = [];
-                /** @var AttributeInterface $attribute */
-                foreach ($image->getCustomAttributes() as $attribute) {
-                    if ($attribute->getAttributeCode() === 'thumbnail_240_url') {
-                        $itemData['thumbnail_url'] = $attribute->getValue();
-                        continue;
-                    }
-                    $itemData[$attribute->getAttributeCode()] = $attribute->getValue();
-                }
-                $data[] = $itemData;
-            }
-            return $data;
-        } catch (\Exception $exception) {
-            throw new SerializationException(
-                __(
-                    'An error occurred during related images serialization: %error',
-                    ['error' => $exception->getMessage()]
-                )
-            );
         }
     }
 }

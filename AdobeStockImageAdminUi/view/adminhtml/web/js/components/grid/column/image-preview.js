@@ -16,6 +16,7 @@ define([
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
             relatedImagesUrl: 'adobe_stock/preview/relatedimages',
+            imageAssetUrl: 'adobe_stock/preview/imageAsset',
             buyCreditsUrl: 'https://stock.adobe.com/',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
@@ -115,11 +116,30 @@ define([
          * @inheritdoc
          */
         show: function (record) {
+            this.requestImageAssetCurrentData(record);
             this.related().selectedTab(null);
             this.keywords().hideAllKeywords();
             this.displayedRecord(record);
             this._super(record);
             this.related().loadRelatedImages(record);
+        },
+
+        /**
+         * Get image asset
+         *
+         * @param {Object} record
+         */
+        requestImageAssetCurrentData: function (record) {
+            $.ajax({
+                type: 'GET',
+                url: this.imageAssetUrl,
+                dataType: 'json',
+                data: {
+                    'image_id': record.id,
+                }
+            }).done(function () {
+                // TODO update record with the new data
+            });
         },
 
         /**

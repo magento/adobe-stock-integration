@@ -21,6 +21,8 @@ use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
  */
 class GetAssetById implements GetAssetByIdInterface
 {
+    private const MEDIA_ID = 'media_id';
+
     /**
      * @var SearchCriteriaBuilder
      */
@@ -56,7 +58,7 @@ class GetAssetById implements GetAssetByIdInterface
      */
     public function execute(int $adobeId): Document
     {
-        $mediaIdFilter = $this->filterBuilder->setField('media_id')
+        $mediaIdFilter = $this->filterBuilder->setField(self::MEDIA_ID)
             ->setValue($adobeId)
             ->create();
         $searchCriteria = $this->searchCriteriaBuilder
