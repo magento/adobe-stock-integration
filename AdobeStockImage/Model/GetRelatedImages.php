@@ -120,7 +120,6 @@ class GetRelatedImages implements GetRelatedImagesInterface
             }
             return $data;
         } catch (\Exception $exception) {
-            $this->logger->critical($exception);
             throw new SerializationException(
                 __(
                     'An error occurred during related images serialization: %error',
