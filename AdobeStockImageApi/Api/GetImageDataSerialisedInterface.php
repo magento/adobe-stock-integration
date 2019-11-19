@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageApi\Api;
 
-use Magento\Framework\Exception\IntegrationException;
-
 /**
  * Serialise image asset data.
  *
@@ -21,7 +19,7 @@ interface GetImageDataSerialisedInterface
      * Serialised image asset from the asset object to an array.
      *
      * @param int $imageAssetId
-     *
+     * @throws \Magento\Framework\Exception\IntegrationException
      * @return array
      */
     public function execute(int $imageAssetId): array;

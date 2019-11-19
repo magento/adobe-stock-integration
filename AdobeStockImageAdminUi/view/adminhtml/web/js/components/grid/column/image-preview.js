@@ -135,7 +135,7 @@ define([
                 url: this.imageAssetUrl,
                 dataType: 'json',
                 data: {
-                    'image_id': record.id,
+                    'image_id': record.id
                 }
             }).done(function () {
                 // TODO update record with the new data

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockImage\Model\GetImageDataSerialised;
+use Magento\AdobeStockImageApi\Api\GetImageDataSerialisedInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -32,7 +32,7 @@ class ImageAsset extends Action
     private $logger;
 
     /**
-     * @var GetImageDataSerialised
+     * @var GetImageDataSerialisedInterface
      */
     private $getImageDataSerialised;
 
@@ -40,12 +40,12 @@ class ImageAsset extends Action
      * ImageAsset constructor.
      *
      * @param Action\Context $context
-     * @param GetImageDataSerialised $getImageDataSerialised
+     * @param GetImageDataSerialisedInterface $getImageDataSerialised
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        GetImageDataSerialised $getImageDataSerialised,
+        GetImageDataSerialisedInterface $getImageDataSerialised,
         LoggerInterface $logger
     ) {
         parent::__construct($context);

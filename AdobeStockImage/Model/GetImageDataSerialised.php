@@ -51,10 +51,11 @@ class GetImageDataSerialised implements GetImageDataSerialisedInterface
     }
 
     /**
-     * @param int $imageAssetId
+     * Serialised image asset from the asset object to an array.
      *
-     * @return array
+     * @param int $imageAssetId
      * @throws IntegrationException
+     * @return array
      */
     public function execute(int $imageAssetId): array
     {
