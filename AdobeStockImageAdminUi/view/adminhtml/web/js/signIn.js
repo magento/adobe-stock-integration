@@ -18,7 +18,7 @@ define([
             // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = adobe_stock_images_listing',
             quotaUrl: 'adobe_stock/license/quota',
-	    getImagesUrl: 'adobe_stock/imagelisting/getimages',
+            getImagesUrl: 'adobe_stock/imagelisting/getimages',
             modules: {
                 source: '${ $.dataProvider }',
                 preview: '${ $.previewProvider }'
@@ -42,59 +42,58 @@ define([
         login: function () {
             var self = this; // TODO Please bind this properly
 
-		console.log(this.source());
-		return new window.Promise(function (resolve, reject) {
-                if (self.user().isAuthorized) {
-                    return resolve();
-                }
-                auth(self.loginConfig)
-                    .then(function (response) {
-                        self.loadUserProfile();
-                        self.setLicensedImages();
-                        resolve(response);
-                    })
-                    .catch(function (error) {
-                        reject(error);
+            return new window.Promise(function (resolve, reject) {
+                        if (self.user().isAuthorized) {
+                            return resolve();
+                        }
+                        auth(self.loginConfig)
+                            .then(function (response) {
+                                self.loadUserProfile();
+                                self.setLicensedImages();
+                                resolve(response);
+                            })
+                            .catch(function (error) {
+                                reject(error);
+                            });
                     });
-            });
         },
 
         /**
          * Logout from adobe account
          */
         logout: function () {
-		$.ajax({
-                type: 'POST',
-                url: this.logoutUrl,
-                data: {
-                    'form_key': window.FORM_KEY
-                },
-                dataType: 'json',
-                context: this,
-                showLoader: true,
-                success: function () {
-                   this.setLicensedImages(); 
-		   this.user({
-                        isAuthorized: false,
-                        name: '',
-                        email: '',
-                        image: this.defaultProfileImage
-                    });
-                }.bind(this),
+            $.ajax({
+                        type: 'POST',
+                        url: this.logoutUrl,
+                        data: {
+                            'form_key': window.FORM_KEY
+                        },
+                        dataType: 'json',
+                        context: this,
+                        showLoader: true,
+                        success: function () {
+                            this.setLicensedImages();
+                            this.user({
+                                            isAuthorized: false,
+                                            name: '',
+                                            email: '',
+                                            image: this.defaultProfileImage
+                                        });
+                        }.bind(this),
 
-                /**
-                 * @param {Object} response
-                 * @returns {String}
-                 */
-                error: function (response) {
-                    return response.message;
-                }
-            });
+                        /**
+                         * @param {Object} response
+                         * @returns {String}
+                         */
+                        error: function (response) {
+                            return response.message;
+                        }
+                    });
         },
-        
-	/**
-         * Set Licensed images data.
-         */
+
+        /**
+                * Set Licensed images data.
+                */
         setLicensedImages: function () {
             $.ajax({
                 type: 'GET',
@@ -110,15 +109,8 @@ define([
                  * @returns void
                  */
                 success: function (response) {
-                response.result.items.forEach((item) => {
-                      if (item.is_licensed) {
-                          this.source().data.items.find(x => x.id === item.id).overlay = "Licensed";
-		      } else {
-                          delete this.source().data.items.find(x => x.id === item.id).overlay;
-		      }
-		});
-                
-		},
+                    this.source().set('data', response.result);
+                },
 
                 /**
                  * @param {Object} response
@@ -148,7 +140,7 @@ define([
                  * @returns void
                  */
                 success: function (response) {
-                    //this.source().data.items(response.result);
+                    this.userQuota(response.result);
                 },
 
                 /**

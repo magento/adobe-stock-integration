@@ -9,12 +9,11 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\ImageListing;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
-use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Class RelatedImages
@@ -54,13 +53,13 @@ class GetImages extends Action
     public function __construct(
         Action\Context $context,
         GetImageListInterface $getImageList,
-	LoggerInterface $logger,
-	SearchCriteriaBuilder $searchCriteriaBuilder
+        LoggerInterface $logger,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         parent::__construct($context);
         $this->getImageList = $getImageList;
-	$this->logger = $logger;
-	$this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->logger = $logger;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
     /**
      * @inheritdoc
@@ -69,7 +68,7 @@ class GetImages extends Action
     {
         try {
             $images = $this->getImageList->execute($this->getSearchCriteria());
-	    $result = $this->searchResultToOutput($images);
+            $result = $this->searchResultToOutput($images);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
@@ -119,13 +118,11 @@ class GetImages extends Action
         return $arrItems;
     }
 
-
     /**
-     * 
+     * TODO: Pass search criteria from grid state
      */
     private function getSearchCriteria()
     {
-
-      return $this->searchCriteriaBuilder->create();
+        return $this->searchCriteriaBuilder->create();
     }
 }
