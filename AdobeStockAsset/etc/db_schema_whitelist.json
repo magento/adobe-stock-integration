@@ -2,29 +2,22 @@
     "adobe_stock_asset": {
         "column": {
             "id": true,
-            "media_type_id": true,
+            "media_gallery_id": true,
             "category_id": true,
             "creator_id": true,
-            "path": true,
             "is_licensed": true,
-            "title": true,
-            "width": true,
-            "height": true,
-            "content_type": true,
-            "creation_date": true,
-            "created_at": true,
-            "updated_at": true
+            "creation_date": true
         },
         "index": {
             "ADOBE_STOCK_ASSET_ID": true,
-            "ADOBE_STOCK_ASSET_MEDIA_TYPE_ID": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID": true,
             "ADOBE_STOCK_ASSET_CREATOR_ID": true
         },
         "constraint": {
             "PRIMARY": true,
             "ADOBE_STOCK_ASSET_CATEGORY_ID_ADOBE_STOCK_CATEGORY_ID": true,
-            "ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID": true
+            "ADOBE_STOCK_ASSET_CREATOR_ID_ADOBE_STOCK_CREATOR_ID": true,
+            "ADOBE_STOCK_ASSET_MEDIA_GALLERY_ID_MEDIA_GALLERY_ASSET_ID": true
         }
     },
     "adobe_stock_category": {
@@ -39,38 +32,10 @@
             "PRIMARY": true
         }
     },
-    "adobe_stock_asset_keyword": {
-        "column": {
-            "keyword_id": true,
-            "asset_id": true
-        },
-        "index": {
-            "ADOBE_STOCK_ASSET_KEYWORD_ASSET_ID": true,
-            "ADOBE_STOCK_ASSET_KEYWORD_KEYWORD_ID": true
-        },
-        "constraint": {
-            "PRIMARY": true,
-            "ADOBE_STOCK_ASSET_KEYWORD_KEYWORD_ID_ADOBE_STOCK_KEYWORD_ID": true,
-            "ADOBE_STOCK_ASSET_KEYWORD_ASSET_ID_ADOBE_STOCK_ASSET_ID": true
-        }
-    },
-    "adobe_stock_keyword": {
-        "column": {
-            "id": true,
-            "keyword": true
-        },
-        "index": {
-            "ADOBE_STOCK_KEYWORD_ID": true
-        },
-        "constraint": {
-            "ADOBE_STOCK_KEYWORD_KEYWORD": true,
-            "PRIMARY": true
-        }
-    },
     "adobe_stock_creator": {
         "column": {
             "id": true,
-            "creator_name": true
+            "name": true
         },
         "index": {
             "ADOBE_STOCK_CREATOR_ID": true

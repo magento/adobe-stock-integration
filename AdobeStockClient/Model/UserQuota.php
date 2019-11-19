@@ -17,6 +17,9 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class UserQuota extends AbstractExtensibleModel implements UserQuotaInterface
 {
+    private const IMAGES = 'images';
+    private const CREDITS = 'credits';
+
     /**
      * @inheritdoc
      */

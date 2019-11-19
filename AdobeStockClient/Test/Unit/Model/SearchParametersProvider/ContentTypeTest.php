@@ -13,6 +13,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,7 +34,7 @@ class ContentTypeTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->contentType = $this->objectManager->getObject(ContentType::class);
@@ -44,23 +45,12 @@ class ContentTypeTest extends TestCase
      */
     public function testApplyWithValuePhoto(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupItemMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterItemMock = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        /** @var SearchParameters|MockObject $searchParameters */
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $filterGroupItemMock = $this->createMock(FilterGroup::class);
+        $filterItemMock = $this->createMock(Filter::class);
         $filterItemMock->expects($this->once())
             ->method('getField')
             ->willReturn('content_type_filter');
@@ -82,22 +72,12 @@ class ContentTypeTest extends TestCase
      */
     public function testApplyWithValueIllustration(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getFilterGroups'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupItemMock = $this->getMockBuilder(FilterGroup::class)
-            ->setMethods(['getFilters'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterItemMock = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getField', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        /** @var SearchParameters|MockObject $searchParameters */
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $filterGroupItemMock = $this->createMock(FilterGroup::class);
+        $filterItemMock = $this->createMock(Filter::class);
         $filterItemMock->expects($this->once())
             ->method('getField')
             ->willReturn('content_type_filter');

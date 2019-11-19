@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockSignInSignOutTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #21] Adobe Sign-in"/>
+            <stories value="[Story #36] User signs out from Stock"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/308"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/389"/>
+            <title value="Admin User is logged into Admin Panel and User signs in and out from Stock"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579351"/>
+            <description value="Admin User is logged into Admin Panel and User signs in and out from Stock"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_grid"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
+        <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
+        <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
+        <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
+
+        <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="LogOut"/>
+        <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserNotLogged"/>
+    </test>
+</tests>

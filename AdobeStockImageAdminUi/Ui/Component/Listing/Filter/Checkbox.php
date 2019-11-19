@@ -15,7 +15,7 @@ use Magento\Ui\Component\Filters\Type\AbstractFilter;
  */
 class Checkbox extends AbstractFilter
 {
-    const NAME = 'filter_input';
+    public const NAME = 'filter_input';
 
     /**
      * Prepare component configuration

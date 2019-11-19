@@ -24,7 +24,7 @@ use Magento\Ui\Component\Filters\Type\Input;
  */
 class Color extends AbstractFilter
 {
-    const NAME = 'filter_input';
+    public const NAME = 'filter_input';
 
     /**
      * Wrapped component

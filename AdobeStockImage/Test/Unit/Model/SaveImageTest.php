@@ -3,15 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockAsset\Model\SaveAsset;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SaveImage;
+use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
+use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockImage\Model\Storage;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -20,62 +30,171 @@ use Psr\Log\LoggerInterface;
 class SaveImageTest extends TestCase
 {
     /**
-     * @var MockObject|ClientInterface
+     * @var MockObject|StorageSave
      */
-    private $client;
+    private $storageSave;
 
     /**
-     * @var MockObject|SaveAsset
+     * @var MockObject|StorageDelete
      */
-    private $saveAsset;
+    private $storageDelete;
 
     /**
-     * @var MockObject|Storage $storage
-     */
-    private $storage;
-
-    /**
-     * @var MockObject|LoggerInterface $logger
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
     /**
-     * @var SaveImage $saveImage
+     * @var MockObject|SaveInterface
+     */
+    private $saveMediaAsset;
+
+    /**
+     * @var MockObject|SaveAssetInterface
+     */
+    private $saveAdobeStockAsset;
+
+    /**
+     * @var MockObject|DocumentToMediaGalleryAsset
+     */
+    private $documentToMediaGalleryAsset;
+
+    /**
+     * @var MockObject|DocumentToAsset
+     */
+    private $documentToAsset;
+
+    /**
+     * @var MockObject|DocumentToKeywords
+     */
+    private $documentToKeywords;
+
+    /**
+     * @var MockObject|SaveAssetKeywordsInterface
+     */
+    private $saveAssetKeywords;
+
+    /**
+     * @var SaveImage
      */
     private $saveImage;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->saveAsset = $this->createMock(SaveAsset::class);
-        $this->storage = $this->createMock(Storage::class);
+        $this->storageSave = $this->createMock(StorageSave::class);
+        $this->storageDelete = $this->createMock(StorageDelete::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->client = $this->createMock(ClientInterface::class);
+        $this->saveMediaAsset = $this->createMock(SaveInterface::class);
+        $this->saveAdobeStockAsset = $this->createMock(SaveAssetInterface::class);
+        $this->documentToMediaGalleryAsset = $this->createMock(DocumentToMediaGalleryAsset::class);
+        $this->documentToAsset = $this->createMock(DocumentToAsset::class);
+        $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
+        $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
 
-        $this->saveImage = new SaveImage(
-            $this->saveAsset,
-            $this->storage,
-            $this->logger,
-            $this->client
+        $this->saveImage = (new ObjectManager($this))->getObject(
+            SaveImage::class,
+            [
+                'storageSave' => $this->storageSave,
+                'storageDelete' => $this->storageDelete,
+                'logger' => $this->logger,
+                'saveMediaAsset' =>  $this->saveMediaAsset,
+                'saveAdobeStockAsset' =>  $this->saveAdobeStockAsset,
+                'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAsset,
+                'documentToAsset' =>  $this->documentToAsset,
+                'documentToKeywords' => $this->documentToKeywords,
+                'saveAssetKeywords' => $this->saveAssetKeywords
+            ]
         );
     }
 
     /**
      * Verify that image can be saved.
+     *
+     * @param Document $document
+     * @param bool $delete
+     * @throws CouldNotSaveException
+     * @dataProvider assetProvider
      */
-    public function testExecute()
+    public function testExecute(Document $document, bool $delete): void
     {
-        $asset = $this->createMock(\Magento\AdobeStockAssetApi\Api\Data\AssetInterface::class);
+        if ($delete) {
+            $this->storageDelete->expects($this->once())
+                ->method('execute');
+        } else {
+            $this->storageDelete->expects($this->never())
+                ->method('execute');
+        }
 
-        $this->storage->expects($this->once())->method('save')
-            ->willReturn('');
-        $asset->expects($this->once())->method('getUrl')
-            ->willReturn('https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg');
-        $asset->expects($this->once())->method('setPath')->willReturn(null);
-        $this->saveAsset->expects($this->once())->method('execute')
-            ->with($asset);
-        $this->saveImage->execute($asset, '');
+        $this->storageSave->expects($this->once())
+            ->method('execute');
+
+        $this->documentToMediaGalleryAsset->expects($this->once())
+            ->method('convert')
+            ->with($document);
+
+        $mediaGalleryAssetId = 42;
+
+        $this->saveMediaAsset->expects($this->once())
+            ->method('execute')
+            ->willReturn($mediaGalleryAssetId);
+
+        $this->documentToKeywords->expects($this->once())
+            ->method('convert')
+            ->with($document);
+
+        $this->saveAssetKeywords->expects($this->once())
+            ->method('execute');
+
+        $this->documentToAsset->expects($this->once())
+            ->method('convert')
+            ->with($document);
+
+        $this->saveAdobeStockAsset->expects($this->once())
+            ->method('execute');
+
+        $this->saveImage->execute($document, 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg', 'path');
+    }
+
+    /**
+     * Data provider for testExecute
+     *
+     * @return array
+     */
+    public function assetProvider(): array
+    {
+        return [
+            [
+                'document' => $this->getDocument(),
+                'delete' => false
+            ],
+            [
+                'document' => $this->getDocument('filepath.jpg'),
+                'delete' => true
+            ],
+        ];
+    }
+
+    /**
+     * Get document
+     *
+     * @param string|null $path
+     * @return MockObject
+     */
+    private function getDocument(?string $path = null): MockObject
+    {
+        $document = $this->createMock(Document::class);
+        $pathAttribute = $this->createMock(AttributeInterface::class);
+        $pathAttribute->expects($this->once())
+            ->method('getValue')
+            ->willReturn($path);
+        $document->expects($this->once())
+            ->method('getCustomAttribute')
+            ->with('path')
+            ->willReturn($pathAttribute);
+
+        return $document;
     }
 }

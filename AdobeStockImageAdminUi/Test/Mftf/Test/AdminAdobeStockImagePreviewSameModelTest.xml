@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockImagePreviewSameModelTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #30] User sees images with the same model as the currently viewed one"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/345"/>
+            <title value="User sees images with the same model as the currently viewed one"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579511"/>
+            <description value="User sees images with the same model"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <click selector="{{AdobeStockImagePreviewSection.moreFromThisModel}}" stepKey="clickOnTabMoreForThisModel"/>
+        <actionGroup ref="AssertNumberOfImagesUnderMoreForThisModelActionGroup" stepKey="assertImagesUnderMoreForThisModelCount">
+            <argument name="imagesNumber" value="4"/>
+        </actionGroup>
+    </test>
+</tests>

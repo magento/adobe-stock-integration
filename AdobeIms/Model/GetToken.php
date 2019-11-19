@@ -11,7 +11,7 @@ namespace Magento\AdobeIms\Model;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
@@ -81,7 +81,7 @@ class GetToken implements GetTokenInterface
         );
 
         $tokenResponse = $this->json->unserialize($curl->getBody());
-        /** @var TokenResponse $tokenResponse */
+        /** @var TokenResponseInterface $tokenResponse */
         $tokenResponse = $this->tokenResponseFactory->create()
             ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')]);
 

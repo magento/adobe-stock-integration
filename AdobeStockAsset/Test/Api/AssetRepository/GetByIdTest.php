@@ -22,13 +22,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class GetByIdTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/adobestock/asset';
-
-    const SERVICE_VERSION = 'V1';
-
-    const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
-
-    const SERVICE_OPERATION = 'GetById';
+    private const RESOURCE_PATH = '/V1/adobestock/asset';
+    private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
+    private const SERVICE_OPERATION = 'GetById';
 
     /**
      * @var ObjectManagerInterface
@@ -36,7 +32,7 @@ class GetByIdTest extends WebapiAbstract
     private $objectManager;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
     private $assetCollectionFactory;
 
@@ -45,7 +41,7 @@ class GetByIdTest extends WebapiAbstract
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->assetCollectionFactory = $this->objectManager->get(CollectionFactory::class);
@@ -57,7 +53,7 @@ class GetByIdTest extends WebapiAbstract
      * @return void
      * @throws \Exception
      */
-    public function testGetNoSuchEntityException()
+    public function testGetNoSuchEntityException(): void
     {
         $notExistedAssetId = -1;
         $serviceInfo = [
@@ -67,7 +63,6 @@ class GetByIdTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION
             ],
         ];
@@ -75,19 +70,19 @@ class GetByIdTest extends WebapiAbstract
         $expectedMessage = 'Object with id "%1" does not exist.';
 
         try {
-            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $this->_webApiCall($serviceInfo);
             } else {
-                $this->_webApiCall($serviceInfo, [AssetInterface::ID => $notExistedAssetId]);
+                $this->_webApiCall($serviceInfo, ['id' => $notExistedAssetId]);
             }
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($expectedMessage, $errorData['message']);
                 self::assertEquals($notExistedAssetId, $errorData['parameters'][0]);
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            } elseif (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault($e, $expectedMessage, 'env:Sender', [1 => $notExistedAssetId]);
             } else {
@@ -99,11 +94,11 @@ class GetByIdTest extends WebapiAbstract
     /**
      * Test get by ID
      *
-     * @magentoApiDataFixture assetFixtureProvider
+     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
      *
      * @return void
      */
-    public function testGetAssetById()
+    public function testGetAssetById(): void
     {
         $assetId = $this->getAssetId();
         $serviceInfo = [
@@ -113,18 +108,17 @@ class GetByIdTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . self::SERVICE_OPERATION,
             ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+        if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
             $assetResultData = $this->_webApiCall($serviceInfo);
         } else {
-            $assetResultData = $this->_webApiCall($serviceInfo, [AssetInterface::ID => $assetId]);
+            $assetResultData = $this->_webApiCall($serviceInfo, ['id' => $assetId]);
         }
 
-        self::assertEquals($assetId, $assetResultData[AssetInterface::ID]);
+        self::assertEquals($assetId, $assetResultData['id']);
     }
 
     /**
@@ -140,15 +134,5 @@ class GetByIdTest extends WebapiAbstract
         $asset = $collection->getLastItem();
 
         return (int) $asset->getId();
-    }
-
-    /**
-     * Asset fixture provider
-     *
-     * @return void
-     */
-    public static function assetFixtureProvider()
-    {
-        require __DIR__ . '/../../_files/asset.php';
     }
 }

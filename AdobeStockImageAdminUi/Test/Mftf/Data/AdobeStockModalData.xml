@@ -12,5 +12,9 @@
         <data key="openModal">Search Adobe Stock</data>
         <data key="title">Adobe Stock</data>
         <data key="thumbnailsNumber">32</data>
+        <data key="authenticationErrorMessage">Failed to authenticate to Adobe Stock API. Please correct the API credentials</data>
+        <data key="availableText">AVAILABLE</data>
+        <data key="creditsText">Credits</data>
+        <data key="imagesText">Images</data>
     </entity>
 </entities>

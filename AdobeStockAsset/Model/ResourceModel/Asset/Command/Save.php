@@ -7,68 +7,79 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\EntityManager\Hydrator;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Save multiple asset service.
  */
 class Save
 {
+    private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
+
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
-     * @var Hydrator $hydrator
+     * @var DataExtractorInterface
      */
-    private $hydrator;
+    private $dataExtractor;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param Hydrator $hydrate
+     * @param DataExtractorInterface $dataExtractor
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        Hydrator $hydrate
+        DataExtractorInterface $dataExtractor,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->hydrator = $hydrate;
+        $this->dataExtractor = $dataExtractor;
+        $this->logger = $logger;
     }
 
     /**
-     * Multiple save category
+     * Save asset action.
      *
-     * @param AssetInterface $assets
-     * @return void
+     * @param AssetInterface $asset
+     *
+     * @throws CouldNotSaveException
      */
-    public function execute(AssetInterface $assets): void
+    public function execute(AssetInterface $asset): void
     {
-        $data = $this->hydrator->extract($assets);
-        $tableName = $this->resourceConnection->getTableName(
-            AssetResourceModel::ADOBE_STOCK_ASSET_TABLE_NAME
-        );
+        try {
+            $data = $this->dataExtractor->extract($asset, AssetInterface::class);
 
-        if (empty($data)) {
-            return;
+            if (empty($data)) {
+                return;
+            }
+
+            $connection = $this->resourceConnection->getConnection();
+            $tableName = $this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME);
+            $saveData = $this->filterData($data, array_keys($connection->describeTable($tableName)));
+            $connection->insertOnDuplicate($tableName, $saveData);
+        } catch (\Exception $exception) {
+            $message = __(
+                'An error occurred during adobe stock asset save: %error',
+                ['error' => $exception->getMessage()]
+            );
+            $this->logger->critical($message);
+            throw new CouldNotSaveException($message, $exception);
         }
-
-        $data = $this->filterData($data, array_keys($this->getConnection()->describeTable($tableName)));
-
-        $query = sprintf(
-            'INSERT INTO `%s` (%s) VALUES (%s)',
-            $tableName,
-            $this->getColumns(array_keys($data)),
-            $this->getValues(count($data))
-        );
-
-        $this->getConnection()->query($query, array_values($data));
     }
 
     /**
@@ -78,42 +89,8 @@ class Save
      * @param array $columns
      * @return array
      */
-    private function filterData(array $data, array $columns)
+    private function filterData(array $data, array $columns): array
     {
         return array_intersect_key($data, array_flip($columns));
-    }
-
-    /**
-     * Retrieve DB adapter
-     *
-     * @return AdapterInterface
-     */
-    private function getConnection(): AdapterInterface
-    {
-        return $this->resourceConnection->getConnection();
-    }
-
-    /**
-     * Get columns query part
-     *
-     * @param array $columns
-     * @return string
-     */
-    private function getColumns(array $columns): string
-    {
-        $connection = $this->getConnection();
-        $sql = implode(', ', array_map([$connection, 'quoteIdentifier'], $columns));
-        return $sql;
-    }
-
-    /**
-     * Get values query part
-     *
-     * @param int $number
-     * @return string
-     */
-    private function getValues(int $number): string
-    {
-        return implode(',', array_pad([], $number, '?'));
     }
 }

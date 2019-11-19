@@ -12,6 +12,7 @@ use Magento\AdobeStockClient\Model\SearchParametersProvider\Sorting;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,7 +33,7 @@ class SortingTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->sorting = $this->objectManager->getObject(Sorting::class);
@@ -43,20 +44,11 @@ class SortingTest extends TestCase
      */
     public function testApplyWithFoundedField(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getSortOrders'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sortOrderMock = $this->getMockBuilder(SortOrder::class)
-            ->setMethods(['getField'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        /** @var SearchParameters|MockObject $searchParameters */
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $sortOrderMock = $this->createMock(SortOrder::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getSortOrders')
             ->willReturn([$sortOrderMock]);
@@ -75,20 +67,11 @@ class SortingTest extends TestCase
      */
     public function testApplyWithoutFoundedField(): void
     {
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getSortOrders'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var SearchParameters|\PHPUnit_Framework_MockObject_MockObject $searchParameters */
-        $searchParameters = $this->getMockBuilder(SearchParameters::class)
-            ->setMethods(['setOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sortOrderMock = $this->getMockBuilder(SortOrder::class)
-            ->setMethods(['getField'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        /** @var SearchParameters|MockObject $searchParameters */
+        $searchParameters = $this->createMock(SearchParameters::class);
+        $sortOrderMock = $this->createMock(SortOrder::class);
         $searchCriteriaMock->expects($this->once())
             ->method('getSortOrders')
             ->willReturn([$sortOrderMock]);

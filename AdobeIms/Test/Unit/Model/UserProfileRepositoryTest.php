@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\AdobeIms\Model\UserProfileRepository;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\AdobeIms\Model\UserProfile;
 use Magento\AdobeIms\Model\ResourceModel\UserProfile as ResourceUserProfile;
+use Magento\AdobeIms\Model\UserProfile;
+use Magento\AdobeIms\Model\UserProfileRepository;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * User repository test.
@@ -31,7 +33,7 @@ class UserProfileRepositoryTest extends TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject $resource
+     * @var ResourceUserProfile|MockObject $resource
      */
     private $resource;
 
@@ -43,16 +45,11 @@ class UserProfileRepositoryTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->resource = $this->getMockBuilder(ResourceUserProfile::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save', 'load'])
-            ->getMock();
-        $this->entityFactory =  $this->getMockBuilder(UserProfileInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(ResourceUserProfile::class);
+        $this->entityFactory =  $this->createMock(UserProfileInterfaceFactory::class);
         $this->model = new UserProfileRepository(
             $this->resource,
             $this->entityFactory
@@ -65,23 +62,26 @@ class UserProfileRepositoryTest extends TestCase
     public function testSave(): void
     {
         $userProfile = $this->objectManager->getObject(UserProfile::class);
-        $this->assertNull($this->model->save($userProfile));
+        $this->resource->expects($this->once())
+            ->method('save')
+            ->with($userProfile);
+        $this->model->save($userProfile);
     }
 
     /**
      * Test save with exception.
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save user profile.
      */
     public function testSaveWithException(): void
     {
-        $userProfile =  $this->getMockBuilder(UserProfile::class)->disableOriginalConstructor()->getMock();
+        $this->expectException(CouldNotSaveException::class);
+        $this->expectExceptionMessage('Could not save user profile.');
+
+        $userProfile = $this->createMock(UserProfile::class);
         $this->resource->expects($this->once())
             ->method('save')
             ->with($userProfile)
             ->willThrowException(
-                new \Magento\Framework\Exception\CouldNotSaveException(__('Could not save user profile.'))
+                new CouldNotSaveException(__('Could not save user profile.'))
             );
         $this->model->save($userProfile);
     }
@@ -89,7 +89,7 @@ class UserProfileRepositoryTest extends TestCase
     /**
      * Test get  id.
      */
-    public function testGet()
+    public function testGet(): void
     {
         $entity = $this->objectManager->getObject(UserProfile::class)->setId(1);
         $this->entityFactory->method('create')
@@ -99,19 +99,19 @@ class UserProfileRepositoryTest extends TestCase
 
     /**
      * Test get user id with exception.
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The user profile wasn't found.
      */
-    public function testGeWithException()
+    public function testGeWithException(): void
     {
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage('The user profile wasn\'t found.');
+
         $entity = $this->objectManager->getObject(UserProfile::class);
         $this->entityFactory->method('create')
             ->willReturn($entity);
         $this->resource->expects($this->once())
             ->method('load')
             ->willThrowException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('The user profile wasn\'t found.'))
+                new NoSuchEntityException(__('The user profile wasn\'t found.'))
             );
         $this->model->get(1);
     }
@@ -119,7 +119,7 @@ class UserProfileRepositoryTest extends TestCase
     /**
      * Test get by user id.
      */
-    public function testGetByUserId()
+    public function testGetByUserId(): void
     {
         $entity = $this->objectManager->getObject(UserProfile::class)->setId(1);
         $this->entityFactory->method('create')

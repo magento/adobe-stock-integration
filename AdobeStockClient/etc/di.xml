@@ -7,8 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\AdobeStockClientApi\Api\ClientInterface" type="Magento\AdobeStockClient\Model\Client"/>
-    <preference for="Magento\AdobeStockClientApi\Api\Data\ConfigInterface" type="Magento\AdobeStockClient\Model\Config"/>
+    <preference for="Magento\AdobeStockClientApi\Api\ConfigInterface" type="Magento\AdobeStockClient\Model\Config"/>
     <preference for="Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface" type="Magento\AdobeStockClient\Model\UserQuota"/>
+    <preference for="Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface" type="Magento\AdobeStockClient\Model\LicenseConfirmation"/>
     <type name="Magento\AdobeStockClient\Model\Config">
         <arguments>
             <argument name="searchResultFields" xsi:type="array">
@@ -30,6 +31,7 @@
                 <item name="16" xsi:type="string">CONTENT_TYPE</item>
                 <item name="17" xsi:type="string">DETAILS_URL</item>
                 <item name="18" xsi:type="string">PREMIUM_LEVEL_ID</item>
+                <item name="19" xsi:type="string">IS_LICENSED</item>
             </argument>
         </arguments>
     </type>
@@ -51,6 +53,7 @@
                 <item name="words" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Words</item>
                 <item name="media_id" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\MediaId</item>
                 <item name="premium_price_filter" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Premium</item>
+                <item name="similar" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProvider\Similar</item>
             </argument>
         </arguments>
     </type>
@@ -60,6 +63,8 @@
                 <item name="colors_filter" xsi:type="string">setFilterColors</item>
                 <item name="serie_id" xsi:type="string">setSerieId</item>
                 <item name="model_id" xsi:type="string">setModelId</item>
+                <item name="premium_filter" xsi:type="string">setFilterPremium</item>
+                <item name="gallery_id" xsi:type="string">setGalleryId</item>
             </argument>
         </arguments>
     </type>

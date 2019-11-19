@@ -15,22 +15,6 @@ use Magento\Ui\Component\Filters\Type\Input;
  */
 class RelatedImages extends Input
 {
-    const NAME = 'filter_input';
-
-    const COMPONENT = 'input';
-
-    /**
-     * Prepare component configuration
-     *
-     * @return void
-     */
-    public function prepare(): void
-    {
-        $this->applyFilter();
-
-        parent::prepare();
-    }
-
     /**
      * Apply filter
      *

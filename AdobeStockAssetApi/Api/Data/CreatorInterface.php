@@ -9,16 +9,14 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
 use Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface CreatorInterface
  * @api
  */
-interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface CreatorInterface extends ExtensibleDataInterface
 {
-    const ID = 'id';
-    const NAME = 'name';
-
     /**
      * Get the id
      *
@@ -27,27 +25,11 @@ interface CreatorInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getId() : ?int;
 
     /**
-     * Set the id
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value): void;
-
-    /**
      * Get the creator name
      *
      * @return string|null
      */
     public function getName(): ?string;
-
-    /**
-     * Set the creator name
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setName(string $value): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

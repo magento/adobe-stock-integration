@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
-use Magento\AdobeStockAsset\Model\GetAssetById;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockImage\Model\SaveImage;
+use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
@@ -21,30 +21,14 @@ use Psr\Log\LoggerInterface;
  */
 class License extends Action
 {
-    /**
-     * Successful image license and download result code.
-     */
-    const HTTP_OK = 200;
-
-    /**
-     * Internal server error response code.
-     */
-    const HTTP_INTERNAL_ERROR = 500;
-
-    /**
-     * Download image failed response code.
-     */
-    const HTTP_BAD_REQUEST = 400;
+    private const HTTP_OK = 200;
+    private const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_BAD_REQUEST = 400;
 
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
-
-    /**
-     * @var GetAssetById
-     */
-    private $getAssetById;
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::license_images';
 
     /**
      * @var ClientInterface
@@ -57,51 +41,46 @@ class License extends Action
     private $logger;
 
     /**
-     * @var SaveImage
+     * @var SaveLicensedImageInterface
      */
-    private $saveImage;
+    private $saveLicensedImage;
 
     /**
-     * GetQuota constructor.
-     *
      * @param Action\Context $context
      * @param ClientInterface $client
-     * @param SaveImage $saveImage
+     * @param SaveLicensedImageInterface $saveLicensedImage
      * @param LoggerInterface $logger
-     * @param GetAssetById $getAssetById
      */
     public function __construct(
         Action\Context $context,
         ClientInterface $client,
-        SaveImage $saveImage,
-        LoggerInterface $logger,
-        GetAssetById $getAssetById
+        SaveLicensedImageInterface $saveLicensedImage,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
 
         $this->client = $client;
-        $this->saveImage = $saveImage;
-        $this->getAssetById = $getAssetById;
+        $this->saveLicensedImage = $saveLicensedImage;
         $this->logger = $logger;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
         try {
             $params = $this->getRequest()->getParams();
-            $contentId = (int)$params['media_id'];
-            $destinationPath = (string) $params['destination_path'];
-            $responseCode = self::HTTP_OK;
-            $this->client->licenseImage($contentId);
-            $asset = $this->getAssetById->execute($contentId);
-            $imageUrl = $this->client->getImageDownloadUrl($contentId);
-            $asset->setUrl($imageUrl);
-            $asset->setIsLicensed(1);
-            $this->saveImage->execute($asset, $destinationPath);
+            $contentId = (int) $params['media_id'];
 
+            $this->client->licenseImage($contentId);
+
+            $this->saveLicensedImage->execute(
+                $contentId,
+                (string) $params['destination_path']
+            );
+
+            $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
                 'message' => __('You have successfully licensed and downloaded the image.'),
@@ -123,7 +102,7 @@ class License extends Action
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);

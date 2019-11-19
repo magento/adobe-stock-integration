@@ -1,0 +1,19 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="keywords">
+    <div class="title" translate="'Similar Keywords'"></div>
+    <!-- ko foreach: getKeywords($col.displayedRecord()) -->
+        <div class="keyword" data-bind="css: { 'hide': $index() >= $parent.getKeywordsLimit()}">
+            <a href="" class="value" data-bind="click: function(){ $parent.searchByKeyWord(name) }">
+                <span text="name"/>
+            </a>
+        </div>
+    <!-- /ko -->
+    <button data-bind="visible: canViewMoreKeywords, click: function(){ viewAllKeywords($col.displayedRecord()) }">
+        <span translate="'View all'"/>
+    </button>
+</div>

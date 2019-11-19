@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<% if (data.visible) { %>
+<form <%= formAttr %>>
+    <fieldset class="admin__fieldset">
+        <div class="admin__field admin__field-wide">
+            <% if(data.label){ %>
+            <label for="prompt-field-<%- data.id %>" class="admin__field-label">
+                <span><%= data.label %></span>
+            </label>
+            <% } %>
+            <div class="admin__field-control admin__field-with-image-ext">
+                <input type="text" data-role="adobe-stock-image-name-field" id="prompt-field-<%- data.id %>" placeholder="Enter the filename (no special characters)" class="admin__control-text" <%= inputAttr %>/>
+                <span class="image-ext">.<%= data.imageExtension %></span>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<% } %>

@@ -12,7 +12,6 @@
         "magento/module-adobe-stock-client-api": "*",
         "magento/module-adobe-stock-admin-ui": "*",
         "magento/module-adobe-ims": "*",
-        "magento/module-adobe-ui": "*",
         "magento/module-adobe-ims-api": "*"
     }
 }

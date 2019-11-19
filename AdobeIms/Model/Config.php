@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Config\Model\Config\Backend\Admin\Custom;
-use Magento\AdobeImsApi\Api\Data\ConfigInterface;
 
 /**
  * Class Config
@@ -22,6 +22,9 @@ class Config implements ConfigInterface
     private const XML_PATH_PRIVATE_KEY = 'adobe_stock/integration/private_key';
     private const XML_PATH_TOKEN_URL = 'adobe_stock/integration/token_url';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_stock/integration/auth_url_pattern';
+    private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_stock/integration/logout_url';
+    private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_stock/integration/default_profile_image';
+    private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_stock/integration/image_url';
 
     /**
      * @var ScopeConfigInterface
@@ -47,9 +50,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Retrieve integration API key (Client ID)
-     *
-     * @return string|null
+     * @inheritdoc
      */
     public function getApiKey():? string
     {
@@ -85,9 +86,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Retrieve Callback URL
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getCallBackUrl(): string
     {
@@ -102,5 +101,37 @@ class Config implements ConfigInterface
     private function getLocale(): string
     {
         return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLogoutUrl(string $accessToken, string $redirectUrl = '') : string
+    {
+        return str_replace(
+            ['#{access_token}', '#{redirect_uri}'],
+            [$accessToken, $redirectUrl],
+            $this->scopeConfig->getValue(self::XML_PATH_LOGOUT_URL_PATTERN)
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProfileImageUrl(): string
+    {
+        return str_replace(
+            ['#{api_key}'],
+            [$this->getApiKey()],
+            $this->scopeConfig->getValue(self::XML_PATH_IMAGE_URL_PATTERN)
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDefaultProfileImage(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_DEFAULT_PROFILE_IMAGE);
     }
 }

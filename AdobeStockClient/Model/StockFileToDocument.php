@@ -12,7 +12,7 @@ use AdobeStock\Api\Models\StockFile;
 use Exception;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Search\DocumentFactory;
-use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Phrase;
@@ -39,7 +39,6 @@ class StockFileToDocument
     private $logger;
 
     /**
-     * StockFileToDocument constructor.
      * @param DocumentFactory $documentFactory
      * @param AttributeValueFactory $attributeValueFactory
      * @param LoggerInterface $logger
@@ -58,10 +57,10 @@ class StockFileToDocument
      * Convert a stock file object to a document object
      *
      * @param StockFile $file
-     * @return DocumentInterface
+     * @return Document
      * @throws IntegrationException
      */
-    public function convert(StockFile $file): DocumentInterface
+    public function convert(StockFile $file): Document
     {
         $itemData = (array) $file;
         $itemId = $itemData['id'];
@@ -72,13 +71,32 @@ class StockFileToDocument
         $itemData['category_id'] = $category['id'];
         $itemData['category_name'] = $category['name'];
 
-        $attributes = $this->createAttributes('id', $itemData);
+        $attributes = $this->createAttributes('id', $this->toArray($itemData));
 
         $item = $this->documentFactory->create();
         $item->setId($itemId);
         $item->setCustomAttributes($attributes);
 
         return $item;
+    }
+
+    /**
+     * Convert data to an associate array
+     *
+     * @param object|array $data
+     * @return mixed
+     */
+    private function toArray($data)
+    {
+        if (is_object($data) || is_array($data)) {
+            $array = [];
+            foreach ((array)$data as $key => $item) {
+                $array[$key] = $this->toArray($item);
+            }
+            return $array;
+        }
+
+        return $data;
     }
 
     /**
@@ -129,7 +147,7 @@ class StockFileToDocument
      * @param Exception $exception
      * @throws IntegrationException
      */
-    private function processException(Phrase $message, Exception $exception)
+    private function processException(Phrase $message, Exception $exception): void
     {
         $this->logger->critical($message->render());
         throw new IntegrationException($message, $exception, $exception->getCode());

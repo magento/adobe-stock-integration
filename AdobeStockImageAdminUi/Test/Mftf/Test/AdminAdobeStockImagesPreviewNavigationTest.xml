@@ -10,10 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockImagesPreviewNavigationTest">
         <annotations>
-            <stories value="User navigates to next previous image"/>
-            <title value="Admin should be able to navigates to next previous image from the currently viewed"/>
-            <description value="Admin should be able to navigates to next previous image from the currently viewed"/>
-            <severity value="CRITICAL"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #17] User navigates to next previous image from the currently viewed"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/40"/>
+            <title value="User navigates to next previous image from the currently viewed"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218871"/>
+            <description value="Admin should be able to navigate to next / previous image from the currently viewed preview image"/>
+            <severity value="BLOCKER"/>
             <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
@@ -26,16 +29,18 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.image}}" userInput="src" stepKey="getCurrentImageUrl"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="NavigateToNextImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <!-- Assert that User switched to the next image "-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getCurrentImageUrl)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToNextImage"/>
         <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.image}}" userInput="src"
                            stepKey="getImageUrlAfterSwitchedToNextImage"/>
-        <!-- Assert that User switched to the previous image "-->
         <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="NavigateToPreviousImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
+        <!-- Assert that User switched to the previous image "-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getImageUrlAfterSwitchedToNextImage)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToPreviousImage"/>
         <!-- Assert that User can close preview "-->

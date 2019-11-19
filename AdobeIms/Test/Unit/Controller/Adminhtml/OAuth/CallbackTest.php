@@ -8,14 +8,21 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\OAuth;
 
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Auth;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\User\Model\User;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
+use Magento\AdobeIms\Model\GetImage;
 
 /**
  * User repository test.
@@ -28,27 +35,27 @@ class CallbackTest extends TestCase
     private $objectManager;
 
     /**
-     * @var MockObject $context
+     * @var MockObject|Context $context
      */
     private $context;
 
     /**
-     * @var MockObject $userProfileRepositoryInterface
+     * @var MockObject|UserProfileRepositoryInterface $userProfileRepositoryInterface
      */
     private $userProfileRepositoryInterface;
 
     /**
-     * @var MockObject $userProfileInterfaceFactory
+     * @var MockObject|UserProfileInterfaceFactory $userProfileInterfaceFactory
      */
     private $userProfileInterfaceFactory;
 
     /**
-     * @var MockObject $getTokenInterface
+     * @var MockObject|GetTokenInterface $getTokenInterface
      */
     private $getTokenInterface;
 
     /**
-     * @var MockObject $logger
+     * @var MockObject|LoggerInterface $logger
      */
     private $logger;
 
@@ -58,7 +65,7 @@ class CallbackTest extends TestCase
     private $callback;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject $request
+     * @var MockObject $request
      */
     private $request;
 
@@ -78,42 +85,39 @@ class CallbackTest extends TestCase
     private $resultFactory;
 
     /**
+     * @var GetImage|MockObject
+     */
+    private $getImage;
+
+    /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->authMock = $this->getMockBuilder(\Magento\Backend\Model\Auth::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
-            ->getMock();
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->authMock = $this->createMock(Auth::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context = $this->objectManager->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'auth' => $this->authMock,
                 'resultFactory' => $this->resultFactory
             ]
         );
-        $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'setUserId'])
-            ->getMock();
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->userMock = $this->createMock(User::class);
+        $this->request = $this->createMock(Http::class);
         $this->userProfileRepositoryInterface = $this->createMock(UserProfileRepositoryInterface::class);
         $this->userProfileInterfaceFactory = $this->createMock(UserProfileInterfaceFactory::class);
         $this->getTokenInterface = $this->createMock(GetTokenInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
+        $this->getImage = $this->createMock(GetImage::class);
         $this->callback = new Callback(
             $this->context,
             $this->userProfileRepositoryInterface,
             $this->userProfileInterfaceFactory,
             $this->getTokenInterface,
-            $this->logger
+            $this->logger,
+            $this->getImage
         );
     }
 
@@ -122,13 +126,12 @@ class CallbackTest extends TestCase
      */
     public function testExecute(): void
     {
-        $this->authMock->expects($this->exactly(2))
-            ->method('getUser')
+        $this->authMock->method('getUser')
             ->will($this->returnValue($this->userMock));
-        $this->userMock->expects($this->exactly(2))
-            ->method('getId')
+        $this->userMock->method('getId')
             ->willReturn(1);
-        $userProfileMock = $this->createMock(\Magento\AdobeImsApi\Api\Data\UserProfileInterface::class);
+        $userProfileMock = $this->createMock(UserProfileInterface::class);
+        $this->getImage->expects($this->once())->method('execute')->willReturn('https://image.url/image.png');
         $this->userProfileRepositoryInterface->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($userProfileMock);
@@ -138,10 +141,8 @@ class CallbackTest extends TestCase
             ->method('setRefreshToken');
         $userProfileMock->expects($this->once())
             ->method('setAccessTokenExpiresAt');
-        $resultInterfaceMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setContents'])
-            ->getMock();
+        $userProfileMock->expects($this->once())->method('setImage');
+        $resultInterfaceMock = $this->createMock(Raw::class);
         $this->userProfileRepositoryInterface->expects($this->once())
             ->method('save')
             ->willReturn(null);

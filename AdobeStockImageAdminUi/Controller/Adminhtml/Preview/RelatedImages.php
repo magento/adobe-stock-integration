@@ -3,12 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Preview;
 
-use Magento\AdobeStockImage\Model\GetRelatedImages;
+use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -19,18 +18,16 @@ use Psr\Log\LoggerInterface;
  */
 class RelatedImages extends Action
 {
-    /**
-     * Successful get related image result code.
-     */
-    const HTTP_OK = 200;
+    private const HTTP_OK = 200;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
-     * Internal server error response code.
+     * @see _isAllowed()
      */
-    const HTTP_INTERNAL_ERROR = 500;
+    public const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
 
     /**
-     * @var GetRelatedImages
+     * @var GetRelatedImagesInterface
      */
     private $getRelatedImages;
 
@@ -43,12 +40,12 @@ class RelatedImages extends Action
      * RelatedImages constructor.
      *
      * @param Action\Context $context
-     * @param GetRelatedImages $getRelatedImages
+     * @param GetRelatedImagesInterface $getRelatedImages
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        GetRelatedImages $getRelatedImages,
+        GetRelatedImagesInterface $getRelatedImages,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
@@ -56,7 +53,7 @@ class RelatedImages extends Action
         $this->logger = $logger;
     }
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {

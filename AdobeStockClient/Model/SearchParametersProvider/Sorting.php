@@ -10,7 +10,7 @@ namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
 use AdobeStock\Api\Core\Constants;
 use AdobeStock\Api\Models\SearchParameters;
-use Magento\AdobeStockClientApi\Api\SearchParameterProviderInterface;
+use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
@@ -19,11 +19,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class Sorting implements SearchParameterProviderInterface
 {
     /**
-     * Apply sorting
-     *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @param SearchParameters $searchParams
-     * @return SearchParameters
+     * @inheritdoc
      */
     public function apply(SearchCriteriaInterface $searchCriteria, SearchParameters $searchParams): SearchParameters
     {

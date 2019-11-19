@@ -10,10 +10,12 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockImagePreviewAttributesTest">
         <annotations>
-            <stories value="Admin User see images preview attributes"/>
-            <title value="Admin should be able to see images attributes in the image preview"/>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #3] User views the image details"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/24"/>
+            <title value="User views the image details"/>
             <description value="Admin should be able to see images attributes in the image preview"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
@@ -26,7 +28,7 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <click selector="{{AdobeStockSection.imagesThumbnails}}" stepKey="clickOnThumbnail"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
 
         <!-- Assert that image attributes visible "-->
         <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeDimension">
@@ -41,20 +43,12 @@
         <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeFile">
             <argument name="attributeName" value="File #"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('Dimensions')}}" stepKey="getDimensionAttributeValue"/>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File type')}}" stepKey="getFileTypeAttributeValue"/>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('Category')}}" stepKey="getCategoryAttributeValue"/>
         <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
 
-        <!-- Assert that image attributes changed "-->
-        <assertNotContains actual="$getDimensionAttributeValue"
-                           expected="AdobeStockImagePreviewSection.attribute('Dimensions')" expectedType="string"
-                           stepKey="assertAttributeDimensionChanged"/>
-        <assertNotContains actual="$getDimensionAttributeValue"
-                           expected="AdobeStockImagePreviewSection.attribute('Category')" expectedType="string"
-                           stepKey="assertAttributeCategoryChanged"/>
-        <assertNotContains actual="$getDimensionAttributeValue"
+        <!-- Assert that file # attribute changed "-->
+        <assertNotContains actual="$getFileAttributeValue"
                            expected="AdobeStockImagePreviewSection.attribute('File #')" expectedType="string"
                            stepKey="assertAttributeFileChanged"/>
     </test>

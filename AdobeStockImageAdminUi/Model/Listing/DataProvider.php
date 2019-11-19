@@ -11,14 +11,16 @@ namespace Magento\AdobeStockImageAdminUi\Model\Listing;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
  * DataProvider of customer addresses for customer address grid.
  */
-class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
+class DataProvider extends UiComponentDataProvider
 {
     /**
      * @var GetImageListInterface
@@ -27,16 +29,16 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * DataProvider constructor.
-     * @param string                $name
-     * @param string                $primaryFieldName
-     * @param string                $requestFieldName
-     * @param ReportingInterface    $reporting
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param ReportingInterface $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param RequestInterface      $request
-     * @param FilterBuilder         $filterBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
      * @param GetImageListInterface $getImageList
-     * @param array                 $meta
-     * @param array                 $data
+     * @param array $meta
+     * @param array $data
      */
     public function __construct(
         string $name,
@@ -66,10 +68,24 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * @inheritdoc
-     *
-     * @throws LocalizedException
      */
-    public function getSearchResult()
+    public function getData()
+    {
+        try {
+            return $this->searchResultToOutput($this->getSearchResult());
+        } catch (LocalizedException $exception) {
+            return [
+                'items' => [],
+                'totalRecords' => 0,
+                'errorMessage' => $exception->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSearchResult(): SearchResultInterface
     {
         return $this->getImageList->execute($this->getSearchCriteria());
     }

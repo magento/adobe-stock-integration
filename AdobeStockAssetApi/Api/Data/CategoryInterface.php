@@ -9,16 +9,14 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api\Data;
 
 use Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface CategoryInterface
  * @api
  */
-interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface CategoryInterface extends ExtensibleDataInterface
 {
-    const ID = 'id';
-    const NAME = 'name';
-
     /**
      * Get the id
      *
@@ -27,27 +25,11 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getId() : ?int;
 
     /**
-     * Set the id
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value): void;
-
-    /**
      * Get the category name
      *
      * @return string
      */
     public function getName(): ?string;
-
-    /**
-     * Set the category name
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setName(string $value): void;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

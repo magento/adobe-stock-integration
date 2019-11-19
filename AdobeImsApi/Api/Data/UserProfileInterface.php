@@ -8,41 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeImsApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface UserProfileInterface
  * @api
  */
-interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface UserProfileInterface extends ExtensibleDataInterface
 {
-    /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
-    const ID = 'id';
-    const USER_ID = 'admin_user_id';
-    const NAME = 'name';
-    const EMAIL = 'email';
-    const ACCOUNT_TYPE = 'account_type';
-    const ACCESS_TOKEN = 'access_token';
-    const REFRESH_TOKEN = 'refresh_token';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
-    const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
-    /**#@-*/
-
     /**
      * Get ID
      *
      * @return int
      */
     public function getId();
-
-    /**
-     * Set ID
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value);
 
     /**
      * Get user ID
@@ -88,6 +67,21 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return string|null
      */
     public function getEmail(): ?string;
+
+    /**
+     * Get user profile image.
+     *
+     * @return string|null
+     */
+    public function getImage(): ?string;
+
+    /**
+     * Set's user profile image.
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setImage(string $value): void;
 
     /**
      * Get account type

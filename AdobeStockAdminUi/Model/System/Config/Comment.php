@@ -18,6 +18,8 @@ class Comment implements CommentInterface
 {
     private const REDIRECT_MCA = 'adobe_ims/oauth/callback';
 
+    private const REG_EXP_URL = '.*';
+
     /**
      * @var UrlInterface
      */
@@ -47,14 +49,9 @@ class Comment implements CommentInterface
             ['io_link' => '<a href="https://console.adobe.io/" target="_blank">Adobe.io</a>']
         );
 
-        $notes = __(
-            'Redirect URI: %uri <br><br>Pattern: %pattern',
-            [
-                'uri' => $this->getRedirectUrl(),
-                'pattern' => $this->getRedirectUrlPattern(),
-            ]
-        );
-
+        $redirectUri = __('Redirect URI: %redirect_uri', ['redirect_uri' => $this->getRedirectUrl()]);
+        $pattern = __('Pattern: %pattern', ['pattern' => $this->getRedirectUrlPattern()]);
+        $notes = $redirectUri . '<br><br>' . $pattern;
         return $message . '<br><br>' . $notes;
     }
 
@@ -75,6 +72,6 @@ class Comment implements CommentInterface
      */
     private function getRedirectUrlPattern(): string
     {
-        return str_replace('.', '\\\.', $this->getRedirectUrl());
+        return str_replace('.', '\\\.', $this->getRedirectUrl()) . self::REG_EXP_URL;
     }
 }

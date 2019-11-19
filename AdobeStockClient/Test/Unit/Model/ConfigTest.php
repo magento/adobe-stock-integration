@@ -10,6 +10,7 @@ namespace Magento\AdobeStockClient\Test\Unit\Model;
 use Magento\AdobeStockClient\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,8 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    private const CONFIG_XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
-
     private const CONFIG_XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
 
     private const CONFIG_XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
@@ -34,20 +33,17 @@ class ConfigTest extends TestCase
     private $config;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->config = $this->objectManager->getObject(
             Config::class,
             [
