@@ -8,12 +8,13 @@ addons:
       - mysql-client-core-5.6
       - mysql-client-5.6
       - postfix
-  firefox: latest
+  chrome: stable
   hosts:
     - magento2.travis
 services:
   - rabbitmq
   - elasticsearch
+  - mysql
 language: php
 php:
   - '7.1'
@@ -21,39 +22,81 @@ php:
   - '7.3'
 env:
   global:
-    - COMPOSER_BIN_DIR=~/bin
-    - NODE_JS_VERSION=8
     - MAGENTO_HOST_NAME="magento2.travis"
+    - MAGENTO_PROTOCOL="https"
+    - MAGENTO_BACKEND="backend"
+    - MAGENTO_ADMIN_USERNAME="admin"
+    - MAGENTO_ADMIN_PASSWORD="123123q"
   matrix:
     - TEST_SUITE=unit
     - TEST_SUITE=phpstan
     - TEST_SUITE=static
+    # List out subsets of functional tests to run separately to fit under travis timeout (50mins)
+    # TODO: this is hacky, is there a better way?
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_preview
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_configuration
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
 matrix:
   fast_finish: true
+jobs:
+  # only run MFTF tests on PHP 7.3
+  exclude:
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_preview
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_configuration
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_preview
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_configuration
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
 cache:
   directories:
     - $HOME/.composer/cache
-    - $HOME/.nvm
-    - $HOME/node_modules
-    - $HOME/yarn.lock
+    # cache location of webdrivers for MFTF (chromedriver, geckdriver, etc)
+    - $HOME/drivers
 before_install:
-  - mkdir -p ext/magento/adobe-stock-integration
-  - mv !(ext) ext/magento/adobe-stock-integration/
-  - ./ext/magento/adobe-stock-integration/dev/travis/before_install.sh
+  - bash -x dev/travis/before_install.sh
 install:
-  - cd magento2
+  - mkdir -p magento2/app/code/Magento
+  - mv Adobe* magento2/app/code/Magento/.
+  - pushd magento2
   - composer install
-  - composer config minimum-stability dev
-  - composer config repositories.ext path "../ext/*/*/*"
-  - composer require magento/adobe-stock-integration
+  - composer require astock/stock-api-libphp
+  - popd
 before_script:
-  - cp ../ext/magento/adobe-stock-integration/dev/tests/unit/phpunit.xml dev/tests/unit/phpunit.xml
-  - cp -f ../ext/magento/adobe-stock-integration/dev/travis/before_script.sh dev/travis/before_script.sh
-  - ./dev/travis/before_script.sh
+  - bash -x dev/travis/before_script.sh
 script:
-  - if [ $TEST_SUITE == 'unit' ]; then phpunit --configuration dev/tests/unit/phpunit.xml; fi
-  - if [ $TEST_SUITE == 'phpstan' ]; then composer require --dev phpstan/phpstan fooman/phpstan-magento2-magic-methods && phpstan analyse -l 2 ../ext -a dev/tests/api-functional/framework/autoload.php ; fi
-  - if [ $TEST_SUITE == 'static' ]; then phpcs --standard=dev/tests/static/framework/Magento/ ../ext ; fi
-  - if [ $TEST_SUITE == 'static' ]; then ! find ../ext -type f -name "*.php" -exec grep -L strict_types=1 {} + | grep ext/magento/adobe-stock-integration/; fi
+  - pushd magento2
+  - if [ $TEST_SUITE == 'unit' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml; fi
+  - if [ $TEST_SUITE == 'phpstan' ]; then composer require --dev phpstan/phpstan fooman/phpstan-magento2-magic-methods && vendor/bin/phpstan analyse -l 2 app/code/Magento/Adobe* -a dev/tests/api-functional/framework/autoload.php ; fi
+  - if [ $TEST_SUITE == 'static' ]; then vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/Magento/Adobe*; fi
+  - if [ $TEST_SUITE == 'static' ]; then ! find app/code/Magento/Adobe*/ -type f -name "*.php" -exec grep -L strict_types=1 {} + | grep Adobe; fi
+  - if [ $TEST_SUITE == 'functional' ]; then echo "Running MFTF suite ${MFTF_SUITE}" && vendor/bin/mftf run:group $MFTF_SUITE --remove -vvv; fi
 after_success:
   - if [ $TEST_SUITE == 'unit' ]; then cd ../ && travis_retry coveralls; fi
+after_failure:
+  - if [ $TEST_SUITE == 'functional' ]; then cat "${HOME}/drivers/*.log" && cat "${TRAVIS_BUILD_DIR}/magento2/var/log/*.log" && cat "${TRAVIS_BUILD_DIR}/var/reports/*"
