@@ -18,7 +18,6 @@ define([
             // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = adobe_stock_images_listing',
             quotaUrl: 'adobe_stock/license/quota',
-            getImagesUrl: 'adobe_stock/imagelisting/getimages',
             modules: {
                 source: '${ $.dataProvider }',
                 preview: '${ $.previewProvider }'
@@ -43,19 +42,19 @@ define([
             var self = this; // TODO Please bind this properly
 
             return new window.Promise(function (resolve, reject) {
-                        if (self.user().isAuthorized) {
-                            return resolve();
-                        }
-                        auth(self.loginConfig)
-                            .then(function (response) {
-                                self.loadUserProfile();
-                                self.setLicensedImages();
-                                resolve(response);
-                            })
-                            .catch(function (error) {
-                                reject(error);
-                            });
+                if (self.user().isAuthorized) {
+                    return resolve();
+                }
+                auth(self.loginConfig)
+                    .then(function (response) {
+                        self.loadUserProfile();
+                        self.preview().setLicensedImages();
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        reject(error);
                     });
+            });
         },
 
         /**
@@ -63,54 +62,23 @@ define([
          */
         logout: function () {
             $.ajax({
-                        type: 'POST',
-                        url: this.logoutUrl,
-                        data: {
-                            'form_key': window.FORM_KEY
-                        },
-                        dataType: 'json',
-                        context: this,
-                        showLoader: true,
-                        success: function () {
-                            this.setLicensedImages();
-                            this.user({
-                                            isAuthorized: false,
-                                            name: '',
-                                            email: '',
-                                            image: this.defaultProfileImage
-                                        });
-                        }.bind(this),
-
-                        /**
-                         * @param {Object} response
-                         * @returns {String}
-                         */
-                        error: function (response) {
-                            return response.message;
-                        }
-                    });
-        },
-
-        /**
-                * Set Licensed images data.
-                */
-        setLicensedImages: function () {
-            $.ajax({
-                type: 'GET',
-                url: this.getImagesUrl,
+                type: 'POST',
+                url: this.logoutUrl,
                 data: {
                     'form_key': window.FORM_KEY
                 },
                 dataType: 'json',
                 context: this,
-
-                /**
-                 * @param {Object} response
-                 * @returns void
-                 */
-                success: function (response) {
-                    this.source().set('data', response.result);
-                },
+                showLoader: true,
+                success: function () {
+                    this.preview().setLicensedImages();
+                    this.user({
+                        isAuthorized: false,
+                        name: '',
+                        email: '',
+                        image: this.defaultProfileImage
+                    });
+                }.bind(this),
 
                 /**
                  * @param {Object} response

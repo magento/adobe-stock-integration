@@ -69,8 +69,8 @@ class GetImages extends Action
         try {
             $images = $this->getImageList->execute($this->getSearchCriteria());
             $result = $this->searchResultToOutput($images);
-
-            $responseCode = self::HTTP_OK;
+	    
+	    $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
                 'message' => __('Get images finished successfully'),

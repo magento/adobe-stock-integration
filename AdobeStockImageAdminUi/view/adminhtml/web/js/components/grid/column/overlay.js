@@ -20,7 +20,7 @@ define([
                 '${ $.provider }:data.items': 'setLabels'
             },
             isLicensed: {
-                items: {}
+		    items: {}
             }
         },
 
@@ -32,7 +32,7 @@ define([
             this._super()
                 .observe([
                     'isLicensed'
-                ]);
+               ]);
 
             return this;
         },
@@ -41,16 +41,17 @@ define([
 	 * Set Licensed lable to the image.
 	 */
         setLabels: function () {
+	    var isLicensed = this.isLicensed();
             this.rows().data.items.forEach((item) => {
-                item.overlay = ko.observable();
-                item.visibility = ko.observable(false);
-
+		    isLicensed.items[item.id] = [{visibility: false, overlay: ''}];
+               
                 if (item.is_licensed) { //jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-                    item.overlay('Licensed');
-                    item.visibility(true);
+                    isLicensed.items[item.id].overlay = 'Licensed';
+                    isLicensed.items[item.id].visibility = true;
                 }
             });
-            this.isLicensed.items = this.rows().data.items;
+            this.isLicensed(isLicensed);
+		console.log(this.rows().data.items);
         },
 
         /**
@@ -74,7 +75,8 @@ define([
          * @returns {Boolean}
          */
         isVisible: function (row) {
-            return this.isLicensed.items.find(x => x.id === row.id).visibility();
+	    var item = this.isLicensed().items[row.id];
+            return overlay ? item.visibility : false;
         },
 
         /**
@@ -84,7 +86,8 @@ define([
          * @returns {String}
          */
         getLabel: function (row) {
-            return this.isLicensed.items.find(x => x.id === row.id).overlay();
+	    var item = this.isLicensed().items[row.id];
+            return overlay ? item.overlay : '';
         }
     });
 });
