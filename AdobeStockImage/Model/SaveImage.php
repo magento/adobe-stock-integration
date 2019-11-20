@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
-use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
-use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
-use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
+use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
+use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -157,8 +157,8 @@ class SaveImage implements SaveImageInterface
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('Image was not saved: %error', ['error' => $exception->getMessage()]);
-            $this->logger->critical($message);
             throw new CouldNotSaveException($message, $exception);
         }
     }
