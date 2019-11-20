@@ -35,7 +35,7 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
-            <argument name="query" value="{{AdobeStockConfigDataUnlicensedImage.value}}"/>
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandPreviewedImage"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.licenseAndSave}}" stepKey="assertLicenseAndSaveButtonIsVisible"/>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdobeStockImageData">
+        <data key="name" unique="suffix">my-image-</data>
+    </entity>
+    <entity name="AdobeStockLicensedImage">
+        <data key="id">{{_ENV.ADOBE_STOCK_LICENSED_IMAGE}}</data>
+    </entity>
+    <entity name="AdobeStockUnlicensedImage">
+        <data key="id">{{_ENV.ADOBE_STOCK_UNLICENSED_IMAGE}}</data>
+    </entity>
+</entities>
