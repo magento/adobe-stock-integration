@@ -15,7 +15,7 @@
             <title value="Admin is able to set the image name on saving the image preview"/>
             <description value="Admin is able to set the image name on saving the image preview"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_filters"/>
+            <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
