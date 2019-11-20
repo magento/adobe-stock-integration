@@ -8,10 +8,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertAdobeStockImageSavedActionGroup">
-        <waitForPageLoad stepKey="waitForMaskDiapered" />
-        <grabValueFrom selector="{{AdobeStockImagePreviewSection.generatedImageName}}" stepKey="generatedImage" />
+        <waitForPageLoad stepKey="waitForMaskToDisappear" />
+        <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="imageName" />
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
-        <waitForPageLoad stepKey="waitForMaskDiapered1" />
-        <seeElement selector="{{AdobeStockSection.selectedImagePreview({$generatedImage})}}" stepKey="assertSavedImage" />
+        <waitForPageLoad stepKey="waitForMaskToDisappear1" />
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$imageName})}}" stepKey="assertSavedImage" />
     </actionGroup>
 </actionGroups>

@@ -9,21 +9,21 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryDeleteImage">
         <arguments>
-            <argument name="generatedImageName" type="string"/>
+            <argument name="name" type="string"/>
         </arguments>
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}" stepKey="seeImageToDelete"/>
-        <click selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}" stepKey="clickImageToDelete"/>
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage(name)}}" stepKey="seeImageToDelete"/>
+        <click selector="{{AdobeStockSection.mediaGalleryImage(name)}}" stepKey="clickImageToDelete"/>
         <!-- Click image again, incase image was already selected and above step unselected the image by clicking it -->
         <conditionalClick
             visible="false"
             dependentSelector="{{AdobeStockSection.mediaGalleryDeleteButton}}"
-            selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}"
+            selector="{{AdobeStockSection.mediaGalleryImage(name)}}"
             stepKey="clickImageToDeleteAgain"/>
         <waitForElementVisible selector="{{AdobeStockSection.mediaGalleryDeleteButton}}" stepKey="waitForDeleteButton"/>
         <click selector="{{AdobeStockSection.mediaGalleryDeleteButton}}" stepKey="clickDeleteButton"/>
         <waitForElementVisible selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
         <waitForPageLoad stepKey="waitForMaskDisappeared"/>
-        <dontSeeElement selector="{{AdobeStockSection.mediaGalleryImage(generatedImageName)}}" stepKey="assertImageIsDeleted"/>
+        <dontSeeElement selector="{{AdobeStockSection.mediaGalleryImage(name)}}" stepKey="assertImageIsDeleted"/>
     </actionGroup>
 </actionGroups>

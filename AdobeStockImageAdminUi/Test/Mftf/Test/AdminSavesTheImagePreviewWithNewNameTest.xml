@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSavesTheImagePreviewWithNewNameTest">
+        <annotations>
+            <features value="AdobeStockConfiguration"/>
+            <stories value="Admin should be able to save the image preview with a new image name"/>
+            <title value="Admin is able to set the image name on saving the image preview"/>
+            <description value="Admin is able to set the image name on saving the image preview"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteSelectedAdobeStockImagePreviewActionGroup" stepKey="removeSavedPreview"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPopup"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="openTheSaveImagePreviewPopup"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AssertAdminImageIsVisibleInMediaGalleryActionGroup" stepKey="checkIfTheSavedImagesIsAvailable"/>
+    </test>
+</tests>
