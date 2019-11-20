@@ -17,7 +17,7 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579522"/>
             <description value="Admin should be able to able to see keywords in the image preview"/>
             <severity value="MAJOR"/>
-            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration_keywords"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

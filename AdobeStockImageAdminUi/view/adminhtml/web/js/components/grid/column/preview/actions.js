@@ -177,10 +177,13 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            return record.title.substring(0, 32)
+            var fileName = record.title.substring(0, 32)
                 .replace(/[^a-zA-Z0-9_]/g, '-')
                 .replace(/-{2,}/g, '-')
                 .toLowerCase();
+
+            /* If the filename does not contain latin chars, use ID as a filename */
+            return fileName === '-' ? record.id : fileName;
         },
 
         /**

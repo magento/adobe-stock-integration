@@ -15,31 +15,27 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <config_path>adobe_stock/integration/enabled</config_path>
                 </field>
-                <field id="api_key" translate="label" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>API Key</label>
-                    <comment><![CDATA[Configure an Adobe Stock account on the <a href="https://console.adobe.io/" target="_blank">Adobe.io</a> site to retrieve an API key (Client ID).]]></comment>
+                <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Key (Client ID)</label>
                     <config_path>adobe_stock/integration/api_key</config_path>
-                    <validate>required-entry</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="adobe_stock_test_connect_wizard" translate="button_label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="private_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Client Secret</label>
+                    <config_path>adobe_stock/integration/private_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                    <comment><![CDATA[Configure an Adobe Stock account on <a href="https://console.adobe.io" target="_blank">adobe.io</a> to get the API Key (Client ID) and Client Secret. You will not be able to use the integration without both the API Key and Client Secret.]]></comment>
+                </field>
+                <field id="adobe_stock_test_connect_wizard" translate="button_label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label/>
                     <button_label>Test Connection</button_label>
                     <frontend_model>Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\TestConnection</frontend_model>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                    <comment><![CDATA[Check currently inserted value on the fly or already saved value if the API Key input value is not changed.]]></comment>
-                </field>
-                <field id="private_key" translate="label" type="password" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Private Key</label>
-                    <comment model="Magento\AdobeStockAdminUi\Model\System\Config\Comment" />
-                    <config_path>adobe_stock/integration/private_key</config_path>
-                    <validate>required-entry</validate>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
