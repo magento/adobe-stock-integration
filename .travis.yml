@@ -79,7 +79,7 @@ jobs:
     - php: '7.2'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
     - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
 cache:
   directories:
     - $HOME/.composer/cache
