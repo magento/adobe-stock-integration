@@ -119,6 +119,49 @@ class GetRelatedImagesTest extends TestCase
     }
 
     /**
+     * Test case when a problem occurred during get image list and an exception thrown.
+     */
+    public function testExceptionThrownOnGetImageListExecute(): void
+    {
+        $this->filterBuilder->expects($this->any())
+            ->method('setField')
+            ->willReturnSelf();
+        $this->filterBuilder->expects($this->any())
+            ->method('setValue')
+            ->willReturnSelf();
+        $this->filterBuilder->expects($this->any())
+            ->method('create')
+            ->willReturn(
+                $this->createMock(Filter::class)
+            );
+        $this->searchCriteriaBuilder->expects($this->any())
+            ->method('addFilter')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilder->expects($this->any())
+            ->method('setPageSize')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilder->expects($this->any())
+            ->method('create')
+            ->willReturn(
+                $this->createMock(SearchCriteria::class)
+            );
+        $searchCriteriaMock = $this->createMock(SearchResultInterface::class);
+        $this->getImageListInterface->expects($this->any())
+            ->method('execute')
+            ->willReturn($searchCriteriaMock);
+        $searchCriteriaMock->expects($this->any())
+            ->method('getItems')
+            ->willThrowException(new \Exception());
+
+        $this->logger->expects($this->any())
+            ->method('critical')
+            ->willReturnSelf();
+        $this->expectException(IntegrationException::class);
+
+        $this->getRelatedSeries->execute(12345678, 30);
+    }
+
+    /**
      * Series Data provider.
      *
      * @return array

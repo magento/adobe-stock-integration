@@ -149,7 +149,7 @@ class StockFileToDocument
      */
     private function processException(Phrase $message, Exception $exception): void
     {
-        $this->logger->critical($message->render());
+        $this->logger->critical($exception);
         throw new IntegrationException($message, $exception, $exception->getCode());
     }
 }
