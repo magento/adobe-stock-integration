@@ -13,8 +13,10 @@ namespace Magento\AdobeImsApi\Api;
  */
 interface LogOutInterface
 {
-    /*
-     *  LogOut User from Adobe Account
+    /**
+     * LogOut User from Adobe Account
+     *
+     * @return bool
      */
     public function execute() : bool;
 }

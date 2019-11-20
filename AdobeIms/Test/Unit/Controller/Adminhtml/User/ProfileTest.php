@@ -84,7 +84,6 @@ class ProfileTest extends TestCase
             $this->userProfileRepository,
             $this->logger
         );
-
     }
 
     /**
@@ -129,7 +128,6 @@ class ProfileTest extends TestCase
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($result));
         $this->profile->execute();
-
     }
 
     /**
@@ -153,6 +151,5 @@ class ProfileTest extends TestCase
                     ]
                 ]
             ];
-
     }
 }

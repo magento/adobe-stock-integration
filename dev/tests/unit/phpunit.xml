@@ -13,32 +13,32 @@
          bootstrap="./framework/bootstrap.php"
 >
     <testsuite name="Magento Adobe Stock Unit Tests">
-        <directory suffix="Test.php">../../../vendor/magento/module-adobe*/Test/Unit/</directory>
+        <directory suffix="Test.php">../../../app/code/Magento/Adobe*/Test/Unit/</directory>
     </testsuite>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../../../vendor/magento/module-adobe*/</directory>
+            <directory suffix=".php">../../../app/code/Adobe*/</directory>
             <exclude>
-                <directory>../../../vendor/magento/module-adobe*/Test</directory>
-                <directory suffix="registration.php">../../../vendor/magento/module-adobe*/</directory>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Asset.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Category.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Creator.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Keyword.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/Config.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Asset.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Category.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Creator.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Asset/Collection.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Category/Collection.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-asset/Model/ResourceModel/Creator/Collection.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-client/Model/UserQuota.php</file>
-                <file>../../../vendor/magento/module-adobe-stock-client/Model/Config.php</file>
-                <file>../../../vendor/magento/module-adobe-ims/Model/Config.php</file>
-                <file>../../../vendor/magento/module-adobe-ims/Model/UserProfile.php</file>
-                <file>../../../vendor/magento/module-adobe-ims/Model/OAuth/TokenResponse.php</file>
-                <file>../../../vendor/magento/module-adobe-ims/Model/ResourceModel/UserProfile.php</file>
-                <file>../../../vendor/magento/module-adobe-ims/Model/ResourceModel/UserProfile/Collection.php</file>
+                <directory>../../../app/code/Magento/Adobe*/Test</directory>
+                <directory suffix="registration.php">../../../app/code/Magento/Adobe*/</directory>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/Asset.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/Category.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/Creator.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/Keyword.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/Config.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/ResourceModel/Asset.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/ResourceModel/Category.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/ResourceModel/Creator.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/ResourceModel/Asset/Collection.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/ResourceModel/Category/Collection.php</file>
+                <file>../../../app/code/Magento/AdobeStockAsset/Model/ResourceModel/Creator/Collection.php</file>
+                <file>../../../app/code/Magento/AdobeStockClient/Model/UserQuota.php</file>
+                <file>../../../app/code/Magento/AdobeStockClient/Model/Config.php</file>
+                <file>../../../app/code/Magento/AdobeIms/Model/Config.php</file>
+                <file>../../../app/code/Magento/AdobeIms/Model/UserProfile.php</file>
+                <file>../../../app/code/Magento/AdobeIms/Model/OAuth/TokenResponse.php</file>
+                <file>../../../app/code/Magento/AdobeIms/Model/ResourceModel/UserProfile.php</file>
+                <file>../../../app/code/Magento/AdobeIms/Model/ResourceModel/UserProfile/Collection.php</file>
             </exclude>
         </whitelist>
     </filter>

@@ -17,16 +17,10 @@
     </entity>
     <entity name="AdobeStockConfigDataApiKey">
         <data key="path">adobe_stock/integration/api_key</data>
-        <data key="value">{{_ENV.ADOBE_STOCK_API_KEY}}</data>
+        <data key="value">{{_CREDS.magento/ADOBE_STOCK_API_KEY}}</data>
     </entity>
     <entity name="AdobeStockConfigDataPrivateKey">
         <data key="path">adobe_stock/integration/private_key</data>
-        <data key="value">{{_ENV.ADOBE_STOCK_PRIVATE_KEY}}</data>
-    </entity>
-    <entity name="AdobeStockConfigDataSignInEmailData">
-        <data key="value">{{_ENV.ADOBE_STOCK_USER_EMAIL}}</data>
-    </entity>
-    <entity name="AdobeStockConfigDataSignInPasswordData">
-        <data key="value">{{_ENV.ADOBE_STOCK_USER_PASSWORD}}</data>
+        <data key="value">{{_CREDS.magento/ADOBE_STOCK_PRIVATE_KEY}}</data>
     </entity>
 </entities>

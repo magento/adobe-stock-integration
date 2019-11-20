@@ -29,7 +29,8 @@ define([
             messageDelay: 5,
             modules: {
                 login: '${ $.loginProvider }',
-                preview: '${ $.parentName }.preview'
+                preview: '${ $.parentName }.preview',
+                source: '${ $.provider }'
             }
         },
 
@@ -114,7 +115,7 @@ define([
                 requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
                     license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
                 destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
-                                  this.getImageExtension(record);
+                    this.getImageExtension(record);
 
             $.ajax({
                 type: 'POST',
@@ -133,17 +134,15 @@ define([
                  *
                  */
                 success: function () {
-                    var displayedRecord = this.preview().displayedRecord();
-
-                    displayedRecord['is_downloaded'] = 1;
-                    displayedRecord.path = destinationPath;
+                    record['is_downloaded'] = 1;
+                    record.path = destinationPath;
 
                     if (license || isLicensed) {
-                        displayedRecord['is_licensed'] = 1;
-                        displayedRecord['is_licensed_locally'] = 1;
+                        record['is_licensed'] = 1;
+                        record['is_licensed_locally'] = 1;
                     }
-
-                    this.preview().displayedRecord(displayedRecord);
+                    this.preview().displayedRecord(record);
+                    this.source().set('params.t ', Date.now());
                     $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
                 },
@@ -178,10 +177,13 @@ define([
          * @return string
          */
         generateImageName: function (record) {
-            return record.title.substring(0, 32)
+            var fileName = record.title.substring(0, 32)
                 .replace(/[^a-zA-Z0-9_]/g, '-')
                 .replace(/-{2,}/g, '-')
                 .toLowerCase();
+
+            /* If the filename does not contain latin chars, use ID as a filename */
+            return fileName === '-' ? record.id : fileName;
         },
 
         /**
