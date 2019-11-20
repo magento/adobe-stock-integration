@@ -51,8 +51,10 @@ define([
          * Send request to server to test connection to Adobe Stock API and display the result
          */
         testConnection: function () {
-            this.visible(false);
             var apiKey = document.getElementById(this.apiKeyInputId).value;
+
+            this.visible(false);
+
             if (apiKey.length === 0) {
                 this.showMessage(false, this.emptyApiKeyErrorMessage);
             } else {
