@@ -40,12 +40,12 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
         <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForPromptModal" />
-        <grabValueFrom selector="{{AdobeStockImagePreviewSection.generatedImageName}}" stepKey="grabImageFileName" />
+        <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
         <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
         <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
         <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
-            <argument name="generatedImageName" value="{$grabImageFileName}"/>
+            <argument name="name" value="{$grabImageFileName}"/>
         </actionGroup>
     </test>
 </tests>
