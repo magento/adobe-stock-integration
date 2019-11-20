@@ -64,6 +64,8 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
     sed -e "s?%MAGENTO_HOST_NAME%?${MAGENTO_HOST_NAME}?g" --in-place ./.env
     sed -e "s?%MAGENTO_ADMIN_USERNAME%?${MAGENTO_ADMIN_USERNAME}?g" --in-place ./.env
     sed -e "s?%MAGENTO_ADMIN_PASSWORD%?${MAGENTO_ADMIN_PASSWORD}?g" --in-place ./.env
+    sed -e "s?%ADOBE_STOCK_LICENSED_IMAGE%?${ADOBE_STOCK_LICENSED_IMAGE}?g" --in-place ./.env
+    sed -e "s?%ADOBE_STOCK_UNLICENSED_IMAGE%?${ADOBE_STOCK_UNLICENSED_IMAGE}?g" --in-place ./.env
     cp -f ${TRAVIS_BUILD_DIR}/dev/tests/acceptance/.credentials .credentials
     sed -e "s?%ADOBE_STOCK_API_KEY%?${ADOBE_STOCK_API_KEY}?g" --in-place ./.credentials
     sed -e "s?%ADOBE_STOCK_PRIVATE_KEY%?${ADOBE_STOCK_PRIVATE_KEY}?g" --in-place ./.credentials
