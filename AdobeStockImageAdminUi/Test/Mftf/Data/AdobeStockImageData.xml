@@ -14,4 +14,7 @@
     <entity name="AdobeStockLicensedImage">
         <data key="id">{{_ENV.ADOBE_STOCK_LICENSED_IMAGE}}</data>
     </entity>
+    <entity name="AdobeStockUnlicensedImage">
+        <data key="id">{{_ENV.ADOBE_STOCK_UNLICENSED_IMAGE}}</data>
+    </entity>
 </entities>
