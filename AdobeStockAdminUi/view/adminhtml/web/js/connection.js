@@ -13,6 +13,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockAdminUi/connection',
             defaultErrorMessage: 'Connection test failed.',
+            emptyApiKeyErrorMessage: 'Please enter an API Key and then test the connection',
             apiKeyInputId: 'system_adobe_stock_integration_api_key',
             url: '',
             serverSuccess: false
@@ -51,20 +52,25 @@ define([
          */
         testConnection: function () {
             this.visible(false);
-            $.ajax({
-                type: 'POST',
-                url: this.url,
-                dataType: 'json',
-                data: {
-                    'api_key': document.getElementById(this.apiKeyInputId).value
-                },
-                success: $.proxy(function (response) {
-                    this.showMessage(response.success === true, response.message);
-                }, this),
-                error: $.proxy(function () {
-                    this.showMessage(false, this.defaultErrorMessage);
-                }, this)
-            });
+            var apiKey = document.getElementById(this.apiKeyInputId).value;
+            if (apiKey.length === 0) {
+                this.showMessage(false, this.emptyApiKeyErrorMessage);
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: this.url,
+                    dataType: 'json',
+                    data: {
+                        'api_key': apiKey
+                    },
+                    success: $.proxy(function (response) {
+                        this.showMessage(response.success === true, response.message);
+                    }, this),
+                    error: $.proxy(function () {
+                        this.showMessage(false, this.defaultErrorMessage);
+                    }, this)
+                });
+            }
         }
     });
 });
