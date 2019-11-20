@@ -10,8 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockImsPopupSignInFillUserDataActionGroup">
         <arguments>
-            <argument name="email" type="string" defaultValue="{{AdobeStockConfigDataSignInEmailData.value}}"/>
-            <argument name="password" type="string" defaultValue="{{AdobeStockConfigDataSignInPasswordData.value}}"/>
+            <argument name="email" type="string" defaultValue="{{AdobeStockLogin.email}}"/>
+            <argument name="password" type="string" defaultValue="{{AdobeStockLogin.password}}"/>
         </arguments>
         <switchToWindow stepKey="switchToWindow"/>
         <fillField selector="{{AdobeStockSection.adobeImsPopupUserEmail}}" userInput="{{email}}" stepKey="fillUserEmail" />
