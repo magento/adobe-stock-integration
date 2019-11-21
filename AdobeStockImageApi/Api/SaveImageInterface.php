@@ -17,13 +17,12 @@ use Magento\Framework\Api\Search\Document;
 interface SaveImageInterface
 {
     /**
-     * Save full image interface
+     * Downloads the image from the $url, saves it to $destinationPath in media gallery
+     * Saves media gallery asset and adobe stock asset entities to database
      *
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
-     *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function execute(Document $document, string $url, string $destinationPath): void;
 }
