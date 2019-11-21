@@ -9,7 +9,7 @@
  */
 ?>
 
-<div id="adobe-stock-images-search-modal" style="display: none;">
+<div id="adobe-stock-images-search-modal" class="adobe-search-images-modal" style="display: none;">
     <div class="adobe-stock-images-search-modal-content">
         <?= $block->getChildHtml(); ?>
     </div>
@@ -30,3 +30,21 @@
         }
     }
 </script>
+<script>
+require([
+    'jquery',
+], function ($) {
+	$(function () {
+	   var searchButton = "#search_adobe_stock",
+	       adobeStockModal = ".adobe-search-images-modal";
+
+		$(searchButton).click(function() {
+		   if ($(adobeStockModal).length > 1) {
+			$(adobeStockModal)[0].remove(); 
+		   }		   
+                 $(adobeStockModal).trigger("openModal");
+		});
+	});
+});
+</script>
+
