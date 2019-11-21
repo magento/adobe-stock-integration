@@ -11,14 +11,15 @@ namespace Magento\AdobeStockImageApi\Api;
 use Magento\Framework\Api\Search\Document;
 
 /**
- * SaveImageInterface
+ * Downloads the image from the $url, saves it to $destinationPath in media gallery
+ * Saves media gallery asset and adobe stock asset entities to database
+ *
  * @api
  */
 interface SaveImageInterface
 {
     /**
-     * Downloads the image from the $url, saves it to $destinationPath in media gallery
-     * Saves media gallery asset and adobe stock asset entities to database
+     * Downloads the image and save it to filesystem and database
      *
      * @param Document $document
      * @param string $url

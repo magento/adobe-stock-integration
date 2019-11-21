@@ -262,7 +262,7 @@ define([
                                             }
 
                                             licenseAndSave(record, fileName);
-                                        }.bind(this)
+                                        }
                                     },
                                     'buttons': [{
                                         text: cancelText,
