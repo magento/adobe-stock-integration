@@ -118,7 +118,7 @@ class LicenseTest extends TestCase
     {
         $result = [
             'success' => true,
-            'message' => new Phrase('You have successfully licensed and downloaded the image.')
+            'message' => new Phrase('The image was licensed and saved successfully.')
         ];
 
         $mediaId = 283415387;
@@ -148,11 +148,12 @@ class LicenseTest extends TestCase
      *
      * @dataProvider exceptionsDataProvider
      *
-     * @param LocalizedException $exception
+     * @param \Exception $exception
      * @param int $responseCode
      * @param array $result
+     * @throws NotFoundException
      */
-    public function testNotFoundAsset(LocalizedException $exception, int $responseCode, array $result): void
+    public function testNotFoundAsset(\Exception $exception, int $responseCode, array $result): void
     {
         $mediaId = 283415387;
 
@@ -187,15 +188,15 @@ class LicenseTest extends TestCase
                 400,
                 [
                     'success' => false,
-                    'message' => new Phrase('Image not found. Could not be saved.')
+                    'message' => 'Requested image doesn\'t exists.'
                 ]
             ],
             "Test the thrown exception if the asset couldn't be licensed or downloaded" => [
-                new LocalizedException(new Phrase('Failed to save the image.')),
+                new \Exception('Failed to save the image.'),
                 500,
                 [
                     'success' => false,
-                    'message' => new Phrase('An error occurred while image license and download. Contact support.')
+                    'message' => 'An error occurred on attempt to license and save the image.'
                 ]
             ]
         ];

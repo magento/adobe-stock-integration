@@ -143,9 +143,9 @@ class DownloadTest extends TestCase
      */
     public function testExecuteWithException(): void
     {
-        $result = ['success' => false, 'message' => new Phrase('An error occurred while image download.Error')];
+        $result = ['success' => false, 'message' => 'Error'];
         $this->saveImage->method('execute')->willThrowException(new CouldNotSaveException(new Phrase('Error')));
-        $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(500);
+        $this->jsonObject->expects($this->once())->method('setHttpResponseCode')->with(400);
         $this->jsonObject->expects($this->once())->method('setData')
             ->with($this->equalTo($result));
         $this->download->execute();

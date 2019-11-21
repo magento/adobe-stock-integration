@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model\Storage;
 
-use Exception;
 use Magento\AdobeStockImage\Model\Storage\Save;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\Https;
@@ -19,7 +18,6 @@ use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 /**
  * Test for the storage save functionality
@@ -52,11 +50,6 @@ class SaveTest extends TestCase
     private $fileSystemIoMock;
 
     /**
-     * @var MockObject | LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Initialize base test objects
      */
     protected function setUp(): void
@@ -64,7 +57,6 @@ class SaveTest extends TestCase
         $this->fileSystemMock = $this->createMock(Filesystem::class);
         $this->httpsDriverMock = $this->createMock(Https::class);
         $this->fileSystemIoMock = $this->createMock(File::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Write::class);
 
         $this->save = (new ObjectManager($this))->getObject(
@@ -72,8 +64,7 @@ class SaveTest extends TestCase
             [
                 'filesystem'   => $this->fileSystemMock,
                 'driver'       => $this->httpsDriverMock,
-                'fileSystemIo' => $this->fileSystemIoMock,
-                'logger'          => $this->logger,
+                'fileSystemIo' => $this->fileSystemIoMock
             ]
         );
     }
@@ -91,7 +82,7 @@ class SaveTest extends TestCase
             ->willReturn($this->mediaDirectoryMock);
 
         $this->mediaDirectoryMock->expects($this->once())
-            ->method('search')
+            ->method('isExist')
             ->withAnyParameters()
             ->will($this->returnValue([]));
         $this->httpsDriverMock->expects($this->once())
@@ -121,7 +112,7 @@ class SaveTest extends TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
         $this->mediaDirectoryMock->expects($this->once())
-            ->method('search')
+            ->method('isExist')
             ->withAnyParameters()
             ->will($this->returnValue(['240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg']));
 
@@ -131,10 +122,7 @@ class SaveTest extends TestCase
         $this->mediaDirectoryMock->expects($this->never())
             ->method('writeFile');
 
-        $this->expectException(CouldNotSaveException::class);
-        $this->logger->expects($this->once())
-            ->method('critical')
-            ->willReturnSelf();
+        $this->expectException(AlreadyExistsException::class);
 
         $this->save->execute($imageUrl, '/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg');
     }
