@@ -11,9 +11,9 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\SerializationException;
 use Psr\Log\LoggerInterface;
@@ -83,7 +83,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
                     ->setPageSize($limit)
                     ->create();
                 $relatedImageGroups[$key] = $this->serializeRelatedImages(
-                    $this->getImageList->execute($searchCriteria)->getItems()
+                    $this->getImageList->execute($searchCriteria)->getItems(),
+                    $imageId
                 );
             }
             return $relatedImageGroups;
@@ -98,10 +99,11 @@ class GetRelatedImages implements GetRelatedImagesInterface
      * Serialize related image data.
      *
      * @param Document[] $images
+     * @param int $imageId
      * @return array
      * @throws SerializationException
      */
-    private function serializeRelatedImages(array $images): array
+    private function serializeRelatedImages(array $images, int $imageId): array
     {
         $data = [];
         try {
@@ -116,7 +118,9 @@ class GetRelatedImages implements GetRelatedImagesInterface
                     }
                     $itemData[$attribute->getAttributeCode()] = $attribute->getValue();
                 }
-                $data[] = $itemData;
+                if ($image->getId() !== $imageId) {
+                    $data[] = $itemData;
+                }
             }
             return $data;
         } catch (\Exception $exception) {

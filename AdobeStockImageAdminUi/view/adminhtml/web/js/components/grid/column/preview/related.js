@@ -80,16 +80,20 @@ define([
             $.ajax({
                 type: 'GET',
                 url: this.preview().relatedImagesUrl,
+                showLoader: true,
                 dataType: 'json',
                 data: {
                     'image_id': record.id,
-                    'limit': this.tabImagesLimit
+                    'limit': this.tabImagesLimit + 1
                 }
             }).done(function (data) {
                 var relatedImages = this.relatedImages();
-
-                relatedImages.series[record.id] = data.result['same_series'];
-                relatedImages.model[record.id] = data.result['same_model'];
+                relatedImages.series[record.id] = (data.result['same_series'].length > this.tabImagesLimit)
+                    ? data.result['same_series'].splice(0, this.tabImagesLimit)
+                    : data.result['same_series'];
+                relatedImages.model[record.id] = (data.result['same_model'].length > this.tabImagesLimit)
+                    ? data.result['same_model'].splice(0,this.tabImagesLimit)
+                    : data.result['same_model'];
                 this.relatedImages(relatedImages);
                 this.preview().updateHeight();
             }.bind(this));
