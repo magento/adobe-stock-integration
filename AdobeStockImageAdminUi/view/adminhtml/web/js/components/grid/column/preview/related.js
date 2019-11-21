@@ -88,12 +88,8 @@ define([
                 }
             }).done(function (data) {
                 var relatedImages = this.relatedImages();
-                relatedImages.series[record.id] = (data.result['same_series'].length > this.tabImagesLimit)
-                    ? data.result['same_series'].splice(0, this.tabImagesLimit)
-                    : data.result['same_series'];
-                relatedImages.model[record.id] = (data.result['same_model'].length > this.tabImagesLimit)
-                    ? data.result['same_model'].splice(0,this.tabImagesLimit)
-                    : data.result['same_model'];
+                relatedImages.series[record.id] = data.result['same_series'];
+                relatedImages.model[record.id] = data.result['same_model'];
                 this.relatedImages(relatedImages);
                 this.preview().updateHeight();
             }.bind(this));

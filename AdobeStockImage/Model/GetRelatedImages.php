@@ -84,7 +84,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
                     ->create();
                 $relatedImageGroups[$key] = $this->serializeRelatedImages(
                     $this->getImageList->execute($searchCriteria)->getItems(),
-                    $imageId
+                    $imageId,
+                    $limit
                 );
             }
             return $relatedImageGroups;
@@ -100,10 +101,11 @@ class GetRelatedImages implements GetRelatedImagesInterface
      *
      * @param Document[] $images
      * @param int $imageId
+     * @param int $limit
      * @return array
      * @throws SerializationException
      */
-    private function serializeRelatedImages(array $images, int $imageId): array
+    private function serializeRelatedImages(array $images, int $imageId, int $limit): array
     {
         $data = [];
         try {
@@ -122,6 +124,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
                     $data[] = $itemData;
                 }
             }
+            $data = (count($data) > $limit-1 ? array_pop($data) : $data);
             return $data;
         } catch (\Exception $exception) {
             throw new SerializationException(
