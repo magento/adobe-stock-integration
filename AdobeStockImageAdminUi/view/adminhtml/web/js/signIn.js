@@ -39,22 +39,20 @@ define([
          * @return {window.Promise}
          */
         login: function () {
-            var self = this; // TODO Please bind this properly
-
             return new window.Promise(function (resolve, reject) {
-                if (self.user().isAuthorized) {
+                if (this.user().isAuthorized) {
                     return resolve();
                 }
-                auth(self.loginConfig)
+                auth(this.loginConfig)
                     .then(function (response) {
-                        self.loadUserProfile();
-                        self.preview().setLicensedImages();
+                        this.loadUserProfile();
+                        this.preview().setLicensedImages();
                         resolve(response);
-                    })
+                    }.bind(this))
                     .catch(function (error) {
                         reject(error);
                     });
-            });
+            }.bind(this));
         },
 
         /**

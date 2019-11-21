@@ -12,14 +12,29 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_AdobeStockAdminUi/connection',
-            defaultErrorMessage: 'Connection test failed.',
+            connectionFailedMessage: 'Connection test failed.',
+            emptyApiKeyMessage: 'Please fill the "API Key (Client ID)" field for a connection test',
             apiKeyInputId: 'system_adobe_stock_integration_api_key',
             url: '',
-            serverSuccess: false
+            success: false,
+            message: '',
+            visible: false
         },
-        success: ko.observable(false),
-        message: ko.observable(''),
-        visible: ko.observable(false),
+
+        /**
+         * Init observable variables
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'success',
+                    'message',
+                    'visible'
+                ]);
+
+            return this;
+        },
 
         /**
          * @override
@@ -30,15 +45,14 @@ define([
                 return 'message-validation message message-' + (this.success() ? 'success' : 'error');
             }, this);
 
-            if (!this.serverSuccess) {
-                this.visible(true);
-                this.message(this.defaultErrorMessage);
+            if (!this.success()) {
+                this.showMessage(false, this.connectionFailedMessage);
             }
         },
 
         /**
-         * @param {String} success
-         * @param {bool} message
+         * @param {bool} success
+         * @param {String} message
          */
         showMessage: function (success, message) {
             this.message(message);
@@ -50,20 +64,29 @@ define([
          * Send request to server to test connection to Adobe Stock API and display the result
          */
         testConnection: function () {
+            var apiKey = document.getElementById(this.apiKeyInputId).value;
+
+            if (apiKey.length === 0) {
+                this.showMessage(false, this.emptyApiKeyMessage);
+
+                return;
+            }
+
             this.visible(false);
+
             $.ajax({
                 type: 'POST',
                 url: this.url,
                 dataType: 'json',
                 data: {
-                    'api_key': document.getElementById(this.apiKeyInputId).value
+                    'api_key': apiKey
                 },
-                success: $.proxy(function (response) {
+                success: function (response) {
                     this.showMessage(response.success === true, response.message);
-                }, this),
-                error: $.proxy(function () {
-                    this.showMessage(false, this.defaultErrorMessage);
-                }, this)
+                }.bind(this),
+                error: function () {
+                    this.showMessage(false, this.connectionFailedMessage);
+                }.bind(this)
             });
         }
     });
