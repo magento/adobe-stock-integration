@@ -42,7 +42,7 @@ env:
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
 matrix:
   fast_finish: true
 jobs:
