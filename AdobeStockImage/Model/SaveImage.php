@@ -9,10 +9,6 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
@@ -20,11 +16,14 @@ use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class SaveImage
@@ -77,11 +76,6 @@ class SaveImage implements SaveImageInterface
     private $documentToKeywords;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var SaveAssetKeywordsInterface
      */
     private $saveAssetKeywords;
@@ -97,7 +91,6 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetInterface $saveAdobeStockAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param DocumentToAsset $documentToAsset
-     * @param LoggerInterface $logger
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      */
@@ -110,7 +103,6 @@ class SaveImage implements SaveImageInterface
         SaveAssetInterface $saveAdobeStockAsset,
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         DocumentToAsset $documentToAsset,
-        LoggerInterface $logger,
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords
     ) {
@@ -122,7 +114,6 @@ class SaveImage implements SaveImageInterface
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
         $this->documentToAsset = $documentToAsset;
-        $this->logger = $logger;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
     }

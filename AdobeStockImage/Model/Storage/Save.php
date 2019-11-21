@@ -14,7 +14,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class Save
@@ -32,24 +31,16 @@ class Save
     private $driver;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Storage constructor.
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param LoggerInterface $logger
      */
     public function __construct(
         Filesystem $filesystem,
-        Https $driver,
-        LoggerInterface $logger
+        Https $driver
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->logger = $logger;
     }
 
     /**
