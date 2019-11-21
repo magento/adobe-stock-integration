@@ -93,7 +93,7 @@ class TestConnection extends Field
             return $this->client->testConnection($this->config->getApiKey());
         }
 
-        return false;
+        return true;
     }
 
     /**
