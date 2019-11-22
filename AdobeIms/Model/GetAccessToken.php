@@ -28,7 +28,8 @@ class GetAccessToken implements GetAccessTokenInterface
     private $userContext;
 
     /**
-     * UserAuthorized constructor.
+     * GetAccessToken constructor.
+     *
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
      */
@@ -46,9 +47,7 @@ class GetAccessToken implements GetAccessTokenInterface
     public function execute(int $adminUserId = null): ?string
     {
         try {
-            if ($adminUserId === null) {
-                $adminUserId = (int) $this->userContext->getUserId();
-            }
+            $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
             return $this->userProfileRepository->getByUserId($adminUserId)->getAccessToken();
         } catch (NoSuchEntityException $exception) {
             return null;
