@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @var $block Magento\AdobeStockImageAdminUi\Block\Adminhtml\Panel
- */
 ?>
 
 <div id="adobe-stock-images-search-modal" class="adobe-search-images-modal" style="display: none;">
@@ -30,21 +27,3 @@
         }
     }
 </script>
-<script>
-require([
-    'jquery',
-], function ($) {
-	$(function () {
-	   var searchButton = "#search_adobe_stock",
-	       adobeStockModal = ".adobe-search-images-modal";
-
-		$(searchButton).click(function() {
-		   if ($(adobeStockModal).length > 1) {
-			$(adobeStockModal)[0].remove(); 
-		   }		   
-                 $(adobeStockModal).trigger("openModal");
-		});
-	});
-});
-</script>
-
