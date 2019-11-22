@@ -16,7 +16,7 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579511"/>
             <description value="User sees images with the same model"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration_see_more"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

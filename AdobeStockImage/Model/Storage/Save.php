@@ -66,8 +66,8 @@ class Save
             $fileContents = $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl));
             $mediaDirectory->writeFile($destinationPath, $fileContents);
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('Failed to save the image: %error', ['error' => $exception->getMessage()]);
-            $this->logger->critical($message);
             throw new CouldNotSaveException($message, $exception);
         }
 

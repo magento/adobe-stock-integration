@@ -14,7 +14,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\Framework\Api\Search\Document;
 
 /**
- * Adoobe stock asset extractor
+ * Adobe stock asset extractor
  */
 class AdobeStockAsset
 {
