@@ -16,6 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * User repository test.
@@ -43,6 +44,11 @@ class UserProfileRepositoryTest extends TestCase
     private $entityFactory;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
      * Prepare test objects.
      */
     protected function setUp(): void
@@ -50,9 +56,11 @@ class UserProfileRepositoryTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->resource = $this->createMock(ResourceUserProfile::class);
         $this->entityFactory =  $this->createMock(UserProfileInterfaceFactory::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->model = new UserProfileRepository(
             $this->resource,
-            $this->entityFactory
+            $this->entityFactory,
+            $this->loggerMock
         );
     }
 
@@ -83,6 +91,7 @@ class UserProfileRepositoryTest extends TestCase
             ->willThrowException(
                 new CouldNotSaveException(__('Could not save user profile.'))
             );
+        $this->loggerMock->expects($this->once())->method('critical');
         $this->model->save($userProfile);
     }
 

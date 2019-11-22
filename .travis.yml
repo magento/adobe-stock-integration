@@ -1,3 +1,6 @@
+branches:
+  only:
+    - develop
 sudo: required
 dist: trusty
 group: edge

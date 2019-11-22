@@ -28,6 +28,7 @@
         <element name="moreFromThisModelSeeMore" selector="//div[@aria-labelledby='model_tab']//div[@class='see-more-wrapper']" type="button"/>
         <element name="moreFromThisSeries" selector="//*[@id='series_tab']" type="block"/>
         <element name="moreFromThisSeriesImages" selector="//div[@aria-labelledby='series_tab']//div[@class='thumbnail']" type="block"/>
+        <element name="moreFromThisSeriesSeeMore" selector="//div[@aria-labelledby='series_tab']//div[@class='see-more-wrapper']" type="button"/>
         <element name="seeMoreFromSeriesImages" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='see-more-wrapper']"/>
     </section>
 </sections>

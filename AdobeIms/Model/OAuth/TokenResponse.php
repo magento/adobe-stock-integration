@@ -16,6 +16,26 @@ use Magento\Framework\DataObject;
  */
 class TokenResponse extends DataObject implements TokenResponseInterface
 {
+    private const ACCESS_TOKEN = 'access_token';
+
+    private const REFRESH_TOKEN = 'refresh_token';
+
+    private const SUB = 'sub';
+
+    private const NAME = 'name';
+
+    private const TOKEN_TYPE = 'token_type';
+
+    private const GIVEN_NAME = 'given_name';
+
+    private const EXPIRES_IN = 'expires_in';
+
+    private const FAMILY_NAME = 'family_name';
+
+    private const EMAIL = 'email';
+
+    private const ERROR = 'error';
+
     /**
      * Get access token
      *
@@ -23,7 +43,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getAccessToken(): string
     {
-        return (string)$this->getData('access_token');
+        return (string)$this->getData(self::ACCESS_TOKEN);
     }
 
     /**
@@ -33,7 +53,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getRefreshToken(): string
     {
-        return (string)$this->getData('refresh_token');
+        return (string)$this->getData(self::REFRESH_TOKEN);
     }
 
     /**
@@ -43,7 +63,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getSub(): string
     {
-        return (string)$this->getData('sub');
+        return (string)$this->getData(self::SUB);
     }
 
     /**
@@ -53,7 +73,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getName(): string
     {
-        return (string)$this->getData('name');
+        return (string)$this->getData(self::NAME);
     }
 
     /**
@@ -63,7 +83,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getTokenType(): string
     {
-        return (string)$this->getData('token_type');
+        return (string)$this->getData(self::TOKEN_TYPE);
     }
 
     /**
@@ -73,7 +93,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getGivenName(): string
     {
-        return (string)$this->getData('given_name');
+        return (string)$this->getData(self::GIVEN_NAME);
     }
 
     /**
@@ -83,7 +103,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getExpiresIn(): int
     {
-        return (int)$this->getData('expires_in');
+        return (int)$this->getData(self::EXPIRES_IN);
     }
 
     /**
@@ -93,7 +113,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getFamilyName(): string
     {
-        return (string)$this->getData('family_name');
+        return (string)$this->getData(self::FAMILY_NAME);
     }
 
     /**
@@ -103,7 +123,7 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getEmail(): string
     {
-        return (string)$this->getData('email');
+        return (string)$this->getData(self::EMAIL);
     }
 
     /**
@@ -113,6 +133,6 @@ class TokenResponse extends DataObject implements TokenResponseInterface
      */
     public function getError(): string
     {
-        return (string)$this->getData('error');
+        return (string)$this->getData(self::ERROR);
     }
 }
