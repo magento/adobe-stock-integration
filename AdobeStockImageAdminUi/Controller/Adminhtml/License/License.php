@@ -69,11 +69,15 @@ class License extends Action
      */
     public function execute()
     {
+        $isLicensed = false;
+
         try {
             $params = $this->getRequest()->getParams();
             $contentId = (int) $params['media_id'];
 
             $this->client->licenseImage($contentId);
+
+            $isLicensed = true;
 
             $this->saveLicensedImage->execute(
                 $contentId,
@@ -90,13 +94,15 @@ class License extends Action
             $responseCode = self::HTTP_BAD_REQUEST;
             $responseContent = [
                 'success' => false,
-                'message' => $exception->getMessage(),
+                'is_licensed' => $isLicensed,
+                'message' => $exception->getMessage()
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
+                'is_licensed' => $isLicensed,
                 'message' => __('An error occurred on attempt to license and save the image.'),
             ];
         }

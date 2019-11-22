@@ -164,6 +164,12 @@ define([
                         message = 'There was an error on attempt to save the image!';
                     } else {
                         message = response.responseJSON.message;
+
+                        if (response.responseJSON['is_licensed'] === true) {
+                            record['is_licensed'] = 1;
+                            this.preview().displayedRecord(record);
+                            this.source().set('params.t ', Date.now());
+                        }
                     }
                     messages.add('error', message);
                     messages.scheduleCleanup(this.messageDelay);

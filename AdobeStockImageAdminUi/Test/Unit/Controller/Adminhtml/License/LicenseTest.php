@@ -188,6 +188,7 @@ class LicenseTest extends TestCase
                 400,
                 [
                     'success' => false,
+                    'is_licensed' => false,
                     'message' => 'Requested image doesn\'t exists.'
                 ]
             ],
@@ -196,6 +197,7 @@ class LicenseTest extends TestCase
                 500,
                 [
                     'success' => false,
+                    'is_licensed' => false,
                     'message' => 'An error occurred on attempt to license and save the image.'
                 ]
             ]
