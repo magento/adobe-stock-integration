@@ -71,11 +71,10 @@ class RelatedImages extends Action
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during get related images data: %1', $exception->getMessage());
-            $this->logger->critical($logMessage);
+            $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while getting related images. Contact support.'),
+                'message' => __('An error occurred on attempt to fetch related images.'),
             ];
         }
 
