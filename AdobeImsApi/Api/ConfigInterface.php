@@ -19,7 +19,7 @@ interface ConfigInterface
      *
      * @return string|null
      */
-    public function getApiKey():? string;
+    public function getApiKey(): ?string;
 
     /**
      * Retrieve integration API private KEY (Client secret)
@@ -56,7 +56,7 @@ interface ConfigInterface
      * @param string $redirectUrl
      * @return string
      */
-    public function getLogoutUrl(string $accessToken, string $redirectUrl = '') : string;
+    public function getLogoutUrl(string $accessToken, string $redirectUrl = ''): string;
 
     /**
      * Return image url for AdobeSdk.

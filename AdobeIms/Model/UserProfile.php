@@ -20,7 +20,6 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    private const ID = 'id';
     private const USER_ID = 'admin_user_id';
     private const NAME = 'name';
     private const EMAIL = 'email';
