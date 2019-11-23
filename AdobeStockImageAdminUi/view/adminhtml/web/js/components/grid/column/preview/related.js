@@ -59,8 +59,29 @@ define([
          * @param {Object} record
          * @returns boolean
          */
-        isLoaded: function (record) {
+        _isLoaded: function (record) {
             return this.getSeries(record).length || this.getModel(record).length;
+        },
+
+        /**
+         * Check if related images has Data
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        _hasData: function (record) {
+            return typeof this.relatedImages().series[record.id] !== 'undefined' ||
+                typeof this.relatedImages().model[record.id] !== 'undefined';
+        },
+
+        /**
+         * Check if visible container
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        isVisible: function(record) {
+            return !this._isLoaded(record) || this._hasData(record)
         },
 
         /**
