@@ -80,7 +80,7 @@ define([
          * @param {Object} record
          * @returns boolean
          */
-        isVisible: function(record) {
+        isVisible: function (record) {
             return !this._isLoaded(record) || this._hasData(record)
         },
 
