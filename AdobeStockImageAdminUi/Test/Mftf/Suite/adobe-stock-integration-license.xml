@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
+    <suite name="adobe_stock_integration_suite_license">
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+        </before>
+        <after>
+        </after>
+        <include>
+            <group name="adobe_stock_integration_license"/>
+        </include>
+    </suite>
+</suites>

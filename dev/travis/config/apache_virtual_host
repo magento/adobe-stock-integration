@@ -1,0 +1,43 @@
+<VirtualHost *:80>
+    DocumentRoot %MAGENTO_ROOT%
+    ServerName %MAGENTO_HOST_NAME%
+
+    <Directory "%MAGENTO_ROOT%">
+        Options FollowSymLinks MultiViews ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    <IfModule mod_fastcgi.c>
+        AddHandler php7-fcgi .php
+        Action php7-fcgi /php7-fcgi
+        Alias /php7-fcgi /usr/lib/cgi-bin/php7-fcgi
+        FastCgiExternalServer /usr/lib/cgi-bin/php7-fcgi -host 127.0.0.1:9000 -pass-header Authorization
+        <Directory /usr/lib/cgi-bin>
+            Require all granted
+        </Directory>
+    </IfModule>
+</VirtualHost>
+<VirtualHost *:443>
+    DocumentRoot %MAGENTO_ROOT%
+    ServerName %MAGENTO_HOST_NAME%
+    SSLEngine on
+    SSLCertificateFile %TRAVIS_BUILD_DIR%/%MAGENTO_HOST_NAME%.cert
+    SSLCertificateKeyFile %TRAVIS_BUILD_DIR%/%MAGENTO_HOST_NAME%.key
+
+    <Directory "%MAGENTO_ROOT%">
+        Options FollowSymLinks MultiViews ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    <IfModule mod_fastcgi.c>
+        AddHandler php7-fcgi .php
+        Action php7-fcgi /php7-fcgi
+        Alias /php7-fcgi /usr/lib/cgi-bin/php7-fcgiSSL
+        FastCgiExternalServer /usr/lib/cgi-bin/php7-fcgiSSL -host 127.0.0.1:9000 -pass-header Authorization
+        <Directory /usr/lib/cgi-bin>
+            Require all granted
+        </Directory>
+    </IfModule>
+</VirtualHost>

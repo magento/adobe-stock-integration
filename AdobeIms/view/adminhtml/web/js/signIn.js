@@ -57,21 +57,20 @@ define([
          * @return {window.Promise}
          */
         login: function () {
-            var self = this; // TODO Please bind this properly
 
             return new window.Promise(function (resolve, reject) {
-                if (self.user().isAuthorized) {
+                if (this.user().isAuthorized) {
                     return resolve();
                 }
-                login(self.loginConfig)
+                login(this.loginConfig)
                     .then(function (response) {
-                        self.loadUserProfile();
+                        this.loadUserProfile();
                         resolve(response);
-                    })
+                    }.bind(this))
                     .catch(function (error) {
                         reject(error);
                     });
-            });
+            }.bind(this));
         },
 
         /**

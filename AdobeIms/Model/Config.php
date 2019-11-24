@@ -38,6 +38,7 @@ class Config implements ConfigInterface
 
     /**
      * Config constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      */
@@ -52,7 +53,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getApiKey():? string
+    public function getApiKey(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_API_KEY);
     }

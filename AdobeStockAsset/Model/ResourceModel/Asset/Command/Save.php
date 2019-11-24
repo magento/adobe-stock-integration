@@ -73,11 +73,11 @@ class Save
             $saveData = $this->filterData($data, array_keys($connection->describeTable($tableName)));
             $connection->insertOnDuplicate($tableName, $saveData);
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __(
                 'An error occurred during adobe stock asset save: %error',
                 ['error' => $exception->getMessage()]
             );
-            $this->logger->critical($message);
             throw new CouldNotSaveException($message, $exception);
         }
     }

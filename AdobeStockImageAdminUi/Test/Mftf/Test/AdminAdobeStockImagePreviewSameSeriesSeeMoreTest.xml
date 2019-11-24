@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockSeeMoreSeriesFilterTest">
+    <test name="AdminAdobeStockImagePreviewSameSeriesSeeMoreTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="[Story #31] User searches for images from the same series as the currently viewed one"/>
@@ -17,7 +17,7 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579513"/>
             <description value="Admin should be able to see more images from series filter"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_filters"/>
+            <group value="adobe_stock_integration_see_more"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -29,17 +29,22 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageId}}" userInput="data-id"
-                           stepKey="getFilteredId"/>
-        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AssertAdobeStockFilterIsNotAppliedActionGroup" stepKey="checkSerieIdFilter">
-            <argument name="filterName" value="Serie Id"/>
-        </actionGroup>
-        <click selector="{{AdobeStockFilterSection.cancelFilters}}" stepKey="cancelFilters"/>
+        <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithoutModelFilter"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
-        <actionGroup ref="AdminAdobeStockApplySameSeriesFilterActionGroup" stepKey="applySerieFilter"/>
+        <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
+        <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
+        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
+        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
+        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnSeeMore"/>
+        <waitForPageLoad stepKey="waitForGridReload"/>
+        <executeJS function="document.querySelector('.admin__data-grid-filters-current').scrollIntoView()" stepKey="scrollToAppliedFilters"/>
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
-            <argument name="resultValue" value="$getFilteredId"/>
+            <argument name="resultValue" value="$getFileAttributeValue"/>
         </actionGroup>
+        <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
+        <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
+            <actualResult type="variable">$countWithoutModelFilter</actualResult>
+            <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
+        </assertNotContains>
     </test>
 </tests>
