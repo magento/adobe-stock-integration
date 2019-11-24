@@ -22,7 +22,6 @@ define([
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
-            isDownloadedPreview: 0,
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
@@ -44,19 +43,6 @@ define([
         },
 
         /**
-         * Init observable variables
-         * @return {Object}
-         */
-        initObservable: function () {
-            this._super()
-                .observe([
-                    'isDownloadedPreview'
-                ]);
-
-            return this;
-        },
-
-        /**
          * @returns {Object} Chainables
          */
         onDeleteFile: function () {
@@ -74,7 +60,6 @@ define([
          * @returns {observable}
          */
         isDownloaded: function () {
-            this.isDownloadedPreview(this.preview().displayedRecord()['is_downloaded']);
             return this.preview().displayedRecord()['is_downloaded'];
         },
 
