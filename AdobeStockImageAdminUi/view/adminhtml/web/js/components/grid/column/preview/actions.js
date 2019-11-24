@@ -22,6 +22,7 @@ define([
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
+            isDownloadedPreview: 0,
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
@@ -35,11 +36,45 @@ define([
         },
 
         /**
+         * {@inheritDoc}
+         */
+        initialize: function () {
+            this._super();
+            $(window).on('fileDeleted.mediabrowser', this.onDeleteFile.bind(this));
+        },
+
+        /**
+         * Init observable variables
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'isDownloadedPreview'
+                ]);
+
+            return this;
+        },
+
+        /**
+         * @returns {Object} Chainables
+         */
+        onDeleteFile: function () {
+            this.preview().displayedRecord()['is_downloaded'] = 0;
+            if (this.preview().displayedRecord()['is_licensed']) {
+                this.preview().displayedRecord()['is_licensed_locally'] = 0;
+            }
+            this.preview().displayedRecord(this.preview().displayedRecord());
+            return this;
+        },
+
+        /**
          * Returns is_downloaded flag as observable for given record
          *
          * @returns {observable}
          */
         isDownloaded: function () {
+            this.isDownloadedPreview(this.preview().displayedRecord()['is_downloaded']);
             return this.preview().displayedRecord()['is_downloaded'];
         },
 
