@@ -46,6 +46,7 @@ define([
         updateLicensed: function () {
             if (!this.login().user().isAuthorized) {
                 this.licensed({});
+                
                 return;
             }
 
