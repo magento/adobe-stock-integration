@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model;
 
 use Magento\AdobeStockClientApi\Api\ConfigInterface;
-use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\UrlInterface;
@@ -28,11 +27,6 @@ class Config implements ConfigInterface
     private $scopeConfig;
 
     /**
-     * @var array
-     */
-    private $searchResultFields;
-
-    /**
      * @var UrlInterface
      */
     private $url;
@@ -48,17 +42,14 @@ class Config implements ConfigInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      * @param ProductMetadataInterface $metadataInterface
-     * @param array $searchResultFields
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
-        ProductMetadataInterface $metadataInterface,
-        array $searchResultFields = []
+        ProductMetadataInterface $metadataInterface
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
-        $this->searchResultFields = $searchResultFields;
         $this->metadataInterface = $metadataInterface;
     }
 
@@ -80,15 +71,5 @@ class Config implements ConfigInterface
     public function getProductName() : ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME) . '/' . $this->metadataInterface->getVersion();
-    }
-
-    /**
-     * Search result configuration
-     *
-     * @return array|string[]
-     */
-    public function getSearchResultFields(): array
-    {
-        return $this->searchResultFields;
     }
 }
