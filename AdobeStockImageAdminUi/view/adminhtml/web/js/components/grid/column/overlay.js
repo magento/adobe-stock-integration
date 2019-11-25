@@ -12,6 +12,7 @@ define([
 
     return overlay.extend({
         defaults: {
+            // eslint-disable-next-line max-len
             provider: 'name = adobe_stock_images_listing.adobe_stock_images_listing_data_source, ns = adobe_stock_images_listing',
             loginProvider: 'name = adobe-login, ns = adobe-login',
             getImagesUrl: 'adobe_stock/license/getlist',
@@ -99,7 +100,7 @@ define([
             var height = record.styles().height.replace('px', '') - 50;
 
             return {
-                top: height + 'px'
+                top: height + 'px';
             }
         },
 
