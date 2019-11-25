@@ -39,19 +39,6 @@ define([
         },
 
         /**
-         * Init observable variables
-         * @return {Object}
-         */
-        initObservable: function () {
-            this._super()
-                .observe([
-                    'rows'
-                ]);
-
-            return this;
-        },
-
-        /**
          * Update displayed record data on data source update
          *
          * @returns {Object} Chainables
