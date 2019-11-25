@@ -11,14 +11,14 @@ namespace Magento\MediaGalleryUi\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class Config
+ * Class responsible to provide access to system configuration related to the Media Gallery
  */
 class Config
 {
     /**
      * Path to enable/disable media gallery in the system settings.
      */
-    private const XML_PATH_ENABLED = 'media/gallery/enabled';
+    private const XML_PATH_ENABLED = 'system/media_gallery/enabled';
 
     /**
      * @var ScopeConfigInterface
@@ -36,7 +36,7 @@ class Config
     }
 
     /**
-     * Is media gallery enabled
+     * Check if masonry grid UI is enabled for Magento media gallery
      *
      * @return bool
      */

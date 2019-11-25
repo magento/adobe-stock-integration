@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    private const XML_PATH_ENABLED = 'media/gallery/enabled';
+    private const XML_PATH_ENABLED = 'system/media_gallery/enabled';
 
     /**
      * @var ObjectManager
@@ -51,7 +51,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * Get target environment test.
+     * Get Magento media gallery enabled test.
      */
     public function testIsEnabled(): void
     {
@@ -59,6 +59,6 @@ class ConfigTest extends TestCase
             ->method('isSetFlag')
             ->with(self::XML_PATH_ENABLED)
             ->willReturn(true);
-        $this->config->isEnabled();
+        $this->assertEquals(true, $this->config->isEnabled());
     }
 }

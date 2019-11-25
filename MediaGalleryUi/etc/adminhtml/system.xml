@@ -11,9 +11,9 @@
             <group id="media_gallery" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Media Gallery</label>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enabled Media Gallery</label>
+                    <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <config_path>media/gallery/enabled</config_path>
+                    <config_path>system/media_gallery/enabled</config_path>
                 </field>
             </group>
         </section>
