@@ -13,7 +13,7 @@ use Magento\AdobeIms\Model\UserProfile as UserProfileModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
- * Class Collection
+ * Represent the user profile collection
  */
 class Collection extends AbstractCollection
 {

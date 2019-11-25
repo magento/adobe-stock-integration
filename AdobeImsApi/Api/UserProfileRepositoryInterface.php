@@ -12,7 +12,7 @@ use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Interface UserProfileRepositoryInterface
+ * Declare user profile repository
  * @api
  */
 interface UserProfileRepositoryInterface

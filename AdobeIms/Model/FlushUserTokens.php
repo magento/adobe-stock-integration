@@ -12,7 +12,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 
 /**
- * Remove user access and refresh tokens
+ * Represent the remove user access and refresh tokens functionality
  */
 class FlushUserTokens implements FlushUserTokensInterface
 {

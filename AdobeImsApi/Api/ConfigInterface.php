@@ -9,7 +9,8 @@ declare(strict_types=1);
 namespace Magento\AdobeImsApi\Api;
 
 /**
- * Class Config
+ * Declare the the Adobe IMS integration config which is responsible for retrieving config
+ * settings for Adobe Ims
  * @api
  */
 interface ConfigInterface
