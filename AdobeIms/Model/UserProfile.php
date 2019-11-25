@@ -13,14 +13,13 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\AdobeImsApi\Api\Data\UserProfileExtensionInterface;
 
 /**
- * Class UserProfile
+ * Represent the user profile service data class
  */
 class UserProfile extends AbstractExtensibleModel implements UserProfileInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    private const ID = 'id';
     private const USER_ID = 'admin_user_id';
     private const NAME = 'name';
     private const EMAIL = 'email';

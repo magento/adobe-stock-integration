@@ -40,6 +40,8 @@ use Psr\Log\LoggerInterface;
  */
 class ClientTest extends TestCase
 {
+    private const SEARCH_RESULT_FIELDS = ['ID', 'NB_RESULTS'];
+
     /**
      * @var MockObject|ConfigInterface $config
      */
@@ -137,7 +139,8 @@ class ClientTest extends TestCase
                 'logger' => $this->logger,
                 'userQuotaFactory' => $this->userQuotaFactory,
                 'stockFileToDocument' => $this->stockFileToDocument,
-                'licenseConfirmationFactory' => $this->licenseConfirmationFactory
+                'licenseConfirmationFactory' => $this->licenseConfirmationFactory,
+                'searchResultFields' => self::SEARCH_RESULT_FIELDS
             ]
         );
     }
@@ -148,9 +151,6 @@ class ClientTest extends TestCase
     public function testSearch(): void
     {
         $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('ru_RU');
-        $this->config->expects($this->once())
-            ->method('getSearchResultFields')
-            ->willReturn(['nb_results' => 'NB_RESULTS']);
         $response = $this->createMock(SearchFilesResponse::class);
         $this->connectionWrapper->expects($this->once())->method('getNextResponse')->willReturn($response);
         $response->expects($this->once())->method('getFiles')->willReturn(
@@ -182,6 +182,7 @@ class ClientTest extends TestCase
      */
     public function testGetQuota(): void
     {
+        $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('ru_RU');
         $this->connectionWrapper->expects($this->once())
             ->method('getMemberProfile')
             ->willReturn($this->licenseResponse);
@@ -190,7 +191,9 @@ class ClientTest extends TestCase
         $licenseEntitielement->expects($this->once())
             ->method('getFullEntitlementQuota')
             ->willReturn($this->createMock(LicenseEntitlementQuota::class));
-        $this->setLicense();
+        $this->licenseRequestFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->getLicenseRequest());
         $quota = $this->createMock(UserQuotaInterface::class);
         $this->userQuotaFactory->expects($this->once())
             ->method('create')
@@ -206,12 +209,12 @@ class ClientTest extends TestCase
      */
     public function testGetLicenseConfirmation(): void
     {
-
-        $this->connectionWrapper->expects($this->exactly(2))
+        $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('ru_RU');
+        $this->connectionWrapper->expects($this->once())
             ->method('getMemberProfile')
             ->willReturn($this->licenseResponse);
         $LicensePurchaseOptions = $this->createMock(LicensePurchaseOptions::class);
-        $this->licenseResponse->expects($this->exactly(2))
+        $this->licenseResponse->expects($this->once())
             ->method('getPurchaseOptions')
             ->willReturn($LicensePurchaseOptions);
         $LicensePurchaseOptions->expects($this->once())
@@ -224,7 +227,9 @@ class ClientTest extends TestCase
         $this->licenseConfirmationFactory->expects($this->once())
             ->method('create')
             ->willReturn($quota);
-        $this->setLicense(2);
+        $this->licenseRequestFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->getLicenseRequest());
         $quota->expects($this->once())->method('setMessage')->willReturnSelf();
         $quota->expects($this->once())->method('setCanLicense')->willReturnSelf();
         $this->assertEquals(
@@ -238,10 +243,13 @@ class ClientTest extends TestCase
      */
     public function testLicenseImage(): void
     {
+        $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('ru_RU');
         $this->connectionWrapper->expects($this->once())
             ->method('getContentLicense')
             ->willReturn($this->licenseResponse);
-        $this->setLicense();
+        $this->licenseRequestFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->getLicenseRequest());
         $this->client->licenseImage(0);
     }
 
@@ -250,10 +258,13 @@ class ClientTest extends TestCase
      */
     public function testGetImageDownloadUrl(): void
     {
+        $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('ru_RU');
         $this->connectionWrapper->expects($this->once())
             ->method('downloadAssetUrl')
             ->willReturn('https://omage.com/png.png');
-        $this->setLicense();
+        $this->licenseRequestFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->getLicenseRequest());
         $this->assertEquals('https://omage.com/png.png', $this->client->getImageDownloadUrl(0));
     }
 
@@ -269,18 +280,17 @@ class ClientTest extends TestCase
     }
 
     /**
-     * Asserts license request
+     * Retrieve license request
      *
-     * @param int $expectInvocation
+     * @return MockObject
      */
-    private function setLicense(int $expectInvocation = 1): void
+    private function getLicenseRequest(): MockObject
     {
         $licenseRequest = $this->createMock(License::class);
-        $this->licenseRequestFactory->expects($this->exactly($expectInvocation))
-            ->method('create')
-            ->willReturn($licenseRequest);
-        $licenseRequest->expects($this->exactly($expectInvocation))->method('setContentId')->willReturnSelf();
-        $licenseRequest->expects($this->exactly($expectInvocation))->method('setLocale')->willReturnSelf();
-        $licenseRequest->expects($this->exactly($expectInvocation))->method('setLicenseState')->willReturnSelf();
+        $licenseRequest->expects($this->once())->method('setContentId')->willReturnSelf();
+        $licenseRequest->expects($this->once())->method('setLocale')->willReturnSelf();
+        $licenseRequest->expects($this->once())->method('setLicenseState')->willReturnSelf();
+
+        return $licenseRequest;
     }
 }

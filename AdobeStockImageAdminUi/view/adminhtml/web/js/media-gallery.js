@@ -63,30 +63,33 @@ define([
                 //select image
                 locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])');
 
-                if (locatedImage.length) {
-                    locatedImage.click();
-                } else {
-                    confirm({
-                        title: $.mage.__('The image cannot be located'),
-                        content: $.mage.__('We cannot find this image in the media gallery.'),
-                        buttons: [{
-                            text: $.mage.__('Okay'),
-                            class: 'action-primary',
-                            attr: {},
-
-                            /**
-                             * Close modal on button click
-                             */
-                            click: function (event) {
-                                this.closeModal(event);
-                            }
-                        }]
-                    });
-                }
+                return locatedImage.length ?  locatedImage : false;
             }
 
             $.ajaxSetup({
                 async: true
+            });
+        },
+
+        /**
+         * Show popup that image cannot be located
+         */
+        notLocated: function () {
+            confirm({
+                title: $.mage.__('The image cannot be located'),
+                content: $.mage.__('We cannot find this image in the media gallery.'),
+                buttons: [{
+                    text: $.mage.__('Okay'),
+                    class: 'action-primary',
+                    attr: {},
+
+                    /**
+                     * Close modal on button click
+                     */
+                    click: function (event) {
+                        this.closeModal(event);
+                    }
+                }]
             });
         }
     };

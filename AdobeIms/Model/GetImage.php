@@ -8,18 +8,16 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Model;
 
 use Magento\AdobeImsApi\Api\GetImageInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 
 /**
- * Get user image profile.
+ * Represent functionality for getting the Adobe services user profile image
  */
 class GetImage implements GetImageInterface
 {
-
     /**
      * @var LoggerInterface
      */
@@ -41,6 +39,8 @@ class GetImage implements GetImageInterface
     private $json;
 
     /**
+     * GetImage constructor.
+     *
      * @param LoggerInterface $logger
      * @param CurlFactory $curlFactory
      * @param ConfigInterface $config
@@ -72,10 +72,9 @@ class GetImage implements GetImageInterface
             $curl->get($this->config->getProfileImageUrl());
             $result = $this->json->unserialize($curl->getBody());
             $image = $result['user']['images'][$size];
-
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $image = $this->config->getDefaultProfileImage();
-            $this->logger->critical('Error during get adobe stock user image operation: ' . $e->getMessage());
+            $this->logger->critical($exception);
         }
 
         return $image;

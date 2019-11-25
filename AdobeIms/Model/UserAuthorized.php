@@ -13,7 +13,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 
 /**
- * User authorized
+ * Represent functionality for getting information is user authorised or not
  */
 class UserAuthorized implements UserAuthorizedInterface
 {
@@ -29,6 +29,7 @@ class UserAuthorized implements UserAuthorizedInterface
 
     /**
      * UserAuthorized constructor.
+     *
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
      */
@@ -46,10 +47,7 @@ class UserAuthorized implements UserAuthorizedInterface
     public function execute(int $adminUserId = null): bool
     {
         try {
-            if ($adminUserId === null) {
-                $adminUserId = (int) $this->userContext->getUserId();
-            }
-
+            $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
             $userProfile = $this->userProfileRepository->getByUserId($adminUserId);
 
             return !empty($userProfile->getId())

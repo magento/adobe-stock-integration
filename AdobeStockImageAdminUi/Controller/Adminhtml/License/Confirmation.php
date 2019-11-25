@@ -75,11 +75,10 @@ class Confirmation extends Action
 
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during get quota operation: %1', $exception->getMessage());
-            $this->logger->critical($logMessage);
+            $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred during get quota operation. Contact support.'),
+                'message' => __('An error occurred on attempt to retrieve image licensing information.'),
             ];
         }
 

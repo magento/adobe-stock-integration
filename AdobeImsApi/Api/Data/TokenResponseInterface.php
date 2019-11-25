@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeImsApi\Api\Data;
 
 /**
- * Interface UserProfileInterface
+ * Interface for the service data response object
  * @api
  */
 interface TokenResponseInterface

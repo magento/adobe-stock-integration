@@ -36,6 +36,7 @@ define([
             modules: {
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
+                overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }'
             }
         },
@@ -92,7 +93,7 @@ define([
          * @returns {observable}
          */
         isLicensed: function () {
-            return this.preview().displayedRecord()['is_licensed'] && !this.isLicensedLocally();
+            return this.overlay().licensed()[this.preview().displayedRecord().id] && !this.isLicensedLocally();
         },
 
         /**
@@ -108,8 +109,10 @@ define([
          * Locate downloaded image in media browser
          */
         locate: function () {
+            var image = mediaGallery.locate(this.preview().displayedRecord().path);
+
             $(this.preview().adobeStockModalSelector).trigger('closeModal');
-            mediaGallery.locate(this.preview().displayedRecord().path);
+            image ? image.click() : mediaGallery.notLocated();
         },
 
         /**
@@ -186,8 +189,8 @@ define([
                     }
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
-                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
+                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
                 },
 
                 /**
@@ -205,6 +208,12 @@ define([
                         message = 'There was an error on attempt to save the image!';
                     } else {
                         message = response.responseJSON.message;
+
+                        if (response.responseJSON['is_licensed'] === true) {
+                            record['is_licensed'] = 1;
+                            this.preview().displayedRecord(record);
+                            this.source().set('params.t ', Date.now());
+                        }
                     }
                     messages.add('error', message);
                     messages.scheduleCleanup(this.messageDelay);
@@ -291,7 +300,7 @@ define([
 
                         if (canPurchase) {
                             this.getPrompt(
-                                {
+                                 {
                                     'title': title,
                                     'content': baseContent + displayFieldName,
                                     'visible': !this.isDownloaded(),
@@ -299,8 +308,9 @@ define([
                                         confirm: function (fileName) {
                                             if (typeof fileName === 'undefined') {
                                                 fileName = filePathArray[imageIndex]
-                                                    .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                                 .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
+
                                             licenseAndSave(record, fileName);
                                         }
                                     },

@@ -17,7 +17,7 @@ use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 
 /**
- * Class Config
+ * Represent the get user token functionality
  */
 class GetToken implements GetTokenInterface
 {
@@ -87,7 +87,7 @@ class GetToken implements GetTokenInterface
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(
-                __('Authentication is failing. Error code: %1', $tokenResponse->getError())
+                __('Authentication is failing. Error code: %error', ['error' => $tokenResponse->getError()])
             );
         }
 

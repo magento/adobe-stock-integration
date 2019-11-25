@@ -11,7 +11,7 @@ namespace Magento\AdobeIms\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Class UserProfile
+ * Represent the user profile resource model
  */
 class UserProfile extends AbstractDb
 {
