@@ -17,6 +17,9 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
 use Magento\Framework\Exception\IntegrationException;
 
+/**
+ * Command for retrieving files information from Adobe Stock API
+ */
 class Files implements FilesInterface
 {
     /**

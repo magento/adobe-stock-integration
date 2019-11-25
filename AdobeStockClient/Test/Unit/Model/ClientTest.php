@@ -282,7 +282,7 @@ class ClientTest extends TestCase
     /**
      * Retrieve license request
      *
-     * @return MockObject|License
+     * @return MockObject
      */
     private function getLicenseRequest(): MockObject
     {
