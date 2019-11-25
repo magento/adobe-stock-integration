@@ -26,8 +26,8 @@ define([
                 source: '${ $.dataProvider }',
                 preview: '${ $.previewProvider }'
             },
-	   signInButtonSelector: "#adobeImsSignIn",
-	   isSignInButtonClicked: false
+            signInButtonSelector: '#adobeImsSignIn',
+            isSignInButtonClicked: false
         },
 
         /**
@@ -55,19 +55,21 @@ define([
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
-                       options.showPopup ?
-                         this.getLoginErrorPopup(error)
-                         : reject(error);
+                    options.showPopup ?
+                      this.getLoginErrorPopup(error)
+                      : reject(error);
                 }.bind(this));
             }.bind(this));
         },
 
-	/**
-	 * Check if button SignIn was clicked.
-	 */
-	loginClick() {
-           this.login({showPopup: true});
-	},
+        /**
+         * Login action with poup on error..
+         */
+        loginClick() {
+            this.login({
+                showPopup: true
+            });
+        },
 
         /**
          * Show popup that user failed to login.

@@ -85,7 +85,7 @@ class SignInConfigProviderTest extends TestCase
         ];
 
         $this->urlMock->expects($this->once())->method('getUrl')->with('adobe_stock/license/quota')
-             ->willReturn($quotaUrl);
+            ->willReturn($quotaUrl);
         $this->userAuthorizedMock->expects($this->once())->method('execute')->willReturn($userIsAuthorized);
 
         if ($userIsAuthorized) {
