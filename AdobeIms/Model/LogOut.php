@@ -14,7 +14,7 @@ use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Log Out User from Adobe Account
+ * Represent functionality for log out users from the Adobe account
  */
 class LogOut implements LogOutInterface
 {

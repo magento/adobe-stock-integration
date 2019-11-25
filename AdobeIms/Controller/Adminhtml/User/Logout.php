@@ -14,7 +14,7 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Logout from adobe account
+ * Logout action from the Adobe account
  */
 class Logout extends Action
 {

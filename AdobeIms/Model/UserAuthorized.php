@@ -13,7 +13,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 
 /**
- * User authorized
+ * Represent functionality for getting information is user authorised or not
  */
 class UserAuthorized implements UserAuthorizedInterface
 {

@@ -13,7 +13,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\AdobeImsApi\Api\Data\UserProfileExtensionInterface;
 
 /**
- * Class UserProfile
+ * Represent the user profile service data class
  */
 class UserProfile extends AbstractExtensibleModel implements UserProfileInterface
 {

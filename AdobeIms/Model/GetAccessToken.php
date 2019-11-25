@@ -13,7 +13,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Get admin user access token
+ * Represent the get user access token functionality
  */
 class GetAccessToken implements GetAccessTokenInterface
 {
