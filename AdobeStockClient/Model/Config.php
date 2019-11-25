@@ -91,14 +91,4 @@ class Config implements ConfigInterface
     {
         return $this->searchResultFields;
     }
-
-    /**
-     * Retrieve token URL
-     *
-     * @return string
-     */
-    public function getLocale(): string
-    {
-        return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
-    }
 }

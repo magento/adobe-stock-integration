@@ -27,18 +27,4 @@ interface ConfigInterface
      * @return string|null
      */
     public function getProductName() : ?string;
-
-    /**
-     * Search result configuration
-     *
-     * @return array|string[]
-     */
-    public function getSearchResultFields(): array;
-
-    /**
-     * Retrieve token URL
-     *
-     * @return string
-     */
-    public function getLocale(): string;
 }

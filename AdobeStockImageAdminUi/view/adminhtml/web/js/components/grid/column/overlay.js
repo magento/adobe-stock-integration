@@ -6,21 +6,22 @@
 // jscs:enable
 define([
     'Magento_Ui/js/grid/columns/overlay',
-    'ko'
-], function (overlay, ko) {
+    'jquery'
+], function (overlay, $) {
     'use strict';
 
     return overlay.extend({
         defaults: {
             provider: 'name = adobe_stock_images_listing.adobe_stock_images_listing_data_source, ns = adobe_stock_images_listing',
+            loginProvider: 'name = adobe-login, ns = adobe-login',
+            getImagesUrl: 'adobe_stock/license/getlist',
+            licensed: {},
             modules: {
-                rows: '${ $.provider }'
+                login: '${ $.loginProvider }',
+                masonry: '${ $.parentName }'
             },
             listens: {
-                '${ $.provider }:data.items': 'setLabels'
-            },
-            isLicensed: {
-		    items: {}
+                '${ $.provider }:data.items': 'updateLicensed'
             }
         },
 
@@ -31,27 +32,69 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'isLicensed'
-               ]);
+                    'licensed'
+                ]);
 
             return this;
         },
 
         /**
-	 * Set Licensed lable to the image.
-	 */
-        setLabels: function () {
-	    var isLicensed = this.isLicensed();
-            this.rows().data.items.forEach((item) => {
-		    isLicensed.items[item.id] = [{visibility: false, overlay: ''}];
-               
-                if (item.is_licensed) { //jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-                    isLicensed.items[item.id].overlay = 'Licensed';
-                    isLicensed.items[item.id].visibility = true;
+         * Set Licensed images data.
+         */
+        updateLicensed: function () {
+            if (!this.login().user().isAuthorized) {
+                return;
+            }
+
+            console.log('requesting licensed');
+
+            $.ajax({
+                type: 'GET',
+                url: this.getImagesUrl + '?ids=' + this.getIds().join(','),
+                data: {
+                    'form_key': window.FORM_KEY
+                },
+                dataType: 'json',
+                context: this,
+
+                /**
+                 * @param {Object} response
+                 * @returns void
+                 */
+                success: function (response) {
+                    this.licensed(response.result);
+                },
+
+                /**
+                 * @param {Object} response
+                 * @returns {String}
+                 */
+                error: function (response) {
+                    return response.message;
                 }
             });
-            this.isLicensed(isLicensed);
-		console.log(this.rows().data.items);
+        },
+
+        /**
+         * Get all ids from data provider
+         *
+         * @returns {Number[]}
+         */
+        getIds: function () {
+            var ids = [];
+
+            this.masonry().rows().forEach(function (record) {
+                ids.push(record.id);
+            });
+
+            return ids;
+        },
+
+        /**
+         * Remove Licensed images data.
+         */
+        cleanLicensed: function () {
+            this.licensed({});
         },
 
         /**
@@ -75,8 +118,7 @@ define([
          * @returns {Boolean}
          */
         isVisible: function (row) {
-	    var item = this.isLicensed().items[row.id];
-            return overlay ? item.visibility : false;
+            return this.licensed()[row.id];
         },
 
         /**
@@ -86,8 +128,7 @@ define([
          * @returns {String}
          */
         getLabel: function (row) {
-	    var item = this.isLicensed().items[row.id];
-            return overlay ? item.overlay : '';
+            return this.licensed()[row.id] ? 'Licensed' : '';
         }
     });
 });
