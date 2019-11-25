@@ -14,5 +14,5 @@ define([
         'validate-image-name', function (value) {
             return /^[a-zA-Z0-9\-\_]+$/i.test(value);
 
-        }, $.mage.__('Letters, numbers or dash only please'));
+        }, $.mage.__('Please name the file using only letters, numbers, underscores and dashes'));
 });

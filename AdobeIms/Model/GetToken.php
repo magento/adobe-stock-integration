@@ -96,10 +96,11 @@ class GetToken implements GetTokenInterface
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(
-            __('Login failed. Please correct the API credentials in'
-                . '<a href="%1"> Configuration → System → Adobe Stock Integration.</a>', 
-		$this->url->getUrl('adminhtml/system_config/edit/section/system'))
-        );
+                __(
+                    'Login failed. Please check if <a href="%1">the Secret Key</a> is set correctly and try again.',
+                    $this->url->getUrl('adminhtml/system_config/edit/section/system')
+                )
+            );
         }
 
         return $tokenResponse;

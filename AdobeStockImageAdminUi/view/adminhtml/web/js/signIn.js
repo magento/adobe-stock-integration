@@ -25,9 +25,7 @@ define([
             modules: {
                 source: '${ $.dataProvider }',
                 preview: '${ $.previewProvider }'
-            },
-            signInButtonSelector: '#adobeImsSignIn',
-            isSignInButtonClicked: false
+            }
         },
 
         /**
@@ -44,7 +42,7 @@ define([
          *
          * @return {window.Promise}
          */
-        login: function (options = {}) {
+        login: function () {
             return new window.Promise(function (resolve, reject) {
                 if (this.user().isAuthorized) {
                     return resolve();
@@ -55,10 +53,8 @@ define([
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
-                    options.showPopup ?
-                      this.getLoginErrorPopup(error)
-                      : reject(error);
-                }.bind(this));
+                        reject(error)
+                    }.bind(this));
             }.bind(this));
         },
 
@@ -66,20 +62,20 @@ define([
          * Login action with poup on error..
          */
         loginClick() {
-            this.login({
-                showPopup: true
-            });
+            this.login().catch(function (error) {
+                this.showLoginErrorPopup(error);
+            }.bind(this));
         },
 
         /**
          * Show popup that user failed to login.
          */
-        getLoginErrorPopup: function (error) {
+        showLoginErrorPopup: function (error) {
             confirm({
-                title: $.mage.__('The user is not able to login'),
+                title: $.mage.__('Couldn\'t log you in'),
                 content: error,
                 buttons: [{
-                    text: $.mage.__('Okay'),
+                    text: $.mage.__('Ok'),
                     class: 'action-primary',
                     attr: {},
 
