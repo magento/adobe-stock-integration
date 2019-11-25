@@ -20,6 +20,7 @@ class Config implements ConfigInterface
 {
     private const XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
+    private const XML_PATH_FILES_URL = 'adobe_stock/integration/files_url';
 
     /**
      * @var ScopeConfigInterface
@@ -54,22 +55,26 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Environment configuration
-     *
-     * @return string|null
+     * @inheritdoc
      */
-    public function getTargetEnvironment() : ?string
+    public function getTargetEnvironment(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_ENVIRONMENT);
     }
 
     /**
-     * Product name
-     *
-     * @return string|null
+     * @inheritdoc
      */
-    public function getProductName() : ?string
+    public function getProductName(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME) . '/' . $this->metadataInterface->getVersion();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFilesUrl(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_FILES_URL);
     }
 }

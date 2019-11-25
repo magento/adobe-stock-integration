@@ -21,7 +21,8 @@ define([
                 masonry: '${ $.parentName }'
             },
             listens: {
-                '${ $.provider }:data.items': 'updateLicensed'
+                '${ $.provider }:data.items': 'updateLicensed',
+                '${ $.loginProvider }:user': 'updateLicensed'
             }
         },
 
@@ -43,10 +44,8 @@ define([
          */
         updateLicensed: function () {
             if (!this.login().user().isAuthorized) {
-                return;
+                this.licensed({});
             }
-
-            console.log('requesting licensed');
 
             $.ajax({
                 type: 'GET',
@@ -88,13 +87,6 @@ define([
             });
 
             return ids;
-        },
-
-        /**
-         * Remove Licensed images data.
-         */
-        cleanLicensed: function () {
-            this.licensed({});
         },
 
         /**

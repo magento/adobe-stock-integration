@@ -16,7 +16,6 @@ define([
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
             relatedImagesUrl: 'adobe_stock/preview/relatedimages',
-            getImagesUrl: 'adobe_stock/imagelisting/getimages',
             buyCreditsUrl: 'https://stock.adobe.com/',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
@@ -42,37 +41,6 @@ define([
             ]
         },
 
-         /**
-         * Set Licensed images data.
-         */
-        setLicensedImages: function () {
-            $.ajax({
-                type: 'GET',
-                url: this.getImagesUrl,
-                data: {
-                    'form_key': window.FORM_KEY
-                },
-                dataType: 'json',
-                context: this,
-
-                /**
-                 * @param {Object} response
-                 * @returns void
-                 */
-                success: function (response) {
-                    this.source().set('data', response.result);
-                },
-
-                /**
-                 * @param {Object} response
-                 * @returns {String}
-                 */
-                error: function (response) {
-                    return response.message;
-                }
-            });
-        },
-
         /**
          * Initialize the component
          *
@@ -80,7 +48,6 @@ define([
          */
         initialize: function () {
             this._super().initView();
-            this.setLicensedImages();
 
             return this;
         },

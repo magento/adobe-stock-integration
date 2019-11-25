@@ -19,8 +19,6 @@ use Magento\Framework\Exception\IntegrationException;
 
 class Files implements FilesInterface
 {
-    private const URL = 'https://stock.adobe.io/Rest/Media/1/Files';
-
     /**
      * @var ImsConfig
      */
@@ -105,7 +103,7 @@ class Files implements FilesInterface
      */
     private function getUrl(array $ids, array $columns, string $locale): string
     {
-        return self::URL . '?' . http_build_query(
+        return $this->clientConfig->getFilesUrl() . '?' . http_build_query(
             [
                     'ids' => implode(',', $ids),
                     'locale' => $locale,

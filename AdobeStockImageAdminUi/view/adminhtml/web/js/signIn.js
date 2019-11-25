@@ -17,12 +17,10 @@ define([
             dataProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing_data_source, ns = adobe_stock_images_listing',
             // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = adobe_stock_images_listing',
-            overlayProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.overlay, ns = adobe_stock_images_listing',
             quotaUrl: 'adobe_stock/license/quota',
             modules: {
                 source: '${ $.dataProvider }',
-                preview: '${ $.previewProvider }',
-                overlay: '${ $.overlayProvider }'
+                preview: '${ $.previewProvider }'
             }
         },
 
@@ -47,14 +45,7 @@ define([
                 }
                 auth(this.loginConfig)
                     .then(function (response) {
-                        this.user({
-                            isAuthorized: true,
-                            name: '',
-                            email: '',
-                            image: ''
-                        });
                         this.loadUserProfile();
-                        this.overlay().updateLicensed();
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
@@ -77,7 +68,6 @@ define([
                 context: this,
                 showLoader: true,
                 success: function () {
-                    this.overlay().cleanLicensed();
                     this.user({
                         isAuthorized: false,
                         name: '',

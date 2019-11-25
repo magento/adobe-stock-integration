@@ -56,7 +56,6 @@ class ImagePreview extends Column
                     'saveLicensedAndDownloadUrl' => $this->url->getUrl('adobe_stock/license/saveLicensed'),
                     'confirmationUrl' => $this->url->getUrl('adobe_stock/license/confirmation'),
                     'relatedImagesUrl' => $this->url->getUrl('adobe_stock/preview/relatedimages'),
-                    'getImagesUrl' => $this->url->getUrl('adobe_stock/imagelisting/getimages'),
                     'buyCreditsUrl' => 'https://stock.adobe.com/'
                 ]
             )

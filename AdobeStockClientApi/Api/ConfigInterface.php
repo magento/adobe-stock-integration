@@ -27,4 +27,11 @@ interface ConfigInterface
      * @return string|null
      */
     public function getProductName() : ?string;
+
+    /**
+     * Get Adobe Stock API files url
+     *
+     * @return string
+     */
+    public function getFilesUrl(): string;
 }
