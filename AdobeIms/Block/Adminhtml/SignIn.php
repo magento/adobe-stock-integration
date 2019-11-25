@@ -18,7 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
- * Adobe sign in block
+ * Provides required data for the Adobe service authentication component
  *
  * @api
  */

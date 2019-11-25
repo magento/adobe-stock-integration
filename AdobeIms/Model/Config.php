@@ -14,7 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class Config
+ * Represent the Adobe stock config model responsible for retrieving config settings for Adobe Ims
  */
 class Config implements ConfigInterface
 {
