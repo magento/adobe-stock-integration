@@ -81,7 +81,7 @@ define([
          * @returns boolean
          */
         isVisible: function (record) {
-            return !this._isLoaded(record) || this._hasData(record)
+            return !this._isLoaded(record) || this._hasData(record);
         },
 
         /**
