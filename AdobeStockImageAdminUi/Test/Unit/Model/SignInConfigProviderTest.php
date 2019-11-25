@@ -81,15 +81,11 @@ class SignInConfigProviderTest extends TestCase
             'component' => 'Magento_AdobeStockImageAdminUi/js/signIn',
             'template' => 'Magento_AdobeStockImageAdminUi/signIn',
             'userQuota' => $userQuota,
-            'quotaUrl' => $quotaUrl,
-            'settingsUrl' => ''
+            'quotaUrl' => $quotaUrl
         ];
 
-        $this->urlMock->expects($this->at(0))->method('getUrl')->with('adobe_stock/license/quota')
+        $this->urlMock->expects($this->once())->method('getUrl')->with('adobe_stock/license/quota')
              ->willReturn($quotaUrl);
-        $this->urlMock->expects($this->at(1))
-           ->method('getUrl')
-           ->with('adminhtml/system_config/edit/section/system');
         $this->userAuthorizedMock->expects($this->once())->method('execute')->willReturn($userIsAuthorized);
 
         if ($userIsAuthorized) {
@@ -118,15 +114,11 @@ class SignInConfigProviderTest extends TestCase
             'component' => 'Magento_AdobeStockImageAdminUi/js/signIn',
             'template' => 'Magento_AdobeStockImageAdminUi/signIn',
             'userQuota' => $userQuota,
-            'quotaUrl' => $quotaUrl,
-            'settingsUrl' => ''
+            'quotaUrl' => $quotaUrl
         ];
 
-        $this->urlMock->expects($this->at(0))->method('getUrl')->with('adobe_stock/license/quota')
+        $this->urlMock->expects($this->once())->method('getUrl')->with('adobe_stock/license/quota')
             ->willReturn($quotaUrl);
-        $this->urlMock->expects($this->at(1))
-           ->method('getUrl')
-           ->with('adminhtml/system_config/edit/section/system');
         $this->userAuthorizedMock->expects($this->once())->method('execute')->willReturn($userIsAuthorized);
         $this->clientInterfaceMock->expects($this->once())->method('getQuota')
             ->willThrowException($exception);

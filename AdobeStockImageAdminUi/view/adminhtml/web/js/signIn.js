@@ -22,12 +22,12 @@ define([
             // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = adobe_stock_images_listing',
             quotaUrl: 'adobe_stock/license/quota',
-            settingsUrl: 'adminhtml/system_config/edit/section/system',
             modules: {
                 source: '${ $.dataProvider }',
                 preview: '${ $.previewProvider }'
             },
-            showPopupOnFail: true
+	   signInButtonSelector: "#adobeImsSignIn",
+	   isSignInButtonClicked: false
         },
 
         /**
@@ -45,7 +45,7 @@ define([
 	 * @params
          * @return {window.Promise}
          */
-        login: function () {
+        login: function (options = {}) {
 
             return new window.Promise(function (resolve, reject) {
                 if (this.user().isAuthorized) {
@@ -58,21 +58,27 @@ define([
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
-                    this.showPopupOnFail ?
-                         this.getLoginErrorPopup()
+                       options.showPopup ?
+                         this.getLoginErrorPopup(error)
                          : reject(error);
                 }.bind(this));
             }.bind(this));
         },
 
+	/**
+	 * Check if button SignIn was clicked.
+	 */
+	loginClick() {
+           this.login({showPopup: true});
+	},
+
         /**
          * Show popup that user failed to login.
          */
-        getLoginErrorPopup: function () {
+        getLoginErrorPopup: function (error) {
             confirm({
                 title: $.mage.__('The user is not able to login'),
-                // eslint-disable-next-line max-len
-                content: $.mage.__('Login failed. Check if the Secret Key  entered <a href="' + this.settingsUrl + '">Configuration → System → Adobe Stock Integration</a> correctly and try again'),
+                content: error,
                 buttons: [{
                     text: $.mage.__('Okay'),
                     class: 'action-primary',

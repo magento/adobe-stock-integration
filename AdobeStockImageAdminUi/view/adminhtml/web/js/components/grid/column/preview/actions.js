@@ -351,7 +351,7 @@ define([
                 modalClass: 'adobe-stock-save-preview-prompt',
                 validation: true,
                 promptField: '[data-role="adobe-stock-image-name-field"]',
-                validationRules: ['required-entry', 'validateImageName'],
+                validationRules: ['required-entry', 'validate-image-name'],
                 attributesForm: {
                     novalidate: 'novalidate',
                     action: '',
@@ -373,16 +373,14 @@ define([
          * Process of license
          */
         licenseProcess: function () {
-            this.login().showPopupOnFail = false;
             this.login().login()
                 .then(function () {
                     this.showLicenseConfirmation(this.preview().displayedRecord());
                 }.bind(this))
                 .catch(function (error) {
-                    messages.add('error', error.message);
+                    messages.add('error', error);
                 })
                 .finally(function () {
-                    this.login().showPopupOnFail = true;
                     messages.scheduleCleanup(this.messageDelay);
                 }.bind(this));
         },

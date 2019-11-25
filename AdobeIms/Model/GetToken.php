@@ -15,6 +15,7 @@ use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class GetToken
@@ -42,22 +43,30 @@ class GetToken implements GetTokenInterface
     private $tokenResponseFactory;
 
     /**
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
      * GetToken constructor.
      * @param ConfigInterface $config
      * @param CurlFactory $curlFactory
      * @param Json $json
      * @param TokenResponseInterfaceFactory $tokenResponseFactory
+     * @param UrlInterface $urlInterface
      */
     public function __construct(
         ConfigInterface $config,
         CurlFactory $curlFactory,
         Json $json,
-        TokenResponseInterfaceFactory $tokenResponseFactory
+        TokenResponseInterfaceFactory $tokenResponseFactory,
+        UrlInterface $urlInterface
     ) {
         $this->config = $config;
         $this->curlFactory = $curlFactory;
         $this->json = $json;
         $this->tokenResponseFactory = $tokenResponseFactory;
+        $this->url = $urlInterface;
     }
 
     /**
@@ -87,8 +96,10 @@ class GetToken implements GetTokenInterface
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(
-                __('Login failed. Check if the Secret Key entered correctly and try again.')
-            );
+            __('Login failed. Please correct the API credentials in'
+                . '<a href="%1"> Configuration → System → Adobe Stock Integration.</a>', 
+		$this->url->getUrl('adminhtml/system_config/edit/section/system'))
+        );
         }
 
         return $tokenResponse;
