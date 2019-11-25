@@ -11,6 +11,11 @@
     <actionGroup name="AdminAdobeStockImsPopupClickSignInActionGroup">
         <click selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="clickOnSignInButton"/>
         <switchToNextTab stepKey="switchToTab"/>
+        <conditionalClick
+            selector="{{AdobeStockSection.adobeSkipAddPhoneNumber}}"
+            dependentSelector="{{AdobeStockSection.adobeSkipAddPhoneNumber}}"
+            visible="true"
+            stepKey="skipAddPhoneIfAsked"/>
         <waitForPageLoad stepKey="waitForGridToReload" time="20"/>
     </actionGroup>
 </actionGroups>

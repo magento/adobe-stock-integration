@@ -16,7 +16,7 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579509"/>
             <description value="User sees images with the same series"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_preview"/>
+            <group value="adobe_stock_integration_see_more"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -30,7 +30,9 @@
         </after>
 
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
-        <conditionalClick selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" dependentSelector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" visible="false" stepKey="clickOnTabMoreForThisSeries"/>
+        <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
+        <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
+        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
         <actionGroup ref="AssertNumberOfImagesUnderMoreForThisSeriesActionGroup" stepKey="assertImagesUnderMoreForThisSeriesCount">
             <argument name="imagesNumber" value="4"/>
         </actionGroup>
