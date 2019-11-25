@@ -53,6 +53,7 @@ define([
             $.ajax({
                 type: 'GET',
                 url: this.getImagesUrl + '?ids=' + this.getIds().join(','),
+                showLoader: true,
                 data: {
                     'form_key': window.FORM_KEY
                 },

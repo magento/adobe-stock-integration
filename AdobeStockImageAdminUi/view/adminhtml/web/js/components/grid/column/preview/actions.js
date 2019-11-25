@@ -51,11 +51,12 @@ define([
                 return;
             }
 
-            this.source().data.items.forEach(function (record) {
+            for(var record of this.source().data.items) {
                 if (record.id === displayedRecord.id) {
                     updatedDisplayedRecord = record;
+                    break;
                 }
-            });
+            }
 
             this.preview().displayedRecord(updatedDisplayedRecord);
 
