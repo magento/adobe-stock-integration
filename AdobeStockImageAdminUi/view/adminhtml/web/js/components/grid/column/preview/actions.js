@@ -27,12 +27,41 @@ define([
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            listens: {
+                '${ $.provider }:data.items': 'updateActions'
+            },
             modules: {
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }'
             }
+        },
+
+        /**
+         * Update displayed record data on data source update
+         *
+         * @returns {Object} Chainables
+         */
+        updateActions: function () {
+            var displayedRecord = this.preview().displayedRecord(),
+                updatedDisplayedRecord = this.preview().displayedRecord(),
+                record;
+
+            if (typeof displayedRecord.id === 'undefined') {
+                return;
+            }
+
+            for (record of this.source().data.items) {
+                if (record.id === displayedRecord.id) {
+                    updatedDisplayedRecord = record;
+                    break;
+                }
+            }
+
+            this.preview().displayedRecord(updatedDisplayedRecord);
+
+            return this;
         },
 
         /**
