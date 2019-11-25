@@ -91,8 +91,7 @@ class Profile extends Action
 
         } catch (NoSuchEntityException $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during get user data operation: %1', $exception->getMessage());
-            $this->logger->critical($logMessage);
+            $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
                 'message' => __('An error occurred during get user data. Contact support.'),

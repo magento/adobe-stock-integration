@@ -135,7 +135,7 @@ class RelatedImagesTest extends TestCase
     {
         $result = [
             'success' => false,
-            'message' => __('An error occurred while getting related images. Contact support.'),
+            'message' => 'An error occurred on attempt to fetch related images.',
         ];
         $this->getRelatedImages->expects($this->once())
             ->method('execute')

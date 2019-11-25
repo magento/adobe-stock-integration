@@ -104,8 +104,8 @@ class LogOut implements LogOutInterface
             $userProfile->setRefreshToken('');
             $this->userProfileRepository->save($userProfile);
             return true;
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             return false;
         }
     }

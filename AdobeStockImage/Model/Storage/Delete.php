@@ -55,8 +55,8 @@ class Delete
                 $mediaDirectory->delete($path);
             }
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('Failed to delete the image: %error', ['error' => $exception->getMessage()]);
-            $this->logger->critical($message);
             throw new CouldNotDeleteException($message, $exception);
         }
     }

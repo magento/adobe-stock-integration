@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAdminUi\Controller\Adminhtml\System\Config;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
@@ -28,6 +29,11 @@ class TestConnection extends Action
     public const ADMIN_RESOURCE = 'Magento_Config::config_system';
 
     /**
+     * Constant for value of an obscured API key
+     */
+    public const OBSCURED_KEY = '******';
+
+    /**
      * @var JsonFactory
      */
     private $resultJsonFactory;
@@ -38,19 +44,28 @@ class TestConnection extends Action
     private $client;
 
     /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
      * TestConnection constructor.
+     *
      * @param Context $context
      * @param ClientInterface $client
      * @param JsonFactory $resultJsonFactory
+     * @param ConfigInterface $config
      */
     public function __construct(
         Context $context,
         ClientInterface $client,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        ConfigInterface $config
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->client = $client;
+        $this->config = $config;
     }
 
     /**
@@ -62,7 +77,11 @@ class TestConnection extends Action
     {
         try {
             $params = $this->getRequest()->getParams();
-            $isConnectionEstablished = $this->client->testConnection((string) $params['api_key']);
+            $apiKey = (string) $params['api_key'];
+            if ($apiKey === self::OBSCURED_KEY) {
+                $apiKey = $this->config->getApiKey();
+            }
+            $isConnectionEstablished = $this->client->testConnection($apiKey);
             $message = $isConnectionEstablished ? __('Connection Successful!') : __('Connection Failed!');
         } catch (\Exception $exception) {
             $message = __('An error occurred during test Adobe Stock API connection');
