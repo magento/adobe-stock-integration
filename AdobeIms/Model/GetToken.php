@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
-use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 
 /**
  * Class GetToken
@@ -87,7 +87,7 @@ class GetToken implements GetTokenInterface
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(
-                __('Authentication is failing. Error code: %error', ['error' => $tokenResponse->getError()])
+                __('Login failed. Check if the Secret Key entered correctly and try again.')
             );
         }
 

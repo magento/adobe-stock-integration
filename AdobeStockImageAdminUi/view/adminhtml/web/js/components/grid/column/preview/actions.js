@@ -215,9 +215,9 @@ define([
 
         /**
          * License and save image
-         *s
+         *
          * @param {Object} record
-         * @param fileName
+         * @param {String} fileName
          */
         licenseAndSave: function (record, fileName) {
             this.save(record, fileName, true);
@@ -242,6 +242,11 @@ define([
                     context: this,
                     showLoader: true,
 
+                    /**
+                     * On success result
+                     *
+                     * @param {Object}
+                     */
                     success: function (response) {
                         var confirmationContent = $.mage.__('License "' + record.title + '"'),
                             quotaMessage = response.result.message,
@@ -361,6 +366,7 @@ define([
          * Process of license
          */
         licenseProcess: function () {
+            this.login().showPopupOnFail = false;
             this.login().login()
                 .then(function () {
                     this.showLicenseConfirmation(this.preview().displayedRecord());
@@ -369,14 +375,13 @@ define([
                     messages.add('error', error.message);
                 })
                 .finally(function () {
+                    this.login().showPopupOnFail = true;
                     messages.scheduleCleanup(this.messageDelay);
                 }.bind(this));
         },
 
         /**
          * Save licensed
-         *
-         * @returns {void}
          */
         saveLicensed: function () {
             if (!this.login().user().isAuthorized) {

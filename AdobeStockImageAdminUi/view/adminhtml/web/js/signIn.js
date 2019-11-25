@@ -1,12 +1,16 @@
+// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// jscs:enable
+
 define([
     'jquery',
     'Magento_AdobeIms/js/signIn',
-    'Magento_AdobeIms/js/action/authorization'
-], function ($, signIn, auth) {
+    'Magento_AdobeIms/js/action/authorization',
+    'Magento_Ui/js/modal/confirm'
+], function ($, signIn, auth, confirm) {
     'use strict';
 
     return signIn.extend({
@@ -18,10 +22,12 @@ define([
             // eslint-disable-next-line max-len
             previewProvider: 'name = adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview, ns = adobe_stock_images_listing',
             quotaUrl: 'adobe_stock/license/quota',
+            settingsUrl: 'adminhtml/system_config/edit/section/system',
             modules: {
                 source: '${ $.dataProvider }',
                 preview: '${ $.previewProvider }'
-            }
+            },
+            showPopupOnFail: true
         },
 
         /**
@@ -36,6 +42,7 @@ define([
         /**
          * Login to Adobe
          *
+	 * @params
          * @return {window.Promise}
          */
         login: function () {
@@ -51,9 +58,34 @@ define([
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
-                        reject(error);
-                    });
+                    this.showPopupOnFail ?
+                         this.getLoginErrorPopup()
+                         : reject(error);
+                }.bind(this));
             }.bind(this));
+        },
+
+        /**
+         * Show popup that user failed to login.
+         */
+        getLoginErrorPopup: function () {
+            confirm({
+                title: $.mage.__('The user is not able to login'),
+                // eslint-disable-next-line max-len
+                content: $.mage.__('Login failed. Check if the Secret Key  entered <a href="'+this.settingsUrl+'">Configuration → System → Adobe Stock Integration</a> correctly and try again'),
+                buttons: [{
+                    text: $.mage.__('Okay'),
+                    class: 'action-primary',
+                    attr: {},
+
+                    /**
+                     * Close modal on button click
+                     */
+                    click: function (event) {
+                        this.closeModal(event);
+                    }
+                }]
+            });
         },
 
         /**

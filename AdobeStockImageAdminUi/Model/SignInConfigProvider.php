@@ -60,7 +60,8 @@ class SignInConfigProvider implements ConfigProviderInterface
             'component' => 'Magento_AdobeStockImageAdminUi/js/signIn',
             'template' => 'Magento_AdobeStockImageAdminUi/signIn',
             'userQuota' => $this->getUserQuota(),
-            'quotaUrl' => $this->url->getUrl('adobe_stock/license/quota')
+            'quotaUrl' => $this->url->getUrl('adobe_stock/license/quota'),
+            'settingsUrl' => $this->url->getUrl('adminhtml/system_config/edit/section/system')
         ];
     }
 
