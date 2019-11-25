@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="adobe_user_profile" resource="default" engine="innodb" comment="Adobe Stock User Profile">
+    <table name="adobe_user_profile" resource="default" engine="innodb" comment="Adobe IMS User Profile">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
         <column xsi:type="varchar" length="255" name="name" nullable="false" comment="Display Name"/>

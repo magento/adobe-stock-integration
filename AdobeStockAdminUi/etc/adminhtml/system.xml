@@ -17,15 +17,15 @@
                 </field>
                 <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Key (Client ID)</label>
-                    <config_path>adobe_stock/integration/api_key</config_path>
+                    <config_path>adobe_ims/integration/api_key</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="private_key" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="private_key" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Client Secret</label>
-                    <config_path>adobe_stock/integration/private_key</config_path>
+                    <config_path>adobe_ims/integration/private_key</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="enabled">1</field>
