@@ -245,7 +245,7 @@ define([
                     /**
                      * On success result
                      *
-                     * @param {Object}
+                     * @param {Object} response
                      */
                     success: function (response) {
                         var confirmationContent = $.mage.__('License "' + record.title + '"'),
@@ -266,6 +266,9 @@ define([
                                     'content': baseContent + displayFieldName,
                                     'visible': !this.isDownloaded(),
                                     'actions': {
+                                        /**
+                                         * Confirm action
+                                         */
                                         confirm: function (fileName) {
                                             if (typeof fileName === 'undefined') {
                                                 fileName = filePathArray[imageIndex]
@@ -278,6 +281,10 @@ define([
                                     'buttons': [{
                                         text: cancelText,
                                         class: 'action-secondary action-dismiss',
+
+                                        /**
+                                         * Close modal
+                                         */
                                         click: function () {
                                             this.closeModal();
                                         }
@@ -295,12 +302,20 @@ define([
                                 buttons: [{
                                     text: cancelText,
                                     class: 'action-secondary action-dismiss',
+
+                                    /**
+                                     * Close modal
+                                     */
                                     click: function () {
                                         this.closeModal();
                                     }
                                 },{
                                     text: $.mage.__('Buy Credits'),
                                     class: 'action-primary action-accept',
+
+                                    /**
+                                     * Close modal
+                                     */
                                     click: function () {
                                         window.open(buyCreditsUrl);
                                         this.closeModal();
@@ -310,6 +325,9 @@ define([
                         }
                     },
 
+                    /**
+                     * On error
+                     */
                     error: function (response) {
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(this.messageDelay);

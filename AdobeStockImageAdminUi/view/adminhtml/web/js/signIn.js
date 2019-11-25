@@ -72,7 +72,7 @@ define([
             confirm({
                 title: $.mage.__('The user is not able to login'),
                 // eslint-disable-next-line max-len
-                content: $.mage.__('Login failed. Check if the Secret Key  entered <a href="'+this.settingsUrl+'">Configuration → System → Adobe Stock Integration</a> correctly and try again'),
+                content: $.mage.__('Login failed. Check if the Secret Key  entered <a href="' + this.settingsUrl + '">Configuration → System → Adobe Stock Integration</a> correctly and try again'),
                 buttons: [{
                     text: $.mage.__('Okay'),
                     class: 'action-primary',
