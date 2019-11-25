@@ -14,7 +14,7 @@ use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Log Out User from Adobe Account
+ * Represent functionality for log out users from the Adobe account
  */
 class LogOut implements LogOutInterface
 {
@@ -104,8 +104,8 @@ class LogOut implements LogOutInterface
             $userProfile->setRefreshToken('');
             $this->userProfileRepository->save($userProfile);
             return true;
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             return false;
         }
     }

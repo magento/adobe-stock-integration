@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeImsApi\Api;
 
 /**
- * Interface UserAuthorizedInterface
+ * Declare functionality for getting information is user authorised or not
  * @api
  */
 interface UserAuthorizedInterface

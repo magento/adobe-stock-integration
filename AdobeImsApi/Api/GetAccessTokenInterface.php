@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeImsApi\Api;
 
 /**
- * Interface GetAccessTokenInterface
+ * Declare functionality for getting user access token
  * @api
  */
 interface GetAccessTokenInterface

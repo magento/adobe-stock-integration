@@ -1,3 +1,6 @@
+branches:
+  only:
+    - develop
 sudo: required
 dist: trusty
 group: edge
@@ -27,6 +30,8 @@ env:
     - MAGENTO_BACKEND="backend"
     - MAGENTO_ADMIN_USERNAME="admin"
     - MAGENTO_ADMIN_PASSWORD="123123q"
+    - ADOBE_STOCK_LICENSED_IMAGE="175947395"
+    - ADOBE_STOCK_UNLICENSED_IMAGE="24860368"
   matrix:
     - TEST_SUITE=unit
     - TEST_SUITE=phpstan
@@ -40,6 +45,7 @@ env:
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
 matrix:
   fast_finish: true
 jobs:
@@ -59,6 +65,8 @@ jobs:
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
     - php: '7.1'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
+    - php: '7.1'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
     - php: '7.2'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
     - php: '7.2'
@@ -73,6 +81,8 @@ jobs:
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
     - php: '7.2'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
+    - php: '7.2'
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
 cache:
   directories:
     - $HOME/.composer/cache
@@ -99,4 +109,4 @@ script:
 after_success:
   - if [ $TEST_SUITE == 'unit' ]; then cd ../ && travis_retry coveralls; fi
 after_failure:
-  - if [ $TEST_SUITE == 'functional' ]; then cat "${HOME}/drivers/*.log" && cat "${TRAVIS_BUILD_DIR}/magento2/var/log/*.log" && cat "${TRAVIS_BUILD_DIR}/var/reports/*"
+  - if [ $TEST_SUITE == 'functional' ]; then cat "${HOME}/selenium.log"; cat "${TRAVIS_BUILD_DIR}/chromedriver.log"; cat "${TRAVIS_BUILD_DIR}/magento2/var/log/debug.log"; cat "${TRAVIS_BUILD_DIR}/magento2/var/log/system.log"; ls -al "${TRAVIS_BUILD_DIR}/magento2/dev/tests/acceptance/tests/_output";fi

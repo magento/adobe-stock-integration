@@ -64,6 +64,8 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
     sed -e "s?%MAGENTO_HOST_NAME%?${MAGENTO_HOST_NAME}?g" --in-place ./.env
     sed -e "s?%MAGENTO_ADMIN_USERNAME%?${MAGENTO_ADMIN_USERNAME}?g" --in-place ./.env
     sed -e "s?%MAGENTO_ADMIN_PASSWORD%?${MAGENTO_ADMIN_PASSWORD}?g" --in-place ./.env
+    sed -e "s?%ADOBE_STOCK_LICENSED_IMAGE%?${ADOBE_STOCK_LICENSED_IMAGE}?g" --in-place ./.env
+    sed -e "s?%ADOBE_STOCK_UNLICENSED_IMAGE%?${ADOBE_STOCK_UNLICENSED_IMAGE}?g" --in-place ./.env
     cp -f ${TRAVIS_BUILD_DIR}/dev/tests/acceptance/.credentials .credentials
     sed -e "s?%ADOBE_STOCK_API_KEY%?${ADOBE_STOCK_API_KEY}?g" --in-place ./.credentials
     sed -e "s?%ADOBE_STOCK_PRIVATE_KEY%?${ADOBE_STOCK_PRIVATE_KEY}?g" --in-place ./.credentials
@@ -85,6 +87,8 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
     CHROME_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
     sh ./vendor/se/selenium-server-standalone/bin/selenium-server-standalone -port 4444 -host 127.0.0.1 \
         -Dwebdriver.chrome.driver="${HOME}/drivers/chromedriver-${CHROME_VERSION}" \
+        -Dwebdriver.chrome.args="--verbose" \
+        -Dselenium.LOGGER.level="VERBOSE" \
         -Dwebdriver.chrome.logfile="${TRAVIS_BUILD_DIR}/chromedriver.log" \
         -trustAllSSLCertificate &> ~/selenium.log &
 fi

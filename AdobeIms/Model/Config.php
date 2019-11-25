@@ -14,7 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class Config
+ * Represent the Adobe IMS config model responsible for retrieving config settings for Adobe Ims
  */
 class Config implements ConfigInterface
 {
@@ -38,6 +38,7 @@ class Config implements ConfigInterface
 
     /**
      * Config constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      */
@@ -52,7 +53,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getApiKey():? string
+    public function getApiKey(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_API_KEY);
     }

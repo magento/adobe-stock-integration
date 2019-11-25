@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 use Magento\AdobeImsApi\Api\GetImageInterface;
 
 /**
- * Class Callback
+ * Callback action for managing user authentication with the Adobe services
  */
 class Callback extends Action
 {
@@ -122,14 +122,14 @@ class Callback extends Action
                 self::RESPONSE_SUCCESS_CODE,
                 __('Authorization was successful')
             );
-        } catch (AuthorizationException | CouldNotSaveException $e) {
+        } catch (AuthorizationException | CouldNotSaveException $exception) {
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_ERROR_CODE,
-                $e->getMessage()
+                $exception->getMessage()
             );
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_ERROR_CODE,
@@ -155,7 +155,7 @@ class Callback extends Action
             return $this->userProfileRepository->getByUserId(
                 (int)$this->getUser()->getId()
             );
-        } catch (NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $exception) {
             return $this->userProfileFactory->create();
         }
     }

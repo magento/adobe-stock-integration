@@ -12,7 +12,7 @@ use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Exception\AuthorizationException;
 
 /**
- * Interface GetTokenInterface
+ * Declare functionality for getting user token
  * @api
  */
 interface GetTokenInterface

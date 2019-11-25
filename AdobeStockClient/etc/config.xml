@@ -12,6 +12,7 @@
                 <enabled>1</enabled>
                 <environment>PROD</environment>
                 <product_name>Magento</product_name>
+                <files_url>https://stock.adobe.io/Rest/Media/1/Files</files_url>
             </integration>
         </adobe_stock>
     </default>

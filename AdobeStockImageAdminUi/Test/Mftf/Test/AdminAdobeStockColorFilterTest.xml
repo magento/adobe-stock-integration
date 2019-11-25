@@ -39,10 +39,15 @@
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="#000000"/>
         </actionGroup>
-        <!--Verify message returns zero results if images was not found -->
+        <!--Enter a search term to nullify the default gallery/collection shown-->
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForCars">
+            <argument name="query" value="cars"/>
+        </actionGroup>
+        <!--Apply an invalid color search term in order to get zero results-->
         <actionGroup ref="AdminApplyNonValidColorValueToFilterActionGroup" stepKey="userChoseAndApplyNonValidFilter">
             <argument name="color" value="none"/>
         </actionGroup>
+        <!--Verify message returns zero results if images was not found -->
         <see selector="{{AdobeStockFilterSection.emptyText}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
     </test>
 </tests>

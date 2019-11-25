@@ -122,10 +122,9 @@ class ConnectionWrapperTest extends TestCase
     {
         $this->imsConfig->expects($this->once())->method('getApiKey')->willReturn('key');
         $searchFileRequest = new SearchFilesRequest();
-        $this->getAccessToken->expects($this->once())->method('execute')->willReturn('token');
-        $this->adobeStockMock->expects($this->exactly(1))
+        $this->adobeStockMock->expects($this->once())
             ->method('searchFilesInitialize')
-            ->with($searchFileRequest, 'token')
+            ->with($searchFileRequest)
             ->willReturnSelf();
         $this->assertEquals(
             $this->connectionWrapper,
@@ -140,11 +139,10 @@ class ConnectionWrapperTest extends TestCase
     {
         $this->expectExceptionMessage('Failed to initialize Adobe Stock search files request: New error');
         $this->imsConfig->expects($this->once())->method('getApiKey')->willReturn('key');
-        $this->getAccessToken->expects($this->once())->method('execute')->willReturn('token');
         $searchFileRequest = new SearchFilesRequest();
-        $this->adobeStockMock->expects($this->exactly(1))
+        $this->adobeStockMock->expects($this->once())
             ->method('searchFilesInitialize')
-            ->with($searchFileRequest, 'token')
+            ->with($searchFileRequest)
             ->willThrowException(new \Exception('New error'));
         $this->connectionWrapper->searchFilesInitialize($searchFileRequest);
     }
