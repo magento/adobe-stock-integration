@@ -30,9 +30,6 @@ define([
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
-            imports: {
-                rows: '${ $.provider }:data.items'
-            },
             modules: {
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
@@ -67,7 +64,7 @@ define([
                 return;
             }
 
-            this.rows().forEach(function (record) {
+            this.source().data.items.forEach(function (record) {
                 if (record.id === displayedRecord.id) {
                     updatedDisplayedRecord = record;
                 }

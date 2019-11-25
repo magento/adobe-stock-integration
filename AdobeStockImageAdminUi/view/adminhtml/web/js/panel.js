@@ -47,7 +47,7 @@ define([
          * Update listing data
          */
         reloadGrid: function () {
-            this.source().set('params.t ', Date.now());
+            this.source().set('params.t', Date.now());
         }
     });
 });
