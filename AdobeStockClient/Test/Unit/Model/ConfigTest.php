@@ -47,8 +47,7 @@ class ConfigTest extends TestCase
         $this->config = $this->objectManager->getObject(
             Config::class,
             [
-                'scopeConfig' => $this->scopeConfigMock,
-                'searchResultFields' => $this->getSearchResultFields()
+                'scopeConfig' => $this->scopeConfigMock
             ]
         );
     }
@@ -73,29 +72,5 @@ class ConfigTest extends TestCase
             ->method('getValue')
             ->with(self::CONFIG_XML_PATH_PRODUCT_NAME);
         $this->config->getProductName();
-    }
-
-    /**
-     * Test get search fields test.
-     */
-    public function testGetSearchResultFields(): void
-    {
-        $methodResult = $this->config->getSearchResultFields();
-        $this->assertEquals($this->getSearchResultFields(), $methodResult);
-    }
-
-    /**
-     * Search result fields.
-     *
-     * @return array
-     */
-    private function getSearchResultFields(): array
-    {
-        return [
-            'filed_1',
-            'field_2',
-            'field_3',
-            'field_4',
-        ];
     }
 }

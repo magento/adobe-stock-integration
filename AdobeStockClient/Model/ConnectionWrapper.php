@@ -188,7 +188,7 @@ class ConnectionWrapper
     public function searchFilesInitialize(SearchFilesRequest $request): self
     {
         try {
-            $this->getConnection()->searchFilesInitialize($request, $this->getAccessToken());
+            $this->getConnection()->searchFilesInitialize($request);
             return $this;
         } catch (\Exception $exception) {
             $this->handleException($exception, 'Failed to initialize Adobe Stock search files request');

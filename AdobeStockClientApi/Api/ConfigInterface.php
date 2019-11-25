@@ -29,16 +29,9 @@ interface ConfigInterface
     public function getProductName() : ?string;
 
     /**
-     * Search result configuration
-     *
-     * @return array|string[]
-     */
-    public function getSearchResultFields(): array;
-
-    /**
-     * Retrieve token URL
+     * Get Adobe Stock API files url
      *
      * @return string
      */
-    public function getLocale(): string;
+    public function getFilesUrl(): string;
 }
