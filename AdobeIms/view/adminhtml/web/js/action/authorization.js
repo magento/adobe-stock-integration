@@ -34,7 +34,7 @@ define([], function () {
         /**
          * Opens authorization window with special parameters
          */
-        authWindow = window.adobeStockAuthWindow = window.open(
+        authWindow = window.adobeIMSAuthWindow = window.open(
             config.url,
             '',
             buildWindowParams(
