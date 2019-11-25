@@ -82,7 +82,7 @@ define([], function () {
                         reject(new Error('Time\'s up.'));
                     }, config.popupWindowTimeout || 60000);
 
-                    responseData = authWindow.document.body.innerText.match(
+                    responseData = authWindow.document.body.innerHTML.match(
                         config.callbackParsingParams.regexpPattern
                     );
 
@@ -99,7 +99,7 @@ define([], function () {
                             lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]
                         });
                     } else {
-                        reject(new Error(responseData[config.callbackParsingParams.messageIndex]));
+                        reject(responseData[config.callbackParsingParams.messageIndex]);
                     }
                 } catch (e) {
                     if (authWindow.closed) {
