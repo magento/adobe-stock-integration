@@ -52,7 +52,7 @@ define([
                 return;
             }
 
-            for(record of this.source().data.items) {
+            for (record of this.source().data.items) {
                 if (record.id === displayedRecord.id) {
                     updatedDisplayedRecord = record;
                     break;
