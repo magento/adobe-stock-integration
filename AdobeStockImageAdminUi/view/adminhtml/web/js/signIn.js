@@ -42,18 +42,15 @@ define([
         /**
          * Login to Adobe
          *
-	 * @params
          * @return {window.Promise}
          */
         login: function (options = {}) {
-
             return new window.Promise(function (resolve, reject) {
                 if (this.user().isAuthorized) {
                     return resolve();
                 }
                 auth(this.loginConfig)
                     .then(function (response) {
-                        this.source().set('params.t ', Date.now());
                         this.loadUserProfile();
                         resolve(response);
                     }.bind(this))
@@ -108,7 +105,6 @@ define([
                 context: this,
                 showLoader: true,
                 success: function () {
-                    this.source().set('params.t ', Date.now());
                     this.user({
                         isAuthorized: false,
                         name: '',

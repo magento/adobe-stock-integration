@@ -10,8 +10,10 @@
     <preference for="Magento\AdobeStockClientApi\Api\ConfigInterface" type="Magento\AdobeStockClient\Model\Config"/>
     <preference for="Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface" type="Magento\AdobeStockClient\Model\UserQuota"/>
     <preference for="Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface" type="Magento\AdobeStockClient\Model\LicenseConfirmation"/>
-    <type name="Magento\AdobeStockClient\Model\Config">
+    <preference for="Magento\AdobeStockClientApi\Api\Client\FilesInterface" type="Magento\AdobeStockClient\Model\Client\Files"/>
+    <type name="Magento\AdobeStockClientApi\Api\ClientInterface">
         <arguments>
+            <argument name="searchParametersProvider" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProviderComposite</argument>
             <argument name="searchResultFields" xsi:type="array">
                 <item name="0" xsi:type="string">ID</item>
                 <item name="1" xsi:type="string">NB_RESULTS</item>
@@ -31,13 +33,7 @@
                 <item name="16" xsi:type="string">CONTENT_TYPE</item>
                 <item name="17" xsi:type="string">DETAILS_URL</item>
                 <item name="18" xsi:type="string">PREMIUM_LEVEL_ID</item>
-                <item name="19" xsi:type="string">IS_LICENSED</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\AdobeStockClientApi\Api\ClientInterface">
-        <arguments>
-            <argument name="searchParametersProvider" xsi:type="object">Magento\AdobeStockClient\Model\SearchParametersProviderComposite</argument>
         </arguments>
     </type>
     <type name="Magento\AdobeStockClient\Model\SearchParametersProviderComposite">

@@ -18,7 +18,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class GetToken
+ * Represent the get user token functionality
  */
 class GetToken implements GetTokenInterface
 {
