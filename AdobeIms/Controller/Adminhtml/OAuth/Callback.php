@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 use Magento\AdobeImsApi\Api\GetImageInterface;
 
 /**
- * Class Callback
+ * Callback action for managing user authentication with the Adobe services
  */
 class Callback extends Action
 {

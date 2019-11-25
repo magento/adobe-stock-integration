@@ -17,7 +17,7 @@ use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 
 /**
- * Class GetToken
+ * Represent the get user token functionality
  */
 class GetToken implements GetTokenInterface
 {

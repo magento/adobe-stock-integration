@@ -12,7 +12,7 @@ use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class TokenResponse
+ * Represent the token response service data class
  */
 class TokenResponse extends DataObject implements TokenResponseInterface
 {

@@ -30,6 +30,7 @@ define([
             modules: {
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
+                overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }'
             }
         },
@@ -49,7 +50,7 @@ define([
          * @returns {observable}
          */
         isLicensed: function () {
-            return this.preview().displayedRecord()['is_licensed'] && !this.isLicensedLocally();
+            return this.overlay().licensed()[this.preview().displayedRecord().id] && !this.isLicensedLocally();
         },
 
         /**

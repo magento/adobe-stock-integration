@@ -17,7 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class UserProfileRepository
+ * Represent user profile repository
  */
 class UserProfileRepository implements UserProfileRepositoryInterface
 {

@@ -11,7 +11,7 @@ namespace Magento\AdobeImsApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Interface UserProfileInterface
+ * Declare the user profile data service object
  * @api
  */
 interface UserProfileInterface extends ExtensibleDataInterface

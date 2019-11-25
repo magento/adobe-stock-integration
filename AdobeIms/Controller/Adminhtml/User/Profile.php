@@ -15,7 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Backend controller for retrieving data for the current user
+ * Get Adobe services user account action
  */
 class Profile extends Action
 {

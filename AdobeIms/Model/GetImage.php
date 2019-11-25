@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 
 /**
- * Get user image profile.
+ * Represent functionality for getting the Adobe services user profile image
  */
 class GetImage implements GetImageInterface
 {
