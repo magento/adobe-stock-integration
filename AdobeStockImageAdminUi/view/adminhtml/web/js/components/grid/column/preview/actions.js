@@ -27,6 +27,12 @@ define([
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            listens: {
+                '${ $.provider }:data.items': 'updateActions'
+            },
+            imports: {
+                rows: '${ $.provider }:data.items'
+            },
             modules: {
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
@@ -35,22 +41,39 @@ define([
         },
 
         /**
-         * {@inheritDoc}
+         * Init observable variables
+         * @return {Object}
          */
-        initialize: function () {
-            this._super();
-            $(window).on('fileDeleted.mediabrowser', this.onDeleteFile.bind(this));
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'rows'
+                ]);
+
+            return this;
         },
 
         /**
+         * Update displayed record data on data source update
+         *
          * @returns {Object} Chainables
          */
-        onDeleteFile: function () {
-            this.preview().displayedRecord()['is_downloaded'] = 0;
-            if (this.preview().displayedRecord()['is_licensed']) {
-                this.preview().displayedRecord()['is_licensed_locally'] = 0;
+        updateActions: function () {
+            var displayedRecord = this.preview().displayedRecord(),
+                updatedDisplayedRecord = this.preview().displayedRecord();
+
+            if (typeof displayedRecord.id === 'undefined') {
+                return;
             }
-            this.preview().displayedRecord(this.preview().displayedRecord());
+
+            this.rows().forEach(function (record) {
+                if (record.id === displayedRecord.id) {
+                    updatedDisplayedRecord = record;
+                }
+            });
+
+            this.preview().displayedRecord(updatedDisplayedRecord);
+
             return this;
         },
 

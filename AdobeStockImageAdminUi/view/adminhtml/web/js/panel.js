@@ -12,10 +12,12 @@ define([
 
     return Element.extend({
         defaults: {
-            containerId: '',
-            masonryComponentPath: '',
+            containerId: '#adobe-stock-images-search-modal',
+            masonryComponentPath: 'adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns',
+            dataSourcePath: 'adobe_stock_images_listing.adobe_stock_images_listing_data_source',
             modules: {
-                masonry: '${$.masonryComponentPath}'
+                masonry: '${ $.masonryComponentPath }',
+                source: '${ $.dataSourcePath }'
             }
         },
 
@@ -36,7 +38,16 @@ define([
                 this.masonry().setLayoutStylesWhenLoaded();
             }.bind(this)).applyBindings();
 
+            $(window).on('fileDeleted.mediabrowser', this.reloadGrid.bind(this));
+
             return this;
+        },
+
+        /**
+         * Update listing data
+         */
+        reloadGrid: function () {
+            this.source().set('params.t ', Date.now());
         }
     });
 });
