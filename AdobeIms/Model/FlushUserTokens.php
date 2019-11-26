@@ -12,7 +12,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 
 /**
- * Remove user access and refresh tokens
+ * Represent the remove user access and refresh tokens functionality
  */
 class FlushUserTokens implements FlushUserTokensInterface
 {
@@ -27,7 +27,8 @@ class FlushUserTokens implements FlushUserTokensInterface
     private $userContext;
 
     /**
-     * UserAuthorized constructor.
+     * FlushUserTokens constructor.
+     *
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
      */
@@ -45,10 +46,7 @@ class FlushUserTokens implements FlushUserTokensInterface
     public function execute(int $adminUserId = null): void
     {
         try {
-            if ($adminUserId === null) {
-                $adminUserId = (int) $this->userContext->getUserId();
-            }
-
+            $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
             $userProfile = $this->userProfileRepository->getByUserId($adminUserId);
             $userProfile->setAccessToken('');
             $userProfile->setRefreshToken('');

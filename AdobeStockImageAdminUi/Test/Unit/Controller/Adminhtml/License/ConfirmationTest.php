@@ -130,7 +130,7 @@ class ConfirmationTest extends TestCase
     {
         $result = [
             'success' => false,
-            'message' => new Phrase('An error occurred during get quota operation. Contact support.')
+            'message' => new Phrase('An error occurred on attempt to retrieve image licensing information.')
         ];
         $this->clientInterfaceMock->expects($this->once())
             ->method('getLicenseConfirmation')

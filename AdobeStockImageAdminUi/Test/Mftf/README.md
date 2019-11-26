@@ -8,6 +8,12 @@ The Functional Test Module for **Magento AdobeStockImageAdminUI** module.
 vendor/bin/mftf run:group AdobeStockIntegration
 ```
 
+Or, if you want to run individual tests:
+
+```bash
+vendor/bin/mftf run:test <Test Name>
+```
+
 ## Configuration
 
 ### `.env`
