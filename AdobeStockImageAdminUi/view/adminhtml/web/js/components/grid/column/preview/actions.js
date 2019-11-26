@@ -148,7 +148,7 @@ define([
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
                     mediaBrowser.reload(true);
-                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
+                    this.preview().getAdobeModal().trigger('closeModal');
                 },
 
                 /**
