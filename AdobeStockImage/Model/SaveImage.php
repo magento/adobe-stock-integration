@@ -16,11 +16,14 @@ use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class SaveImage
@@ -73,11 +76,6 @@ class SaveImage implements SaveImageInterface
     private $documentToKeywords;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var SaveAssetKeywordsInterface
      */
     private $saveAssetKeywords;
@@ -93,7 +91,6 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetInterface $saveAdobeStockAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param DocumentToAsset $documentToAsset
-     * @param LoggerInterface $logger
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      */
@@ -106,7 +103,6 @@ class SaveImage implements SaveImageInterface
         SaveAssetInterface $saveAdobeStockAsset,
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         DocumentToAsset $documentToAsset,
-        LoggerInterface $logger,
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords
     ) {
@@ -118,48 +114,51 @@ class SaveImage implements SaveImageInterface
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
         $this->documentToAsset = $documentToAsset;
-        $this->logger = $logger;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
     }
 
     /**
-     * @inheritdoc
+     * Downloads the image and save it to filesystem and database
+     *
+     * @param Document $document
+     * @param string $url
+     * @param string $destinationPath
+     *
+     * @throws CouldNotSaveException
+     * @throws AlreadyExistsException
+     * @throws CouldNotDeleteException
+     * @throws FileSystemException
+     * @throws NoSuchEntityException
      */
     public function execute(Document $document, string $url, string $destinationPath): void
     {
-        try {
-            $pathAttribute = $document->getCustomAttribute('path');
-            $pathValue = $pathAttribute->getValue();
-            /* If the asset has been already saved, delete the previous version */
-            if (null !== $pathAttribute && $pathValue) {
-                $this->storageDelete->execute($pathValue);
-            }
-
-            $path = $this->storageSave->execute($url, $destinationPath);
-
-            $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert(
-                $document,
-                [
-                    'id' => null,
-                    'path' => $path,
-                    'source' => 'Adobe Stock'
-                ]
-            );
-            $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
-
-            if (!$mediaGalleryAssetId) {
-                $mediaGalleryAssetId = $this->assetRepository->getById($document->getId())->getMediaGalleryId();
-            }
-
-            $this->saveAssetKeywords->execute($this->documentToKeywords->convert($document), $mediaGalleryAssetId);
-
-            $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
-            $this->saveAdobeStockAsset->execute($asset);
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            $message = __('Image was not saved: %error', ['error' => $exception->getMessage()]);
-            throw new CouldNotSaveException($message, $exception);
+        $pathAttribute = $document->getCustomAttribute('path');
+        $pathValue = $pathAttribute->getValue();
+        /* If the asset has been already saved, delete the previous version */
+        if (null !== $pathAttribute && $pathValue) {
+            $this->storageDelete->execute($pathValue);
         }
+
+        $path = $this->storageSave->execute($url, $destinationPath);
+
+        $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert(
+            $document,
+            [
+                'id' => null,
+                'path' => $path,
+                'source' => 'Adobe Stock'
+            ]
+        );
+        $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
+
+        if (!$mediaGalleryAssetId) {
+            $mediaGalleryAssetId = $this->assetRepository->getById($document->getId())->getMediaGalleryId();
+        }
+
+        $this->saveAssetKeywords->execute($this->documentToKeywords->convert($document), $mediaGalleryAssetId);
+
+        $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
+        $this->saveAdobeStockAsset->execute($asset);
     }
 }

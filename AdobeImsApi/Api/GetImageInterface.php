@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeImsApi\Api;
 
 /**
- * Interface GetImageInterface
+ * Declare functionality for getting the Adobe services user profile image
  * @api
  */
 interface GetImageInterface

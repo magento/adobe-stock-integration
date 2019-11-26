@@ -14,17 +14,17 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class Config
+ * Represent the Adobe IMS config model responsible for retrieving config settings for Adobe Ims
  */
 class Config implements ConfigInterface
 {
-    private const XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
-    private const XML_PATH_PRIVATE_KEY = 'adobe_stock/integration/private_key';
-    private const XML_PATH_TOKEN_URL = 'adobe_stock/integration/token_url';
-    private const XML_PATH_AUTH_URL_PATTERN = 'adobe_stock/integration/auth_url_pattern';
-    private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_stock/integration/logout_url';
-    private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_stock/integration/default_profile_image';
-    private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_stock/integration/image_url';
+    private const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
+    private const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
+    private const XML_PATH_TOKEN_URL = 'adobe_ims/integration/token_url';
+    private const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
+    private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
+    private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_ims/integration/default_profile_image';
+    private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_ims/integration/image_url';
 
     /**
      * @var ScopeConfigInterface
@@ -38,6 +38,7 @@ class Config implements ConfigInterface
 
     /**
      * Config constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      */
@@ -52,7 +53,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getApiKey():? string
+    public function getApiKey(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_API_KEY);
     }

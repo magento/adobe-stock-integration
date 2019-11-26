@@ -9,7 +9,7 @@
         <div class="messages">
             <div attr="class: 'message message-'+code">
                 <div data-ui-id="messages-message-error">
-                    <span text="message"></span>
+                    <span data-bind="html: message"></span>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
 <button class="action-secondary"
         type="button"
         data-bind="visible: isDownloaded(), click: function(){ locate() }">
-    <span translate="'Locate'"/>
+    <span translate="'Open in Media Gallery'"/>
 </button>
 <button class="action-default primary"
         type="button"

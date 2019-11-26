@@ -6,7 +6,6 @@
         "magento/framework": "*",
         "magento/module-adobe-ims-api": "1.*.*",
         "magento/module-adobe-stock-client-api": "1.*.*",
-        "magento/module-config": "*",
         "astock/stock-api-libphp": "^1.1.2"
     },
     "type": "magento2-module",

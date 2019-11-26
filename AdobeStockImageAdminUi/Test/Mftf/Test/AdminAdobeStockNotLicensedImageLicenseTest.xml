@@ -9,6 +9,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockNotLicensedImageLicenseTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/783"/>
+            </skip>
             <features value="AdobeStockImagePanel"/>
             <stories value="User licenses an image"/>
             <title value="Adobe Stock License Image"/>
