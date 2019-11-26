@@ -11,17 +11,31 @@ namespace Magento\AdobeStockClient\Model\Client;
 use Magento\AdobeImsApi\Api\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
-use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 /**
  * Command for retrieving files information from Adobe Stock API
  */
 class Files implements FilesInterface
 {
+    /**
+     * Successful curl result code.
+     */
+    private const CURL_STATUS_OK = 0;
+
+    private const FILES = 'files';
+
+    private const QUERY_PARAM_IDS = 'ids';
+
+    private const QUERY_PARAM_LOCALE = 'locale';
+
+    private const QUERY_PARAM_RESULT_COLUMNS = 'result_columns';
+
     /**
      * @var ImsConfig
      */
@@ -53,6 +67,8 @@ class Files implements FilesInterface
     private $getAccessToken;
 
     /**
+     * Files constructor.
+     *
      * @param ImsConfig $imsConfig
      * @param ClientConfig $clientConfig
      * @param LocaleResolver $localeResolver
@@ -81,19 +97,26 @@ class Files implements FilesInterface
      */
     public function execute(array $ids, array $columns, string $locale = null): array
     {
+        if (empty($ids)) {
+            throw new IntegrationException(__('Files ids can not be empty.'));
+        }
+
         $locale = $locale ?? $this->localeResolver->getLocale();
 
         $curl = $this->curlFactory->create();
         $curl->setHeaders($this->getHeaders());
         $curl->get($this->getUrl($ids, $columns, $locale));
 
-        $response = $this->json->unserialize($curl->getBody());
+        if (self::CURL_STATUS_OK !== $curl->getStatus()) {
+            throw new WebapiException(__('An error occurred during retrieve files information.'));
+        }
 
-        if (!isset($response['files'])) {
+        $response = $this->json->unserialize($curl->getBody());
+        if (!isset($response[self::FILES])) {
             throw new IntegrationException(__('Could not retrieve files information.'));
         }
 
-        return $response['files'];
+        return $response[self::FILES];
     }
 
     /**
@@ -106,13 +129,15 @@ class Files implements FilesInterface
      */
     private function getUrl(array $ids, array $columns, string $locale): string
     {
-        return $this->clientConfig->getFilesUrl() . '?' . http_build_query(
-            [
-                    'ids' => implode(',', $ids),
-                    'locale' => $locale,
-                    'result_columns' => $columns
+        return $this->clientConfig->getFilesUrl()
+            . '?'
+            . http_build_query(
+                [
+                    self::QUERY_PARAM_IDS => implode(',', $ids),
+                    self::QUERY_PARAM_LOCALE => $locale,
+                    self::QUERY_PARAM_RESULT_COLUMNS => $columns
                 ]
-        );
+            );
     }
 
     /**
@@ -120,7 +145,7 @@ class Files implements FilesInterface
      *
      * @return array
      */
-    private function getHeaders()
+    private function getHeaders(): array
     {
         return [
             'x-Product' => $this->clientConfig->getProductName(),
