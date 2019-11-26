@@ -2,66 +2,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-@admin__masonry_grid_image__space: 20px;
-@admin__masonry_overlay_background_color: #507DC8;
 
 & when (@media-common = true) {
     .adobe-stock-images-search-modal-content {
         .masonry-image {
             &-grid {
-                position: relative;
-                margin: @admin__masonry_grid_image__space/2 -(@admin__masonry_grid_image__space/2);
-                overflow: hidden;
                 display: inline-block;
                 width: 100%;
                 margin: 0;
-
-                .no-data-message-container,
-                .error-message-container {
-                    font-size: @data-grid__no-records__font-size;
-                    padding: @data-grid__no-records__padding;
-                    text-align: center;
-                }
             }
 
             &-column {
-                margin: @admin__masonry_grid_image__space/2;
-                float: left;
-                background-color: #ffffff;
                 position: relative;
                 overflow: visible;
-
-                img {
-                    cursor: pointer;
-                    height: 100%;
-                    width: 100%;
-                }
             }
 
             &-overlay {
                 right: 0;
-                opacity: 1;
-                position: absolute;
-                color: #fff;
-                z-index: 10;
-                padding: .5rem;
-                width: 80px;
-                background-color: @admin__masonry_overlay_background_color;
-                text-align: center;
             }
 
             &-preview {
-                left: 0;
-                right: 0;
-                display: table;
-                background-color: #ffffff;
-                width: 100%;
                 position: fixed;
                 z-index: 299;
 
                 .container {
-                    max-width: 880px;
-                    margin: auto;
                     padding-top: 0;
                     .preview-buttons {
                         /* Align image preview actions uniformly to the right edge */
@@ -70,22 +34,8 @@
                         }
                     }
                     .preview-row-content {
-                        display: flex;
-
-                        &:after {
-                            content: "";
-                            clear: both;
-                            display: table;
-                        }
-
                         img.preview {
-                            display: block;
-                            max-height: 500px;
-                            margin-bottom: 20px;
-                            flex-basis: 300px;
-                            max-width: 60%;
-                            float: left;
-                            width: auto;
+                            flex-basis: auto;
                         }
                     }
                 }
@@ -122,7 +72,7 @@
         .adobe-login-container {
             .adobe-user-information {
                 .adobe-user-popup {
-                    .adobe-stock-user-quota {
+                    .adobe-user-info {
                         padding-top: 15px;
                     }
                 }
@@ -147,6 +97,7 @@
                 float: left;
                 min-width: 40%;
                 padding-left: 40px;
+                width: -moz-min-content;
 
                 .actions {
                     letter-spacing: -1px;
@@ -170,29 +121,8 @@
                 }
             }
 
-            .action-buttons {
-                text-align: right;
-
-                .action {
-                    &-close {
-                        position: static;
-                        padding: 30px;
-                    }
-
-                    &-previous,
-                    &-next {
-                        background: transparent;
-                        border: none;
-                        margin: 0;
-                        white-space: nowrap;
-                    }
-
-                    &-close,
-                    &-previous,
-                    &-next {
-                        font-size: 2rem;
-                    }
-                }
+            .related-container {
+                height: 180px;
             }
 
             .attributes {
@@ -242,6 +172,10 @@
 
             .adobe-stock-tabs {
                 margin-top: 30px;
+                border-bottom: 1px solid @color-gray68;
+                .ui-state-default {
+                    border-bottom: none;
+                }
             }
 
             .adobe-stock-related-images-tab-content {

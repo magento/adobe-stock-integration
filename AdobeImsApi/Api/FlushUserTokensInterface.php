@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeImsApi\Api;
 
 /**
- * Interface UserAuthorizedInterface
+ * Declare functionality for remove user access and refresh tokens functionality
  * @api
  */
 interface FlushUserTokensInterface

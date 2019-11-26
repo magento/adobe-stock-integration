@@ -3,28 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
-use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
+use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
 use Magento\Backend\App\Action;
-use Magento\Framework\Api\AttributeInterfaceFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Backend controller for saving licensed image
+ * Identify if images are licensed in adobe stock
  */
-class SaveLicensed extends Action
+class GetList extends Action
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;
-    private const HTTP_BAD_REQUEST = 400;
+    private const FIELD_ID = 'id';
+    private const FIELD_IS_LICENSED = 'is_licensed';
 
     /**
      * @see _isAllowed()
@@ -37,26 +34,24 @@ class SaveLicensed extends Action
     private $logger;
 
     /**
-     * @var SaveLicensedImageInterface
+     * @var FilesInterface
      */
-    private $saveLicensedImage;
+    private $files;
 
     /**
      * @param Action\Context $context
-     * @param SaveLicensedImageInterface $saveLicensedImage
      * @param LoggerInterface $logger
+     * @param FilesInterface $files
      */
     public function __construct(
         Action\Context $context,
-        SaveLicensedImageInterface $saveLicensedImage,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        FilesInterface $files
     ) {
         parent::__construct($context);
-
-        $this->saveLicensedImage = $saveLicensedImage;
         $this->logger = $logger;
+        $this->files = $files;
     }
-
     /**
      * @inheritdoc
      */
@@ -65,29 +60,31 @@ class SaveLicensed extends Action
         try {
             $params = $this->getRequest()->getParams();
 
-            $this->saveLicensedImage->execute(
-                (int) $params['media_id'],
-                (string) $params['destination_path']
+            $files = $this->files->execute(
+                explode(',', $params['ids']),
+                [
+                    self::FIELD_ID,
+                    self::FIELD_IS_LICENSED
+                ]
             );
+
+            $result = [];
+
+            foreach ($files as $file) {
+                $result[$file[self::FIELD_ID]] = (bool) $file[self::FIELD_IS_LICENSED];
+            }
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully downloaded the licensed image.'),
-            ];
-
-        } catch (LocalizedException $exception) {
-            $responseCode = self::HTTP_BAD_REQUEST;
-            $responseContent = [
-                'success' => false,
-                'message' => $exception->getMessage(),
+                'result' => $result,
             ];
         } catch (\Exception $exception) {
-            $responseCode = self::HTTP_INTERNAL_ERROR;
             $this->logger->critical($exception);
+            $responseCode = self::HTTP_INTERNAL_ERROR;
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred on attempt to save image.'),
+                'message' => __('Retrieving license information for images failed.'),
             ];
         }
 

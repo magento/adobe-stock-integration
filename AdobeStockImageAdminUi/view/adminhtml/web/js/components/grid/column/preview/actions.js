@@ -27,11 +27,38 @@ define([
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            listens: {
+                '${ $.provider }:data.items': 'updateActions'
+            },
             modules: {
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
+                overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }'
             }
+        },
+
+        /**
+         * Update displayed record data on data source update
+         */
+        updateActions: function () {
+            var displayedRecord = this.preview().displayedRecord(),
+                updatedDisplayedRecord = this.preview().displayedRecord(),
+                records = this.source().data.items,
+                index;
+
+            if (typeof displayedRecord.id === 'undefined') {
+                return;
+            }
+
+            for (index = 0; index < records.length; index++) {
+                if (records[index].id === displayedRecord.id) {
+                    updatedDisplayedRecord = records[index];
+                    break;
+                }
+            }
+
+            this.preview().displayedRecord(updatedDisplayedRecord);
         },
 
         /**
@@ -49,7 +76,7 @@ define([
          * @returns {observable}
          */
         isLicensed: function () {
-            return this.preview().displayedRecord()['is_licensed'] && !this.isLicensedLocally();
+            return this.overlay().licensed()[this.preview().displayedRecord().id] && !this.isLicensedLocally();
         },
 
         /**
@@ -65,8 +92,10 @@ define([
          * Locate downloaded image in media browser
          */
         locate: function () {
+            var image = mediaGallery.locate(this.preview().displayedRecord().path);
+
             $(this.preview().adobeStockModalSelector).trigger('closeModal');
-            mediaGallery.locate(this.preview().displayedRecord().path);
+            image ? image.click() : mediaGallery.notLocated();
         },
 
         /**
@@ -143,8 +172,8 @@ define([
                     }
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
-                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
                     mediaBrowser.reload(true);
+                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
                 },
 
                 /**
@@ -162,6 +191,12 @@ define([
                         message = 'There was an error on attempt to save the image!';
                     } else {
                         message = response.responseJSON.message;
+
+                        if (response.responseJSON['is_licensed'] === true) {
+                            record['is_licensed'] = 1;
+                            this.preview().displayedRecord(record);
+                            this.source().set('params.t ', Date.now());
+                        }
                     }
                     messages.add('error', message);
                     messages.scheduleCleanup(this.messageDelay);
@@ -207,9 +242,9 @@ define([
 
         /**
          * License and save image
-         *s
+         *
          * @param {Object} record
-         * @param fileName
+         * @param {String} fileName
          */
         licenseAndSave: function (record, fileName) {
             this.save(record, fileName, true);
@@ -234,6 +269,11 @@ define([
                     context: this,
                     showLoader: true,
 
+                    /**
+                     * On success result
+                     *
+                     * @param {Object} response
+                     */
                     success: function (response) {
                         var confirmationContent = $.mage.__('License "' + record.title + '"'),
                             quotaMessage = response.result.message,
@@ -248,22 +288,30 @@ define([
 
                         if (canPurchase) {
                             this.getPrompt(
-                                {
+                                 {
                                     'title': title,
                                     'content': baseContent + displayFieldName,
                                     'visible': !this.isDownloaded(),
                                     'actions': {
+                                        /**
+                                         * Confirm action
+                                         */
                                         confirm: function (fileName) {
                                             if (typeof fileName === 'undefined') {
                                                 fileName = filePathArray[imageIndex]
-                                                    .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                                 .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
+
                                             licenseAndSave(record, fileName);
                                         }
                                     },
                                     'buttons': [{
                                         text: cancelText,
                                         class: 'action-secondary action-dismiss',
+
+                                        /**
+                                         * Close modal
+                                         */
                                         click: function () {
                                             this.closeModal();
                                         }
@@ -281,12 +329,20 @@ define([
                                 buttons: [{
                                     text: cancelText,
                                     class: 'action-secondary action-dismiss',
+
+                                    /**
+                                     * Close modal
+                                     */
                                     click: function () {
                                         this.closeModal();
                                     }
                                 },{
                                     text: $.mage.__('Buy Credits'),
                                     class: 'action-primary action-accept',
+
+                                    /**
+                                     * Close modal
+                                     */
                                     click: function () {
                                         window.open(buyCreditsUrl);
                                         this.closeModal();
@@ -296,6 +352,9 @@ define([
                         }
                     },
 
+                    /**
+                     * On error
+                     */
                     error: function (response) {
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(this.messageDelay);
@@ -308,7 +367,6 @@ define([
          * Return configured  prompt with input field.
          */
         getPrompt: function (data) {
-            var regex = new RegExp('[a-zA-Z0-9_-]');
 
             prompt({
                 title: data.title,
@@ -320,7 +378,7 @@ define([
                 modalClass: 'adobe-stock-save-preview-prompt',
                 validation: true,
                 promptField: '[data-role="adobe-stock-image-name-field"]',
-                validationRules: ['required-entry'],
+                validationRules: ['required-entry', 'validate-image-name'],
                 attributesForm: {
                     novalidate: 'novalidate',
                     action: '',
@@ -336,16 +394,6 @@ define([
                 buttons: data.buttons
             });
 
-            /* Allow only alphanumeric, dash, and underscore on filename input keypress */
-            $('input[data-role="adobe-stock-image-name-field"]').bind('keypress', function (event) {
-                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-
-                if (!regex.test(key)) {
-                    event.preventDefault();
-
-                    return false;
-                }
-            });
         },
 
         /**
@@ -357,7 +405,7 @@ define([
                     this.showLicenseConfirmation(this.preview().displayedRecord());
                 }.bind(this))
                 .catch(function (error) {
-                    messages.add('error', error.message);
+                    messages.add('error', error);
                 })
                 .finally(function () {
                     messages.scheduleCleanup(this.messageDelay);
@@ -366,8 +414,6 @@ define([
 
         /**
          * Save licensed
-         *
-         * @returns {void}
          */
         saveLicensed: function () {
             if (!this.login().user().isAuthorized) {

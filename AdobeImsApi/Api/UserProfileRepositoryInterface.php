@@ -9,9 +9,10 @@ declare(strict_types=1);
 namespace Magento\AdobeImsApi\Api;
 
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Interface UserProfileRepositoryInterface
+ * Declare user profile repository
  * @api
  */
 interface UserProfileRepositoryInterface
@@ -19,9 +20,9 @@ interface UserProfileRepositoryInterface
     /**
      * Save user profile
      *
-     * @param \Magento\AdobeImsApi\Api\Data\UserProfileInterface $entity
+     * @param UserProfileInterface $entity
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws CouldNotSaveException
      */
     public function save(UserProfileInterface $entity): void;
 

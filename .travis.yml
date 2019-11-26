@@ -1,3 +1,6 @@
+branches:
+  only:
+    - develop
 sudo: required
 dist: trusty
 group: edge
@@ -42,7 +45,7 @@ env:
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
 matrix:
   fast_finish: true
 jobs:
@@ -63,7 +66,7 @@ jobs:
     - php: '7.1'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
     - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
     - php: '7.2'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
     - php: '7.2'

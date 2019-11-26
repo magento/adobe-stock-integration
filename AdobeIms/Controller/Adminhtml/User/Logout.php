@@ -12,10 +12,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\HTTP\Client\CurlFactory;
 
 /**
- * Logout from adobe account
+ * Logout action from the Adobe account
  */
 class Logout extends Action
 {
