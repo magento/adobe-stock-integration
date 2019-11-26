@@ -61,7 +61,7 @@ define([
         /**
          * Login action with poup on error..
          */
-        loginClick() {
+        loginClick: function () {
             this.login().catch(function (error) {
                 this.showLoginErrorPopup(error);
             }.bind(this));
