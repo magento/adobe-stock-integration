@@ -53,8 +53,8 @@ define([
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
-                        reject(error)
-                    }.bind(this));
+                        reject(error);
+                    });
             }.bind(this));
         },
 
