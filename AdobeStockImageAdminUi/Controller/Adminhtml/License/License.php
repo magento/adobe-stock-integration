@@ -79,7 +79,10 @@ class License extends Action
 
             $isLicensed = true;
 
-            $this->saveLicensedImage->execute($contentId);
+            $this->saveLicensedImage->execute(
+                $contentId,
+                (string) $params['destination_path'] ?? null
+            );
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

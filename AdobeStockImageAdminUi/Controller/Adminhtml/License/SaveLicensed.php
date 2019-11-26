@@ -63,7 +63,10 @@ class SaveLicensed extends Action
         try {
             $params = $this->getRequest()->getParams();
 
-            $this->saveLicensedImage->execute((int) $params['media_id']);
+            $this->saveLicensedImage->execute(
+                (int) $params['media_id'],
+                (string) $params['destination_path'] ?? null
+            );
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
