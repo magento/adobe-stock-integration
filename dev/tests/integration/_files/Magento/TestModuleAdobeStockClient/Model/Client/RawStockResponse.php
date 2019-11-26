@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestModuleAdobeStockClient\Model;
+namespace Magento\TestModuleAdobeStockClient\Model\Client;
 
 /**
  * Represents the raw stock data response from the Adobe Stock service gotten with the Adobe Stock PHP SDK
@@ -19,7 +19,7 @@ class RawStockResponse
      */
     public function getRawAdobeStockResponse(): array
     {
-        [
+        return [
             'nb_results' => 347,
             'files' => [
                 0 => [

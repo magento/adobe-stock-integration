@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestModuleAdobeStockClient\Model;
+namespace Magento\TestModuleAdobeStockClient\Model\Client;
 
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Response\SearchFiles;
