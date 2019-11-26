@@ -59,7 +59,7 @@ define([
         },
 
         /**
-         * Login action with poup on error..
+         * Login action with popup on error..
          */
         loginClick() {
             this.login().catch(function (error) {

@@ -86,9 +86,12 @@ define([
             return this.related().cannotViewNext(record);
         },
 
+        /**
+         * Return active adobe gallery selector.
+         */
         getAdobeModal: function () {
-          return jQuery(this.activeMediaGallerySelector).find(this.adobeStockModalSelector);
-	},
+            return $(this.activeMediaGallerySelector).find(this.adobeStockModalSelector);
+        },
 
         /**
          * @inheritdoc

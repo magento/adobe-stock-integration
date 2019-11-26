@@ -101,7 +101,6 @@ define([
             image ? image.click() : mediaGallery.notLocated();
         },
 
-
         /**
          * Save preview
          */
@@ -113,6 +112,9 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
+                            $.ajaxSetup({
+                                async: true
+                            });
                             this.save(this.preview().displayedRecord(), fileName);
                         }.bind(this)
                     },
