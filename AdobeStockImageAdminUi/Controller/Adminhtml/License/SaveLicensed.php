@@ -10,11 +10,9 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
 use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
 use Magento\Backend\App\Action;
-use Magento\Framework\Api\AttributeInterfaceFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -65,17 +63,13 @@ class SaveLicensed extends Action
         try {
             $params = $this->getRequest()->getParams();
 
-            $this->saveLicensedImage->execute(
-                (int) $params['media_id'],
-                (string) $params['destination_path']
-            );
+            $this->saveLicensedImage->execute((int) $params['media_id']);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
                 'message' => __('You have successfully downloaded the licensed image.'),
             ];
-
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
             $responseContent = [
