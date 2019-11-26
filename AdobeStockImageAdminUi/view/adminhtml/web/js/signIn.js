@@ -1,12 +1,16 @@
+// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// jscs:enable
+
 define([
     'jquery',
     'Magento_AdobeIms/js/signIn',
-    'Magento_AdobeIms/js/action/authorization'
-], function ($, signIn, auth) {
+    'Magento_AdobeIms/js/action/authorization',
+    'Magento_Ui/js/modal/confirm'
+], function ($, signIn, auth, confirm) {
     'use strict';
 
     return signIn.extend({
@@ -49,9 +53,40 @@ define([
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
-                        reject(error);
-                    });
+                        reject(error)
+                    }.bind(this));
             }.bind(this));
+        },
+
+        /**
+         * Login action with poup on error..
+         */
+        loginClick() {
+            this.login().catch(function (error) {
+                this.showLoginErrorPopup(error);
+            }.bind(this));
+        },
+
+        /**
+         * Show popup that user failed to login.
+         */
+        showLoginErrorPopup: function (error) {
+            confirm({
+                title: $.mage.__('Couldn\'t log you in'),
+                content: error,
+                buttons: [{
+                    text: $.mage.__('Ok'),
+                    class: 'action-primary',
+                    attr: {},
+
+                    /**
+                     * Close modal on button click
+                     */
+                    click: function (event) {
+                        this.closeModal(event);
+                    }
+                }]
+            });
         },
 
         /**

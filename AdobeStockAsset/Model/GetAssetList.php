@@ -80,7 +80,7 @@ class GetAssetList implements GetAssetListInterface
                 )
             );
         } catch (\Exception $exception) {
-            $message = __('Get asset list action failed.');
+            $message = __('Cannot retrieve assets from Adobe Stock.');
             $this->log->critical($exception);
             throw new LocalizedException($message, $exception, $exception->getCode());
         }

@@ -26,8 +26,8 @@
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
-                <item name="adobe_stock/integration/api_key" xsi:type="string">1</item>
-                <item name="adobe_stock/integration/private_key" xsi:type="string">1</item>
+                <item name="adobe_ims/integration/api_key" xsi:type="string">1</item>
+                <item name="adobe_ims/integration/private_key" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

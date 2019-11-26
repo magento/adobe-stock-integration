@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    private const CONFIG_XML_PATH_API_KEY = 'adobe_stock/integration/api_key';
+    private const CONFIG_XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
 
     /**
      * @var ObjectManager

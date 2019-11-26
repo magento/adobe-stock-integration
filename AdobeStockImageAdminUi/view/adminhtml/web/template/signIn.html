@@ -2,7 +2,7 @@
     class="adobe-sign-in-button"
     id="adobeImsSignIn"
     data-role="signInBtn"
-    data-bind="click: login, visible: !user().isAuthorized"
+    data-bind="click: loginClick, visible: !user().isAuthorized"
     type="button">
     <span>Sign In</span>
 </button>
@@ -22,7 +22,7 @@
             <li>
                 <img class="adobe-profile-image-large" attr="src: user().image">
             </li>
-            <li class="adobe-stock-user-quota">
+            <li class="adobe-user-info">
                 <ul>
                     <li><!--ko text: user().name--><!--/ko--></li>
                     <li><!--ko text: user().email--><!--/ko--></li>
@@ -30,7 +30,7 @@
                 </ul>
             </li>
             <li>
-                <div class="adobe-stock-user-quota">
+                <div class="adobe-user-info">
                     <span>AVAILABLE</span>
                     <p><b><!--ko text: userQuota().images--><!--/ko--></b> Images | <b><!--ko text: userQuota().credits -->
                         <!--/ko--></b> Credits</p>

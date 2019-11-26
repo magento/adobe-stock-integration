@@ -79,7 +79,7 @@ define([
                 title: $.mage.__('The image cannot be located'),
                 content: $.mage.__('We cannot find this image in the media gallery.'),
                 buttons: [{
-                    text: $.mage.__('Okay'),
+                    text: $.mage.__('Ok'),
                     class: 'action-primary',
                     attr: {},
 
