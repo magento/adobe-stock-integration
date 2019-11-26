@@ -53,15 +53,15 @@ define([
                         resolve(response);
                     }.bind(this))
                     .catch(function (error) {
-                        reject(error)
-                    }.bind(this));
+                        reject(error);
+                    });
             }.bind(this));
         },
 
         /**
          * Login action with popup on error..
          */
-        loginClick() {
+        loginClick: function () {
             this.login().catch(function (error) {
                 this.showLoginErrorPopup(error);
             }.bind(this));
