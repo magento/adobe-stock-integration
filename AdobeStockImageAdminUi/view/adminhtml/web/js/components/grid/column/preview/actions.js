@@ -51,7 +51,7 @@ define([
             if (typeof displayedRecord.id === 'undefined') {
                 return;
             }
-
+            /*eslint-env es6 */
             for (record of this.source().data.items) {
                 if (record.id === displayedRecord.id) {
                     updatedDisplayedRecord = record;
