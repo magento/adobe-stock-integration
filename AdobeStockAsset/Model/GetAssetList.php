@@ -18,7 +18,7 @@ use Magento\Framework\UrlInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetAssetList
+ * Service for getting asset list filtered by search criteria
  */
 class GetAssetList implements GetAssetListInterface
 {

@@ -12,7 +12,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
 
 /**
- * Save creator.
+ * Command for saving the Adobe Stock asset creator object data
  */
 class Save
 {

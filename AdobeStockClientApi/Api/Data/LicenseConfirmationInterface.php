@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClientApi\Api\Data;
 
 /**
- * Lincense confirmation response
- *
+ * License confirmation response
  * @api
  */
 interface LicenseConfirmationInterface

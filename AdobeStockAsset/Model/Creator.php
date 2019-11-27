@@ -14,7 +14,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
- * Class Creator
+ * Adobe Stock creator data class
  */
 class Creator extends AbstractExtensibleModel implements CreatorInterface
 {

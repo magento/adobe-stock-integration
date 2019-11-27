@@ -19,7 +19,7 @@ use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class StockFileToDocument
+ * Used for converting the stock document to the search document object
  */
 class StockFileToDocument
 {

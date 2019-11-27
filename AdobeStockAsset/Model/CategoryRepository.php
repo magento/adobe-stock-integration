@@ -22,7 +22,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class CategoryRepository
+ * Repository used for managing asset category related functionality. Uses commands as proxy for those operations.
  */
 class CategoryRepository implements CategoryRepositoryInterface
 {
