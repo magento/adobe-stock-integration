@@ -112,6 +112,9 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
+                            $.ajaxSetup({
+                                async: true
+                            });
                             this.save(this.preview().displayedRecord(), fileName);
                         }.bind(this)
                     },
@@ -176,7 +179,7 @@ define([
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
                     mediaBrowser.reload(true);
-                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
+                    this.locate();
                 },
 
                 /**
@@ -304,6 +307,9 @@ define([
                                                 fileName = filePathArray[imageIndex]
                                                  .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
+                                            $.ajaxSetup({
+                                                async: true
+                                            });
 
                                             licenseAndSave(record, fileName);
                                         }
@@ -434,6 +440,9 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
+                            $.ajaxSetup({
+                                async: true
+                            });
                             this.save(this.preview().displayedRecord(), fileName, false, true);
                         }.bind(this)
                     },
