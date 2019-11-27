@@ -22,7 +22,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Repository used for managing asset creator related functionality. Uses commands as proxy for those operations.
+ * Centralize common data access functionality for the Adobe Stock creator. Uses commands as proxy for those operations.
  */
 class CreatorRepository implements CreatorRepositoryInterface
 {

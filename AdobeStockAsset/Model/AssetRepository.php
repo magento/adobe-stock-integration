@@ -24,7 +24,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Repository used for managing asset related functionality. Uses commands as proxy for those operations.
+ * Centralize common data access functionality for the Adobe Stock asset
  */
 class AssetRepository implements AssetRepositoryInterface
 {

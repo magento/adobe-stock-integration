@@ -16,7 +16,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
- * Adobe Stock Asset data class
+ * Representing the Adobe Stock asset data saved in adobe_stock_asset database table (table is populated once preview or licensed asset is saved)
  */
 class Asset extends AbstractExtensibleModel implements AssetInterface
 {
