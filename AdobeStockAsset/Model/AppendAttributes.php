@@ -15,8 +15,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Class is used for adding an additional assets attributes such as is_downloaded or path to the search
- * results
+ * Class is used for adding an additional assets attributes such as is_downloaded or path to the search results
  */
 class AppendAttributes
 {
