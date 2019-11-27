@@ -6,15 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model;
+namespace Magento\AdobeStockAdminUi\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\AdobeStockAssetApi\Api\ConfigInterface;
 
 /**
- * Class Config
+ * Used for identification is Adobe Stock integration enabled or not in the system configuration settings
  */
-class Config implements ConfigInterface
+class IsAdobeStockIntegrationEnabled implements IsAdobeStockIntegrationEnabledInterface
 {
     /**
      * Path to enable/disable adobe stock integration in the system settings.
@@ -27,7 +26,7 @@ class Config implements ConfigInterface
     private $scopeConfig;
 
     /**
-     * Config constructor.
+     * IsAdobeStockIntegrationEnabled constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      */
@@ -37,11 +36,11 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Is integration enabled
+     * Check is the Adobe Stock integration enabled or not
      *
      * @return bool
      */
-    public function isEnabled(): bool
+    public function checkStatus(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED);
     }

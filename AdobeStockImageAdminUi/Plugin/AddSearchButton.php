@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Plugin;
 
-use Magento\AdobeStockAssetApi\Api\ConfigInterface;
+use Magento\AdobeStockAdminUi\Model\IsAdobeStockIntegrationEnabledInterface;
 use Magento\Backend\Block\Widget\Container;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Plugin for media gallery block adding button to the toolbar.
@@ -29,18 +29,21 @@ class AddSearchButton
     private $authorization;
 
     /**
-     * @var ConfigInterface
+     * @var IsAdobeStockIntegrationEnabledInterface
      */
-    private $config;
+    private $isAdobeStockInterfaceEnabled;
 
     /**
      * AddSearchButton constructor.
-     * @param ConfigInterface $config
+     *
+     * @param IsAdobeStockIntegrationEnabledInterface $isAdobeStockInterfaceEnabled
      * @param AuthorizationInterface $authorization
      */
-    public function __construct(ConfigInterface $config, AuthorizationInterface $authorization)
-    {
-        $this->config = $config;
+    public function __construct(
+        IsAdobeStockIntegrationEnabledInterface $isAdobeStockInterfaceEnabled,
+        AuthorizationInterface $authorization
+    ) {
+        $this->isAdobeStockInterfaceEnabled = $isAdobeStockInterfaceEnabled;
         $this->authorization = $authorization;
     }
 
@@ -54,7 +57,9 @@ class AddSearchButton
      */
     public function beforeSetLayout(Container $subject, LayoutInterface $layout): void
     {
-        if ($this->authorization->isAllowed(self::ACL_SAVE_PREVIEW_IMAGES) && $this->config->isEnabled()) {
+        if ($this->authorization->isAllowed(self::ACL_SAVE_PREVIEW_IMAGES)
+            && $this->isAdobeStockInterfaceEnabled->checkStatus()
+        ) {
             $subject->addButton(
                 'search_adobe_stock',
                 [
