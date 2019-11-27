@@ -43,16 +43,11 @@ define([
         initialize: function () {
             this._super();
 
-            this.filterChips()._elems.each(function (elem) {
-                        if (elem.index === 'serie_id' && elem.initialValue === '') {
-                            elem.initialValue = this.serieFilterValue();
-                        } else if (elem.index === 'model_id' && elem.initialValue === '') {
-                            elem.initialValue = this.modelFilterValue();
-                        }
-                    }.bind(this));
+            this.filterChips().updateActive();
 
             return this;
         },
+
         /**
          * Init observable variables
          * @return {Object}
