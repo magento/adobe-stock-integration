@@ -60,13 +60,13 @@ class GetList extends Action
         try {
             $params = $this->getRequest()->getParams();
 
-            $files = $this->files->execute(
-                explode(',', $params['ids']),
-                [
-                    self::FIELD_ID,
-                    self::FIELD_IS_LICENSED
-                ]
-            );
+            $files = [];
+            if ($params['ids'] !== '') {
+                $files[] = $this->files->execute(
+                    explode(',', $params['ids']),
+                    [self::FIELD_ID, self::FIELD_IS_LICENSED]
+                );
+            }
 
             $result = [];
 

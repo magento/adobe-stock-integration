@@ -26,7 +26,7 @@ class Files implements FilesInterface
     /**
      * Successful curl result code.
      */
-    private const CURL_STATUS_OK = 0;
+    private const CURL_STATUS_OK = 200;
 
     private const FILES = 'files';
 
