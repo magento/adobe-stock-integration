@@ -38,6 +38,17 @@ define([
         },
 
         /**
+         * Initializes related component.
+         */
+        initialize: function () {
+            this._super();
+
+            this.filterChips().updateActive();
+
+            return this;
+        },
+
+        /**
          * Init observable variables
          * @return {Object}
          */

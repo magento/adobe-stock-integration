@@ -18,7 +18,8 @@ define([
             relatedImagesUrl: 'adobe_stock/preview/relatedimages',
             buyCreditsUrl: 'https://stock.adobe.com/',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
-            adobeStockModalSelector: '#adobe-stock-images-search-modal',
+            adobeStockModalSelector: '.adobe-search-images-modal',
+            activeMediaGallerySelector: 'aside.modal-slide.adobe-stock-modal._show',
             modules: {
                 keywords: '${ $.name }_keywords',
                 related: '${ $.name }_related',
@@ -83,6 +84,13 @@ define([
          */
         cannotViewNext: function (record) {
             return this.related().cannotViewNext(record);
+        },
+
+        /**
+         * Return active adobe gallery selector.
+         */
+        getAdobeModal: function () {
+            return $(this.activeMediaGallerySelector).find(this.adobeStockModalSelector);
         },
 
         /**

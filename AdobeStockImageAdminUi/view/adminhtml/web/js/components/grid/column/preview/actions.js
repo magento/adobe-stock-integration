@@ -20,7 +20,7 @@ define([
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/actions',
             loginProvider: 'name = adobe-login, ns = adobe-login',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
-            adobeStockModalSelector: '#adobe-stock-images-search-modal',
+            adobeStockModalSelector: '.adobe-search-images-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
@@ -94,7 +94,7 @@ define([
         locate: function () {
             var image = mediaGallery.locate(this.preview().displayedRecord().path);
 
-            $(this.preview().adobeStockModalSelector).trigger('closeModal');
+            this.preview().getAdobeModal().trigger('closeModal');
             image ? image.click() : mediaGallery.notLocated();
         },
 
@@ -109,6 +109,9 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
+                            $.ajaxSetup({
+                                async: true
+                            });
                             this.save(this.preview().displayedRecord(), fileName);
                         }.bind(this)
                     },
@@ -173,7 +176,7 @@ define([
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
                     mediaBrowser.reload(true);
-                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
+                    this.preview().getAdobeModal().trigger('closeModal');
                 },
 
                 /**

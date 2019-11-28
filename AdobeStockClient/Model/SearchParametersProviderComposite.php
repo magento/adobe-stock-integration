@@ -13,7 +13,7 @@ use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * A class that keeping the list of providers responsible for filling SearchParamters based on search criteria
+ * A class that keeping the list of providers responsible for filling SearchParameters based on search criteria
  */
 class SearchParametersProviderComposite implements SearchParameterProviderInterface
 {

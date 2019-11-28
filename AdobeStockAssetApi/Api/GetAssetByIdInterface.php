@@ -11,8 +11,7 @@ namespace Magento\AdobeStockAssetApi\Api;
 use Magento\Framework\Api\Search\Document;
 
 /**
- * Get asset by Adobe ID
- *
+ * Service for getting asset by content id
  * @api
  */
 interface GetAssetByIdInterface

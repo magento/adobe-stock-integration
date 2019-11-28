@@ -12,7 +12,7 @@ use AdobeStock\Api\Client\AdobeStock;
 use AdobeStock\Api\Client\Http\HttpInterface;
 
 /**
- * Class ConnectionFactory
+ * Used for generating a new connection instance to the Adobe Stock service
  */
 class ConnectionFactory
 {
