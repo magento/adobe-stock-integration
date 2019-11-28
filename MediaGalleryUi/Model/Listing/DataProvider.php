@@ -10,15 +10,31 @@ namespace Magento\MediaGalleryUi\Model\Listing;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
-use Magento\MediaGalleryUi\Model\ImagesProvider;
+use Magento\MediaGalleryUi\Model\Filesystem\ImagesProvider;
 
 class DataProvider extends UiComponentDataProvider
 {
-    /** @var ImagesProvider */
+    /**
+     * @var ImagesProvider
+     */
     private $imagesProvider;
 
+    /**
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param ReportingInterface $reporting
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
+     * @param ImagesProvider $imagesProvider
+     * @param array $meta
+     * @param array $data
+     */
     public function __construct(
         $name,
         $primaryFieldName,
@@ -27,9 +43,9 @@ class DataProvider extends UiComponentDataProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
+        ImagesProvider $imagesProvider,
         array $meta = [],
-        array $data = [],
-        ImagesProvider $imagesProvider
+        array $data = []
     ) {
         parent::__construct(
             $name,
@@ -45,18 +61,27 @@ class DataProvider extends UiComponentDataProvider
         $this->imagesProvider = $imagesProvider;
     }
 
-    private function getErrorData(): array
-    {
-        return [
-            'items' => [],
-            'totalRecords' => 0,
-            'errorMessage' => 'Error'
-        ];
-    }
-
-
+    /**
+     * @inheritdoc
+     */
     public function getData(): array
     {
-        return $this->imagesProvider->getImages();
+        try {
+            return $this->searchResultToOutput($this->getSearchResult());
+        } catch (LocalizedException $exception) {
+            return [
+                'items' => [],
+                'totalRecords' => 0,
+                'errorMessage' => $exception->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSearchResult(): SearchResultInterface
+    {
+        return $this->imagesProvider->getImages($this->getSearchCriteria());
     }
 }

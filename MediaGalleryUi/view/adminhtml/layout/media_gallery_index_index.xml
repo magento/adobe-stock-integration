@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <body>
         <referenceContainer name="content">
-            <uiComponent name="masonry_images_listing"/>
+            <uiComponent name="media_gallery_listing"/>
         </referenceContainer>
     </body>
 </layout>

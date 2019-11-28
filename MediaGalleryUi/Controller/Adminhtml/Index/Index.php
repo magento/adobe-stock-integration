@@ -12,11 +12,16 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Test controller for initial development of the new media gallery
+ */
 class Index extends Action
 {
-    const ADMIN_RESOURCE = 'Magento_MediaGalleryUi::general';
+    const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
-    /** @var PageFactory */
+    /**
+     * @var PageFactory
+     */
     private $pageFactory;
 
     /**

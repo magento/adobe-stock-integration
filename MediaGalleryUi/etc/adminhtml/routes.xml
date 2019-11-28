@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="admin">
-        <route id="masonry_grid_example" frontName="masonry_grid_example">
+        <route id="media_gallery" frontName="media_gallery">
             <module name="Magento_MediaGalleryUi" before="Magento_Backend" />
         </route>
     </router>

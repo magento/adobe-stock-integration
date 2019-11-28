@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magento_MediaGalleryUi::general"
-             title="Media Gallery Ui WIP"
+             title="Media Gallery Development"
              translate="title"
              module="Magento_MediaGalleryUi"
              sortOrder="10"
-             action="masonry_grid_example"
-             resource="Magento_MediaGalleryUi::general"/>
+             action="media_gallery"
+             resource="Magento_Cms::media_gallery"/>
     </menu>
 </config>

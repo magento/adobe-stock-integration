@@ -9,32 +9,32 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">masonry_images_listing.masonry_images_listing_data_source
+            <item name="provider" xsi:type="string">media_gallery_listing.media_gallery_listing_data_source
             </item>
         </item>
     </argument>
     <settings>
-        <spinner>masonry_images_columns</spinner>
+        <spinner>media_gallery_columns</spinner>
         <deps>
-            <dep>masonry_images_listing.masonry_images_listing_data_source</dep>
+            <dep>media_gallery_listing.media_gallery_listing_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="masonry_images_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="media_gallery_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_MediaGalleryUi::general</aclResource>
-        <dataProvider class="Magento\MediaGalleryUi\Model\Listing\DataProvider" name="masonry_images_listing_data_source">
+        <aclResource>Magento_Cms::media_gallery</aclResource>
+        <dataProvider class="Magento\MediaGalleryUi\Model\Listing\DataProvider" name="media_gallery_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
-    <columns name="masonry_images_columns" component="Magento_Ui/js/grid/masonry">
+    <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="containerId" xsi:type="string">masonry-grid-example</item>
