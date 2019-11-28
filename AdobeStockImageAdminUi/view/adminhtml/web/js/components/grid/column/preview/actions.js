@@ -197,9 +197,8 @@ define([
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
                     mediaBrowser.reload(true);
-                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
-                    mediaGallery.locate(this.getSavedPath(record.id).savedPreviewPath).click();
-                },
+                    this.preview().getAdobeModal().trigger('closeModal');
+		    mediaGallery.locate(this.getSavedPath(record.id).savedPreviewPath).click();
 
                 /**
                  * Error handler for Adobe Stock preview or licensed image
