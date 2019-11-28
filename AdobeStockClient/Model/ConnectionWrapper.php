@@ -24,7 +24,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Adapter for Adobe SDK
+ * Adapter for Adobe Stock SDK
  */
 class ConnectionWrapper
 {

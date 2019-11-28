@@ -13,7 +13,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Interface CategoryRepositoryInterface
+ * Repository used for managing asset category related functionality. Uses commands as proxy for those operations.
  * @api
  */
 interface CategoryRepositoryInterface

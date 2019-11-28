@@ -14,7 +14,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Save multiple asset service.
+ * Command for saving the Adobe Stock asset object data
  */
 class Save
 {

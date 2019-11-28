@@ -24,7 +24,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class AssetRepository
+ * Centralize common data access functionality for the Adobe Stock asset
  */
 class AssetRepository implements AssetRepositoryInterface
 {

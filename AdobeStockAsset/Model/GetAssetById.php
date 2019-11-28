@@ -15,8 +15,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 
 /**
- * Class GetAssetById
- *
  * Service for getting asset by content id
  */
 class GetAssetById implements GetAssetByIdInterface

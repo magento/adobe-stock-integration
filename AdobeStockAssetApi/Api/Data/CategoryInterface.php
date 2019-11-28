@@ -12,7 +12,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryExtensionInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Interface CategoryInterface
+ * Adobe Stock asset Category data class
  * @api
  */
 interface CategoryInterface extends ExtensibleDataInterface

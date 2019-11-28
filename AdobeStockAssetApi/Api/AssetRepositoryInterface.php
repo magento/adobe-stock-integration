@@ -16,7 +16,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Interface AssetRepositoryInterface
+ * Repository used for managing asset related functionality. Uses commands as proxy for those operations.
  * @api
  */
 interface AssetRepositoryInterface

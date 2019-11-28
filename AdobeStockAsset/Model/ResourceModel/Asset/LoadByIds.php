@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 
 /**
- * Save multiple asset service.
+ * Command for load assets by ids
  */
 class LoadByIds
 {

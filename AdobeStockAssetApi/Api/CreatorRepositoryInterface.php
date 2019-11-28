@@ -13,7 +13,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Interface CreatorRepositoryInterface
+ * Repository used for managing asset creator related functionality. Uses commands as proxy for those operations.
  * @api
  */
 interface CreatorRepositoryInterface

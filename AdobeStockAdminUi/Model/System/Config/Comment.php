@@ -12,7 +12,7 @@ use Magento\Config\Model\Config\CommentInterface;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class Comment
+ * Used for showing an information about how and where the Adobe Stock account can be configured
  */
 class Comment implements CommentInterface
 {

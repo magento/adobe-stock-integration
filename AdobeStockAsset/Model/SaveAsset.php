@@ -16,9 +16,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 
 /**
- * Class SaveAsset
- *
- * Service for saving asset
+ * Service for saving asset object
  */
 class SaveAsset implements SaveAssetInterface
 {

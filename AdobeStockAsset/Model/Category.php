@@ -14,7 +14,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
- * Adobe Stock Asset Category
+ * Representing the Adobe Stock asset category retrieved from Adobe Stock API (id matches to id on Adobe Stock side)
  */
 class Category extends AbstractExtensibleModel implements CategoryInterface
 {

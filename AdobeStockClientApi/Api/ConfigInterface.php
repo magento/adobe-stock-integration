@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClientApi\Api;
 
 /**
- * Class Config
+ * Used for managing the Adobe Stock integration config settings
  * @api
  */
 interface ConfigInterface
