@@ -14,7 +14,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class Config
+ * Used for managing the Adobe Stock integration config settings
  */
 class Config implements ConfigInterface
 {

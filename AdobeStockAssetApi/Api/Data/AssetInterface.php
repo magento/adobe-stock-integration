@@ -11,8 +11,7 @@ namespace Magento\AdobeStockAssetApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Asset Interface
- *
+ * Adobe Stock Asset data class interface
  * @api
  */
 interface AssetInterface extends ExtensibleDataInterface

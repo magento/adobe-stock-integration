@@ -12,7 +12,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorExtensionInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Interface CreatorInterface
+ * Adobe Stock creator data class
  * @api
  */
 interface CreatorInterface extends ExtensibleDataInterface

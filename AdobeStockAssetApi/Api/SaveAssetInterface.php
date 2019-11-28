@@ -11,8 +11,7 @@ namespace Magento\AdobeStockAssetApi\Api;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 
 /**
- * Save asset and all it's relations
- *
+ * Service for saving asset object
  * @api
  */
 interface SaveAssetInterface

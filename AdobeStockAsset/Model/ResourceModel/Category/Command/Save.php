@@ -12,7 +12,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
 
 /**
- * Save category.
+ * Command for saving the Adobe Stock category object data
  */
 class Save
 {
