@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAdminUi\Test\Unit\Model;
 
-use Magento\AdobeStockAdminUi\Model\IsAdobeStockIntegrationEnabledInte;
+use Magento\AdobeStockAdminUi\Model\IsAdobeStockIntegrationEnabled;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
