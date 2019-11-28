@@ -22,11 +22,13 @@ define([
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '#adobe-stock-images-search-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
+            getImagePathUrl: 'adobe_stock/preview/getPath',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            savedPreviewPath: null,
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -60,6 +62,25 @@ define([
 
             this.preview().displayedRecord(updatedDisplayedRecord);
         },
+
+        /**
+         * Return path for image that already saved
+         */
+        getSavedPath: function (mediaId) {
+                $.ajax({
+                    type: 'GET',
+                    async: false,
+                    url: this.preview().getImagePathUrl,
+                    dataType: 'json',
+                    data: {
+                        'media_id': mediaId
+                    }
+                }).done(function (data) {
+                    this.savedPreviewPath = data.result;
+                }.bind(this));
+
+                return this;
+            },
 
         /**
          * Returns is_downloaded flag as observable for given record
@@ -176,7 +197,8 @@ define([
                     this.preview().displayedRecord(record);
                     this.source().set('params.t ', Date.now());
                     mediaBrowser.reload(true);
-                    this.locate();
+                    $(this.preview().adobeStockModalSelector).trigger('closeModal');
+                    mediaGallery.locate(this.getSavedPath(record.id).savedPreviewPath).click();
                 },
 
                 /**
@@ -309,7 +331,7 @@ define([
                                             });
 
                                             licenseAndSave(record, fileName);
-                                        }
+                                        }.bind(this)
                                     },
                                     'buttons': [{
                                         text: cancelText,
