@@ -40,28 +40,25 @@ define([
 
         /**
          * Update displayed record data on data source update
-         *
-         * @returns {Object} Chainables
          */
         updateActions: function () {
             var displayedRecord = this.preview().displayedRecord(),
                 updatedDisplayedRecord = this.preview().displayedRecord(),
-                record;
+                records = this.source().data.items,
+                index;
 
             if (typeof displayedRecord.id === 'undefined') {
                 return;
             }
 
-            for (record of this.source().data.items) {
-                if (record.id === displayedRecord.id) {
-                    updatedDisplayedRecord = record;
+            for (index = 0; index < records.length; index++) {
+                if (records[index].id === displayedRecord.id) {
+                    updatedDisplayedRecord = records[index];
                     break;
                 }
             }
 
             this.preview().displayedRecord(updatedDisplayedRecord);
-
-            return this;
         },
 
         /**
