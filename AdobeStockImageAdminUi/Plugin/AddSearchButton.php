@@ -10,8 +10,8 @@ namespace Magento\AdobeStockImageAdminUi\Plugin;
 
 use Magento\AdobeStockAssetApi\Api\ConfigInterface;
 use Magento\Backend\Block\Widget\Container;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Plugin for media gallery block adding button to the toolbar.
@@ -61,7 +61,7 @@ class AddSearchButton
                     'class' => 'action-secondary',
                     'label' => __('Search Adobe Stock'),
                     'type' => 'button',
-                    'onclick' => 'jQuery("#adobe-stock-images-search-modal").trigger("openModal");'
+                    'onclick' => 'jQuery(".adobe-search-images-modal").trigger("openModal");'
                 ],
                 0,
                 0,
