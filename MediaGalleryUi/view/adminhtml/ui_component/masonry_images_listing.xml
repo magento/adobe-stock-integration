@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">masonry_images_listing.masonry_images_listing_data_source
+            </item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>masonry_images_columns</spinner>
+        <deps>
+            <dep>masonry_images_listing.masonry_images_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="masonry_images_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_MediaGalleryUi::general</aclResource>
+        <dataProvider class="Magento\MediaGalleryUi\Model\Listing\DataProvider" name="masonry_images_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <columns name="masonry_images_columns" component="Magento_Ui/js/grid/masonry">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="containerId" xsi:type="string">masonry-grid-example</item>
+            </item>
+        </argument>
+        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay">
+            <settings>
+                <label translate="true">Overlay</label>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image">
+            <settings>
+                <label translate="true">Thumbnail Image</label>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="preview" component="Magento_Ui/js/grid/columns/image-preview">
+            <settings>
+                <label translate="true">Image Preview</label>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+    </columns>
+</listing>
