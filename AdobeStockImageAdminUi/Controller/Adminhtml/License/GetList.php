@@ -61,17 +61,17 @@ class GetList extends Action
             $params = $this->getRequest()->getParams();
 
             $files = [];
+            $result = [];
+
             if ($params['ids'] !== '') {
                 $files[] = $this->files->execute(
                     explode(',', $params['ids']),
                     [self::FIELD_ID, self::FIELD_IS_LICENSED]
                 );
-            }
 
-            $result = [];
-
-            foreach ($files as $file) {
-                $result[$file[self::FIELD_ID]] = (bool) $file[self::FIELD_IS_LICENSED];
+                foreach ($files as $file) {
+                    $result[$file[self::FIELD_ID]] = (bool) $file[self::FIELD_IS_LICENSED];
+                }
             }
 
             $responseCode = self::HTTP_OK;
