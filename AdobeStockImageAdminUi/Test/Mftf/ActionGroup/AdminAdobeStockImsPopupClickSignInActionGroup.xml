@@ -9,7 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockImsPopupClickSignInActionGroup">
+        <makeScreenshot userInput="imsbeforeclick" stepKey="imsbeforeclick"/>
         <click selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="clickOnSignInButton"/>
+        <makeScreenshot userInput="imsafterclick" stepKey="imsafterclick"/>
         <switchToNextTab stepKey="switchToTab"/>
         <waitForPageLoad stepKey="waitForGridToReload" time="20"/>
     </actionGroup>

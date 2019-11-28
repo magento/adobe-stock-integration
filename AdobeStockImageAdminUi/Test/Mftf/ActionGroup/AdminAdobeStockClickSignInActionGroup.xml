@@ -11,5 +11,6 @@
     <actionGroup name="AdminAdobeStockClickSignInActionGroup">
         <click selector="{{AdobeStockSection.adobeSignIn}}" stepKey="clickOnSignInButton"/>
         <waitForPageLoad stepKey="waitForLoad"/>
+        <makeScreenshot userInput="imssignin" stepKey="screenshotIMSSignIn"/>
     </actionGroup>
 </actionGroups>

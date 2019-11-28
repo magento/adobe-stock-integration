@@ -16,6 +16,14 @@ if [ "$TEST_SUITE" == 'functional' ]; then
         echo "Uploading ${screenshot}, image URL follows..."
         curl --location --request POST --form "image=@${screenshot}" "https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}" | jq '.data.url'
     done
+    pushd debug
+    for screenshot in *.png;
+    do
+        echo ""
+        echo "Uploading ${screenshot}, image URL follows..."
+        curl --location --request POST --form "image=@${screenshot}" "https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}" | jq '.data.url'
+    done
     set -x
+    popd
     popd
 fi
