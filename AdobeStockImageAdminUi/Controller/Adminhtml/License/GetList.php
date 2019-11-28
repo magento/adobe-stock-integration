@@ -22,6 +22,7 @@ class GetList extends Action
     private const HTTP_INTERNAL_ERROR = 500;
     private const FIELD_ID = 'id';
     private const FIELD_IS_LICENSED = 'is_licensed';
+    private const PARAM_IDS = 'ids';
 
     /**
      * @see _isAllowed()
@@ -60,24 +61,16 @@ class GetList extends Action
         try {
             $params = $this->getRequest()->getParams();
 
-            $files = [];
             $result = [];
 
-            if ($params['ids'] !== '') {
-                $files[] = $this->files->execute(
-                    explode(',', $params['ids']),
-                    [self::FIELD_ID, self::FIELD_IS_LICENSED]
-                );
-
-                foreach ($files as $file) {
-                    $result[$file[self::FIELD_ID]] = (bool) $file[self::FIELD_IS_LICENSED];
-                }
+            if (!empty($params[self::PARAM_IDS])) {
+                $result = $this->getLicensedData(explode(',', $params[self::PARAM_IDS]));
             }
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'result' => $result,
+                'result' => $result
             ];
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
@@ -94,5 +87,32 @@ class GetList extends Action
         $resultJson->setData($responseContent);
 
         return $resultJson;
+    }
+
+    /**
+     * Get licensed data for the list of ids
+     *
+     * @param array $ids
+     * @return array
+     * @throws \Magento\Framework\Exception\IntegrationException
+     * @throws \Magento\Framework\Webapi\Exception
+     */
+    private function getLicensedData(array $ids): array
+    {
+        $result = [];
+
+        $files = $this->files->execute(
+            $ids,
+            [
+                self::FIELD_ID,
+                self::FIELD_IS_LICENSED
+            ]
+        );
+
+        foreach ($files as $file) {
+            $result[$file[self::FIELD_ID]] = (bool) $file[self::FIELD_IS_LICENSED];
+        }
+
+        return $result;
     }
 }
