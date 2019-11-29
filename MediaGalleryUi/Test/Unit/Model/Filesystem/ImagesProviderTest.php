@@ -8,6 +8,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\DocumentFactory;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResult;
@@ -30,6 +31,8 @@ class ImagesProviderTest extends TestCase
     private const MOCK_PATH = 'testpath';
 
     private const MOCK_URL = 'testurl';
+
+    private $index = 0;
 
     /**
      * @var ObjectManager
@@ -68,7 +71,6 @@ class ImagesProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
         $filesystemMock = $this->createMock(Filesystem::class);
         $this->mediaDirectoryMock = $this->createMock(Filesystem\Directory\ReadInterface::class);
         $filesystemMock->expects($this->once())
@@ -88,16 +90,7 @@ class ImagesProviderTest extends TestCase
         $this->documentFactoryMock = $this->createMock(DocumentFactory::class);
         $this->attributeValueFactoryMock = $this->createMock(AttributeValueFactory::class);
 
-        $this->documentFactoryMock->expects($this->any())
-        ->method('create')
-        ->willReturn(new Document());
-
-        $this->attributeValueFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn(new AttributeValue());
-
-
-        $this->imagesProvider = $this->objectManager->getObject(
+        $this->imagesProvider = (new ObjectManager($this))->getObject(
             ImagesProvider::class,
             [
                 'filesystem' => $filesystemMock,
@@ -116,12 +109,20 @@ class ImagesProviderTest extends TestCase
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function testGetImages(SearchCriteriaInterface $searchCriteria, SearchResultInterface $searchResult)
+    public function testGetImages(string $directoryPath, array $items)
     {
-        $this->mediaDirectoryMock->expects($this->once())
-            ->method('getAbsolutePath')
-            ->with(self::MOCK_PATH)
-            ->willReturn(__DIR__ . '/../../_files');
+        $searchCriteria = $this->getSearchCriteria($directoryPath);
+        $searchResult = $this->createMock(SearchResultInterface::class);
+
+        $documents = [];
+
+        foreach ($items as $itemData) {
+            $documents[] = $this->getDocument($itemData);
+        }
+
+        $searchResult->expects($this->once())
+            ->method('setItems')
+            ->with($documents);
 
         $this->searchResultFactoryMock->expects($this->once())
             ->method('create')
@@ -129,17 +130,55 @@ class ImagesProviderTest extends TestCase
 
         $getImages = $this->imagesProvider->getImages($searchCriteria);
 
-        var_dump($getImages->getItems());
-
         $this->assertEquals($searchResult, $getImages);
     }
 
     public function imagesProvider(): array
     {
-        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
-        $searchResult = $this->createMock(SearchResultInterface::class);
+        return [
+            'simplest test case' => [
+                __DIR__ . '/../../_files',
+                [
+                    [
+                        'id_field_name' => 'id',
+                        'id' => 1,
+                        'title' => 'test_img1.jpeg',
+                        'url' => 'testurl',
+                        'preview_url' => 'testurl',
+                        'width' => 800,
+                        'height' => 800
+                    ],
+                    [
+                        'id_field_name' => 'id',
+                        'id' => 2,
+                        'title' => 'test_img2.jpeg',
+                        'url' => 'testurl',
+                        'preview_url' => 'testurl',
+                        'width' => 800,
+                        'height' => 800
+                    ]
+                ]
+            ],
+            'subdir test' => [
+                __DIR__ . '/../../_files/subdir',
+                [
+                    [
+                        'id_field_name' => 'id',
+                        'id' => 1,
+                        'title' => 'test_img2.jpeg',
+                        'url' => 'testurl',
+                        'preview_url' => 'testurl',
+                        'width' => 800,
+                        'height' => 800
+                    ]
+                ]
+            ]
+        ];
+    }
 
-        $searchResult = new SearchResult();
+    private function getSearchCriteria(string $directoryPath)
+    {
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $path = self::MOCK_PATH;
 
@@ -162,11 +201,42 @@ class ImagesProviderTest extends TestCase
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
 
-        return [
-            'simplest test case' => [
-                $searchCriteria,
-                $searchResult
-            ]
-        ];
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with(self::MOCK_PATH)
+            ->willReturn($directoryPath);
+
+        return $searchCriteria;
+    }
+
+    private function getDocument(array $data)
+    {
+        $document = $this->createMock(DocumentInterface::class);
+
+        $attributes = [];
+
+        foreach ($data as $key => $value) {
+            $attribute = $this->createMock(\Magento\Framework\Api\AttributeInterface::class);
+            $attribute->expects($this->once())
+                ->method('setAttributeCode')
+                ->with($key);
+            $attribute->expects($this->once())
+                ->method('setValue')
+                ->with($value);
+
+            $this->attributeValueFactoryMock->expects($this->at($this->index++))
+                ->method('create')
+                ->willReturn($attribute);
+
+            $attributes[] = $attribute;
+        }
+
+        $document->method('setCustomAttributes')
+            ->with($attributes);
+
+        $this->documentFactoryMock->method('create')
+            ->willReturn($document);
+
+        return $document;
     }
 }
