@@ -80,7 +80,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
             foreach ($this->fields as $key => $field) {
                 $filter = $this->filterBuilder->setField($field)->setValue($imageId)->create();
                 $searchCriteria = $this->searchCriteriaBuilder->addFilter($filter)
-                    ->setPageSize($limit)
+                    ->setPageSize($limit + 1)
                     ->create();
                 $relatedImageGroups[$key] = $this->serializeRelatedImages(
                     $this->getImageList->execute($searchCriteria)->getItems(),

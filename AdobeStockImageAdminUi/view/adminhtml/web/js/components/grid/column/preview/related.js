@@ -101,11 +101,10 @@ define([
             $.ajax({
                 type: 'GET',
                 url: this.preview().relatedImagesUrl,
-                showLoader: true,
                 dataType: 'json',
                 data: {
                     'image_id': record.id,
-                    'limit': this.tabImagesLimit + 1
+                    'limit': this.tabImagesLimit
                 }
             }).done(function (data) {
                 var relatedImages = this.relatedImages();
