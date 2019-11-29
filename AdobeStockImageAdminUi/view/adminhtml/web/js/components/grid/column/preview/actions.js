@@ -22,13 +22,12 @@ define([
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '.adobe-search-images-modal',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
-            getImagePathUrl: 'adobe_stock/preview/getPath',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
-            savedPreviewPath: null,
+            savedPreviewPath: {},
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -62,25 +61,6 @@ define([
 
             this.preview().displayedRecord(updatedDisplayedRecord);
         },
-
-        /**
-         * Return path for image that already saved
-         */
-        getSavedPath: function (mediaId) {
-                $.ajax({
-                    type: 'GET',
-                    async: false,
-                    url: this.preview().getImagePathUrl,
-                    dataType: 'json',
-                    data: {
-                        'media_id': mediaId
-                    }
-                }).done(function (data) {
-                    this.savedPreviewPath = data.result;
-                }.bind(this));
-
-                return this;
-            },
 
         /**
          * Returns is_downloaded flag as observable for given record
@@ -195,12 +175,14 @@ define([
                         record['is_licensed_locally'] = 1;
                     }
                     this.preview().displayedRecord(record);
-                    this.source().set('params.t ', Date.now());
+                    this.source().reload({
+                        refresh: true
+                    });
                     mediaBrowser.reload(true);
                     this.preview().getAdobeModal().trigger('closeModal');
 
-                    if (isLicensed) {
-                        mediaGallery.locate(this.getSavedPath(record.id).savedPreviewPath).click();
+                    if (this.savedPreviewPath[record.id]) {
+                        mediaGallery.locate(this.savedPreviewPath[record.id]).click();
                     }
                 },
 
@@ -223,7 +205,9 @@ define([
                         if (response.responseJSON['is_licensed'] === true) {
                             record['is_licensed'] = 1;
                             this.preview().displayedRecord(record);
-                            this.source().set('params.t ', Date.now());
+                            this.source().reload({
+                                    refresh: true
+                                });
                         }
                     }
                     messages.add('error', message);
@@ -329,12 +313,10 @@ define([
                                                 fileName = filePathArray[imageIndex]
                                                  .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
-                                            $.ajaxSetup({
-                                                async: true
-                                            });
 
+                                            this.savedPreviewPath[record.id] = record.path;
                                             licenseAndSave(record, fileName);
-                                        }
+                                        }.bind(this)
                                     },
                                     'buttons': [{
                                         text: cancelText,

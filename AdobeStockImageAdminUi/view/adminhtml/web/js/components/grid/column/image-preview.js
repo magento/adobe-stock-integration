@@ -12,7 +12,6 @@ define([
     return imagePreview.extend({
         defaults: {
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
-            getImagePathUrl: 'adobe_stock/preview/getPath',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             confirmationUrl: 'adobe_stock/license/confirmation',
