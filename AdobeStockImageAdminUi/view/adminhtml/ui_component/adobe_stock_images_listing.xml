@@ -151,6 +151,32 @@
                     <label translate="true">Isolated Assets</label>
                 </settings>
             </filterInput>
+	    <filterInput
+		    name="undiscovered_filter"
+		    class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox"
+		    template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox"
+		    provider="${ $.parentName }"
+		    sortOrder="70"
+		    component="Magento_Ui/js/form/element/single-checkbox">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">Undiscovered only</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">Undiscovered only</item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <additionalClasses>
+                        <class name="admin__undiscovered_filter">true</class>
+                    </additionalClasses>
+                    <tooltip>
+                        <description>Use this filter to view content that has never been downloaded by anyone on Adobe Stock.</description>
+                    </tooltip>
+                    <dataScope>undiscovered_filter</dataScope>
+                    <label translate="true">Undiscovered Assets</label>
+                </settings>
+            </filterInput>
             <filterInput name="serie_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages" provider="${ $.parentName }" sortOrder="70">
                 <argument name="data" xsi:type="array">
                 </argument>
@@ -225,13 +251,6 @@
         <column name="nb_downloads">
             <settings>
                 <label translate="true">Downloads</label>
-                <visible>false</visible>
-                <sortable>true</sortable>
-            </settings>
-        </column>
-        <column name="undiscovered">
-            <settings>
-                <label translate="true">Undiscovered</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
