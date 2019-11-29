@@ -100,7 +100,7 @@ class ImagesProvider
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'directory') {
+                if ($filter->getField() === 'directory_filter') {
                     return $filter->getValue();
                 }
             }
