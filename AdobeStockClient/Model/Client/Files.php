@@ -16,7 +16,7 @@ use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
-use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Webapi\Exception as WebApiException;
 
 /**
  * Command for retrieving files information from Adobe Stock API
@@ -108,7 +108,7 @@ class Files implements FilesInterface
         $curl->get($this->getUrl($ids, $columns, $locale));
 
         if (self::CURL_STATUS_OK !== $curl->getStatus()) {
-            throw new WebapiException(__('An error occurred during retrieve files information.'));
+            throw new WebApiException(__('An error occurred during retrieve files information.'));
         }
 
         $response = $this->json->unserialize($curl->getBody());

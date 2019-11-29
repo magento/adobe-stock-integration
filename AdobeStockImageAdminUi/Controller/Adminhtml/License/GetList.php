@@ -62,7 +62,6 @@ class GetList extends Action
             $params = $this->getRequest()->getParams();
 
             $result = [];
-
             if (!empty($params[self::PARAM_IDS])) {
                 $result = $this->getLicensedData(explode(',', $params[self::PARAM_IDS]));
             }
