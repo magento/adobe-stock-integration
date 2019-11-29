@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\MediaGalleryUiApi\Model\ConfigInterface;
 
 /**
  * Class responsible to provide access to system configuration related to the Media Gallery
  */
-class Config
+class Config implements ConfigInterface
 {
     /**
      * Path to enable/disable media gallery in the system settings.
