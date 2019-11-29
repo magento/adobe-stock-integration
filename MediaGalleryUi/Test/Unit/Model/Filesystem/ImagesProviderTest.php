@@ -3,44 +3,37 @@
 namespace Magento\MediaGalleryUi\Test\Unit\Model\Filesystem;
 
 use Magento\Backend\Model\UrlInterface;
-use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\SearchResult;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryUi\Model\Filesystem\ImagesProvider;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Filesystem\File\ReadInterface;
 
 class ImagesProviderTest extends TestCase
 {
-    private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
-
     private const MOCK_PATH = 'testpath';
 
     private const MOCK_URL = 'testurl';
 
+    /** @var int  */
     private $index = 0;
 
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var Filesystem\Directory\ReadInterface|MockObject
+     * @var ReadInterface|MockObject
      */
     private $mediaDirectoryMock;
 
@@ -72,7 +65,7 @@ class ImagesProviderTest extends TestCase
     protected function setUp(): void
     {
         $filesystemMock = $this->createMock(Filesystem::class);
-        $this->mediaDirectoryMock = $this->createMock(Filesystem\Directory\ReadInterface::class);
+        $this->mediaDirectoryMock = $this->createMock(ReadInterface::class);
         $filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
@@ -106,8 +99,7 @@ class ImagesProviderTest extends TestCase
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchResultInterface $searchResult
      * @dataProvider imagesProvider
-     *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function testGetImages(string $directoryPath, array $items)
     {
@@ -212,11 +204,10 @@ class ImagesProviderTest extends TestCase
     private function getDocument(array $data)
     {
         $document = $this->createMock(DocumentInterface::class);
-
         $attributes = [];
 
         foreach ($data as $key => $value) {
-            $attribute = $this->createMock(\Magento\Framework\Api\AttributeInterface::class);
+            $attribute = $this->createMock(AttributeInterface::class);
             $attribute->expects($this->once())
                 ->method('setAttributeCode')
                 ->with($key);
