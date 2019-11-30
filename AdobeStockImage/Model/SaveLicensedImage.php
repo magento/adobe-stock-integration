@@ -67,10 +67,9 @@ class SaveLicensedImage implements SaveLicensedImageInterface
 
         $document = $this->getAssetById->execute($mediaId);
         $pathAttribute = $document->getCustomAttribute('path');
-        $pathValue = $pathAttribute->getValue();
 
-        if (!empty($pathAttribute) && !empty($pathValue)) {
-            $destinationPath = $pathValue;
+        if (!empty($pathAttribute) && !empty($pathAttribute->getValue())) {
+            $destinationPath = $pathAttribute->getValue();
         }
 
         $document->setCustomAttribute(

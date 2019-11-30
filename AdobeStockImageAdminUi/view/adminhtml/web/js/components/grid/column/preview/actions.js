@@ -27,7 +27,6 @@ define([
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
-            savedPreviewPath: {},
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -93,9 +92,16 @@ define([
          * Locate downloaded image in media browser
          */
         locate: function () {
+            this.preview().getAdobeModal().trigger('closeModal');
+            this.selectDisplayedImageInMediaGallery();
+        },
+
+        /**
+         * Selects displayed image in media gallery
+         */
+        selectDisplayedImageInMediaGallery: function () {
             var image = mediaGallery.locate(this.preview().displayedRecord().path);
 
-            this.preview().getAdobeModal().trigger('closeModal');
             image ? image.click() : mediaGallery.notLocated();
         },
 
@@ -168,7 +174,10 @@ define([
                  */
                 success: function () {
                     record['is_downloaded'] = 1;
-                    record.path = destinationPath;
+
+                    if (record.path === '') {
+                        record.path = destinationPath;
+                    }
 
                     if (license || isLicensed) {
                         record['is_licensed'] = 1;
@@ -178,12 +187,15 @@ define([
                     this.source().reload({
                         refresh: true
                     });
-                    mediaBrowser.reload(true);
                     this.preview().getAdobeModal().trigger('closeModal');
-
-                    if (this.savedPreviewPath[record.id]) {
-                        mediaGallery.locate(this.savedPreviewPath[record.id]).click();
-                    }
+                    $.ajaxSetup({
+                        async: false
+                    });
+                    mediaBrowser.reload();
+                    $.ajaxSetup({
+                        async: true
+                    });
+                    this.selectDisplayedImageInMediaGallery();
                 },
 
                 /**
@@ -206,8 +218,8 @@ define([
                             record['is_licensed'] = 1;
                             this.preview().displayedRecord(record);
                             this.source().reload({
-                                    refresh: true
-                                });
+                                refresh: true
+                            });
                         }
                     }
                     messages.add('error', message);
@@ -268,8 +280,6 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-            var licenseAndSave = this.licenseAndSave.bind(this);
-
             $.ajax(
                 {
                     type: 'POST',
@@ -314,8 +324,7 @@ define([
                                                  .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
 
-                                            this.savedPreviewPath[record.id] = record.path;
-                                            licenseAndSave(record, fileName);
+                                            this.licenseAndSave(record, fileName);
                                         }.bind(this)
                                     },
                                     'buttons': [{
@@ -444,9 +453,6 @@ define([
                     'visible': true,
                     'actions': {
                         confirm: function (fileName) {
-                            $.ajaxSetup({
-                                async: true
-                            });
                             this.save(this.preview().displayedRecord(), fileName, false, true);
                         }.bind(this)
                     },
