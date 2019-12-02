@@ -13,7 +13,6 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryUi\Model\Filesystem\ImagesProvider;
@@ -21,19 +20,29 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Filesystem\File\ReadInterface;
+use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface as DirectoryReadInterface;
+use Magento\Framework\Exception\FileSystemException;
 
 class ImagesProviderTest extends TestCase
 {
+    /**
+     * Mocked path for the test
+     */
     private const MOCK_PATH = 'testpath';
 
+    /**
+     * Mocked url for the test
+     */
     private const MOCK_URL = 'testurl';
 
-    /** @var int  */
+    /**
+     * @var int $index
+     */
     private $index = 0;
 
     /**
-     * @var ReadInterface|MockObject
+     * @var FileReadInterface|MockObject
      */
     private $mediaDirectoryMock;
 
@@ -65,7 +74,7 @@ class ImagesProviderTest extends TestCase
     protected function setUp(): void
     {
         $filesystemMock = $this->createMock(Filesystem::class);
-        $this->mediaDirectoryMock = $this->createMock(ReadInterface::class);
+        $this->mediaDirectoryMock = $this->createMock(DirectoryReadInterface::class);
         $filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
@@ -99,13 +108,13 @@ class ImagesProviderTest extends TestCase
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchResultInterface $searchResult
      * @dataProvider imagesProvider
+     *
      * @throws FileSystemException
      */
     public function testGetImages(string $directoryPath, array $items)
     {
         $searchCriteria = $this->getSearchCriteria($directoryPath);
         $searchResult = $this->createMock(SearchResultInterface::class);
-
         $documents = [];
 
         foreach ($items as $itemData) {
@@ -115,11 +124,9 @@ class ImagesProviderTest extends TestCase
         $searchResult->expects($this->once())
             ->method('setItems')
             ->with($documents);
-
         $this->searchResultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($searchResult);
-
         $getImages = $this->imagesProvider->getImages($searchCriteria);
 
         $this->assertEquals($searchResult, $getImages);
@@ -128,7 +135,7 @@ class ImagesProviderTest extends TestCase
     public function imagesProvider(): array
     {
         return [
-            'simplest test case' => [
+            'first test case: all directiories' => [
                 __DIR__ . '/../../_files',
                 [
                     [
@@ -151,7 +158,7 @@ class ImagesProviderTest extends TestCase
                     ]
                 ]
             ],
-            'subdir test' => [
+            'second test case: subdirectory test' => [
                 __DIR__ . '/../../_files/subdir',
                 [
                     [
@@ -171,7 +178,6 @@ class ImagesProviderTest extends TestCase
     private function getSearchCriteria(string $directoryPath)
     {
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
-
         $path = self::MOCK_PATH;
 
         $filterMock = $this->createMock(Filter::class);
@@ -180,19 +186,15 @@ class ImagesProviderTest extends TestCase
         $filterMock->expects($this->once())
             ->method('getValue')
             ->willReturn($path);
-
         $filterMock->expects($this->once())
             ->method('getField')
             ->willReturn('directory');
-
         $filterGroupMock->expects($this->once())
             ->method('getFilters')
             ->willReturn([$filterMock]);
-
         $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
-
         $this->mediaDirectoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(self::MOCK_PATH)
@@ -208,13 +210,13 @@ class ImagesProviderTest extends TestCase
 
         foreach ($data as $key => $value) {
             $attribute = $this->createMock(AttributeInterface::class);
+
             $attribute->expects($this->once())
                 ->method('setAttributeCode')
                 ->with($key);
             $attribute->expects($this->once())
                 ->method('setValue')
                 ->with($value);
-
             $this->attributeValueFactoryMock->expects($this->at($this->index++))
                 ->method('create')
                 ->willReturn($attribute);
