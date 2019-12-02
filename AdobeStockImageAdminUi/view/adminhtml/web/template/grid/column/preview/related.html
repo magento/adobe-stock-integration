@@ -31,6 +31,7 @@
 
     <div id="adobe-stock-tabs-content"
          class="adobe-stock-related-images-tab-content">
+       <div class="related-loader" data-bind="visible: loader"></div> 
         <div attr="'id': 'series_content_' + $row().id">
             <!-- ko foreach: getSeries($row()) -->
             <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToSeriesImage($data) }">

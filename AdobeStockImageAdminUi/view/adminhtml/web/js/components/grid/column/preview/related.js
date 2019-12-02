@@ -18,6 +18,7 @@ define([
             serieFilterValue: '',
             modelFilterValue: '',
             selectedTab: null,
+            loader: false,
             relatedImages: {
                 series: {},
                 model: {}
@@ -58,7 +59,8 @@ define([
                     'serieFilterValue',
                     'modelFilterValue',
                     'selectedTab',
-                    'relatedImages'
+                    'relatedImages',
+                    'loader'
                 ]);
 
             return this;
@@ -113,6 +115,9 @@ define([
                 type: 'GET',
                 url: this.preview().relatedImagesUrl,
                 dataType: 'json',
+                beforeSend: function () {
+                    this.loader(true);
+                }.bind(this),
                 data: {
                     'image_id': record.id,
                     'limit': this.tabImagesLimit
@@ -120,6 +125,7 @@ define([
             }).done(function (data) {
                 var relatedImages = this.relatedImages();
 
+                this.loader(false);
                 relatedImages.series[record.id] = data.result['same_series'];
                 relatedImages.model[record.id] = data.result['same_model'];
                 this.relatedImages(relatedImages);
