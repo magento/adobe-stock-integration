@@ -81,7 +81,7 @@ class License extends Action
 
             $this->saveLicensedImage->execute(
                 $contentId,
-                (string) $params['destination_path']
+                (string) $params['destination_path'] ?? null
             );
 
             $responseCode = self::HTTP_OK;
@@ -89,7 +89,6 @@ class License extends Action
                 'success' => true,
                 'message' => __('The image was licensed and saved successfully.'),
             ];
-
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
             $responseContent = [
