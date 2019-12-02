@@ -14,6 +14,7 @@
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/309"/>
             <title value="User views licensed label for licensed images in Adobe Stock Panel"/>
             <description value="User views licensed label for licensed images in Adobe Stock Panel"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579363"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_license"/>
             <group value="adobe_stock_integration"/>
