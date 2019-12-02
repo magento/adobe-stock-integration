@@ -9,7 +9,6 @@ namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\GetImage;
 use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;

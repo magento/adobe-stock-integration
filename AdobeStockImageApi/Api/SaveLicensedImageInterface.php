@@ -27,5 +27,5 @@ interface SaveLicensedImageInterface
      * @throws LocalizedException
      * @throws NotFoundException
      */
-    public function execute(int $mediaId, string $destinationPath): void;
+    public function execute(int $mediaId, string $destinationPath = null): void;
 }
