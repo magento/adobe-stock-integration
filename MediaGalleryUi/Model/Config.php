@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\MediaGalleryUiApi\Model\ConfigInterface;
+use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 
 /**
  * Class responsible to provide access to system configuration related to the Media Gallery
