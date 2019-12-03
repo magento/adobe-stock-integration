@@ -91,9 +91,15 @@ class CurlResultSuccessFilesExistsTest extends TestCase
     }
 
     /**
-     * Search test
+     * Test case when the curl request successfull and a file exists
+     *
+     * @param string $xProductName
+     * @param string $apiKey
+     * @param string $accessToken
+     *
+     * @dataProvider curlRequestHeaders
      */
-    public function testCurlResultSuccessFilesExist(): void
+    public function testCurlResultSuccessFilesExist(string $xProductName, string $apiKey, string $accessToken): void
     {
         $ids = [1];
         $columns = [];
@@ -102,19 +108,25 @@ class CurlResultSuccessFilesExistsTest extends TestCase
 
         $this->clientConfigMock->expects($this->once())
             ->method('getProductName')
-            ->willReturn('string');
+            ->willReturn($xProductName);
 
         $this->imsConfigMock->expects($this->once())
             ->method('getApiKey')
-            ->willReturn('string');
+            ->willReturn($apiKey);
 
         $this->getAccessTokenMock->expects($this->once())
             ->method('execute')
-            ->willReturn('array');
+            ->willReturn($accessToken);
 
+        $headers = [
+            'x-Product' => $xProductName,
+            'x-api-key' => $apiKey,
+            'Authorization' => 'Bearer ' . $accessToken
+        ];
         $this->curlAdapterMock->expects($this->once())
             ->method('setHeaders')
-            ->willReturn(null);
+            ->with($headers)
+            ->willReturnSelf();
 
         $this->curlAdapterMock->expects($this->once())
             ->method('get')
@@ -138,5 +150,22 @@ class CurlResultSuccessFilesExistsTest extends TestCase
 
         $this->expectException(IntegrationException::class);
         $this->assertEquals($files, $this->files->execute($ids, $columns, $locale));
+    }
+
+    /**
+     * Data provider for the curl request to the Adobe authentication service
+     *
+     * @return array
+     */
+    public function curlRequestHeaders(): array
+    {
+        return
+            [
+                [
+                    'Magento/dev-2.3-develop',
+                    '75y87d439eqweqw4f4asde64ae42060fc571c456sdfsdqwe',
+                    'Bearer ' . base64_encode('Magento/dev-2.3-develop')
+                ]
+            ];
     }
 }
