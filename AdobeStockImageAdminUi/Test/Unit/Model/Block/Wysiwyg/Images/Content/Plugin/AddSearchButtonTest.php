@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model\Block\Wysiwyg\Images\Content\Plugin;
 
-use Magento\AdobeStockAssetApi\Api\ConfigInterface;
+use Magento\AdobeStockImageAdminUi\Model\IsAdobeStockIntegrationEnabled;
 use Magento\AdobeStockImageAdminUi\Plugin\AddSearchButton;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\AuthorizationInterface;
 
 /**
- * Test adding Adobe Stock Search button to the toolbar.
+ * Test adding Adobe Stock Search button to the media gallery toolbar.
  */
 class AddSearchButtonTest extends TestCase
 {
@@ -28,9 +28,9 @@ class AddSearchButtonTest extends TestCase
     private $layoutInterface;
 
     /**
-     * @var ConfigInterface|MockObject
+     * @var IsAdobeStockIntegrationEnabled|MockObject
      */
-    private $config;
+    private $isAdobeStockIntegrationEnabledMock;
 
     /**
      * @var AuthorizationInterface|MockObject
@@ -48,20 +48,20 @@ class AddSearchButtonTest extends TestCase
     protected function setUp(): void
     {
         $this->layoutInterface = $this->createMock(LayoutInterface::class);
-        $this->config = $this->createMock(ConfigInterface::class);
+        $this->isAdobeStockIntegrationEnabledMock = $this->createMock(IsAdobeStockIntegrationEnabled::class);
         $this->authorization = $this->createMock(AuthorizationInterface::class);
 
         $this->addSearchButton = (new ObjectManager($this))->getObject(
             AddSearchButton::class,
             [
-                'config' => $this->config,
+                'isAdobeStockIntegrationEnabled' => $this->isAdobeStockIntegrationEnabledMock,
                 'authorization' => $this->authorization
             ]
         );
     }
 
     /**
-     * Test with enabled config.
+     * Test with enabled Adobe Stock integration.
      */
     public function testSearchButtonEnabled(): void
     {
@@ -69,8 +69,8 @@ class AddSearchButtonTest extends TestCase
             ->method('isAllowed')
             ->with('Magento_AdobeStockImageAdminUi::save_preview_images')
             ->willReturn(true);
-        $this->config->expects($this->once())
-            ->method('isEnabled')
+        $this->isAdobeStockIntegrationEnabledMock->expects($this->once())
+            ->method('execute')
             ->willReturn(true);
 
         /**
@@ -85,7 +85,7 @@ class AddSearchButtonTest extends TestCase
     }
 
     /**
-     * Test with disabled config.
+     * Test with disabled Adobe Stock integration.
      */
     public function testSearchButtonDisabled(): void
     {
@@ -93,8 +93,8 @@ class AddSearchButtonTest extends TestCase
             ->method('isAllowed')
             ->with('Magento_AdobeStockImageAdminUi::save_preview_images')
             ->willReturn(true);
-        $this->config->expects($this->once())
-            ->method('isEnabled')
+        $this->isAdobeStockIntegrationEnabledMock->expects($this->once())
+            ->method('execute')
             ->willReturn(false);
 
         /**
