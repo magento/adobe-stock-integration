@@ -92,9 +92,16 @@ define([
          * Locate downloaded image in media browser
          */
         locate: function () {
+            this.preview().getAdobeModal().trigger('closeModal');
+            this.selectDisplayedImageInMediaGallery();
+        },
+
+        /**
+         * Selects displayed image in media gallery
+         */
+        selectDisplayedImageInMediaGallery: function () {
             var image = mediaGallery.locate(this.preview().displayedRecord().path);
 
-            this.preview().getAdobeModal().trigger('closeModal');
             image ? image.click() : mediaGallery.notLocated();
         },
 
@@ -167,16 +174,28 @@ define([
                  */
                 success: function () {
                     record['is_downloaded'] = 1;
-                    record.path = destinationPath;
+
+                    if (record.path === '') {
+                        record.path = destinationPath;
+                    }
 
                     if (license || isLicensed) {
                         record['is_licensed'] = 1;
                         record['is_licensed_locally'] = 1;
                     }
                     this.preview().displayedRecord(record);
-                    this.source().set('params.t ', Date.now());
-                    mediaBrowser.reload(true);
+                    this.source().reload({
+                        refresh: true
+                    });
                     this.preview().getAdobeModal().trigger('closeModal');
+                    $.ajaxSetup({
+                        async: false
+                    });
+                    mediaBrowser.reload();
+                    $.ajaxSetup({
+                        async: true
+                    });
+                    this.selectDisplayedImageInMediaGallery();
                 },
 
                 /**
@@ -198,7 +217,9 @@ define([
                         if (response.responseJSON['is_licensed'] === true) {
                             record['is_licensed'] = 1;
                             this.preview().displayedRecord(record);
-                            this.source().set('params.t ', Date.now());
+                            this.source().reload({
+                                refresh: true
+                            });
                         }
                     }
                     messages.add('error', message);
@@ -259,8 +280,6 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-            var licenseAndSave = this.licenseAndSave.bind(this);
-
             $.ajax(
                 {
                     type: 'POST',
@@ -305,8 +324,8 @@ define([
                                                  .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
                                             }
 
-                                            licenseAndSave(record, fileName);
-                                        }
+                                            this.licenseAndSave(record, fileName);
+                                        }.bind(this)
                                     },
                                     'buttons': [{
                                         text: cancelText,

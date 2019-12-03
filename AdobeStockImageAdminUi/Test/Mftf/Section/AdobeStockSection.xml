@@ -36,5 +36,6 @@
         <element name="sortDropdown" type="button" selector="div[class='masonry-sorting'] select"/>
         <element name="sortOption" type="button" selector="//div[@class='masonry-sorting'] //option[@value='{{sortOption}}']" parameterized="true"/>
         <element name="deleteMediaButton" type="button" selector="button#delete_files"/>
+        <element name="licensedLabel" type="block" selector="//div[@class='masonry-image-column' and @data-repeat-index='0']//span[text()='Licensed']"/>
     </section>
 </sections>
