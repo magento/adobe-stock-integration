@@ -34,6 +34,18 @@
             </settings>
         </dataProvider>
     </dataSource>
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters">
+            <filterSelect name="directory_filter" provider="${ $.parentName }" sortOrder="10">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\DirectoryTree"/>
+                    <label translate="true">Media Directory Tree</label>
+                    <dataScope>directory_filter</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -59,6 +71,15 @@
                 <label translate="true">Image Preview</label>
                 <visible>true</visible>
                 <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="directory">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Directory</label>
+                <dataType>select</dataType>
+                <visible>false</visible>
+                <sortable>true</sortable>
             </settings>
         </column>
     </columns>

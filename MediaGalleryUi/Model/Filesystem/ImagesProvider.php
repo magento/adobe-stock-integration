@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Filesystem;
 
+use DirectoryIterator;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -100,7 +101,7 @@ class ImagesProvider
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'directory') {
+                if ($filter->getField() === 'directory_filter') {
                     return $filter->getValue();
                 }
             }
@@ -120,10 +121,15 @@ class ImagesProvider
         $result = [];
         $flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS;
 
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, $flags),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
+        if ($path === $this->mediaDirectory->getAbsolutePath()) {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path, $flags),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+        } else {
+            $iterator = new DirectoryIterator($path);
+        }
+
         $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
         $i = 1;
         /** @var FilesystemIterator $item */
