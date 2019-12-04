@@ -46,7 +46,7 @@
             </filterSelect>
             <filterDate name="upload_date" provider="${ $.parentName }" sortOrder="20">
                 <settings>
-                    <label translate="true">Upload date</label>
+                    <label translate="true">Upload Date</label>
                     <dataScope>upload_date</dataScope>
                     <additionalClasses>
                         <class name="media-gallery-date-filter">true</class>
