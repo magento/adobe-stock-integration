@@ -44,6 +44,15 @@
                     <dataScope>directory_filter</dataScope>
                 </settings>
             </filterSelect>
+            <filterDate name="upload_date" provider="${ $.parentName }" sortOrder="20">
+                <settings>
+                    <label translate="true">Upload date</label>
+                    <dataScope>upload_date</dataScope>
+                    <additionalClasses>
+                        <class name="media-gallery-date-filter">true</class>
+                    </additionalClasses>
+                </settings>
+            </filterDate>
         </filters>
     </listingToolbar>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
