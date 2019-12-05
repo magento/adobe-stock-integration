@@ -45,6 +45,25 @@
                 </settings>
             </filterSelect>
         </filters>
+        <paging name="listing_paging">
+            <settings>
+                <options>
+                    <option name="32" xsi:type="array">
+                        <item name="value" xsi:type="number">32</item>
+                        <item name="label" xsi:type="string">32</item>
+                    </option>
+                    <option name="48" xsi:type="array">
+                        <item name="value" xsi:type="number">48</item>
+                        <item name="label" xsi:type="string">48</item>
+                    </option>
+                    <option name="64" xsi:type="array">
+                        <item name="value" xsi:type="number">64</item>
+                        <item name="label" xsi:type="string">64</item>
+                    </option>
+                </options>
+                <pageSize>32</pageSize>
+            </settings>
+        </paging>
     </listingToolbar>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
