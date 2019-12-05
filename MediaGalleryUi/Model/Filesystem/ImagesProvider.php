@@ -11,7 +11,7 @@ use DirectoryIterator;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\StoreManagerInterface;
@@ -24,6 +24,9 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\AttributeValueFactory;
 
+/**
+ * ImagesProvider is used to read the media files across the media directory provided as a path in the method argument.
+ */
 class ImagesProvider
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
@@ -54,9 +57,13 @@ class ImagesProvider
     private $attributeFactory;
 
     /**
+     * ImagesProvider constructor.
+     *
      * @param Filesystem $filesystem
      * @param StoreManagerInterface $storeManager
      * @param SearchResultFactory $searchResultFactory
+     * @param DocumentFactory $documentFactory
+     * @param AttributeValueFactory $attributeFactory
      */
     public function __construct(
         Filesystem $filesystem,
@@ -76,12 +83,15 @@ class ImagesProvider
      * Retrieve images from the filesystem
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return array
-     * @throws FileSystemException
+     *
+     * @return SearchResultInterface
+     * @throws NoSuchEntityException
      */
     public function getImages(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $data = $this->readFiles($this->mediaDirectory->getAbsolutePath($this->getPath($searchCriteria)));
+        $path = $this->getPath($searchCriteria);
+        $absolutePath = $this->mediaDirectory->getAbsolutePath($path);
+        $data = $this->readFiles($absolutePath);
 
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
@@ -114,7 +124,7 @@ class ImagesProvider
      *
      * @param string $path
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function readFiles(string $path): array
     {
@@ -138,17 +148,19 @@ class ImagesProvider
             if (!preg_match(self::IMAGE_FILE_NAME_PATTERN, $file)) {
                 continue;
             }
-            list($width, $height) = getimagesize($file);
+            [$width, $height] = getimagesize($file);
             $imageUrl = $mediaUrl . $this->mediaDirectory->getRelativePath($file);
-            $result[] = $this->createDocument([
-                'id_field_name' => 'id',
-                'id' => $i++,
-                'title' => $item->getBasename(),
-                'url' => $imageUrl,
-                'preview_url' => $imageUrl,
-                'width' => $width,
-                'height' => $height
-            ]);
+            $result[] = $this->createDocument(
+                [
+                    'id_field_name' => 'id',
+                    'id' => $i++,
+                    'title' => $item->getBasename(),
+                    'url' => $imageUrl,
+                    'preview_url' => $imageUrl,
+                    'width' => $width,
+                    'height' => $height
+                ]
+            );
         }
 
         return $result;
