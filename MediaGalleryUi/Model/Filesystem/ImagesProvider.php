@@ -8,21 +8,21 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model\Filesystem;
 
 use DirectoryIterator;
-use Magento\Backend\Model\UrlInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem;
-use Magento\Store\Model\StoreManagerInterface;
 use FilesystemIterator;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Search\DocumentFactory;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Api\Search\DocumentFactory;
-use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * ImagesProvider is used to read the media files across the media directory provided as a path in the method argument.
@@ -92,11 +92,17 @@ class ImagesProvider
         $path = $this->getPath($searchCriteria);
         $absolutePath = $this->mediaDirectory->getAbsolutePath($path);
         $data = $this->readFiles($absolutePath);
+        $path = $this->getPath($searchCriteria);
+        $data = $this->readFiles(
+            $this->mediaDirectory->getAbsolutePath($path),
+            $this->getPageSize($searchCriteria),
+            $this->getCurrentPage($searchCriteria)
+        );
 
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
-        $searchResult->setItems($data);
-        $searchResult->setTotalCount(count($data));
+        $searchResult->setItems($data['items']);
+        $searchResult->setTotalCount($data['totalCount']);
 
         return $searchResult;
     }
@@ -120,15 +126,45 @@ class ImagesProvider
     }
 
     /**
+     * Retrieve page size from the search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     *
+     * @return int
+     */
+    private function getPageSize(SearchCriteriaInterface $searchCriteria): int
+    {
+        return (int) $searchCriteria->getPageSize();
+    }
+
+    /**
+     * Retrieve current page number from the search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     *
+     * @return int
+     */
+    private function getCurrentPage(SearchCriteriaInterface $searchCriteria): int
+    {
+        return (int) $searchCriteria->getCurrentPage();
+    }
+
+    /**
      * Load files form filesystem
      *
      * @param string $path
+     * @param int $size
+     * @param int $currentPage
+     *
      * @return array
      * @throws NoSuchEntityException
      */
-    private function readFiles(string $path): array
+    private function readFiles(string $path, $size = 32, $currentPage = 1): array
     {
-        $result = [];
+        $items = [];
+        $filesCount = 0;
+        $fromIndex = $size * ($currentPage - 1);
+        $toIndex = $size * $currentPage;
         $flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS;
 
         if ($path === $this->mediaDirectory->getAbsolutePath()) {
@@ -141,19 +177,28 @@ class ImagesProvider
         }
 
         $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
-        $i = 1;
+
         /** @var FilesystemIterator $item */
         foreach ($iterator as $item) {
             $file = $item->getPath() . '/' . $item->getFileName();
+
             if (!preg_match(self::IMAGE_FILE_NAME_PATTERN, $file)) {
                 continue;
             }
+
+            if ($filesCount < $fromIndex || $filesCount >= $toIndex) {
+                $filesCount++;
+
+                continue;
+            }
+
+            $filesCount++;
             [$width, $height] = getimagesize($file);
             $imageUrl = $mediaUrl . $this->mediaDirectory->getRelativePath($file);
-            $result[] = $this->createDocument(
+            $items[] = $this->createDocument(
                 [
                     'id_field_name' => 'id',
-                    'id' => $i++,
+                    'id' => $filesCount,
                     'title' => $item->getBasename(),
                     'url' => $imageUrl,
                     'preview_url' => $imageUrl,
@@ -163,7 +208,10 @@ class ImagesProvider
             );
         }
 
-        return $result;
+        return [
+            'items' => $items,
+            'totalCount' => $filesCount
+        ];
     }
 
     /**
