@@ -8,3 +8,5 @@
 @import AdobeStockImage
 @import AdobeStockImageAdminUi
 @import AdobeStockImageApi
+@import MediaGalleryUi
+@import MediaGalleryUiApi

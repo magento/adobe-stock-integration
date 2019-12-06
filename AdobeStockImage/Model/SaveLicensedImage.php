@@ -61,11 +61,17 @@ class SaveLicensedImage implements SaveLicensedImageInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $mediaId, string $destinationPath): void
+    public function execute(int $mediaId, string $destinationPath = null): void
     {
         $imageUrl = $this->client->getImageDownloadUrl($mediaId);
 
         $document = $this->getAssetById->execute($mediaId);
+        $pathAttribute = $document->getCustomAttribute('path');
+
+        if (!empty($pathAttribute) && !empty($pathAttribute->getValue())) {
+            $destinationPath = $pathAttribute->getValue();
+        }
+
         $document->setCustomAttribute(
             'is_licensed',
             $this->attributeFactory->create(
