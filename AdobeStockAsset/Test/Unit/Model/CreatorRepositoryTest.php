@@ -7,16 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
-use Magento\AdobeStockAsset\Model\Creator;
-use Magento\AdobeStockAsset\Model\CreatorFactory;
-use Magento\AdobeStockAsset\Model\CreatorRepository;
+use Magento\AdobeStockAsset\Model\{Creator, CreatorFactory, CreatorRepository};
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
-use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\Save;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\{CreatorInterface, CreatorSearchResultsInterface, CreatorSearchResultsInterfaceFactory};
+use Magento\AdobeStockAssetApi\Model\Creator\Command\{LoadByIdInterface,DeleteByIdInterface, SaveInterface};
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -25,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Category repository test.
+ * Creator repository test.
  */
 class CreatorRepositoryTest extends TestCase
 {
@@ -66,31 +62,41 @@ class CreatorRepositoryTest extends TestCase
     private $creatorRepository;
 
     /**
-     * @var MockObject|Save $commandSave
+     * @var LoadByIdInterface|MockObject
      */
-    private $commandSave;
+    private $loadByIdCommandMock;
+
+    /**
+     * @var SaveInterface|MockObject
+     */
+    private $saveCommandMock;
+
+    /**
+     * @var DeleteByIdInterface|MockObject
+     */
+    private $deleteByIdCommandMock;
 
     /**
      * @inheritdoc
      */
     public function setUp(): void
     {
-        $this->resourceModel = $this->createMock(ResourceModel::class);
-        $this->commandSave = $this->createMock(Save::class);
         $this->creatorCollectionFactory = $this->createMock(CreatorCollectionFactory::class);
-        $this->creatorFactory = $this->createMock(CreatorFactory::class);
         $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);
         $this->collectionProcessorInterface = $this->createMock(CollectionProcessorInterface::class);
         $this->creatorSearchResultInterfaceFactory = $this->createMock(CreatorSearchResultsInterfaceFactory::class);
+        $this->loadByIdCommandMock = $this->createMock(LoadByIdInterface::class);
+        $this->saveCommandMock = $this->createMock(SaveInterface::class);
+        $this->deleteByIdCommandMock = $this->createMock(DeleteByIdInterface::class);
 
         $this->creatorRepository = new CreatorRepository(
-            $this->resourceModel,
             $this->creatorCollectionFactory,
-            $this->creatorFactory,
             $this->joinProcessorInterface,
             $this->collectionProcessorInterface,
             $this->creatorSearchResultInterfaceFactory,
-            $this->commandSave
+            $this->loadByIdCommandMock,
+            $this->saveCommandMock,
+            $this->deleteByIdCommandMock
         );
     }
 
@@ -140,40 +146,40 @@ class CreatorRepositoryTest extends TestCase
     }
 
     /**
-     * Test get By id.
+     * Test getById scenario with successful result.
      */
     public function testGetById(): void
     {
+        $creatorId = 1;
         $creatorMock = $this->createMock(Creator::class);
-        $this->creatorFactory->expects($this->once())
-            ->method('create')
+        $this->loadByIdCommandMock->expects($this->once())
+            ->method('execute')
+            ->with($creatorId)
             ->willReturn($creatorMock);
-        $this->resourceModel->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
         $creatorMock->expects($this->once())
             ->method('getId')
-            ->willReturn(2);
-        $this->assertInstanceOf(CreatorInterface::class, $this->creatorRepository->getById(2));
+            ->willReturn($creatorId);
+        $this->assertInstanceOf(
+            CreatorInterface::class,
+            $this->creatorRepository->getById($creatorId)
+        );
     }
 
     /**
-     * Test get By id with exception.
+     * Test getById scenario with failed execution.
      */
     public function testGetByIdWithException(): void
     {
-        $this->expectException(NoSuchEntityException::class);
-
+        $creatorId = 1;
         $creatorMock = $this->createMock(Creator::class);
-        $this->creatorFactory->expects($this->once())
-            ->method('create')
+        $this->loadByIdCommandMock->expects($this->once())
+            ->method('execute')
+            ->with($creatorId)
             ->willReturn($creatorMock);
-        $this->resourceModel->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
         $creatorMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
-        $this->creatorRepository->getById(2);
+        $this->expectException(NoSuchEntityException::class);
+        $this->creatorRepository->getById($creatorId);
     }
 }

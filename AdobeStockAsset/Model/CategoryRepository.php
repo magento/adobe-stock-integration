@@ -8,14 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Category as CategoryResource;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection as CategoryCollection;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\Save;
+use Magento\AdobeStockAssetApi\Model\Category\Command\{SaveInterface, LoadByIdInterface, DeleteByIdInterface};
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\{
+    Collection as CategoryCollection,
+    CollectionFactory as CategoryCollectionFactory};
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\{
+    CategoryInterface,
+    CategorySearchResultsInterface,
+    CategorySearchResultsInterfaceFactory};
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -28,20 +29,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    /**
-     * @var CategoryResource
-     */
-    private $resource;
-
-    /**
-     * @var Save
-     */
-    private $categorySaveService;
-
-    /**
-     * @var CategoryFactory
-     */
-    private $factory;
 
     /**
      * @var CategoryCollectionFactory
@@ -64,50 +51,65 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $searchResultFactory;
 
     /**
+     * @var LoadByIdInterface
+     */
+    private $loadByIdCommand;
+
+    /**
+     * @var SaveInterface
+     */
+    private $saveCommand;
+
+    /**
+     * @var DeleteByIdInterface
+     */
+    private $deleteByIdCommand;
+
+    /**
      * CategoryRepository constructor.
      *
-     * @param CategoryResource $resource
-     * @param Save $commandSave
      * @param CategoryCollectionFactory $collectionFactory
-     * @param CategoryFactory $factory
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CategorySearchResultsInterfaceFactory $searchResultFactory
+     * @param LoadByIdInterface $loadByIdCommand
+     * @param SaveInterface $saveCommand
+     * @param DeleteByIdInterface $deleteByIdCommand
      */
     public function __construct(
-        CategoryResource $resource,
-        Save $commandSave,
         CategoryCollectionFactory $collectionFactory,
-        CategoryFactory $factory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        CategorySearchResultsInterfaceFactory $searchResultFactory
+        CategorySearchResultsInterfaceFactory $searchResultFactory,
+        LoadByIdInterface $loadByIdCommand,
+        SaveInterface $saveCommand,
+        DeleteByIdInterface $deleteByIdCommand
     ) {
-        $this->resource = $resource;
-        $this->categorySaveService = $commandSave;
         $this->collectionFactory = $collectionFactory;
-        $this->factory = $factory;
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
+        $this->loadByIdCommand = $loadByIdCommand;
+        $this->saveCommand = $saveCommand;
+        $this->deleteByIdCommand = $deleteByIdCommand;
     }
 
     /**
      * @inheritdoc
      */
-    public function save(CategoryInterface $item): CategoryInterface
+    public function save(CategoryInterface $category): CategoryInterface
     {
-        $this->categorySaveService->execute($item);
+        $this->saveCommand->execute($category);
 
-        return $item;
+        return $category;
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(CategoryInterface $item): void
+    public function delete(CategoryInterface $category): void
     {
-        $this->resource->delete($item);
+        $this->deleteByIdCommand->execute($category->getId());
     }
 
     /**
@@ -135,14 +137,18 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getById(int $id) : CategoryInterface
+    public function getById(int $categoryId) : CategoryInterface
     {
-        $item = $this->factory->create();
-        $this->resource->load($item, $id);
-        if (!$item->getId()) {
-            throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
+        $category = $this->loadByIdCommand->execute($categoryId);
+        if (!$category->getId()) {
+            throw new NoSuchEntityException(
+                __(
+                    'Adobe Stock asset category with id "%1" does not exist.',
+                    $categoryId
+                )
+            );
         }
-        return $item;
+        return $category;
     }
 
     /**
@@ -150,6 +156,6 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function deleteById(int $id): void
     {
-        $this->delete($this->getById($id));
+        $this->deleteByIdCommand->execute($id);
     }
 }

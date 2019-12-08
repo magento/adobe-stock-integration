@@ -7,16 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
-use Magento\AdobeStockAsset\Model\CategoryFactory;
-use Magento\AdobeStockAsset\Model\CategoryRepository;
-use Magento\AdobeStockAsset\Model\Category;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category as ResourceModel;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection;
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\Save;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
+use Magento\AdobeStockAsset\Model\{Category, CategoryFactory, CategoryRepository};
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\{Collection, CollectionFactory as CategoryCollectionFactory};
+use Magento\AdobeStockAssetApi\Api\Data\{CategoryInterface, CategorySearchResultsInterface, CategorySearchResultsInterfaceFactory};
+use Magento\AdobeStockAssetApi\Model\Category\Command\{LoadByIdInterface,DeleteByIdInterface, SaveInterface};
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -29,11 +23,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryRepositoryTest extends TestCase
 {
-    /**
-     * @var MockObject|ResourceModel $resourceModel
-     */
-    private $resourceModel;
-
     /**
      * @var MockObject|CategoryCollectionFactory $categoryCollectionFactory
      */
@@ -64,32 +53,43 @@ class CategoryRepositoryTest extends TestCase
      */
     private $categoryRepository;
 
+
     /**
-     * @var MockObject|Save $commandSave
+     * @var LoadByIdInterface|MockObject
      */
-    private $commandSave;
+    private $loadByIdCommandMock;
+
+    /**
+     * @var SaveInterface|MockObject
+     */
+    private $saveCommandMock;
+
+    /**
+     * @var DeleteByIdInterface|MockObject
+     */
+    private $deleteByIdCommandMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->resourceModel = $this->createMock(ResourceModel::class);
-        $this->commandSave = $this->createMock(Save::class);
         $this->categoryCollectionFactory = $this->createMock(CategoryCollectionFactory::class);
-        $this->categoryFactory = $this->createMock(CategoryFactory::class);
         $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);
         $this->collectionProcessorInterface = $this->createMock(CollectionProcessorInterface::class);
         $this->categorySearchResultsInterfaceFactory = $this->createMock(CategorySearchResultsInterfaceFactory::class);
+        $this->loadByIdCommandMock = $this->createMock(LoadByIdInterface::class);
+        $this->saveCommandMock = $this->createMock(SaveInterface::class);
+        $this->deleteByIdCommandMock = $this->createMock(DeleteByIdInterface::class);
 
         $this->categoryRepository = new CategoryRepository(
-            $this->resourceModel,
-            $this->commandSave,
             $this->categoryCollectionFactory,
-            $this->categoryFactory,
             $this->joinProcessorInterface,
             $this->collectionProcessorInterface,
-            $this->categorySearchResultsInterfaceFactory
+            $this->categorySearchResultsInterfaceFactory,
+            $this->loadByIdCommandMock,
+            $this->saveCommandMock,
+            $this->deleteByIdCommandMock
         );
     }
 
@@ -134,39 +134,40 @@ class CategoryRepositoryTest extends TestCase
     }
 
     /**
-     * Test get By id.
+     * Test getById scenario with successful result.
      */
     public function testGetById(): void
     {
+        $categoryId = 1;
         $categoryMock = $this->createMock(Category::class);
-        $this->categoryFactory->expects($this->once())
-            ->method('create')
+        $this->loadByIdCommandMock->expects($this->once())
+            ->method('execute')
+            ->with($categoryId)
             ->willReturn($categoryMock);
-        $this->resourceModel->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
         $categoryMock->expects($this->once())
             ->method('getId')
-            ->willReturn(2);
-        $this->assertInstanceOf(CategoryInterface::class, $this->categoryRepository->getById(2));
+            ->willReturn($categoryId);
+        $this->assertInstanceOf(
+            CategoryInterface::class,
+            $this->categoryRepository->getById($categoryId)
+        );
     }
 
     /**
-     * Test get By id with exception.
+     * Test getById scenario with failed execution.
      */
     public function testGetByIdWithException(): void
     {
-        $this->expectException(NoSuchEntityException::class);
+        $categoryId = 1;
         $categoryMock = $this->createMock(Category::class);
-        $this->categoryFactory->expects($this->once())
-            ->method('create')
+        $this->loadByIdCommandMock->expects($this->once())
+            ->method('execute')
+            ->with($categoryId)
             ->willReturn($categoryMock);
-        $this->resourceModel->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
         $categoryMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
-        $this->categoryRepository->getById(2);
+        $this->expectException(NoSuchEntityException::class);
+        $this->categoryRepository->getById($categoryId);
     }
 }

@@ -8,41 +8,26 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as ResourceModel;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\Save;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\{SaveInterface, LoadByIdsInterface, DeleteByIdInterface};
+use Magento\AdobeStockAssetApi\Api\Data\{
+    AssetInterface,
+    AssetSearchResultsInterface,
+    AssetSearchResultsInterfaceFactory};
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\{
+    Collection as AssetCollection,
+    CollectionFactory as AssetCollectionFactory};
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\{IntegrationException, NoSuchEntityException};
+use Psr\Log\LoggerInterface;
 
 /**
  * Centralize common data access functionality for the Adobe Stock asset
  */
 class AssetRepository implements AssetRepositoryInterface
 {
-    /**
-     * @var Save
-     */
-    private $assetSaveService;
-
-    /**
-     * @var ResourceModel
-     */
-    private $resource;
-
-    /**
-     * @var AssetFactory
-     */
-    private $factory;
-
     /**
      * @var AssetCollectionFactory
      */
@@ -64,43 +49,63 @@ class AssetRepository implements AssetRepositoryInterface
     private $searchResultFactory;
 
     /**
+     * @var SaveInterface
+     */
+    private $saveCommand;
+
+    /**
+     * @var LoadByIdsInterface
+     */
+    private $loadByIdsCommand;
+
+    /**
+     * @var DeleteByIdInterface
+     */
+    private $deleteByIdCommand;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * AssetRepository constructor.
      *
-     * @param ResourceModel $resource
      * @param AssetCollectionFactory $collectionFactory
-     * @param AssetFactory $factory
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
-     * @param Save $commandSave
+     * @param SaveInterface $saveCommand
+     * @param LoadByIdsInterface $loadByIdsCommand
+     * @param DeleteByIdInterface $deleteByIdCommand
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceModel $resource,
         AssetCollectionFactory $collectionFactory,
-        AssetFactory $factory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         AssetSearchResultsInterfaceFactory $searchResultFactory,
-        Save $commandSave
+        SaveInterface $saveCommand,
+        LoadByIdsInterface $loadByIdsCommand,
+        DeleteByIdInterface $deleteByIdCommand,
+        LoggerInterface $logger
     ) {
-        $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
-        $this->factory = $factory;
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
-        $this->assetSaveService = $commandSave;
+        $this->saveCommand = $saveCommand;
+        $this->loadByIdsCommand = $loadByIdsCommand;
+        $this->deleteByIdCommand = $deleteByIdCommand;
+        $this->logger = $logger;
     }
 
     /**
-     * Save asset
-     *
-     * @param AssetInterface $asset
-     * @return void
+     * @inheritdoc
      */
     public function save(AssetInterface $asset): void
     {
-        $this->assetSaveService->execute($asset);
+        $this->saveCommand->execute($asset);
     }
 
     /**
@@ -126,6 +131,7 @@ class AssetRepository implements AssetRepositoryInterface
 
             return $searchResults;
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('An error occurred during get asset list: %error', ['error' => $exception->getMessage()]);
             throw new IntegrationException($message, $exception);
         }
@@ -136,14 +142,12 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getById(int $id): AssetInterface
     {
-        /** @var AssetInterface $asset */
-        $asset = $this->factory->create();
-        $this->resource->load($asset, $id);
-        if (!$asset->getId()) {
+        $assets = $this->loadByIdsCommand->execute([$id]);
+        if (empty($assets)) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
         }
 
-        return $asset;
+        return reset($assets);
     }
 
     /**
@@ -151,6 +155,6 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function deleteById(int $id): void
     {
-        $this->resource->delete($this->getById($id));
+        $this->deleteByIdCommand->execute($id);
     }
 }

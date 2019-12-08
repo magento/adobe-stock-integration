@@ -8,9 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
+use Exception;
+use Magento\AdobeStockAssetApi\Api\Data\{CreatorInterface, CreatorSearchResultsInterface};
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\{AlreadyExistsException, NoSuchEntityException};
 
 /**
  * Repository used for managing asset creator related functionality. Uses commands as proxy for those operations.
@@ -19,46 +20,48 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 interface CreatorRepositoryInterface
 {
     /**
-     * Save asset creator
+     * Save Adobe Stock asset creator
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface $item
-     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @param CreatorInterface $creator
+     *
+     * @return CreatorInterface
+     * @throws AlreadyExistsException
      */
-    public function save(CreatorInterface $item): CreatorInterface;
+    public function save(CreatorInterface $creator): CreatorInterface;
 
     /**
-     * Delete item
+     * Delete Adobe Stock asset creator
      *
-     * @param CreatorInterface $item
+     * @param CreatorInterface $creator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    public function delete(CreatorInterface $item): void;
+    public function delete(CreatorInterface $creator): void;
 
     /**
-     * Get a list of creators
+     * Get a list of Adobe Stock asset creators
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return CreatorSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : CreatorSearchResultsInterface;
 
     /**
-     * Get asset creator by id
+     * Get Adobe Stock asset creator filtered by id
      *
-     * @param int $id
-     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param int $creatorId
+     *
+     * @return CreatorInterface
+     * @throws NoSuchEntityException
      */
-    public function getById(int $id) : CreatorInterface;
+    public function getById(int $creatorId) : CreatorInterface;
 
     /**
-     * Delete creator
+     * Delete Adobe Stock asset creator
      *
-     * @param int $id
+     * @param int $creatorId
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    public function deleteById(int $id): void;
+    public function deleteById(int $creatorId): void;
 }

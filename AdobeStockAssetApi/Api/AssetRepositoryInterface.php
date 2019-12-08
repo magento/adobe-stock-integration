@@ -9,11 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api;
 
 use Exception;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\{AssetInterface, AssetSearchResultsInterface};
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\{CouldNotSaveException, NoSuchEntityException};
 
 /**
  * Repository used for managing asset related functionality. Uses commands as proxy for those operations.
@@ -24,7 +22,8 @@ interface AssetRepositoryInterface
     /**
      * Save asset
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\AssetInterface $asset
+     * @param AssetInterface $asset
+     *
      * @return void
      * @throws CouldNotSaveException
      */
@@ -33,8 +32,8 @@ interface AssetRepositoryInterface
     /**
      * Get a list of assets
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return AssetSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : AssetSearchResultsInterface;
 
@@ -42,7 +41,8 @@ interface AssetRepositoryInterface
      * Get asset by id
      *
      * @param int $id
-     * @return \Magento\AdobeStockAssetApi\Api\Data\AssetInterface
+     *
+     * @return AssetInterface
      * @throws NoSuchEntityException
      */
     public function getById(int $id) : AssetInterface;
