@@ -11,7 +11,6 @@ namespace Magento\AdobeStockAssetApi\Api;
 use Exception;
 use Magento\AdobeStockAssetApi\Api\Data\{CategoryInterface, CategorySearchResultsInterface};
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\{AlreadyExistsException, NoSuchEntityException};
 
 /**
  * Repository used for managing asset category related functionality. Uses commands as proxy for those operations.
@@ -22,17 +21,17 @@ interface CategoryRepositoryInterface
     /**
      * Save Adobe Stock asset category
      *
-     * @param CategoryInterface $category
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $category
      *
-     * @return CategoryInterface
-     * @throws AlreadyExistsException
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function save(CategoryInterface $category): CategoryInterface;
 
     /**
      * Delete Adobe Stock asset category item
      *
-     * @param CategoryInterface $category
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $category
      * @return void
      * @throws Exception
      */
@@ -41,8 +40,8 @@ interface CategoryRepositoryInterface
     /**
      * Get a list of Adobe Stock categories
      *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return CategorySearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : CategorySearchResultsInterface;
 
@@ -51,8 +50,8 @@ interface CategoryRepositoryInterface
      *
      * @param int $categoryId
      *
-     * @return CategoryInterface
-     * @throws NoSuchEntityException
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById(int $categoryId) : CategoryInterface;
 

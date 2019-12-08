@@ -11,7 +11,6 @@ namespace Magento\AdobeStockAssetApi\Api;
 use Exception;
 use Magento\AdobeStockAssetApi\Api\Data\{CreatorInterface, CreatorSearchResultsInterface};
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\{AlreadyExistsException, NoSuchEntityException};
 
 /**
  * Repository used for managing asset creator related functionality. Uses commands as proxy for those operations.
@@ -22,17 +21,17 @@ interface CreatorRepositoryInterface
     /**
      * Save Adobe Stock asset creator
      *
-     * @param CreatorInterface $creator
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface $creator
      *
-     * @return CreatorInterface
-     * @throws AlreadyExistsException
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function save(CreatorInterface $creator): CreatorInterface;
 
     /**
      * Delete Adobe Stock asset creator
      *
-     * @param CreatorInterface $creator
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface $creator
      * @return void
      * @throws Exception
      */
@@ -41,8 +40,8 @@ interface CreatorRepositoryInterface
     /**
      * Get a list of Adobe Stock asset creators
      *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return CreatorSearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : CreatorSearchResultsInterface;
 
@@ -51,8 +50,8 @@ interface CreatorRepositoryInterface
      *
      * @param int $creatorId
      *
-     * @return CreatorInterface
-     * @throws NoSuchEntityException
+     * @return \Magento\AdobeStockAssetApi\Api\Data\CreatorInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById(int $creatorId) : CreatorInterface;
 
