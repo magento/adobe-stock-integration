@@ -27,6 +27,7 @@ define([
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            IslicenseRequestStarted: false,
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -36,6 +37,19 @@ define([
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }'
             }
+        },
+
+        /**
+         * Init observable variables
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'isLicenseRequestStarted'
+                ]);
+
+            return this;
         },
 
         /**
@@ -281,6 +295,11 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
+
+            if (this.isLicenseRequestStarted()) {
+                return;
+            }
+            this.isLicenseRequestStarted(true);
             $.ajax(
                 {
                     type: 'POST',
@@ -308,6 +327,8 @@ define([
                             title = $.mage.__('License Adobe Stock Images?'),
                             cancelText = $.mage.__('Cancel'),
                             baseContent = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>';
+
+                        this.isLicenseRequestStarted(false);
 
                         if (canPurchase) {
                             this.getPrompt(
@@ -383,6 +404,7 @@ define([
                      * On error
                      */
                     error: function (response) {
+                        this.isLicenseRequestStarted(false);
                         messages.add('error', response.responseJSON.message);
                         messages.scheduleCleanup(this.messageDelay);
                     }
