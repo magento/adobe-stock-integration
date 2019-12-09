@@ -320,6 +320,10 @@ define([
                                          * Confirm action
                                          */
                                         confirm: function (fileName) {
+                                            $.ajaxSetup({
+                                                async: true
+                                            });
+
                                             if (typeof fileName === 'undefined') {
                                                 fileName = filePathArray[imageIndex]
                                                  .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
