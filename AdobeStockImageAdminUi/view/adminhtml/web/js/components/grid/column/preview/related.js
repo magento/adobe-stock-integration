@@ -18,6 +18,7 @@ define([
             serieFilterValue: '',
             modelFilterValue: '',
             selectedTab: null,
+            loader: false,
             relatedImages: {
                 series: {},
                 model: {}
@@ -58,7 +59,8 @@ define([
                     'serieFilterValue',
                     'modelFilterValue',
                     'selectedTab',
-                    'relatedImages'
+                    'relatedImages',
+                    'loader'
                 ]);
 
             return this;
@@ -113,6 +115,9 @@ define([
                 type: 'GET',
                 url: this.preview().relatedImagesUrl,
                 dataType: 'json',
+                beforeSend: function () {
+                    this.loader(true);
+                }.bind(this),
                 data: {
                     'image_id': record.id,
                     'limit': this.tabImagesLimit
@@ -120,11 +125,40 @@ define([
             }).done(function (data) {
                 var relatedImages = this.relatedImages();
 
+                this.loader(false);
                 relatedImages.series[record.id] = data.result['same_series'];
                 relatedImages.model[record.id] = data.result['same_model'];
+
                 this.relatedImages(relatedImages);
                 this.preview().updateHeight();
+
+                /* Switch to the model tab if the series tab is hidden */
+                if (relatedImages.series[record.id].length === 0) {
+                    $('#adobe-stock-tabs').data().mageTabs.select(1);
+                }
             }.bind(this));
+        },
+
+        /**
+         * Returns true if the series tab should be show, false otherwise
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        showSeriesTab: function (record) {
+            return typeof this.relatedImages().series[record.id] === 'undefined' ||
+                this.relatedImages().series[record.id].length !== 0;
+        },
+
+        /**
+         * Returns true if the model tab should be show, false otherwise
+         *
+         * @param {Object} record
+         * @returns boolean
+         */
+        showModelTab: function (record) {
+            return typeof this.relatedImages().model[record.id] === 'undefined' ||
+                this.relatedImages().model[record.id].length !== 0;
         },
 
         /**
