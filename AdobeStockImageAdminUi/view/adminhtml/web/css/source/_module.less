@@ -216,7 +216,7 @@
                         justify-content: center;
                         position: relative;
                         height: 100px;
-                        max-width: 130px;
+                        max-width: 150px;
                         width: 100%;
                         overflow: hidden;
                         margin-right: 10px;
@@ -233,7 +233,7 @@
                         display: inline-block;
                         max-height: 100px;
                         text-align: center;
-                        max-width: 130px;
+                        max-width: 140px;
                         vertical-align: middle;
                         width: 100%;
                         cursor: pointer;
@@ -334,6 +334,23 @@
 
             .admin__field-tooltip {
                 margin: -5px 0 0 5px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1400px) {
+    .adobe-stock-images-search-modal-content {
+        .masonry-image-preview {
+            .adobe-stock-related-images-tab-content {
+                .ui-tabs-panel {
+                    .thumbnail {
+                        max-width: 130px;
+                    }
+                    .see-more-wrapper {
+                        max-width: 130px;
+                    }
+                }
             }
         }
     }
