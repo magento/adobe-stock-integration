@@ -5,23 +5,22 @@
  */
 -->
 <div if="isVisible($row())"
-    class="related-container">
+     class="related-container">
     <div id="adobe-stock-tabs"
          class="adobe-stock-tabs"
          data-bind="mageInit: {
                     'mage/backend/tabs': {
-                    active: 'series_content_' + $row().id,
                     destination: '#adobe-stock-tabs-content',
                     shadowTabs: [],
                 }
             }">
         <ul class="tabs-horiz">
-            <li>
+            <li if="showSeriesTab($row())">
                 <a id="series_tab" attr="'href': '#series_content_' + $row().id">
                     <span class="title" translate="'More from this series'"></span>
                 </a>
             </li>
-            <li>
+            <li if="showModelTab($row())">
                 <a id="model_tab" attr="'href': '#model_content_' + $row().id">
                     <span class="title" translate="'More from this model'"></span>
                 </a>
@@ -31,7 +30,11 @@
 
     <div id="adobe-stock-tabs-content"
          class="adobe-stock-related-images-tab-content">
-        <div attr="'id': 'series_content_' + $row().id">
+        <div class="spinner related-loader" data-bind="visible: loader">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+        <div if="showSeriesTab($row())" attr="'id': 'series_content_' + $row().id">
             <!-- ko foreach: getSeries($row()) -->
             <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToSeriesImage($data) }">
                 <img attr="src: thumbnail_url, alt: title">
@@ -50,7 +53,7 @@
             </div>
             <!-- /ko -->
         </div>
-        <div attr="'id': 'model_content_' + $row().id">
+        <div if="showModelTab($row())" attr="'id': 'model_content_' + $row().id">
             <!-- ko foreach: getModel($row()) -->
             <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToModelImage($data) }">
                 <img attr="src: thumbnail_url, alt: title">
@@ -71,4 +74,3 @@
         </div>
     </div>
 </div>
-

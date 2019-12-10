@@ -27,12 +27,15 @@
 
                 .container {
                     padding-top: 0;
+
                     .preview-buttons {
                         /* Align image preview actions uniformly to the right edge */
+
                         .action-previous, .action-next, .action-close {
                             padding: 30px 0 30px 30px;
                         }
                     }
+
                     .preview-row-content {
                         img.preview {
                             flex-basis: auto;
@@ -179,9 +182,19 @@
             .adobe-stock-tabs {
                 margin-top: 30px;
                 border-bottom: 1px solid @color-gray68;
+
                 .ui-state-default {
                     border-bottom: none;
                 }
+            }
+
+            .related-loader {
+                height: 100px;
+                width: 100px;
+                left: 50%;
+                margin-left: -50px;
+                top: 50%;
+                margin-top: 50px;
             }
 
             .adobe-stock-related-images-tab-content {
@@ -327,6 +340,7 @@
         .masonry-image-preview {
             .container {
                 margin: 0 60px;
+
                 .preview-row-content {
                     .info {
                         .actions {
