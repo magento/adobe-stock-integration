@@ -82,8 +82,10 @@ class ImagesProvider
     public function getImages(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
         $path = $this->getPath($searchCriteria);
+        $modificationDate = $this->getModificationDate($searchCriteria);
         $data = $this->readFiles(
             $this->mediaDirectory->getAbsolutePath($path),
+            $modificationDate,
             $this->getPageSize($searchCriteria),
             $this->getCurrentPage($searchCriteria)
         );
@@ -115,6 +117,25 @@ class ImagesProvider
     }
 
     /**
+     * Retrieve directory path filter value from the search criteria if it is set
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return array
+     */
+    private function getModificationDate(SearchCriteriaInterface $searchCriteria): array
+    {
+        $modificationDate = [];
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() === 'modification_date') {
+                    $modificationDate[] = $filter->getValue();
+                }
+            }
+        }
+        return $modificationDate;
+    }
+
+    /**
      * Retrieve page size from the search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
@@ -142,13 +163,14 @@ class ImagesProvider
      * Load files form filesystem
      *
      * @param string $path
+     * @param $modificationDate
      * @param int $size
      * @param int $currentPage
      *
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function readFiles(string $path, $size = 32, $currentPage = 1): array
+    private function readFiles(string $path, $modificationDate, $size = 32, $currentPage = 1): array
     {
         $items = [];
         $filesCount = 0;
@@ -166,6 +188,7 @@ class ImagesProvider
         }
 
         $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+        $iterator = $this->filterByModificationDate($iterator, $modificationDate);
 
         /** @var FilesystemIterator $item */
         foreach ($iterator as $item) {
@@ -221,5 +244,41 @@ class ImagesProvider
         $document->setCustomAttributes($attributes);
 
         return $document;
+    }
+
+    /**
+     * Filter By Modification Date
+     *
+     * @param DirectoryIterator|RecursiveDirectoryIterator $iterator
+     * @param array $modificationDate
+     * @return DirectoryIterator|RecursiveDirectoryIterator|array
+     */
+    private function filterByModificationDate($iterator, $modificationDate)
+    {
+        $modificationFilter = [];
+        if (!isset($modificationDate[0]) && !isset($modificationDate[1])) {
+            return $iterator;
+        }
+        foreach ($iterator as $item) {
+            $file = $item->getPath() . '/' . $item->getFileName();
+            if (isset($modificationDate[0]) && isset($modificationDate[1])) {
+                if (
+                    strtotime($modificationDate[0]) <= filectime($file) &&
+                    strtotime($modificationDate[1]) >= filectime($file)
+                ) {
+                    $modificationFilter[] = $item;
+                }
+            } elseif (isset($modificationDate[0])) {
+                if (strtotime($modificationDate[0]) <= filectime($file)) {
+                    $modificationFilter[] = $item;
+                }
+            } elseif (isset($modificationDate[1])) {
+                if (strtotime($modificationDate[1]) >= filectime($file)) {
+                    $modificationFilter[] = $item;
+                }
+            }
+        }
+
+        return $modificationFilter;
     }
 }

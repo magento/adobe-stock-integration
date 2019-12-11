@@ -44,15 +44,17 @@
                     <dataScope>directory_filter</dataScope>
                 </settings>
             </filterSelect>
-            <filterDate name="modification_date" provider="${ $.parentName }" sortOrder="30">
+            <filterRange name="modification_date" class="Magento\Ui\Component\Filters\Type\Date"
+                         provider="${ $.parentName }"
+                         component="Magento_Ui/js/grid/filters/range"
+                         template="ui/grid/filters/elements/group"
+                         sortOrder="20">
                 <settings>
+                    <rangeType>date</rangeType>
                     <label translate="true">Modification Date</label>
                     <dataScope>modification_date</dataScope>
-                    <additionalClasses>
-                        <class name="media-gallery-date-filter">true</class>
-                    </additionalClasses>
                 </settings>
-            </filterDate>
+            </filterRange>
         </filters>
         <paging name="listing_paging">
             <settings>
