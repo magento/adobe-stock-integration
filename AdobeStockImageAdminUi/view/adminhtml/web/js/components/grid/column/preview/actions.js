@@ -378,10 +378,10 @@ define([
                      * On error
                      */
                     error: function (response) {
-                        var errorMessage = response.JSON ? response.JSON.meassage : '';
+                        var errorMessage = response.JSON ? response.JSON.meassage : 'Failed to fetch licensing information.';
 
                         if (response.status === 403) {
-                            errorMessage = $.mage.__('You have not enough permission to license images');
+                            errorMessage = $.mage.__('Your admin role does not have permissions to license an image');
                         }
 
                         messages.add('error', errorMessage);
