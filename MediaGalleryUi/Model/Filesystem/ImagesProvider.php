@@ -90,9 +90,6 @@ class ImagesProvider
     public function getImages(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
         $path = $this->getPath($searchCriteria);
-        $absolutePath = $this->mediaDirectory->getAbsolutePath($path);
-        $data = $this->readFiles($absolutePath);
-        $path = $this->getPath($searchCriteria);
         $data = $this->readFiles(
             $this->mediaDirectory->getAbsolutePath($path),
             $this->getPageSize($searchCriteria),
