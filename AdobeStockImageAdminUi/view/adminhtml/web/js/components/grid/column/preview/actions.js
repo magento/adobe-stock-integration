@@ -378,7 +378,13 @@ define([
                      * On error
                      */
                     error: function (response) {
-                        messages.add('error', response.responseJSON.message);
+			var errorMessage = response.JSON ? response.JSON.meassage : '';
+
+			if (response.status === 403) {
+				errorMessage = $.mage.__('You have not enough permission to license images');
+			}
+
+                        messages.add('error', errorMessage);
                         messages.scheduleCleanup(this.messageDelay);
                     }
                 }
