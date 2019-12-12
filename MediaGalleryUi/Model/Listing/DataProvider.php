@@ -12,10 +12,13 @@ use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 use Magento\MediaGalleryUi\Model\Filesystem\ImagesProvider;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Media gallery UI data provider
+ */
 class DataProvider extends UiComponentDataProvider
 {
     /**
@@ -24,6 +27,13 @@ class DataProvider extends UiComponentDataProvider
     private $imagesProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * DataProvider constructor.
+     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -32,18 +42,20 @@ class DataProvider extends UiComponentDataProvider
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param ImagesProvider $imagesProvider
+     * @param LoggerInterface $logger
      * @param array $meta
      * @param array $data
      */
     public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
+        string $name,
+        string $primaryFieldName,
+        string $requestFieldName,
         ReportingInterface $reporting,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         ImagesProvider $imagesProvider,
+        LoggerInterface $logger,
         array $meta = [],
         array $data = []
     ) {
@@ -59,6 +71,7 @@ class DataProvider extends UiComponentDataProvider
             $data
         );
         $this->imagesProvider = $imagesProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -68,7 +81,8 @@ class DataProvider extends UiComponentDataProvider
     {
         try {
             return $this->searchResultToOutput($this->getSearchResult());
-        } catch (LocalizedException $exception) {
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             return [
                 'items' => [],
                 'totalRecords' => 0,
