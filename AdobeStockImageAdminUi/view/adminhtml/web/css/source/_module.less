@@ -213,7 +213,8 @@
                         justify-content: center;
                         position: relative;
                         height: 100px;
-                        width: 150px;
+                        max-width: 150px;
+                        width: 100%;
                         overflow: hidden;
                         margin-right: 10px;
                         vertical-align: middle;
@@ -330,6 +331,23 @@
 
             .admin__field-tooltip {
                 margin: -5px 0 0 5px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1400px) {
+    .adobe-stock-images-search-modal-content {
+        .masonry-image-preview {
+            .adobe-stock-related-images-tab-content {
+                .ui-tabs-panel {
+                    .thumbnail {
+                        max-width: 130px;
+                    }
+                    .see-more-wrapper {
+                        max-width: 130px;
+                    }
+                }
             }
         }
     }
