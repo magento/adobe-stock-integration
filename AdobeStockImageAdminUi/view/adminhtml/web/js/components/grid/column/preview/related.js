@@ -243,7 +243,7 @@ define([
         /**
          * Checks if the filter is applied
          *
-         * @param record
+         * @param {Object} record
          * @returns {boolean}
          */
         isSerieFilterApplied: function (record) {
@@ -253,7 +253,7 @@ define([
         /**
          * Checks if the filter is applied
          *
-         * @param record
+         * @param {Object} record
          * @returns {boolean}
          */
         isModelFilterApplied: function (record) {
