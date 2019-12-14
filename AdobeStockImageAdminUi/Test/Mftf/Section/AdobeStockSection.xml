@@ -37,5 +37,7 @@
         <element name="sortOption" type="button" selector="//div[@class='masonry-sorting'] //option[@value='{{sortOption}}']" parameterized="true"/>
         <element name="deleteMediaButton" type="button" selector="button#delete_files"/>
         <element name="licensedLabel" type="block" selector="//div[@class='masonry-image-column' and @data-repeat-index='0']//span[text()='Licensed']"/>
+        <element name="editViewButtonPartial" type="button" selector="/following-sibling::div/button[@class='action-edit']"/>
+        <element name="deleteViewButton" type="button" selector="//div[@data-bind='afterRender: \$data.setToolbarNode']//input/following-sibling::div/button[@class='action-delete']"/>
     </section>
 </sections>
