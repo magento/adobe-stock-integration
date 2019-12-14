@@ -209,7 +209,8 @@ define([
          */
         seeMoreFromSeries: function (record) {
             if (this.isSerieFilterApplied(record)) {
-                this.scrollToFilter()
+                this.scrollToFilter();
+                return;
             }
             this.serieFilterValue(record.id);
             this.filterChips().set(
@@ -227,7 +228,8 @@ define([
          */
         seeMoreFromModel: function (record) {
             if (this.isModelFilterApplied(record)) {
-                this.scrollToFilter()
+                this.scrollToFilter();
+                return;
             }
             this.modelFilterValue(record.id);
             this.filterChips().set(
