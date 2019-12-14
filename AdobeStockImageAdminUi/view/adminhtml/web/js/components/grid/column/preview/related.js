@@ -210,7 +210,7 @@ define([
         seeMoreFromSeries: function (record) {
             if (this.isSerieFilterApplied(record)) {
                 this.scrollToFilter();
-                
+
                 return;
             }
             this.serieFilterValue(record.id);
