@@ -247,7 +247,7 @@ define([
          * @returns {boolean}
          */
         isSerieFilterApplied: function (record) {
-            return this.filterChips().get('applied').serie_id === record.id.toString();
+            return this.filterChips().get('applied')['serie_id'] === record.id.toString();
         },
 
         /**
@@ -257,7 +257,7 @@ define([
          * @returns {boolean}
          */
         isModelFilterApplied: function (record) {
-            return this.filterChips().get('applied').model_id === record.id.toString();
+            return this.filterChips().get('applied')['model_id'] === record.id.toString();
         },
 
         /**
@@ -268,7 +268,7 @@ define([
                 behavior: 'smooth',
                 block: 'center',
                 inline: 'nearest'
-            })
+            });
         },
 
         /**
