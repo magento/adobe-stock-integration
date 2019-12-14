@@ -244,7 +244,7 @@ define([
          * Checks if the filter is applied
          *
          * @param {Object} record
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         isSerieFilterApplied: function (record) {
             return this.filterChips().get('applied')['serie_id'] === record.id.toString();
@@ -254,7 +254,7 @@ define([
          * Checks if the filter is applied
          *
          * @param {Object} record
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         isModelFilterApplied: function (record) {
             return this.filterChips().get('applied')['model_id'] === record.id.toString();
