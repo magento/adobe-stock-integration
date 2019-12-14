@@ -210,6 +210,7 @@ define([
         seeMoreFromSeries: function (record) {
             if (this.isSerieFilterApplied(record)) {
                 this.scrollToFilter();
+                
                 return;
             }
             this.serieFilterValue(record.id);
@@ -229,6 +230,7 @@ define([
         seeMoreFromModel: function (record) {
             if (this.isModelFilterApplied(record)) {
                 this.scrollToFilter();
+
                 return;
             }
             this.modelFilterValue(record.id);
