@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Test\Unit\Model\Filesystem;
 
@@ -22,8 +27,10 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
 use Magento\Framework\Filesystem\Directory\ReadInterface as DirectoryReadInterface;
-use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class ImagesProviderTest
+ */
 class ImagesProviderTest extends TestCase
 {
     /**
@@ -47,11 +54,6 @@ class ImagesProviderTest extends TestCase
     private $mediaDirectoryMock;
 
     /**
-     * @var StoreManagerInterface|MockObject
-     */
-    private $storeManagerInterfaceMock;
-
-    /**
      * @var SearchResultFactory|MockObject
      */
     private $searchResultFactoryMock;
@@ -71,21 +73,27 @@ class ImagesProviderTest extends TestCase
      */
     private $imagesProvider;
 
+    /**
+     * Initialize test object parameters
+     */
     protected function setUp(): void
     {
-        $filesystemMock = $this->createMock(Filesystem::class);
         $this->mediaDirectoryMock = $this->createMock(DirectoryReadInterface::class);
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
-        $this->storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
+
+
         $storeInterface = $this->createMock(Store::class);
         $storeInterface->expects($this->once())
             ->method('getBaseUrl')
             ->with(UrlInterface::URL_TYPE_MEDIA)
             ->willReturn(self::MOCK_URL);
-        $this->storeManagerInterfaceMock->expects($this->once())
+
+        $storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
+        $storeManagerInterfaceMock->expects($this->once())
             ->method('getStore')
             ->willReturn($storeInterface);
         $this->searchResultFactoryMock = $this->createMock(SearchResultFactory::class);
@@ -96,7 +104,7 @@ class ImagesProviderTest extends TestCase
             ImagesProvider::class,
             [
                 'filesystem' => $filesystemMock,
-                'storeManager' => $this->storeManagerInterfaceMock,
+                'storeManager' => $storeManagerInterfaceMock,
                 'searchResultFactory' => $this->searchResultFactoryMock,
                 'documentFactory' => $this->documentFactoryMock,
                 'attributeFactory' => $this->attributeValueFactoryMock
@@ -105,11 +113,11 @@ class ImagesProviderTest extends TestCase
     }
 
     /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @param SearchResultInterface $searchResult
-     * @dataProvider imagesProvider
+     * Test get images functionality of the ImageProvider. Expectes successfull assertion of
+     * to equal images
      *
-     * @throws FileSystemException
+     * @param string $directoryPath
+     * @param array $items
      */
     public function testGetImages(string $directoryPath, array $items)
     {
@@ -132,6 +140,11 @@ class ImagesProviderTest extends TestCase
         $this->assertEquals($searchResult, $getImages);
     }
 
+    /**
+     * Image data provider for the test method.
+     *
+     * @return array
+     */
     public function imagesProvider(): array
     {
         return [
@@ -175,14 +188,18 @@ class ImagesProviderTest extends TestCase
         ];
     }
 
-    private function getSearchCriteria(string $directoryPath)
+    /**
+     * Build SearchCriteria Mock and defines behaviour for operations with filters
+     *
+     * @param string $directoryPath
+     *
+     * @return MockObject
+     */
+    private function getSearchCriteria(string $directoryPath): MockObject
     {
-        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $path = self::MOCK_PATH;
-
         $filterMock = $this->createMock(Filter::class);
         $filterGroupMock = $this->createMock(FilterGroup::class);
-
         $filterMock->expects($this->once())
             ->method('getValue')
             ->willReturn($path);
@@ -192,6 +209,8 @@ class ImagesProviderTest extends TestCase
         $filterGroupMock->expects($this->once())
             ->method('getFilters')
             ->willReturn([$filterMock]);
+
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
@@ -203,7 +222,14 @@ class ImagesProviderTest extends TestCase
         return $searchCriteria;
     }
 
-    private function getDocument(array $data)
+    /**
+     * A document mock object contains information about images gotten by the search request
+     *
+     * @param array $data
+     *
+     * @return MockObject
+     */
+    private function getDocument(array $data): MockObject
     {
         $document = $this->createMock(DocumentInterface::class);
         $attributes = [];
