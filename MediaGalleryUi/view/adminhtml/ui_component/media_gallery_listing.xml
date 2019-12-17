@@ -39,7 +39,7 @@
             <filterSelect name="directory_filter" provider="${ $.parentName }" sortOrder="10">
                 <settings>
                     <caption translate="true">All</caption>
-                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\DirectoryTree"/>
+                    <options class="Magento\MediaGalleryUi\Ui\Options\Directory"/>
                     <label translate="true">Media Directory Tree</label>
                     <dataScope>directory_filter</dataScope>
                 </settings>
@@ -92,7 +92,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="directory">
+        <column name="directory" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Directory">
             <settings>
                 <filter>select</filter>
                 <label translate="true">Directory</label>

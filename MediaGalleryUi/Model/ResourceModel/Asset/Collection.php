@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\ResourceModel\Asset;
@@ -13,7 +12,7 @@ use Magento\MediaGalleryUi\Model\ResourceModel\Asset as ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
- * Assets (metadata) collection
+ * Media gallery assets collection
  */
 class Collection extends AbstractCollection
 {

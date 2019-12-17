@@ -15,6 +15,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Asset extends AbstractDb
 {
     private const MEDIA_GALLERY_ASSET_TABLE_NAME = 'media_gallery_asset';
+    private const ID_FIELD_NAME = 'id';
 
     /**
      * @inheritdoc
@@ -31,6 +32,6 @@ class Asset extends AbstractDb
      */
     protected function _construct(): void
     {
-        $this->_init(self::MEDIA_GALLERY_ASSET_TABLE_NAME, 'id');
+        $this->_init(self::MEDIA_GALLERY_ASSET_TABLE_NAME, self::ID_FIELD_NAME);
     }
 }
