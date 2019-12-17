@@ -78,7 +78,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image">
+        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
             <settings>
                 <label translate="true">Thumbnail Image</label>
                 <visible>true</visible>
