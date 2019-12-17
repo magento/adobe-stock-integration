@@ -30,8 +30,11 @@
     </type>
     <virtualType name="mediaGallerySearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
-            <argument name="mainTable" xsi:type="string">media_gallery_asset</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Asset</argument>
+            <argument name="mainTable" xsi:type="string">media_gallery_asset_grid</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface">
+        <plugin name="updateAssetInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetInGrid"/>
+    </type>
 </config>

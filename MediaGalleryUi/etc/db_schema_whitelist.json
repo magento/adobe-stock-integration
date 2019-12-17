@@ -1,0 +1,18 @@
+{
+    "media_gallery_asset_grid": {
+        "column": {
+            "id": true,
+            "directory": true,
+            "url": true,
+            "preview_url": true,
+            "width": true,
+            "height": true
+        },
+        "index": {
+            "MEDIA_GALLERY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

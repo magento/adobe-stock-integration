@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Model\ResourceModel;
+namespace Magento\MediaGalleryUi\Model\ResourceModel\Grid;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
@@ -14,7 +14,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class Asset extends AbstractDb
 {
-    private const MEDIA_GALLERY_ASSET_TABLE_NAME = 'media_gallery_asset';
+    private const MEDIA_GALLERY_ASSET_TABLE_NAME = 'media_gallery_asset_grid';
     private const ID_FIELD_NAME = 'id';
 
     /**

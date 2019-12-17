@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Model\ResourceModel\Asset;
+namespace Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset;
 
 use Magento\MediaGallery\Model\Asset as Model;
 use Magento\MediaGalleryUi\Model\ResourceModel\Asset as ResourceModel;

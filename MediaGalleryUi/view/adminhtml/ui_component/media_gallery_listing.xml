@@ -41,7 +41,7 @@
                     <caption translate="true">All</caption>
                     <options class="Magento\MediaGalleryUi\Ui\Options\Directory"/>
                     <label translate="true">Media Directory Tree</label>
-                    <dataScope>directory_filter</dataScope>
+                    <dataScope>directory</dataScope>
                 </settings>
             </filterSelect>
         </filters>
@@ -78,7 +78,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
+        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image">
             <settings>
                 <label translate="true">Thumbnail Image</label>
                 <visible>true</visible>
@@ -92,7 +92,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="directory" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Directory">
+        <column name="directory">
             <settings>
                 <filter>select</filter>
                 <label translate="true">Directory</label>
