@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\MediaGalleryUiApi\Api\ConfigInterface" type="Magento\MediaGalleryUi\Model\Config"/>
+    <type name="Magento\MediaGalleryUi\Model\ImagesIndexer">
+        <arguments>
+            <argument name="indexers" xsi:type="array">
+                <item name="mediaGallery" xsi:type="object">Magento\MediaGalleryUi\Model\AssetIndexer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="mediaGalleryIndexer" xsi:type="object">Magento\MediaGalleryUi\Console\Command\IndexAssets</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
