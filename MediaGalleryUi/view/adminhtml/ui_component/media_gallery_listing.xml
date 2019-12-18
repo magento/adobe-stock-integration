@@ -36,11 +36,11 @@
     </dataSource>
     <listingToolbar name="listing_top">
         <filters name="listing_filters">
-            <filterSelect name="directory_filter" provider="${ $.parentName }" sortOrder="10">
+            <filterSelect name="directory" provider="${ $.parentName }" sortOrder="10">
                 <settings>
                     <caption translate="true">All</caption>
                     <options class="Magento\MediaGalleryUi\Ui\Options\Directory"/>
-                    <label translate="true">Media Directory Tree</label>
+                    <label translate="true">Directory</label>
                     <dataScope>directory</dataScope>
                 </settings>
             </filterSelect>
@@ -100,15 +100,6 @@
                 <label translate="true">Image Preview</label>
                 <visible>true</visible>
                 <sortable>false</sortable>
-            </settings>
-        </column>
-        <column name="directory">
-            <settings>
-                <filter>select</filter>
-                <label translate="true">Directory</label>
-                <dataType>select</dataType>
-                <visible>false</visible>
-                <sortable>true</sortable>
             </settings>
         </column>
     </columns>
