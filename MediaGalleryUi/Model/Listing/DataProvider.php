@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Model\Listing;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
- * Media gallery UI data provider
+ * Media gallery UI data provider. Try catch added for displaying errors in grid
  */
 class DataProvider extends UiComponentDataProvider
 {

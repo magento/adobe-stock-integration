@@ -13,7 +13,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
- * Content Type Photo filter options provider
+ * Plugin to update media gallery grid table when asset is saved
  */
 class UpdateAssetInGrid
 {
@@ -29,6 +29,7 @@ class UpdateAssetInGrid
 
     /**
      * @param Service $service
+     * @param GetByPathInterface $getByPath
      */
     public function __construct(
         Service $service,
@@ -39,9 +40,11 @@ class UpdateAssetInGrid
     }
 
     /**
+     * Update media gallery grid table when asset is saved
+     *
      * @param SaveInterface $save
+     * @param \Closure $proceed
      * @param AssetInterface $asset
-     * @param int $id
      * @return int
      */
     public function aroundExecute(SaveInterface $save, \Closure $proceed, AssetInterface $asset): int

@@ -31,7 +31,7 @@ class UpdateAssetInGrid
     }
 
     /**
-     * Update the grid table for asset
+     * Update the grid table for the asset
      */
     public function execute(AssetInterface $asset): void
     {
@@ -49,6 +49,8 @@ class UpdateAssetInGrid
     }
 
     /**
+     * Retrieve the database adapter
+     *
      * @return AdapterInterface
      */
     private function getConnection(): AdapterInterface
