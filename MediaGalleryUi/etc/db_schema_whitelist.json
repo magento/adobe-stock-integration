@@ -3,7 +3,7 @@
         "column": {
             "id": true,
             "directory": true,
-            "url": true,
+            "thumbnail_url": true,
             "preview_url": true,
             "width": true,
             "height": true

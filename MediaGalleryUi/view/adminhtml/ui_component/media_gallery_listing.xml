@@ -78,14 +78,24 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image">
+        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="modules" xsi:type="array">
+                        <item name="previewComponent" xsi:type="string">${ $.parentName }.preview_url</item>
+                    </item>
+                    <item name="fields" xsi:type="array">
+                        <item name="url" xsi:type="string">thumbnail_url</item>
+                    </item>
+                </item>
+            </argument>
             <settings>
                 <label translate="true">Thumbnail Image</label>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="preview" component="Magento_Ui/js/grid/columns/image-preview">
+        <column name="preview_url" component="Magento_Ui/js/grid/columns/image-preview" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
             <settings>
                 <label translate="true">Image Preview</label>
                 <visible>true</visible>
