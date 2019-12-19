@@ -14,6 +14,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/related',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            filterTitleSelector: '.admin__current-filters-title-wrap',
             tabImagesLimit: 4,
             serieFilterValue: '',
             modelFilterValue: '',
@@ -207,6 +208,11 @@ define([
          * @param {Object} record
          */
         seeMoreFromSeries: function (record) {
+            if (this.isSerieFilterApplied(record)) {
+                this.scrollToFilter();
+
+                return;
+            }
             this.serieFilterValue(record.id);
             this.filterChips().set(
                 'applied',
@@ -222,6 +228,11 @@ define([
          * @param {Object} record
          */
         seeMoreFromModel: function (record) {
+            if (this.isModelFilterApplied(record)) {
+                this.scrollToFilter();
+
+                return;
+            }
             this.modelFilterValue(record.id);
             this.filterChips().set(
                 'applied',
@@ -229,6 +240,37 @@ define([
                     'model_id': record.id.toString()
                 }
             );
+        },
+
+        /**
+         * Checks if the filter is applied
+         *
+         * @param {Object} record
+         * @returns {Boolean}
+         */
+        isSerieFilterApplied: function (record) {
+            return this.filterChips().get('applied')['serie_id'] === record.id.toString();
+        },
+
+        /**
+         * Checks if the filter is applied
+         *
+         * @param {Object} record
+         * @returns {Boolean}
+         */
+        isModelFilterApplied: function (record) {
+            return this.filterChips().get('applied')['model_id'] === record.id.toString();
+        },
+
+        /**
+         * Scrolls user window to the filter title
+         */
+        scrollToFilter: function () {
+            $(this.filterTitleSelector).get(0).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
         },
 
         /**
