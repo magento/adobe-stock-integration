@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Test\Unit\Model;
 
-use Magento\MediaGalleryUi\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGalleryUi\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

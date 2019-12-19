@@ -17,6 +17,7 @@ use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\User\Api\Data\UserInterface;
@@ -100,6 +101,7 @@ class Callback extends Action
     public function execute(): ResultInterface
     {
         try {
+            $this->validateCallbackRequest();
             $tokenResponse = $this->getToken->execute(
                 (string)$this->getRequest()->getParam('code')
             );
@@ -122,7 +124,7 @@ class Callback extends Action
                 self::RESPONSE_SUCCESS_CODE,
                 __('Authorization was successful')
             );
-        } catch (AuthorizationException | CouldNotSaveException $exception) {
+        } catch (AuthorizationException | ConfigurationMismatchException | CouldNotSaveException $exception) {
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_ERROR_CODE,
@@ -142,6 +144,23 @@ class Callback extends Action
         $resultRaw->setContents($response);
 
         return $resultRaw;
+    }
+
+    /**
+     * Validate callback request from the Adobe OAth service
+     *
+     * @throws ConfigurationMismatchException
+     */
+    private function validateCallbackRequest(): void
+    {
+        $error = $this->getRequest()->getParam('error');
+        if ($error) {
+            $message = __(
+                'An error occurred during the callback request from the Adobe service: %error',
+                ['error' => $error]
+            );
+            throw new ConfigurationMismatchException($message);
+        }
     }
 
     /**
