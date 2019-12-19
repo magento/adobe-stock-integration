@@ -6,10 +6,12 @@
             "thumbnail_url": true,
             "preview_url": true,
             "width": true,
-            "height": true
+            "height": true,
+            "updated_at": true
         },
         "index": {
-            "MEDIA_GALLERY_ID": true
+            "MEDIA_GALLERY_ID": true,
+            "MEDIA_GALLERY_ASSET_GRID_ID": true
         },
         "constraint": {
             "PRIMARY": true

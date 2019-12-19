@@ -43,7 +43,8 @@ class UpdateAssetInGrid
                 'thumbnail_url' => $asset->getPath(),
                 'preview_url' => $asset->getPath(),
                 'width' => $asset->getWidth(),
-                'height' => $asset->getHeight()
+                'height' => $asset->getHeight(),
+                'updated_at' => $asset->getUpdatedAt()
             ]
         );
     }

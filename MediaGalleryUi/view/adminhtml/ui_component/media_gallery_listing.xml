@@ -44,7 +44,7 @@
                     <dataScope>directory</dataScope>
                 </settings>
             </filterSelect>
-            <filterRange name="modification_date" class="Magento\Ui\Component\Filters\Type\Date"
+            <filterRange name="updated_at" class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
                          component="Magento_Ui/js/grid/filters/range"
                          template="ui/grid/filters/elements/group"
@@ -52,7 +52,7 @@
                 <settings>
                     <rangeType>date</rangeType>
                     <label translate="true">Modification Date</label>
-                    <dataScope>modification_date</dataScope>
+                    <dataScope>updated_at</dataScope>
                 </settings>
             </filterRange>
         </filters>
