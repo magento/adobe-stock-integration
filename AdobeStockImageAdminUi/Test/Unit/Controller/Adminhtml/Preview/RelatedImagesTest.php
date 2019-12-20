@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * RelatedImages test.
+ * Test for controller providing Adobe Stock asset related images
  */
 class RelatedImagesTest extends TestCase
 {

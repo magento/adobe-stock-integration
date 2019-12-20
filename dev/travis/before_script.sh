@@ -91,5 +91,7 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
         -Dselenium.LOGGER.level="VERBOSE" \
         -Dwebdriver.chrome.logfile="${TRAVIS_BUILD_DIR}/chromedriver.log" \
         -trustAllSSLCertificate &> ~/selenium.log &
+
+    sed -e 's/args: \[/args: ["ignore-certificate-errors", /g' --in-place ./dev/tests/acceptance/tests/functional.suite.yml
 fi
 popd

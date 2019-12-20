@@ -20,7 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class SaveLicensedImageTest
+ * Test saving the Adobe Stock Image that was licensed on Adobe Stock previously
  */
 class SaveLicensedImageTest extends TestCase
 {
