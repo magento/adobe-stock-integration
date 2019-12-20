@@ -26,7 +26,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 
 /**
- * Class SaveImage
+ * Test saving Adobe Stock Image to filesystem and database
  */
 class SaveImage implements SaveImageInterface
 {

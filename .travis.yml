@@ -95,6 +95,7 @@ before_install:
 install:
   - mkdir -p magento2/app/code/Magento
   - mv Adobe* magento2/app/code/Magento/.
+  - mv MediaGallery* magento2/app/code/Magento/.
   - pushd magento2
   - composer install
   - composer require astock/stock-api-libphp
@@ -107,3 +108,5 @@ after_success:
   - if [ $TEST_SUITE == 'unit' ]; then travis_retry coveralls; fi
 after_failure:
   - bash -x dev/travis/after_failure.sh
+after_script:
+    - bash -x dev/travis/after_script.sh

@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class GetByIdTest
+ * Test Adobe Stock Asset retrieval by ID
  */
 class GetByIdTest extends WebapiAbstract
 {
