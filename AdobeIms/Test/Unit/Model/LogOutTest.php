@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * LogOut test.
+ * Test the Adobe Stock log out service
  */
 class LogOutTest extends TestCase
 {

@@ -189,10 +189,10 @@ class ConnectionWrapper
     {
         try {
             $this->getConnection()->searchFilesInitialize($request);
-            return $this;
         } catch (\Exception $exception) {
             $this->handleException($exception, 'Failed to initialize Adobe Stock search files request');
         }
+        return $this;
     }
 
     /**

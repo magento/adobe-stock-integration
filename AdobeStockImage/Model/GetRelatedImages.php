@@ -19,7 +19,7 @@ use Magento\Framework\Exception\SerializationException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetRelatedImages
+ * Test retrieving the related images (same model and same series) of the adobe stock image asset
  */
 class GetRelatedImages implements GetRelatedImagesInterface
 {
