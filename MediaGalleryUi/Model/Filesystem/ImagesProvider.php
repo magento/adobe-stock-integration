@@ -17,13 +17,16 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
+/**
+ * ImagesProvider is used to read the media files across the media directory provided as a path in the method argument.
+ */
 class ImagesProvider
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
@@ -54,9 +57,13 @@ class ImagesProvider
     private $attributeFactory;
 
     /**
+     * ImagesProvider constructor.
+     *
      * @param Filesystem $filesystem
      * @param StoreManagerInterface $storeManager
      * @param SearchResultFactory $searchResultFactory
+     * @param DocumentFactory $documentFactory
+     * @param AttributeValueFactory $attributeFactory
      */
     public function __construct(
         Filesystem $filesystem,
@@ -76,8 +83,9 @@ class ImagesProvider
      * Retrieve images from the filesystem
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return array
-     * @throws FileSystemException
+     *
+     * @return SearchResultInterface
+     * @throws NoSuchEntityException
      */
     public function getImages(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
@@ -146,7 +154,7 @@ class ImagesProvider
      * @param int $currentPage
      *
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function readFiles(string $path, $size = 32, $currentPage = 1): array
     {
@@ -182,17 +190,19 @@ class ImagesProvider
             }
 
             $filesCount++;
-            list($width, $height) = getimagesize($file);
+            [$width, $height] = getimagesize($file);
             $imageUrl = $mediaUrl . $this->mediaDirectory->getRelativePath($file);
-            $items[] = $this->createDocument([
-                'id_field_name' => 'id',
-                'id' => $filesCount,
-                'title' => $item->getBasename(),
-                'url' => $imageUrl,
-                'preview_url' => $imageUrl,
-                'width' => $width,
-                'height' => $height
-            ]);
+            $items[] = $this->createDocument(
+                [
+                    'id_field_name' => 'id',
+                    'id' => $filesCount,
+                    'title' => $item->getBasename(),
+                    'url' => $imageUrl,
+                    'preview_url' => $imageUrl,
+                    'width' => $width,
+                    'height' => $height
+                ]
+            );
         }
 
         return [

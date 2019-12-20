@@ -1,6 +1,8 @@
 branches:
   only:
-    - develop
+    - 1.0-develop
+    - 1.1-develop
+    - staging
 sudo: required
 dist: trusty
 group: edge

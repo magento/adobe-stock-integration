@@ -378,7 +378,14 @@ define([
                      * On error
                      */
                     error: function (response) {
-                        messages.add('error', response.responseJSON.message);
+                        var defaultMessage = 'Failed to fetch licensing information.',
+                            errorMessage = response.JSON ? response.JSON.meassage : defaultMessage;
+
+                        if (response.status === 403) {
+                            errorMessage = $.mage.__('Your admin role does not have permissions to license an image');
+                        }
+
+                        messages.add('error', errorMessage);
                         messages.scheduleCleanup(this.messageDelay);
                     }
                 }
