@@ -23,7 +23,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * License test.
+ * Test for the controller responsible for licensing an Adobe Stock image
  */
 class LicenseTest extends TestCase
 {

@@ -14,7 +14,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class RelatedImages
+ * Controller providing related images (same model and same series) for the provided Adobe Stock asset id
  */
 class RelatedImages extends Action
 {
