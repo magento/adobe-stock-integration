@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="media_gallery_asset_grid" resource="default" engine="innodb" comment="Media Gallery Asset">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="directory" length="255" nullable="true" comment="Directory"/>
+        <column xsi:type="varchar" name="thumbnail_url" length="255" nullable="true" comment="Thumbnail Url"/>
+        <column xsi:type="varchar" name="preview_url" length="255" nullable="true" comment="Preview Url"/>
+        <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
+        <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
+            <column name="id"/>
+        </index>
+    </table>
+</schema>
