@@ -39,5 +39,7 @@
         <element name="licensedLabel" type="block" selector="//div[@class='masonry-image-column' and @data-repeat-index='0']//span[text()='Licensed']"/>
         <element name="editViewButtonPartial" type="button" selector="/following-sibling::div/button[@class='action-edit']"/>
         <element name="deleteViewButton" type="button" selector="//div[@data-bind='afterRender: \$data.setToolbarNode']//input/following-sibling::div/button[@class='action-delete']"/>
+        <element name="IncorrectSecretModalText" type="block" selector="//*[contains(@class, 'modal-popup')]//div[contains(text(), 'Login failed')]"/>
+        <element name="IncorrectSecretModalButton" type="button" selector="//*[contains(@class, 'modal-popup')]//*[@class='modal-footer']/button//span[text()='Ok']"/>
     </section>
 </sections>
