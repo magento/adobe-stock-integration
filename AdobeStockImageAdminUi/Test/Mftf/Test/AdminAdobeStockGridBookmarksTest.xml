@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockGridBookmarksTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #1] User accesses stock images from Magento Admin"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/860"/>
+            <title value="User has access to bookmarks"/>
+            <description value="User is able to see and use the available Adobe Stock grid bookmarks"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3222613"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_grid"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
+            <argument name="filterName" value="Price"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToStandard">
+            <argument name="type" value="Standard"/>
+            <argument name="filter" value="{{AdobeStockFilterSection.premiumPriceFilter}}"/>
+            <argument name="filterOption" value="premium_price_filter"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockSaveViewActionGroup" stepKey="saveAndDeleteView"/>
+    </test>
+</tests>
