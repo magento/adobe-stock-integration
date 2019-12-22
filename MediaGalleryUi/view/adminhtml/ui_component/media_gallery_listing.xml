@@ -44,15 +44,16 @@
                     <dataScope>directory</dataScope>
                 </settings>
             </filterSelect>
-            <filterDate name="upload_date" provider="${ $.parentName }" sortOrder="20">
+            <filterRange name="created_at"
+                         class="Magento\Ui\Component\Filters\Type\DateRange"
+                         provider="${ $.parentName }"
+                         template="ui/grid/filters/elements/group">
                 <settings>
-                    <label translate="true">Upload Date</label>
-                    <dataScope>upload_date</dataScope>
-                    <additionalClasses>
-                        <class name="media-gallery-date-filter">true</class>
-                    </additionalClasses>
+                    <rangeType>date</rangeType>
+                    <label translate="true">Uploaded Date</label>
+                    <dataScope>created_at</dataScope>
                 </settings>
-            </filterDate>
+            </filterRange>
         </filters>
         <paging name="listing_paging">
             <settings>

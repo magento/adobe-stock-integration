@@ -13,6 +13,7 @@
         <column xsi:type="varchar" name="preview_url" length="255" nullable="true" comment="Preview Url"/>
         <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
         <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="datetime" name="created_at" nullable="true" comment="Uploaded Date"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
