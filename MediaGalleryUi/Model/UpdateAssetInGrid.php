@@ -42,6 +42,8 @@ class UpdateAssetInGrid
                 'directory' => dirname($asset->getPath()),
                 'thumbnail_url' => $asset->getPath(),
                 'preview_url' => $asset->getPath(),
+                'content_type' => $asset->getContentType(),
+                'source' => $asset->getSource(),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight()
             ]

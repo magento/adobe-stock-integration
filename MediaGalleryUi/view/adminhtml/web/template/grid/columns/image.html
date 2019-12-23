@@ -1,0 +1,19 @@
+<!--
+    /**
+    * Copyright © Magento, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<div class="masonry-image-block" ko-style="$col.getStyles($row())" attr="'data-id': $col.getId($row())">
+    <div class="media-gallery-image">
+        <img attr="src: $col.getUrl($row())" css="$col.getClasses($row())" click="function(){ expandPreview($row()) }" data-role="thumbnail"/>
+    </div>
+    <div class="masonry-image-description">
+        <ul class="media-gallery-image-details">
+            <li class="name" data-bind="text: $col.getName($row())"></li>
+            <li class="source" data-bind="text: $col.getSource($row())"></li>
+            <li class="type" data-bind="text: $col.getContentType($row())"></li>
+            <li class="dimensions" data-bind="text: $col.getDimensions($row())"></li>
+        </ul>
+    </div>
+</div>

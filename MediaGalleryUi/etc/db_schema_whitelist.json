@@ -5,6 +5,8 @@
             "directory": true,
             "thumbnail_url": true,
             "preview_url": true,
+            "content_type": true,
+            "source": true,
             "width": true,
             "height": true
         },
