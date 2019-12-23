@@ -63,7 +63,5 @@ define([
             return imageUrl.match(/([\w\d_-]*)\.?[^\\\/]*$/g)[0];
             
         },
-
-
     });
 });
