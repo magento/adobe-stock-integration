@@ -17,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Download
+ * Controller for downloading the Adobe Stock asset preview by the id
  */
 class Download extends Action
 {

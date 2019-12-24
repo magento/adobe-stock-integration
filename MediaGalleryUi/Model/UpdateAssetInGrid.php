@@ -44,6 +44,7 @@ class UpdateAssetInGrid
                 'preview_url' => $asset->getPath(),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight(),
+                'created_at' => $asset->getCreatedAt(),
                 'updated_at' => $asset->getUpdatedAt()
             ]
         );
