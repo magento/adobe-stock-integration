@@ -7,6 +7,7 @@
     
     .media-gallery-image-details {
         list-style: none;
+        margin-bottom: 0px;
 
         .name {
             font-weight: bold;
@@ -21,7 +22,32 @@
             display: inline-block;
         }
     }
-    .media-gallery-image-column {
-        padding-bottom: 5%;
+
+    .media-gallery-image {
+        text-align: center;
+        margin: 0 auto;
+        width: 200px;
+        height: 200px;
     }
+
+    .masonry-image-description {
+        min-height: 80px;
+        background-color: white;
+    }
+
+    .media-gallery-image-column {
+        width: 200px;
+        background-color: #e1e1e1 !important;
+    }
+
+    .media-gallery-image-block {
+        padding: 25px;
+        margin: 0 auto;
+        height: 200px;
+    }
+
+    .media-gallery-image-column img {
+        object-fit: cover;
+    }
+
 }
