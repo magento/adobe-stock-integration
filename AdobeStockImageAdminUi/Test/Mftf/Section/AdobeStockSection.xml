@@ -37,5 +37,7 @@
         <element name="sortOption" type="button" selector="//div[@class='masonry-sorting'] //option[@value='{{sortOption}}']" parameterized="true"/>
         <element name="deleteMediaButton" type="button" selector="button#delete_files"/>
         <element name="licensedLabel" type="block" selector="//div[@class='masonry-image-column' and @data-repeat-index='0']//span[text()='Licensed']"/>
+        <element name="IncorrectSecretModalText" type="block" selector="//*[contains(@class, 'modal-popup')]//div[contains(text(), 'Login failed')]"/>
+        <element name="IncorrectSecretModalButton" type="button" selector="//*[contains(@class, 'modal-popup')]//*[@class='modal-footer']/button//span[text()='Ok']"/>
     </section>
 </sections>
