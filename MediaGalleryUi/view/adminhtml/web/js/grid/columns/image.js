@@ -11,6 +11,7 @@ define([
     return image.extend({
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
+            adobeStockIconUrl: '',
         },
 
         /**
@@ -40,7 +41,7 @@ define([
          * @return {String}
          */
         getSource: function (record) {
-            return record.source ? "AStock" : '';
+            return record.source ? this.adobeStockIconUrl : false
         },
 
         /**
