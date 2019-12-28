@@ -34,9 +34,6 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
-        <settings>
-            <sticky>true</sticky>
-        </settings>
         <bookmark name="bookmarks"/>
         <filterSearch name="words"/>
         <paging name="listing_paging">
