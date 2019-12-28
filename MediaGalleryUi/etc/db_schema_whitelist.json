@@ -7,7 +7,8 @@
             "preview_url": true,
             "width": true,
             "height": true,
-            "created_at": true
+            "created_at": true,
+            "updated_at": true
         },
         "index": {
             "MEDIA_GALLERY_ID": true
