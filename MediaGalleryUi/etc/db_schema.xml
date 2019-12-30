@@ -15,6 +15,8 @@
         <column xsi:type="varchar" name="source" length="255" nullable="true" comment="Image Source"/>
         <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
         <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="datetime" name="created_at" nullable="true" comment="Uploaded Date"/>
+        <column xsi:type="datetime" name="updated_at" nullable="true" comment="Modification Date"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>

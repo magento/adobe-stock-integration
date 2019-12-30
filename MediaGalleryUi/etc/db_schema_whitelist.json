@@ -8,7 +8,9 @@
             "content_type": true,
             "source": true,
             "width": true,
-            "height": true
+            "height": true,
+            "created_at": true,
+            "updated_at": true
         },
         "index": {
             "MEDIA_GALLERY_ID": true

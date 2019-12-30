@@ -129,24 +129,22 @@ class ConnectionWrapper
      *
      * @param \Exception $exception
      * @param string $message
-     * @throws AuthenticationException
-     * @throws AuthorizationException
-     * @throws IntegrationException
+     * @return AuthenticationException | AuthorizationException | IntegrationException
      */
-    private function handleException(\Exception $exception, string $message): void
+    private function handleException(\Exception $exception, string $message): \Exception
     {
         if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
-            throw new AuthenticationException(__('Adobe API Key is invalid!'));
+            return new AuthenticationException(__('Adobe API Key is invalid!'));
         }
         if (strpos($exception->getMessage(), 'Oauth token is not valid') !== false) {
             $this->flushUserTokens->execute();
-            throw new AuthorizationException(__('Adobe API login has expired!'));
+            return new AuthorizationException(__('Adobe API login has expired!'));
         }
         $phrase = __(
             $message . ': %error_message',
             ['error_message' => $exception->getMessage()]
         );
-        throw new IntegrationException($phrase, $exception, $exception->getCode());
+        return new IntegrationException($phrase, $exception, $exception->getCode());
     }
 
     /**
@@ -190,7 +188,7 @@ class ConnectionWrapper
         try {
             $this->getConnection()->searchFilesInitialize($request);
         } catch (\Exception $exception) {
-            $this->handleException($exception, 'Failed to initialize Adobe Stock search files request');
+            throw $this->handleException($exception, 'Failed to initialize Adobe Stock search files request');
         }
         return $this;
     }
@@ -208,7 +206,7 @@ class ConnectionWrapper
         try {
             return $this->getConnection()->getNextResponse();
         } catch (\Exception $exception) {
-            $this->handleException($exception, 'Failed to retrieve Adobe Stock search files results');
+            throw $this->handleException($exception, 'Failed to retrieve Adobe Stock search files results');
         }
     }
 
@@ -226,7 +224,7 @@ class ConnectionWrapper
         try {
             return $this->getConnection()->getMemberProfile($request, $this->getAccessToken());
         } catch (\Exception $exception) {
-            $this->handleException($exception, 'Failed to retrieve Adobe Stock member profile');
+            throw $this->handleException($exception, 'Failed to retrieve Adobe Stock member profile');
         }
     }
 
@@ -244,7 +242,7 @@ class ConnectionWrapper
         try {
             return $this->getConnection()->getContentLicense($request, $this->getAccessToken());
         } catch (\Exception $exception) {
-            $this->handleException($exception, 'Failed to retrieve Adobe Stock content license');
+            throw $this->handleException($exception, 'Failed to retrieve Adobe Stock content license');
         }
     }
 
@@ -262,7 +260,7 @@ class ConnectionWrapper
         try {
             return $this->getConnection()->downloadAssetUrl($request, $this->getAccessToken());
         } catch (\Exception $exception) {
-            $this->handleException($exception, 'Failed to retrieve Adobe Stock asset download URL');
+            throw $this->handleException($exception, 'Failed to retrieve Adobe Stock asset download URL');
         }
     }
 }

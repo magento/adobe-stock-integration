@@ -44,6 +44,26 @@
                     <dataScope>directory</dataScope>
                 </settings>
             </filterSelect>
+            <filterRange name="created_at"
+                         class="Magento\Ui\Component\Filters\Type\DateRange"
+                         provider="${ $.parentName }"
+                         template="ui/grid/filters/elements/group" sortOrder="20">
+                <settings>
+                    <rangeType>date</rangeType>
+                    <label translate="true">Uploaded Date</label>
+                    <dataScope>created_at</dataScope>
+                </settings>
+            </filterRange>
+            <filterRange name="updated_at"
+                         class="Magento\Ui\Component\Filters\Type\DateRange"
+                         provider="${ $.parentName }"
+                         template="ui/grid/filters/elements/group" sortOrder="30">
+                <settings>
+                    <rangeType>date</rangeType>
+                    <label translate="true">Modification Date</label>
+                    <dataScope>updated_at</dataScope>
+                </settings>
+            </filterRange>
         </filters>
         <paging name="listing_paging">
             <settings>
