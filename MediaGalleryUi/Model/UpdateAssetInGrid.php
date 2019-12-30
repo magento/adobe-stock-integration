@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\View\Asset\Repository;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
@@ -22,12 +23,20 @@ class UpdateAssetInGrid
     private $resource;
 
     /**
+     * @var Repository $assetRepository
+     */
+    private $assetRepository;
+
+    /**
      * @param ResourceConnection $resource
+     * @param Repository $assetRepository
      */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        Repository $assetRepository
     ) {
         $this->resource = $resource;
+        $this->assetRepository = $assetRepository;
     }
 
     /**
@@ -42,8 +51,9 @@ class UpdateAssetInGrid
                 'directory' => dirname($asset->getPath()),
                 'thumbnail_url' => $asset->getPath(),
                 'preview_url' => $asset->getPath(),
-                'content_type' => $asset->getContentType(),
-                'source' => $asset->getSource(),
+                'name' => preg_replace('/(^\\/)|(\\.[a-zA-Z])|$/i', '', $asset->getPath()),
+                'content_type' =>  strtoupper(str_replace("image/", "", $asset->getContentType())),
+                'source_icon_url' => $this->getIconUrl($asset),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight(),
                 'created_at' => $asset->getCreatedAt(),
@@ -60,5 +70,20 @@ class UpdateAssetInGrid
     private function getConnection(): AdapterInterface
     {
         return $this->resource->getConnection();
+    }
+
+    /**
+     * Return AStock incon url if source is Adobe Stock
+     *
+     * @return ?string
+     */
+    private function getIconUrl(AssetInterface $asset): ?string
+    {
+        $iconUrl = null;
+
+        if (!empty($asset->getSource())) {
+            $iconUrl = $this->assetRepository->getUrl('Magento_MediaGalleryUi::images/Astock.png');
+        }
+        return $iconUrl;
     }
 }

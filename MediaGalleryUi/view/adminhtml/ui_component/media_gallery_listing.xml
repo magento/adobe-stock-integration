@@ -85,7 +85,7 @@
             </settings>
         </paging>
     </listingToolbar>
-    <columns name="media_gallery_columns" component="Magento_MediaGalleryUi/js/grid/masonry">
+    <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="containerId" xsi:type="string">masonry-grid-example</item>
@@ -98,7 +98,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" component="Magento_MediaGalleryUi/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
+        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="modules" xsi:type="array">
@@ -112,6 +112,7 @@
             <settings>
                 <label translate="true">Thumbnail Image</label>
                 <visible>true</visible>
+                <bodyTmpl>Magento_MediaGalleryUi/grid/columns/image</bodyTmpl>
                 <sortable>false</sortable>
             </settings>
         </column>
