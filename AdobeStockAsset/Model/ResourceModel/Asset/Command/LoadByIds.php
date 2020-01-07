@@ -9,13 +9,13 @@ namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeStockAssetApi\Model\Asset\Command\MultiplyLoadByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**
  * Command for the bulk loading Adobe Stock assets by id
  */
-class MultiplyLoadById implements MultiplyLoadByIdInterface
+class LoadByIds implements LoadByIdsInterface
 {
     private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
 

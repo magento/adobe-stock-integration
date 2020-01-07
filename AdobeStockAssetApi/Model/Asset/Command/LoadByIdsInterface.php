@@ -13,7 +13,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 /**
  * Used for bulk load for Adobe Stock assets filtered by id.
  */
-interface MultiplyLoadByIdInterface
+interface LoadByIdsInterface
 {
     /**
      * Load an Adobe Stock asset by id
