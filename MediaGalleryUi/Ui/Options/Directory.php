@@ -3,10 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns;
+namespace Magento\MediaGalleryUi\Ui\Options;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Filesystem;
@@ -14,12 +13,13 @@ use Magento\Framework\Filesystem;
 /**
  * Content Type Photo filter options provider
  */
-class DirectoryTree implements OptionSourceInterface
+class Directory implements OptionSourceInterface
 {
     /**
-     * @var Magento\Framework\Filesystem
+     * @var Filesystem
      */
     private $filesystem;
+
     /**
      * @var string
      */

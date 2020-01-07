@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Category repository test.
+ * Test for the Adobe Stock Asset Category repository
  */
 class CategoryRepositoryTest extends TestCase
 {
