@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Model\Creator\Command\{SaveInterface, LoadByIdInterface, DeleteByIdInterface};
-use Magento\AdobeStockAssetApi\Api\Data\{CreatorInterface, CreatorSearchResultsInterface, CreatorSearchResultsInterfaceFactory};
-use Magento\AdobeStockAsset\Model\ResourceModel\Creator\{
-    Collection as CreatorCollection,
-    CollectionFactory as CreatorCollectionFactory
-};
+use Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\LoadByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\DeleteByIdInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Collection as CreatorCollection;
+use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;

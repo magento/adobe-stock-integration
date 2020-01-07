@@ -7,10 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
-use Magento\AdobeStockAsset\Model\{Category, CategoryFactory, CategoryRepository};
-use Magento\AdobeStockAsset\Model\ResourceModel\Category\{Collection, CollectionFactory as CategoryCollectionFactory};
-use Magento\AdobeStockAssetApi\Api\Data\{CategoryInterface, CategorySearchResultsInterface, CategorySearchResultsInterfaceFactory};
-use Magento\AdobeStockAssetApi\Model\Category\Command\{LoadByIdInterface,DeleteByIdInterface, SaveInterface};
+use Magento\AdobeStockAsset\Model\Category;
+use Magento\AdobeStockAsset\Model\CategoryRepository;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection;
+use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
+use Magento\AdobeStockAssetApi\Model\Category\Command\DeleteByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Category\Command\LoadByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -27,11 +33,6 @@ class CategoryRepositoryTest extends TestCase
      * @var MockObject|CategoryCollectionFactory $categoryCollectionFactory
      */
     private $categoryCollectionFactory;
-
-    /**
-     * @var MockObject|CategoryFactory
-     */
-    private $categoryFactory;
 
     /**
      * @var MockObject|JoinProcessorInterface $joinProcessorInterface
@@ -52,7 +53,6 @@ class CategoryRepositoryTest extends TestCase
      * @var CategoryRepository $categoryRepository
      */
     private $categoryRepository;
-
 
     /**
      * @var LoadByIdInterface|MockObject

@@ -23,7 +23,8 @@
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface" type="Magento\AdobeStockAsset\Model\GetAssetById"/>
 
     <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\DeleteByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\DeleteById"/>
-    <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\LoadByIds"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\LoadById"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\MultiplyLoadByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\MultiplyLoadById"/>
     <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\SaveInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\Save"/>
 
     <preference for="Magento\AdobeStockAssetApi\Model\Category\Command\DeleteByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\DeleteById"/>

@@ -7,12 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
-use Magento\AdobeStockAsset\Model\{Creator, CreatorFactory, CreatorRepository};
+use Magento\AdobeStockAsset\Model\Creator;
+use Magento\AdobeStockAsset\Model\CreatorRepository;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection;
-use Magento\AdobeStockAsset\Model\ResourceModel\Creator as ResourceModel;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
-use Magento\AdobeStockAssetApi\Api\Data\{CreatorInterface, CreatorSearchResultsInterface, CreatorSearchResultsInterfaceFactory};
-use Magento\AdobeStockAssetApi\Model\Creator\Command\{LoadByIdInterface,DeleteByIdInterface, SaveInterface};
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\DeleteByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\LoadByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -21,25 +25,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Creator repository test.
+ * Test for the Adobe Stock Asset Creator repository
  */
 class CreatorRepositoryTest extends TestCase
 {
-
-    /**
-     * @var MockObject|ResourceModel $resourceModel
-     */
-    private $resourceModel;
-
     /**
      * @var MockObject|CreatorCollectionFactory
      */
     private $creatorCollectionFactory;
-
-    /**
-     * @var MockObject|CreatorFactory $creatorFactory
-     */
-    private $creatorFactory;
 
     /**
      * @var MockObject|JoinProcessorInterface $joinProcessorInterface

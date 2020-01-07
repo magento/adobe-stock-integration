@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
-use Exception;
-use Magento\AdobeStockAssetApi\Api\Data\{CategoryInterface, CategorySearchResultsInterface};
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
@@ -19,26 +19,25 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 interface CategoryRepositoryInterface
 {
     /**
-     * Save Adobe Stock asset category
+     * Save asset category
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $category
-     *
+     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $item
      * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function save(CategoryInterface $category): CategoryInterface;
+    public function save(CategoryInterface $item): CategoryInterface;
 
     /**
-     * Delete Adobe Stock asset category item
+     * Delete item
      *
-     * @param \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface $category
+     * @param CategoryInterface $item
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
-    public function delete(CategoryInterface $category): void;
+    public function delete(CategoryInterface $item): void;
 
     /**
-     * Get a list of Adobe Stock categories
+     * Get a list of categories
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface
@@ -46,21 +45,20 @@ interface CategoryRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria) : CategorySearchResultsInterface;
 
     /**
-     * Get Adobe Stock category by id
+     * Get asset category by id
      *
-     * @param int $categoryId
-     *
+     * @param int $id
      * @return \Magento\AdobeStockAssetApi\Api\Data\CategoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById(int $categoryId) : CategoryInterface;
+    public function getById(int $id) : CategoryInterface;
 
     /**
-     * Delete Adobe Stock category filtered by id
+     * Delete category
      *
-     * @param int $categoryId
+     * @param int $id
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
-    public function deleteById(int $categoryId): void;
+    public function deleteById(int $id): void;
 }

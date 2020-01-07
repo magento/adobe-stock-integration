@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Category\Command;
 
-use Magento\AdobeStockAssetApi\Api\Data\{CategoryInterface,CategoryInterfaceFactory};
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Model\Category\Command\LoadByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 

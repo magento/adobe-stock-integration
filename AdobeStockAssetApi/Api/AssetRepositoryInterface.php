@@ -9,7 +9,8 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Api;
 
 use Exception;
-use Magento\AdobeStockAssetApi\Api\Data\{AssetInterface, AssetSearchResultsInterface};
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**

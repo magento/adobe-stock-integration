@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\LoadByIds;
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\MultiplyLoadById;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\Search\{Document,SearchResultInterface};
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 
 /**
@@ -28,14 +28,9 @@ class AppendAttributes
     private $attributeValueFactory;
 
     /**
-     * @var ResourceConnection
+     * @var MultiplyLoadById
      */
-    private $resourceConnection;
-
-    /**
-     * @var LoadByIds
-     */
-    private $loadByIds;
+    private $multiplyLoadById;
 
     /**
      * @var GetByIdInterface
@@ -43,20 +38,17 @@ class AppendAttributes
     private $getMediaGalleryAssetById;
 
     /**
-     * @param ResourceConnection $resourceConnection
      * @param AttributeValueFactory $attributeValueFactory
-     * @param LoadByIds $loadByIds
+     * @param MultiplyLoadById $multiplyLoadById
      * @param GetByIdInterface $getMediaGalleryAssetById
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         AttributeValueFactory $attributeValueFactory,
-        LoadByIds $loadByIds,
+        MultiplyLoadById $multiplyLoadById,
         GetByIdInterface $getMediaGalleryAssetById
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->attributeValueFactory = $attributeValueFactory;
-        $this->loadByIds = $loadByIds;
+        $this->multiplyLoadById = $multiplyLoadById;
         $this->getMediaGalleryAssetById = $getMediaGalleryAssetById;
     }
 
@@ -64,6 +56,7 @@ class AppendAttributes
      * Add additional asset attributes
      *
      * @param SearchResultInterface $searchResult
+     *
      * @return SearchResultInterface
      */
     public function execute(SearchResultInterface $searchResult): SearchResultInterface
@@ -81,7 +74,7 @@ class AppendAttributes
             $items
         );
 
-        $assets = $this->loadByIds->execute($ids);
+        $assets = $this->multiplyLoadById->execute($ids);
 
         foreach ($items as $key => $item) {
             if (!isset($assets[$item->getId()])) {

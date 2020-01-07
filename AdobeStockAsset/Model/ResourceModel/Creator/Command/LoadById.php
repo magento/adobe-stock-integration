@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command;
 
-use Magento\AdobeStockAssetApi\Api\Data\{CreatorInterface,CreatorInterfaceFactory};
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Model\Creator\Command\LoadByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 

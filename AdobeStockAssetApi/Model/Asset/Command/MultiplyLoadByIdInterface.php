@@ -11,16 +11,16 @@ namespace Magento\AdobeStockAssetApi\Model\Asset\Command;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 
 /**
- * Used to load Adobe Stock assets for gotten asset ids.
+ * Used for bulk load for Adobe Stock assets filtered by id.
  */
-interface LoadByIdsInterface
+interface MultiplyLoadByIdInterface
 {
     /**
-     * Load Adobe Stock assets by ids
+     * Load an Adobe Stock asset by id
      *
-     * @param int[] $ids
+     * @param int[] $id
      *
      * @return AssetInterface[]
      */
-    public function execute(array $ids): array;
+    public function execute(array $id): array;
 }

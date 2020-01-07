@@ -8,19 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Model\Asset\Command\{SaveInterface, LoadByIdsInterface, DeleteByIdInterface};
-use Magento\AdobeStockAssetApi\Api\Data\{
-    AssetInterface,
-    AssetSearchResultsInterface,
-    AssetSearchResultsInterfaceFactory};
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\{
-    Collection as AssetCollection,
-    CollectionFactory as AssetCollectionFactory};
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection as AssetCollection;
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory as AssetCollectionFactory;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterfaceFactory;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\DeleteByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\{IntegrationException, NoSuchEntityException};
+use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -54,9 +55,9 @@ class AssetRepository implements AssetRepositoryInterface
     private $saveCommand;
 
     /**
-     * @var LoadByIdsInterface
+     * @var LoadByIdInterface
      */
-    private $loadByIdsCommand;
+    private $loadByIdCommand;
 
     /**
      * @var DeleteByIdInterface
@@ -76,7 +77,7 @@ class AssetRepository implements AssetRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param AssetSearchResultsInterfaceFactory $searchResultFactory
      * @param SaveInterface $saveCommand
-     * @param LoadByIdsInterface $loadByIdsCommand
+     * @param LoadByIdInterface $loadByIdCommand
      * @param DeleteByIdInterface $deleteByIdCommand
      * @param LoggerInterface $logger
      */
@@ -86,7 +87,7 @@ class AssetRepository implements AssetRepositoryInterface
         CollectionProcessorInterface $collectionProcessor,
         AssetSearchResultsInterfaceFactory $searchResultFactory,
         SaveInterface $saveCommand,
-        LoadByIdsInterface $loadByIdsCommand,
+        LoadByIdInterface $loadByIdCommand,
         DeleteByIdInterface $deleteByIdCommand,
         LoggerInterface $logger
     ) {
@@ -95,7 +96,7 @@ class AssetRepository implements AssetRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultFactory = $searchResultFactory;
         $this->saveCommand = $saveCommand;
-        $this->loadByIdsCommand = $loadByIdsCommand;
+        $this->loadByIdCommand = $loadByIdCommand;
         $this->deleteByIdCommand = $deleteByIdCommand;
         $this->logger = $logger;
     }
@@ -142,7 +143,7 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getById(int $id): AssetInterface
     {
-        $assets = $this->loadByIdsCommand->execute([$id]);
+        $assets = $this->loadByIdCommand->execute($id);
         if (empty($assets)) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
         }

@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
-use Magento\AdobeStockAssetApi\Api\Data\{AssetInterface, AssetInterfaceFactory};
-use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Command for loading Adobe Stock assets by ids
+ * Command for loading Adobe Stock asset by id
  */
-class LoadByIds implements LoadByIdsInterface
+class LoadById implements LoadByIdInterface
 {
     private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
 
@@ -43,24 +44,21 @@ class LoadByIds implements LoadByIdsInterface
     }
 
     /**
-     * Load assets by ids
+     * Load asset by the id value
      *
-     * @param int[] $ids
-     * @return AssetInterface[]
+     * @param int $id
+     * @return AssetInterface
      */
-    public function execute(array $ids): array
+    public function execute(int $id): AssetInterface
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME))
-            ->where(self::ADOBE_STOCK_ASSET_ID . ' in (?)', $ids);
+            ->where(self::ADOBE_STOCK_ASSET_ID . ' = ?', $id);
         $data = $connection->fetchAssoc($select);
+        /** @var AssetInterface $asset */
+        $asset = $this->factory->create(['data' => $data]);
 
-        $assets = [];
-        foreach ($data as $id => $assetData) {
-            $assets[$id] = $this->factory->create(['data' => $assetData]);
-        }
-
-        return $assets;
+        return $asset;
     }
 }
