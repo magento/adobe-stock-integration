@@ -303,8 +303,6 @@ define([
                             canPurchase = response.result.canLicense,
                             buyCreditsUrl = this.preview().buyCreditsUrl,
                             displayFieldName = !this.isDownloaded() ? '<b>' + $.mage.__('File Name') + '</b>' : '',
-                            filePathArray = record.path.split('/'),
-                            imageIndex = filePathArray.length - 1,
                             title = $.mage.__('License Adobe Stock Images?'),
                             cancelText = $.mage.__('Cancel'),
                             baseContent = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>';
@@ -321,8 +319,7 @@ define([
                                          */
                                         confirm: function (fileName) {
                                             if (typeof fileName === 'undefined') {
-                                                fileName = filePathArray[imageIndex]
-                                                 .substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+                                                fileName = this.getImageNameFromPath(record.path);
                                             }
 
                                             this.licenseAndSave(record, fileName);
@@ -446,6 +443,8 @@ define([
          * Save licensed
          */
         saveLicensed: function () {
+            var imageName = '';
+
             if (!this.login().user().isAuthorized) {
                 return;
             }
@@ -454,6 +453,15 @@ define([
                 return;
             }
 
+            // If there's a copy of the image (preview), get the filename from the copy
+            if (this.preview().displayedRecord().path !== '') {
+                imageName = this.getImageNameFromPath(this.preview().displayedRecord().path);
+                this.save(this.preview().displayedRecord(), imageName, false, true);
+
+                return;
+            }
+
+            // Ask user for the image name otherwise
             this.getPrompt(
                 {
                     'title': $.mage.__('Save'),
@@ -492,6 +500,19 @@ define([
          */
         getLicenseButtonTitle: function () {
             return this.isDownloaded() ?  $.mage.__('License') : $.mage.__('License and Save');
+        },
+
+        /**
+         * Extracts image name from its path
+         *
+         * @param {String} path
+         * @returns {String}
+         */
+        getImageNameFromPath: function (path) {
+            var filePathArray = path.split('/'),
+                imageIndex = filePathArray.length - 1;
+
+            return filePathArray[imageIndex].substring(0, filePathArray[imageIndex].lastIndexOf('.'));
         }
     });
 });
