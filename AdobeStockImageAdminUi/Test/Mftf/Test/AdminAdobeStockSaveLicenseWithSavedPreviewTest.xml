@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockSaveLicenseWithSavedPreviewTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="User saves licensed image for previously saved preview"/>
+            <title value="Adobe Stock Previewed Licensed Image Save"/>
+            <description value="User saves previously licensed image with saved preview into Magento Media Gallery"/>
+            <severity value="AVERAGE"/>
+            <group value="adobe_stock_integration_license"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+            <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
+            <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserLoggedOut"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryToRemoveImage"/>
+            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImage">
+                <argument name="name" value="{{AdobeStockImageData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Not logged in user opens an image that is supposed to be licensed -->
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotSavedLicensedImage">
+            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImageForPreviewSave"/>
+
+        <!-- Not logged in user saves the image preview -->
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="openTheSaveImagePreviewPopup"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="saveImagePreview"/>
+
+        <!-- User logs into Adobe IMS -->
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
+        <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
+        <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
+        <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
+
+        <!-- The logged in user saves licensed image with previously saved preview -->
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImageWithSavedPreview">
+            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockSaveLicensedActionGroup" stepKey="saveLicensedImage"/>
+
+        <!-- User sees the saved image in media gallery without the name confirmation popup -->
+        <actionGroup ref="AssertAdminImageIsVisibleInMediaGalleryActionGroup" stepKey="seeImageInMediaGallery"/>
+    </test>
+</tests>
