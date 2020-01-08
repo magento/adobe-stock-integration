@@ -6,7 +6,7 @@
 if [ "$TEST_SUITE" == 'functional' ]; then
     pushd "${TRAVIS_BUILD_DIR}/magento2/dev/tests/acceptance/tests/_output"
     set +x
-    ls -al
+    ls -al debug
     for screenshot in *.png;
     do
         echo ""
