@@ -94,6 +94,7 @@
         <column name="overlay" component="Magento_Ui/js/grid/columns/overlay">
             <settings>
                 <label translate="true">Overlay</label>
+                <bodyTmpl>Magento_MediaGalleryUi/grid/columns/overlay</bodyTmpl>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>

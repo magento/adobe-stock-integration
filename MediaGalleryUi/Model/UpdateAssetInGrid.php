@@ -11,7 +11,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-
 /**
  * Reindex Media Gallery Assets Grid
  */
@@ -41,6 +40,9 @@ class UpdateAssetInGrid
 
     /**
      * Update the grid table for the asset
+     *
+     * @param AssetInterface $asset
+     * @return void
      */
     public function execute(AssetInterface $asset): void
     {
@@ -54,6 +56,7 @@ class UpdateAssetInGrid
                 'name' => preg_replace('/(^\\/)|(\\.[a-zA-Z])|$/i', '', $asset->getPath()),
                 'content_type' =>  strtoupper(str_replace("image/", "", $asset->getContentType())),
                 'source_icon_url' => $this->getIconUrl($asset),
+                'licensed' => $asset->getIsLicensed(),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight(),
                 'created_at' => $asset->getCreatedAt(),
