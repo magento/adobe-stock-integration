@@ -97,19 +97,19 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(CategoryInterface $category): CategoryInterface
+    public function save(CategoryInterface $item): CategoryInterface
     {
-        $this->saveCommand->execute($category);
+        $this->saveCommand->execute($item);
 
-        return $category;
+        return $item;
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(CategoryInterface $category): void
+    public function delete(CategoryInterface $item): void
     {
-        $this->deleteByIdCommand->execute($category->getId());
+        $this->deleteByIdCommand->execute($item->getId());
     }
 
     /**
@@ -137,14 +137,14 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getById(int $categoryId) : CategoryInterface
+    public function getById(int $id) : CategoryInterface
     {
-        $category = $this->loadByIdCommand->execute($categoryId);
+        $category = $this->loadByIdCommand->execute($id);
         if (!$category->getId()) {
             throw new NoSuchEntityException(
                 __(
                     'Adobe Stock asset category with id "%1" does not exist.',
-                    $categoryId
+                    $id
                 )
             );
         }

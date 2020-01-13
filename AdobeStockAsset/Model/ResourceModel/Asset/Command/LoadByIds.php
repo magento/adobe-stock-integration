@@ -46,15 +46,15 @@ class LoadByIds implements LoadByIdsInterface
     /**
      * Load assets filtered by ids
      *
-     * @param int[] $id
+     * @param int[] $ids
      * @return AssetInterface[]
      */
-    public function execute(array $id): array
+    public function execute(array $ids): array
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME))
-            ->where(self::ADOBE_STOCK_ASSET_ID . ' in (?)', $id);
+            ->where(self::ADOBE_STOCK_ASSET_ID . ' in (?)', $ids);
         $data = $connection->fetchAssoc($select);
 
         $assets = [];

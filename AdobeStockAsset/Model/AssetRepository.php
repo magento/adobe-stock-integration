@@ -21,6 +21,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
@@ -131,6 +132,8 @@ class AssetRepository implements AssetRepositoryInterface
             $searchResults->setTotalCount($collection->getSize());
 
             return $searchResults;
+        } catch (LocalizedException $exception) {
+            throw $exception;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during get asset list: %error', ['error' => $exception->getMessage()]);

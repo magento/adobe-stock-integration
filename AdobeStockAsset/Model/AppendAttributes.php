@@ -30,7 +30,7 @@ class AppendAttributes
     /**
      * @var LoadByIds
      */
-    private $multiplyLoadById;
+    private $loadByIds;
 
     /**
      * @var GetByIdInterface
@@ -39,16 +39,16 @@ class AppendAttributes
 
     /**
      * @param AttributeValueFactory $attributeValueFactory
-     * @param LoadByIds $multiplyLoadById
+     * @param LoadByIds $loadByIds
      * @param GetByIdInterface $getMediaGalleryAssetById
      */
     public function __construct(
         AttributeValueFactory $attributeValueFactory,
-        LoadByIds $multiplyLoadById,
+        LoadByIds $loadByIds,
         GetByIdInterface $getMediaGalleryAssetById
     ) {
         $this->attributeValueFactory = $attributeValueFactory;
-        $this->loadByIds = $multiplyLoadById;
+        $this->loadByIds = $loadByIds;
         $this->getMediaGalleryAssetById = $getMediaGalleryAssetById;
     }
 

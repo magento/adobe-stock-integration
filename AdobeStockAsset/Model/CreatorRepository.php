@@ -94,19 +94,19 @@ class CreatorRepository implements CreatorRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(CreatorInterface $creator): CreatorInterface
+    public function save(CreatorInterface $item): CreatorInterface
     {
-        $this->saveCommand->execute($creator);
+        $this->saveCommand->execute($item);
 
-        return $creator;
+        return $item;
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(CreatorInterface $creator): void
+    public function delete(CreatorInterface $item): void
     {
-        $this->deleteByIdCommand->execute($creator->getId());
+        $this->deleteByIdCommand->execute($item->getId());
     }
 
     /**
@@ -134,14 +134,14 @@ class CreatorRepository implements CreatorRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getById(int $creatorId) : CreatorInterface
+    public function getById(int $id) : CreatorInterface
     {
-        $creator = $this->loadByIdCommand->execute($creatorId);
+        $creator = $this->loadByIdCommand->execute($id);
         if (!$creator->getId()) {
             throw new NoSuchEntityException(
                 __(
                     'Adobe Stock asset creator with id "%1" does not exist.',
-                    $creatorId
+                    $id
                 )
             );
         }
@@ -151,8 +151,8 @@ class CreatorRepository implements CreatorRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deleteById(int $creatorId): void
+    public function deleteById(int $id): void
     {
-        $this->deleteByIdCommand->execute($creatorId);
+        $this->deleteByIdCommand->execute($id);
     }
 }
