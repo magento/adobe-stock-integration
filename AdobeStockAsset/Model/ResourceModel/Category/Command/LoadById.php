@@ -11,6 +11,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Model\Category\Command\LoadByIdInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Command for loading an Adobe Stock asset category
@@ -44,10 +45,7 @@ class LoadById implements LoadByIdInterface
     }
 
     /**
-     * Load an Adobe Asset category filtered by id
-     *
-     * @param int $categoryId
-     * @return CategoryInterface
+     * @inheritdoc
      */
     public function execute(int $categoryId): CategoryInterface
     {
@@ -58,6 +56,15 @@ class LoadById implements LoadByIdInterface
         $data = $connection->fetchAssoc($select);
         /** @var CategoryInterface $category */
         $category = $this->factory->create(['data' => $data]);
+
+        if (!$category->getId()) {
+            throw new NoSuchEntityException(
+                __(
+                    'Adobe Stock asset category with id "%1" does not exist.',
+                    $categoryId
+                )
+            );
+        }
 
         return $category;
     }

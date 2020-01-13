@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Model\Category\Command;
 
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Used to load an Adobe Stock asset category filtered by id
@@ -21,6 +22,7 @@ interface LoadByIdInterface
      * @param int $categoryId
      *
      * @return CategoryInterface
+     * @throws NoSuchEntityException
      */
     public function execute(int $categoryId): CategoryInterface;
 }

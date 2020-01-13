@@ -11,6 +11,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Model\Creator\Command\LoadByIdInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Command for loading an Adobe Stock asset creator
@@ -44,10 +45,7 @@ class LoadById implements LoadByIdInterface
     }
 
     /**
-     * Load an Adobe Asset creator filtered by id
-     *
-     * @param int $creatorId
-     * @return CreatorInterface
+     * @inheritdoc
      */
     public function execute(int $creatorId): CreatorInterface
     {
@@ -58,6 +56,15 @@ class LoadById implements LoadByIdInterface
         $data = $connection->fetchAssoc($select);
         /** @var CreatorInterface $creator */
         $creator = $this->factory->create(['data' => $data]);
+
+        if (!$creator->getId()) {
+            throw new NoSuchEntityException(
+                __(
+                    'Adobe Stock asset creator with id "%1" does not exist.',
+                    $creatorId
+                )
+            );
+        }
 
         return $creator;
     }

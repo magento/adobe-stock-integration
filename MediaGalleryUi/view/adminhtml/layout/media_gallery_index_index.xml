@@ -7,7 +7,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
-    <container name="root" label="Root">
+    <container name="root">
         <referenceContainer name="content">
             <uiComponent name="media_gallery_listing"/>
         </referenceContainer>

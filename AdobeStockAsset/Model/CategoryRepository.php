@@ -140,14 +140,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function getById(int $id) : CategoryInterface
     {
         $category = $this->loadByIdCommand->execute($id);
-        if (!$category->getId()) {
-            throw new NoSuchEntityException(
-                __(
-                    'Adobe Stock asset category with id "%1" does not exist.',
-                    $id
-                )
-            );
-        }
+
         return $category;
     }
 

@@ -137,14 +137,7 @@ class CreatorRepository implements CreatorRepositoryInterface
     public function getById(int $id) : CreatorInterface
     {
         $creator = $this->loadByIdCommand->execute($id);
-        if (!$creator->getId()) {
-            throw new NoSuchEntityException(
-                __(
-                    'Adobe Stock asset creator with id "%1" does not exist.',
-                    $id
-                )
-            );
-        }
+
         return $creator;
     }
 
