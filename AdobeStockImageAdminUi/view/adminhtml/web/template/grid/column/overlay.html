@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<div ifnot="$row().licensed" class="masonry-image-overlay media-gallery-image-overlay">
-    <span>Unlicensed</span>
+<div if="$col.isVisible($row())" ko-style="$col.getStyles($row())" class="masonry-image-overlay">
+    <span text="$col.getLabel($row())"/>
 </div>
-
