@@ -80,6 +80,7 @@ class AssetIndexer implements IndexerInterface
                     'path' => $this->getMediaDirectory()->getRelativePath($file),
                     'title' => $item->getBasename('.' . $item->getExtension()),
                     'created_at' => (new \DateTime())->setTimestamp($item->getCTime())->format('Y-m-d H:i:s'),
+                    'updated_at' => (new \DateTime())->setTimestamp($item->getMTime())->format('Y-m-d H:i:s'),
                     'width' => $width,
                     'height' => $height,
                     'content_type' => 'image/' . $item->getExtension()

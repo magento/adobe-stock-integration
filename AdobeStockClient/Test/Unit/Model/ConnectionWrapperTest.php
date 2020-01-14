@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Connection wrapper test.
+ * Test the Adobe Stock SDK wrapper
  */
 class ConnectionWrapperTest extends TestCase
 {

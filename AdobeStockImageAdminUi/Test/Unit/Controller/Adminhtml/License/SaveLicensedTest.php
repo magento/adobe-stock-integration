@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SaveLicensedTest
+ * Test for the controller saving previously licensed image
  */
 class SaveLicensedTest extends TestCase
 {
