@@ -27,7 +27,6 @@ define([
             confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
-            IslicenseRequestStarted: false,
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -37,19 +36,6 @@ define([
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }'
             }
-        },
-
-        /**
-         * Init observable variables
-         * @return {Object}
-         */
-        initObservable: function () {
-            this._super()
-                .observe([
-                    'isLicenseRequestStarted'
-                ]);
-
-            return this;
         },
 
         /**
@@ -295,11 +281,6 @@ define([
          * @param {Object} record
          */
         showLicenseConfirmation: function (record) {
-
-            if (this.isLicenseRequestStarted()) {
-                return;
-            }
-            this.isLicenseRequestStarted(true);
             $.ajax(
                 {
                     type: 'POST',
@@ -328,8 +309,6 @@ define([
                             cancelText = $.mage.__('Cancel'),
                             baseContent = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>';
 
-                        this.isLicenseRequestStarted(false);
-
                         if (canPurchase) {
                             this.getPrompt(
                                  {
@@ -341,9 +320,9 @@ define([
                                          * Confirm action
                                          */
                                         confirm: function (fileName) {
-                                            $.ajaxSetup({
-                                                async: true
-                                            });
+                                            // $.ajaxSetup({
+                                            //     async: true
+                                            // });
 
                                             if (typeof fileName === 'undefined') {
                                                 fileName = filePathArray[imageIndex]
