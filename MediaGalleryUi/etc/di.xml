@@ -10,7 +10,7 @@
     <type name="Magento\MediaGalleryUi\Model\ImagesIndexer">
         <arguments>
             <argument name="indexers" xsi:type="array">
-                <item name="mediaGallery" xsi:type="object">Magento\MediaGalleryUi\Model\AssetIndexer</item>
+                <item name="100" xsi:type="object">Magento\MediaGalleryUi\Model\AssetIndexer</item>
             </argument>
         </arguments>
     </type>

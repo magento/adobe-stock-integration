@@ -56,7 +56,7 @@ class UpdateAssetInGrid
                 'name' => preg_replace('/(^\\/)|(\\.[a-zA-Z])|$/i', '', $asset->getPath()),
                 'content_type' =>  strtoupper(str_replace("image/", "", $asset->getContentType())),
                 'source_icon_url' => $this->getIconUrl($asset),
-                'licensed' => $asset->getIsLicensed(),
+                'licensed' => $asset->getLicensed(),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight(),
                 'created_at' => $asset->getCreatedAt(),

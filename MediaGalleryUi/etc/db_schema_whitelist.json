@@ -7,7 +7,6 @@
             "preview_url": true,
             "content_type": true,
             "source_icon_url": true,
-            "licensed": true,
             "name": true,
             "width": true,
             "height": true,

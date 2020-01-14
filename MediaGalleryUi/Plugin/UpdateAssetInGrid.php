@@ -50,9 +50,8 @@ class UpdateAssetInGrid
     public function aroundExecute(SaveInterface $save, \Closure $proceed, AssetInterface $asset): int
     {
         $result = $proceed($asset);
-        $mediaAsset = $this->getByPath->execute($asset->getPath());
-        $mediaAsset->setData('is_licensed', $asset->getIsLicensed());
-        $this->service->execute($mediaAsset);
+        $asset = $this->getByPath->execute($asset->getPath());
+        $this->service->execute($asset);
         return $result;
     }
 }

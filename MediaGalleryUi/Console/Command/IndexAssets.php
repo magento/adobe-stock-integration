@@ -5,6 +5,8 @@
  */
 namespace Magento\MediaGalleryUi\Console\Command;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
 use Magento\MediaGalleryUi\Model\ImagesIndexer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,12 +23,19 @@ class IndexAssets extends Command
     protected $imagesIndexer;
 
     /**
+     * @var State $state
+     */
+    private $state;
+
+    /**
      * @param ImagesIndexer $imagesIndexer
      */
     public function __construct(
-        ImagesIndexer $imagesIndexer
+        ImagesIndexer $imagesIndexer,
+        State $state
     ) {
         $this->imagesIndexer = $imagesIndexer;
+        $this->state = $state;
         parent::__construct();
     }
 
@@ -44,6 +53,7 @@ class IndexAssets extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->state->setAreaCode(Area::AREA_ADMINHTML);
         $output->writeln('Uploading assets information from media directory to database...');
         $this->imagesIndexer->execute();
         $output->writeln('Completed assets indexing.');

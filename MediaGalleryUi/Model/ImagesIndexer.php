@@ -55,6 +55,7 @@ class ImagesIndexer
      */
     public function execute(): void
     {
+        ksort($this->indexers);
         $this->filesIndexer->execute(
             $this->mediaDirectory->getAbsolutePath(),
             $this->indexers,
