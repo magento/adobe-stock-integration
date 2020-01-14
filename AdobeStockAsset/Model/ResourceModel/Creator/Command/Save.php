@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command;
 
+use Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
@@ -14,7 +15,7 @@ use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
 /**
  * Command for saving the Adobe Stock asset creator object data
  */
-class Save
+class Save implements SaveInterface
 {
     private const ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME = 'adobe_stock_creator';
 
@@ -41,7 +42,7 @@ class Save
     }
 
     /**
-     * Save creator to database
+     * Save an Adobe Stock asset creator to database
      *
      * @param CreatorInterface $creator
      * @return void
