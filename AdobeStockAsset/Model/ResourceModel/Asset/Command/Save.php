@@ -7,16 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\SaveInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Command for saving the Adobe Stock asset object data
+ * Command is used to safe an Adobe Stock asset data to the data storage
  */
-class Save
+class Save implements SaveInterface
 {
     private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
 
@@ -53,7 +54,7 @@ class Save
     }
 
     /**
-     * Save asset action.
+     * Save an Adobe Stock asset.
      *
      * @param AssetInterface $asset
      *
