@@ -8,19 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface;
-use Magento\AdobeStockAssetApi\Model\Creator\Command\LoadByIdInterface;
-use Magento\AdobeStockAssetApi\Model\Creator\Command\DeleteByIdInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\Collection as CreatorCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Creator\CollectionFactory as CreatorCollectionFactory;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorSearchResultsInterfaceFactory;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\DeleteByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\LoadByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Centralize common data access functionality for the Adobe Stock creator. Uses commands as proxy for those operations.
@@ -136,9 +135,7 @@ class CreatorRepository implements CreatorRepositoryInterface
      */
     public function getById(int $id) : CreatorInterface
     {
-        $creator = $this->loadByIdCommand->execute($id);
-
-        return $creator;
+        return $this->loadByIdCommand->execute($id);
     }
 
     /**

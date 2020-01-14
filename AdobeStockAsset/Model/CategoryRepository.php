@@ -20,7 +20,6 @@ use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Centralize common data access functionality for the Adobe Stock category.
@@ -139,9 +138,7 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function getById(int $id) : CategoryInterface
     {
-        $category = $this->loadByIdCommand->execute($id);
-
-        return $category;
+        return $this->loadByIdCommand->execute($id);
     }
 
     /**

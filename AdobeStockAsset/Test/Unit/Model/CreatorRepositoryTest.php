@@ -149,30 +149,9 @@ class CreatorRepositoryTest extends TestCase
             ->method('execute')
             ->with($creatorId)
             ->willReturn($creatorMock);
-        $creatorMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($creatorId);
         $this->assertInstanceOf(
             CreatorInterface::class,
             $this->creatorRepository->getById($creatorId)
         );
-    }
-
-    /**
-     * Test getById scenario with failed execution.
-     */
-    public function testGetByIdWithException(): void
-    {
-        $creatorId = 1;
-        $creatorMock = $this->createMock(Creator::class);
-        $this->loadByIdCommandMock->expects($this->once())
-            ->method('execute')
-            ->with($creatorId)
-            ->willReturn($creatorMock);
-        $creatorMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(null);
-        $this->expectException(NoSuchEntityException::class);
-        $this->creatorRepository->getById($creatorId);
     }
 }

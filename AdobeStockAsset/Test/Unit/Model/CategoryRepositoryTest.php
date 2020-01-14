@@ -144,30 +144,9 @@ class CategoryRepositoryTest extends TestCase
             ->method('execute')
             ->with($categoryId)
             ->willReturn($categoryMock);
-        $categoryMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($categoryId);
         $this->assertInstanceOf(
             CategoryInterface::class,
             $this->categoryRepository->getById($categoryId)
         );
-    }
-
-    /**
-     * Test getById scenario with failed execution.
-     */
-    public function testGetByIdWithException(): void
-    {
-        $categoryId = 1;
-        $categoryMock = $this->createMock(Category::class);
-        $this->loadByIdCommandMock->expects($this->once())
-            ->method('execute')
-            ->with($categoryId)
-            ->willReturn($categoryMock);
-        $categoryMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(null);
-        $this->expectException(NoSuchEntityException::class);
-        $this->categoryRepository->getById($categoryId);
     }
 }
