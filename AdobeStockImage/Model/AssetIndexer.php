@@ -18,7 +18,7 @@ use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 use Magento\MediaGalleryUi\Model\UpdateAssetInGrid as Service;
 
 /**
- * Check is image licensed and save it to database
+ * Check is image licensed and save it to media gallery asset grid
  */
 class AssetIndexer implements IndexerInterface
 {
@@ -63,6 +63,10 @@ class AssetIndexer implements IndexerInterface
      *
      * @param GetByPathInterface $getByPathCommand
      * @param SaveInterface $saveCommand
+     * @param AssetRepository $assetRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Filesystem $filesystem
+     * @param Service $service
      */
     public function __construct(
         GetByPathInterface $getByPathCommand,
@@ -81,17 +85,18 @@ class AssetIndexer implements IndexerInterface
     }
 
     /**
-     * Check is image licensed and save it to database
+     * Check is image licensed and save it to media gallery asset grid
      *
      * @param \SplFileInfo $item
+     * @return void
      */
     public function execute(\SplFileInfo $item): void
     {
         $mediaAsset = $this->getByPathCommand->execute($this->getPathFormMediaAsset($item));
-        
+
         $this->searchCriteriaBuilder->addFilter('media_gallery_id', $mediaAsset->getId());
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        
+
         $assets = $this->assetRepository->getList($searchCriteria)->getItems();
 
         if (count($assets) > 0) {
@@ -102,12 +107,11 @@ class AssetIndexer implements IndexerInterface
         }
     }
 
-
     /**
      * Return correct path for file.
      *
      * @param \SplFileInfo $item
-     * @return string 
+     * @return string
      */
     private function getPathFormMediaAsset(\SplFileInfo $item): string
     {
