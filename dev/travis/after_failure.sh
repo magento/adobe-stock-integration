@@ -6,7 +6,7 @@
 if [ "$TEST_SUITE" == 'functional' ]; then
     pushd "${TRAVIS_BUILD_DIR}/magento2/dev/tests/acceptance/tests/_output"
     set +x
-    for screenshot in *.png;
+    for screenshot in *.png debug/*.png;
     do
         echo ""
         echo "Uploading ${screenshot}, image URL follows..."
