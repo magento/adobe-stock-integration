@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\LoadByIds;
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\LoadByIds;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\App\ResourceConnection;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 
 /**
  * Class is used for adding an additional assets attributes such as is_downloaded or path to the search results
@@ -29,11 +28,6 @@ class AppendAttributes
     private $attributeValueFactory;
 
     /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
      * @var LoadByIds
      */
     private $loadByIds;
@@ -44,18 +38,15 @@ class AppendAttributes
     private $getMediaGalleryAssetById;
 
     /**
-     * @param ResourceConnection $resourceConnection
      * @param AttributeValueFactory $attributeValueFactory
      * @param LoadByIds $loadByIds
      * @param GetByIdInterface $getMediaGalleryAssetById
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         AttributeValueFactory $attributeValueFactory,
         LoadByIds $loadByIds,
         GetByIdInterface $getMediaGalleryAssetById
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->loadByIds = $loadByIds;
         $this->getMediaGalleryAssetById = $getMediaGalleryAssetById;
@@ -65,6 +56,7 @@ class AppendAttributes
      * Add additional asset attributes
      *
      * @param SearchResultInterface $searchResult
+     *
      * @return SearchResultInterface
      */
     public function execute(SearchResultInterface $searchResult): SearchResultInterface
@@ -76,7 +68,7 @@ class AppendAttributes
         }
 
         $ids = array_map(
-            function ($item) {
+            static function ($item) {
                 return $item->getId();
             },
             $items
