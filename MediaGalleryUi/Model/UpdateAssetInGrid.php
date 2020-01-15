@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\View\Asset\Repository;
@@ -25,27 +27,38 @@ class UpdateAssetInGrid
     private $resource;
 
     /**
-     * @var Repository $assetRepository
+     * @var Repository
      */
     private $assetRepository;
 
     /**
-     * @var Emulation $appEmulation
+     * @var Emulation
      */
     private $appEmulation;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * Constructor
+     *
      * @param ResourceConnection $resource
      * @param Repository $assetRepository
+     * @param Emulation $emulation
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         ResourceConnection $resource,
         Repository $assetRepository,
-        Emulation $emulation
+        Emulation $emulation,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->resource = $resource;
         $this->assetRepository = $assetRepository;
         $this->appEmulation = $emulation;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -66,7 +79,6 @@ class UpdateAssetInGrid
                 'name' => basename($asset->getPath()),
                 'content_type' =>  strtoupper(str_replace("image/", "", $asset->getContentType())),
                 'source_icon_url' => $this->getIconUrl($asset),
-                'licensed' => $asset->getLicensed(),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight(),
                 'created_at' => $asset->getCreatedAt(),
@@ -96,16 +108,29 @@ class UpdateAssetInGrid
 
         $this->appEmulation->startEnvironmentEmulation(
             Store::DEFAULT_STORE_ID,
-            \Magento\Framework\App\Area::AREA_ADMINHTML,
+            Area::AREA_ADMINHTML,
             true
         );
 
         if (!empty($asset->getSource())) {
-            $iconUrl = $this->assetRepository->getUrlWithParams('Magento_MediaGalleryUi::images/Astock.png', ['_secure' => true]);
+            $iconUrl = $this->assetRepository->getUrlWithParams(
+                'Magento_MediaGalleryUi::images/Astock.png',
+                ['_secure' => $this->getIsSecure()]
+            );
         }
 
         $this->appEmulation->stopEnvironmentEmulation();
 
         return $iconUrl;
+    }
+
+    /**
+     * Ceheck if store use secure connection
+     *
+     * @return bool
+     */
+    private function getIsSecure(): bool
+    {
+        return $this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_ADMINHTML);
     }
 }

@@ -28,7 +28,10 @@ class IndexAssets extends Command
     private $state;
 
     /**
+     * Constructor
+     *
      * @param ImagesIndexer $imagesIndexer
+     * @param State $state
      */
     public function __construct(
         ImagesIndexer $imagesIndexer,

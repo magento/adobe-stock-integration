@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAsset\Model\AssetRepository;
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 use Magento\MediaGalleryUi\Model\UpdateAssetInGrid as Service;
 
@@ -29,17 +31,12 @@ class AssetIndexer implements IndexerInterface
     private $service;
 
     /**
-     * @var SaveInterface $saveCommand
-     */
-    private $saveCommand;
-
-    /**
-     * @var GetByPathInterface $getByPathCommand
+     * @var GetByPathInterface
      */
     private $getByPathCommand;
 
     /**
-     * @var AssetRepository $assetRepository
+     * @var AssetRepositoryInterface
      */
     private $assetRepository;
 
@@ -59,33 +56,45 @@ class AssetIndexer implements IndexerInterface
     private $mediaDirectory;
 
     /**
+     * @var File
+     */
+    private $driver;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
      * Constructor
      *
      * @param GetByPathInterface $getByPathCommand
-     * @param SaveInterface $saveCommand
-     * @param AssetRepository $assetRepository
+     * @param AssetRepositoryInterface $assetRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Filesystem $filesystem
      * @param Service $service
+     * @param File $driver
      */
     public function __construct(
         GetByPathInterface $getByPathCommand,
-        SaveInterface $saveCommand,
-        AssetRepository $assetRepository,
+        ResourceConnection $resource,
+        AssetRepositoryInterface $assetRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Filesystem $filesystem,
-        Service $service
+        Service $service,
+        File $driver
     ) {
         $this->getByPathCommand = $getByPathCommand;
-        $this->saveCommand = $saveCommand;
         $this->assetRepository = $assetRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filesystem = $filesystem;
         $this->service = $service;
+        $this->driver = $driver;
+        $this->resource = $resource;
     }
 
     /**
-     * Check is image licensed and save it to media gallery asset grid
+     * Check if image licensed and save it to media gallery asset grid
      *
      * @param \SplFileInfo $item
      * @return void
@@ -101,8 +110,13 @@ class AssetIndexer implements IndexerInterface
 
         if (count($assets) > 0) {
             foreach ($assets as $asset) {
-                $mediaAsset->setLicensed($asset->getIsLicensed());
-                $this->service->execute($mediaAsset);
+                $this->getConnection()->insertOnDuplicate(
+                    $this->resource->getTableName('media_gallery_asset_grid'),
+                    [
+                        'id' => $mediaAsset->getId(),
+                        'licensed' => $asset->getIsLicensed(),
+                    ]
+                );
             }
         }
     }
@@ -117,7 +131,7 @@ class AssetIndexer implements IndexerInterface
     {
         $path = $this->getMediaDirectory()->getRelativePath($item->getPath() . '/' . $item->getFileName());
 
-        if (dirname($path) === '.') {
+        if ($this->driver->getParentDirectory($path) === '.') {
             $path = '/' . $path;
         }
 
@@ -135,5 +149,15 @@ class AssetIndexer implements IndexerInterface
             $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
+    }
+
+    /**
+     * Retrieve the database adapter
+     *
+     * @return AdapterInterface
+     */
+    private function getConnection(): AdapterInterface
+    {
+        return $this->resource->getConnection();
     }
 }
