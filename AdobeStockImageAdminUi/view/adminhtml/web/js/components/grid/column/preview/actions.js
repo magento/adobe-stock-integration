@@ -182,6 +182,7 @@ define([
                     if (license || isLicensed) {
                         record['is_licensed'] = 1;
                         record['is_licensed_locally'] = 1;
+                        this.login().getUserQuota();
                     }
                     this.preview().displayedRecord(record);
                     this.source().reload({
