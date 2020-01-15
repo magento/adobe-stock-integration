@@ -71,13 +71,16 @@ class AssetIndexer implements IndexerInterface
     public function execute(\SplFileInfo $item): void
     {
         $file = $item->getPath() . '/' . $item->getFileName();
+        $relativePath = $this->getMediaDirectory()->getRelativePath($file);
 
+        $path = dirname($relativePath) === '.' ? '/' . $relativePath : $relativePath;
+        
         [$width, $height] = getimagesize($file);
 
         $asset = $this->assetFactory->create(
             [
                 'data' => [
-                    'path' => $this->getMediaDirectory()->getRelativePath($file),
+                    'path' => $path,
                     'title' => $item->getBasename('.' . $item->getExtension()),
                     'created_at' => (new \DateTime())->setTimestamp($item->getCTime())->format('Y-m-d H:i:s'),
                     'updated_at' => (new \DateTime())->setTimestamp($item->getMTime())->format('Y-m-d H:i:s'),

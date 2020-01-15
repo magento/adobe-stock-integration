@@ -53,7 +53,7 @@ class UpdateAssetInGrid
                 'directory' => dirname($asset->getPath()),
                 'thumbnail_url' => $asset->getPath(),
                 'preview_url' => $asset->getPath(),
-                'name' => preg_replace('/(^\\/)|(\\.[a-zA-Z])|$/i', '', $asset->getPath()),
+                'name' => basename($asset->getPath()),
                 'content_type' =>  strtoupper(str_replace("image/", "", $asset->getContentType())),
                 'source_icon_url' => $this->getIconUrl($asset),
                 'licensed' => $asset->getLicensed(),
