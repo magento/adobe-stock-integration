@@ -36,7 +36,7 @@
             <argument name="color" value="#000000"/>
         </actionGroup>
         <!--Verify that filter is applied -->
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="#000000"/>
         </actionGroup>
         <!--Enter a search term to nullify the default gallery/collection shown-->

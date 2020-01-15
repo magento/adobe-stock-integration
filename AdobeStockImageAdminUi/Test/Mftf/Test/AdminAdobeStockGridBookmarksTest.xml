@@ -29,7 +29,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Price"/>
         </actionGroup>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToStandard">

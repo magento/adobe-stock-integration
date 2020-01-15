@@ -38,7 +38,7 @@
         <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnSeeMore"/>
         <waitForPageLoad stepKey="waitForGridReload"/>
         <executeJS function="document.querySelector('.admin__data-grid-filters-current').scrollIntoView()" stepKey="scrollToAppliedFilters"/>
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="$getFileAttributeValue"/>
         </actionGroup>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
