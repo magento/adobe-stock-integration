@@ -53,7 +53,7 @@ class IndexAssets extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->state->setAreaCode(Area::AREA_CRONTAB);
+        $this->state->setAreaCode(Area::AREA_ADMINHTML);
         $output->writeln('Uploading assets information from media directory to database...');
         $this->imagesIndexer->execute();
         $output->writeln('Completed assets indexing.');

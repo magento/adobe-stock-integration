@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<div ifnot="$row().licensed" class="masonry-image-overlay media-gallery-image-overlay">
+<div if="$row().licensed === 0" class="masonry-image-overlay media-gallery-image-overlay">
     <span>Unlicensed<span/>
 </div>

@@ -87,19 +87,37 @@ class AssetIndexer implements IndexerInterface
      */
     public function execute(\SplFileInfo $item): void
     {
-        $relativePath = $this->getMediaDirectory()->getRelativePath($item->getPath() . '/' . $item->getFileName());
-        $path = dirname($relativePath) === '.' ? '/' . $relativePath : $relativePath;
-        $mediaAsset = $this->getByPathCommand->execute($path);
+        $mediaAsset = $this->getByPathCommand->execute($this->getPathFormMediaAsset($item));
+        
         $this->searchCriteriaBuilder->addFilter('media_gallery_id', $mediaAsset->getId());
         $searchCriteria = $this->searchCriteriaBuilder->create();
+        
         $assets = $this->assetRepository->getList($searchCriteria)->getItems();
 
         if (count($assets) > 0) {
             foreach ($assets as $asset) {
-                $mediaAsset->setLicensed(1);
+                $mediaAsset->setLicensed($asset->getIsLicensed());
                 $this->service->execute($mediaAsset);
             }
         }
+    }
+
+
+    /**
+     * Return correct path for file.
+     *
+     * @param \SplFileInfo $item
+     * @return string 
+     */
+    private function getPathFormMediaAsset(\SplFileInfo $item): string
+    {
+        $path = $this->getMediaDirectory()->getRelativePath($item->getPath() . '/' . $item->getFileName());
+
+        if (dirname($path) === '.') {
+            $path = '/' . $path;
+        }
+
+        return $path;
     }
 
     /**
