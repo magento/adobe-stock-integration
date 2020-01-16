@@ -109,17 +109,15 @@ class AssetIndexerTest extends TestCase
      * @dataProvider pathDataProvider
      * @param array $pathData
      * @param int $mediaAssetId
-     * @param array $assets
      * @return void
      */
-    public function testExecute(array $pathData, int $mediaAssetId, array $assets): void
+    public function testExecute(array $pathData, int $mediaAssetId): void
     {
         $fileInfoMock = $this->createMock(\SplFileInfo::class);
         $mediaAssetMock = $this->createMock(AssetInterface::class);
         $directoryReadMock = $this->createMock(ReadInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $searchResultMock = $this->createMock(AssetSearchResultsInterface::class);
-        $assets[] = $this->assetMock;
 
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryRead')
@@ -156,7 +154,7 @@ class AssetIndexerTest extends TestCase
             ->willReturn($searchResultMock);
         $searchResultMock->expects($this->once())
             ->method('getItems')
-            ->willReturn($assets);
+            ->willReturn([$this->assetMock]);
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->adapderMock);
@@ -185,8 +183,7 @@ class AssetIndexerTest extends TestCase
                         'expected_path' => 'theme/preview/image.png',
                         'is_slash' => true
                     ],
-                    1,
-                    []
+                    1
                 ],
                 [
                     [
@@ -195,8 +192,7 @@ class AssetIndexerTest extends TestCase
                         'expected_path' => '/image.png',
                         'is_slash' => false
                     ],
-                    1,
-                    []
+                    1
                 ],
                 [
                     [
@@ -205,8 +201,7 @@ class AssetIndexerTest extends TestCase
                         'expected_path' => 'new/folder/.theme/preview/image.png',
                         'is_slash' => true
                     ],
-                    1,
-                    []
+                    1
                 ]
             ];
     }

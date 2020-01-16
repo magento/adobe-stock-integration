@@ -17,18 +17,12 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
-use Magento\MediaGalleryUi\Model\UpdateAssetInGrid as Service;
 
 /**
  * Check is image licensed and save it to media gallery asset grid
  */
 class AssetIndexer implements IndexerInterface
 {
-
-    /**
-     * @var Service
-     */
-    private $service;
 
     /**
      * @var GetByPathInterface
@@ -73,7 +67,6 @@ class AssetIndexer implements IndexerInterface
      * @param AssetRepositoryInterface $assetRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Filesystem $filesystem
-     * @param Service $service
      * @param File $driver
      */
     public function __construct(
@@ -82,14 +75,12 @@ class AssetIndexer implements IndexerInterface
         AssetRepositoryInterface $assetRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Filesystem $filesystem,
-        Service $service,
         File $driver
     ) {
         $this->getByPathCommand = $getByPathCommand;
         $this->assetRepository = $assetRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filesystem = $filesystem;
-        $this->service = $service;
         $this->driver = $driver;
         $this->resource = $resource;
     }
@@ -102,7 +93,7 @@ class AssetIndexer implements IndexerInterface
      */
     public function execute(\SplFileInfo $item): void
     {
-        $mediaAsset = $this->getByPathCommand->execute($this->getPathFormMediaAsset($item));
+        $mediaAsset = $this->getByPathCommand->execute($this->getPathForMediaAsset($item));
 
         $this->searchCriteriaBuilder->addFilter('media_gallery_id', $mediaAsset->getId());
         $searchCriteria = $this->searchCriteriaBuilder->create();
@@ -126,7 +117,7 @@ class AssetIndexer implements IndexerInterface
      * @param \SplFileInfo $item
      * @return string
      */
-    private function getPathFormMediaAsset(\SplFileInfo $item): string
+    private function getPathForMediaAsset(\SplFileInfo $item): string
     {
         $path = $this->getMediaDirectory()->getRelativePath($item->getPath() . '/' . $item->getFileName());
 
