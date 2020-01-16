@@ -109,16 +109,14 @@ class AssetIndexer implements IndexerInterface
 
         $assets = $this->assetRepository->getList($searchCriteria)->getItems();
 
-        if (count($assets) > 0) {
-            foreach ($assets as $asset) {
-                $this->getConnection()->insertOnDuplicate(
-                    $this->resource->getTableName('media_gallery_asset_grid'),
-                    [
-                        'id' => $mediaAsset->getId(),
-                        'licensed' => $asset->getIsLicensed(),
-                    ]
-                );
-            }
+        foreach ($assets as $asset) {
+            $this->getConnection()->insertOnDuplicate(
+                $this->resource->getTableName('media_gallery_asset_grid'),
+                [
+                    'id' => $mediaAsset->getId(),
+                    'licensed' => $asset->getIsLicensed(),
+                ]
+            );
         }
     }
 

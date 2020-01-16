@@ -42,26 +42,10 @@ class UnlicensedOverlay extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->isLicensed($item) ? '' : 'Unlicensed';
+                $item[$this->getData('name')] = (isset($item['licensed']) &&  !$item['licensed']) ? 'Unlicensed' : '';
             }
         }
 
         return $dataSource;
-    }
-
-    /**
-     * Check if asset licensed
-     *
-     * @return bool
-     */
-    private function isLicensed(array $item): bool
-    {
-        $isLicensed = true;
-
-        if (isset($item['licensed']) &&  !$item['licensed']) {
-            $isLicensed = false;
-        }
-
-        return $isLicensed;
     }
 }
