@@ -69,6 +69,7 @@ class AssetIndexer implements IndexerInterface
      * Constructor
      *
      * @param GetByPathInterface $getByPathCommand
+     * @param ResourceConnection $resource
      * @param AssetRepositoryInterface $assetRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Filesystem $filesystem
