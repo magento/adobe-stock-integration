@@ -112,6 +112,7 @@
             <settings>
                 <label translate="true">Thumbnail Image</label>
                 <visible>true</visible>
+                <bodyTmpl>Magento_MediaGalleryUi/grid/columns/image</bodyTmpl>
                 <sortable>false</sortable>
             </settings>
         </column>

@@ -12,7 +12,7 @@
         <element name="licenseAndSave" type="button" selector="//button[@class='action-default primary']//span[text()='License and Save']"/>
         <element name="save" type="block" selector="//button[@class='action-secondary']//span[text()='Save Preview']"/>
         <element name="openInMediaGallery" type="block" selector="//button[@class='action-secondary']//span[text()='Open in Media Gallery']"/>
-        <element name="saveLicensedImage" type="button" selector="//div[@class='actions']/descendant::span[text()='Save']"/>
+        <element name="saveLicensedImage" type="button" selector="//button[@class='action-default primary']//span[text()='Save Licensed']"/>
         <element name="image" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="navigation" type="button" selector="//div[@class='masonry-image-preview']//div[contains(@class, 'action-buttons')]/button[@class='action-{{type}}']" parameterized="true"/>
         <element name="attribute" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='{{type}}']/parent::div//div[@class='value']//span" parameterized="true"/>

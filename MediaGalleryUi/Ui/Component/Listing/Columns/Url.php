@@ -10,8 +10,8 @@ namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Overlay column

@@ -5,13 +5,17 @@
             "directory": true,
             "thumbnail_url": true,
             "preview_url": true,
+            "content_type": true,
+            "source_icon_url": true,
+            "name": true,
             "width": true,
             "height": true,
             "created_at": true,
             "updated_at": true
         },
         "index": {
-            "MEDIA_GALLERY_ID": true
+            "MEDIA_GALLERY_ID": true,
+            "MEDIA_GALLERY_ASSET_GRID_ID": true
         },
         "constraint": {
             "PRIMARY": true

@@ -10,11 +10,10 @@ namespace Magento\MediaGalleryUi\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\MediaGalleryUi\Model\FilesIndexer;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 
 /**
- * ImagesProvider is used to read the media files across the media directory provided as a path in the method argument.
+ * ImagesIndexer is used to read the media files across the media directory provided as a path in the method argument.
  */
 class ImagesIndexer
 {
