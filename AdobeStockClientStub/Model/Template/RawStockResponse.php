@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestModuleAdobeStockClient\Model\Client;
+namespace Magento\AdobeStockClientStub\Model\Template;
 
 /**
- * Represents the raw stock data response from the Adobe Stock service gotten with the Adobe Stock PHP SDK
+ * Represents the stub raw stock data response from the Adobe Stock service
  */
 class RawStockResponse
 {

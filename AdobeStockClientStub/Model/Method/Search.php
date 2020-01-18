@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestModuleAdobeStockClient\Model\Client;
+namespace Magento\AdobeStockClientStub\Model\Method;
 
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Response\SearchFiles;
@@ -13,9 +13,10 @@ use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use Magento\AdobeStockClient\Model\StockFileToDocument;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\AdobeStockClientStub\Model\Template\RawStockResponse;
 
 /**
- * The test stub class for the Adobe Stock client search method
+ * Provides the stub result for the search method of the AdobeStockClient
  */
 class Search
 {
@@ -46,12 +47,13 @@ class Search
         RawStockResponse $rawStockResponse,
         StockFileToDocument $stockFileToDocument
     ) {
+        $this->searchResultFactory = $searchResultFactory;
         $this->rawStockResponse = $rawStockResponse;
         $this->stockFileToDocument = $stockFileToDocument;
     }
 
     /**
-     * Return the Adobe Stock service stub reponse for default request
+     * Return the Adobe Stock client search result stub data
      *
      * @return SearchResultInterface
      */

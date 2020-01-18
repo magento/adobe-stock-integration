@@ -10,6 +10,7 @@
         "magento/module-adobe-stock-image-api": "*",
         "magento/module-adobe-stock-client": "*",
         "magento/module-adobe-stock-client-api": "*",
+        "magento/module-adobe-stock-client-stub": "*",
         "magento/module-adobe-stock-admin-ui": "*",
         "magento/module-adobe-ims": "*",
         "magento/module-adobe-ims-api": "*",

@@ -5,6 +5,7 @@
 @import AdobeStockAssetApi
 @import AdobeStockClient
 @import AdobeStockClientApi
+@import AdobeStockClientStub
 @import AdobeStockImage
 @import AdobeStockImageAdminUi
 @import AdobeStockImageApi

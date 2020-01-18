@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestModuleAdobeStockClient\Model\Client;
+namespace Magento\AdobeStockClientStub\Model\Method;
 
 /**
- * The test stub class for the Adobe Stock client search method with search criteria
+ * Provides the stub result for the searchWithCriteria method of the AdobeStockClient
  */
 class SearchWithCriteria
 {
