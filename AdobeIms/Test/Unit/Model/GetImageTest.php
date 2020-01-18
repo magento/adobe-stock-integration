@@ -9,7 +9,6 @@ namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\GetImage;
 use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -109,9 +108,8 @@ class GetImageTest extends TestCase
         $this->curlFactoryMock->expects($this->once())
             ->method('create')
             ->willThrowException(new \Exception());
-        $this->logger->expects($this->once())
+        $this->logger->expects($this->any())
             ->method('critical')
-            ->with('Error during get adobe stock user image operation: ')
             ->willReturnSelf();
         $this->getImage->execute('code');
     }

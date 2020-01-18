@@ -28,7 +28,6 @@
         </after>
         <actionGroup ref="AdminOpenAdobeStockConfigActionGroup" stepKey="navigateToAdobeStockConfigurationFieldset"/>
         <actionGroup ref="AdminAssertAdobeStockConfigFieldsActionGroup" stepKey="checkAdobeStockConfigurationFields"/>
-        <actionGroup ref="AdminAssertAdobeStockConfigRequiredFieldsActionGroup" stepKey="testAdobeStockConfigRequiredFields"/>
         <actionGroup ref="AdminAssertAdobeStockConnectionTestActionGroup" stepKey="testConnection"/>
     </test>
 </tests>

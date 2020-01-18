@@ -91,6 +91,11 @@ class Client implements ClientInterface
     private $authorized;
 
     /**
+     * @var array
+     */
+    private $searchResultFields;
+
+    /**
      * @param ConfigInterface $config
      * @param ConnectionWrapperFactory $connectionFactory
      * @param SearchResultFactory $searchResultFactory
@@ -102,6 +107,7 @@ class Client implements ClientInterface
      * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param StockFileToDocument $stockFileToDocument
      * @param LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
+     * @param array $searchResultFields
      */
     public function __construct(
         ConfigInterface $config,
@@ -114,7 +120,8 @@ class Client implements ClientInterface
         UserAuthorizedInterface $authorized,
         UserQuotaInterfaceFactory $userQuotaFactory,
         StockFileToDocument $stockFileToDocument,
-        LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
+        LicenseConfirmationInterfaceFactory $licenseConfirmationFactory,
+        array $searchResultFields
     ) {
         $this->authorized = $authorized;
         $this->config = $config;
@@ -127,6 +134,7 @@ class Client implements ClientInterface
         $this->userQuotaFactory = $userQuotaFactory;
         $this->stockFileToDocument = $stockFileToDocument;
         $this->licenseConfirmationFactory = $licenseConfirmationFactory;
+        $this->searchResultFields = $searchResultFields;
     }
 
     /**
@@ -170,7 +178,7 @@ class Client implements ClientInterface
         /** @var LicenseRequest $licenseRequest */
         $licenseRequest = $this->licenseRequestFactory->create();
         $licenseRequest->setContentId($contentId)
-            ->setLocale($this->config->getLocale())
+            ->setLocale($this->localeResolver->getLocale())
             ->setLicenseState('STANDARD');
 
         return $licenseRequest;
@@ -208,8 +216,9 @@ class Client implements ClientInterface
      */
     public function getLicenseConfirmation(int $contentId): LicenseConfirmationInterface
     {
-        $message = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getMessage();
-        $canPurchase = $this->getLicenseInfo($contentId)->getPurchaseOptions()->getPurchaseState() == 'possible';
+        $purchaseOptions = $this->getLicenseInfo($contentId)->getPurchaseOptions();
+        $message = $purchaseOptions->getMessage();
+        $canPurchase = $purchaseOptions->getPurchaseState() == 'possible';
         /** @var LicenseConfirmationInterface $userQuota */
         $userQuota = $this->licenseConfirmationFactory->create();
         $userQuota->setMessage($message);
@@ -262,10 +271,7 @@ class Client implements ClientInterface
     {
         $resultsColumns = Constants::getResultColumns();
         $resultColumnArray = [];
-        foreach ($this->config->getSearchResultFields() as $field) {
-            if ($field === 'IS_LICENSED' && !$this->authorized->execute()) {
-                continue;
-            }
+        foreach ($this->searchResultFields as $field) {
             if (!isset($resultsColumns[$field])) {
                 $message = __('Cannot retrieve the field %1. It\'s not available in Adobe Stock SDK', $field);
                 $this->logger->critical($message);

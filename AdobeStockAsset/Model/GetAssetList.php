@@ -18,7 +18,7 @@ use Magento\Framework\UrlInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetAssetList
+ * Service for getting asset list filtered by search criteria
  */
 class GetAssetList implements GetAssetListInterface
 {
@@ -80,7 +80,7 @@ class GetAssetList implements GetAssetListInterface
                 )
             );
         } catch (\Exception $exception) {
-            $message = __('Get asset list action failed.');
+            $message = __('Cannot retrieve assets from Adobe Stock.');
             $this->log->critical($exception);
             throw new LocalizedException($message, $exception, $exception->getCode());
         }

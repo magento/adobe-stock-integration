@@ -24,30 +24,22 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForInterior">
-            <argument name="query" value="Interior"/>
+            <argument name="query" value="273672939"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
-        <actionGroup ref="AdminImagePreviewKeywordSearchActionGroup" stepKey="searchByImageKeyword">
-            <argument name="keyword" value="interior"/>
+        <executeJS function="document.querySelector('.keywords').scrollIntoView()" stepKey="scrollToKeywords"/>
+        <actionGroup ref="AdminImagePreviewKeywordSearchActionGroup" stepKey="clickAccessoryKeyword">
+            <argument name="keyword" value="accessory"/>
         </actionGroup>
 
         <!-- verify that clicking on keyword initialize new search -->
         <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="assertKeywordFilterApplied">
-            <argument name="resultValue" value="interior"/>
-        </actionGroup>
-
-        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="clickOnImage"/>
-        <click selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="clickOnViewAlKeywords"/>
-        <actionGroup ref="AdminImagePreviewKeywordSearchActionGroup" stepKey="searchByKeyword">
-            <argument name="keyword" value="window"/>
-        </actionGroup>
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="assertSearchFilterForNewSearch">
-            <argument name="resultValue" value="window"/>
+            <argument name="resultValue" value="accessory"/>
         </actionGroup>
     </test>
 </tests>

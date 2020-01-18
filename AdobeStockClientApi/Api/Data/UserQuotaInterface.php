@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClientApi\Api\Data;
 
 /**
- * Quota of adobe stock user account
- *
+ * Quota of an Adobe Stock user account
  * @api
  */
 interface UserQuotaInterface

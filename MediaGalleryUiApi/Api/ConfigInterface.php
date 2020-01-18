@@ -6,16 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAssetApi\Api;
+namespace Magento\MediaGalleryUiApi\Api;
 
 /**
- * Class Config
+ * Class responsible to provide API access to system configuration related to the Media Gallery
  * @api
  */
 interface ConfigInterface
 {
     /**
-     * Is integration enabled
+     * Check if masonry grid UI is enabled for Magento media gallery
      *
      * @return bool
      */

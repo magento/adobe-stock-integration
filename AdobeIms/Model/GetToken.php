@@ -8,16 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
-use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
+use Magento\Framework\UrlInterface;
 
 /**
- * Class Config
+ * Represent the get user token functionality
  */
 class GetToken implements GetTokenInterface
 {
@@ -42,22 +43,30 @@ class GetToken implements GetTokenInterface
     private $tokenResponseFactory;
 
     /**
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
      * GetToken constructor.
      * @param ConfigInterface $config
      * @param CurlFactory $curlFactory
      * @param Json $json
      * @param TokenResponseInterfaceFactory $tokenResponseFactory
+     * @param UrlInterface $urlInterface
      */
     public function __construct(
         ConfigInterface $config,
         CurlFactory $curlFactory,
         Json $json,
-        TokenResponseInterfaceFactory $tokenResponseFactory
+        TokenResponseInterfaceFactory $tokenResponseFactory,
+        UrlInterface $urlInterface
     ) {
         $this->config = $config;
         $this->curlFactory = $curlFactory;
         $this->json = $json;
         $this->tokenResponseFactory = $tokenResponseFactory;
+        $this->url = $urlInterface;
     }
 
     /**
@@ -87,7 +96,10 @@ class GetToken implements GetTokenInterface
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(
-                __('Authentication is failing. Error code: %1', $tokenResponse->getError())
+                __(
+                    'Login failed. Please check if <a href="%1">the Secret Key</a> is set correctly and try again.',
+                    $this->url->getUrl('adminhtml/system_config/edit/section/system')
+                )
             );
         }
 

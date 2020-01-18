@@ -26,36 +26,35 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters1"/>
-        <actionGroup ref="AdminAdobeStockApplyIsolatedFilterActionGroup" stepKey="applyIsolatedFilter"/>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AdminApplyColorFilterValue" stepKey="userChoseAndApplyColorFilter">
-            <argument name="color" value="#000000"/>
-        </actionGroup>
-        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters2"/>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setOrientationFilterToHorizontal">
             <argument name="type" value="Horizontal"/>
             <argument name="filter" value="{{AdobeStockFilterSection.orientationFilter}}"/>
             <argument name="filterOption" value="orientation_filter"/>
         </actionGroup>
-        <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters3"/>
-        <actionGroup ref="AdminUserApplySafeSearchFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
         <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
-        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
-        <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
+
+        <click selector="{{AdobeStockImagePreviewSection.savePreview}}" stepKey="clickSavePreview"/>
+        <waitForPageLoad stepKey="waitForPromptModal" />
+        <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
+        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
+        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
             <argument name="pageNumber" value="2"/>
         </actionGroup>
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter1">
-            <argument name="resultValue" value="Isolated Only"/>
+        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+            <argument name="resultValue" value="Horizontal"/>
         </actionGroup>
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter2">
-            <argument name="resultValue" value="#000000"/>
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
+            <argument name="name" value="{$grabImageFileName}"/>
         </actionGroup>
     </test>
 </tests>

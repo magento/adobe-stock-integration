@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
- * SaveLicensedImageInterface
+ * Download the image from Adobe Stock API that is already licensed
  *
  * @api
  */
@@ -27,5 +27,5 @@ interface SaveLicensedImageInterface
      * @throws LocalizedException
      * @throws NotFoundException
      */
-    public function execute(int $mediaId, string $destinationPath): void;
+    public function execute(int $mediaId, string $destinationPath = null): void;
 }

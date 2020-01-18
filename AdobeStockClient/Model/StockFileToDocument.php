@@ -19,7 +19,7 @@ use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class StockFileToDocument
+ * Used for converting the stock document to the search document object
  */
 class StockFileToDocument
 {
@@ -109,9 +109,8 @@ class StockFileToDocument
      */
     private function createAttributes(string $idFieldName, array $itemData): array
     {
+        $attributes = [];
         try {
-            $attributes = [];
-
             $idFieldNameAttribute = $this->attributeValueFactory->create();
             $idFieldNameAttribute->setAttributeCode('id_field_name');
             $idFieldNameAttribute->setValue($idFieldName);
@@ -130,7 +129,6 @@ class StockFileToDocument
                 $attribute->setValue($value);
                 $attributes[$key] = $attribute;
             }
-            return $attributes;
         } catch (Exception $exception) {
             $message = __(
                 'Create attributes process failed: %error_message',
@@ -138,6 +136,7 @@ class StockFileToDocument
             );
             $this->processException($message, $exception);
         }
+        return $attributes;
     }
 
     /**

@@ -5,15 +5,16 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockSavedLicensedImageLocateTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
-            <stories value="User locates licensed and uploaded image inside Media Gallery"/>
-            <title value="Adobe Stock Saved Licensed Image Locate"/>
+            <stories value="[Story #24] User locates licensed and uploaded image inside Media Gallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/312"/>
+            <title value="User locates licensed and uploaded image inside Media Gallery"/>
             <description value="User can locate previously licensed and saved image in Media Gallery"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579444"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_license"/>
             <group value="adobe_stock_integration"/>
@@ -32,7 +33,7 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertAdobeUserLoggedOut"/>
-            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">

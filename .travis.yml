@@ -1,6 +1,8 @@
 branches:
   only:
-    - develop
+    - 1.0-develop
+    - 1.1-develop
+    - staging
 sudo: required
 dist: trusty
 group: edge
@@ -20,7 +22,6 @@ services:
   - mysql
 language: php
 php:
-  - '7.1'
   - '7.2'
   - '7.3'
 env:
@@ -45,7 +46,7 @@ env:
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
     - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
+    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
 matrix:
   fast_finish: true
 jobs:
@@ -66,7 +67,7 @@ jobs:
     - php: '7.1'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
     - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_license
+      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
     - php: '7.2'
       env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
     - php: '7.2'
@@ -93,6 +94,7 @@ before_install:
 install:
   - mkdir -p magento2/app/code/Magento
   - mv Adobe* magento2/app/code/Magento/.
+  - mv MediaGallery* magento2/app/code/Magento/.
   - pushd magento2
   - composer install
   - composer require astock/stock-api-libphp
@@ -100,13 +102,10 @@ install:
 before_script:
   - bash -x dev/travis/before_script.sh
 script:
-  - pushd magento2
-  - if [ $TEST_SUITE == 'unit' ]; then vendor/bin/phpunit --configuration dev/tests/unit/phpunit.xml; fi
-  - if [ $TEST_SUITE == 'phpstan' ]; then composer require --dev phpstan/phpstan fooman/phpstan-magento2-magic-methods && vendor/bin/phpstan analyse -l 2 app/code/Magento/Adobe* -a dev/tests/api-functional/framework/autoload.php ; fi
-  - if [ $TEST_SUITE == 'static' ]; then vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/Magento/Adobe*; fi
-  - if [ $TEST_SUITE == 'static' ]; then ! find app/code/Magento/Adobe*/ -type f -name "*.php" -exec grep -L strict_types=1 {} + | grep Adobe; fi
-  - if [ $TEST_SUITE == 'functional' ]; then echo "Running MFTF suite ${MFTF_SUITE}" && vendor/bin/mftf run:group $MFTF_SUITE --remove -vvv; fi
+  - bash -x dev/travis/script.sh
 after_success:
-  - if [ $TEST_SUITE == 'unit' ]; then cd ../ && travis_retry coveralls; fi
+  - if [ $TEST_SUITE == 'unit' ]; then travis_retry coveralls; fi
 after_failure:
-  - if [ $TEST_SUITE == 'functional' ]; then cat "${HOME}/selenium.log"; cat "${TRAVIS_BUILD_DIR}/chromedriver.log"; cat "${TRAVIS_BUILD_DIR}/magento2/var/log/debug.log"; cat "${TRAVIS_BUILD_DIR}/magento2/var/log/system.log"; ls -al "${TRAVIS_BUILD_DIR}/magento2/dev/tests/acceptance/tests/_output";fi
+  - bash -x dev/travis/after_failure.sh
+after_script:
+    - bash -x dev/travis/after_script.sh

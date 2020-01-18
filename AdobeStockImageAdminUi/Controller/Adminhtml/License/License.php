@@ -13,7 +13,7 @@ use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -69,36 +69,40 @@ class License extends Action
      */
     public function execute()
     {
+        $isLicensed = false;
+
         try {
             $params = $this->getRequest()->getParams();
             $contentId = (int) $params['media_id'];
 
             $this->client->licenseImage($contentId);
 
+            $isLicensed = true;
+
             $this->saveLicensedImage->execute(
                 $contentId,
-                (string) $params['destination_path']
+                (string) $params['destination_path'] ?? null
             );
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully licensed and downloaded the image.'),
+                'message' => __('The image was licensed and saved successfully.'),
             ];
-
-        } catch (NotFoundException $exception) {
+        } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
             $responseContent = [
                 'success' => false,
-                'message' => __('Image not found. Could not be saved.'),
+                'is_licensed' => $isLicensed,
+                'message' => $exception->getMessage()
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during image license and download: %1', $exception->getMessage());
-            $this->logger->critical($logMessage);
+            $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while image license and download. Contact support.'),
+                'is_licensed' => $isLicensed,
+                'message' => __('An error occurred on attempt to license and save the image.'),
             ];
         }
 

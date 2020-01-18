@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @var $block Magento\AdobeStockImageAdminUi\Block\Adminhtml\Panel
- */
+// phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
+
 ?>
 
-<div id="adobe-stock-images-search-modal" style="display: none;">
+<div id="adobe-stock-images-search-modal" class="adobe-search-images-modal" style="display: none;">
     <div class="adobe-stock-images-search-modal-content">
         <?= $block->getChildHtml(); ?>
     </div>
@@ -22,11 +21,12 @@
                 "components": {
                     "stock_panel": {
                         "component": "Magento_AdobeStockImageAdminUi/js/panel",
-                        "containerId": "#adobe-stock-images-search-modal",
+                        "containerId": ".adobe-search-images-modal",
                         "masonryComponentPath": "adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns"
                     }
                 }
-            }
+            },
+            "Magento_AdobeStockImageAdminUi/js/validation/validate-image-name": {}
         }
     }
 </script>

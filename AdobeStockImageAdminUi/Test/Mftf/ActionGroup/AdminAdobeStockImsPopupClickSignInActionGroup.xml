@@ -10,12 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockImsPopupClickSignInActionGroup">
         <click selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="clickOnSignInButton"/>
+        <makeScreenshot stepKey="postIMSSignInClickScreenshot" userInput="SignInClick"/>
         <switchToNextTab stepKey="switchToTab"/>
-        <conditionalClick
-            selector="{{AdobeStockSection.adobeSkipAddPhoneNumber}}"
-            dependentSelector="{{AdobeStockSection.adobeSkipAddPhoneNumber}}"
-            visible="true"
-            stepKey="skipAddPhoneIfAsked"/>
         <waitForPageLoad stepKey="waitForGridToReload" time="20"/>
     </actionGroup>
 </actionGroups>

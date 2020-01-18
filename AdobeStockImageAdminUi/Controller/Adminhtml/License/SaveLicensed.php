@@ -10,10 +10,9 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
 use Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface;
 use Magento\Backend\App\Action;
-use Magento\Framework\Api\AttributeInterfaceFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -66,7 +65,7 @@ class SaveLicensed extends Action
 
             $this->saveLicensedImage->execute(
                 (int) $params['media_id'],
-                (string) $params['destination_path']
+                (string) $params['destination_path'] ?? null
             );
 
             $responseCode = self::HTTP_OK;
@@ -74,20 +73,18 @@ class SaveLicensed extends Action
                 'success' => true,
                 'message' => __('You have successfully downloaded the licensed image.'),
             ];
-
-        } catch (NotFoundException $exception) {
+        } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
             $responseContent = [
                 'success' => false,
-                'message' => __('Image not found. Could not be saved.'),
+                'message' => $exception->getMessage(),
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during image download: %1', $exception->getMessage());
-            $this->logger->critical($logMessage);
+            $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred while licensed image download. Contact support.'),
+                'message' => __('An error occurred on attempt to save image.'),
             ];
         }
 

@@ -9,28 +9,23 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model;
 
 use Magento\AdobeStockClientApi\Api\ConfigInterface;
-use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class Config
+ * Used for managing the Adobe Stock integration config settings
  */
 class Config implements ConfigInterface
 {
     private const XML_PATH_ENVIRONMENT = 'adobe_stock/integration/environment';
     private const XML_PATH_PRODUCT_NAME = 'adobe_stock/integration/product_name';
+    private const XML_PATH_FILES_URL = 'adobe_stock/integration/files_url';
 
     /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
-
-    /**
-     * @var array
-     */
-    private $searchResultFields;
 
     /**
      * @var UrlInterface
@@ -48,57 +43,38 @@ class Config implements ConfigInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      * @param ProductMetadataInterface $metadataInterface
-     * @param array $searchResultFields
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
-        ProductMetadataInterface $metadataInterface,
-        array $searchResultFields = []
+        ProductMetadataInterface $metadataInterface
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
-        $this->searchResultFields = $searchResultFields;
         $this->metadataInterface = $metadataInterface;
     }
 
     /**
-     * Environment configuration
-     *
-     * @return string|null
+     * @inheritdoc
      */
-    public function getTargetEnvironment() : ?string
+    public function getTargetEnvironment(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_ENVIRONMENT);
     }
 
     /**
-     * Product name
-     *
-     * @return string|null
+     * @inheritdoc
      */
-    public function getProductName() : ?string
+    public function getProductName(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_PRODUCT_NAME) . '/' . $this->metadataInterface->getVersion();
     }
 
     /**
-     * Search result configuration
-     *
-     * @return array|string[]
+     * @inheritdoc
      */
-    public function getSearchResultFields(): array
+    public function getFilesUrl(): string
     {
-        return $this->searchResultFields;
-    }
-
-    /**
-     * Retrieve token URL
-     *
-     * @return string
-     */
-    public function getLocale(): string
-    {
-        return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
+        return $this->scopeConfig->getValue(self::XML_PATH_FILES_URL);
     }
 }

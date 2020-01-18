@@ -12,15 +12,15 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockImage\Model\SaveLicensedImage;
-use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\SaveLicensed;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class SaveLicensedImageTest
+ * Test saving the Adobe Stock Image that was licensed on Adobe Stock previously
  */
 class SaveLicensedImageTest extends TestCase
 {
@@ -77,6 +77,10 @@ class SaveLicensedImageTest extends TestCase
         $mediaId = 283415387;
         $destinationPath = 'destination_path';
         $imageUrl = 'http://image_url.jpg';
+
+        $this->documentMock->expects($this->once())
+            ->method('getCustomAttribute')
+            ->willReturn(new DataObject(['value' => '']));
         $this->getAssetByIdMock->expects($this->once())
             ->method('execute')
             ->with($mediaId)

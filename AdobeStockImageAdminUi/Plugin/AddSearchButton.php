@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Plugin;
 
-use Magento\AdobeStockAssetApi\Api\ConfigInterface;
+use Magento\AdobeStockImageAdminUi\Model\IsAdobeStockIntegrationEnabled;
 use Magento\Backend\Block\Widget\Container;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\LayoutInterface;
 
 /**
- * Plugin for media gallery block adding button to the toolbar.
+ * Plugin which adds an Adobe Stock search button to the media пфддукн tab
  */
 class AddSearchButton
 {
@@ -29,18 +29,21 @@ class AddSearchButton
     private $authorization;
 
     /**
-     * @var ConfigInterface
+     * @var IsAdobeStockIntegrationEnabled
      */
-    private $config;
+    private $isAdobeStockIntegrationEnabled;
 
     /**
      * AddSearchButton constructor.
-     * @param ConfigInterface $config
+     *
+     * @param IsAdobeStockIntegrationEnabled $isAdobeStockIntegrationEnabled
      * @param AuthorizationInterface $authorization
      */
-    public function __construct(ConfigInterface $config, AuthorizationInterface $authorization)
-    {
-        $this->config = $config;
+    public function __construct(
+        IsAdobeStockIntegrationEnabled $isAdobeStockIntegrationEnabled,
+        AuthorizationInterface $authorization
+    ) {
+        $this->isAdobeStockIntegrationEnabled = $isAdobeStockIntegrationEnabled;
         $this->authorization = $authorization;
     }
 
@@ -54,14 +57,16 @@ class AddSearchButton
      */
     public function beforeSetLayout(Container $subject, LayoutInterface $layout): void
     {
-        if ($this->authorization->isAllowed(self::ACL_SAVE_PREVIEW_IMAGES) && $this->config->isEnabled()) {
+        if ($this->authorization->isAllowed(self::ACL_SAVE_PREVIEW_IMAGES)
+            && $this->isAdobeStockIntegrationEnabled->execute()
+        ) {
             $subject->addButton(
                 'search_adobe_stock',
                 [
                     'class' => 'action-secondary',
                     'label' => __('Search Adobe Stock'),
                     'type' => 'button',
-                    'onclick' => 'jQuery("#adobe-stock-images-search-modal").trigger("openModal");'
+                    'onclick' => 'jQuery(".adobe-search-images-modal").trigger("openModal");'
                 ],
                 0,
                 0,

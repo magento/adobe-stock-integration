@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Category\Command;
 
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
+use Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 
 /**
- * Save category.
+ * Command is used to save an Adobe Stock asset category data
  */
-class Save
+class Save implements SaveInterface
 {
     private const ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME = 'adobe_stock_category';
 

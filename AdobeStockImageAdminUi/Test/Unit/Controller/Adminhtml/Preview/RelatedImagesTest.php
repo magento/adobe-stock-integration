@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * RelatedImages test.
+ * Test for controller providing Adobe Stock asset related images
  */
 class RelatedImagesTest extends TestCase
 {
@@ -135,7 +135,7 @@ class RelatedImagesTest extends TestCase
     {
         $result = [
             'success' => false,
-            'message' => __('An error occurred while getting related images. Contact support.'),
+            'message' => 'An error occurred on attempt to fetch related images.',
         ];
         $this->getRelatedImages->expects($this->once())
             ->method('execute')

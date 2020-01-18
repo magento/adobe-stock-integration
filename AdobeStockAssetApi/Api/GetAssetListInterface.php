@@ -12,8 +12,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
- * GetAssetListInterface
- *
+ * Service for getting asset list filtered by search criteria
  * @api
  */
 interface GetAssetListInterface
