@@ -12,6 +12,8 @@ namespace Magento\AdobeStockClientStub\Model\Method;
  */
 class TestConnection
 {
+    private const VALID_API_KEY = 'valid key';
+
     /**
      * Return the stub result of the test connection method
      *
@@ -21,6 +23,6 @@ class TestConnection
      */
     public function execute(string $key): bool
     {
-        //@TODO implement the test connection stub logic
+        return self::VALID_API_KEY === $key;
     }
 }
