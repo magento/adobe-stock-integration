@@ -6,62 +6,69 @@
 & when (@media-common = true) {
 
     .media_gallery-index-index {
+        .masonry-image-grid
+        {
+            width: 80%;
+            float: right;
+            .media-gallery-image-details {
+                list-style: none;
+                margin-bottom: 0;
 
-        .media-gallery-image-details {
-            list-style: none;
-            margin-bottom: 0px;
+                .name {
+                    font-weight: bold;
+                    font-size: 15px;
+                }
 
-            .name {
-                font-weight: bold;
-                font-size: 15px;
-                font-weight: bold;
+                .type {
+                    display: inline-block;
+                    font-size: 12px;
+                }
+
+                .dimensions {
+                    display: inline-block;
+                }
+
+                .source {
+                    display: inline-block;
+                }
             }
 
-            .type {
-                display: inline-block;
-                font-size: 12px;
+            .media-gallery-image {
+                text-align: center;
+                margin: 0 auto;
+                height: 310px;
             }
 
-            .dimensions {
-                display: inline-block;
+            .masonry-image-description {
+                min-height: 90px;
+                background-color: white;
+                padding-top: 10px;
             }
 
-            .source {
-                display: inline-block;
+            .masonry-image-column {
+                width: 23%;
+                margin: 0;
+                background-color: #e1e1e1 !important;
+                margin-right: 32px;
+                &:nth-child(4n) {
+                    margin: 0 !important;
+                }
             }
-        }
 
-        .media-gallery-image {
-            text-align: center;
-            margin: 0 auto;
-            width: 200px;
-            height: 200px;
-        }
+            .media-gallery-image-block {
+                padding: 25px 10px;
+                margin: 0 auto;
+                height: 310px;
+            }
 
-        .masonry-image-description {
-            min-height: 90px;
-            background-color: white;
-            padding-top: 10px;
-        }
+            .media-gallery-image img {
+                object-fit: cover;
+            }
 
-        .masonry-image-column {
-            width: 200px;
-            background-color: #e1e1e1 !important;
-        }
-
-        .media-gallery-image-block {
-            padding: 25px;
-            margin: 0 auto;
-            height: 200px;
-        }
-
-        .media-gallery-image img {
-            object-fit: cover;
-        }
-
-        .adobe-stock-icon {
-            width: 29px !important;
-            margin-bottom: -6px;
+            .adobe-stock-icon {
+                width: 29px !important;
+                margin-bottom: -6px;
+            }
         }
     }
 }

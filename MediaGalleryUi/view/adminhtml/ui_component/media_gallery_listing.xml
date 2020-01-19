@@ -88,7 +88,7 @@
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="containerId" xsi:type="string">masonry-grid-example</item>
+                <item name="containerId" xsi:type="string">media-gallery-ui</item>
             </item>
         </argument>
         <column name="overlay" component="Magento_Ui/js/grid/columns/overlay">
