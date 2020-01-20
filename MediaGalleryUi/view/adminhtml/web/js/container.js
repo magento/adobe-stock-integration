@@ -28,9 +28,7 @@ define([
             this._super();
 
             $(this.containerSelector).applyBindings();
-            setTimeout(function () {
-                this.masonry().setLayoutStylesWhenLoaded();
-            }.bind(this), 2000);
+            this.masonry().setLayoutStylesWhenLoaded();
 
             return this;
         }

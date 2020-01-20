@@ -51,7 +51,7 @@ define([
         },
 
         /**
-         * Returns class list to given record.
+         * Check if the record is currently selected
          *
          * @param {Object} record - Data to be preprocessed.
          * @returns {Object}
@@ -61,7 +61,7 @@ define([
         },
 
         /**
-         * Select image
+         * Set the record as selected
          */
         select: function (record) {
             (this.isSelected(record)) ? this.selected(null) : this.selected(this.getId(record));
