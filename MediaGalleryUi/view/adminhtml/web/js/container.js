@@ -5,9 +5,8 @@
 
 define([
     'uiElement',
-    'jquery',
-    'mage/translate'
-], function (Element, $, $t) {
+    'jquery'
+], function (Element, $) {
     'use strict';
 
     return Element.extend({

@@ -64,7 +64,7 @@ define([
          * Set the record as selected
          */
         select: function (record) {
-            (this.isSelected(record)) ? this.selected(null) : this.selected(this.getId(record));
+            this.isSelected(record) ? this.selected(null) : this.selected(this.getId(record));
         }
     });
 });

@@ -48,10 +48,7 @@ class UpdateOpenDialogUrl
 
         $data = $component->getData();
 
-        $data['config']['mediaGallery']['openDialogUrl'] = $this->url->getUrl(
-            'media_gallery/index/index',
-            ['_secure' => true]
-        );
+        $data['config']['mediaGallery']['openDialogUrl'] = $this->url->getUrl('media_gallery/index/index');
 
         $component->setData($data);
     }
