@@ -91,7 +91,7 @@
                 <item name="containerId" xsi:type="string">masonry-grid-example</item>
             </item>
         </argument>
-        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay">
+        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\UnlicensedOverlay">
             <settings>
                 <label translate="true">Overlay</label>
                 <visible>true</visible>
