@@ -45,7 +45,7 @@
                 </settings>
             </filterSelect>
             <filterRange name="created_at"
-                         class="Magento\Ui\Component\Filters\Type\DateRange"
+                         class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
                          template="ui/grid/filters/elements/group" sortOrder="20">
                 <settings>
@@ -55,7 +55,7 @@
                 </settings>
             </filterRange>
             <filterRange name="updated_at"
-                         class="Magento\Ui\Component\Filters\Type\DateRange"
+                         class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
                          template="ui/grid/filters/elements/group" sortOrder="30">
                 <settings>
@@ -91,7 +91,7 @@
                 <item name="containerId" xsi:type="string">media-gallery-ui</item>
             </item>
         </argument>
-        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay">
+        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\UnlicensedOverlay">
             <settings>
                 <label translate="true">Overlay</label>
                 <visible>true</visible>
