@@ -18,7 +18,7 @@
             <dep>adobe_stock_images_listing.adobe_stock_images_listing_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="adobe_stock_images_listing_data_source" component="Magento_AdobeStockImageAdminUi/js/grid/provider">
+    <dataSource name="adobe_stock_images_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">id</param>
