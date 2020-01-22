@@ -9,40 +9,42 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\View\Result\Layout;
 
 /**
- * Test controller for initial development of the new media gallery
+ * Controller serving the media gallery content
  */
 class Index extends Action
 {
     const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var PageFactory
+     * @var LayoutFactory
      */
-    private $pageFactory;
+    private $layoutFactory;
 
     /**
      * Index constructor.
      *
      * @param Context $context
-     * @param PageFactory $pageFactory
+     * @param LayoutFactory $pageFactory
      */
     public function __construct(
         Context $context,
-        PageFactory $pageFactory
+        LayoutFactory $layoutFactory
     ) {
         parent::__construct($context);
-        $this->pageFactory = $pageFactory;
+        $this->layoutFactory = $layoutFactory;
     }
 
     /**
-     * @return Page
+     * Get the media gallery layout
+     *
+     * @return Layout
      */
-    public function execute(): Page
+    public function execute(): Layout
     {
-        return $this->pageFactory->create();
+        return $this->layoutFactory->create();
     }
 }
