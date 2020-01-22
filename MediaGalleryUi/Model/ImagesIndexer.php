@@ -10,13 +10,13 @@ namespace Magento\MediaGalleryUi\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\MediaGalleryUi\Model\FilesIndexer;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
+use Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface;
 
 /**
- * ImagesProvider is used to read the media files across the media directory provided as a path in the method argument.
+ * @inheritdoc
  */
-class ImagesIndexer
+class ImagesIndexer implements ImagesIndexerInterface
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
 
@@ -48,10 +48,11 @@ class ImagesIndexer
         $this->mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->filesIndexer = $filesIndexer;
         $this->indexers = $indexers;
+        ksort($this->indexers);
     }
 
     /**
-     * Index image files in media gallery and execute indexers configured in DI for each file
+     * @inheritdoc
      */
     public function execute(): void
     {

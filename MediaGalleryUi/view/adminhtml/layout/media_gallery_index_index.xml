@@ -7,9 +7,12 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
-    <body>
-        <referenceContainer name="content">
+    <container name="root">
+        <block name="media.gallery.container"
+               class="Magento\Backend\Block\Template"
+               template="Magento_MediaGalleryUi::container.phtml"
+               aclResource="Magento_Cms::media_gallery">
             <uiComponent name="media_gallery_listing"/>
-        </referenceContainer>
-    </body>
+        </block>
+    </container>
 </layout>

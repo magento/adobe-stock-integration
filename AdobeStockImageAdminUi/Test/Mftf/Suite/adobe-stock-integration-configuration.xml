@@ -11,6 +11,9 @@
     <suite name="adobe_stock_integration_suite_configuration">
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
         </before>
         <after>
         </after>

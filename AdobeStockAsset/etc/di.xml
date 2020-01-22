@@ -22,6 +22,19 @@
     <preference for="Magento\AdobeStockAssetApi\Api\SaveAssetInterface" type="Magento\AdobeStockAsset\Model\SaveAsset"/>
     <preference for="Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface" type="Magento\AdobeStockAsset\Model\GetAssetById"/>
 
+    <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\DeleteByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\DeleteById"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\LoadById"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\LoadByIds"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Asset\Command\SaveInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\Save"/>
+
+    <preference for="Magento\AdobeStockAssetApi\Model\Category\Command\DeleteByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\DeleteById"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Category\Command\LoadByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\LoadById"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Category\Command\Save"/>
+
+    <preference for="Magento\AdobeStockAssetApi\Model\Creator\Command\DeleteByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\DeleteById"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Creator\Command\LoadByIdInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\LoadById"/>
+    <preference for="Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface" type="Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command\Save"/>
+
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

@@ -5,16 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset;
+namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface;
+use Magento\Framework\App\ResourceConnection;
 
 /**
- * Command for load assets by ids
+ * Command for the bulk loading Adobe Stock assets by id
  */
-class LoadByIds
+class LoadByIds implements LoadByIdsInterface
 {
     private const ADOBE_STOCK_ASSET_TABLE_NAME = 'adobe_stock_asset';
 
@@ -43,7 +44,7 @@ class LoadByIds
     }
 
     /**
-     * Load assets by ids
+     * Load assets filtered by ids
      *
      * @param int[] $ids
      * @return AssetInterface[]
@@ -57,9 +58,8 @@ class LoadByIds
         $data = $connection->fetchAssoc($select);
 
         $assets = [];
-
-        foreach ($data as $id => $assetData) {
-            $assets[$id] = $this->factory->create(['data' => $assetData]);
+        foreach ($data as $assetId => $assetData) {
+            $assets[$assetId] = $this->factory->create(['data' => $assetData]);
         }
 
         return $assets;
