@@ -19,19 +19,26 @@ define([
             });
 
             /**
+             * Return the emulated masonry grid
+             *
              * @return {Object}
              */
-            function getMasonary()  {
+            function getMasonry()  {
                 return {
+                    /**
+                     * Retrieve records form the masonry grid
+                     *
+                     * @returns {[{id: number}]}
+                     */
                     rows: function () {
                         return [{
                             id: 1
-                        }]
+                        }];
                     }
                 };
             }
 
-            overlayObj.masonry = getMasonary
+            overlayObj.masonry = getMasonry;
         });
 
         describe('"initObservable" method', function () {
@@ -58,6 +65,7 @@ define([
 
             it('Check method type', function () {
                 var type = typeof overlayObj.updateLicensed;
+
                 expect(type).toEqual('function');
             });
 
@@ -69,6 +77,7 @@ define([
                         };
                     }
                 }, ids = [1,2,3];
+
                 spyOn(overlayObj, 'licensed').and.callFake(function() {
                     return [];
                 });
@@ -88,16 +97,14 @@ define([
             });
 
             it("Check Ajax error request", function() {
-                var handler = {
-                        error: function() {}
-                    },
-                    login = {
-                        user: function () {
-                            return {
-                                isAuthorized: true
-                            };
-                        }
-                    }, ids = [];
+                var login = {
+                    user: function () {
+                        return {
+                            isAuthorized: true
+                        };
+                    }
+                }, ids = [];
+
                 spyOn(overlayObj, 'login').and.callFake(function() {
                     return login;
                 });
@@ -121,6 +128,7 @@ define([
                         };
                     }
                 }, ids = [1,2,3];
+
                 spyOn(overlayObj, 'login').and.callFake(function() {
                     return login;
                 });
@@ -143,11 +151,13 @@ define([
 
             it('Check method type', function () {
                 var type = typeof overlayObj.getIds;
+
                 expect(type).toEqual('function');
             });
 
             it('Return array if getIds is called', function() {
                 var returnValue = [1];
+
                 expect(overlayObj.getIds()).toEqual(returnValue);
             });
 
@@ -161,6 +171,7 @@ define([
 
             it('Check method type', function () {
                 var type = typeof overlayObj.getStyles;
+
                 expect(type).toEqual('function');
             });
 
@@ -171,7 +182,8 @@ define([
                     returnValue = {
                         top: '150px'
                     };
-                spyOn(record, 'styles').and.callFake(function(e) {
+
+                spyOn(record, 'styles').and.callFake(function() {
                     return {
                         height: '200px'
                     };
@@ -190,6 +202,7 @@ define([
 
             it('Check method type', function () {
                 var type = typeof overlayObj.isVisible;
+
                 expect(type).toEqual('function');
             });
 
@@ -197,7 +210,8 @@ define([
                 var row = {
                     id: 1
                 };
-                spyOn(overlayObj, 'licensed').and.callFake(function(e) {
+
+                spyOn(overlayObj, 'licensed').and.callFake(function() {
                     return [1,2,3];
                 });
                 overlayObj.licensed();
@@ -208,7 +222,8 @@ define([
                 var row = {
                     id: ''
                 };
-                spyOn(overlayObj, 'licensed').and.callFake(function(e) {
+
+                spyOn(overlayObj, 'licensed').and.callFake(function() {
                     return [];
                 });
                 overlayObj.licensed();
@@ -224,6 +239,7 @@ define([
 
             it('Check method type', function () {
                 var type = typeof overlayObj.getLabel;
+
                 expect(type).toEqual('function');
             });
 
@@ -231,7 +247,8 @@ define([
                 var row = {
                     id: 1
                 };
-                spyOn(overlayObj, 'licensed').and.callFake(function(e) {
+
+                spyOn(overlayObj, 'licensed').and.callFake(function() {
                     return [1,2,3];
                 });
                 overlayObj.licensed();
@@ -242,7 +259,8 @@ define([
                 var row = {
                     id: 1
                 };
-                spyOn(overlayObj, 'licensed').and.callFake(function(e) {
+
+                spyOn(overlayObj, 'licensed').and.callFake(function() {
                     return [];
                 });
                 overlayObj.licensed();
