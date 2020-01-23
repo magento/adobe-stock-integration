@@ -69,7 +69,7 @@ define([
                 expect(type).toEqual('function');
             });
 
-            it("Check Ajax Success request", function() {
+            it("Check Ajax Success request", function () {
                 var login = {
                     user: function () {
                         return {
@@ -78,16 +78,16 @@ define([
                     }
                 }, ids = [1,2,3];
 
-                spyOn(overlayObj, 'licensed').and.callFake(function() {
+                spyOn(overlayObj, 'licensed').and.callFake(function () {
                     return [];
                 });
-                spyOn(overlayObj, 'login').and.callFake(function() {
+                spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
                 });
-                spyOn(overlayObj, 'getIds').and.callFake(function() {
+                spyOn(overlayObj, 'getIds').and.callFake(function () {
                     return ids;
                 });
-                spyOn($, 'ajax').and.callFake(function() {
+                spyOn($, 'ajax').and.callFake(function () {
                     return overlayObj.licensed([1,2]);
                 });
                 overlayObj.updateLicensed();
@@ -96,7 +96,7 @@ define([
                 expect(overlayObj.getIds).toHaveBeenCalled();
             });
 
-            it("Check Ajax error request", function() {
+            it("Check Ajax error request", function () {
                 var login = {
                     user: function () {
                         return {
@@ -105,13 +105,13 @@ define([
                     }
                 }, ids = [];
 
-                spyOn(overlayObj, 'login').and.callFake(function() {
+                spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
                 });
-                spyOn(overlayObj, 'getIds').and.callFake(function() {
+                spyOn(overlayObj, 'getIds').and.callFake(function () {
                     return ids;
                 });
-                spyOn($, 'ajax').and.callFake(function() {
+                spyOn($, 'ajax').and.callFake(function () {
                     return 'error';
                 });
                 overlayObj.updateLicensed();
@@ -120,7 +120,7 @@ define([
                 expect(overlayObj.getIds).toHaveBeenCalled();
             });
 
-            it('If user is not authorized', function() {
+            it('If user is not authorized', function () {
                 var login = {
                     user: function () {
                         return {
@@ -129,10 +129,10 @@ define([
                     }
                 }, ids = [1,2,3];
 
-                spyOn(overlayObj, 'login').and.callFake(function() {
+                spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
                 });
-                spyOn(overlayObj, 'getIds').and.callFake(function() {
+                spyOn(overlayObj, 'getIds').and.callFake(function () {
                     return ids;
                 });
                 spyOn($, 'ajax');
@@ -155,7 +155,7 @@ define([
                 expect(type).toEqual('function');
             });
 
-            it('Return array if getIds is called', function() {
+            it('Return array if getIds is called', function () {
                 var returnValue = [1];
 
                 expect(overlayObj.getIds()).toEqual(returnValue);
@@ -175,7 +175,7 @@ define([
                 expect(type).toEqual('function');
             });
 
-            it('Return object if getStyles is called', function() {
+            it('Return object if getStyles is called', function () {
                 var record = {
                         styles: function () {}
                     },
@@ -183,7 +183,7 @@ define([
                         top: '150px'
                     };
 
-                spyOn(record, 'styles').and.callFake(function() {
+                spyOn(record, 'styles').and.callFake(function () {
                     return {
                         height: '200px'
                     };
@@ -211,7 +211,7 @@ define([
                     id: 1
                 };
 
-                spyOn(overlayObj, 'licensed').and.callFake(function() {
+                spyOn(overlayObj, 'licensed').and.callFake(function () {
                     return [1,2,3];
                 });
                 overlayObj.licensed();
@@ -223,7 +223,7 @@ define([
                     id: ''
                 };
 
-                spyOn(overlayObj, 'licensed').and.callFake(function() {
+                spyOn(overlayObj, 'licensed').and.callFake(function () {
                     return [];
                 });
                 overlayObj.licensed();
@@ -248,7 +248,7 @@ define([
                     id: 1
                 };
 
-                spyOn(overlayObj, 'licensed').and.callFake(function() {
+                spyOn(overlayObj, 'licensed').and.callFake(function () {
                     return [1,2,3];
                 });
                 overlayObj.licensed();
@@ -260,7 +260,7 @@ define([
                     id: 1
                 };
 
-                spyOn(overlayObj, 'licensed').and.callFake(function() {
+                spyOn(overlayObj, 'licensed').and.callFake(function () {
                     return [];
                 });
                 overlayObj.licensed();
