@@ -28,7 +28,7 @@ define([
                     /**
                      * Retrieve records form the masonry grid
                      *
-                     * @returns {[{id: number}]}
+                     * @returns {Array}
                      */
                     rows: function () {
                         return [{
@@ -69,14 +69,18 @@ define([
                 expect(type).toEqual('function');
             });
 
-            it("Check Ajax Success request", function () {
+            it('Check Ajax Success request', function () {
                 var login = {
+                    /**
+                     * Check if user is authorized or not
+                     */
                     user: function () {
                         return {
                             isAuthorized: true
                         };
                     }
-                }, ids = [1,2,3];
+                },
+                ids = [1,2,3];
 
                 spyOn(overlayObj, 'licensed').and.callFake(function () {
                     return [];
@@ -96,14 +100,18 @@ define([
                 expect(overlayObj.getIds).toHaveBeenCalled();
             });
 
-            it("Check Ajax error request", function () {
+            it('Check Ajax error request', function () {
                 var login = {
+                    /**
+                     * Check if user is authorized or not
+                     */
                     user: function () {
                         return {
                             isAuthorized: true
                         };
                     }
-                }, ids = [];
+                },
+                ids = [];
 
                 spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
@@ -122,12 +130,16 @@ define([
 
             it('If user is not authorized', function () {
                 var login = {
+                    /**
+                     * Check if user is authorized or not
+                     */
                     user: function () {
                         return {
                             isAuthorized: false
                         };
                     }
-                }, ids = [1,2,3];
+                },
+                ids = [1,2,3];
 
                 spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
