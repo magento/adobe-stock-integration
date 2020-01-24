@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Block\Adminhtml;
 
-use Magento\AdobeImsApi\Api\ConfigProviderInterface;
-use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\ConfigProviderInterface;
+use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 
 /**
  * Provides required data for the Adobe service authentication component
@@ -30,6 +30,10 @@ class SignIn extends Template
     private const RESPONSE_MESSAGE_INDEX = 2;
     private const RESPONSE_SUCCESS_CODE = 'success';
     private const RESPONSE_ERROR_CODE = 'error';
+    private const ADOBE_IMS_JS_SIGNIN = 'Magento_AdobeIms/js/signIn';
+    private const ADOBE_IMS_SIGNIN = 'Magento_AdobeIms/signIn';
+    private const ADOBE_IMS_USER_PROFILE = 'adobe_ims/user/profile';
+    private const ADOBE_IMS_USER_LOGOUT = 'adobe_ims/user/logout';
 
     /**
      * @var ConfigInterface
@@ -100,7 +104,7 @@ class SignIn extends Template
             )
         );
     }
-
+    
     /**
      * Get default UI component configuration
      *
@@ -109,10 +113,10 @@ class SignIn extends Template
     private function getDefaultComponentConfig(): array
     {
         return [
-            'component' => 'Magento_AdobeIms/js/signIn',
-            'template' => 'Magento_AdobeIms/signIn',
-            'profileUrl' => $this->getUrl('adobe_ims/user/profile'),
-            'logoutUrl' => $this->getUrl('adobe_ims/user/logout'),
+            'component' => self::ADOBE_IMS_JS_SIGNIN,
+            'template' => self::ADOBE_IMS_SIGNIN,
+            'profileUrl' => $this->getUrl(self::ADOBE_IMS_USER_PROFILE),
+            'logoutUrl' => $this->getUrl(self::ADOBE_IMS_USER_LOGOUT),
             'user' => $this->getUserData(),
             'loginConfig' => [
                 'url' => $this->config->getAuthUrl(),
