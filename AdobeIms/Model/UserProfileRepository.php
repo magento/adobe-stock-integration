@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Model;
 
 use Exception;
+use Psr\Log\LoggerInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Psr\Log\LoggerInterface;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 
 /**
  * Represent user profile repository
@@ -91,7 +91,7 @@ class UserProfileRepository implements UserProfileRepositoryInterface
         $entity = $this->entityFactory->create();
         $this->resource->load($entity, $entityId, self::ID);
         if (!$entity->getId()) {
-            $message = __('User profile with id %id not found.', ['id' => $entityId]);
+            $message = __('User profile with id %id not found.', [self::ID => $entityId]);
             throw new NoSuchEntityException($message);
         }
 
@@ -106,7 +106,7 @@ class UserProfileRepository implements UserProfileRepositoryInterface
         $entity = $this->entityFactory->create();
         $this->resource->load($entity, $userId, self::ADMIN_USER_ID);
         if (!$entity->getId()) {
-            $message = __('User profile with user id %id not found.', ['id' => $userId]);
+            $message = __('User profile with user id %id not found.', [self::ID => $userId]);
             throw new NoSuchEntityException($message);
         }
 
