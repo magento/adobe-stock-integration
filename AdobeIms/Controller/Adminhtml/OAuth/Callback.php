@@ -8,21 +8,21 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Controller\Adminhtml\OAuth;
 
-use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
-use Magento\AdobeImsApi\Api\GetTokenInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Psr\Log\LoggerInterface;
 use Magento\Backend\App\Action;
+use Magento\User\Api\Data\UserInterface;
 use Magento\Framework\Controller\Result\Raw;
+use Magento\AdobeImsApi\Api\GetTokenInterface;
+use Magento\AdobeImsApi\Api\GetImageInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\User\Api\Data\UserInterface;
-use Psr\Log\LoggerInterface;
-use Magento\AdobeImsApi\Api\GetImageInterface;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 
 /**
  * Callback action for managing user authentication with the Adobe services
@@ -44,6 +44,15 @@ class Callback extends Action
     private const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
     private const RESPONSE_SUCCESS_CODE = 'success';
     private const RESPONSE_ERROR_CODE = 'error';
+
+    /**
+     * Constants of request
+     *
+     * REQUEST_PARAM_ERROR error
+     * REQUEST_PARAM_CODE code
+     */
+    private const REQUEST_PARAM_ERROR = 'error';
+    private const REQUEST_PARAM_CODE = 'code';
 
     /**
      * @var UserProfileRepositoryInterface
@@ -103,7 +112,7 @@ class Callback extends Action
         try {
             $this->validateCallbackRequest();
             $tokenResponse = $this->getToken->execute(
-                (string)$this->getRequest()->getParam('code')
+                (string)$this->getRequest()->getParam(self::REQUEST_PARAM_CODE)
             );
             $userImage = $this->getUserImage->execute($tokenResponse->getAccessToken());
             $userProfile = $this->getUserProfile();
@@ -153,7 +162,7 @@ class Callback extends Action
      */
     private function validateCallbackRequest(): void
     {
-        $error = $this->getRequest()->getParam('error');
+        $error = $this->getRequest()->getParam(self::REQUEST_PARAM_ERROR);
         if ($error) {
             $message = __(
                 'An error occurred during the callback request from the Adobe service: %error',
