@@ -58,7 +58,7 @@ class RelatedImages extends Action
     public function execute()
     {
         try {
-            $params = $params = $this->getRequest()->getParams();
+            $params = $this->getRequest()->getParams();
             $imageId = (int) $params['image_id'];
             $limit = (int) ($params['limit'] ?? 4);
             $relatedImages = $this->getRelatedImages->execute($imageId, $limit);
@@ -67,7 +67,7 @@ class RelatedImages extends Action
             $responseContent = [
                 'success' => true,
                 'message' => __('Get related images finished successfully'),
-                'result' => $relatedImages,
+                'result' => $relatedImages
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
