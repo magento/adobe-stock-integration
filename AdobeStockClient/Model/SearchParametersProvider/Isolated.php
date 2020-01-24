@@ -9,14 +9,17 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
 use AdobeStock\Api\Models\SearchParameters;
-use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 
 /**
  * Is image separated from (and by) background color
  */
 class Isolated implements SearchParameterProviderInterface
 {
+    private const ISOLATED_FILTER = 'isolated_filter';
+    private const ISOLATED_ONLY = 'Isolated Only';
+
     /**
      * @inheritdoc
      */
@@ -24,8 +27,8 @@ class Isolated implements SearchParameterProviderInterface
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'isolated_filter') {
-                    if ($filter->getValue() === 'Isolated Only') {
+                if ($filter->getField() === self::ISOLATED_FILTER) {
+                    if ($filter->getValue() === self::ISOLATED_ONLY) {
                         $searchParams->setFilterIsolatedOn(true);
                         break;
                     }
