@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
+use Exception;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 
 /**
  * Represent the remove user access and refresh tokens functionality
@@ -51,7 +52,7 @@ class FlushUserTokens implements FlushUserTokensInterface
             $userProfile->setAccessToken('');
             $userProfile->setRefreshToken('');
             $this->userProfileRepository->save($userProfile);
-        } catch (\Exception $e) { //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (Exception $e) { //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             // User profile and tokens are not present in the system
         }
     }
