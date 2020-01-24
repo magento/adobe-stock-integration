@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model\Client;
 
-use Magento\AdobeImsApi\Api\ConfigInterface as ImsConfig;
-use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
-use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
-use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\AdobeImsApi\Api\ConfigInterface as ImsConfig;
 use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
 use Magento\Framework\Webapi\Exception as WebApiException;
+use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
 
 /**
  * Command for retrieving files information from Adobe Stock API
@@ -35,6 +35,14 @@ class Files implements FilesInterface
     private const QUERY_PARAM_LOCALE = 'locale';
 
     private const QUERY_PARAM_RESULT_COLUMNS = 'result_columns';
+
+    private const HEADERS_X_PRODUCT = 'x-Product';
+    
+    private const HEADERS_X_API_KEY = 'x-api-key';
+    
+    private const HEADERS_AUTHORIZATION = 'Authorization';
+    
+    private const HEADERS_BEARER = 'Bearer';
 
     /**
      * @var ImsConfig
@@ -139,7 +147,7 @@ class Files implements FilesInterface
                 ]
             );
     }
-
+    
     /**
      * Get request headers
      *
@@ -148,9 +156,9 @@ class Files implements FilesInterface
     private function getHeaders(): array
     {
         return [
-            'x-Product' => $this->clientConfig->getProductName(),
-            'x-api-key' => $this->imsConfig->getApiKey(),
-            'Authorization' => 'Bearer ' . $this->getAccessToken->execute()
+            self::HEADERS_X_PRODUCT => $this->clientConfig->getProductName(),
+            self::HEADERS_X_API_KEY => $this->imsConfig->getApiKey(),
+            self::HEADERS_AUTHORIZATION => self::HEADERS_BEARER . ' ' . $this->getAccessToken->execute()
         ];
     }
 }
