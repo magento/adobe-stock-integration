@@ -177,6 +177,9 @@ define([
 
             it('Return object if getStyles is called', function () {
                 var record = {
+                        /**
+                         * Return height of the image
+                         */
                         styles: function () {}
                     },
                     returnValue = {
