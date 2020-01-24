@@ -9,14 +9,16 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model\SearchParametersProvider;
 
 use AdobeStock\Api\Models\SearchParameters;
-use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 
 /**
  * Search for similar to image id
  */
 class Similar implements SearchParameterProviderInterface
 {
+    private const SIMILAR = 'similar';
+    
     /**
      * @inheritdoc
      */
@@ -24,7 +26,7 @@ class Similar implements SearchParameterProviderInterface
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'similar') {
+                if ($filter->getField() === self::SIMILAR) {
                     $searchParams->setSimilar((int)$filter->getValue());
                     break;
                 }
