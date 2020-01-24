@@ -11,6 +11,11 @@
             <argument name="path" xsi:type="string">media</argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGalleryUi\Controller\Adminhtml\Directories\GetList">
+        <arguments>
+            <argument name="path" xsi:type="string">media</argument>
+        </arguments>
+    </type>
     <type name="Magento\Ui\Component\Form\Element\DataType\Media\Image">
         <plugin name="updateOpenDialogUrl" type="Magento\MediaGalleryUi\Plugin\UpdateOpenDialogUrl"/>
     </type>
