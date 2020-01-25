@@ -34,7 +34,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <listingToolbar name="listing_top">
+    <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
         <filters name="listing_filters">
             <filterSelect name="directory" provider="${ $.parentName }" sortOrder="10">
                 <settings>
@@ -84,6 +84,22 @@
                 <pageSize>32</pageSize>
             </settings>
         </paging>
+        <container
+            name="sorting"
+            provider="media_gallery_listing.media_gallery_listing_data_source"
+            displayArea="sorting"
+            sortOrder="20"
+            component="Magento_MediaGalleryUi/js/sorting">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">
+                            media_gallery_listing.media_gallery_listing.media_gallery_columns
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </container>
     </listingToolbar>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
@@ -110,6 +126,20 @@
                 <label translate="true">Thumbnail Image</label>
                 <visible>true</visible>
                 <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="name">
+            <settings>
+                <label translate="true">Name</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="directory">
+            <settings>
+                <label translate="true">Directory</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
             </settings>
         </column>
     </columns>
