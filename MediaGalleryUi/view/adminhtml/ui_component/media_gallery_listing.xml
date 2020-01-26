@@ -45,7 +45,7 @@
                 </settings>
             </filterSelect>
             <filterRange name="created_at"
-                         class="Magento\Ui\Component\Filters\Type\DateRange"
+                         class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
                          template="ui/grid/filters/elements/group" sortOrder="20">
                 <settings>
@@ -55,7 +55,7 @@
                 </settings>
             </filterRange>
             <filterRange name="updated_at"
-                         class="Magento\Ui\Component\Filters\Type\DateRange"
+                         class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
                          template="ui/grid/filters/elements/group" sortOrder="30">
                 <settings>
@@ -88,22 +88,19 @@
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="containerId" xsi:type="string">masonry-grid-example</item>
+                <item name="containerId" xsi:type="string">media-gallery-masonry-grid</item>
             </item>
         </argument>
-        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay">
+        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\UnlicensedOverlay">
             <settings>
                 <label translate="true">Overlay</label>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="thumbnail_url" component="Magento_Ui/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
+        <column name="thumbnail_url" component="Magento_MediaGalleryUi/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="modules" xsi:type="array">
-                        <item name="previewComponent" xsi:type="string">${ $.parentName }.preview_url</item>
-                    </item>
                     <item name="fields" xsi:type="array">
                         <item name="url" xsi:type="string">thumbnail_url</item>
                     </item>
@@ -111,14 +108,6 @@
             </argument>
             <settings>
                 <label translate="true">Thumbnail Image</label>
-                <visible>true</visible>
-                <bodyTmpl>Magento_MediaGalleryUi/grid/columns/image</bodyTmpl>
-                <sortable>false</sortable>
-            </settings>
-        </column>
-        <column name="preview_url" component="Magento_Ui/js/grid/columns/image-preview" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
-            <settings>
-                <label translate="true">Image Preview</label>
                 <visible>true</visible>
                 <sortable>false</sortable>
             </settings>

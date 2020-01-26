@@ -10,9 +10,10 @@ namespace Magento\MediaGalleryUi\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -46,21 +47,31 @@ class AssetIndexer implements IndexerInterface
     private $logger;
 
     /**
-     * AssetIndexer constructor.
+     * @var File
+     */
+    private $driver;
+
+    /**
+     * Constructor
+     *
      * @param AssetInterfaceFactory $assetFactory
+     * @param Filesystem $filesystem
      * @param SaveInterface $saveAsset
      * @param LoggerInterface $logger
+     * @param File $file
      */
     public function __construct(
         AssetInterfaceFactory $assetFactory,
         Filesystem $filesystem,
         SaveInterface $saveAsset,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        File $file
     ) {
         $this->assetFactory = $assetFactory;
         $this->filesystem = $filesystem;
         $this->saveAsset = $saveAsset;
         $this->logger = $logger;
+        $this->driver = $file;
     }
 
     /**
@@ -77,7 +88,7 @@ class AssetIndexer implements IndexerInterface
         $asset = $this->assetFactory->create(
             [
                 'data' => [
-                    'path' => $this->getMediaDirectory()->getRelativePath($file),
+                    'path' => $this->getPath($file),
                     'title' => $item->getBasename('.' . $item->getExtension()),
                     'created_at' => (new \DateTime())->setTimestamp($item->getCTime())->format('Y-m-d H:i:s'),
                     'updated_at' => (new \DateTime())->setTimestamp($item->getMTime())->format('Y-m-d H:i:s'),
@@ -93,6 +104,23 @@ class AssetIndexer implements IndexerInterface
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }
+    }
+
+    /**
+     * Get correct path for media asset
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getPath(string $file): string
+    {
+        $path = $this->getMediaDirectory()->getRelativePath($file);
+
+        if ($this->driver->getParentDirectory($path) === '.') {
+            $path = '/' . $path;
+        }
+
+        return $path;
     }
 
     /**
