@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockClientStub\Model\Template;
+namespace Magento\AdobeStockClientStub\Model\DataProvider;
 
 use AdobeStock\Api\Models\LicenseEntitlementQuota;
 
 /**
- * Represents the Adobe Stock client quota stub object
+ * Represent the Adobe Stock client quota stub object
  */
 class Quota
 {
@@ -29,4 +29,3 @@ class Quota
         return new LicenseEntitlementQuota($data);
     }
 }
-

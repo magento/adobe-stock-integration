@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClientStub\Model\Method;
 
 /**
- * Provides the stub result for the testConnection method of the AdobeStockClient
+ * Provide a stub result for the testConnection method of the AdobeStockClient
  */
 class TestConnection
 {
-    private const VALID_API_KEY = 'valid key';
+    private const INVALID_API_KEY = 'wrong-api-key';
 
     /**
      * Return the stub result of the test connection method
@@ -23,6 +23,6 @@ class TestConnection
      */
     public function execute(string $key): bool
     {
-        return self::VALID_API_KEY === $key;
+        return self::INVALID_API_KEY !== $key;
     }
 }

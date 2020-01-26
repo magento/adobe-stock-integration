@@ -8,17 +8,17 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClientStub\Model\Method;
 
 /**
- * Provides the stub data for the licenseImage method of the AdobeStockClient
+ * Emulate image license method of the AdobeStockClient
  */
 class LicenseImage
 {
     /**
-     * Return the stub result of the license image request
+     * Re-assign value to emulate void
      *
-     * @return SearchResultInterface
+     * @param int $contentId
      */
-    public function execute(): SearchResultInterface
+    public function execute(int $contentId): void
     {
-        //@TODO implement the get license image stub data
+        $contentId = $contentId;
     }
 }

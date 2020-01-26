@@ -7,14 +7,37 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClientStub\Model\Method;
 
+use Magento\AdobeStockClientStub\Model\DataProvider\ImageDownloadUrl;
+
 /**
- * Provides the stub data for the get image download method of the Adobe Stock client
+ * Provides a stub data for the get image download method of the AdobeStockClient
  */
 class GetImageDownloadUrl
 {
+    /**
+     * @var ImageDownloadUrl
+     */
+    private $imageDownloadUrl;
 
-    public function execute(): SearchResultInterface
+    /**
+     * GetImageDownloadUrl constructor.
+     *
+     * @param ImageDownloadUrl $imageDownloadUrl
+     */
+    public function __construct(ImageDownloadUrl $imageDownloadUrl)
     {
-        //@TODO implement the get image download url stub logic
+        $this->imageDownloadUrl = $imageDownloadUrl;
+    }
+
+    /**
+     * Return a stub string which emulates the image download url.
+     *
+     * @param int $contentId
+     *
+     * @return string
+     */
+    public function execute(int $contentId): string
+    {
+        return $this->imageDownloadUrl->provideImageDownloadUrl($contentId);
     }
 }

@@ -10,10 +10,10 @@ namespace Magento\AdobeStockClientStub\Model\Method;
 use AdobeStock\Api\Models\LicenseEntitlementQuota;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
-use Magento\AdobeStockClientStub\Model\Template\Quota;
+use Magento\AdobeStockClientStub\Model\DataProvider\Quota;
 
 /**
- * Provides the stub data for the GetQuota method of the AdobeStockClient
+ * Provides a stub data for the GetQuota method of the AdobeStockClient
  */
 class GetQuota
 {

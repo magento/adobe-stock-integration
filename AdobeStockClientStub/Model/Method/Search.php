@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClientStub\Model\Method;
 
-use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Response\SearchFiles;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use Magento\AdobeStockClient\Model\StockFileToDocument;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\AdobeStockClientStub\Model\Template\RawStockResponse;
+use Magento\AdobeStockClientStub\Model\DataProvider\RawStockResponse;
 
 /**
- * Provides the stub result for the search method of the AdobeStockClient
+ * Provides a stub result for the search method of the AdobeStockClient
  */
 class Search
 {
@@ -60,7 +59,6 @@ class Search
     public function execute(): SearchResultInterface
     {
         $responseStub = $this->generateResponseStub();
-        /** @var StockFile $file */
         $items = [];
         foreach ($responseStub->getFiles() as $file) {
             $items[] = $this->stockFileToDocument->convert($file);

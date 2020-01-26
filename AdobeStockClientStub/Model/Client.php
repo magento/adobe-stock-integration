@@ -18,12 +18,24 @@ use Magento\AdobeStockClientStub\Model\Method\Search;
 use Magento\AdobeStockClientStub\Model\Method\TestConnection;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Provide the emulation the Adobe Stock PHP SDK calls in scope of the Adobe Stock client module
  */
 class Client implements ClientInterface
 {
+    /**
+     * @var ConnectionWrapperFactory
+     */
+    private $connectionFactory;
+
+    /**
+     * @var Search
+     */
+    private $search;
+
     /**
      * @var GetImageDownloadUrl
      */
@@ -45,18 +57,16 @@ class Client implements ClientInterface
     private $getLicenseConfirmation;
 
     /**
-     * @var Search
-     */
-    private $search;
-
-    /**
      * @var GetQuota
      */
     private $getQuota;
 
+
+
     /**
      * Client constructor.
      *
+     * @param ConnectionWrapperFactory $connectionFactory
      * @param Search $search
      * @param GetQuota $getQuota
      * @param GetLicenseConfirmation $getLicenseConfirmation
@@ -65,6 +75,7 @@ class Client implements ClientInterface
      * @param GetImageDownloadUrl $getImageDownloadUrl
      */
     public function __construct(
+        ConnectionWrapperFactory $connectionFactory,
         Search $search,
         GetQuota $getQuota,
         GetLicenseConfirmation $getLicenseConfirmation,
@@ -72,6 +83,7 @@ class Client implements ClientInterface
         LicenseImage $licenseImage,
         GetImageDownloadUrl $getImageDownloadUrl
     ) {
+        $this->connectionFactory = $connectionFactory;
         $this->search = $search;
         $this->getQuota = $getQuota;
         $this->getLicenseConfirmation = $getLicenseConfirmation;
@@ -81,29 +93,33 @@ class Client implements ClientInterface
     }
 
     /**
-     * Returns the stub raw response contains media data from the Adobe Service
+     * Return a stub raw response contains media data from the Adobe Service
      *
      * @param SearchCriteriaInterface $searchCriteria
      *
      * @return SearchResultInterface
+     * @throws AuthenticationException
+     * @throws AuthorizationException
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
+        $this->getConnection();
         return $this->search->execute();
     }
 
     /**
-     * Return the stub quota data of the Adobe Stock client
+     * Return a stub quota data
      *
      * @return UserQuotaInterface
      */
     public function getQuota(): UserQuotaInterface
     {
+        $this->getConnection();
         return $this->getQuota->execute();
     }
 
     /**
-     * Return
+     * Return a stub license confirmation data
      *
      * @param int $contentId
      *
@@ -111,34 +127,52 @@ class Client implements ClientInterface
      */
     public function getLicenseConfirmation(int $contentId): LicenseConfirmationInterface
     {
+        $this->getConnection();
         return $this->getLicenseConfirmation->execute($contentId);
     }
 
     /**
+     * Return a test connection stub result
+     *
      * @param string $apiKey
      *
      * @return bool
      */
     public function testConnection(string $apiKey): bool
     {
-        // TODO: Implement testConnection() method.
+        $this->getConnection();
+        return $this->testConnection->execute($apiKey);
     }
 
     /**
+     * Emulate license image action
+     *
      * @param int $contentId
      */
     public function licenseImage(int $contentId): void
     {
-        // TODO: Implement licenseImage() method.
+        $this->getConnection();
+        $this->licenseImage->execute($contentId);
     }
 
     /**
+     * Return a stub image download data
+     *
      * @param int $contentId
      *
      * @return string
      */
     public function getImageDownloadUrl(int $contentId): string
     {
-        // TODO: Implement getImageDownloadUrl() method.
+        $this->getConnection();
+        return $this->getImageDownloadUrl->execute($contentId);
+    }
+
+    /**
+     * Initialize connection to the Adobe Stock service.
+     */
+    private function getConnection(): ConnectionWrapper
+    {
+        return $this->connectionFactory->create();
     }
 }

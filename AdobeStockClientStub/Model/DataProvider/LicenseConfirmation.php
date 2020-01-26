@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockClientStub\Model\Template;
+namespace Magento\AdobeStockClientStub\Model\DataProvider;
 
 use AdobeStock\Api\Response\License as LicenseResponse;
 
