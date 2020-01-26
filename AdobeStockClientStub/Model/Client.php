@@ -19,7 +19,6 @@ use Magento\AdobeStockClientStub\Model\Method\TestConnection;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Provide the emulation the Adobe Stock PHP SDK calls in scope of the Adobe Stock client module
@@ -61,8 +60,6 @@ class Client implements ClientInterface
      */
     private $getQuota;
 
-
-
     /**
      * Client constructor.
      *
@@ -99,11 +96,10 @@ class Client implements ClientInterface
      *
      * @return SearchResultInterface
      * @throws AuthenticationException
-     * @throws AuthorizationException
      */
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
-        $this->getConnection();
+        $this->getConnection()->initializeConnectionStub();
         return $this->search->execute();
     }
 
@@ -111,10 +107,11 @@ class Client implements ClientInterface
      * Return a stub quota data
      *
      * @return UserQuotaInterface
+     * @throws AuthenticationException
      */
     public function getQuota(): UserQuotaInterface
     {
-        $this->getConnection();
+        $this->getConnection()->initializeConnectionStub();
         return $this->getQuota->execute();
     }
 
@@ -124,10 +121,11 @@ class Client implements ClientInterface
      * @param int $contentId
      *
      * @return LicenseConfirmationInterface
+     * @throws AuthenticationException
      */
     public function getLicenseConfirmation(int $contentId): LicenseConfirmationInterface
     {
-        $this->getConnection();
+        $this->getConnection()->initializeConnectionStub();
         return $this->getLicenseConfirmation->execute($contentId);
     }
 
@@ -137,10 +135,11 @@ class Client implements ClientInterface
      * @param string $apiKey
      *
      * @return bool
+     * @throws AuthenticationException
      */
     public function testConnection(string $apiKey): bool
     {
-        $this->getConnection();
+        $this->getConnection()->initializeConnectionStub($apiKey);
         return $this->testConnection->execute($apiKey);
     }
 
@@ -148,10 +147,12 @@ class Client implements ClientInterface
      * Emulate license image action
      *
      * @param int $contentId
+     *
+     * @throws AuthenticationException
      */
     public function licenseImage(int $contentId): void
     {
-        $this->getConnection();
+        $this->getConnection()->initializeConnectionStub();
         $this->licenseImage->execute($contentId);
     }
 
@@ -161,10 +162,11 @@ class Client implements ClientInterface
      * @param int $contentId
      *
      * @return string
+     * @throws AuthenticationException
      */
     public function getImageDownloadUrl(int $contentId): string
     {
-        $this->getConnection();
+        $this->getConnection()->initializeConnectionStub();
         return $this->getImageDownloadUrl->execute($contentId);
     }
 

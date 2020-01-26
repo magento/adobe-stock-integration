@@ -59,9 +59,16 @@ class ConnectionWrapper
         $this->httpClient = $httpClient;
     }
 
-    public function initializeConnectionStub()
+    /**
+     * Initialize stub connection
+     *
+     * @param string|null $apiKey
+     *
+     * @throws AuthenticationException
+     */
+    public function initializeConnectionStub(string $apiKey = null)
     {
-
+        $this->getConnection($apiKey);
     }
 
     /**
@@ -86,25 +93,5 @@ class ConnectionWrapper
         }
 
         return $this->connection;
-    }
-
-    /**
-     * Handle Adobe Stock SDK exception
-     *
-     * @param \Exception $exception
-     * @param string $message
-     * @return AuthenticationException | AuthorizationException | IntegrationException
-     */
-    private function handleException(\Exception $exception, string $message): \Exception
-    {
-        if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
-            return new AuthenticationException(__('Adobe API Key is invalid!'));
-        }
-
-        $phrase = __(
-            $message . ': %error_message',
-            ['error_message' => $exception->getMessage()]
-        );
-        return new IntegrationException($phrase, $exception, $exception->getCode());
     }
 }
