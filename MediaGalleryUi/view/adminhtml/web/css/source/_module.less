@@ -5,7 +5,7 @@
 
 & when (@media-common = true) {
 
-    .media_gallery-index-index {
+    .media-gallery-container {
 
         .masonry-image-overlay {
             margin-left: 120px;
@@ -60,6 +60,9 @@
             position: relative;
             margin: 0 auto;
             height: 200px;
+            &.selected {
+                border: 5px solid steelblue;
+            }
         }
 
         .media-gallery-image img {
