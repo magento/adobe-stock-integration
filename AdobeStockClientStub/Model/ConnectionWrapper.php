@@ -81,7 +81,7 @@ class ConnectionWrapper
      */
     private function getConnection(string $apiKey = null): AdobeStock
     {
-        if (($apiKey === self::INVALID_API_KEY)) {
+        if (($apiKey !== self::INVALID_API_KEY)) {
             $this->connection = $this->connectionFactory->create(
                 $apiKey,
                 $this->clientConfig->getProductName(),
