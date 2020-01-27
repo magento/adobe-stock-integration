@@ -41,6 +41,8 @@ class GetList extends Action
      */
     private $path;
 
+    private $responseContent;
+
     /**
      * Constructor
      *
@@ -59,6 +61,7 @@ class GetList extends Action
         $this->logger = $logger;
         $this->filesystem = $filesystem;
         $this->path = $path;
+        $this->responseContent = [];
     }
     /**
      * @inheritdoc
@@ -66,16 +69,11 @@ class GetList extends Action
     public function execute()
     {
         try {
-            $responseContent = [];
             $directoryInstance = $this->filesystem->getDirectoryRead($this->path);
             if ($directoryInstance->isDirectory()) {
                 foreach ($directoryInstance->readRecursively() as $index => $path) {
                     if ($directoryInstance->isDirectory($path)) {
-                        $responseContent[] = [
-                            'path' => $path,
-                            'id' => $index,
-                            'text' => $path,
-                        ];
+                        $this->getDirectoryListing($path, $index);
                     }
                 }
             }
@@ -83,7 +81,7 @@ class GetList extends Action
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $responseContent = [
+            $this->responseContent = [
                 'success' => false,
                 'message' => __('Retrieving directories list failed.'),
             ];
@@ -92,8 +90,24 @@ class GetList extends Action
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
-        $resultJson->setData($responseContent);
+        $resultJson->setData($this->responseContent);
 
         return $resultJson;
+    }
+
+    private function getDirectoryListing($path, $index)
+    {
+        $childrens = explode('/', $path);
+        foreach($childrens as $keyDirectory => $path) {
+            $key = array_search($path, array_column($this->responseContent, 'data'));
+        if ($key) {
+            $this->responseContent[$key]['children'] = [$childrens[$keyDirectory + 1]];
+        } else {
+            $this->responseContent[] = [
+                'data' => $path,
+                'metadata' => ['id' => $index],
+            ];
+        }
+        }
     }
 }
