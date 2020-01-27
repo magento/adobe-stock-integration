@@ -73,9 +73,15 @@ class GetList extends Action
             if ($directoryInstance->isDirectory()) {
                 foreach ($directoryInstance->readRecursively() as $index => $path) {
                     if ($directoryInstance->isDirectory($path)) {
-                        $this->getDirectoryListing($path, $index);
+                        $node = $this->buildTree($this->prepareTree($path));
+                        $this->responseContent[$node['data']] = $node;
                     }
                 }
+            }
+            $i = 0;
+            foreach ($this->responseContent as $key => $val) {
+                $this->responseContent[$i++] = $this->responseContent[$key];
+                unset($this->responseContent[$key]);
             }
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
@@ -95,19 +101,40 @@ class GetList extends Action
         return $resultJson;
     }
 
-    private function getDirectoryListing($path, $index)
+    /**
+     * prepareTree
+     *
+     * @param string $path
+     * @return array
+     */
+    private function prepareTree(string $path): array
     {
-        $childrens = explode('/', $path);
-        foreach($childrens as $keyDirectory => $path) {
-            $key = array_search($path, array_column($this->responseContent, 'data'));
-        if ($key) {
-            $this->responseContent[$key]['children'] = [$childrens[$keyDirectory + 1]];
-        } else {
-            $this->responseContent[] = [
-                'data' => $path,
-                'metadata' => ['id' => $index],
-            ];
+        $array = [];
+        $path = trim($path, '/');
+        $list = explode('/', $path);
+        $n = count($list);
+
+        $arrayRef = &$array;
+        for ($i = 0; $i < $n; $i++) {
+            $key = $list[$i];
+            $arrayRef = &$arrayRef[$key];
         }
+        return $array;
+    }
+
+    /**
+     * buildTree
+     *
+     * @param array $array
+     * @return array
+     */
+    private function buildTree(array $array): array
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                return ['data' => $key, 'children' => [$this->buildTree($value)]];
+            }
+            return ['data' => $key];
         }
     }
 }
