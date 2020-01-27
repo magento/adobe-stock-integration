@@ -22,6 +22,11 @@ class Config implements ConfigInterface
     private const XML_PATH_ENABLED = 'system/media_gallery/enabled';
 
     /**
+     * Route Path to Media Gallery Index Controller.
+     */
+    const MEDIA_GALLERY_INDEX_ROUTE_PATH = 'media_gallery/index/index';
+
+    /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;

@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Plugin;
 
-use Magento\Cms\Model\Wysiwyg\Config;
-use Magento\Framework\UrlInterface;
-use Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider;
 use Magento\Framework\DataObject;
+use Magento\Framework\UrlInterface;
+use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
+use Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider;
+use Magento\MediaGalleryUi\Model\Config as MediaGalleryConfig;
 
 /**
  * Plugin to update open media gallery dialog URL for WYSIWYG
@@ -60,7 +61,7 @@ class UpdateWysiwygOpenDialogUrl
         return $config->setData(
             'files_browser_window_url',
             $this->url->getUrl(
-                'media_gallery/index/index',
+                MediaGalleryConfig::MEDIA_GALLERY_INDEX_ROUTE_PATH,
                 [
                     'current_tree_path' => $this->imagesHelper->idEncode(Config::IMAGE_DIRECTORY)
                 ]

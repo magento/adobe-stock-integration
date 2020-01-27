@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Plugin;
 
 use Magento\Framework\UrlInterface;
-use Magento\Ui\Component\Form\Element\DataType\Media\Image;
+use Magento\MediaGalleryUi\Model\Config;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
+use Magento\Ui\Component\Form\Element\DataType\Media\Image;
 
 /**
  * Plugin to update open media gallery dialog URL for image-uploader component
@@ -48,7 +49,7 @@ class UpdateOpenDialogUrl
 
         $data = $component->getData();
 
-        $data['config']['mediaGallery']['openDialogUrl'] = $this->url->getUrl('media_gallery/index/index');
+        $data['config']['mediaGallery']['openDialogUrl'] = $this->url->getUrl(CONFIG::MEDIA_GALLERY_INDEX_ROUTE_PATH);
 
         $component->setData($data);
     }
