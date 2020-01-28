@@ -47,11 +47,6 @@ class GetList extends Action
     private $responseContent;
 
     /**
-    * @var array
-    */
-    private $tree;
-
-    /**
      * Constructor
      *
      * @param Action\Context $context
@@ -70,7 +65,6 @@ class GetList extends Action
         $this->filesystem = $filesystem;
         $this->path = $path;
         $this->responseContent = [];
-        $this->tree = null;
     }
     /**
      * @inheritdoc
