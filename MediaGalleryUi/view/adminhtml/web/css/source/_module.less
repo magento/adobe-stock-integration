@@ -17,12 +17,11 @@
 
         .media-gallery-image-details {
             list-style: none;
-            margin-bottom: 0px;
+            margin-bottom: 0;
 
             .name {
                 font-weight: bold;
                 font-size: 15px;
-                font-weight: bold;
             }
 
             .type {
@@ -58,7 +57,7 @@
         }
 
         .media-gallery-image-block {
-            padding: 25px;
+            position: relative;
             margin: 0 auto;
             height: 200px;
             &.selected {
@@ -67,7 +66,17 @@
         }
 
         .media-gallery-image img {
-            object-fit: cover;
+            max-height: 100%;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            padding: 5px;
         }
 
         .adobe-stock-icon {
