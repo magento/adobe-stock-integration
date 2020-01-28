@@ -47,20 +47,9 @@ class GetList extends Action
     private $responseContent;
 
     /**
-     *
-     *  @var array
-     */
-    private $directories;
-
-    /**
     * @var array
     */
-    private $tree = null;
-
-    /**
-     * @var array
-     */
-    private $nodes;
+    private $tree;
 
     /**
      * Constructor
@@ -81,6 +70,7 @@ class GetList extends Action
         $this->filesystem = $filesystem;
         $this->path = $path;
         $this->responseContent = [];
+        $this->tree = null;
     }
     /**
      * @inheritdoc
@@ -88,23 +78,22 @@ class GetList extends Action
     public function execute()
     {
         try {
-            $node = [];
+            $directories = [];
             $directoryInstance = $this->filesystem->getDirectoryRead($this->path);
             if ($directoryInstance->isDirectory()) {
                 foreach ($directoryInstance->readRecursively() as $index => $path) {
                     if ($directoryInstance->isDirectory($path)) {
                         $pathArray = explode('/', $path);
-                        $node[] =
+                        $directories[] =
                             [
+                                'path' => $path,
                                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
                                 'path_array' => $pathArray
                             ];
                     }
                 }
             }
-            $this->directories = $node;
-            $this->buildFolderTree();
-            $this->responseContent = $this->tree['children'];
+            $this->responseContent = $this->buildFolderTree($directories);
 
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
@@ -125,19 +114,26 @@ class GetList extends Action
     }
 
     /**
-     * Build Folder Tree for jstree plugin
+     * Builde folder tree structure by provided directories path
      *
-     * @return void
+     * @param array $directories
+     * @return array
      */
-    public function buildFolderTree()
+    private function buildFolderTree(array $directories, bool $skipRoot = true): array
     {
-        foreach ($this->directories as $idx => &$node) {
+        $tree = [
+            'name' => 'root',
+            'path' => '/',
+            'children' => []
+        ];
+        foreach ($directories as $idx => &$node) {
             $node['children'] = [];
-            $result = $this->findParent($node, $this->tree);
+            $result = $this->findParent($node, $tree);
             $parent = & $result['treeNode'];
             
-            $parent['children'][] =& $this->directories[$idx];
+            $parent['children'][] =& $directories[$idx];
         }
+        return $skipRoot ? $tree['children'] : $tree;
     }
 
     /**
@@ -146,9 +142,9 @@ class GetList extends Action
      * @param mixed $node
      * @param mixed $treeNode
      * @param int $level
-     * @return void
+     * @return array
      */
-    public function findParent(&$node, &$treeNode, $level = 0)
+    private function findParent(&$node, &$treeNode, int $level = 0): array
     {
         $nodePathLength = count($node['path_array']);
         $treeNodeParentLevel = $nodePathLength - 1;
@@ -171,7 +167,7 @@ class GetList extends Action
         $nodeDir = $node['path_array'][$level];
 
         foreach ($treeNode['children'] as $idx => &$tnode) {
-            $tnodeDir  = $tnode['path_array'][$level];
+            $tnodeDir = $tnode['path_array'][$level];
 
             if ($nodeDir === $tnodeDir) {
                 return $this->findParent($node, $tnode, $level + 1);
