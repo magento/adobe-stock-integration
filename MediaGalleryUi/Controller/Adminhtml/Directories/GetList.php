@@ -41,7 +41,26 @@ class GetList extends Action
      */
     private $path;
 
+    /**
+     * @var array
+     */
     private $responseContent;
+
+    /**
+     *
+     *  @var array
+     */
+    private $directories;
+
+    /**
+    * @var array
+    */
+    private $tree = null;
+
+    /**
+     * @var array
+     */
+    private $nodes;
 
     /**
      * Constructor
@@ -69,20 +88,24 @@ class GetList extends Action
     public function execute()
     {
         try {
+            $node = [];
             $directoryInstance = $this->filesystem->getDirectoryRead($this->path);
             if ($directoryInstance->isDirectory()) {
                 foreach ($directoryInstance->readRecursively() as $index => $path) {
                     if ($directoryInstance->isDirectory($path)) {
-                        $node = $this->buildTree($this->prepareTree($path));
-                        $this->responseContent[$node['data']] = $node;
+                        $pathArray = explode('/', $path);
+                        $node[] =
+                            [
+                                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
+                                'path_array' => $pathArray
+                            ];
                     }
                 }
             }
-            $i = 0;
-            foreach ($this->responseContent as $key => $val) {
-                $this->responseContent[$i++] = $this->responseContent[$key];
-                unset($this->responseContent[$key]);
-            }
+            $this->directories = $node;
+            $this->buildFolderTree();
+            $this->responseContent = $this->tree['children'];
+
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
@@ -102,39 +125,63 @@ class GetList extends Action
     }
 
     /**
-     * prepareTree
+     * Build Folder Tree for jstree plugin
      *
-     * @param string $path
-     * @return array
+     * @return void
      */
-    private function prepareTree(string $path): array
+    public function buildFolderTree()
     {
-        $array = [];
-        $path = trim($path, '/');
-        $list = explode('/', $path);
-        $n = count($list);
-
-        $arrayRef = &$array;
-        for ($i = 0; $i < $n; $i++) {
-            $key = $list[$i];
-            $arrayRef = &$arrayRef[$key];
+        foreach ($this->directories as $idx => &$node) {
+            $node['children'] = [];
+            $result = $this->findParent($node, $this->tree);
+            $parent = & $result['treeNode'];
+            
+            $parent['children'][] =& $this->directories[$idx];
         }
-        return $array;
     }
 
     /**
-     * buildTree
+     * Find parent directory
      *
-     * @param array $array
-     * @return array
+     * @param mixed $node
+     * @param mixed $treeNode
+     * @param int $level
+     * @return void
      */
-    private function buildTree(array $array): array
+    public function findParent(&$node, &$treeNode, $level = 0)
     {
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                return ['data' => $key, 'children' => [$this->buildTree($value)]];
-            }
-            return ['data' => $key];
+        $nodePathLength = count($node['path_array']);
+        $treeNodeParentLevel = $nodePathLength - 1;
+
+        $result = [
+            'isParent' => false,
+            'treeNode' => &$treeNode,
+            'node' => &$node,
+        ];
+
+        if ($nodePathLength <= 1) {
+            $result['isParent'] = true;
+            return $result;
         }
+
+        if ($level > $treeNodeParentLevel) {
+            $result['isParent'] = false;
+            return $result;
+        }
+        $nodeDir = $node['path_array'][$level];
+
+        foreach ($treeNode['children'] as $idx => &$tnode) {
+            $tnodeDir  = $tnode['path_array'][$level];
+
+            if ($nodeDir === $tnodeDir) {
+                return $this->findParent($node, $tnode, $level + 1);
+            }
+        }
+
+        if ($level == $treeNodeParentLevel) {
+            $result['isParent'] = true;
+        }
+
+        return $result;
     }
 }
