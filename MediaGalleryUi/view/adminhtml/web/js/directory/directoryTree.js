@@ -1,21 +1,33 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.g
  * See COPYING.txt for license details.
  */
 
 define([
     'jquery',
-    'uiElement',
+    'uiComponent',
     'jquery/jstree/jquery.jstree'
-], function ($, Element) {
+], function ($, Component) {
     'use strict';
 
-    return Element.extend({
+    return Component.extend({
         defaults: {
-            directoryListUrl: 'media_gallery/directories/getdirectorytreedata',
+            template: "Magento_MediaGalleryUi/grid/directories/directoryTree",
+            directoryListUrl: 'media_gallery/directories/getlist',
+            filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
+            urlProvider: 'name = media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url, ns = media_gallery_listing',
             options: {
-                treeInitData: []
+                treeInitData: [],
+                selectedIds: [],
+            },
+            modules: {
+                image: '${ $.urlProvider }',
+                filterChips: '${ $.filterChipsProvider }'
+
+            },
+            listens: {
+                '${ $.provider }:data.items': 'getJsonTree createTree initEvents',
             }
         },
 
@@ -25,9 +37,32 @@ define([
         initialize: function () {
             this._super()
 
-            this.createTree();
-
+            this.directoryListUrl = this.image().directoryListUrl;
             return this;
+        },
+
+        initEvents: function () {
+            $(this.directoryTreeSelector).on('select_node.jstree', function(element, data) {
+        
+             this.applyFilter($(data.rslt.obj).data('path'));
+
+            }.bind(this));
+        },
+
+
+        /**
+         * Apply folder filter by path
+         *
+         * @param {string} path
+         */
+        applyFilter: function (path) {
+
+            this.filterChips().set(
+                'applied',
+                {
+                    'directory': path
+                }
+            );
         },
 
         /**
@@ -46,7 +81,7 @@ define([
                     this.options.treeInitData = data;
                 }.bind(this),
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
+                    console.log(errorThrown);
                 }.bind(this)
             });
         },
@@ -55,7 +90,6 @@ define([
          * Initialize directory tree.
          */
         createTree: function () {
-            this.getJsonTree();
             $(this.directoryTreeSelector).jstree({
                 plugins: ['themes', 'json_data', 'ui', 'crrm', 'types', 'hotkeys'],
                 vcheckbox: {
@@ -65,9 +99,6 @@ define([
                 'json_data': {
                     data: this.options.treeInitData
                 },
-                ui: {
-                    'select_limit': 0
-                },
                 hotkeys: {
                     space: this._changeState,
                     'return': this._changeState
@@ -75,7 +106,7 @@ define([
                 types: {
                     'types': {
                         'disabled': {
-                            'check_node': false,
+                            'check_node': true,
                             'uncheck_node': false
                         }
                     }

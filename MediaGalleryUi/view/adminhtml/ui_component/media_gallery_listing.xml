@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -36,14 +36,6 @@
     </dataSource>
     <listingToolbar name="listing_top">
         <filters name="listing_filters">
-            <filterSelect name="directory" provider="${ $.parentName }" sortOrder="10">
-                <settings>
-                    <caption translate="true">All</caption>
-                    <options class="Magento\MediaGalleryUi\Ui\Options\Directory"/>
-                    <label translate="true">Directory</label>
-                    <dataScope>directory</dataScope>
-                </settings>
-            </filterSelect>
             <filterRange name="created_at"
                 class="Magento\Ui\Component\Filters\Type\Date"
                 provider="${ $.parentName }"
@@ -64,6 +56,15 @@
             <dataScope>updated_at</dataScope>
         </settings>
     </filterRange>
+    <filterSelect name="directory" provider="${ $.parentName }" sortOrder="10">
+        <settings>
+            <visible>false</visible>
+            <caption translate="true">All</caption>
+            <options class="Magento\MediaGalleryUi\Ui\Options\Directory"/>
+            <label translate="true">Directory</label>
+            <dataScope>directory</dataScope>
+        </settings>
+    </filterSelect>
 </filters>
 <paging name="listing_paging">
     <settings>
@@ -85,21 +86,7 @@
     </settings>
 </paging>
     </listingToolbar>
-    <fieldset name="media_gallery_directories">
-        <settings>
-            <label/>
-        </settings>
-        <container name="media_gallery_directories" >
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
-            <htmlContent name="media_gallery_directories">
-                <argument name="block" xsi:type="object">Magento\MediaGalleryUi\Block\MediaGalleryDirectories</argument>
-            </htmlContent>
-        </container>
-    </fieldset>
+
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -128,4 +115,19 @@
             </settings>
         </column>
     </columns>
+    <fieldset name="media_gallery_directories">
+        <settings>
+            <label/>
+        </settings>
+        <container name="media_gallery_directories" >
+            <htmlContent name="media_gallery_directories">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_MediaGalleryUi/js/directory/directoryTree</item>
+                </item>
+            </argument>
+                <argument name="block" xsi:type="object">Magento\Backend\Block\Template</argument>
+            </htmlContent>
+        </container>
+    </fieldset>
 </listing>

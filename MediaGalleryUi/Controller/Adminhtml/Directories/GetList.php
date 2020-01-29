@@ -80,8 +80,10 @@ class GetList extends Action
                         $pathArray = explode('/', $path);
                         $directories[] =
                             [
-                                'path' => $path,
                                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
+                                'metadata' => [
+                                    'path' => $path
+                                ],
                                 'path_array' => $pathArray
                             ];
                     }
@@ -124,7 +126,7 @@ class GetList extends Action
             $node['children'] = [];
             $result = $this->findParent($node, $tree);
             $parent = & $result['treeNode'];
-            
+
             $parent['children'][] =& $directories[$idx];
         }
         return $skipRoot ? $tree['children'] : $tree;
@@ -133,29 +135,23 @@ class GetList extends Action
     /**
      * Find parent directory
      *
-     * @param mixed $node
-     * @param mixed $treeNode
+     * @param array $node
+     * @param array $treeNode
      * @param int $level
      * @return array
      */
-    private function findParent(&$node, &$treeNode, int $level = 0): array
+    private function findParent(array &$node, array &$treeNode, int $level = 0): array
     {
         $nodePathLength = count($node['path_array']);
         $treeNodeParentLevel = $nodePathLength - 1;
 
-        $result = [
-            'isParent' => false,
-            'treeNode' => &$treeNode,
-            'node' => &$node,
-        ];
+        $result = ['treeNode' => &$treeNode];
 
         if ($nodePathLength <= 1) {
-            $result['isParent'] = true;
             return $result;
         }
 
         if ($level > $treeNodeParentLevel) {
-            $result['isParent'] = false;
             return $result;
         }
         $nodeDir = $node['path_array'][$level];
@@ -166,10 +162,6 @@ class GetList extends Action
             if ($nodeDir === $tnodeDir) {
                 return $this->findParent($node, $tnode, $level + 1);
             }
-        }
-
-        if ($level == $treeNodeParentLevel) {
-            $result['isParent'] = true;
         }
 
         return $result;
