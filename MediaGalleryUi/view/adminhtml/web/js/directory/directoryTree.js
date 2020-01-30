@@ -20,7 +20,7 @@ define([
             urlProvider: 'name = media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url, ns = media_gallery_listing',
             options: {
                 treeInitData: [],
-                selectedId: null,
+                selectedId: null
             },
             modules: {
                 image: '${ $.urlProvider }',
@@ -31,23 +31,23 @@ define([
                 '${ $.provider }:data.items': 'getJsonTree createTree initEvents'
             }
         },
-        
+
         /**
-         *  Dispatch onSelect jstree node event
+         *  Hendle jstree events
          */
         initEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-            
+
                 this.options.selectedId = $(this.directoryTreeSelector).jstree('get_selected').attr('id');
                 this.applyFilter($(data.rslt.obj).data('path'));
-            
+
             }.bind(this));
-            
-            $(this.directoryTreeSelector).on('loaded.jstree', function (e, data) {
-             
-                $(this.directoryTreeSelector).jstree('select_node', '#'+this.options.selectedId);
-            
-            }.bind(this))
+
+            $(this.directoryTreeSelector).on('loaded.jstree', function () {
+
+                $(this.directoryTreeSelector).jstree('select_node', '#' + this.options.selectedId);
+
+            }.bind(this));
         },
 
         /**
