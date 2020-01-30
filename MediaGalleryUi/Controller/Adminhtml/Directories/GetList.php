@@ -81,6 +81,7 @@ class GetList extends Action
                         $directories[] =
                             [
                                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
+                                'attr' => ['id' => $index],
                                 'metadata' => [
                                     'path' => $path
                                 ],

@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* global FORM_KEY */
 define([
     'jquery',
     'uiComponent',
@@ -12,14 +13,14 @@ define([
 
     return Component.extend({
         defaults: {
-            template: "Magento_MediaGalleryUi/grid/directories/directoryTree",
-            directoryListUrl: 'media_gallery/directories/getlist',
+            template: 'Magento_MediaGalleryUi/grid/directories/directoryTree',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
+            /* eslint-disable max-len */
             urlProvider: 'name = media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url, ns = media_gallery_listing',
             options: {
                 treeInitData: [],
-                selectedIds: [],
+                selectedId: null,
             },
             modules: {
                 image: '${ $.urlProvider }',
@@ -27,33 +28,32 @@ define([
 
             },
             listens: {
-                '${ $.provider }:data.items': 'getJsonTree createTree initEvents',
+                '${ $.provider }:data.items': 'getJsonTree createTree initEvents'
             }
         },
-
-        /**
-         * Initializes Media Gallery Directories Tree component
-         */
-        initialize: function () {
-            this._super()
-
-            this.directoryListUrl = this.image().directoryListUrl;
-            return this;
-        },
-
-        initEvents: function () {
-            $(this.directoryTreeSelector).on('select_node.jstree', function(element, data) {
         
-             this.applyFilter($(data.rslt.obj).data('path'));
-
+        /**
+         *  Dispatch onSelect jstree node event
+         */
+        initEvents: function () {
+            $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
+            
+                this.options.selectedId = $(this.directoryTreeSelector).jstree('get_selected').attr('id');
+                this.applyFilter($(data.rslt.obj).data('path'));
+            
             }.bind(this));
+            
+            $(this.directoryTreeSelector).on('loaded.jstree', function (e, data) {
+             
+                $(this.directoryTreeSelector).jstree('select_node', '#'+this.options.selectedId);
+            
+            }.bind(this))
         },
-
 
         /**
          * Apply folder filter by path
          *
-         * @param {string} path
+         * @param {String} path
          */
         applyFilter: function (path) {
 
@@ -70,19 +70,33 @@ define([
          */
         getJsonTree: function () {
             $.ajax({
-                url: this.directoryListUrl,
+                url: this.image().directoryListUrl,
                 type: 'POST',
                 dataType: 'json',
                 async: false,
                 data: {
                     'form_key': FORM_KEY
                 },
+
+                /**
+                 * Succes handler for request
+                 *
+                 * @param {Object} data
+                 */
                 success: function (data) {
                     this.options.treeInitData = data;
                 }.bind(this),
+
+                /**
+                 * Error handler for request
+                 *
+                 * @param {Object} jqXHR
+                 * @param {String} textStatus
+                 * @param {Object} errorThrown
+                 */
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(errorThrown);
-                }.bind(this)
+                }
             });
         },
 
@@ -112,6 +126,7 @@ define([
                     }
                 }
             });
+
         }
     });
 
