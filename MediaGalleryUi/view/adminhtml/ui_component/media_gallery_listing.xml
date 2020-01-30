@@ -86,6 +86,7 @@
             </settings>
         </paging>
     </listingToolbar>
+    <container name="media_gallery_directories" component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -114,19 +115,4 @@
             </settings>
         </column>
     </columns>    
-    <fieldset name="media_gallery_directories">
-        <settings>
-            <label/>
-        </settings>
-        <container name="media_gallery_directories" >
-            <htmlContent name="media_gallery_directories">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_MediaGalleryUi/js/directory/directoryTree</item>
-                </item>
-            </argument>
-                <argument name="block" xsi:type="object">Magento\Backend\Block\Template</argument>
-            </htmlContent>
-        </container>
-    </fieldset>
 </listing>
