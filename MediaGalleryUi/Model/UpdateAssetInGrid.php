@@ -7,14 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
-use Magento\Framework\App\Area;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\Store\Model\App\Emulation;
-use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Reindex Media Gallery Assets Grid
@@ -27,110 +24,71 @@ class UpdateAssetInGrid
     private $resource;
 
     /**
-     * @var Repository
+     * @var DriverInterface
      */
-    private $assetRepository;
+    private $file;
 
     /**
-     * @var Emulation
+     * @var LoggerInterface
      */
-    private $appEmulation;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private $logger;
 
     /**
      * Constructor
      *
      * @param ResourceConnection $resource
-     * @param Repository $assetRepository
-     * @param Emulation $emulation
-     * @param ScopeConfigInterface $scopeConfig
+     * @param DriverInterface $file
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resource,
-        Repository $assetRepository,
-        Emulation $emulation,
-        ScopeConfigInterface $scopeConfig
+        DriverInterface $file,
+        LoggerInterface $logger
     ) {
         $this->resource = $resource;
-        $this->assetRepository = $assetRepository;
-        $this->appEmulation = $emulation;
-        $this->scopeConfig = $scopeConfig;
+        $this->file = $file;
+        $this->logger = $logger;
     }
 
     /**
-     * Update the grid table for the asset
+     * Update the media asset grid with additional data
      *
      * @param AssetInterface $asset
+     *
      * @return void
+     * @throws CouldNotSaveException
      */
     public function execute(AssetInterface $asset): void
     {
-        $this->getConnection()->insertOnDuplicate(
-            $this->resource->getTableName('media_gallery_asset_grid'),
-            [
-                'id' => $asset->getId(),
-                'directory' => dirname($asset->getPath()),
-                'thumbnail_url' => $asset->getPath(),
-                'preview_url' => $asset->getPath(),
-                'name' => basename($asset->getPath()),
-                'content_type' =>  strtoupper(str_replace("image/", "", $asset->getContentType())),
-                'source_icon_url' => $this->getIconUrl($asset),
-                'width' => $asset->getWidth(),
-                'height' => $asset->getHeight(),
-                'created_at' => $asset->getCreatedAt(),
-                'updated_at' => $asset->getUpdatedAt()
-            ]
-        );
+        try {
+            $this->resource->getConnection()->insertOnDuplicate(
+                $this->resource->getTableName('media_gallery_asset_grid'),
+                [
+                    'id' => $asset->getId(),
+                    'directory' => $this->file->getParentDirectory($asset->getPath()),
+                    'thumbnail_url' => $asset->getPath(),
+                    'preview_url' => $asset->getPath(),
+                    'name' => basename($asset->getPath()),
+                    'content_type' => strtoupper(str_replace('image/', '', $asset->getContentType())),
+                    'source' => $asset->getSource(),
+                    'width' => $asset->getWidth(),
+                    'height' => $asset->getHeight(),
+                    'created_at' => $asset->getCreatedAt(),
+                    'updated_at' => $asset->getUpdatedAt(),
+                ]
+            );
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $message = __('An error occurred during media asset save: %1', $exception->getMessage());
+            throw new CouldNotSaveException($message, $exception);
+        }
     }
 
-    /**
-     * Retrieve the database adapter
-     *
-     * @return AdapterInterface
-     */
-    private function getConnection(): AdapterInterface
+    private function getIconUrl(AssetInterface $asset)
     {
-        return $this->resource->getConnection();
-    }
-
-    /**
-     * Return AStock incon url if source is Adobe Stock
-     *
-     * @return ?string
-     */
-    private function getIconUrl(AssetInterface $asset): ?string
-    {
-        $iconUrl = null;
-
-        $this->appEmulation->startEnvironmentEmulation(
-            Store::DEFAULT_STORE_ID,
-            Area::AREA_ADMINHTML,
-            true
-        );
-
-        if (!empty($asset->getSource())) {
-            $iconUrl = $this->assetRepository->getUrlWithParams(
+        $iconUrl = $this->assetRepository->getUrlWithParams(
                 'Magento_MediaGalleryUi::images/Astock.png',
                 ['_secure' => $this->getIsSecure()]
             );
-        }
-
-        $this->appEmulation->stopEnvironmentEmulation();
-
-        return $iconUrl;
-    }
-
-    /**
-     * Ceheck if store use secure connection
-     *
-     * @return bool
-     */
-    private function getIsSecure(): bool
-    {
-        return $this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_ADMINHTML);
     }
 }

@@ -12,14 +12,16 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Unlicensed Overlay column
+ * Source icon url provider
  */
-class UnlicensedOverlay extends Column
+class SourceIconProvider extends Column
 {
+    private $constructSourceItemUrl;
 
     /**
-     * UnlicensedOverlay constructor.
+     * SourceIconProvider constructor.
      *
+     * @param ConstructSourceItemUrl $constructSourceItemUrl
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param array $components
@@ -28,24 +30,26 @@ class UnlicensedOverlay extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
+        ConstructSourceItemUrl $constructSourceItemUrl,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->constructSourceItemUrl = $constructSourceItemUrl;
     }
 
     /**
      * Prepare Data Source
      *
      * @param array $dataSource
-     *
      * @return array
      */
     public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = (isset($item['licensed']) && !$item['licensed']) ? 'Unlicensed' : '';
+            foreach ($dataSource['data']['items'] as &$item) {
+                $item['source_icon_url'] =
+                    (isset($item['source'])) ? $this->constructSourceItemUrl->execute($item['source']) : null;
             }
         }
 

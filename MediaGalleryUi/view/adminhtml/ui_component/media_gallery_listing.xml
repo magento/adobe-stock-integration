@@ -98,6 +98,15 @@
                 <sortable>false</sortable>
             </settings>
         </column>
+        <column name="source" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="fields" xsi:type="array">
+                        <item name="source_icon_url" xsi:type="string">source</item>
+                    </item>
+                </item>
+            </argument>
+        </column>
         <column name="thumbnail_url" component="Magento_MediaGalleryUi/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
