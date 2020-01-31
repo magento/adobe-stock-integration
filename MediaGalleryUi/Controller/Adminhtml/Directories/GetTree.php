@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Returns all available directories
  */
-class GetList extends Action
+class GetTree extends Action
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;

@@ -29,9 +29,12 @@ class Url extends Column
     private $url;
 
     /**
+     * Constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $url
      * @param array $components
      * @param array $data
      */
@@ -59,7 +62,7 @@ class Url extends Column
             array_replace_recursive(
                 (array) $this->getData('config'),
                 [
-                    'directoryListUrl' => $this->url->getUrl("media_gallery/directories/getlist")
+                    'getDirectoryTreeUrl' => $this->url->getUrl("media_gallery/directories/gettree")
                 ]
             )
         );

@@ -11,7 +11,7 @@ define([
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
             selected: null,
-            directoryListUrl: 'media_gallery/directories/getlist',
+            getDirectoryTreeUrl: 'media_gallery/directories/gettree',
             fields: {
                 id: 'id',
                 url: 'url'

@@ -6,12 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\MediaGalleryUi\Ui\Options\Directory">
-        <arguments>
-            <argument name="path" xsi:type="string">media</argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaGalleryUi\Controller\Adminhtml\Directories\GetList">
+    <type name="Magento\MediaGalleryUi\Controller\Adminhtml\Directories\GetTree">
         <arguments>
             <argument name="path" xsi:type="string">media</argument>
         </arguments>

@@ -13,14 +13,12 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_MediaGalleryUi/grid/directories/directoryTree',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
             /* eslint-disable max-len */
             urlProvider: 'name = media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url, ns = media_gallery_listing',
             options: {
-                treeInitData: [],
-                selectedId: null
+                treeInitData: []
             },
             modules: {
                 image: '${ $.urlProvider }',
@@ -52,7 +50,6 @@ define([
         initEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
 
-                this.options.selectedId = $(this.directoryTreeSelector).jstree('get_selected').attr('id');
                 this.applyFilter($(data.rslt.obj).data('path'));
 
             }.bind(this));
@@ -78,7 +75,7 @@ define([
          */
         getJsonTree: function () {
             $.ajax({
-                url: this.image().directoryListUrl,
+                url: this.image().getDirectoryTreeUrl,
                 type: 'POST',
                 dataType: 'json',
                 async: false,
@@ -136,5 +133,4 @@ define([
 
         }
     });
-
-})  
+});
