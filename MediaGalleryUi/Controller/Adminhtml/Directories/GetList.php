@@ -148,19 +148,12 @@ class GetList extends Action
 
         $result = ['treeNode' => &$treeNode];
 
-        if ($nodePathLength <= 1) {
+        if ($nodePathLength <= 1 || $level > $treeNodeParentLevel) {
             return $result;
         }
-
-        if ($level > $treeNodeParentLevel) {
-            return $result;
-        }
-        $nodeDir = $node['path_array'][$level];
 
         foreach ($treeNode['children'] as $idx => &$tnode) {
-            $tnodeDir = $tnode['path_array'][$level];
-
-            if ($nodeDir === $tnodeDir) {
+            if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
                 return $this->findParent($node, $tnode, $level + 1);
             }
         }

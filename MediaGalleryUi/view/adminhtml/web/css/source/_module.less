@@ -6,6 +6,44 @@
 & when (@media-common = true) {
 
     .media-gallery-container {
+        
+        .jstree-default .jstree-hovered {
+            border-radius: 6px;
+            background:#cdecf6;
+            border: solid 0.14em;
+            border-color:#7185f5;
+        }
+        
+        .jstree-default .jstree-clicked {
+            border-radius: 6px;
+            background:#cdecf6;
+            border: solid 0.14em;
+            border-color:#7185f5;
+        }
+
+        .jstree-default a .jstree-icon {
+            background-position: -52px -16px;
+        }
+
+        .jstree a > ins {
+            height: 20px;
+            width: 20px;
+        }
+
+        .jstree-default .jstree-no-dots .jstree-leaf > ins{ 
+            background-image: none !important; 
+        }
+
+        .jstree-default ins {
+            background-image: url("../../images/d.png") !important;
+        }
+
+        .jstree a { 
+            padding: 3px 8px;
+            height: 30px;
+            width: 124%;
+            margin: 1px;
+        }
 
         .masonry-image-overlay {
             margin-left: 120px;

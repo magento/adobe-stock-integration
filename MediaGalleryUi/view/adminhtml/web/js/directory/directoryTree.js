@@ -92,10 +92,9 @@ define([
                  *
                  * @param {Object} jqXHR
                  * @param {String} textStatus
-                 * @param {Object} errorThrown
                  */
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(errorThrown);
+                error: function (jqXHR, textStatus) {
+                    throw testStatus;
                 }
             });
         },
@@ -105,7 +104,7 @@ define([
          */
         createTree: function () {
             $(this.directoryTreeSelector).jstree({
-                plugins: ['themes', 'json_data', 'ui', 'crrm', 'types', 'hotkeys'],
+                plugins: ['json_data', 'themes',  'ui', 'crrm', 'types', 'hotkeys'],
                 vcheckbox: {
                     'two_state': true,
                     'real_checkboxes': true
