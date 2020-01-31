@@ -111,7 +111,7 @@ class GetList extends Action
     }
 
     /**
-     * Builde folder tree structure by provided directories path
+     * Build folder tree structure by provided directories path
      *
      * @param array $directories
      * @return array

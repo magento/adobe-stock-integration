@@ -25,11 +25,25 @@ define([
             modules: {
                 image: '${ $.urlProvider }',
                 filterChips: '${ $.filterChipsProvider }'
-
-            },
-            listens: {
-                '${ $.provider }:data.items': 'getJsonTree createTree initEvents'
             }
+        },
+
+        /**
+         * Initializes media gallery directories component.
+         *
+         * @returns {Sticky} Chainable.
+         */
+        initialize: function () {
+            this._super();
+
+            // wait one second for template render
+            setTimeout(function () {
+                this.getJsonTree();
+                this.createTree();
+                this.initEvents();
+            }.bind(this), 100);
+
+            return this;
         },
 
         /**
@@ -40,12 +54,6 @@ define([
 
                 this.options.selectedId = $(this.directoryTreeSelector).jstree('get_selected').attr('id');
                 this.applyFilter($(data.rslt.obj).data('path'));
-
-            }.bind(this));
-
-            $(this.directoryTreeSelector).on('loaded.jstree', function () {
-
-                $(this.directoryTreeSelector).jstree('select_node', '#' + this.options.selectedId);
 
             }.bind(this));
         },
@@ -94,7 +102,7 @@ define([
                  * @param {String} textStatus
                  */
                 error: function (jqXHR, textStatus) {
-                    throw testStatus;
+                    throw textStatus;
                 }
             });
         },
@@ -129,4 +137,4 @@ define([
         }
     });
 
-});
+})  
