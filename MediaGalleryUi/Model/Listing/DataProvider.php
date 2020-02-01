@@ -9,12 +9,13 @@ namespace Magento\MediaGalleryUi\Model\Listing;
 
 use Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset\CollectionFactory;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
  * Media gallery UI data provider. Try catch added for displaying errors in grid
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
     /**
      * @var AddFieldToCollectionInterface[]
