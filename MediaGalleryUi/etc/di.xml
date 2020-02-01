@@ -38,4 +38,7 @@
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface">
         <plugin name="updateAssetInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetInGrid"/>
     </type>
+    <type name="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface">
+        <plugin name="updateAssetKeywordsInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetKeywordsInGrid"/>
+    </type>
 </config>

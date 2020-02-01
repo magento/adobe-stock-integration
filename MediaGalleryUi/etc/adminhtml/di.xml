@@ -17,4 +17,11 @@
     <type name="Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider">
         <plugin name="updateWysiwygOpenDialogUrl" type="Magento\MediaGalleryUi\Plugin\UpdateWysiwygOpenDialogUrl"/>
     </type>
+    <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
+        <arguments>
+            <argument name="addFilterStrategies" xsi:type="array">
+                <item name="keywords" xsi:type="object">Magento\MediaGalleryUi\Ui\Data\AddFulltextFilterToCollection</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

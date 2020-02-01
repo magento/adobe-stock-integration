@@ -18,6 +18,7 @@
         <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
         <column xsi:type="datetime" name="created_at" nullable="true" comment="Uploaded Date"/>
         <column xsi:type="datetime" name="updated_at" nullable="true" comment="Modification Date"/>
+        <column xsi:type="varchar" name="keywords" length="500" nullable="true"  comment="Keywords"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
