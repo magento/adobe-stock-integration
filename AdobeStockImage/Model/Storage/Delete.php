@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model\Storage;
 
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Filesystem;
@@ -29,16 +30,23 @@ class Delete
     private $logger;
 
     /**
+     * @var Storage
+     */
+    private $storage;
+
+    /**
      * Storage constructor.
      * @param Filesystem $filesystem
      * @param LoggerInterface $logger
      */
     public function __construct(
         Filesystem $filesystem,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Storage $storage
     ) {
         $this->filesystem = $filesystem;
         $this->logger = $logger;
+        $this->storage = $storage;
     }
 
     /**
@@ -52,7 +60,7 @@ class Delete
         try {
             $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
             if ($mediaDirectory->isFile($path)) {
-                $mediaDirectory->delete($path);
+                $this->storage->deleteFile($mediaDirectory->getAbsolutePath($path));
             }
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
