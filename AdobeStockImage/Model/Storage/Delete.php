@@ -35,9 +35,11 @@ class Delete
     private $storage;
 
     /**
-     * Storage constructor.
+     * Constructor
+     *
      * @param Filesystem $filesystem
      * @param LoggerInterface $logger
+     * @param Storage $storage
      */
     public function __construct(
         Filesystem $filesystem,
