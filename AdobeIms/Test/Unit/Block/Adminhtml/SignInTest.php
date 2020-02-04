@@ -84,9 +84,9 @@ class SignInTest extends TestCase
         $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
         $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
+        $this->jsonHexTag = $this->createMock(JsonHexTag::class);
 
         $objectManager = new ObjectManager($this);
-        $this->jsonHexTag = $objectManager->getObject(JsonHexTag::class);
         $this->signInBlock = $objectManager->getObject(
             SignInBlock::class,
             [
@@ -134,32 +134,26 @@ class SignInTest extends TestCase
             $userData = $this->getDefaultUserData();
         }
 
-        if ($userId !== 14) {
-            $result = $this->signInBlock->getComponentJsonConfig();
-
-            $this->assertEquals(
-                $this->jsonHexTag->serialize($this->getDefaultComponentConfig($userData)),
-                $result
-            );
-        } else { // Test user 14 using an additional config provider
+        $serializedResult = 'Some result';
+        $expectedData = $this->getDefaultComponentConfig($userData);
+        if ($userId === 14) { // Test user 14 using an additional config provider
             $configProviderMock = $this->createMock(ConfigProviderInterface::class);
             $configProviderMock->expects($this->any())
                 ->method('get')
                 ->willReturn($this->getConfigProvideConfig());
             $this->signInBlock->setData('configProviders', [$configProviderMock]);
 
-            $result = $this->signInBlock->getComponentJsonConfig();
-
-            $this->assertEquals(
-                $this->jsonHexTag->serialize(
-                    array_replace_recursive(
-                        $this->getDefaultComponentConfig($userData),
-                        $this->getConfigProvideConfig()
-                    )
-                ),
-                $result
+            $expectedData = array_replace_recursive(
+                $expectedData,
+                $this->getConfigProvideConfig()
             );
         }
+        $this->jsonHexTag->expects($this->once())
+            ->method('serialize')
+            ->with($expectedData)
+            ->willReturn($serializedResult);
+
+        $this->assertEquals($serializedResult, $this->signInBlock->getComponentJsonConfig());
     }
 
     /**
