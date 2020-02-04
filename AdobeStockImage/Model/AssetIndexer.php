@@ -11,7 +11,6 @@ use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
@@ -55,9 +54,9 @@ class AssetIndexer implements IndexerInterface
     private $driver;
 
     /**
-     * @var ResourceConnection
+     * @var SetUnlicensedImageMediaGallery
      */
-    private $resource;
+    private $setUnlicensedImagesMediaGalley;
 
     /**
      * Constructor
@@ -71,18 +70,18 @@ class AssetIndexer implements IndexerInterface
      */
     public function __construct(
         GetByPathInterface $getByPathCommand,
-        ResourceConnection $resource,
         AssetRepositoryInterface $assetRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Filesystem $filesystem,
-        File $driver
+        File $driver,
+        SetUnlicensedImageMediaGallery $setUnlicensedImagesMediaGalley
     ) {
         $this->getByPathCommand = $getByPathCommand;
         $this->assetRepository = $assetRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->resource = $resource;
+        $this->setUnlicensedImagesMediaGalley = $setUnlicensedImagesMediaGalley;
     }
 
     /**
@@ -101,13 +100,7 @@ class AssetIndexer implements IndexerInterface
         $assets = $this->assetRepository->getList($searchCriteria)->getItems();
 
         foreach ($assets as $asset) {
-            $this->getConnection()->insertOnDuplicate(
-                $this->resource->getTableName('media_gallery_asset_grid'),
-                [
-                    'id' => $mediaAsset->getId(),
-                    'licensed' => $asset->getIsLicensed(),
-                ]
-            );
+            $this->setUnlicensedImagesMediaGalley->execute($asset);
         }
     }
 
@@ -139,15 +132,5 @@ class AssetIndexer implements IndexerInterface
             $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
-    }
-
-    /**
-     * Retrieve the database adapter
-     *
-     * @return AdapterInterface
-     */
-    private function getConnection(): AdapterInterface
-    {
-        return $this->resource->getConnection();
     }
 }
