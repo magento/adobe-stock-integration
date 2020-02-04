@@ -106,14 +106,15 @@ class SignInTest extends TestCase
      * @param bool $userExists
      * @param array $userData
      * @param array $configProviderData
+     * @param array $expectedData
      */
     public function testGetComponentJsonConfig(
         int $userId,
         bool $userExists,
         array $userData,
-        array $configProviderData
-    ): void
-    {
+        array $configProviderData,
+        array $expectedData
+    ): void {
         $this->userAuthorizedMock->expects($this->once())
             ->method('execute')
             ->willReturn($userData['isAuthorized']);
@@ -135,11 +136,6 @@ class SignInTest extends TestCase
             ->with($userId)
             ->will($userRepositoryWillReturn);
 
-        // Get default data for the assertion for non-authorized or not existing user
-        if ($userData['isAuthorized'] === false || !$userExists) {
-            $userData = $this->getDefaultUserData();
-        }
-
         $configProviderMock = $this->createMock(ConfigProviderInterface::class);
         $configProviderMock->expects($this->any())
             ->method('get')
@@ -147,11 +143,6 @@ class SignInTest extends TestCase
         $this->signInBlock->setData('configProviders', [$configProviderMock]);
 
         $serializedResult = 'Some result';
-        $expectedData = array_replace_recursive(
-            $this->getDefaultComponentConfig($userData),
-            $configProviderData
-        );
-
         $this->jsonHexTag->expects($this->once())
             ->method('serialize')
             ->with($expectedData)
@@ -243,7 +234,13 @@ class SignInTest extends TestCase
                     'email' => 'john@email.com',
                     'image' => 'image.png'
                 ],
-                []
+                [],
+                $this->getDefaultComponentConfig([
+                    'isAuthorized' => true,
+                    'name' => 'John',
+                    'email' => 'john@email.com',
+                    'image' => 'image.png'
+                ])
             ],
             'Existing non-authorized user' => [
                 12,
@@ -254,7 +251,8 @@ class SignInTest extends TestCase
                     'email' => 'john@email.com',
                     'image' => 'image.png'
                 ],
-                []
+                [],
+                $this->getDefaultComponentConfig($this->getDefaultUserData()),
             ],
             'Non-existing user' => [
                 13,
@@ -265,7 +263,8 @@ class SignInTest extends TestCase
                     'email' => 'john@email.com',
                     'image' => 'image.png'
                 ],
-                []
+                [],
+                $this->getDefaultComponentConfig($this->getDefaultUserData()),
             ],
             'Existing user with additional config provider' => [
                 14,
@@ -276,7 +275,11 @@ class SignInTest extends TestCase
                     'email' => 'john@email.com',
                     'image' => 'image.png'
                 ],
-                $this->getConfigProvideConfig()
+                $this->getConfigProvideConfig(),
+                array_replace_recursive(
+                    $this->getDefaultComponentConfig($this->getDefaultUserData()),
+                    $this->getConfigProvideConfig()
+                )
             ]
         ];
     }
