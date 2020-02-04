@@ -125,9 +125,10 @@ class SignInTest extends TestCase
     /**
      * @dataProvider userDataProvider
      * @param int $userId
+     * @param bool $userExists
      * @param array $userData
      */
-    public function testGetComponentJsonConfig(int $userId, array $userData): void
+    public function testGetComponentJsonConfig(int $userId, bool $userExists, array $userData): void
     {
         $this->userAuthorizedMock->expects($this->once())
             ->method('execute')
@@ -142,20 +143,16 @@ class SignInTest extends TestCase
             ->method('getUserId')
             ->willReturn($userId);
 
-        if ($userId !== 13) {
-            $this->userProfileRepositoryMock->expects($this->any())
-                ->method('getByUserId')
-                ->with($userId)
-                ->willReturn($userProfile);
-        } else { // Emulate non-existing user with ID 13
-            $this->userProfileRepositoryMock->expects($this->any())
-                ->method('getByUserId')
-                ->with($userId)
-                ->willThrowException(new NoSuchEntityException());
-        }
+        $userRepositoryWillReturn = $userExists
+            ? $this->returnValue($userProfile)
+            : $this->throwException(new NoSuchEntityException());
+        $this->userProfileRepositoryMock
+            ->method('getByUserId')
+            ->with($userId)
+            ->will($userRepositoryWillReturn);
 
-        // Get default data for the assertion for non-authorized user
-        if ($userData['isAuthorized'] === false) {
+        // Get default data for the assertion for non-authorized or not existing user
+        if ($userData['isAuthorized'] === false || !$userExists) {
             $userData = $this->getDefaultUserData();
         }
 
@@ -262,6 +259,7 @@ class SignInTest extends TestCase
         return [
             'Existing authorized user' => [
                 11,
+                true,
                 [
                     'isAuthorized' => true,
                     'name' => 'John',
@@ -271,6 +269,7 @@ class SignInTest extends TestCase
             ],
             'Existing non-authorized user' => [
                 12,
+                true,
                 [
                     'isAuthorized' => false,
                     'name' => 'John',
@@ -280,8 +279,9 @@ class SignInTest extends TestCase
             ],
             'Non-existing user' => [
                 13,
+                false, //user doesn't exist
                 [
-                    'isAuthorized' => false,
+                    'isAuthorized' => true,
                     'name' => 'John',
                     'email' => 'john@email.com',
                     'image' => 'image.png'
@@ -289,6 +289,7 @@ class SignInTest extends TestCase
             ],
             'Existing user with additional config provider' => [
                 14,
+                true,
                 [
                     'isAuthorized' => false,
                     'name' => 'John',
