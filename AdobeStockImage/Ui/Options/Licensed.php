@@ -9,6 +9,9 @@ namespace Magento\AdobeStockImage\Ui\Options;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * Licensed status filter options
+ */
 class Licensed implements OptionSourceInterface
 {
     /**
