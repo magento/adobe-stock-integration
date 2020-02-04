@@ -23,6 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\AdobeStockImage\Model\SetUnlicensedImageMediaGallery;
 
 /**
  * Test for Save image model.
@@ -80,6 +81,11 @@ class SaveImageTest extends TestCase
     private $saveImage;
 
     /**
+     * @var SetUnlicensedImageMediaGallery|MockObject
+     */
+    private $setUnlicensedImageMediaGalleryMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -93,6 +99,7 @@ class SaveImageTest extends TestCase
         $this->documentToAsset = $this->createMock(DocumentToAsset::class);
         $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
         $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
+        $this->setUnlicensedImageMediaGalleryMock = $this->createMock(SetUnlicensedImageMediaGallery::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -105,7 +112,8 @@ class SaveImageTest extends TestCase
                 'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAsset,
                 'documentToAsset' =>  $this->documentToAsset,
                 'documentToKeywords' => $this->documentToKeywords,
-                'saveAssetKeywords' => $this->saveAssetKeywords
+                'saveAssetKeywords' => $this->saveAssetKeywords,
+                'setUnlicensedImagesMediaGalley' => $this->setUnlicensedImageMediaGalleryMock
             ]
         );
     }
@@ -155,6 +163,9 @@ class SaveImageTest extends TestCase
         $this->saveAdobeStockAsset->expects($this->once())
             ->method('execute');
 
+        $this->setUnlicensedImageMediaGalleryMock->expects($this->once())
+            ->method('execute');
+        
         $this->saveImage->execute($document, 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg', 'path');
     }
 
