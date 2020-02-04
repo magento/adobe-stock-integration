@@ -11,9 +11,9 @@ use Magento\AdobeStockAsset\Model\Asset;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockImage\Model\AssetIndexer;
+use Magento\AdobeStockImage\Model\SetUnlicensedImageMediaGallery;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -21,8 +21,8 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for Magento\AdobeStockImage\Model\AssetIndexer
@@ -40,9 +40,9 @@ class AssetIndexerTest extends TestCase
     private $getByPathCommandMock;
 
     /**
-     * @var ResourceConnection|MockObject
+     * @var SetUnlicensedImageMediaGallery|MockObject
      */
-    private $resourceConnectionMock;
+    private $setUnLicensedImageMediaGalleryMock;
 
     /**
      * @var AssetRepositoryInterface|MockObject
@@ -82,7 +82,7 @@ class AssetIndexerTest extends TestCase
         $objectManagerHelper = (new ObjectManager($this));
 
         $this->getByPathCommandMock = $this->createMock(GetByPathInterface::class);
-        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->setUnLicensedImageMediaGalleryMock = $this->createMock(SetUnlicensedImageMediaGallery::class);
         $this->assetRepositoryMock = $this->createMock(AssetRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->fileSystemMock = $this->createMock(Filesystem::class);
@@ -98,7 +98,7 @@ class AssetIndexerTest extends TestCase
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'filesystem' => $this->fileSystemMock,
                 'driver' => $this->fileMock,
-                'resource' => $this->resourceConnectionMock
+                'setUnlicensedImagesMediaGalley' => $this->setUnLicensedImageMediaGalleryMock
             ]
         );
     }
@@ -142,7 +142,7 @@ class AssetIndexerTest extends TestCase
             ->method('addFilter')
             ->with('media_gallery_id', $mediaAssetId)
             ->willReturn($searchCriteriaMock);
-        $mediaAssetMock->expects($this->exactly(2))
+        $mediaAssetMock->expects($this->exactly(1))
             ->method('getId')
             ->willReturn(1);
         $this->searchCriteriaBuilderMock->expects($this->once())
@@ -155,14 +155,9 @@ class AssetIndexerTest extends TestCase
         $searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->assetMock]);
-        $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
-            ->willReturn($this->adapderMock);
-        $this->assetMock->expects($this->once())
-            ->method('getIsLicensed')
-            ->willReturn(1);
-        $this->adapderMock->expects($this->once())
-            ->method('insertOnDuplicate')
+        $this->setUnLicensedImageMediaGalleryMock->expects($this->once())
+            ->method('execute')
+            ->with($this->assetMock)
             ->willReturnSelf();
         $this->assetIndexer->execute($fileInfoMock);
     }

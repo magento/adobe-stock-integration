@@ -10,7 +10,7 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ResourceConnection;
+use Magento\AdobeStockImage\Model\SetUnlicensedImageMediaGallery;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
@@ -62,11 +62,11 @@ class AssetIndexer implements IndexerInterface
      * Constructor
      *
      * @param GetByPathInterface $getByPathCommand
-     * @param ResourceConnection $resource
      * @param AssetRepositoryInterface $assetRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Filesystem $filesystem
      * @param File $driver
+     * @param SetUnlicensedImageMediaGallery $setUnlicensedImagesMediaGalley
      */
     public function __construct(
         GetByPathInterface $getByPathCommand,
