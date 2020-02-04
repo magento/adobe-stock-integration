@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Block\Adminhtml;
 
 use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
-use Magento\AdobeIms\Model\UserProfile;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
@@ -133,11 +132,12 @@ class SignInTest extends TestCase
         $this->userAuthorizedMock->expects($this->once())
             ->method('execute')
             ->willReturn($userData['isAuthorized']);
-        /** @var UserProfileInterface $userProfile */
-        $userProfile = $this->objectManager->getObject(UserProfile::class);
-        $userProfile->setName($userData['name']);
-        $userProfile->setEmail($userData['email']);
-        $userProfile->setImage($userData['image']);
+
+        $userProfile = $this->createMock(UserProfileInterface::class);
+        $userProfile->method('getName')->willReturn($userData['name']);
+        $userProfile->method('getEmail')->willReturn($userData['email']);
+        $userProfile->method('getImage')->willReturn($userData['image']);
+
         $this->userContextMock->expects($this->any())
             ->method('getUserId')
             ->willReturn($userId);
