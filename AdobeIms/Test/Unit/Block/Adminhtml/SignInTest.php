@@ -162,7 +162,7 @@ class SignInTest extends TestCase
         if ($userId !== 14) {
             $result = $this->signInBlock->getComponentJsonConfig();
 
-            self::assertEquals(
+            $this->assertEquals(
                 $this->jsonHexTag->serialize($this->getDefaultComponentConfig($userData)),
                 $result
             );
@@ -174,7 +174,7 @@ class SignInTest extends TestCase
 
             $result = $this->signInBlock->getComponentJsonConfig();
 
-            self::assertEquals(
+            $this->assertEquals(
                 $this->jsonHexTag->serialize(
                     array_replace_recursive(
                         $this->getDefaultComponentConfig($userData),
