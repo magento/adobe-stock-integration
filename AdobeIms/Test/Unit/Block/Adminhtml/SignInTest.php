@@ -53,7 +53,7 @@ class SignInTest extends TestCase
     private $userProfileRepositoryMock;
 
     /**
-     * @var JsonHexTag
+     * @var JsonHexTag|MockObject
      */
     private $jsonHexTag;
 
