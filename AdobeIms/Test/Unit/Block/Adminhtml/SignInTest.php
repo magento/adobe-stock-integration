@@ -38,21 +38,6 @@ class SignInTest extends TestCase
     private const RESPONSE_ERROR_CODE = 'error';
 
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var Context|MockObject
-     */
-    private $contextMock;
-
-    /**
-     * @var ConfigInterface|MockObject
-     */
-    private $configMock;
-
-    /**
      * @var UserContextInterface|MockObject
      */
     private $userContextMock;
@@ -78,42 +63,35 @@ class SignInTest extends TestCase
     private $signInBlock;
 
     /**
-     * @var ConfigProviderInterface|MockObject
-     */
-    private $configProviderMock;
-
-    /**
      * Prepare test objects.
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-        $urlBuilderMock = $this->createMock(UrlInterface::class);
-        $urlBuilderMock->expects($this->any())
-            ->method('getUrl')
-            ->willReturn(self::PROFILE_URL);
-        $this->contextMock = $this->createMock(Context::class);
-        $this->contextMock->expects($this->any())
-            ->method('getUrlBuilder')
-            ->willReturn($urlBuilderMock);
-        $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
-        $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
-        $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->jsonHexTag = $this->objectManager->getObject(JsonHexTag::class);
-        $this->configProviderMock = $this->createMock(ConfigProviderInterface::class);
-        $this->configMock->expects($this->once())
+        $configMock = $this->createMock(ConfigInterface::class);
+        $configMock->expects($this->once())
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);
-        $this->configMock->expects($this->any())
-            ->method('getDefaultProfileImage')
+        $configMock->method('getDefaultProfileImage')
             ->willReturn(self::DEFAULT_PROFILE_IMAGE);
 
-        $this->signInBlock = $this->objectManager->getObject(
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
+        $urlBuilderMock->method('getUrl')
+            ->willReturn(self::PROFILE_URL);
+        $contextMock = $this->createMock(Context::class);
+        $contextMock->method('getUrlBuilder')
+            ->willReturn($urlBuilderMock);
+
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
+        $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
+
+        $objectManager = new ObjectManager($this);
+        $this->jsonHexTag = $objectManager->getObject(JsonHexTag::class);
+        $this->signInBlock = $objectManager->getObject(
             SignInBlock::class,
             [
-                'config' => $this->configMock,
-                'context' => $this->contextMock,
+                'config' => $configMock,
+                'context' => $contextMock,
                 'userContext' => $this->userContextMock,
                 'userAuthorized' => $this->userAuthorizedMock,
                 'userProfileRepository' => $this->userProfileRepositoryMock,
@@ -164,10 +142,11 @@ class SignInTest extends TestCase
                 $result
             );
         } else { // Test user 14 using an additional config provider
-            $this->configProviderMock->expects($this->any())
+            $configProviderMock = $this->createMock(ConfigProviderInterface::class);
+            $configProviderMock->expects($this->any())
                 ->method('get')
                 ->willReturn($this->getConfigProvideConfig());
-            $this->signInBlock->setData('configProviders', [$this->configProviderMock]);
+            $this->signInBlock->setData('configProviders', [$configProviderMock]);
 
             $result = $this->signInBlock->getComponentJsonConfig();
 
