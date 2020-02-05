@@ -12,7 +12,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\FileSystem\DriverInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 
@@ -48,7 +48,7 @@ class AssetIndexer implements IndexerInterface
     private $mediaDirectory;
 
     /**
-     * @var File
+     * @var DriverInterface
      */
     private $driver;
 
@@ -64,7 +64,7 @@ class AssetIndexer implements IndexerInterface
      * @param AssetRepositoryInterface $assetRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Filesystem $filesystem
-     * @param File $driver
+     * @param DriverInterface $driver
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      */
     public function __construct(
@@ -72,7 +72,7 @@ class AssetIndexer implements IndexerInterface
         AssetRepositoryInterface $assetRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Filesystem $filesystem,
-        File $driver,
+        DriverInterface $driver,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
     ) {
         $this->getByPathCommand = $getByPathCommand;

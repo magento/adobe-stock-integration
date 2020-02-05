@@ -53,5 +53,10 @@
                 <item name="200" xsi:type="object">Magento\AdobeStockImage\Model\AssetIndexer</item>
             </argument>
         </arguments>
+    </type>    
+    <type name="Magento\AdobeStockImage\Model\AssetIndexer">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
     </type>
 </config>
