@@ -9,9 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model\Storage;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Filesystem;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,11 +17,6 @@ use Psr\Log\LoggerInterface;
  */
 class Delete
 {
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
     /**
      * @var LoggerInterface
      */
@@ -37,16 +30,13 @@ class Delete
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
      * @param LoggerInterface $logger
      * @param Storage $storage
      */
     public function __construct(
-        Filesystem $filesystem,
         LoggerInterface $logger,
         Storage $storage
     ) {
-        $this->filesystem = $filesystem;
         $this->logger = $logger;
         $this->storage = $storage;
     }
@@ -60,10 +50,7 @@ class Delete
     public function execute(string $path): void
     {
         try {
-            $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-            if ($mediaDirectory->isFile($path)) {
-                $this->storage->deleteFile($mediaDirectory->getAbsolutePath($path));
-            }
+            $this->storage->deleteFile($this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('Failed to delete the image: %error', ['error' => $exception->getMessage()]);
