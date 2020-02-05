@@ -81,7 +81,7 @@ class SaveImage implements SaveImageInterface
     private $saveAssetKeywords;
 
     /**
-     * @var SetUnlicensedImageMediaGallery
+     * @var SetLicensedInMediaGalleryGrid
      */
     private $setLicensedInMediaGalleryGrid;
 
