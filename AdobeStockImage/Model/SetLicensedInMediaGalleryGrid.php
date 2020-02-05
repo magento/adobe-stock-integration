@@ -10,13 +10,12 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Set unlicensed label for media gallery image
  */
-class SetUnlicensedImageMediaGallery
+class SetLicensedInMediaGalleryGrid
 {
     private const MEDIA_GALLERY_ASSET_GRID_TABLE = 'media_gallery_asset_grid';
 
@@ -60,7 +59,7 @@ class SetUnlicensedImageMediaGallery
                     'licensed' => $asset->getIsLicensed()
                 ]
             );
-        } catch (LocalizedException $exception) {
+        } catch (\Exception $exception) {
             $this->logger->critical($exception->getMessage());
         }
     }

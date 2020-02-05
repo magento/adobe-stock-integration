@@ -10,7 +10,6 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\AdobeStockImage\Model\SetUnlicensedImageMediaGallery;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
@@ -54,9 +53,9 @@ class AssetIndexer implements IndexerInterface
     private $driver;
 
     /**
-     * @var SetUnlicensedImageMediaGallery
+     * @var SetLicensedInMediaGalleryGrid
      */
-    private $setUnlicensedImagesMediaGalley;
+    private $setLicensedInMediaGalleryGrid;
 
     /**
      * Constructor
@@ -66,7 +65,7 @@ class AssetIndexer implements IndexerInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Filesystem $filesystem
      * @param File $driver
-     * @param SetUnlicensedImageMediaGallery $setUnlicensedImagesMediaGalley
+     * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      */
     public function __construct(
         GetByPathInterface $getByPathCommand,
@@ -74,14 +73,14 @@ class AssetIndexer implements IndexerInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Filesystem $filesystem,
         File $driver,
-        SetUnlicensedImageMediaGallery $setUnlicensedImagesMediaGalley
+        SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
     ) {
         $this->getByPathCommand = $getByPathCommand;
         $this->assetRepository = $assetRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->setUnlicensedImagesMediaGalley = $setUnlicensedImagesMediaGalley;
+        $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
     }
 
     /**
@@ -100,7 +99,7 @@ class AssetIndexer implements IndexerInterface
         $assets = $this->assetRepository->getList($searchCriteria)->getItems();
 
         foreach ($assets as $asset) {
-            $this->setUnlicensedImagesMediaGalley->execute($asset);
+            $this->setLicensedInMediaGalleryGrid->execute($asset);
         }
     }
 

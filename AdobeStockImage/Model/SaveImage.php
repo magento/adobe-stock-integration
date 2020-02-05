@@ -23,7 +23,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\AdobeStockImage\Model\SetUnlicensedImageMediaGallery;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 
 /**
@@ -84,8 +83,8 @@ class SaveImage implements SaveImageInterface
     /**
      * @var SetUnlicensedImageMediaGallery
      */
-    private $setUnlicensedImagesMediaGalley;
-    
+    private $setLicensedInMediaGalleryGrid;
+
     /**
      * Constructor
      *
@@ -99,7 +98,7 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToAsset $documentToAsset
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
-     * @param SetUnlicensedImageMediaGallery $setUnlicensedImagesMediaGalley
+     * @param SetLicensedInMediaGalleryGrid $setUnlicensedImagesMediaGalley
      */
     public function __construct(
         StorageSave $storageSave,
@@ -112,7 +111,7 @@ class SaveImage implements SaveImageInterface
         DocumentToAsset $documentToAsset,
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
-        SetUnlicensedImageMediaGallery $setUnlicensedImagesMediaGalley
+        SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
     ) {
         $this->storageSave = $storageSave;
         $this->storageDelete = $storageDelete;
@@ -124,7 +123,7 @@ class SaveImage implements SaveImageInterface
         $this->documentToAsset = $documentToAsset;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
-        $this->setUnlicensedImagesMediaGalley = $setUnlicensedImagesMediaGalley;
+        $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
     }
 
     /**
@@ -169,6 +168,6 @@ class SaveImage implements SaveImageInterface
 
         $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
         $this->saveAdobeStockAsset->execute($asset);
-        $this->setUnlicensedImagesMediaGalley->execute($asset);
+        $this->setLicensedInMediaGalleryGrid->execute($asset);
     }
 }

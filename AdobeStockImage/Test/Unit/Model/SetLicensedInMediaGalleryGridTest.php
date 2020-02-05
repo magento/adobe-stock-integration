@@ -9,11 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockImage\Model\SetUnlicensedImageMediaGallery;
+use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +20,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Verify setting unlicensed lable for media gallery grid
  */
-class SetUnlicensedImageMediaGalleryTest extends TestCase
+class SetLicensedInMediaGalleryGridTest extends TestCase
 {
     /**
      * @var ResourceConnection|MockObject
@@ -35,9 +33,9 @@ class SetUnlicensedImageMediaGalleryTest extends TestCase
     private $loggerMock;
 
     /**
-     * @var SetUnlicensedImageMediaGallery
+     * @var SetLicensedInMediaGalleryGrid
      */
-    private $setUnlicensedImagesMediaGallery;
+    private $setLicensedInMediaGalleryGrid;
 
     /**
      * @var ObjectManager
@@ -65,8 +63,8 @@ class SetUnlicensedImageMediaGalleryTest extends TestCase
         $this->assetMock = $this->createMock(AssetInterface::class);
         $this->adapterMock = $this->createMock(AdapterInterface::class);
 
-        $this->setUnlicensedImagesMediaGallery = $this->objectManager->getObject(
-            SetUnlicensedImageMediaGallery::class,
+        $this->setLicensedInMediaGalleryGrid = $this->objectManager->getObject(
+            SetLicensedInMediaGalleryGrid::class,
             [
                 'resource' => $this->resourceConnectionMock,
                 'logger' => $this->loggerMock
@@ -103,7 +101,7 @@ class SetUnlicensedImageMediaGalleryTest extends TestCase
             )
             ->willReturnSelf();
 
-        $this->setUnlicensedImagesMediaGallery->execute($this->assetMock);
+        $this->setLicensedInMediaGalleryGrid->execute($this->assetMock);
     }
 
     /**
@@ -118,13 +116,11 @@ class SetUnlicensedImageMediaGalleryTest extends TestCase
             ->willReturn($this->adapterMock);
         $this->adapterMock->expects($this->once())
             ->method('insertOnDuplicate')
-            ->willThrowException(
-                new LocalizedException(new Phrase('New error'))
-            );
+            ->willThrowException(new \Exception('New error'));
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with('New error')
             ->willReturnSelf();
-        $this->setUnlicensedImagesMediaGallery->execute($this->assetMock);
+        $this->setLicensedInMediaGalleryGrid->execute($this->assetMock);
     }
 }
