@@ -14,6 +14,9 @@
         </item>
     </argument>
     <settings>
+        <buttons>
+            <button name="cancel" class="Magento\MediaGalleryUi\Block\Adminhtml\CancelButton"/>
+        </buttons>
         <spinner>media_gallery_columns</spinner>
         <deps>
             <dep>media_gallery_listing.media_gallery_listing_data_source</dep>
