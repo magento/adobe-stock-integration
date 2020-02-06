@@ -12,6 +12,17 @@
                class="Magento\Backend\Block\Template"
                template="Magento_MediaGalleryUi::container.phtml"
                aclResource="Magento_Cms::media_gallery">
+            <container name="gallery.actions" htmlTag="div" htmlClass="page-main-actions">
+                <block name="page.actions.toolbar" template="Magento_Backend::pageactions.phtml">
+                    <block class="Magento\Backend\Block\Widget\Button" name="toolbar.back">
+                        <arguments>
+                            <argument xsi:type="string" name="label">Cancel</argument>
+                            <argument xsi:type="string" name="onclick">MediabrowserUtility.closeDialog();</argument>
+                            <argument xsi:type="string" name="class">cancel action-quaternary</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </container>
             <uiComponent name="media_gallery_listing"/>
         </block>
     </container>
