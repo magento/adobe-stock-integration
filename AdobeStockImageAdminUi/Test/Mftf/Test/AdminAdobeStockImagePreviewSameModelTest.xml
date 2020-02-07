@@ -33,7 +33,7 @@
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
         <click selector="{{AdobeStockImagePreviewSection.moreFromThisModel}}" stepKey="clickOnTabMoreForThisModel"/>
-        <actionGroup ref="AssertNumberOfImagesUnderMoreForThisModelActionGroup" stepKey="assertImagesUnderMoreForThisModelCount">
+        <actionGroup ref="AssertAdminAdobeStockImagesNumberMoreForThisModelActionGroup" stepKey="assertImagesUnderMoreForThisModelCount">
             <argument name="imagesNumber" value="4"/>
         </actionGroup>
     </test>

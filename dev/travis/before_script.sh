@@ -41,6 +41,8 @@ if [[ ${TEST_SUITE} = "functional" ]]; then
         --admin-password="${MAGENTO_ADMIN_PASSWORD}"
     echo "Enabling production mode"
     php bin/magento deploy:mode:set production
+    # deploy ru_RU locale for localization tests
+    php bin/magento setup:static-content:deploy ru_RU
     # prepare magento instance as per getting started docs
     # https://devdocs.magento.com/mftf/docs/getting-started.html#prepare-magento
     echo "Preparing magento instance for MFTF usage"
