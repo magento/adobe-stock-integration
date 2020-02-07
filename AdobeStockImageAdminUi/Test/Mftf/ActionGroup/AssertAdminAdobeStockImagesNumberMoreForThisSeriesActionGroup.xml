@@ -7,10 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertAdobeStockThumbnailsNumberActionGroup">
+    <actionGroup name="AssertAdminAdobeStockImagesNumberMoreForThisSeriesActionGroup">
         <arguments>
-            <argument name="thumbnailsNumber" type="string" defaultValue="{{AdobeStockModalData.thumbnailsNumber}}"/>
+            <argument name="imagesNumber" type="string"/>
         </arguments>
-        <seeNumberOfElements selector="{{AdobeStockSection.modal}} {{AdobeStockSection.firstImageInGrid}}" userInput="{{thumbnailsNumber}}" stepKey="seeCorrectThumbnailsNumber"/>
+        <seeNumberOfElements selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesImages}}" userInput="{{imagesNumber}}" stepKey="seeCorrectImagesNumber"/>
     </actionGroup>
 </actionGroups>
