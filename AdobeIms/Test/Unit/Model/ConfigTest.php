@@ -8,23 +8,17 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\Config;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Config data test.
+ * PHPUnit test for \Magento\AdobeIms\Model\Config
  */
 class ConfigTest extends TestCase
 {
-    private const CONFIG_XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
     /**
      * @var Config
      */
@@ -36,28 +30,129 @@ class ConfigTest extends TestCase
     private $scopeConfigMock;
 
     /**
-     * Prepare test objects.
+     * @var UrlInterface|MockObject
+     */
+    private $urlMock;
+
+    /**
+     * Set up test mock objects
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->config = $this->objectManager->getObject(
-            Config::class,
-            [
-                'scopeConfig' => $this->scopeConfigMock
-            ]
-        );
+        $this->urlMock = $this->createMock(UrlInterface::class);
+
+        $this->config = new Config($this->scopeConfigMock, $this->urlMock);
     }
 
     /**
-     * Get API key test.
+     * Test for \Magento\AdobeIms\Model\Config::getApiKey
      */
     public function testGetApiKey(): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(self::CONFIG_XML_PATH_API_KEY);
+            ->with(Config::XML_PATH_API_KEY);
+
         $this->config->getApiKey();
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getPrivateKey
+     */
+    public function testGetPrivateKey(): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(Config::XML_PATH_PRIVATE_KEY);
+
+        $this->config->getPrivateKey();
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getTokenUrl
+     */
+    public function testGetTokenUrl(): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(Config::XML_PATH_TOKEN_URL)
+            ->willReturn('URL');
+
+        $this->config->getTokenUrl();
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getAuthUrl
+     */
+    public function testGetAuthUrl(): void
+    {
+        $this->scopeConfigMock->expects($this->exactly(3))
+            ->method('getValue')
+            ->withConsecutive(
+                [Config::XML_PATH_API_KEY],
+                [Custom::XML_PATH_GENERAL_LOCALE_CODE],
+                [Config::XML_PATH_AUTH_URL_PATTERN]
+            )
+            ->willReturn('URL');
+
+        $this->urlMock->expects($this->once())->method('getUrl')->willReturn('URL');
+
+        $this->config->getAuthUrl();
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getCallBackUrl
+     */
+    public function testGetCallBackUrl(): void
+    {
+        $this->urlMock->expects($this->once())
+            ->method('getUrl')
+            ->with('adobe_ims/oauth/callback')
+            ->willReturn('URL');
+
+        $this->config->getCallBackUrl();
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getLogoutUrl
+     */
+    public function testGetLogoutUrl(): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(Config::XML_PATH_LOGOUT_URL_PATTERN)
+            ->willReturn('URL');
+
+        $this->config->getLogoutUrl('Access token');
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getProfileImageUrl
+     */
+    public function testGetProfileImageUrl(): void
+    {
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->withConsecutive(
+                [Config::XML_PATH_API_KEY],
+                [Config::XML_PATH_IMAGE_URL_PATTERN]
+            )
+            ->willReturn('URL');
+
+        $this->config->getProfileImageUrl();
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getDefaultProfileImage
+     */
+    public function testGetDefaultProfileImage(): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(Config::XML_PATH_DEFAULT_PROFILE_IMAGE)
+            ->willReturn('URL');
+
+        $this->config->getDefaultProfileImage();
     }
 }
