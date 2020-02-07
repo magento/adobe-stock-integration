@@ -55,8 +55,7 @@ class ConfigTest extends TestCase
      */
     public function testGetApiKey(): void
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_API_KEY)
             ->willReturn(self::STRING_RETURN);
 
@@ -68,8 +67,7 @@ class ConfigTest extends TestCase
      */
     public function testGetPrivateKey(): void
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_PRIVATE_KEY)
             ->willReturn(self::STRING_RETURN);
 
@@ -81,8 +79,7 @@ class ConfigTest extends TestCase
      */
     public function testGetTokenUrl(): void
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_TOKEN_URL)
             ->willReturn(self::STRING_RETURN);
 
@@ -94,15 +91,14 @@ class ConfigTest extends TestCase
      */
     public function testGetAuthUrl(): void
     {
-        $this->scopeConfigMock->expects($this->exactly(3))
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->withConsecutive(
                 [Config::XML_PATH_API_KEY],
                 [Custom::XML_PATH_GENERAL_LOCALE_CODE],
                 [Config::XML_PATH_AUTH_URL_PATTERN]
             )->willReturn(self::STRING_RETURN);
 
-        $this->urlMock->expects($this->once())->method('getUrl')->willReturn(self::STRING_RETURN);
+        $this->urlMock->method('getUrl')->willReturn(self::STRING_RETURN);
 
         $this->assertEquals(self::STRING_RETURN, $this->config->getAuthUrl());
     }
@@ -112,8 +108,7 @@ class ConfigTest extends TestCase
      */
     public function testGetCallBackUrl(): void
     {
-        $this->urlMock->expects($this->once())
-            ->method('getUrl')
+        $this->urlMock->method('getUrl')
             ->with('adobe_ims/oauth/callback')
             ->willReturn(self::STRING_RETURN);
 
@@ -125,8 +120,7 @@ class ConfigTest extends TestCase
      */
     public function testGetLogoutUrl(): void
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_LOGOUT_URL_PATTERN)
             ->willReturn(self::STRING_RETURN);
 
@@ -138,8 +132,7 @@ class ConfigTest extends TestCase
      */
     public function testGetProfileImageUrl(): void
     {
-        $this->scopeConfigMock->expects($this->exactly(2))
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->withConsecutive(
                 [Config::XML_PATH_API_KEY],
                 [Config::XML_PATH_IMAGE_URL_PATTERN]
@@ -153,8 +146,7 @@ class ConfigTest extends TestCase
      */
     public function testGetDefaultProfileImage(): void
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_DEFAULT_PROFILE_IMAGE)
             ->willReturn(self::STRING_RETURN);
 

@@ -94,7 +94,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Retrieve token URL
+     * Get locale
      *
      * @return string
      */
