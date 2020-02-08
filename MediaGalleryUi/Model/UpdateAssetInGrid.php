@@ -83,12 +83,4 @@ class UpdateAssetInGrid
             throw new CouldNotSaveException($message, $exception);
         }
     }
-
-    private function getIconUrl(AssetInterface $asset)
-    {
-        $iconUrl = $this->assetRepository->getUrlWithParams(
-                'Magento_MediaGalleryUi::images/Astock.png',
-                ['_secure' => $this->getIsSecure()]
-            );
-    }
 }
