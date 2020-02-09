@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test removing images from the filesystem
+ * Remove images from the filesystem
  */
 class Delete
 {
