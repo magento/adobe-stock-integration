@@ -20,9 +20,19 @@ use PHPUnit\Framework\TestCase;
 class ConfigTest extends TestCase
 {
     /**
-     * Constant for string return value
+     * Constants for test cases
      */
-    private const STRING_RETURN = 'STRING_RETURN_VALUE';
+    private const API_KEY = 'API_KEY';
+    private const LOCALE_CODE = 'en_US';
+    private const PRIVATE_KEY = 'PRIVATE_KEY';
+    private const REDIRECT_URI = 'REDIRECT_URI';
+    private const ACCCESS_TOKEN = 'ACCCESS_TOKEN';
+    private const TOKEN_URL = 'https://token-url.com/integration';
+    private const IMAGE_URL_DEFAULT = 'https://image-url.com/default';
+    private const CALLBACK_URL = 'https://magento-instance.com/adobe_ims/oauth/callback';
+    private const IMAGE_URL_PATTERN = 'https://image-url.com/pattern?api_key=#{api_key}';
+    private const LOGOUT_URL_PATTERN = 'https://logout-url.com/pattern?access_token=#{access_token}&redirect_uri=#{redirect_uri}';
+    private const AUTH_URL_PATTERN = 'https://auth-url.com/pattern?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}';
 
     /**
      * @var Config
@@ -57,9 +67,9 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_API_KEY)
-            ->willReturn(self::STRING_RETURN);
+            ->willReturn(self::API_KEY);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getApiKey());
+        $this->assertEquals(self::API_KEY, $this->config->getApiKey());
     }
 
     /**
@@ -69,9 +79,9 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_PRIVATE_KEY)
-            ->willReturn(self::STRING_RETURN);
+            ->willReturn(self::PRIVATE_KEY);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getPrivateKey());
+        $this->assertEquals(self::PRIVATE_KEY, $this->config->getPrivateKey());
     }
 
     /**
@@ -81,9 +91,9 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_TOKEN_URL)
-            ->willReturn(self::STRING_RETURN);
+            ->willReturn(self::TOKEN_URL);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getTokenUrl());
+        $this->assertEquals(self::TOKEN_URL, $this->config->getTokenUrl());
     }
 
     /**
@@ -92,15 +102,15 @@ class ConfigTest extends TestCase
     public function testGetAuthUrl(): void
     {
         $this->scopeConfigMock->method('getValue')
-            ->withConsecutive(
-                [Config::XML_PATH_API_KEY],
-                [Custom::XML_PATH_GENERAL_LOCALE_CODE],
-                [Config::XML_PATH_AUTH_URL_PATTERN]
-            )->willReturn(self::STRING_RETURN);
+            ->willReturnMap([
+                [Config::XML_PATH_API_KEY, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, self::API_KEY],
+                [Custom::XML_PATH_GENERAL_LOCALE_CODE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, self::LOCALE_CODE],
+                [Config::XML_PATH_AUTH_URL_PATTERN, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, self::AUTH_URL_PATTERN]
+            ]);
 
-        $this->urlMock->method('getUrl')->willReturn(self::STRING_RETURN);
+        $this->urlMock->method('getUrl')->willReturn(self::CALLBACK_URL);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getAuthUrl());
+        $this->assertEquals('https://auth-url.com/pattern?client_id=' . self::API_KEY . '&redirect_uri=' . self::CALLBACK_URL . '&locale=' . self::LOCALE_CODE, $this->config->getAuthUrl());
     }
 
     /**
@@ -110,9 +120,9 @@ class ConfigTest extends TestCase
     {
         $this->urlMock->method('getUrl')
             ->with('adobe_ims/oauth/callback')
-            ->willReturn(self::STRING_RETURN);
+            ->willReturn(self::CALLBACK_URL);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getCallBackUrl());
+        $this->assertEquals(self::CALLBACK_URL, $this->config->getCallBackUrl());
     }
 
     /**
@@ -122,9 +132,9 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_LOGOUT_URL_PATTERN)
-            ->willReturn(self::STRING_RETURN);
+            ->willReturn(self::LOGOUT_URL_PATTERN);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getLogoutUrl(self::STRING_RETURN));
+        $this->assertEquals('https://logout-url.com/pattern?access_token=' . self::ACCCESS_TOKEN . '&redirect_uri=' . self::REDIRECT_URI, $this->config->getLogoutUrl(self::ACCCESS_TOKEN, self::REDIRECT_URI));
     }
 
     /**
@@ -133,12 +143,12 @@ class ConfigTest extends TestCase
     public function testGetProfileImageUrl(): void
     {
         $this->scopeConfigMock->method('getValue')
-            ->withConsecutive(
-                [Config::XML_PATH_API_KEY],
-                [Config::XML_PATH_IMAGE_URL_PATTERN]
-            )->willReturn(self::STRING_RETURN);
+            ->willReturnMap([
+                [Config::XML_PATH_IMAGE_URL_PATTERN, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, self::IMAGE_URL_PATTERN],
+                [Config::XML_PATH_API_KEY, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, self::API_KEY]
+            ]);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getProfileImageUrl());
+        $this->assertEquals('https://image-url.com/pattern?api_key=' . self::API_KEY, $this->config->getProfileImageUrl());
     }
 
     /**
@@ -148,8 +158,8 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')
             ->with(Config::XML_PATH_DEFAULT_PROFILE_IMAGE)
-            ->willReturn(self::STRING_RETURN);
+            ->willReturn(self::IMAGE_URL_DEFAULT);
 
-        $this->assertEquals(self::STRING_RETURN, $this->config->getDefaultProfileImage());
+        $this->assertEquals(self::IMAGE_URL_DEFAULT, $this->config->getDefaultProfileImage());
     }
 }
