@@ -12,7 +12,7 @@
             <filterSelect name="licensed" provider="${ $.parentName }" sortOrder="50">
                 <settings>
                     <caption translate="true">All</caption>
-                    <options class="Magento\AdobeStockImage\Ui\Options\Licensed"/>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Licensed\Options"/>
                     <label translate="true">License Status</label>
                     <dataScope>licensed</dataScope>
                 </settings>
