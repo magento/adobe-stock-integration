@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Block\Adminhtml;
 
 use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
-use Magento\AdobeIms\Model\UserProfile;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
@@ -39,21 +38,6 @@ class SignInTest extends TestCase
     private const RESPONSE_ERROR_CODE = 'error';
 
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var Context|MockObject
-     */
-    private $contextMock;
-
-    /**
-     * @var ConfigInterface|MockObject
-     */
-    private $configMock;
-
-    /**
      * @var UserContextInterface|MockObject
      */
     private $userContextMock;
@@ -69,7 +53,7 @@ class SignInTest extends TestCase
     private $userProfileRepositoryMock;
 
     /**
-     * @var JsonHexTag
+     * @var JsonHexTag|MockObject
      */
     private $jsonHexTag;
 
@@ -79,42 +63,35 @@ class SignInTest extends TestCase
     private $signInBlock;
 
     /**
-     * @var ConfigProviderInterface|MockObject
-     */
-    private $configProviderMock;
-
-    /**
      * Prepare test objects.
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-        $urlBuilderMock = $this->createMock(UrlInterface::class);
-        $urlBuilderMock->expects($this->any())
-            ->method('getUrl')
-            ->willReturn(self::PROFILE_URL);
-        $this->contextMock = $this->createMock(Context::class);
-        $this->contextMock->expects($this->any())
-            ->method('getUrlBuilder')
-            ->willReturn($urlBuilderMock);
-        $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
-        $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
-        $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->jsonHexTag = $this->objectManager->getObject(JsonHexTag::class);
-        $this->configProviderMock = $this->createMock(ConfigProviderInterface::class);
-        $this->configMock->expects($this->once())
+        $configMock = $this->createMock(ConfigInterface::class);
+        $configMock->expects($this->once())
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);
-        $this->configMock->expects($this->any())
-            ->method('getDefaultProfileImage')
+        $configMock->method('getDefaultProfileImage')
             ->willReturn(self::DEFAULT_PROFILE_IMAGE);
 
-        $this->signInBlock = $this->objectManager->getObject(
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
+        $urlBuilderMock->method('getUrl')
+            ->willReturn(self::PROFILE_URL);
+        $contextMock = $this->createMock(Context::class);
+        $contextMock->method('getUrlBuilder')
+            ->willReturn($urlBuilderMock);
+
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
+        $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
+        $this->jsonHexTag = $this->createMock(JsonHexTag::class);
+
+        $objectManager = new ObjectManager($this);
+        $this->signInBlock = $objectManager->getObject(
             SignInBlock::class,
             [
-                'config' => $this->configMock,
-                'context' => $this->contextMock,
+                'config' => $configMock,
+                'context' => $contextMock,
                 'userContext' => $this->userContextMock,
                 'userAuthorized' => $this->userAuthorizedMock,
                 'userProfileRepository' => $this->userProfileRepositoryMock,
@@ -126,64 +103,52 @@ class SignInTest extends TestCase
     /**
      * @dataProvider userDataProvider
      * @param int $userId
+     * @param bool $userExists
      * @param array $userData
+     * @param array $configProviderData
+     * @param array $expectedData
      */
-    public function testGetComponentJsonConfig(int $userId, array $userData): void
-    {
+    public function testGetComponentJsonConfig(
+        int $userId,
+        bool $userExists,
+        array $userData,
+        array $configProviderData,
+        array $expectedData
+    ): void {
         $this->userAuthorizedMock->expects($this->once())
             ->method('execute')
             ->willReturn($userData['isAuthorized']);
-        /** @var UserProfileInterface $userProfile */
-        $userProfile = $this->objectManager->getObject(UserProfile::class);
-        $userProfile->setName($userData['name']);
-        $userProfile->setEmail($userData['email']);
-        $userProfile->setImage($userData['image']);
+
+        $userProfile = $this->createMock(UserProfileInterface::class);
+        $userProfile->method('getName')->willReturn($userData['name']);
+        $userProfile->method('getEmail')->willReturn($userData['email']);
+        $userProfile->method('getImage')->willReturn($userData['image']);
+
         $this->userContextMock->expects($this->any())
             ->method('getUserId')
             ->willReturn($userId);
 
-        if ($userId !== 13) {
-            $this->userProfileRepositoryMock->expects($this->any())
-                ->method('getByUserId')
-                ->with($userId)
-                ->willReturn($userProfile);
-        } else { // Emulate non-existing user with ID 13
-            $this->userProfileRepositoryMock->expects($this->any())
-                ->method('getByUserId')
-                ->with($userId)
-                ->willThrowException(new NoSuchEntityException());
-        }
+        $userRepositoryWillReturn = $userExists
+            ? $this->returnValue($userProfile)
+            : $this->throwException(new NoSuchEntityException());
+        $this->userProfileRepositoryMock
+            ->method('getByUserId')
+            ->with($userId)
+            ->will($userRepositoryWillReturn);
 
-        // Get default data for the assertion for non-authorized user
-        if ($userData['isAuthorized'] === false) {
-            $userData = $this->getDefaultUserData();
-        }
+        $configProviderMock = $this->createMock(ConfigProviderInterface::class);
+        $configProviderMock->expects($this->any())
+            ->method('get')
+            ->willReturn($configProviderData);
+        $this->signInBlock->setData('configProviders', [$configProviderMock]);
 
-        if ($userId !== 14) {
-            $result = $this->signInBlock->getComponentJsonConfig();
+        $serializedResult = 'Some result';
+        $this->jsonHexTag->expects($this->once())
+            ->method('serialize')
+            ->with($expectedData)
+            ->willReturn($serializedResult);
 
-            self::assertEquals(
-                $this->jsonHexTag->serialize($this->getDefaultComponentConfig($userData)),
-                $result
-            );
-        } else { // Test user 14 using an additional config provider
-            $this->configProviderMock->expects($this->any())
-                ->method('get')
-                ->willReturn($this->getConfigProvideConfig());
-            $this->signInBlock->setData('configProviders', [$this->configProviderMock]);
-
-            $result = $this->signInBlock->getComponentJsonConfig();
-
-            self::assertEquals(
-                $this->jsonHexTag->serialize(
-                    array_replace_recursive(
-                        $this->getDefaultComponentConfig($userData),
-                        $this->getConfigProvideConfig()
-                    )
-                ),
-                $result
-            );
-        }
+        $this->assertEquals($serializedResult, $this->signInBlock->getComponentJsonConfig());
     }
 
     /**
@@ -262,39 +227,59 @@ class SignInTest extends TestCase
         return [
             'Existing authorized user' => [
                 11,
+                true,
                 [
                     'isAuthorized' => true,
                     'name' => 'John',
                     'email' => 'john@email.com',
                     'image' => 'image.png'
-                ]
+                ],
+                [],
+                $this->getDefaultComponentConfig([
+                    'isAuthorized' => true,
+                    'name' => 'John',
+                    'email' => 'john@email.com',
+                    'image' => 'image.png'
+                ])
             ],
             'Existing non-authorized user' => [
                 12,
+                true,
                 [
                     'isAuthorized' => false,
                     'name' => 'John',
                     'email' => 'john@email.com',
                     'image' => 'image.png'
-                ]
+                ],
+                [],
+                $this->getDefaultComponentConfig($this->getDefaultUserData()),
             ],
             'Non-existing user' => [
                 13,
+                false, //user doesn't exist
                 [
-                    'isAuthorized' => false,
+                    'isAuthorized' => true,
                     'name' => 'John',
                     'email' => 'john@email.com',
                     'image' => 'image.png'
-                ]
+                ],
+                [],
+                $this->getDefaultComponentConfig($this->getDefaultUserData()),
             ],
             'Existing user with additional config provider' => [
                 14,
+                true,
                 [
                     'isAuthorized' => false,
                     'name' => 'John',
                     'email' => 'john@email.com',
                     'image' => 'image.png'
-                ]
+                ],
+                $this->getConfigProvideConfig(),
+                array_replace_recursive(
+                    $this->getDefaultComponentConfig($this->getDefaultUserData()),
+                    $this->getConfigProvideConfig()
+                )
             ]
         ];
     }

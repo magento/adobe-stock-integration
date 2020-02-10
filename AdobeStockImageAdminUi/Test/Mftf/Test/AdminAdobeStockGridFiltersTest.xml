@@ -32,22 +32,22 @@
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlWithoutFilters"/>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSubcategoryFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSubcategoryFilter">
             <argument name="filterName" value="Subcategory"/>
         </actionGroup>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
             <argument name="filterName" value="Orientation"/>
         </actionGroup>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkColorFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkColorFilter">
             <argument name="filterName" value="Color"/>
         </actionGroup>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Price"/>
         </actionGroup>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSafeSearchFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSafeSearchFilter">
             <argument name="filterName" value="Safe search"/>
         </actionGroup>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkIsolatedAssetsFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkIsolatedAssetsFilter">
             <argument name="filterName" value="Isolated Assets"/>
         </actionGroup>
     </test>
