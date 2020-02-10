@@ -57,15 +57,12 @@ class ConstructSourceItemUrl
      */
     public function execute(string $sourceName): ?string
     {
-        $sourceIconUrl = null;
-        if (!empty($this->imageSource) && isset($this->imageSource[$sourceName])) {
-            $sourceIconUrl = $this->assetRepository->getUrlWithParams(
+        return isset($this->imageSource[$sourceName])
+            ? $this->assetRepository->getUrlWithParams(
                 $this->imageSource[$sourceName],
                 ['_secure' => $this->getIsSecure()]
-            );
-        }
-
-        return $sourceIconUrl;
+            )
+            : null;
     }
 
     /**

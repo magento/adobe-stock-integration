@@ -46,10 +46,10 @@ class SourceIconProvider extends Column
      */
     public function prepareDataSource(array $dataSource): array
     {
-        if (isset($dataSource['data']['items'])) {
+        if (isset($dataSource['data']['items']) && is_iterable($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $item['source_icon_url'] =
-                    (isset($item['source'])) ? $this->constructSourceItemUrl->execute($item['source']) : null;
+                    isset($item['source']) ? $this->constructSourceItemUrl->execute($item['source']) : null;
             }
         }
 
