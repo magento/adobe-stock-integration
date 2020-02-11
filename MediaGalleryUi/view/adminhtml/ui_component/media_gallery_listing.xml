@@ -15,7 +15,11 @@
     </argument>
     <settings>
         <buttons>
-            <button name="cancel" class="Magento\MediaGalleryUi\Block\Adminhtml\CancelButton"/>
+            <button name="cancel">
+                <param name="on_click" xsi:type="string">MediabrowserUtility.closeDialog();</param>
+                <class>cancel action-quaternary</class>
+                <label translate="true">Cancel</label>
+            </button>
         </buttons>
         <spinner>media_gallery_columns</spinner>
         <deps>
