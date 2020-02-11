@@ -16,7 +16,7 @@ use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
- * Test saving images to the filesystem
+ * Save images to the file system
  */
 class Save
 {
