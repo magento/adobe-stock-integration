@@ -17,13 +17,13 @@ use Magento\Framework\UrlInterface;
  */
 class Config implements ConfigInterface
 {
-    public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
-    public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
-    public const XML_PATH_TOKEN_URL = 'adobe_ims/integration/token_url';
-    public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
-    public const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
-    public const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_ims/integration/default_profile_image';
-    public const XML_PATH_IMAGE_URL_PATTERN = 'adobe_ims/integration/image_url';
+    private const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
+    private const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
+    private const XML_PATH_TOKEN_URL = 'adobe_ims/integration/token_url';
+    private const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
+    private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
+    private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_ims/integration/default_profile_image';
+    private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_ims/integration/image_url';
 
     /**
      * @var ScopeConfigInterface
