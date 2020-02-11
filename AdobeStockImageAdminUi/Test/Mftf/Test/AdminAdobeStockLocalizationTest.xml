@@ -45,7 +45,7 @@
         <actionGroup ref="AssertAdminAdobeStockImageKeywordActionGroup" stepKey="assertKeywordLocalized">
             <argument name="keyword" value="машина"/>
         </actionGroup>
-        <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="assertCategoryLocalized">
+        <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="assertCategoryLocalized">
             <argument name="attributeName" value="Транспорт"/>
         </actionGroup>
     </test>
