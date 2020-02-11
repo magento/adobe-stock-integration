@@ -13,7 +13,8 @@
         "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-cms": "*"
+        "magento/module-cms": "*",
+        "magento/module-media-gallery-ui": "*"
     },
     "type": "magento2-module",
     "license": [
