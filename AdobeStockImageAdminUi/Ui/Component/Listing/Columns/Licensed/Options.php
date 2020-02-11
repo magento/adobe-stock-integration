@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImage\Ui\Options;
+namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Licensed;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Licensed status filter options
  */
-class Licensed implements OptionSourceInterface
+class Options implements OptionSourceInterface
 {
     /**
      * @inheritdoc
@@ -22,11 +22,11 @@ class Licensed implements OptionSourceInterface
         return [
             [
                 'value' => '1',
-                'label' => 'Licensed'
+                'label' =>  __('Licensed')
             ],
             [
                 'value' => '0',
-                'label' => 'Unlicensed'
+                'label' =>  __('Unlicensed')
             ]
         ];
     }
