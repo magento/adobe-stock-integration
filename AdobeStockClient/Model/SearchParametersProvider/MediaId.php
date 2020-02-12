@@ -17,6 +17,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
  */
 class MediaId implements SearchParameterProviderInterface
 {
+    private const MEDIA_ID = 'media_id';
+    
     /**
      * @inheritdoc
      */
@@ -24,7 +26,7 @@ class MediaId implements SearchParameterProviderInterface
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'media_id') {
+                if ($filter->getField() === self::MEDIA_ID) {
                     $searchParams->setMediaId((int) $filter->getValue());
                 }
             }

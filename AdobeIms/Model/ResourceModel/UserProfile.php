@@ -15,11 +15,17 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class UserProfile extends AbstractDb
 {
+    /** Define Table Name */
+    private const ADOBE_USER_PROFILE = 'adobe_user_profile';
+
+    /** Primary key of table  */
+    private const ENTITY_ID = 'id';
+
     /**
      * @inheritdoc
      */
     protected function _construct(): void
     {
-        $this->_init('adobe_user_profile', 'id');
+        $this->_init(self::ADOBE_USER_PROFILE, self::ENTITY_ID);
     }
 }
