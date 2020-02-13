@@ -15,11 +15,6 @@
     </argument>
     <settings>
         <buttons>
-            <button name="search_adobe_stock">
-                <param name="on_click" xsi:type="string">jQuery(".adobe-search-images-modal").trigger("openModal");</param>
-                <class>action-default primary add</class>
-                <label translate="true">Search Adobe Stock</label>
-            </button>
             <button name="cancel">
                 <param name="on_click" xsi:type="string">MediabrowserUtility.closeDialog();</param>
                 <class>cancel action-quaternary</class>
