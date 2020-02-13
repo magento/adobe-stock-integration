@@ -17,6 +17,9 @@ use Magento\Framework\Api\SearchCriteriaInterface;
  */
 class Orientation implements SearchParameterProviderInterface
 {
+    private const ORIENTATION_FILTER = 'orientation_filter';
+    private const PANORAMIC = 'PANORAMIC';
+
     /**
      * @inheritdoc
      */
@@ -24,8 +27,8 @@ class Orientation implements SearchParameterProviderInterface
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'orientation_filter') {
-                    if ($filter->getValue() === 'PANORAMIC') {
+                if ($filter->getField() === self::ORIENTATION_FILTER) {
+                    if ($filter->getValue() === self::PANORAMIC) {
                         $searchParams->setFilterPanoromicOn(true);
                         break;
                     }

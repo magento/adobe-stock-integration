@@ -20,6 +20,8 @@ class RelatedImages extends Action
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;
+    private const IMAGE_ID = 'image_id';
+    private const LIMIT = 'limit';
 
     /**
      * @see _isAllowed()
@@ -58,16 +60,16 @@ class RelatedImages extends Action
     public function execute()
     {
         try {
-            $params = $params = $this->getRequest()->getParams();
-            $imageId = (int) $params['image_id'];
-            $limit = (int) ($params['limit'] ?? 4);
+            $params = $this->getRequest()->getParams();
+            $imageId = (int) $params[self::IMAGE_ID];
+            $limit = (int) ($params[self::LIMIT] ?? 4);
             $relatedImages = $this->getRelatedImages->execute($imageId, $limit);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
                 'message' => __('Get related images finished successfully'),
-                'result' => $relatedImages,
+                'result' => $relatedImages
             ];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
