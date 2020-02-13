@@ -18,12 +18,16 @@
         <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
         <column xsi:type="datetime" name="created_at" nullable="true" comment="Uploaded Date"/>
         <column xsi:type="datetime" name="updated_at" nullable="true" comment="Modification Date"/>
-        <column xsi:type="varchar" name="keywords" length="500" nullable="true"  comment="Keywords"/>
+        <column xsi:type="text" name="keywords" nullable="true" comment="Comma separated keywords"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
         <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
             <column name="id"/>
+        </index>
+        <index referenceId="MEDIA_GALLERY_GRID_FULLTEXT" indexType="fulltext">
+            <column name="name"/>
+            <column name="keywords"/>
         </index>
     </table>
 </schema>

@@ -9,7 +9,6 @@ namespace Magento\MediaGalleryUi\Plugin;
 
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\MediaGalleryUi\Model\UpdateAssetKeywordsInGrid as Service;
-use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -23,20 +22,13 @@ class UpdateAssetKeywordsInGrid
     private $service;
 
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
      * UpdateAssetKeywordsInGrid constructor.
      *
      * @param Service $service
-     * @param ConfigInterface $config
      */
-    public function __construct(Service $service, ConfigInterface $config)
+    public function __construct(Service $service)
     {
         $this->service = $service;
-        $this->config = $config;
     }
 
     /**
@@ -52,8 +44,6 @@ class UpdateAssetKeywordsInGrid
      */
     public function afterExecute(SaveAssetKeywordsInterface $save, $result, array $keywords, int $assetId): void
     {
-        if ($this->config->isEnabled()) {
-            $this->service->execute($keywords, $assetId);
-        }
+        $this->service->execute($keywords, $assetId);
     }
 }

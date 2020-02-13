@@ -43,7 +43,7 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
-        <filterSearch name="keywords"/>
+        <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <filterSelect name="directory" provider="${ $.parentName }" sortOrder="10">
                 <settings>
