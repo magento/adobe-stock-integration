@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
@@ -48,11 +49,24 @@ class FlushUserTokens implements FlushUserTokensInterface
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
             $userProfile = $this->userProfileRepository->getByUserId($adminUserId);
-            $userProfile->setAccessToken('');
-            $userProfile->setRefreshToken('');
-            $this->userProfileRepository->save($userProfile);
+            if (!$this->isTokenDataEmpty($userProfile)) {
+                $userProfile->setAccessToken('');
+                $userProfile->setRefreshToken('');
+                $this->userProfileRepository->save($userProfile);
+            }
         } catch (\Exception $e) { //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             // User profile and tokens are not present in the system
         }
+    }
+
+    /**
+     * Checks if the tokens are empty
+     *
+     * @param UserProfileInterface $userProfile
+     * @return bool
+     */
+    private function isTokenDataEmpty(UserProfileInterface $userProfile) : bool
+    {
+        return empty($userProfile->getRefreshToken()) && empty($userProfile->getAccessToken());
     }
 }

@@ -46,6 +46,15 @@ class Callback extends Action
     private const RESPONSE_ERROR_CODE = 'error';
 
     /**
+     * Constants of request
+     *
+     * REQUEST_PARAM_ERROR error
+     * REQUEST_PARAM_CODE code
+     */
+    private const REQUEST_PARAM_ERROR = 'error';
+    private const REQUEST_PARAM_CODE = 'code';
+
+    /**
      * @var UserProfileRepositoryInterface
      */
     private $userProfileRepository;
@@ -103,7 +112,7 @@ class Callback extends Action
         try {
             $this->validateCallbackRequest();
             $tokenResponse = $this->getToken->execute(
-                (string)$this->getRequest()->getParam('code')
+                (string)$this->getRequest()->getParam(self::REQUEST_PARAM_CODE)
             );
             $userImage = $this->getUserImage->execute($tokenResponse->getAccessToken());
             $userProfile = $this->getUserProfile();
@@ -153,7 +162,7 @@ class Callback extends Action
      */
     private function validateCallbackRequest(): void
     {
-        $error = $this->getRequest()->getParam('error');
+        $error = $this->getRequest()->getParam(self::REQUEST_PARAM_ERROR);
         if ($error) {
             $message = __(
                 'An error occurred during the callback request from the Adobe service: %error',
