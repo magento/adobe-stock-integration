@@ -36,6 +36,14 @@ class Files implements FilesInterface
 
     private const QUERY_PARAM_RESULT_COLUMNS = 'result_columns';
 
+    private const HEADERS_X_PRODUCT = 'x-Product';
+
+    private const HEADERS_X_API_KEY = 'x-api-key';
+
+    private const HEADERS_AUTHORIZATION = 'Authorization';
+
+    private const HEADERS_BEARER = 'Bearer';
+
     /**
      * @var ImsConfig
      */
@@ -148,9 +156,9 @@ class Files implements FilesInterface
     private function getHeaders(): array
     {
         return [
-            'x-Product' => $this->clientConfig->getProductName(),
-            'x-api-key' => $this->imsConfig->getApiKey(),
-            'Authorization' => 'Bearer ' . $this->getAccessToken->execute()
+            self::HEADERS_X_PRODUCT => $this->clientConfig->getProductName(),
+            self::HEADERS_X_API_KEY => $this->imsConfig->getApiKey(),
+            self::HEADERS_AUTHORIZATION => self::HEADERS_BEARER . ' ' . $this->getAccessToken->execute()
         ];
     }
 }

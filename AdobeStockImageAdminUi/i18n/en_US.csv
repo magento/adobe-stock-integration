@@ -1,0 +1,68 @@
+"An error occurred on attempt to retrieve image licensing information.","An error occurred on attempt to retrieve image licensing information."
+"Retrieving license information for images failed.","Retrieving license information for images failed."
+"The image was licensed and saved successfully.","The image was licensed and saved successfully."
+"An error occurred on attempt to license and save the image.","An error occurred on attempt to license and save the image."
+"An error occurred on attempt to retrieve user quota.","An error occurred on attempt to retrieve user quota."
+"You have successfully downloaded the licensed image.","You have successfully downloaded the licensed image."
+"An error occurred on attempt to save image.","An error occurred on attempt to save image."
+"You have successfully downloaded the image.","You have successfully downloaded the image."
+"An error occurred on attempt to save the image.","An error occurred on attempt to save the image."
+"Get related images finished successfully","Get related images finished successfully"
+"An error occurred on attempt to fetch related images.","An error occurred on attempt to fetch related images."
+"Search Adobe Stock","Search Adobe Stock"
+"Requested image doesn't exists.","Requested image doesn't exists."
+Error,Error
+"Localized error","Localized error"
+"Adobe API Key is invalid!","Adobe API Key is invalid!"
+"Adobe API login has expired!","Adobe API login has expired!"
+Photo,Photo
+Illustration,Illustration
+Yes,Yes
+Licensed,Licensed
+Unlicensed,Unlicensed
+All,All
+Horizontal,Horizontal
+Vertical,Vertical
+Square,Square
+Panoramic,Panoramic
+Standard,Standard
+Premium,Premium
+"Sort by","Sort by"
+"Save Preview","Save Preview"
+"File Name","File Name"
+Cancel,Cancel
+Confirm,Confirm
+"License ""","License """
+"License Adobe Stock Images?","License Adobe Stock Images?"
+"Buy Credits","Buy Credits"
+"Your admin role does not have permissions to license an image","Your admin role does not have permissions to license an image"
+Save,Save
+License,License
+"License and Save","License and Save"
+"The image cannot be located","The image cannot be located"
+"We cannot find this image in the media gallery.","We cannot find this image in the media gallery."
+Ok,Ok
+"Adobe Stock","Adobe Stock"
+"Couldn't log you in","Couldn't log you in"
+"Please name the file using only letters, numbers, underscores and dashes","Please name the file using only letters, numbers, underscores and dashes"
+"Save Preview Image","Save Preview Image"
+"License images","License images"
+Subcategory,Subcategory
+Orientation,Orientation
+Color,Color
+Price,Price
+Disabled,Disabled
+"Safe search","Safe search"
+"Isolated Only","Isolated Only"
+"Isolated Assets","Isolated Assets"
+"Serie Id","Serie Id"
+"Model Id","Model Id"
+Overlay,Overlay
+"Thumbnail Image","Thumbnail Image"
+"Image Preview","Image Preview"
+Relevance,Relevance
+"Most Recent","Most Recent"
+Popularity,Popularity
+Downloads,Downloads
+Undiscovered,Undiscovered
+"License Status","License Status"

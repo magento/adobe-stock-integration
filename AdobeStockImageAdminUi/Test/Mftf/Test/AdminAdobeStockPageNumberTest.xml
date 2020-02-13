@@ -32,14 +32,14 @@
             <argument name="perPage" value="64"/>
         </actionGroup>
         <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="64" stepKey="seePerPageValueInDropDown"/>
-        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see64imagesOnTheSecondPage">
+        <actionGroup ref="AssertAdminAdobeStockThumbnailsNumberActionGroup" stepKey="see64imagesOnTheSecondPage">
             <argument name="thumbnailsNumber" value="64"/>
         </actionGroup>
         <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="select48rderPerPage">
             <argument name="perPage" value="48"/>
         </actionGroup>
         <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="48" stepKey="see48PerPageValueInDropDown"/>
-        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see48imagesOnTheSecondPage">
+        <actionGroup ref="AssertAdminAdobeStockThumbnailsNumberActionGroup" stepKey="see48imagesOnTheSecondPage">
             <argument name="thumbnailsNumber" value="48"/>
         </actionGroup>
         <!-- assert custom page size -->
@@ -47,7 +47,7 @@
             <argument name="perPage" value="23"/>
         </actionGroup>
         <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="23" stepKey="seePerPage"/>
-        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see100imagesOnTheSecondPage">
+        <actionGroup ref="AssertAdminAdobeStockThumbnailsNumberActionGroup" stepKey="see100imagesOnTheSecondPage">
             <argument name="thumbnailsNumber" value="23"/>
         </actionGroup>
     </test>

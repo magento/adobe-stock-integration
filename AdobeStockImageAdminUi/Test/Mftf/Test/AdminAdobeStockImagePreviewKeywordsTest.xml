@@ -37,7 +37,7 @@
         <executeJS function="document.querySelector('.keywords').scrollIntoView()" stepKey="scrollToKeywords"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>
-        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCount">
+        <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCount">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
         <executeJS function="return document.querySelector('.keywords').childElementCount;" stepKey="expandedKeywordsCount"/>
@@ -55,7 +55,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="navigateToPreviousImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
-        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
+        <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
         <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButton"/>

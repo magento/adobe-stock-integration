@@ -33,7 +33,7 @@
                            stepKey="getUrlWithoutFilters"/>
         <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
         <waitForPageLoad stepKey="waitForFiltersOpen"/>
-        <actionGroup ref="AssertIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
+        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Price"/>
         </actionGroup>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToPremium">
@@ -42,7 +42,7 @@
             <argument name="filterOption" value="premium_price_filter"/>
         </actionGroup>
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Premium"/>
         </actionGroup>
     </test>
