@@ -16,7 +16,8 @@
         },
         "index": {
             "MEDIA_GALLERY_ID": true,
-            "MEDIA_GALLERY_ASSET_GRID_ID": true
+            "MEDIA_GALLERY_ASSET_GRID_ID": true,
+            "MEDIA_GALLERY_GRID_FULLTEXT": true
         },
         "constraint": {
             "PRIMARY": true
