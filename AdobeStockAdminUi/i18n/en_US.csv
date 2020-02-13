@@ -1,0 +1,13 @@
+button_label,button_label
+"Connection Successful!","Connection Successful!"
+"Connection Failed!","Connection Failed!"
+"An error occurred during test Adobe Stock API connection","An error occurred during test Adobe Stock API connection"
+"Configure an Adobe Stock account on the %io_link site to retrieve a Private key (Client secret).","Configure an Adobe Stock account on the %io_link site to retrieve a Private key (Client secret)."
+"Redirect URI: %redirect_uri","Redirect URI: %redirect_uri"
+"Pattern: %pattern","Pattern: %pattern"
+"Adobe Stock Integration","Adobe Stock Integration"
+"Enabled Adobe Stock","Enabled Adobe Stock"
+"API Key (Client ID)","API Key (Client ID)"
+"Client Secret","Client Secret"
+"Configure an Adobe Stock account on <a href=""https://console.adobe.io"" target=""_blank"">adobe.io</a> to get the API Key (Client ID) and Client Secret. You will not be able to use the integration without both the API Key and Client Secret.","Configure an Adobe Stock account on <a href=""https://console.adobe.io"" target=""_blank"">adobe.io</a> to get the API Key (Client ID) and Client Secret. You will not be able to use the integration without both the API Key and Client Secret."
+"Test Connection","Test Connection"

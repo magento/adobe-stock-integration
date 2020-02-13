@@ -1,0 +1,8 @@
+"Cannot retrieve the field %1. It's not available in Adobe Stock SDK","Cannot retrieve the field %1. It's not available in Adobe Stock SDK"
+"Files ids can not be empty.","Files ids can not be empty."
+"An error occurred during retrieve files information.","An error occurred during retrieve files information."
+"Could not retrieve files information.","Could not retrieve files information."
+"Adobe API Key is invalid!","Adobe API Key is invalid!"
+"Adobe API login has expired!","Adobe API login has expired!"
+". ': %error_message'",". ': %error_message'"
+"Create attributes process failed: %error_message","Create attributes process failed: %error_message"

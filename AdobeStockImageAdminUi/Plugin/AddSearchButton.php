@@ -14,7 +14,7 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\LayoutInterface;
 
 /**
- * Plugin which adds an Adobe Stock search button to the media пфддукн tab
+ * Plugin which adds an Adobe Stock search button to the media gallery tab
  */
 class AddSearchButton
 {
