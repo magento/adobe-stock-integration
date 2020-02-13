@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Directories;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Filesystem;
+use Magento\MediaGalleryUi\Model\Directories\FolderTree;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -32,39 +32,25 @@ class GetTree extends Action
     private $logger;
 
     /**
-     * @var Filesystem
+     * @var FolderTree
      */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var array
-     */
-    private $responseContent;
+    private $folderTree;
 
     /**
      * Constructor
      *
      * @param Action\Context $context
      * @param LoggerInterface $logger
-     * @param Filesystem $filesystem
-     * @param string $path
+     * @param FolderTree $FolderTree
      */
     public function __construct(
         Action\Context $context,
         LoggerInterface $logger,
-        Filesystem $filesystem,
-        string $path
+        FolderTree $folderTree
     ) {
         parent::__construct($context);
         $this->logger = $logger;
-        $this->filesystem = $filesystem;
-        $this->path = $path;
-        $this->responseContent = [];
+        $this->folderTree = $folderTree;
     }
     /**
      * @inheritdoc
@@ -72,31 +58,12 @@ class GetTree extends Action
     public function execute()
     {
         try {
-            $directories = [];
-            $directoryInstance = $this->filesystem->getDirectoryRead($this->path);
-            if ($directoryInstance->isDirectory()) {
-                foreach ($directoryInstance->readRecursively() as $index => $path) {
-                    if ($directoryInstance->isDirectory($path)) {
-                        $pathArray = explode('/', $path);
-                        $directories[] =
-                            [
-                                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                                'attr' => ['id' => $index],
-                                'metadata' => [
-                                    'path' => $path
-                                ],
-                                'path_array' => $pathArray
-                            ];
-                    }
-                }
-            }
-            $this->responseContent = $this->buildFolderTree($directories);
-
+            $responseContent[] = $this->folderTree->buildTree();
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $this->responseContent = [
+            $responseContent = [
                 'success' => false,
                 'message' => __('Retrieving directories list failed.'),
             ];
@@ -105,59 +72,8 @@ class GetTree extends Action
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setHttpResponseCode($responseCode);
-        $resultJson->setData($this->responseContent);
+        $resultJson->setData($responseContent);
 
         return $resultJson;
-    }
-
-    /**
-     * Build folder tree structure by provided directories path
-     *
-     * @param array $directories
-     * @return array
-     */
-    private function buildFolderTree(array $directories, bool $skipRoot = true): array
-    {
-        $tree = [
-            'name' => 'root',
-            'path' => '/',
-            'children' => []
-        ];
-        foreach ($directories as $idx => &$node) {
-            $node['children'] = [];
-            $result = $this->findParent($node, $tree);
-            $parent = & $result['treeNode'];
-
-            $parent['children'][] =& $directories[$idx];
-        }
-        return $skipRoot ? $tree['children'] : $tree;
-    }
-
-    /**
-     * Find parent directory
-     *
-     * @param array $node
-     * @param array $treeNode
-     * @param int $level
-     * @return array
-     */
-    private function findParent(array &$node, array &$treeNode, int $level = 0): array
-    {
-        $nodePathLength = count($node['path_array']);
-        $treeNodeParentLevel = $nodePathLength - 1;
-
-        $result = ['treeNode' => &$treeNode];
-
-        if ($nodePathLength <= 1 || $level > $treeNodeParentLevel) {
-            return $result;
-        }
-
-        foreach ($treeNode['children'] as $idx => &$tnode) {
-            if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
-                return $this->findParent($node, $tnode, $level + 1);
-            }
-        }
-
-        return $result;
     }
 }

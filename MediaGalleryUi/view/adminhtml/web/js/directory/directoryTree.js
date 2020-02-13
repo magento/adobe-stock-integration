@@ -15,11 +15,7 @@ define([
         defaults: {
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
-            /* eslint-disable max-len */
-            urlProvider: 'name = media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url, ns = media_gallery_listing',
-            options: {
-                treeInitData: []
-            },
+            getDirectoryTreeUrl: 'media_gallery/directories/gettree',
             modules: {
                 image: '${ $.urlProvider }',
                 filterChips: '${ $.filterChipsProvider }'
@@ -37,7 +33,6 @@ define([
             // wait one second for template render
             setTimeout(function () {
                 this.getJsonTree();
-                this.createTree();
                 this.initEvents();
             }.bind(this), 100);
 
@@ -75,10 +70,10 @@ define([
          */
         getJsonTree: function () {
             $.ajax({
-                url: this.image().getDirectoryTreeUrl,
+                url: this.getDirectoryTreeUrl,
                 type: 'POST',
-                dataType: 'json',
                 async: false,
+                dataType: 'json',
                 data: {
                     'form_key': FORM_KEY
                 },
@@ -89,7 +84,7 @@ define([
                  * @param {Object} data
                  */
                 success: function (data) {
-                    this.options.treeInitData = data;
+                    this.createTree(data);
                 }.bind(this),
 
                 /**
@@ -105,9 +100,11 @@ define([
         },
 
         /**
-         * Initialize directory tree.
+         * Initialize directory tree
+         * 
+         * @param {Array}
          */
-        createTree: function () {
+        createTree: function (data) {
             $(this.directoryTreeSelector).jstree({
                 plugins: ['json_data', 'themes',  'ui', 'crrm', 'types', 'hotkeys'],
                 vcheckbox: {
@@ -115,7 +112,7 @@ define([
                     'real_checkboxes': true
                 },
                 'json_data': {
-                    data: this.options.treeInitData
+                    data: data
                 },
                 hotkeys: {
                     space: this._changeState,

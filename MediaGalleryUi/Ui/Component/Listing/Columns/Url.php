@@ -24,17 +24,11 @@ class Url extends Column
     private $storeManager;
 
     /**
-     * @var UrlInterface
-     */
-    private $url;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
-     * @param UrlInterface $url
      * @param array $components
      * @param array $data
      */
@@ -42,31 +36,13 @@ class Url extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         StoreManagerInterface $storeManager,
-        UrlInterface $url,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->storeManager = $storeManager;
-        $this->url = $url;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function prepare(): void
-    {
-        parent::prepare();
-        $this->setData(
-            'config',
-            array_replace_recursive(
-                (array) $this->getData('config'),
-                [
-                    'getDirectoryTreeUrl' => $this->url->getUrl("media_gallery/directories/gettree")
-                ]
-            )
-        );
-    }
     /**
      * Prepare Data Source
      *

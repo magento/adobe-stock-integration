@@ -92,6 +92,7 @@
         </paging>
     </listingToolbar>
     <container name="media_gallery_directories" 
+               class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
                template="Magento_MediaGalleryUi/grid/directories/directoryTree" 
                component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
@@ -121,5 +122,5 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-    </columns>    
+    </columns> 
 </listing>
