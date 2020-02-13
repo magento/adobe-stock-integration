@@ -24,8 +24,6 @@ class Url extends Column
     private $storeManager;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager

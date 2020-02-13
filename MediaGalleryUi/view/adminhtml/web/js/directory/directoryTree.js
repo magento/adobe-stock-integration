@@ -17,7 +17,6 @@ define([
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
             modules: {
-                image: '${ $.urlProvider }',
                 filterChips: '${ $.filterChipsProvider }'
             }
         },
@@ -72,7 +71,6 @@ define([
             $.ajax({
                 url: this.getDirectoryTreeUrl,
                 type: 'POST',
-                async: false,
                 dataType: 'json',
                 data: {
                     'form_key': FORM_KEY
@@ -101,8 +99,8 @@ define([
 
         /**
          * Initialize directory tree
-         * 
-         * @param {Array}
+         *
+         * @param {Array} data
          */
         createTree: function (data) {
             $(this.directoryTreeSelector).jstree({
