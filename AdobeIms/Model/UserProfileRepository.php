@@ -21,7 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class UserProfileRepository implements UserProfileRepositoryInterface
 {
-    private const ID = 'id';
     private const ADMIN_USER_ID = 'admin_user_id';
 
     /**
@@ -89,7 +88,7 @@ class UserProfileRepository implements UserProfileRepositoryInterface
         }
 
         $entity = $this->entityFactory->create();
-        $this->resource->load($entity, $entityId, self::ID);
+        $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
             $message = __('User profile with id %id not found.', ['id' => $entityId]);
             throw new NoSuchEntityException($message);

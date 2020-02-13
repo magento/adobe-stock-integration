@@ -25,6 +25,7 @@ class Config implements ConfigInterface
     private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
     private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_ims/integration/default_profile_image';
     private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_ims/integration/image_url';
+    private const OAUTH_CALLBACK_URL = 'adobe_ims/oauth/callback';
 
     /**
      * @var ScopeConfigInterface
@@ -91,7 +92,7 @@ class Config implements ConfigInterface
      */
     public function getCallBackUrl(): string
     {
-        return $this->url->getUrl('adobe_ims/oauth/callback');
+        return $this->url->getUrl(self::OAUTH_CALLBACK_URL);
     }
 
     /**

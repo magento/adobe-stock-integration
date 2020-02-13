@@ -17,6 +17,9 @@ use Magento\Framework\Api\SearchCriteriaInterface;
  */
 class Isolated implements SearchParameterProviderInterface
 {
+    private const ISOLATED_FILTER = 'isolated_filter';
+    private const ISOLATED_ONLY = 'Isolated Only';
+
     /**
      * @inheritdoc
      */
@@ -24,8 +27,8 @@ class Isolated implements SearchParameterProviderInterface
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'isolated_filter') {
-                    if ($filter->getValue() === 'Isolated Only') {
+                if ($filter->getField() === self::ISOLATED_FILTER) {
+                    if ($filter->getValue() === self::ISOLATED_ONLY) {
                         $searchParams->setFilterIsolatedOn(true);
                         break;
                     }

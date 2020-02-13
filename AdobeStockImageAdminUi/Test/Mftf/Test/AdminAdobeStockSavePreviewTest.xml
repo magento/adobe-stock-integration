@@ -30,6 +30,6 @@
         </after>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
-        <actionGroup ref="AdminAssertAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
+        <actionGroup ref="AssertAdminAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
     </test>
 </tests>

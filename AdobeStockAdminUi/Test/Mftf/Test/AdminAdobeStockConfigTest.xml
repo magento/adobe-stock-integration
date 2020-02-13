@@ -27,7 +27,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenAdobeStockConfigActionGroup" stepKey="navigateToAdobeStockConfigurationFieldset"/>
-        <actionGroup ref="AdminAssertAdobeStockConfigFieldsActionGroup" stepKey="checkAdobeStockConfigurationFields"/>
-        <actionGroup ref="AdminAssertAdobeStockConnectionTestActionGroup" stepKey="testConnection"/>
+        <actionGroup ref="AssertAdminAdobeStockConfigFieldsActionGroup" stepKey="checkAdobeStockConfigurationFields"/>
+        <actionGroup ref="AssertAdminAdobeStockConnectionTestActionGroup" stepKey="testConnection"/>
     </test>
 </tests>

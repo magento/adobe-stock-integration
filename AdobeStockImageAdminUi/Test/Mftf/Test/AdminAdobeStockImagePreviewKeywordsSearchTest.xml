@@ -38,7 +38,7 @@
         </actionGroup>
 
         <!-- verify that clicking on keyword initialize new search -->
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="assertKeywordFilterApplied">
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="assertKeywordFilterApplied">
             <argument name="resultValue" value="accessory"/>
         </actionGroup>
     </test>

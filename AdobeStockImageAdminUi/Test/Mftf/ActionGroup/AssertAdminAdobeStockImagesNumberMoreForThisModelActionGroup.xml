@@ -7,10 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertNumberOfKeywordsInImagePreviewActionGroup">
+    <actionGroup name="AssertAdminAdobeStockImagesNumberMoreForThisModelActionGroup">
         <arguments>
-            <argument name="keywordsNumber" type="string"/>
+            <argument name="imagesNumber" type="string"/>
         </arguments>
-        <seeNumberOfElements selector="{{AdobeStockImagePreviewSection.keywords}}" userInput="{{keywordsNumber}}" stepKey="seeCorrectKeywordsNumber"/>
+        <seeNumberOfElements selector="{{AdobeStockImagePreviewSection.moreFromThisModelImages}}" userInput="{{imagesNumber}}" stepKey="seeCorrectImagesNumber"/>
     </actionGroup>
 </actionGroups>
