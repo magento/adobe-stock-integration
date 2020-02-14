@@ -28,7 +28,7 @@ class IndexAssets extends Command
     private $state;
 
     /**
-     * Constructor
+     * IndexAssets constructor.
      *
      * @param ImagesIndexer $imagesIndexer
      * @param State $state

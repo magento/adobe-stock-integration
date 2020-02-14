@@ -11,6 +11,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryUi\Model\UpdateAssetInGrid as Service;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Plugin to update media gallery grid table when asset is saved
@@ -28,6 +29,8 @@ class UpdateAssetInGrid
     private $getByPath;
 
     /**
+     * UpdateAssetInGrid constructor.
+     *
      * @param Service $service
      * @param GetByPathInterface $getByPath
      */
@@ -45,13 +48,16 @@ class UpdateAssetInGrid
      * @param SaveInterface $save
      * @param \Closure $proceed
      * @param AssetInterface $asset
+     *
      * @return int
+     * @throws CouldNotSaveException
      */
     public function aroundExecute(SaveInterface $save, \Closure $proceed, AssetInterface $asset): int
     {
         $result = $proceed($asset);
         $asset = $this->getByPath->execute($asset->getPath());
         $this->service->execute($asset);
+
         return $result;
     }
 }
