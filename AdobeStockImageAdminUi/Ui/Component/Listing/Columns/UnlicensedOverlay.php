@@ -16,24 +16,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
  */
 class UnlicensedOverlay extends Column
 {
-
-    /**
-     * UnlicensedOverlay constructor.
-     *
-     * @param ContextInterface $context
-     * @param UiComponentFactory $uiComponentFactory
-     * @param array $components
-     * @param array $data
-     */
-    public function __construct(
-        ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
-        array $components = [],
-        array $data = []
-    ) {
-        parent::__construct($context, $uiComponentFactory, $components, $data);
-    }
-
     /**
      * Prepare Data Source
      *
