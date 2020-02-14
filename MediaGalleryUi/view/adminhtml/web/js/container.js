@@ -27,7 +27,6 @@ define([
             this._super();
 
             $(this.containerSelector).applyBindings();
-            this.masonry().setLayoutStylesWhenLoaded();
 
             return this;
         }
