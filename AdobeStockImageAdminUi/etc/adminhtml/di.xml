@@ -9,4 +9,11 @@
     <type name="Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content">
         <plugin name="add_search_button" type="Magento\AdobeStockImageAdminUi\Plugin\AddSearchButton"/>
     </type>
+    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
+        <arguments>
+            <argument name="sourceIcons" xsi:type="array">
+                <item name="Adobe Stock" xsi:type="string">Magento_MediaGalleryUi::images/Astock.png</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

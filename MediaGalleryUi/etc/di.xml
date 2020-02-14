@@ -41,4 +41,9 @@
     <type name="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface">
         <plugin name="updateAssetKeywordsInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetKeywordsInGrid"/>
     </type>
+    <type name="Magento\MediaGalleryUi\Model\UpdateAssetInGrid">
+        <arguments>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
 </config>

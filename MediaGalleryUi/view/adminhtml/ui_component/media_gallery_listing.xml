@@ -100,10 +100,10 @@
                 <item name="containerId" xsi:type="string">media-gallery-masonry-grid</item>
             </item>
         </argument>
-        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\UnlicensedOverlay">
+        <column name="source" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
             <settings>
-                <label translate="true">Overlay</label>
-                <visible>true</visible>
+                <label translate="true">Source</label>
+                <visible>false</visible>
                 <sortable>false</sortable>
             </settings>
         </column>

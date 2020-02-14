@@ -12,7 +12,7 @@
 <div class="masonry-image-description">
     <ul class="media-gallery-image-details">
         <li class="name" data-bind="text: $row().name"></li>
-        <li class="source"><img if="$row().source_icon_url" class="adobe-stock-icon" data-bind="attr: {src: $row().source_icon_url}" /></li>
+        <li class="source"><img if="$row().source" class="adobe-stock-icon" data-bind="attr: { src: $row().source }" /></li>
         <li class="type" data-bind="text: $row().content_type"></li> &#8226;
         <li class="dimensions" data-bind="text: $row().width + 'x' + $row().height"></li>
     </ul>
