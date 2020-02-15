@@ -11,11 +11,13 @@
             "height": true,
             "created_at": true,
             "updated_at": true,
+            "keywords": true,
             "source": true
         },
         "index": {
             "MEDIA_GALLERY_ID": true,
-            "MEDIA_GALLERY_ASSET_GRID_ID": true
+            "MEDIA_GALLERY_ASSET_GRID_ID": true,
+            "MEDIA_GALLERY_ASSET_GRID_NAME_KEYWORDS": true
         },
         "constraint": {
             "PRIMARY": true

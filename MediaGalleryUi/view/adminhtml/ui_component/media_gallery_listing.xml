@@ -9,7 +9,8 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">media_gallery_listing.media_gallery_listing_data_source
+            <item name="provider" xsi:type="string">
+                media_gallery_listing.media_gallery_listing_data_source
             </item>
         </item>
     </argument>
@@ -42,6 +43,7 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
+        <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <filterSelect name="directory" provider="${ $.parentName }" sortOrder="10">
                 <settings>
@@ -54,7 +56,7 @@
             <filterRange name="created_at"
                          class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
-                         template="ui/grid/filters/elements/group" sortOrder="20">
+                         template="ui/grid/filters/elements/group" sortOrder="30">
                 <settings>
                     <rangeType>date</rangeType>
                     <label translate="true">Uploaded Date</label>
@@ -64,7 +66,7 @@
             <filterRange name="updated_at"
                          class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
-                         template="ui/grid/filters/elements/group" sortOrder="30">
+                         template="ui/grid/filters/elements/group" sortOrder="40">
                 <settings>
                     <rangeType>date</rangeType>
                     <label translate="true">Modification Date</label>
