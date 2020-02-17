@@ -84,7 +84,7 @@ class SaveImage implements SaveImageInterface
      * @var SetLicensedInMediaGalleryGrid
      */
     private $setLicensedInMediaGalleryGrid;
-    
+
     /**
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
