@@ -29,13 +29,25 @@ define([
         initialize: function () {
             this._super();
 
-            // wait one second for template render
-            setTimeout(function () {
+            this.waitForContainer(function () {
                 this.getJsonTree();
                 this.initEvents();
-            }.bind(this), 100);
+            }.bind(this));
 
             return this;
+        },
+
+        /**
+         * Wait for container to initialize
+         */
+        waitForContainer: function (callback) {
+            if ($(this.directoryTreeSelector).length === 0) {
+                setTimeout(function () {
+                    this.waitForContainer(callback);
+                }.bind(this), 100);
+            } else {
+                setTimeout(callback, 0);
+            }
         },
 
         /**
