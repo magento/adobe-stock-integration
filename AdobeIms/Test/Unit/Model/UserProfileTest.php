@@ -102,7 +102,7 @@ class UserProfileTest extends TestCase
     /**
      * Test setEmail
      */
-    public function testEmail(): void 
+    public function testEmail(): void
     {
         $value = 'value1';
         $this->model->setEmail($value);
