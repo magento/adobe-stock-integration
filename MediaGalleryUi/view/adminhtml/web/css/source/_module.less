@@ -6,6 +6,44 @@
 & when (@media-common = true) {
 
     .media-gallery-container {
+        
+        .jstree-default .jstree-hovered {
+            border-radius: 6px;
+            background:#cdecf6;
+            border: solid 0.14em;
+            border-color:#7185f5;
+        }
+        
+        .jstree-default a .jstree-icon {
+            background-position: -52px -16px;
+        }
+
+        .jstree a > ins {
+            height: 20px;
+            width: 20px;
+        }
+
+        .jstree-default .jstree-no-dots .jstree-leaf > ins { 
+            background-image: none; 
+        }
+
+        .jstree-default ins {
+            background-image: url("@{baseDir}Magento_MediaGalleryUi/images/d.png");
+        }
+
+        .jstree a { 
+            padding: 3px 8px;
+            height: 30px;
+            width: 124%;
+            margin: 1px;
+        }
+
+        .jstree-default .jstree-clicked {
+            border-radius: 6px;
+            background:#cdecf6;
+            border: solid 0.14em;
+            border-color:#7185f5;
+        }
 
         .masonry-image-overlay {
             margin-left: 120px;
@@ -54,6 +92,16 @@
         .masonry-image-column {
             width: 200px;
             background-color: #e1e1e1 !important;
+        }
+        
+        .masonry-image-grid {
+            width: 84%;
+            float: right;
+        }
+
+        .media-directory-container {
+            width:12%;
+            float: left; 
         }
 
         .media-gallery-image-block {

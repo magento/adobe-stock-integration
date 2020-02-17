@@ -45,14 +45,13 @@
     <listingToolbar name="listing_top">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <filterSelect name="directory" provider="${ $.parentName }" sortOrder="10">
+            <filterInput name="directory" provider="${ $.parentName }" sortOrder="10">
                 <settings>
-                    <caption translate="true">All</caption>
-                    <options class="Magento\MediaGalleryUi\Ui\Options\Directory"/>
-                    <label translate="true">Directory</label>
+                    <visible>false</visible>
                     <dataScope>directory</dataScope>
+                    <label translate="true">Directory</label>
                 </settings>
-            </filterSelect>
+            </filterInput>
             <filterRange name="created_at"
                          class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
@@ -94,6 +93,10 @@
             </settings>
         </paging>
     </listingToolbar>
+    <container name="media_gallery_directories" 
+               class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
+               template="Magento_MediaGalleryUi/grid/directories/directoryTree" 
+               component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
