@@ -41,140 +41,100 @@ class UserProfileTest extends TestCase
 
     /**
      * Test setAccessToken
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testAccessToken(
-        ?string $value
-    ): void {
+    public function testAccessToken(): void
+    {
+        $value = 'value1';
         $this->model->setAccessToken($value);
         $this->assertSame($value, $this->model->getAccessToken());
     }
 
     /**
      * Test setRefreshToken
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testRefreshToken(
-        ?string $value
-    ): void {
+    public function testRefreshToken(): void
+    {
+        $value = 'value1';
         $this->model->setRefreshToken($value);
         $this->assertSame($value, $this->model->getRefreshToken());
     }
 
     /**
      * Test setAccessTokenExpiresAt
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testAccessTokenExpiresAt(
-        ?string $value
-    ): void {
+    public function testAccessTokenExpiresAt(): void
+    {
+        $value = 'value1';
         $this->model->setAccessTokenExpiresAt($value);
         $this->assertSame($value, $this->model->getAccessTokenExpiresAt());
     }
 
     /**
      * Test setCreatedAt
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testCreatedAt(
-        ?string $value
-    ): void {
+    public function testCreatedAt(): void
+    {
+        $value = 'value1';
         $this->model->setCreatedAt($value);
         $this->assertSame($value, $this->model->getCreatedAt());
     }
 
     /**
      * Test setUpdatedAt
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testUpdatedAt(
-        ?string $value
-    ): void {
+    public function testUpdatedAt(): void
+    {
+        $value = 'value1';
         $this->model->setUpdatedAt($value);
         $this->assertSame($value, $this->model->getUpdatedAt());
     }
 
     /**
      * Test setAccountType
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testAccountType(
-        ?string $value
-    ): void {
+    public function testAccountType(): void
+    {
+        $value = 'value1';
         $this->model->setAccountType($value);
         $this->assertSame($value, $this->model->getAccountType());
     }
 
     /**
      * Test setEmail
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testEmail(
-        ?string $value
-    ): void {
+    public function testEmail(): void 
+    {
+        $value = 'value1';
         $this->model->setEmail($value);
         $this->assertSame($value, $this->model->getEmail());
     }
 
     /**
      * Test setImage
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testImage(
-        ?string $value
-    ): void {
+    public function testImage(): void
+    {
+        $value = 'value1';
         $this->model->setImage($value);
         $this->assertSame($value, $this->model->getImage());
     }
 
     /**
      * Test setName
-     *
-     * @param string|null $value
-     * @testWith ["value1"]
-     *           ["value2"]
      */
-    public function testName(
-        ?string $value
-    ): void {
+    public function testName(): void
+    {
+        $value = 'value1';
         $this->model->setName($value);
         $this->assertSame($value, $this->model->getName());
     }
 
     /**
      * Test setUserId
-     *
-     * @param int|null $value
-     * @testWith [1]
-     *           [2]
      */
-    public function testUserId(
-        ?int $value
-    ): void {
+    public function testUserId(): void
+    {
+        $value = 42;
         $this->model->setUserId($value);
         $this->assertSame($value, $this->model->getUserId());
     }
