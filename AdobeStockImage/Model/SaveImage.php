@@ -84,10 +84,8 @@ class SaveImage implements SaveImageInterface
      * @var SetLicensedInMediaGalleryGrid
      */
     private $setLicensedInMediaGalleryGrid;
-
+    
     /**
-     * Constructor
-     *
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
      * @param GetByIdInterface $getMediaAssetById
@@ -98,7 +96,7 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToAsset $documentToAsset
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
-     * @param SetLicensedInMediaGalleryGrid $setUnlicensedImagesMediaGalley
+     * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      */
     public function __construct(
         StorageSave $storageSave,

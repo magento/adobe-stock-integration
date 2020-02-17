@@ -12,7 +12,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\FileSystem\DriverInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 
