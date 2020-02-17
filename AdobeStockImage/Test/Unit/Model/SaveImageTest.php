@@ -7,19 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SaveImage;
-use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
+use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
+use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -80,6 +81,11 @@ class SaveImageTest extends TestCase
     private $saveImage;
 
     /**
+     * @var SetLicensedInMediaGalleryGrid|MockObject
+     */
+    private $setLicensedInMediaGalleryGridMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -93,6 +99,7 @@ class SaveImageTest extends TestCase
         $this->documentToAsset = $this->createMock(DocumentToAsset::class);
         $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
         $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
+        $this->setLicensedInMediaGalleryGridMock = $this->createMock(SetLicensedInMediaGalleryGrid::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -105,7 +112,8 @@ class SaveImageTest extends TestCase
                 'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAsset,
                 'documentToAsset' =>  $this->documentToAsset,
                 'documentToKeywords' => $this->documentToKeywords,
-                'saveAssetKeywords' => $this->saveAssetKeywords
+                'saveAssetKeywords' => $this->saveAssetKeywords,
+                'setLicensedInMediaGalleryGrid' => $this->setLicensedInMediaGalleryGridMock
             ]
         );
     }
@@ -153,6 +161,9 @@ class SaveImageTest extends TestCase
             ->with($document);
 
         $this->saveAdobeStockAsset->expects($this->once())
+            ->method('execute');
+
+        $this->setLicensedInMediaGalleryGridMock->expects($this->once())
             ->method('execute');
 
         $this->saveImage->execute($document, 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg', 'path');

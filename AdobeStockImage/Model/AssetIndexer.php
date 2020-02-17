@@ -10,11 +10,9 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 
@@ -50,39 +48,39 @@ class AssetIndexer implements IndexerInterface
     private $mediaDirectory;
 
     /**
-     * @var File
+     * @var DriverInterface
      */
     private $driver;
 
     /**
-     * @var ResourceConnection
+     * @var SetLicensedInMediaGalleryGrid
      */
-    private $resource;
+    private $setLicensedInMediaGalleryGrid;
 
     /**
      * Constructor
      *
      * @param GetByPathInterface $getByPathCommand
-     * @param ResourceConnection $resource
      * @param AssetRepositoryInterface $assetRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Filesystem $filesystem
-     * @param File $driver
+     * @param DriverInterface $driver
+     * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      */
     public function __construct(
         GetByPathInterface $getByPathCommand,
-        ResourceConnection $resource,
         AssetRepositoryInterface $assetRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Filesystem $filesystem,
-        File $driver
+        DriverInterface $driver,
+        SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
     ) {
         $this->getByPathCommand = $getByPathCommand;
         $this->assetRepository = $assetRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->resource = $resource;
+        $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
     }
 
     /**
@@ -101,13 +99,7 @@ class AssetIndexer implements IndexerInterface
         $assets = $this->assetRepository->getList($searchCriteria)->getItems();
 
         foreach ($assets as $asset) {
-            $this->getConnection()->insertOnDuplicate(
-                $this->resource->getTableName('media_gallery_asset_grid'),
-                [
-                    'id' => $mediaAsset->getId(),
-                    'licensed' => $asset->getIsLicensed(),
-                ]
-            );
+            $this->setLicensedInMediaGalleryGrid->execute($asset);
         }
     }
 
@@ -139,15 +131,5 @@ class AssetIndexer implements IndexerInterface
             $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
-    }
-
-    /**
-     * Retrieve the database adapter
-     *
-     * @return AdapterInterface
-     */
-    private function getConnection(): AdapterInterface
-    {
-        return $this->resource->getConnection();
     }
 }
