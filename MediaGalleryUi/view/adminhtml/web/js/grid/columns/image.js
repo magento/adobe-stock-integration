@@ -3,18 +3,44 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/grid/columns/column'
-], function (Column) {
+    'Magento_Ui/js/grid/columns/column',
+    'uiLayout'
+], function (Column, layout) {
     'use strict';
 
     return Column.extend({
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
+            deleteImageUrl: 'media_gallery/image/delete',
             selected: null,
             fields: {
                 id: 'id',
                 url: 'url'
-            }
+            },
+            modules: {
+                actions: '${ $.name }_actions'
+            },
+            viewConfig: [
+                {
+                    component: 'Magento_MediaGalleryUi/js/grid/columns/image/actions',
+                    name: '${ $.name }_actions',
+                    providerName: '${ $.provider }',
+                    imageModelName: '${ $.name }',
+                    messagesName: '${ $.messagesName }'
+                }
+            ]
+        },
+
+        /**
+         * Initialize the component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super();
+            this.initView();
+
+            return this;
         },
 
         /**
@@ -65,6 +91,15 @@ define([
          */
         select: function (record) {
             this.isSelected(record) ? this.selected(null) : this.selected(this.getId(record));
+        },
+
+        /**
+         * Initialize child components
+         *
+         * @returns {Object}
+         */
+        initView: function () {
+            layout(this.viewConfig);
         }
     });
 });
