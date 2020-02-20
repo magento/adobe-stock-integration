@@ -132,7 +132,7 @@ define([
                     }
 
                     this.addMessage('error', message);
-                }.bind(this),
+                }.bind(this)
             });
         },
 

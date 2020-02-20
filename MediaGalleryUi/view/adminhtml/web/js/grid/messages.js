@@ -19,7 +19,7 @@ define([
         /**
          * Get messages
          *
-         * @return {Array}
+         * @returns {Array}
          */
         get: function () {
             return this.messages();

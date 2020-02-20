@@ -100,6 +100,8 @@ define([
          */
         initView: function () {
             layout(this.viewConfig);
+
+            return this;
         }
     });
 });
