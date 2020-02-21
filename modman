@@ -10,3 +10,4 @@
 @import AdobeStockImageApi
 @import MediaGalleryUi
 @import MediaGalleryUiApi
+@import MediaGalleryIntegration
