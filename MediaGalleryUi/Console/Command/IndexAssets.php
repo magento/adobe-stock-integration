@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryUi\Console\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
+use Magento\Framework\Console\Cli;
 use Magento\MediaGalleryUi\Model\ImagesIndexer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,5 +64,6 @@ class IndexAssets extends Command
             $this->imagesIndexer->execute();
         });
         $output->writeln('Completed assets indexing.');
+        return Cli::RETURN_SUCCESS;
     }
 }
