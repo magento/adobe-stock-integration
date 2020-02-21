@@ -10,13 +10,14 @@ namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License;
 
 use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
 
 /**
  * Backend controller for retrieving license quota for the current user
  */
-class Quota extends Action
+class Quota extends Action implements HttpPostActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;

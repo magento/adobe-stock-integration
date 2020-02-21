@@ -12,6 +12,7 @@ use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -19,7 +20,7 @@ use Magento\Framework\Controller\ResultInterface;
 /**
  * Controller used for testing connection to Adobe Stock API from stores configuration
  */
-class TestConnection extends Action
+class TestConnection extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session.

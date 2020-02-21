@@ -13,6 +13,7 @@ use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -27,7 +28,7 @@ use Magento\AdobeImsApi\Api\GetImageInterface;
 /**
  * Callback action for managing user authentication with the Adobe services
  */
-class Callback extends Action
+class Callback extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()

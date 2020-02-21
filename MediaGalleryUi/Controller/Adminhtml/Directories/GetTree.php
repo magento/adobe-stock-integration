@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Controller\Adminhtml\Directories;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\MediaGalleryUi\Model\Directories\FolderTree;
@@ -16,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Returns all available directories
  */
-class GetTree extends Action
+class GetTree extends Action implements HttpPostActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;

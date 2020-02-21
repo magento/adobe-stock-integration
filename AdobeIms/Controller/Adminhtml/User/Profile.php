@@ -10,6 +10,8 @@ namespace Magento\AdobeIms\Controller\Adminhtml\User;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
@@ -17,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Get Adobe services user account action
  */
-class Profile extends Action
+class Profile extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Successful result code.
