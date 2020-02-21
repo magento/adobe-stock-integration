@@ -28,6 +28,7 @@ class UpdateOpenDialogUrl
 
     /**
      * @param UrlInterface $url
+     * @param ConfigInterface $config
      */
     public function __construct(UrlInterface $url, ConfigInterface $config)
     {

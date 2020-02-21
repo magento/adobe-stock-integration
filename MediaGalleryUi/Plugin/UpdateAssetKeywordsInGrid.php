@@ -35,7 +35,7 @@ class UpdateAssetKeywordsInGrid
      * Update the enhanced media gallery grid table when asset is saved with the keywords information
      *
      * @param SaveAssetKeywordsInterface $save
-     * @param null $result
+     * @param void $result
      * @param array $keywords
      * @param int $assetId
      *

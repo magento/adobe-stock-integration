@@ -18,7 +18,7 @@ then
 fi
 
 if [ $TEST_SUITE == 'static' ]; then
-    vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/Magento/Adobe*;
+    vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/Magento/Adobe* app/code/Magento/Media*;
     ! find app/code/Magento/Adobe*/ -type f -name "*.php" -exec grep -L strict_types=1 {} + | grep Adobe;
 fi
 

@@ -41,7 +41,7 @@ class GetTree extends Action
      *
      * @param Action\Context $context
      * @param LoggerInterface $logger
-     * @param FolderTree $FolderTree
+     * @param FolderTree $folderTree
      */
     public function __construct(
         Action\Context $context,
