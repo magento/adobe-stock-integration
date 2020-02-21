@@ -18,6 +18,9 @@ use Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface;
  */
 class ImagesIndexer implements ImagesIndexerInterface
 {
+    /**
+     *  Regular expression for image extension
+     */
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
 
     /**
