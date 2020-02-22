@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Plugin;
 
+use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Config;
-use Magento\Framework\UrlInterface;
 use Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider;
 use Magento\Framework\DataObject;
-use Magento\Cms\Helper\Wysiwyg\Images;
+use Magento\Framework\UrlInterface;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 
 /**
@@ -36,6 +36,8 @@ class UpdateWysiwygOpenDialogUrl
 
     /**
      * @param UrlInterface $url
+     * @param Images $imagesHelper
+     * @param ConfigInterface $config
      */
     public function __construct(UrlInterface $url, Images $imagesHelper, ConfigInterface $config)
     {
