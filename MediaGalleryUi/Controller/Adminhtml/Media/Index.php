@@ -8,43 +8,31 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Controller\Adminhtml\Media;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Controller serving the media gallery content
  */
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'Magento_MediaGalleryUi::media_gallery';
 
     /**
-     * @var PageFactory
-     */
-    private $pageFactory;
-
-    /**
-     * Index constructor.
-     *
-     * @param Context $context
-     * @param PageFactory $pageFactory
-     */
-    public function __construct(
-        Context $context,
-        PageFactory $pageFactory
-    ) {
-        parent::__construct($context);
-        $this->pageFactory = $pageFactory;
-    }
-
-    /**
      * Get the media gallery layout
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return ResultInterface
      */
-    public function execute(): \Magento\Framework\View\Result\Page
+    public function execute(): ResultInterface
     {
-        return $this->pageFactory->create();
+        /** @var Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_MediaGalleryUi::media_gallery')
+            ->addBreadcrumb(__('Media'), __('Media Gallery'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Manage Gallery'));
+
+        return $resultPage;
     }
 }
