@@ -126,7 +126,7 @@ define([
          */
         getUserQuota: function () {
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: this.quotaUrl,
                 data: {
                     'form_key': window.FORM_KEY
@@ -157,7 +157,7 @@ define([
          */
         loadUserProfile: function () {
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: this.profileUrl,
                 data: {
                     'form_key': window.FORM_KEY

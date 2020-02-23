@@ -82,7 +82,7 @@ define([
         getJsonTree: function () {
             $.ajax({
                 url: this.getDirectoryTreeUrl,
-                type: 'POST',
+                type: 'GET',
                 dataType: 'json',
                 data: {
                     'form_key': FORM_KEY

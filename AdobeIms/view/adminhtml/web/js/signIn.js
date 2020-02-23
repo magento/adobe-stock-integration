@@ -80,7 +80,7 @@ define([
          */
         loadUserProfile: function () {
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: this.profileUrl,
                 showLoader: true,
                 data: {
