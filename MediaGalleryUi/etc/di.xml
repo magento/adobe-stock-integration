@@ -46,7 +46,4 @@
             <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
-        <plugin name="deleteAssetInGrid" type="Magento\MediaGalleryUi\Plugin\DeleteAssetInGrid"/>
-    </type>
 </config>

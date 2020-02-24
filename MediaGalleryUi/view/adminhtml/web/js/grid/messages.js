@@ -4,16 +4,28 @@
  */
 
 define([
-    'uiElement',
-    'knockout'
-], function (Element, ko) {
+    'uiElement'
+], function (Element) {
     'use strict';
 
     return Element.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/grid/messages',
             messageDelay: 5,
-            messages: ko.observableArray()
+            messages: []
+        },
+
+        /**
+         * Init observable variables
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'messages'
+                ]);
+
+            return this;
         },
 
         /**

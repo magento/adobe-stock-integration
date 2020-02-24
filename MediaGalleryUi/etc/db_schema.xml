@@ -22,6 +22,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
+        <constraint xsi:type="foreign" referenceId="MEDIA_GALLERY_ASSET_GRID_ID_MEDIA_GALLERY_ASSET_ID"
+                    table="media_gallery_asset_grid" column="id" referenceTable="media_gallery_asset"
+                    referenceColumn="id" onDelete="CASCADE"/>
         <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
             <column name="id"/>
         </index>

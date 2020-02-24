@@ -17,6 +17,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\MediaGalleryUi\Model\DeleteImageByAssetId;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,20 +35,9 @@ class Delete extends Action
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var GetByIdInterface
+     * @var DeleteImageByAssetId
      */
-    private $getAssetById;
-
-    /**
-     * @var Storage
-     */
-    private $imagesStorage;
-
-
-    /**
-     * @var Storage
-     */
-    private $filesystem;
+    private $deleteImageByAssetId;
 
     /**
      * @var LoggerInterface
@@ -58,23 +48,17 @@ class Delete extends Action
      * Delete constructor.
      *
      * @param Context $context
-     * @param GetByIdInterface $getAssetById
-     * @param Storage $imagesStorage
-     * @param Filesystem $filesystem
+     * @param DeleteImageByAssetId $deleteImageByAssetId
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        GetByIdInterface $getAssetById,
-        Storage $imagesStorage,
-        Filesystem $filesystem,
+        DeleteImageByAssetId $deleteImageByAssetId,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->getAssetById = $getAssetById;
-        $this->imagesStorage = $imagesStorage;
-        $this->filesystem = $filesystem;
+        $this->deleteImageByAssetId = $deleteImageByAssetId;
         $this->logger = $logger;
     }
 
@@ -99,11 +83,7 @@ class Delete extends Action
         }
 
         try {
-            $image = $this->getAssetById->execute($imageId);
-            $mediaFilePath = $image->getPath();
-            $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-            $absoluteMediaPath = $mediaDirectory->getAbsolutePath();
-            $this->imagesStorage->deleteFile($absoluteMediaPath . $mediaFilePath);
+            $this->deleteImageByAssetId->execute($imageId);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

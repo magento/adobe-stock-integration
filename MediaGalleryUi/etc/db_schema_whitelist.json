@@ -20,7 +20,8 @@
             "MEDIA_GALLERY_ASSET_GRID_NAME_KEYWORDS": true
         },
         "constraint": {
-            "PRIMARY": true
+            "PRIMARY": true,
+            "MEDIA_GALLERY_ASSET_GRID_ID_MEDIA_GALLERY_ASSET_ID": true
         }
     }
 }

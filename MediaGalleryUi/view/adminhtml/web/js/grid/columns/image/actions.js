@@ -4,9 +4,10 @@
  */
 define([
     'jquery',
+    'underscore',
     'uiComponent',
     'Magento_Ui/js/modal/confirm'
-], function ($, Component, confirmation) {
+], function ($, _, Component, confirmation) {
     'use strict';
 
     return Component.extend({
@@ -94,23 +95,16 @@ define([
                  * @param {Object} response
                  */
                 success: function (response) {
-                    var message;
-
-                    if (typeof response === 'undefined' ||
-                        typeof response.message === 'undefined' ||
-                        !response.success
-                    ) {
-                        message = 'There was an error on attempt to delete the image.';
-                    } else {
-                        message = response.message;
-                    }
+                    var message = !_.isUndefined(response.message) ? response.message : null;
 
                     if (!response.success) {
+                        message = message || $.mage.__('There was an error on attempt to delete the image.');
                         this.addMessage('error', message);
 
                         return;
                     }
 
+                    message = message || $.mage.__('You have successfully removed the image.');
                     this.reloadGrid();
                     this.addMessage('success', message);
                 }.bind(this),
