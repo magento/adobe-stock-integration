@@ -84,12 +84,8 @@ define([
                 url: this.getDirectoryTreeUrl,
                 type: 'GET',
                 dataType: 'json',
-                data: {
-                    'form_key': FORM_KEY
-                },
-
                 /**
-                 * Succes handler for request
+                 * Success handler for request
                  *
                  * @param {Object} data
                  */
