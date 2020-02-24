@@ -12,10 +12,11 @@ define([
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
             deleteImageUrl: 'media_gallery/image/delete',
+            targetElementId: null,
             selected: null,
             fields: {
                 id: 'id',
-                url: 'url'
+                url: 'url',
             },
             modules: {
                 actions: '${ $.name }_actions'
@@ -83,14 +84,25 @@ define([
          * @returns {Object}
          */
         isSelected: function (record) {
-            return this.selected() === this.getId(record);
+            if (this.selected() === null) {
+                return false;
+            }
+            return this.getId(this.selected()) === this.getId(record);
         },
 
         /**
          * Set the record as selected
          */
         select: function (record) {
-            this.isSelected(record) ? this.selected(null) : this.selected(this.getId(record));
+            this.isSelected(record) ? this.selected(null) : this.selected(record);
+        },
+
+        /**
+         * Get the selected record
+         * @returns {Object}
+         */
+        getSelected: function () {
+            return this.selected();
         },
 
         /**

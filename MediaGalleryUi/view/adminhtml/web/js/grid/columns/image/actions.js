@@ -13,6 +13,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/grid/columns/image/actions',
+            addSelectedBtnSelector: '#add_selected',
             deleteImageUrl: 'media_gallery/image/delete',
             actionsList: [
                 {
@@ -26,6 +27,44 @@ define([
                 messages: '${ $.messagesName }',
                 provider: '${ $.providerName }'
             }
+        },
+
+        /**
+         * Initialize the component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super();
+            const context = this;
+            $(this.addSelectedBtnSelector).click(function () {
+                context.insertImage();
+            });
+
+            return this;
+        },
+
+        /**
+         * Insert selected image
+         *
+         * @returns {Boolean}
+         */
+        insertImage: function () {
+            var record = this.imageModel().getSelected();
+            if (record === null) {
+                return false;
+            }
+            var targetEl = this.getTargetElement();
+            if (!targetEl.length) {
+                MediabrowserUtility.closeDialog();
+                throw 'Target element not found for content update';
+            }
+            targetEl.val(record['thumbnail_url'])
+                .data('mime-type', record['content_type'])
+                .trigger('change');
+            MediabrowserUtility.closeDialog();
+            targetEl.focus();
+            jQuery(targetEl).change();
         },
 
         /**
@@ -150,6 +189,15 @@ define([
         addMessage: function (code, message) {
             this.messages().add(code, message);
             this.messages().scheduleCleanup();
-        }
+        },
+
+        /**
+         * Get target element
+         *
+         * @returns {*|n.fn.init|jQuery|HTMLElement}
+         */
+        getTargetElement: function () {
+            return $('#' + this.imageModel().targetElementId);
+        },
     });
 });

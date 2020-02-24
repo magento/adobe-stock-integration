@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns;
 
 use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -46,6 +47,7 @@ class Url extends Column
      *
      * @param array $dataSource
      * @return array
+     * @throws NoSuchEntityException
      */
     public function prepareDataSource(array $dataSource): array
     {
@@ -57,5 +59,22 @@ class Url extends Column
         }
 
         return $dataSource;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function prepare(): void
+    {
+        parent::prepare();
+        $this->setData(
+            'config',
+            array_replace_recursive(
+                (array) $this->getData('config'),
+                [
+                    'targetElementId' => $this->context->getRequestParam('target_element_id')
+                ]
+            )
+        );
     }
 }
