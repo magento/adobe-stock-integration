@@ -90,9 +90,9 @@ class GetToken implements GetTokenInterface
         );
 
         $tokenResponse = $this->json->unserialize($curl->getBody());
+        $data = is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')];
         /** @var TokenResponseInterface $tokenResponse */
-        $tokenResponse = $this->tokenResponseFactory->create()
-            ->addData(is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')]);
+        $tokenResponse = $this->tokenResponseFactory->create(['data' => $data]);
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
             throw new AuthorizationException(
