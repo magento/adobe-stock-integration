@@ -28,7 +28,7 @@ class Index extends Action
      * Index constructor.
      *
      * @param Context $context
-     * @param LayoutFactory $pageFactory
+     * @param LayoutFactory $layoutFactory
      */
     public function __construct(
         Context $context,

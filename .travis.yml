@@ -94,7 +94,7 @@ before_install:
 install:
   - mkdir -p magento2/app/code/Magento
   - mv Adobe* magento2/app/code/Magento/.
-  - mv MediaGallery* magento2/app/code/Magento/.
+  - mv Media* magento2/app/code/Magento/.
   - pushd magento2
   - composer install
   - composer require astock/stock-api-libphp
