@@ -24,6 +24,7 @@
         <element name="mediaGalleryImage" type="button" selector="//img[contains(@alt,'{{imageName}}')]" parameterized="true"/>
         <element name="mediaGalleryDeleteButton" type="button" selector="[data-ui-id=wysiwyg-images-content-delete-files-button]"/>
         <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
+        <element name="adobeImsACL" type="checkbox" selector="//a[text()='Adobe IMS']"/>
         <element name="adobeSignIn" type="button" selector=".adobe-sign-in-button"/>
         <element name="adobeImsPopupUserEmail" type="button" selector="#adobeid_username"/>
         <element name="adobeImsPopUpUserPassword" type="button" selector="#adobeid_password"/>
