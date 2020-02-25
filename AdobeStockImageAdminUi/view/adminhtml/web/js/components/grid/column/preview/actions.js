@@ -23,7 +23,6 @@ define([
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
-            confirmationUrl: 'adobe_stock/license/confirmation',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
             listens: {
@@ -283,7 +282,7 @@ define([
         showLicenseConfirmation: function (record) {
             $.ajax(
                 {
-                    type: 'POST',
+                    type: 'GET',
                     url: this.preview().confirmationUrl,
                     dataType: 'json',
                     data: {
@@ -383,8 +382,8 @@ define([
                             errorMessage = $.mage.__('Your admin role does not have permissions to license an image');
                         }
 
-                        messages.add('error', errorMessage);
-                        messages.scheduleCleanup(this.messageDelay);
+                        this.messages().add('error', errorMessage);
+                        this.messages().scheduleCleanup(this.messageDelay);
                     }
                 }
             );

@@ -75,7 +75,7 @@ define([
             this.visible(false);
 
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: this.url,
                 dataType: 'json',
                 data: {

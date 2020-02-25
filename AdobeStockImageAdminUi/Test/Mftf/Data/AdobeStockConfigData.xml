@@ -17,10 +17,10 @@
     </entity>
     <entity name="AdobeStockConfigDataApiKey">
         <data key="path">adobe_stock/integration/api_key</data>
-        <data key="value">{{_CREDS.magento/ADOBE_STOCK_API_KEY}}</data>
+        <data key="value">{{_CREDS.magento/adobe_stock_api_key}}</data>
     </entity>
     <entity name="AdobeStockConfigDataPrivateKey">
         <data key="path">adobe_ims/integration/private_key</data>
-        <data key="value">{{_CREDS.magento/ADOBE_STOCK_PRIVATE_KEY}}</data>
+        <data key="value">{{_CREDS.magento/adobe_stock_private_key}}</data>
     </entity>
 </entities>

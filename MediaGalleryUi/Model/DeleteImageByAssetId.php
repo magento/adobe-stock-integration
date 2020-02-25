@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 
 /**
- * Delete image by asset ID
+ * Load Media Asset path from database by id and delete the file
  */
 class DeleteImageByAssetId
 {

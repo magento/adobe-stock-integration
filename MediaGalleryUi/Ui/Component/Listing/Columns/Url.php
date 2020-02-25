@@ -11,8 +11,10 @@ use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Overlay column
@@ -51,10 +53,9 @@ class Url extends Column
      */
     public function prepareDataSource(array $dataSource): array
     {
-        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $mediaUrl . $item[$this->getData('name')];
+                $item[$this->getData('name')] = $this->getUrl($item[$this->getData('name')]);
             }
         }
 
@@ -70,11 +71,24 @@ class Url extends Column
         $this->setData(
             'config',
             array_replace_recursive(
-                (array) $this->getData('config'),
+                (array)$this->getData('config'),
                 [
                     'targetElementId' => $this->context->getRequestParam('target_element_id')
                 ]
             )
         );
+    }
+
+    /**
+     * Get URL for the provided media asset path
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getUrl(string $path): string
+    {
+        /** @var Store $store */
+        $store = $this->storeManager->getStore();
+        return $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $path;
     }
 }

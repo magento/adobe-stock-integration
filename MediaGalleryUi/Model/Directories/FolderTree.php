@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model\Directories;
 
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 
 /**
  * Build folder tree structure by path
@@ -57,22 +58,28 @@ class FolderTree
     private function getDirectories(): array
     {
         $directories = [];
-        $directoryInstance = $this->filesystem->getDirectoryRead($this->path);
-        if ($directoryInstance->isDirectory()) {
-            foreach ($directoryInstance->readRecursively() as $index => $path) {
-                if ($directoryInstance->isDirectory($path)) {
-                    $pathArray = explode('/', $path);
-                    $directories[] =
-                        [
-                            'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                            'attr' => ['id' => $index],
-                            'metadata' => [
-                                'path' => $path
-                            ],
-                            'path_array' => $pathArray
-                        ];
-                }
+
+        /** @var Read $directory */
+        $directory = $this->filesystem->getDirectoryRead($this->path);
+
+        if (!$directory->isDirectory()) {
+            return $directories;
+        }
+
+        foreach ($directory->readRecursively() as $index => $path) {
+            if (!$directory->isDirectory($path)) {
+                continue;
             }
+
+            $pathArray = explode('/', $path);
+            $directories[] = [
+                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
+                'attr' => ['id' => $index],
+                'metadata' => [
+                    'path' => $path
+                ],
+                'path_array' => $pathArray
+            ];
         }
         return $directories;
     }
