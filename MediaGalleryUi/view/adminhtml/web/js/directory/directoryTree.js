@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global FORM_KEY */
 define([
     'jquery',
     'uiComponent',
@@ -82,14 +81,11 @@ define([
         getJsonTree: function () {
             $.ajax({
                 url: this.getDirectoryTreeUrl,
-                type: 'POST',
+                type: 'GET',
                 dataType: 'json',
-                data: {
-                    'form_key': FORM_KEY
-                },
 
                 /**
-                 * Succes handler for request
+                 * Success handler for request
                  *
                  * @param {Object} data
                  */
