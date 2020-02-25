@@ -13,7 +13,6 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/grid/columns/image/actions',
-            addSelectedBtnSelector: '#add_selected',
             deleteImageUrl: 'media_gallery/image/delete',
             actionsList: [
                 {
@@ -37,7 +36,7 @@ define([
         initialize: function () {
             this._super();
             const context = this;
-            $(this.addSelectedBtnSelector).click(function () {
+            $(this.imageModel().addSelectedBtnSelector).click(function () {
                 context.insertImage();
             });
 

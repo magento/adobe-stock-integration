@@ -14,7 +14,6 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Overlay column
@@ -84,6 +83,7 @@ class Url extends Column
      *
      * @param string $path
      * @return string
+     * @throws NoSuchEntityException
      */
     private function getUrl(string $path): string
     {

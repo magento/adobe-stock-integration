@@ -3,15 +3,17 @@
  * See COPYING.txt for license details.
  */
 define([
+    'jquery',
     'Magento_Ui/js/grid/columns/column',
     'uiLayout'
-], function (Column, layout) {
+], function ($, Column, layout) {
     'use strict';
 
     return Column.extend({
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
             deleteImageUrl: 'media_gallery/image/delete',
+            addSelectedBtnSelector: '#add_selected',
             targetElementId: null,
             selected: null,
             fields: {
@@ -95,6 +97,7 @@ define([
          */
         select: function (record) {
             this.isSelected(record) ? this.selected(null) : this.selected(record);
+            this.toggleAddSelectedButton();
         },
 
         /**
@@ -114,6 +117,17 @@ define([
             layout(this.viewConfig);
 
             return this;
+        },
+
+        /**
+         * Toggle add selected button
+         */
+        toggleAddSelectedButton: function () {
+            if (this.selected() === null) {
+                $(this.addSelectedBtnSelector).addClass('no-display');
+            } else {
+                $(this.addSelectedBtnSelector).removeClass('no-display');
+            }
         }
     });
 });
