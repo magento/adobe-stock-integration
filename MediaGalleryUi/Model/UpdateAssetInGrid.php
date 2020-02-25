@@ -10,7 +10,9 @@ namespace Magento\MediaGalleryUi\Model;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,20 +36,28 @@ class UpdateAssetInGrid
     private $logger;
 
     /**
+     * @var GetAssetKeywords
+     */
+    private $assetKeywords;
+
+    /**
      * Constructor
      *
      * @param ResourceConnection $resource
      * @param DriverInterface $file
      * @param LoggerInterface $logger
+     * @param GetAssetKeywords $assetKeywords
      */
     public function __construct(
         ResourceConnection $resource,
         DriverInterface $file,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        GetAssetKeywords $assetKeywords
     ) {
         $this->resource = $resource;
         $this->file = $file;
         $this->logger = $logger;
+        $this->assetKeywords = $assetKeywords;
     }
 
     /**
@@ -61,6 +71,12 @@ class UpdateAssetInGrid
     public function execute(AssetInterface $asset): void
     {
         try {
+
+            /* Get all keywords from media_gallery_keyword table for current asset */
+            $keywords = array_map(function (KeywordInterface $keyword) {
+                return $keyword->getKeyword();
+            }, $this->assetKeywords->execute($asset->getId()));
+
             $this->resource->getConnection()->insertOnDuplicate(
                 $this->resource->getTableName('media_gallery_asset_grid'),
                 [
@@ -68,6 +84,7 @@ class UpdateAssetInGrid
                     'directory' => $this->file->getParentDirectory($asset->getPath()),
                     'thumbnail_url' => $asset->getPath(),
                     'preview_url' => $asset->getPath(),
+                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'name' => basename($asset->getPath()),
                     'content_type' => strtoupper(str_replace('image/', '', $asset->getContentType())),
                     'source' => $asset->getSource(),
@@ -75,6 +92,7 @@ class UpdateAssetInGrid
                     'height' => $asset->getHeight(),
                     'created_at' => $asset->getCreatedAt(),
                     'updated_at' => $asset->getUpdatedAt(),
+                    'keywords' => implode(",", $keywords) ?: null
                 ]
             );
         } catch (\Exception $exception) {

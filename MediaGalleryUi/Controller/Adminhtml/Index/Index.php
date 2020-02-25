@@ -9,13 +9,14 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\Layout;
 
 /**
  * Controller serving the media gallery content
  */
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
@@ -28,7 +29,7 @@ class Index extends Action
      * Index constructor.
      *
      * @param Context $context
-     * @param LayoutFactory $pageFactory
+     * @param LayoutFactory $layoutFactory
      */
     public function __construct(
         Context $context,

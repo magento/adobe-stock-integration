@@ -37,53 +37,8 @@ env:
     - TEST_SUITE=unit
     - TEST_SUITE=phpstan
     - TEST_SUITE=static
-    # List out subsets of functional tests to run separately to fit under travis timeout (50mins)
-    # TODO: this is hacky, is there a better way?
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_preview
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_configuration
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
-    - TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
 matrix:
   fast_finish: true
-jobs:
-  # only run MFTF tests on PHP 7.3
-  exclude:
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_preview
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_configuration
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
-    - php: '7.1'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_filters
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_grid
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_preview
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_configuration
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_keywords
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_ims
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_see_more
-    - php: '7.2'
-      env: TEST_SUITE=functional MFTF_SUITE=adobe_stock_integration_suite_license
 cache:
   directories:
     - $HOME/.composer/cache
@@ -94,7 +49,7 @@ before_install:
 install:
   - mkdir -p magento2/app/code/Magento
   - mv Adobe* magento2/app/code/Magento/.
-  - mv MediaGallery* magento2/app/code/Magento/.
+  - mv Media* magento2/app/code/Magento/.
   - pushd magento2
   - composer install
   - composer require astock/stock-api-libphp
@@ -105,7 +60,5 @@ script:
   - bash -x dev/travis/script.sh
 after_success:
   - if [ $TEST_SUITE == 'unit' ]; then travis_retry coveralls; fi
-after_failure:
-  - bash -x dev/travis/after_failure.sh
 after_script:
-    - bash -x dev/travis/after_script.sh
+  - bash -x dev/travis/after_script.sh
