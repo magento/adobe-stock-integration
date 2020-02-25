@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global FORM_KEY */
 define([
     'jquery',
     'uiComponent',
@@ -84,6 +83,7 @@ define([
                 url: this.getDirectoryTreeUrl,
                 type: 'GET',
                 dataType: 'json',
+
                 /**
                  * Success handler for request
                  *
