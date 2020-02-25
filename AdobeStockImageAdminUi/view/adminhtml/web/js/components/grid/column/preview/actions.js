@@ -383,8 +383,8 @@ define([
                             errorMessage = $.mage.__('Your admin role does not have permissions to license an image');
                         }
 
-                        messages.add('error', errorMessage);
-                        messages.scheduleCleanup(this.messageDelay);
+                        this.messages().add('error', errorMessage);
+                        this.messages().scheduleCleanup(this.messageDelay);
                     }
                 }
             );
