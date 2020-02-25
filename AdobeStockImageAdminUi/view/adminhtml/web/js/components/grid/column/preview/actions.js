@@ -7,12 +7,11 @@
 define([
     'uiComponent',
     'jquery',
-    'Magento_AdobeStockImageAdminUi/js/model/messages',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html'
-], function (Component, $, messages, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
+], function (Component, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
     'use strict';
 
     return Component.extend({
@@ -34,7 +33,8 @@ define([
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
-                source: '${ $.provider }'
+                source: '${ $.provider }',
+                messages: '${ $.messagesName }'
             }
         },
 
@@ -223,8 +223,8 @@ define([
                             });
                         }
                     }
-                    messages.add('error', message);
-                    messages.scheduleCleanup(this.messageDelay);
+                    this.messages().add('error', message);
+                    this.messages().scheduleCleanup(this.messageDelay);
                 }
             });
         },
@@ -262,7 +262,7 @@ define([
          * @return {Array}
          */
         getMessages: function () {
-            return messages.get();
+            return this.messages().get();
         },
 
         /**
@@ -383,8 +383,8 @@ define([
                             errorMessage = $.mage.__('Your admin role does not have permissions to license an image');
                         }
 
-                        messages.add('error', errorMessage);
-                        messages.scheduleCleanup(this.messageDelay);
+                        this.messages().add('error', errorMessage);
+                        this.messages().scheduleCleanup(this.messageDelay);
                     }
                 }
             );
@@ -432,10 +432,10 @@ define([
                     this.showLicenseConfirmation(this.preview().displayedRecord());
                 }.bind(this))
                 .catch(function (error) {
-                    messages.add('error', error);
-                })
+                    this.messages().add('error', error);
+                }.bind(this))
                 .finally(function () {
-                    messages.scheduleCleanup(this.messageDelay);
+                    this.messages().scheduleCleanup(this.messageDelay);
                 }.bind(this));
         },
 
