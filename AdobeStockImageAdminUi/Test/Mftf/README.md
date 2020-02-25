@@ -44,17 +44,17 @@ Add the following environment variables to `dev/tests/acceptance/.credentials`.
 These variables contain sensitive information related to your Adobe IMS and
 Stock accounts and keys and thus MFTF treats them differently:
 
-- `magento/ADOBE_STOCK_API_KEY`
-- `magento/ADOBE_STOCK_PRIVATE_KEY`
-- `magento/ADOBE_STOCK_USER_EMAIL`
-- `magento/ADOBE_STOCK_USER_PASSWORD`
+- `magento/adobe_stock_api_key`
+- `magento/adobe_stock_private_key`
+- `magento/adobe_stock_user_email`
+- `magento/adobe_stock_user_password`
 
 i.e.:
 
-    magento/ADOBE_STOCK_API_KEY=12345
-    magento/ADOBE_STOCK_PRIVATE_KEY=67890
-    magento/ADOBE_STOCK_USER_EMAIL=shantanu@adobe.com
-    magento/ADOBE_STOCK_USER_PASSWORD=password
+    magento/adobe_stock_api_key=12345
+    magento/adobe_stock_private_key=67890
+    magento/adobe_stock_user_email=shantanu@adobe.com
+    magento/adobe_stock_user_password=password
 
 More details about storing credentials in MFTF via `.credentials` can be found
 on the [MFTF Credentials documentation](https://devdocs.magento.com/mftf/docs/credentials.html).
