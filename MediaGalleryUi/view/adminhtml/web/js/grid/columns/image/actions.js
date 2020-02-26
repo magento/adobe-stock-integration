@@ -49,11 +49,14 @@ define([
          * @returns {Boolean}
          */
         insertImage: function () {
-            var record = this.imageModel().getSelected();
+            var record = this.imageModel().getSelected(),
+                targetEl;
+
             if (record === null) {
                 return false;
             }
-            var targetEl = this.getTargetElement();
+            targetEl = this.getTargetElement();
+
             if (!targetEl.length) {
                 MediabrowserUtility.closeDialog();
                 throw 'Target element not found for content update';
@@ -197,6 +200,6 @@ define([
          */
         getTargetElement: function () {
             return $('#' + this.imageModel().targetElementId);
-        },
+        }
     });
 });

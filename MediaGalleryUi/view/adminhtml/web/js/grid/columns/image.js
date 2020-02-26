@@ -18,7 +18,7 @@ define([
             selected: null,
             fields: {
                 id: 'id',
-                url: 'url',
+                url: 'url'
             },
             modules: {
                 actions: '${ $.name }_actions'
@@ -83,12 +83,13 @@ define([
          * Check if the record is currently selected
          *
          * @param {Object} record - Data to be preprocessed.
-         * @returns {Object}
+         * @returns {Boolean}
          */
         isSelected: function (record) {
             if (this.selected() === null) {
                 return false;
             }
+
             return this.getId(this.selected()) === this.getId(record);
         },
 
