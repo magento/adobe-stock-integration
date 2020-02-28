@@ -426,9 +426,20 @@ define([
          * Process of license
          */
         licenseProcess: function () {
+            $.ajaxSetup({
+                async: false
+            });
             this.login().login()
                 .then(function () {
-                    this.showLicenseConfirmation(this.preview().displayedRecord());
+                    if (this.isLicensed()) {
+                        this.saveLicensed();
+                    }
+                    else {
+                        this.showLicenseConfirmation(this.preview().displayedRecord());
+                    }
+                    $.ajaxSetup({
+                        async: true
+                    });
                 }.bind(this))
                 .catch(function (error) {
                     this.messages().add('error', error);
