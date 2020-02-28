@@ -27,5 +27,6 @@
         "psr-4": {
             "Magento\\AdobeStockImageAdminUi\\": ""
         }
-    }
+    },
+    "version": "1.0.1"
 }

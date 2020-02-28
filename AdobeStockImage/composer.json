@@ -24,5 +24,6 @@
         "psr-4": {
             "Magento\\AdobeStockImage\\": ""
         }
-    }
+    },
+    "version": "1.0.0"
 }

@@ -3,15 +3,16 @@
     "description": "Adobe Stock integration",
     "type": "metapackage",
     "require": {
-        "magento/module-adobe-stock-asset": "*",
-        "magento/module-adobe-stock-asset-api": "*",
-        "magento/module-adobe-stock-image": "*",
-        "magento/module-adobe-stock-image-admin-ui": "*",
-        "magento/module-adobe-stock-image-api": "*",
-        "magento/module-adobe-stock-client": "*",
-        "magento/module-adobe-stock-client-api": "*",
-        "magento/module-adobe-stock-admin-ui": "*",
-        "magento/module-adobe-ims": "*",
-        "magento/module-adobe-ims-api": "*"
-    }
+        "magento/module-adobe-stock-asset": "1.0.0",
+        "magento/module-adobe-stock-asset-api": "1.0.0",
+        "magento/module-adobe-stock-image": "1.0.0",
+        "magento/module-adobe-stock-image-admin-ui": "1.0.1",
+        "magento/module-adobe-stock-image-api": "1.0.0",
+        "magento/module-adobe-stock-client": "1.0.0",
+        "magento/module-adobe-stock-client-api": "1.0.0",
+        "magento/module-adobe-stock-admin-ui": "1.0.0",
+        "magento/module-adobe-ims": "1.0.0",
+        "magento/module-adobe-ims-api": "1.0.0"
+    },
+    "version": "1.0.1"
 }

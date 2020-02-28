@@ -22,5 +22,6 @@
         "psr-4": {
             "Magento\\AdobeIms\\": ""
         }
-    }
+    },
+    "version": "1.0.0"
 }

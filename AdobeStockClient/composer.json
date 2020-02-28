@@ -26,5 +26,6 @@
             "type": "vcs",
             "url": "git@github.com:adobe/stock-api-libphp.git"
         }
-    }
+    },
+    "version": "1.0.0"
 }
