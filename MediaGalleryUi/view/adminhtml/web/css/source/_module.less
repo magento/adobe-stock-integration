@@ -10,16 +10,25 @@
         .jstree-default .jstree-hovered {
             border-radius: 6px;
             background:#cdecf6;
-            border: solid 0.14em;
             border-color:#7185f5;
         }
         
+        .jstree-default .jstree-leaf a .jstree-icon {
+            background-position: -52px -16px;
+        }
+
         .jstree-default a .jstree-icon {
             background-position: -52px -16px;
         }
 
-        .jstree a > ins {
+        .jstree-default .jstree-no-dots .jstree-open > a > ins {
+            background-position: -52px -38px;
+            width: 29px;
             height: 20px;
+        }
+
+        .jstree a > ins {
+            height: 22px;
             width: 20px;
         }
 
@@ -32,9 +41,10 @@
         }
 
         .jstree a { 
-            padding: 3px 8px;
+            padding-top: 4px;
+            padding-left: 6px;
             height: 30px;
-            width: 124%;
+            width: 94%;
             margin: 1px;
         }
 
@@ -114,13 +124,8 @@
             background-color: #e1e1e1 !important;
         }
         
-        .masonry-image-grid {
-            width: 84%;
-            float: right;
-        }
-
         .media-directory-container {
-            width:12%;
+            padding-right: 40px;
             float: left; 
         }
 
