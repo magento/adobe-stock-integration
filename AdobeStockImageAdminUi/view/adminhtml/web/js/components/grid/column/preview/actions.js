@@ -433,8 +433,7 @@ define([
                 .then(function () {
                     if (this.isLicensed()) {
                         this.saveLicensed();
-                    }
-                    else {
+                    } else {
                         this.showLicenseConfirmation(this.preview().displayedRecord());
                     }
                     $.ajaxSetup({
