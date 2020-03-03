@@ -33,6 +33,15 @@
             </settings>
         </dataProvider>
     </dataSource>
+    <container name="messages"
+               sortOrder="10"
+               component="Magento_MediaGalleryUi/js/grid/messages">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="messageDelay" xsi:type="number">10</item>
+            </item>
+        </argument>
+    </container>
     <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
         <bookmark name="bookmarks"/>
         <filterSearch name="words"/>
@@ -191,6 +200,11 @@
             </settings>
         </column>
         <column name="preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="messagesName" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.messages</item>
+                </item>
+            </argument>
             <settings>
                 <label translate="true">Image Preview</label>
                 <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image-preview</bodyTmpl>

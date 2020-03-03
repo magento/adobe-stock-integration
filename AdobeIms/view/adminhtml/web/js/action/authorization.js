@@ -32,6 +32,13 @@ define([], function () {
         var authWindow;
 
         /**
+         * Close authorization window if already opened
+         */
+        if (window.adobeIMSAuthWindow) {
+            window.adobeIMSAuthWindow.close();
+        }
+
+        /**
          * Opens authorization window with special parameters
          */
         authWindow = window.adobeIMSAuthWindow = window.open(
