@@ -10,3 +10,5 @@
 @import AdobeStockImageApi
 @import MediaGalleryUi
 @import MediaGalleryUiApi
+@import MediaContent
+@import MediaContentApi
