@@ -112,7 +112,9 @@ define([], function () {
                     if (authWindow.closed) {
                         clearTimeout(stopWatcherId);
                         clearInterval(watcherId);
-                        reject(new Error('Authentication window was closed.'));
+                        if (window.adobeIMSAuthWindow && window.adobeIMSAuthWindow.closed) {
+                            reject(new Error('Authentication window was closed.'));
+                        }
                     }
                 }
             }
