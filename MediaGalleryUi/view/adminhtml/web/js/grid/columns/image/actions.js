@@ -35,10 +35,9 @@ define([
          */
         initialize: function () {
             this._super();
-            const context = this;
             $(this.imageModel().addSelectedBtnSelector).click(function () {
-                context.insertImage();
-            });
+                this.insertImage();
+            }.bind(this));
 
             return this;
         },
@@ -50,23 +49,22 @@ define([
          */
         insertImage: function () {
             var record = this.imageModel().getSelected(),
-                targetEl;
+                targetElement;
 
             if (record === null) {
                 return false;
             }
-            targetEl = this.getTargetElement();
+            targetElement = this.getTargetElement();
 
-            if (!targetEl.length) {
+            if (!targetElement.length) {
                 MediabrowserUtility.closeDialog();
                 throw 'Target element not found for content update';
             }
-            targetEl.val(record['thumbnail_url'])
+            targetElement.val(record['thumbnail_url'])
                 .data('mime-type', record['content_type'])
                 .trigger('change');
             MediabrowserUtility.closeDialog();
-            targetEl.focus();
-            jQuery(targetEl).change();
+            targetElement.focus();
         },
 
         /**
