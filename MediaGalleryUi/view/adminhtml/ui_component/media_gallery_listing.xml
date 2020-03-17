@@ -54,7 +54,7 @@
     <listingToolbar name="listing_top">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <filterInput name="directory" provider="${ $.parentName }" sortOrder="10">
+            <filterInput name="directory" provider="${ $.parentName }" sortOrder="100">
                 <settings>
                     <visible>false</visible>
                     <dataScope>directory</dataScope>
