@@ -29,6 +29,45 @@ define([
         },
 
         /**
+         * Initialize the component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super();
+            $(this.imageModel().addSelectedBtnSelector).click(function () {
+                this.insertImage();
+            }.bind(this));
+
+            return this;
+        },
+
+        /**
+         * Insert selected image
+         *
+         * @returns {Boolean}
+         */
+        insertImage: function () {
+            var record = this.imageModel().getSelected(),
+                targetElement;
+
+            if (record === null) {
+                return false;
+            }
+            targetElement = this.getTargetElement();
+
+            if (!targetElement.length) {
+                MediabrowserUtility.closeDialog();
+                throw 'Target element not found for content update';
+            }
+            targetElement.val(record['thumbnail_url'])
+                .data('mime-type', record['content_type'])
+                .trigger('change');
+            MediabrowserUtility.closeDialog();
+            targetElement.focus();
+        },
+
+        /**
          * Delete image action
          *
          * @param {Object} record
@@ -150,6 +189,15 @@ define([
         addMessage: function (code, message) {
             this.messages().add(code, message);
             this.messages().scheduleCleanup();
+        },
+
+        /**
+         * Get target element
+         *
+         * @returns {*|n.fn.init|jQuery|HTMLElement}
+         */
+        getTargetElement: function () {
+            return $('#' + this.imageModel().targetElementId);
         }
     });
 });
