@@ -84,6 +84,7 @@ class UpdateAssetInGrid
                     'directory' => $this->file->getParentDirectory($asset->getPath()),
                     'thumbnail_url' => $asset->getPath(),
                     'preview_url' => $asset->getPath(),
+                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'name' => basename($asset->getPath()),
                     'content_type' => strtoupper(str_replace('image/', '', $asset->getContentType())),
                     'source' => $asset->getSource(),

@@ -2,18 +2,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
-    'knockout'
-], function (ko) {
+    'uiElement'
+], function (Element) {
     'use strict';
 
-    return {
-        messages: ko.observableArray(),
+    return Element.extend({
+        defaults: {
+            template: 'Magento_MediaGalleryUi/grid/messages',
+            messageDelay: 5,
+            messages: []
+        },
+
+        /**
+         * Init observable variables
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'messages'
+                ]);
+
+            return this;
+        },
 
         /**
          * Get messages
          *
-         * @return {Array}
+         * @returns {Array}
          */
         get: function () {
             return this.messages();
@@ -48,12 +66,12 @@ define([
             // eslint-disable-next-line no-unused-vars
             var timerId;
 
-            delay = delay || 3;
+            delay = delay || this.messageDelay;
 
             timerId = setTimeout(function () {
                 clearTimeout(timerId);
                 this.clear();
             }.bind(this), Number(delay) * 1000);
         }
-    };
+    });
 });

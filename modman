@@ -12,3 +12,4 @@
 @import MediaGalleryUiApi
 @import MediaContent
 @import MediaContentApi
+@import MediaGalleryIntegration

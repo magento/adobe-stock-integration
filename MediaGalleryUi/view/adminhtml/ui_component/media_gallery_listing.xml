@@ -16,6 +16,11 @@
     </argument>
     <settings>
         <buttons>
+            <button name="add_selected">
+                <param name="on_click" xsi:type="string">return false;</param>
+                <class>action-primary no-display</class>
+                <label translate="true">Add Selected</label>
+            </button>
             <button name="cancel">
                 <param name="on_click" xsi:type="string">MediabrowserUtility.closeDialog();</param>
                 <class>cancel action-quaternary</class>
@@ -42,10 +47,19 @@
             </settings>
         </dataProvider>
     </dataSource>
+    <container name="messages"
+               sortOrder="20"
+               component="Magento_MediaGalleryUi/js/grid/messages">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="messageDelay" xsi:type="number">10</item>
+            </item>
+        </argument>
+    </container>
     <listingToolbar name="listing_top">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <filterInput name="directory" provider="${ $.parentName }" sortOrder="10">
+            <filterInput name="directory" provider="${ $.parentName }" sortOrder="100">
                 <settings>
                     <visible>false</visible>
                     <dataScope>directory</dataScope>
@@ -93,9 +107,9 @@
             </settings>
         </paging>
     </listingToolbar>
-    <container name="media_gallery_directories" 
+    <container name="media_gallery_directories"
                class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
-               template="Magento_MediaGalleryUi/grid/directories/directoryTree" 
+               template="Magento_MediaGalleryUi/grid/directories/directoryTree"
                component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
     <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
         <argument name="data" xsi:type="array">
@@ -116,6 +130,8 @@
                     <item name="fields" xsi:type="array">
                         <item name="url" xsi:type="string">thumbnail_url</item>
                     </item>
+                    <item name="deleteImageUrl" xsi:type="url" path="media_gallery/image/delete"/>
+                    <item name="messagesName" xsi:type="string">media_gallery_listing.media_gallery_listing.messages</item>
                 </item>
             </argument>
             <settings>

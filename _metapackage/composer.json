@@ -15,6 +15,7 @@
         "magento/module-adobe-ims-api": "*",
         "magento/module-media-gallery-ui": "*",
         "magento/module-media-gallery-ui-api": "*",
+        "magento/module-media-gallery-integration": "*",
         "magento/module-media-content-api": "*",
         "magento/module-media-content": "*"
     }
