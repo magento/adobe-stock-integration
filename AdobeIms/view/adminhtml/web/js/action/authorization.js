@@ -112,7 +112,11 @@ define([], function () {
                     if (authWindow.closed) {
                         clearTimeout(stopWatcherId);
                         clearInterval(watcherId);
-                        reject(new Error('Authentication window was closed.'));
+
+                        // eslint-disable-next-line max-depth
+                        if (window.adobeIMSAuthWindow && window.adobeIMSAuthWindow.closed) {
+                            reject(new Error('Authentication window was closed.'));
+                        }
                     }
                 }
             }
