@@ -6,6 +6,7 @@
         "magento/framework": "*",
         "magento/module-ui": "*",
         "magento/module-media-gallery-ui-api": "*",
+        "magento/module-media-gallery-ui": "*",
         "magento/module-cms": "*"
     },
     "type": "magento2-module",
