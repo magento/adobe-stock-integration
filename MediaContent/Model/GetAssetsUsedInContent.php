@@ -13,11 +13,12 @@ use Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used to return media asset list which is used in the specified media content
+ * Used to return media asset id list which is used in the specified media content
  */
 class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
+    private const ASSET_ID = 'asset_id';
     private const TYPE = 'type';
     private const ENTITY_ID = 'entity_id';
     private const FIELD = 'field';
@@ -52,15 +53,17 @@ class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
-                ->from($this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME))
-                ->where(self::TYPE . ' =?', $contentType);
+                ->from(
+                    $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME),
+                    self::ASSET_ID
+                )->where(self::TYPE . ' = ?', $contentType);
 
             if (null !== $contentEntityId) {
-                $select = $select->where(self::ENTITY_ID . ' ?=' . $contentEntityId);
+                $select = $select->where(self::ENTITY_ID . '= ?' . $contentEntityId);
             }
 
             if (null !== $contentField) {
-                $select = $select->where(self::FIELD . ' ?=' . $contentField);
+                $select = $select->where(self::FIELD . '= ?' . $contentField);
             }
 
             return $connection->fetchAssoc($select);

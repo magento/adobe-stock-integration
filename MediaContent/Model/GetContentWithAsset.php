@@ -51,7 +51,7 @@ class GetContentWithAsset implements GetContentWithAssetInterface
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
                 ->from($this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME))
-                ->where(self::ASSET_ID . ' =?', $assetId);
+                ->where(self::ASSET_ID . '= ?', $assetId);
 
             return $connection->fetchAssoc($select);
         } catch (\Exception $exception) {

@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaContentApi\Api;
 
 /**
- * Get media asset list which is used in the specified media content
+ * Get media asset id list which is used in the specified media content
  * @api
  */
 interface GetAssetsUsedInContentInterface
@@ -19,7 +19,7 @@ interface GetAssetsUsedInContentInterface
      * @param string|null $contentEntityId
      * @param string|null $contentField
      *
-     * @return array
+     * @return int[]
      * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function execute(string $contentType, string $contentEntityId = null, string $contentField = null): array;
