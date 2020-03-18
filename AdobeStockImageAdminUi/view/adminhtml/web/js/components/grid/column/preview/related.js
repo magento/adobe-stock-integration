@@ -68,34 +68,13 @@ define([
         },
 
         /**
-         * Check if related images are present for the record
-         *
-         * @param {Object} record
-         * @returns boolean
-         */
-        _isLoaded: function (record) {
-            return this.getSeries(record).length || this.getModel(record).length;
-        },
-
-        /**
-         * Check if related images has Data
-         *
-         * @param {Object} record
-         * @returns boolean
-         */
-        _hasData: function (record) {
-            return typeof this.relatedImages().series[record.id] !== 'undefined' ||
-                typeof this.relatedImages().model[record.id] !== 'undefined';
-        },
-
-        /**
          * Check if visible container
          *
          * @param {Object} record
          * @returns boolean
          */
         isVisible: function (record) {
-            return !this._isLoaded(record) || this._hasData(record);
+            return this.showSeriesTab(record) && this.showModelTab(record);
         },
 
         /**
@@ -134,7 +113,7 @@ define([
                 this.preview().updateHeight();
 
                 /* Switch to the model tab if the series tab is hidden */
-                if (relatedImages.series[record.id].length === 0) {
+                if (relatedImages.series[record.id].length === 0 && relatedImages.model[record.id].length > 0) {
                     $('#adobe-stock-tabs').data().mageTabs.select(1);
                 }
             }.bind(this));
