@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Backend\Block\Template" name="stock.panel" template="Magento_AdobeStockImageAdminUi::panel.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
+                <block class="Magento\AdobeIms\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdobeIms::signIn.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
+                    <arguments>
+                        <argument name="configProviders" xsi:type="array">
+                            <item name="adobe-stock" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SignInConfigProvider</item>
+                        </argument>
+                    </arguments>
+                </block>
+                <uiComponent name="adobe_stock_images_listing"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
