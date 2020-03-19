@@ -108,9 +108,10 @@ define([
         },
 
         /**
-         * Set avtive delete button for selected folder
+         * Set active node, remove disable state from Delete Forlder button
          *
          * @param {String} folderId
+         * @param {String} nodeId
          */
         setActive: function (folderId, nodeId) {
             this.selectedFolder(folderId);
