@@ -17,8 +17,8 @@ use Psr\Log\LoggerInterface;
 class DeleteByPath
 {
     /**
-      * @var LoggerInterface
-      */
+     * @var LoggerInterface
+     */
     private $logger;
 
     /**

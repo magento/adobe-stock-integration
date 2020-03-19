@@ -5,8 +5,9 @@
 
 define([
     'jquery',
-    'uiComponent'
-], function ($, Component) {
+    'uiComponent',
+    'Magento_Ui/js/modal/confirm'
+], function ($, Component, confirm) {
     'use strict';
 
     return Component.extend({
@@ -27,7 +28,7 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().observe(['selectedFolder']);
+            this._super().observe(['selectedFolder', 'activeNodeId']);
             this.initEvents();
 
             return this;
@@ -37,18 +38,36 @@ define([
           * Initialize directories events
           */
         initEvents: function () {
-            $(this.deleteButtonSelector).on('delete_folder', function (path) {
-                this.deleteFolder(this.selectedFolder());
+            $(this.deleteButtonSelector).on('delete_folder', function () {
+                this.deleteFolderComfirmationPopup();
             }.bind(this));
+        },
+
+        /**
+          * Confirmation popup for delete folder action.
+          */
+        deleteFolderComfirmationPopup: function () {
+            confirm({
+                title: $.mage.__('Are you sure you want to delete ?'),
+                content: 'Are you sure you want to delete folder: ' + this.selectedFolder(),
+                actions: {
+
+                    /**
+                     * Delete folder on button click
+                     */
+                    confirm: function () {
+                        this.deleteFolder(this.selectedFolder());
+                    }.bind(this)
+                }
+            });
         },
 
         /**
           * Delete folder action
           *
           * @param {String} path
-          * @param {Integer} nodeId
           */
-        deleteFolder: function (path, nodeId) {
+        deleteFolder: function (path) {
             $.ajax({
                 type: 'POST',
                 url: this.directoryTree().deleteDirectoryUrl,
@@ -64,7 +83,7 @@ define([
                  *
                  */
                 success: function () {
-                    this.directoryTree().removeNode(nodeId);
+                    this.directoryTree().removeNode(this.activeNodeId());
                 },
 
                 /**
@@ -76,7 +95,7 @@ define([
                     var message;
 
                     if (typeof response.responseJSON === 'undefined' ||
-                        typeof response.responseJSON.success === 'false'
+                        response.responseJSON.success === 'false'
                     ) {
                         message = 'There was an error on attempt to delete folder!';
                     } else {
@@ -93,8 +112,9 @@ define([
          *
          * @param {String} folderId
          */
-        setActive: function (folderId) {
+        setActive: function (folderId, nodeId) {
             this.selectedFolder(folderId);
+            this.activeNodeId(nodeId);
             $(this.deleteButtonSelector).removeAttr('disabled').removeClass('disabled');
         }
     });

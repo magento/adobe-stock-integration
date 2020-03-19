@@ -45,7 +45,7 @@ class Delete extends Action implements HttpPostActionInterface
      * Delete constructor.
      *
      * @param Context $context
-     * @param DeleteByPath $driver
+     * @param DeleteByPath $deleteFolderByPath
      * @param LoggerInterface $logger
      */
     public function __construct(

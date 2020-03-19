@@ -71,9 +71,10 @@ define([
          */
         initEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                var path = $(data.rslt.obj).data('path');
+                var path = $(data.rslt.obj).data('path'),
+                    nodeId = $(data.rslt.obj).data('id');
 
-                this.directories().setActive(path);
+                this.directories().setActive(path, nodeId);
                 this.applyFilter(path);
 
             }.bind(this));
