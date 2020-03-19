@@ -28,7 +28,7 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().observe(['selectedFolder', 'activeNodeId']);
+            this._super().observe(['selectedFolder']);
             this.initEvents();
 
             return this;
@@ -80,10 +80,9 @@ define([
 
                 /**
                  * Success handler for Delete folder action
-                 *
                  */
                 success: function () {
-                    this.directoryTree().removeNode(this.activeNodeId());
+                    this.directoryTree().removeNode();
                 },
 
                 /**
@@ -111,11 +110,9 @@ define([
          * Set active node, remove disable state from Delete Forlder button
          *
          * @param {String} folderId
-         * @param {String} nodeId
          */
-        setActive: function (folderId, nodeId) {
+        setActive: function (folderId) {
             this.selectedFolder(folderId);
-            this.activeNodeId(nodeId);
             $(this.deleteButtonSelector).removeAttr('disabled').removeClass('disabled');
         }
     });

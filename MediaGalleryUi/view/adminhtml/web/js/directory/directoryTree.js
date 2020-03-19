@@ -71,22 +71,19 @@ define([
          */
         initEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                var path = $(data.rslt.obj).data('path'),
-                    nodeId = $(data.rslt.obj).data('id');
+                var path = $(data.rslt.obj).data('path');
 
-                this.directories().setActive(path, nodeId);
+                this.directories().setActive(path);
                 this.applyFilter(path);
 
             }.bind(this));
         },
 
         /**
-          * Remove node from directory tree
-          *
-          * @param {String} nodeId
+          * Remove active node from directory tree, and select next
           */
-        removeNode: function (nodeId) {
-            $(this.directoryTreeSelector).jstree('remove', nodeId);
+        removeNode: function () {
+            $(this.directoryTreeSelector).jstree('remove');
         },
 
         /**
