@@ -51,7 +51,8 @@ class DirectoriesTree extends Container
                 (array) $this->getData('config'),
                 [
                     'getDirectoryTreeUrl' => $this->url->getUrl("media_gallery/directories/gettree"),
-                    'deleteDirectoryUrl' => $this->url->getUrl("media_gallery/directories/delete")
+                    'deleteDirectoryUrl' => $this->url->getUrl("media_gallery/directories/delete"),
+                    'createDirectoryUrl' => $this->url->getUrl("media_gallery/directories/create")
                 ]
             )
         );

@@ -32,7 +32,7 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().initView();
+            this._super().observe(['selectedNode']).initView();
 
             this.waitForContainer(function () {
                 this.getJsonTree();
@@ -71,8 +71,10 @@ define([
          */
         initEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                var path = $(data.rslt.obj).data('path');
+                var path = $(data.rslt.obj).data('path'),
+                    nodeId = $(data.rslt.obj).id;
 
+                this.selectedNode(nodeId);
                 this.directories().setActive(path);
                 this.applyFilter(path);
 

@@ -32,6 +32,11 @@
                 <class>action-default scalable action-quaternary</class>
                 <label translate="true">Delete Folder</label>
             </button>
+            <button name="create_folder">
+                <param name="on_click" xsi:type="string">jQuery('#create_folder').trigger('create_folder');</param>
+                <class>action-default scalable add</class>
+                <label translate="true">Create Folder</label>
+            </button> 
         </buttons>
         <spinner>media_gallery_columns</spinner>
         <deps>
