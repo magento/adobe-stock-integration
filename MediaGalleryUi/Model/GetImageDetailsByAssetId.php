@@ -27,17 +27,17 @@ class GetImageDetailsByAssetId
     /**
      * Media gallery asset grid table
      */
-    const MEDIA_GALLERY_ASSET_GRID_TABLE = 'media_gallery_asset_grid';
+    private const MEDIA_GALLERY_ASSET_GRID_TABLE = 'media_gallery_asset_grid';
 
     /**
      * Media gallery asset grid id
      */
-    const MEDIA_GALLERY_ASSET_GRID_ID = 'id';
+    private const MEDIA_GALLERY_ASSET_GRID_ID = 'id';
 
     /**
      * Date format
      */
-    const DATE_FORMAT = 'd/m/Y, g:i A';
+    private const DATE_FORMAT = 'd/m/Y, g:i A';
 
     /**
      * @var GetByIdInterface

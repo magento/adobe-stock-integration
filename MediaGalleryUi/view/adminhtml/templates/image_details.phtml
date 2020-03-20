@@ -15,13 +15,14 @@ use Magento\Backend\Block\Template;
             type: 'slide',
             buttons: [],
             modalClass: 'media-gallery-image-details',
-            title: '<?= __('Image Details'); ?>'
+            title: '<?= $block->escapeHtmlAttr(__('Image Details')); ?>'
         }
      }">
     <div class="page-main-actions">
         <div class="page-actions">
             <div class="page-actions-inner">
-                <div class="page-action-buttons" id="media-gallery-image-actions" data-bind="scope: 'mediaGalleryImageActions'">
+                <div class="page-action-buttons" id="media-gallery-image-actions"
+                     data-bind="scope: 'mediaGalleryImageActions'">
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 </div>
             </div>
@@ -42,7 +43,7 @@ use Magento\Backend\Block\Template;
                 "components": {
                     "mediaGalleryImageDetails": {
                         "component": "Magento_MediaGalleryUi/js/image/image-details",
-                        "imageDetailsUrl": "<?= $block->getData('imageDetailsUrl'); ?>",
+                        "imageDetailsUrl": "<?= $block->escapeUrl($block->getData('imageDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "mediaGridMessages": "media_gallery_listing.media_gallery_listing.messages"
                     }
@@ -66,7 +67,7 @@ use Magento\Backend\Block\Template;
                         "modalSelector": ".media-gallery-image-details-modal",
                         "actionsList": [
                             {
-                                "title": "<?= __('Cancel'); ?>",
+                                "title": "<?= $block->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
                                 "classes": "action-default scalable cancel action-quaternary"
