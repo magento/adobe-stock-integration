@@ -6,14 +6,14 @@
 & when (@media-common = true) {
 
     .media-gallery-container {
-        
+
         .jstree-default .jstree-hovered {
             border-radius: 6px;
             background:#cdecf6;
             border: solid 0.14em;
             border-color:#7185f5;
         }
-        
+
         .jstree-default a .jstree-icon {
             background-position: -52px -16px;
         }
@@ -23,15 +23,15 @@
             width: 20px;
         }
 
-        .jstree-default .jstree-no-dots .jstree-leaf > ins { 
-            background-image: none; 
+        .jstree-default .jstree-no-dots .jstree-leaf > ins {
+            background-image: none;
         }
 
         .jstree-default ins {
             background-image: url("@{baseDir}Magento_MediaGalleryUi/images/d.png");
         }
 
-        .jstree a { 
+        .jstree a {
             padding: 3px 8px;
             height: 30px;
             width: 124%;
@@ -113,7 +113,7 @@
             width: 200px;
             background-color: #e1e1e1 !important;
         }
-        
+
         .masonry-image-grid {
             width: 84%;
             float: right;
@@ -121,7 +121,7 @@
 
         .media-directory-container {
             width:12%;
-            float: left; 
+            float: left;
         }
 
         .media-gallery-image-block {
@@ -160,6 +160,91 @@
         .adobe-stock-icon {
             width: 29px !important;
             margin-bottom: -6px;
+        }
+    }
+
+    .media-gallery-image-details-modal {
+        .page-action-buttons {
+            float: right;
+        }
+
+        .image-type {
+            .adobe-stock-icon {
+                width: 29px !important;
+                margin-bottom: -6px;
+            }
+
+            .type {
+                color: #666666;
+            }
+        }
+
+        .image-details {
+            .image-details-image {
+                width: auto;
+                max-width: 70%;
+                float: left;
+            }
+
+            .image-details-sidebar {
+                max-width: 30%;
+                padding-left: 40px;
+                float: left;
+
+                .image-details-section {
+                    .lib-clearfix();
+                    margin-bottom: 40px;
+                }
+
+                h3.image-title {
+                    font-weight: bold;
+                }
+
+                .attributes {
+                    .attribute {
+                        &:not(:last-child) {
+                            padding-bottom: 20px;
+                            margin-bottom: 20px;
+                        }
+
+                        & > * {
+                            width: 50%;
+                            float: left;
+                        }
+
+                        .value {
+                            float: right;
+                            display: inline;
+                        }
+
+                        .title {
+                            color: #666666;
+                        }
+                    }
+                }
+
+                .tags {
+                    .tags-list {
+                        margin-bottom: 10px;
+
+                        .show-more-item {
+                            display: none;
+                        }
+
+                        &.show-all-tags {
+                            margin-bottom: 0;
+
+                            .show-more-item {
+                                display: inline;
+                            }
+
+                            & + .show-more-link-container {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
