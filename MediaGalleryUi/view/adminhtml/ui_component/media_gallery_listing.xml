@@ -16,6 +16,11 @@
     </argument>
     <settings>
         <buttons>
+            <button name="add_selected">
+                <param name="on_click" xsi:type="string">return false;</param>
+                <class>action-primary no-display</class>
+                <label translate="true">Add Selected</label>
+            </button>
             <button name="cancel">
                 <param name="on_click" xsi:type="string">MediabrowserUtility.closeDialog();</param>
                 <class>cancel action-quaternary</class>
@@ -54,7 +59,7 @@
     <listingToolbar name="listing_top">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <filterInput name="directory" provider="${ $.parentName }" sortOrder="10">
+            <filterInput name="directory" provider="${ $.parentName }" sortOrder="100">
                 <settings>
                     <visible>false</visible>
                     <dataScope>directory</dataScope>

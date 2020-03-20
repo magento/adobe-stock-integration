@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Plugin;
+namespace Magento\MediaGalleryIntegration\Plugin;
 
 use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Config;
@@ -52,6 +52,7 @@ class UpdateWysiwygOpenDialogUrl
      * @param DefaultConfigProvider $provider
      * @param DataObject $config
      * @return DataObject
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetConfig(DefaultConfigProvider $provider, DataObject $config): DataObject
     {
