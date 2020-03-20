@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Plugin;
+namespace Magento\MediaGalleryIntegration\Plugin;
 
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Form\Element\DataType\Media\Image;
@@ -28,6 +28,7 @@ class UpdateOpenDialogUrl
 
     /**
      * @param UrlInterface $url
+     * @param ConfigInterface $config
      */
     public function __construct(UrlInterface $url, ConfigInterface $config)
     {

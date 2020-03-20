@@ -30,7 +30,7 @@ If you are a new GitHub user, we recommend that you create your own [free github
 This will allow you to collaborate with the Adobe Stock Integration development team, fork the Adobe Stock Integration project and send pull requests.
 
 1. Search current [listed issues](https://github.com/magento/adobe-stock-integration/issues) (open or closed) for similar proposals of intended contribution before starting work on a new contribution.
-2. Review the [Contributor License Agreement](https://magento.com/legaldocuments/mca) if this is your first time contributing.
+2. Review the [Contributor License Agreement](https://opensource.adobe.com/cla.html) if this is your first time contributing.
 3. Create and test your work.
 4. Fork the Adobe Stock Integration repository according to the [Fork A Repository instructions](https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#fork) and when you are ready to send us a pull request – follow the [Create A Pull Request instructions](https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#pull_request).
 5. Once your contribution is received the Adobe Stock Integration development team will review the contribution and collaborate with you as needed.
@@ -42,6 +42,6 @@ The full text is available in the repository [Wiki](https://github.com/magento/m
 
 ## Connecting with Community!
 
-If you have any questions, join us in [#adobe-stock](https://magentocommeng.slack.com/messages/CH8BGFX9D) Slack chat. If you are not on our slack, [click here](http://tinyurl.com/engcom-slack) to join.
+If you have any questions, join us in [#adobe-stock](https://magentocommeng.slack.com/messages/CH8BGFX9D) Slack chat. If you are not on our slack, [click here](https://opensource.magento.com/slack) to join.
 
 Need to find a project? Check out the [Slack Channels](https://github.com/magento/magento2/wiki/Slack-Channels) (with listed project info) and the [Magento Community Portal](https://opensource.magento.com/).

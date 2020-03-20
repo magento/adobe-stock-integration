@@ -111,9 +111,6 @@ class GetTokenTest extends TestCase
             ->method('create')
             ->willReturn($tokenResponse);
         $tokenResponse->expects($this->once())
-            ->method('addData')
-            ->willReturn($tokenResponse);
-        $tokenResponse->expects($this->once())
             ->method('getAccessToken')
             ->willReturn('string');
         $tokenResponse->expects($this->once())
