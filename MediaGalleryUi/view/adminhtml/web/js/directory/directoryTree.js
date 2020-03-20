@@ -6,8 +6,9 @@
 define([
     'jquery',
     'uiComponent',
+    'uiLayout',
     'jquery/jstree/jquery.jstree'
-], function ($, Component) {
+], function ($, Component, layout) {
     'use strict';
 
     return Component.extend({
@@ -16,8 +17,13 @@ define([
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
             modules: {
+                directories: '${ $.name }_directories',
                 filterChips: '${ $.filterChipsProvider }'
-            }
+            },
+            viewConfig: [{
+                component: 'Magento_MediaGalleryUi/js/directory/directories',
+                name: '${ $.name }_directories'
+            }]
         },
 
         /**
@@ -26,12 +32,23 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super();
+            this._super().initView();
 
             this.waitForContainer(function () {
                 this.getJsonTree();
                 this.initEvents();
             }.bind(this));
+
+            return this;
+        },
+
+        /**
+         * Initialize child components
+         *
+         * @returns {Object}
+         */
+        initView: function () {
+            layout(this.viewConfig);
 
             return this;
         },
@@ -54,10 +71,19 @@ define([
          */
         initEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
+                var path = $(data.rslt.obj).data('path');
 
-                this.applyFilter($(data.rslt.obj).data('path'));
+                this.directories().setActive(path);
+                this.applyFilter(path);
 
             }.bind(this));
+        },
+
+        /**
+          * Remove active node from directory tree, and select next
+          */
+        removeNode: function () {
+            $(this.directoryTreeSelector).jstree('remove');
         },
 
         /**
