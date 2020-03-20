@@ -45,7 +45,7 @@ class Create extends Action implements HttpPostActionInterface
      * Delete constructor.
      *
      * @param Context $context
-     * @param CreateByPath $deleteFolderByPath
+     * @param CreateByPath $createFolderByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
