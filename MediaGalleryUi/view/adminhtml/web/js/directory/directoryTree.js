@@ -32,7 +32,7 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().observe(['selectedNode']).initView();
+            this._super().initView();
 
             this.waitForContainer(function () {
                 this.getJsonTree();
@@ -71,10 +71,8 @@ define([
          */
         initEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                var path = $(data.rslt.obj).data('path'),
-                    nodeId = $(data.rslt.obj).id;
+                var path = $(data.rslt.obj).data('path');
 
-                this.selectedNode(nodeId);
                 this.directories().setActive(path);
                 this.applyFilter(path);
 
@@ -101,6 +99,22 @@ define([
                     'directory': path
                 }
             );
+        },
+
+        /**
+         * Reload jstree and update jstreeevents
+         */
+        reloadJsTee: function () {
+            $.ajaxSetup({
+                async: false
+            });
+
+            this.getJsonTree();
+            this.initEvents();
+
+            $.ajaxSetup({
+                async: true
+            });
         },
 
         /**

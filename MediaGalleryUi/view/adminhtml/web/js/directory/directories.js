@@ -42,7 +42,7 @@ define([
           */
         initEvents: function () {
             $(this.deleteButtonSelector).on('delete_folder', function () {
-                this.getComfirmationPopup();
+                this.getComfirmationPopupDeleteFolder();
             }.bind(this));
 
             $(this.createFolderButtonSelector).on('create_folder', function () {
@@ -124,13 +124,12 @@ define([
         createFolder: function (path, subPath) {
             var folder = _.isUndefined(subPath) ? '/' : subPath,
                 data = {
-                path: folder,
-                name: path
-            },
+                    path: folder,
+                    name: path
+                },
                 errorMessage = 'There was an error on attempt to create folder!',
                 callback = function () {
-                    this.directoryTree().getJsonTree();
-                    this.directoryTree().initEvents();
+                    this.directoryTree().reloadJsTee();
                 }.bind(this);
 
             this.sendPostRequest(this.directoryTree().createDirectoryUrl, data, errorMessage, callback);
@@ -158,9 +157,9 @@ define([
             },
 
         /**
-          * Confirmation popup template.
+          * Confirmation popup for delete folder action.
           */
-        getComfirmationPopup: function () {
+        getComfirmationPopupDeleteFolder: function () {
             confirm({
                 title: $.mage.__('Are you sure you want to delete ?'),
                 content: 'Are you sure you want to delete folder: ' + this.selectedFolder(),
