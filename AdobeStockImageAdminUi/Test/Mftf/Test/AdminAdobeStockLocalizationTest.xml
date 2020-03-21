@@ -48,7 +48,7 @@
             <argument name="keyword" value="машина"/>
         </actionGroup>
         <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="assertCategoryLocalized">
-            <argument name="attributeName" value="Транспорт"/>
+            <argument name="attributeName" value="Индустрия"/>
         </actionGroup>
     </test>
 </tests>
