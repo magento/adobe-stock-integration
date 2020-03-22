@@ -129,7 +129,7 @@ define([
                 },
                 errorMessage = 'There was an error on attempt to create folder!',
                 callback = function () {
-                    this.directoryTree().reloadJsTee();
+                    this.directoryTree().reloadJsTree();
                 }.bind(this);
 
             this.sendPostRequest(this.directoryTree().createDirectoryUrl, data, errorMessage, callback);

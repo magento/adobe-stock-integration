@@ -104,7 +104,7 @@ define([
         /**
          * Reload jstree and update jstreeevents
          */
-        reloadJsTee: function () {
+        reloadJsTree: function () {
             $.ajaxSetup({
                 async: false
             });
