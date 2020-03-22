@@ -14,13 +14,11 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContent\Model\ContentProcessor;
 
 /**
- * Observe the catalog_category_save_after event and run processing relation between media content and media asset
+ * Observe the catalog_category_save_after event and run processing relation between category content and media asset.
  */
-class CatalogCategorySaveAfter implements ObserverInterface
+class CatalogCategory implements ObserverInterface
 {
     private const CONTENT_TYPE = 'catalog_category';
-    private const IMAGE_FIELD = 'image';
-    private const DESCRIPTION_FIELD = 'description';
 
     /**
      * @var ContentProcessor
@@ -28,16 +26,25 @@ class CatalogCategorySaveAfter implements ObserverInterface
     private $contentProcessor;
 
     /**
-     * CmsPageSaveAfter constructor.
+     * @var array
+     */
+    private $contentField;
+
+    /**
+     * CatalogCategory constructor.
      *
      * @param ContentProcessor $contentProcessor
+     * @param array $contentField
      */
-    public function __construct(ContentProcessor $contentProcessor)
+    public function __construct(ContentProcessor $contentProcessor, array $contentField)
     {
         $this->contentProcessor = $contentProcessor;
+        $this->contentField = $contentField;
     }
 
     /**
+     * Get changed content data matches to the search interest and run relation processor.
+     *
      * @param Observer $observer
      *
      * @throws IntegrationException
@@ -47,12 +54,11 @@ class CatalogCategorySaveAfter implements ObserverInterface
         $content = [];
         /** @var Category $category */
         $category = $observer->getEvent()->getData('category');
-        if ($category->dataHasChangedFor(self::IMAGE_FIELD)) {
-            $content[self::IMAGE_FIELD] = $category->getData(self::IMAGE_FIELD);
-        }
-
-        if ($category->dataHasChangedFor(self::DESCRIPTION_FIELD)) {
-            $content[self::DESCRIPTION_FIELD] = $category->getData(self::DESCRIPTION_FIELD);
+        $categoryData = $category->getData();
+        foreach ($this->contentField as $key => $field) {
+            if ($category->dataHasChangedFor($field)) {
+                $content[$field] = $categoryData[$field];
+            }
         }
 
         if (!empty($content)) {

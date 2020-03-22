@@ -14,9 +14,9 @@ namespace Magento\MediaContentApi\Api;
 interface ExtractAssetFromContentInterface
 {
     /**
-     * @param string $contentData
+     * @param string $content
      *
      * @return array
      */
-    public function execute(string $contentData): array;
+    public function execute(string $content): array;
 }

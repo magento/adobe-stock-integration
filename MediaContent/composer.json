@@ -6,8 +6,11 @@
         "magento/framework": "*",
         "magento/module-media-content-api": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery": "*",
-        "magento/module-cms": "*"
+        "magento/module-media-gallery": "*"
+    },
+    "suggest": {
+        "magento/module-cms": "*",
+        "magento/module-catalog": "*"
     },
     "type": "magento2-module",
     "license": [

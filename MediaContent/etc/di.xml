@@ -19,4 +19,34 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContent\Observer\CatalogCategory">
+        <arguments>
+            <argument name="contentField" xsi:type="array">
+                <item name="image_field" xsi:type="string">image</item>
+                <item name="description_field" xsi:type="string">description</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContent\Observer\CatalogProduct">
+        <arguments>
+            <argument name="contentField" xsi:type="array">
+                <item name="description_field" xsi:type="string">description</item>
+                <item name="short_description_field" xsi:type="string">short_description</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContent\Observer\CmsBlock">
+        <arguments>
+            <argument name="contentField" xsi:type="array">
+                <item name="content_field" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContent\Observer\CmsPage">
+        <arguments>
+            <argument name="contentField" xsi:type="array">
+                <item name="content_field" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

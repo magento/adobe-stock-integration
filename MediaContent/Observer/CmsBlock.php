@@ -14,12 +14,11 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContent\Model\ContentProcessor;
 
 /**
- * Observe cms_block_save_after event and run processing relation between media content and media asset
+ * Observe cms_block_save_after event and run processing relation between cms block content and media asset
  */
-class CmsBlockSaveAfter implements ObserverInterface
+class CmsBlock implements ObserverInterface
 {
     private const CONTENT_TYPE = 'cms_block';
-    private const CONTENT_FIELD = 'content';
 
     /**
      * @var ContentProcessor
@@ -27,26 +26,42 @@ class CmsBlockSaveAfter implements ObserverInterface
     private $contentProcessor;
 
     /**
-     * CmsPageSaveAfter constructor.
+     * @var array
+     */
+    private $contentField;
+
+    /**
+     * CmsBlock constructor.
      *
      * @param ContentProcessor $contentProcessor
+     * @param array $contentField
      */
-    public function __construct(ContentProcessor $contentProcessor)
+    public function __construct(ContentProcessor $contentProcessor, array $contentField)
     {
         $this->contentProcessor = $contentProcessor;
+        $this->contentField = $contentField;
     }
 
     /**
+     * Get changed content data matches to the search interest and run relation processor.
+     *
      * @param Observer $observer
      *
      * @throws IntegrationException
      */
     public function execute(Observer $observer): void
     {
+        $content = [];
         /** @var Block $cmsBlock */
         $cmsBlock = $observer->getEvent()->getObject();
-        if ($cmsBlock->dataHasChangedFor(self::CONTENT_FIELD)) {
-            $content = [self::CONTENT_FIELD => $cmsBlock->getData(self::CONTENT_FIELD)];
+        $cmsBlockData = $cmsBlock->getData();
+        foreach ($this->contentField as $key => $field) {
+            if ($cmsBlock->dataHasChangedFor($field)) {
+                $content[$field] = $cmsBlockData[$field];
+            }
+        }
+
+        if (!empty($content)) {
             $this->contentProcessor->execute((string)$cmsBlock->getId(), $content, self::CONTENT_TYPE);
         }
     }

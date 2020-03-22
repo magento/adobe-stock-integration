@@ -48,6 +48,8 @@ class ExtractAssetFromContent implements ExtractAssetFromContentInterface
     }
 
     /**
+     * Search for the media asset in content by the search pattern and return asset list used in content.
+     *
      * @param string $content
      *
      * @return AssetInterface[]

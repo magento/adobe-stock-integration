@@ -14,13 +14,11 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContent\Model\ContentProcessor;
 
 /**
- * Observe the catalog_product_save_after event and run processing relation between media content and media asset
+ * Observe the catalog_product_save_after event and run processing relation between product content and media asset
  */
-class CatalogProductSaveAfter implements ObserverInterface
+class CatalogProduct implements ObserverInterface
 {
     private const CONTENT_TYPE = 'catalog_product';
-    private const DESCRIPTION_FIELD = 'description';
-    private const SHORT_DESCRIPTION_FIELD = 'short_description';
 
     /**
      * @var ContentProcessor
@@ -28,16 +26,25 @@ class CatalogProductSaveAfter implements ObserverInterface
     private $contentProcessor;
 
     /**
-     * CmsPageSaveAfter constructor.
+     * @var array
+     */
+    private $contentField;
+
+    /**
+     * CatalogProduct constructor.
      *
      * @param ContentProcessor $contentProcessor
+     * @param array $contentField
      */
-    public function __construct(ContentProcessor $contentProcessor)
+    public function __construct(ContentProcessor $contentProcessor, array $contentField)
     {
         $this->contentProcessor = $contentProcessor;
+        $this->contentField = $contentField;
     }
 
     /**
+     * Get changed content data matches to the search interest and run relation processor.
+     *
      * @param Observer $observer
      *
      * @throws IntegrationException
@@ -47,12 +54,11 @@ class CatalogProductSaveAfter implements ObserverInterface
         $content = [];
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getData('product');
-        if ($product->dataHasChangedFor(self::SHORT_DESCRIPTION_FIELD)) {
-            $content[self::SHORT_DESCRIPTION_FIELD] = $product->getData(self::SHORT_DESCRIPTION_FIELD);
-        }
-
-        if ($product->dataHasChangedFor(self::DESCRIPTION_FIELD)) {
-            $content[self::DESCRIPTION_FIELD] = $product->getData(self::DESCRIPTION_FIELD);
+        $productData = $product->getData();
+        foreach ($this->contentField as $key => $field) {
+            if ($product->dataHasChangedFor($field)) {
+                $content[$field] = $productData[$field];
+            }
         }
 
         if (!empty($content)) {
