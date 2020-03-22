@@ -28,18 +28,18 @@ class CatalogProduct implements ObserverInterface
     /**
      * @var array
      */
-    private $contentField;
+    private $fields;
 
     /**
      * CatalogProduct constructor.
      *
      * @param ContentProcessor $contentProcessor
-     * @param array $contentField
+     * @param array $fields
      */
-    public function __construct(ContentProcessor $contentProcessor, array $contentField)
+    public function __construct(ContentProcessor $contentProcessor, array $fields)
     {
         $this->contentProcessor = $contentProcessor;
-        $this->contentField = $contentField;
+        $this->fields = $fields;
     }
 
     /**
@@ -55,9 +55,9 @@ class CatalogProduct implements ObserverInterface
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getData('product');
         $productData = $product->getData();
-        foreach ($this->contentField as $key => $field) {
+        foreach ($this->fields as $field) {
             if ($product->dataHasChangedFor($field)) {
-                $content[$field] = $productData[$field];
+                $content[$field] = $product->getData($field);
             }
         }
 

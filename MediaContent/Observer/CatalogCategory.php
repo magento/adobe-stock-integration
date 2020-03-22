@@ -28,18 +28,18 @@ class CatalogCategory implements ObserverInterface
     /**
      * @var array
      */
-    private $contentField;
+    private $fields;
 
     /**
      * CatalogCategory constructor.
      *
      * @param ContentProcessor $contentProcessor
-     * @param array $contentField
+     * @param array $fields
      */
-    public function __construct(ContentProcessor $contentProcessor, array $contentField)
+    public function __construct(ContentProcessor $contentProcessor, array $fields)
     {
         $this->contentProcessor = $contentProcessor;
-        $this->contentField = $contentField;
+        $this->fields = $fields;
     }
 
     /**
@@ -54,10 +54,9 @@ class CatalogCategory implements ObserverInterface
         $content = [];
         /** @var Category $category */
         $category = $observer->getEvent()->getData('category');
-        $categoryData = $category->getData();
-        foreach ($this->contentField as $key => $field) {
+        foreach ($this->fields as $field) {
             if ($category->dataHasChangedFor($field)) {
-                $content[$field] = $categoryData[$field];
+                $content[$field] = $category->getData($field);
             }
         }
 

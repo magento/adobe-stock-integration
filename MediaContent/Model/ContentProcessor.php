@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaContent\Model;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContentApi\Api\ExtractAssetFromContentInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\CouldNotDeleteException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -80,14 +80,7 @@ class ContentProcessor
     {
         try {
             foreach ($contentData as $contentField => $content) {
-                $relations = $this->getAssetsUsedInContent->execute($contentType, $contentEntityId, $contentField);
-                if (empty($relations)) {
-                    $this->addNewRelation($content, $contentField, $contentEntityId, $contentType);
-                    continue;
-                }
-
                 $this->updateRelation(
-                    $relations,
                     $content,
                     $contentField,
                     $contentEntityId,
@@ -102,34 +95,8 @@ class ContentProcessor
     }
 
     /**
-     * Add new relation between media asset and content if any media asset presents in content.
+     * Add s newly added asset to content relation or remove not actual.
      *
-     * @param string $content
-     * @param string $contentField
-     * @param string $contentEntityId
-     * @param string $contentType
-     *
-     * @throws CouldNotSaveException
-     */
-    private function addNewRelation(
-        string $content,
-        string $contentField,
-        string $contentEntityId,
-        string $contentType
-    ) {
-        $assetsInContent = $this->extractAssetFromContent->execute($content);
-        if (count($assetsInContent) > 0) {
-            /** @var AssetInterface $asset */
-            foreach ($assetsInContent as $asset) {
-                $this->assignAsset->execute($asset->getId(), $contentType, $contentEntityId, $contentField);
-            }
-        }
-    }
-
-    /**
-     * Add newly added asset to content relation or remove not actual.
-     *
-     * @param array $relations
      * @param string|null $content
      * @param string $contentField
      * @param string $contentEntityId
@@ -137,19 +104,20 @@ class ContentProcessor
      *
      * @throws CouldNotDeleteException
      * @throws CouldNotSaveException
+     * @throws IntegrationException
      */
     private function updateRelation(
-        array $relations,
         string $content = null,
         string $contentField,
         string $contentEntityId,
         string $contentType
     ) {
+        $relations = $this->getAssetsUsedInContent->execute($contentType, $contentEntityId, $contentField);
         $assetsInContent = ($content !== null) ? $this->extractAssetFromContent->execute($content) : [];
+        /** @var AssetInterface $asset */
         foreach ($assetsInContent as $asset) {
             if (!isset($relations[$asset->getId()])) {
                 $this->assignAsset->execute($asset->getId(), $contentType, $contentEntityId, $contentField);
-                unset($assetsInContent[$asset->getId()]);
             }
         }
 

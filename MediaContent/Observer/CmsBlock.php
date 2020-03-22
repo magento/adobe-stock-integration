@@ -28,18 +28,18 @@ class CmsBlock implements ObserverInterface
     /**
      * @var array
      */
-    private $contentField;
+    private $fields;
 
     /**
      * CmsBlock constructor.
      *
      * @param ContentProcessor $contentProcessor
-     * @param array $contentField
+     * @param array $fields
      */
-    public function __construct(ContentProcessor $contentProcessor, array $contentField)
+    public function __construct(ContentProcessor $contentProcessor, array $fields)
     {
         $this->contentProcessor = $contentProcessor;
-        $this->contentField = $contentField;
+        $this->fields = $fields;
     }
 
     /**
@@ -54,10 +54,9 @@ class CmsBlock implements ObserverInterface
         $content = [];
         /** @var Block $cmsBlock */
         $cmsBlock = $observer->getEvent()->getObject();
-        $cmsBlockData = $cmsBlock->getData();
-        foreach ($this->contentField as $key => $field) {
+        foreach ($this->fields as $field) {
             if ($cmsBlock->dataHasChangedFor($field)) {
-                $content[$field] = $cmsBlockData[$field];
+                $content[$field] = $cmsBlock->getData($field);
             }
         }
 

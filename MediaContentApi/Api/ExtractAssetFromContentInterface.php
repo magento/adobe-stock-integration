@@ -14,9 +14,12 @@ namespace Magento\MediaContentApi\Api;
 interface ExtractAssetFromContentInterface
 {
     /**
+     * Search for the media asset in content and extract it providing a list of media assets.
+     *
      * @param string $content
      *
-     * @return array
+     * @return \Magento\MediaGalleryApi\Api\Data\AssetInterface[]
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function execute(string $content): array;
 }

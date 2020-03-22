@@ -21,7 +21,7 @@ class ExtractAssetFromContent implements ExtractAssetFromContentInterface
     /**
      * @var string
      */
-    private $searchPattern;
+    private $searchPatterns;
 
     /**
      * @var GetByPathInterface
@@ -36,31 +36,26 @@ class ExtractAssetFromContent implements ExtractAssetFromContentInterface
     /**
      * ExtractAssetFromContent constructor.
      *
-     * @param array $searchPattern
+     * @param array $searchPatterns
      * @param GetByPathInterface $getMediaAssetByPath
      * @param LoggerInterface $logger
      */
-    public function __construct(array $searchPattern, GetByPathInterface $getMediaAssetByPath, LoggerInterface $logger)
+    public function __construct(array $searchPatterns, GetByPathInterface $getMediaAssetByPath, LoggerInterface $logger)
     {
-        $this->searchPattern = $searchPattern;
+        $this->searchPatterns = $searchPatterns;
         $this->getMediaAssetByPath = $getMediaAssetByPath;
         $this->logger = $logger;
     }
 
     /**
-     * Search for the media asset in content by the search pattern and return asset list used in content.
-     *
-     * @param string $content
-     *
-     * @return AssetInterface[]
-     * @throws IntegrationException
+     * @inheritDoc
      */
     public function execute(string $content): array
     {
         try {
             $contentDecoded = html_entity_decode($content);
             $pathMatches = [];
-            foreach ($this->searchPattern as $pattern) {
+            foreach ($this->searchPatterns as $pattern) {
                 preg_match_all($pattern, $contentDecoded, $matches, PREG_PATTERN_ORDER);
                 if (isset($matches[1]) && isset($matches[1][0])) {
                     $uniqueMatches = array_unique($matches[1]);

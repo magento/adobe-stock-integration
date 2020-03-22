@@ -13,7 +13,7 @@
     <preference for="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetFromContent"/>
     <type name="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface">
         <arguments>
-            <argument name="searchPattern" xsi:type="array">
+            <argument name="searchPatterns" xsi:type="array">
                 <item name="media_gallery" xsi:type="string">({{media url="(.*?)"}})</item>
                 <item name="catalog_image" xsi:type="string">(media\/(.*))</item>
             </argument>
@@ -21,31 +21,31 @@
     </type>
     <type name="Magento\MediaContent\Observer\CatalogCategory">
         <arguments>
-            <argument name="contentField" xsi:type="array">
-                <item name="image_field" xsi:type="string">image</item>
-                <item name="description_field" xsi:type="string">description</item>
+            <argument name="fields" xsi:type="array">
+                <item name="image" xsi:type="string">image</item>
+                <item name="description" xsi:type="string">description</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\MediaContent\Observer\CatalogProduct">
         <arguments>
-            <argument name="contentField" xsi:type="array">
-                <item name="description_field" xsi:type="string">description</item>
-                <item name="short_description_field" xsi:type="string">short_description</item>
+            <argument name="fields" xsi:type="array">
+                <item name="description" xsi:type="string">description</item>
+                <item name="short_description" xsi:type="string">short_description</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\MediaContent\Observer\CmsBlock">
         <arguments>
-            <argument name="contentField" xsi:type="array">
-                <item name="content_field" xsi:type="string">content</item>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\MediaContent\Observer\CmsPage">
         <arguments>
-            <argument name="contentField" xsi:type="array">
-                <item name="content_field" xsi:type="string">content</item>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
             </argument>
         </arguments>
     </type>

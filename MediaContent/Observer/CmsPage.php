@@ -28,18 +28,18 @@ class CmsPage implements ObserverInterface
     /**
      * @var array
      */
-    private $contentField;
+    private $fields;
 
     /**
      * CmsPage constructor.
      *
      * @param ContentProcessor $contentProcessor
-     * @param array $contentField
+     * @param array $fields
      */
-    public function __construct(ContentProcessor $contentProcessor, array $contentField)
+    public function __construct(ContentProcessor $contentProcessor, array $fields)
     {
         $this->contentProcessor = $contentProcessor;
-        $this->contentField = $contentField;
+        $this->fields = $fields;
     }
 
     /**
@@ -54,10 +54,9 @@ class CmsPage implements ObserverInterface
         $content = [];
         /** @var Page $cmsPage */
         $cmsPage = $observer->getEvent()->getObject();
-        $cmsPageData = $cmsPage->getData();
-        foreach ($this->contentField as $key => $field) {
+        foreach ($this->fields as $field) {
             if ($cmsPage->dataHasChangedFor($field)) {
-                $content[$field] = $cmsPageData[$field];
+                $content[$field] = $cmsPage->getData($field);
             }
         }
 
