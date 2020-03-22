@@ -18,5 +18,8 @@
             </block>
             <uiComponent name="adobe_stock_images_listing"/>
         </block>
+        <referenceBlock name="media.gallery.container">
+            <block class="Magento\Backend\Block\Template" name="adobe.stock.image.details" template="Magento_AdobeStockImageAdminUi::image_details/adobe_stock.phtml" after="image.details" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images"/>
+        </referenceBlock>
     </referenceContainer>
 </layout>

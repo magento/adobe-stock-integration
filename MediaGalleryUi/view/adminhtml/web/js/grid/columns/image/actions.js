@@ -14,7 +14,13 @@ define([
         defaults: {
             template: 'Magento_MediaGalleryUi/grid/columns/image/actions',
             deleteImageUrl: 'media_gallery/image/delete',
+            mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             actionsList: [
+                {
+                    name: 'image-details',
+                    title: 'View Details',
+                    handler: 'viewImageDetails'
+                },
                 {
                     name: 'delete',
                     title: 'Delete',
@@ -24,7 +30,8 @@ define([
             modules: {
                 imageModel: '${ $.imageModelName }',
                 messages: '${ $.messagesName }',
-                provider: '${ $.providerName }'
+                provider: '${ $.providerName }',
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
             }
         },
 
@@ -110,6 +117,17 @@ define([
                     }
                 ]
             });
+        },
+
+        /**
+         * View image details
+         *
+         * @param {Object} record
+         */
+        viewImageDetails: function (record) {
+            var recordId = this.imageModel().getId(record);
+
+            this.mediaGalleryImageDetails().showImageDetailsById(recordId);
         },
 
         /**
