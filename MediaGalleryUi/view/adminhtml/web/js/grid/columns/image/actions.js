@@ -61,6 +61,7 @@ define([
                 throw 'Target element not found for content update';
             }
             targetElement.val(record['thumbnail_url'])
+                .data('size', record['size'])
                 .data('mime-type', record['content_type'])
                 .trigger('change');
             window.MediabrowserUtility.closeDialog();
