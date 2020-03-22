@@ -14,7 +14,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContent\Model\ContentProcessor;
 
 /**
- * Observe cms page save after event and run processing relation between media content and media asset
+ * Observe cms_page_save_after event and run processing relation between media content and media asset
  */
 class CmsPageSaveAfter implements ObserverInterface
 {

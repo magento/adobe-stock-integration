@@ -9,4 +9,7 @@
     <event name="cms_page_save_after">
         <observer name="media_content_cms_page_save_after" instance="Magento\MediaContent\Observer\CmsPageSaveAfter" />
     </event>
+    <event name="catalog_category_save_after">
+        <observer name="media_content_catalog_category_save_after" instance="Magento\MediaContent\Observer\CatalogCategorySaveAfter" />
+    </event>
 </config>

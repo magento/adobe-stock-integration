@@ -79,7 +79,7 @@ class ContentProcessor
                 $relations = $this->getAssetsUsedInContent->execute($contentType, $contentEntityId, $contentField);
                 if (empty($relations)) {
                     $assetsInContent = $this->extractAssetFromContent->execute($content);
-                    if (isset($assetsInContent[0])) {
+                    if (count($assetsInContent) > 0) {
                         /** @var AssetInterface $asset */
                         foreach ($assetsInContent as $asset) {
                             $this->assignAsset->execute($asset->getId(), $contentType, $contentEntityId, $contentField);
