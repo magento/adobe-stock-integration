@@ -15,4 +15,7 @@
     <event name="cms_block_save_after">
         <observer name="media_content_cms_block_save_after" instance="Magento\MediaContent\Observer\CmsBlockSaveAfter" />
     </event>
+    <event name="catalog_product_save_after">
+        <observer name="media_content_catalog_product_save_after" instance="Magento\MediaContent\Observer\CatalogProductSaveAfter" />
+    </event>
 </config>
