@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <referenceContainer name="root">
         <block class="Magento\Backend\Block\Template" name="stock.panel" template="Magento_AdobeStockImageAdminUi::panel.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
-            <block class="Magento\AdobeIms\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdobeIms::signIn.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
+            <block class="Magento\AdobeIms\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdobeIms::signIn.phtml" aclResource="Magento_AdobeIms::adobe_ims">
                 <arguments>
                     <argument name="configProviders" xsi:type="array">
                         <item name="adobe-stock" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SignInConfigProvider</item>
