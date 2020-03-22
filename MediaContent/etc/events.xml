@@ -12,4 +12,7 @@
     <event name="catalog_category_save_after">
         <observer name="media_content_catalog_category_save_after" instance="Magento\MediaContent\Observer\CatalogCategorySaveAfter" />
     </event>
+    <event name="cms_block_save_after">
+        <observer name="media_content_cms_block_save_after" instance="Magento\MediaContent\Observer\CmsBlockSaveAfter" />
+    </event>
 </config>

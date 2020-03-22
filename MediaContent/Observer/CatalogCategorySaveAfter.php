@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\MediaContent\Observer;
 
 use Magento\Catalog\Model\Category;
-use Magento\Cms\Model\Page;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\IntegrationException;
