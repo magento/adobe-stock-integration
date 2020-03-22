@@ -44,7 +44,7 @@
             background-image: url("@{baseDir}Magento_MediaGalleryUi/images/d.png");
         }
 
-        .jstree a { 
+        .jstree a {
             padding-top: 4px;
             padding-left: 6px;
             height: 30px;
@@ -130,7 +130,7 @@
 
         .media-directory-container {
             padding-right: 40px;
-            float: left; 
+            float: left;
         }
 
         .media-gallery-image-block {
@@ -169,6 +169,91 @@
         .adobe-stock-icon {
             width: 29px;
             margin-bottom: -6px;
+        }
+    }
+
+    .media-gallery-image-details-modal {
+        .page-action-buttons {
+            float: right;
+        }
+
+        .image-type {
+            .adobe-stock-icon {
+                width: 29px;
+                margin-bottom: -6px;
+            }
+
+            .type {
+                color: #666666;
+            }
+        }
+
+        .image-details {
+            .image-details-image {
+                width: auto;
+                max-width: 70%;
+                float: left;
+            }
+
+            .image-details-sidebar {
+                max-width: 30%;
+                padding-left: 40px;
+                float: left;
+
+                .image-details-section {
+                    .lib-clearfix();
+                    margin-bottom: 40px;
+                }
+
+                h3.image-title {
+                    font-weight: bold;
+                }
+
+                .attributes {
+                    .attribute {
+                        &:not(:last-child) {
+                            padding-bottom: 20px;
+                            margin-bottom: 20px;
+                        }
+
+                        & > * {
+                            width: 50%;
+                            float: left;
+                        }
+
+                        .value {
+                            float: right;
+                            display: inline;
+                        }
+
+                        .title {
+                            color: #666666;
+                        }
+                    }
+                }
+
+                .tags {
+                    .tags-list {
+                        margin-bottom: 10px;
+
+                        .show-more-item {
+                            display: none;
+                        }
+
+                        &.show-all-tags {
+                            margin-bottom: 0;
+
+                            .show-more-item {
+                                display: inline;
+                            }
+
+                            & + .show-more-link-container {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
