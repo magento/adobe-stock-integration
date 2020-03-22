@@ -76,14 +76,29 @@ class ContentProcessor
     {
         try {
             foreach ($contentData as $contentField => $content) {
-                $relation = $this->getAssetsUsedInContent->execute($contentType, $contentEntityId, $contentField);
-                if (!isset($relation[0])) {
+                $relations = $this->getAssetsUsedInContent->execute($contentType, $contentEntityId, $contentField);
+                if (empty($relations)) {
                     $assetsInContent = $this->extractAssetFromContent->execute($content);
                     if (isset($assetsInContent[0])) {
                         /** @var AssetInterface $asset */
                         foreach ($assetsInContent as $asset) {
                             $this->assignAsset->execute($asset->getId(), $contentType, $contentEntityId, $contentField);
                         }
+                    }
+                    continue;
+                }
+
+                $assetsInContent = $this->extractAssetFromContent->execute($content);
+                foreach ($assetsInContent as $asset) {
+                    if (!isset($relations[$asset->getId()])) {
+                        $this->assignAsset->execute($asset->getId(), $contentType, $contentEntityId, $contentField);
+                        unset($assetsInContent[$asset]);
+                    }
+                }
+
+                foreach ($relations as $assetId => $data) {
+                    if (!isset($assetsInContent[$assetId])) {
+                        $this->unassignAsset->execute($assetId, $contentType, $contentEntityId, $contentField);
                     }
                 }
             }

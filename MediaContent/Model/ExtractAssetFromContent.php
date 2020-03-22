@@ -14,7 +14,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used for extracting media assets from a media content be the search pattern
+ * Used for extracting media asset list from a media content by the search pattern.
  */
 class ExtractAssetFromContent implements ExtractAssetFromContentInterface
 {
@@ -56,18 +56,21 @@ class ExtractAssetFromContent implements ExtractAssetFromContentInterface
     public function execute(string $content): array
     {
         try {
-            $assets = [];
             $contentDecoded = html_entity_decode($content);
             $pathMatches = [];
             foreach ($this->searchPattern as $pattern) {
                 preg_match_all($pattern, $contentDecoded, $matches, PREG_PATTERN_ORDER);
-                $pathMatches = array_merge($matches[1], $pathMatches);
+                $uniqueMatches = array_unique($matches[1]);
+                $pathMatches += $uniqueMatches;
             }
 
+            $assets = [];
             if (isset($pathMatches[0])) {
                 $assetPaths = array_unique($pathMatches);
                 foreach ($assetPaths as $path) {
-                    $assets[] = $this->getMediaAssetByPath->execute('/' . $path);
+                    /** @var AssetInterface $asset */
+                    $asset = $this->getMediaAssetByPath->execute('/' . $path);
+                    $assets[$asset->getId()] = $asset;
                 }
             }
 
