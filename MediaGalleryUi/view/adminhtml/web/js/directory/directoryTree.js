@@ -102,6 +102,22 @@ define([
         },
 
         /**
+         * Reload jstree and update jstreeevents
+         */
+        reloadJsTree: function () {
+            $.ajaxSetup({
+                async: false
+            });
+
+            this.getJsonTree();
+            this.initEvents();
+
+            $.ajaxSetup({
+                async: true
+            });
+        },
+
+        /**
          * Get json data for jstree
          */
         getJsonTree: function () {
