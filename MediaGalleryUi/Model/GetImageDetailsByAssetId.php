@@ -130,7 +130,7 @@ class GetImageDetailsByAssetId
                 ]
             ],
             'tags' => $tags,
-            'source' => $this->sourceIconProvider->getSourceIconUrl($asset->getSource()),
+            'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
             'content_type' => $type
         ];
     }
