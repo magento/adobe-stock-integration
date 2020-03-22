@@ -14,6 +14,7 @@ define([
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
+            deleteSelectedBtnSelector: '#delete_selected',
             targetElementId: null,
             selected: null,
             fields: {
@@ -126,8 +127,10 @@ define([
         toggleAddSelectedButton: function () {
             if (this.selected() === null) {
                 $(this.addSelectedBtnSelector).addClass('no-display');
+                $(this.deleteSelectedBtnSelector).addClass('no-display');
             } else {
                 $(this.addSelectedBtnSelector).removeClass('no-display');
+                $(this.deleteSelectedBtnSelector).removeClass('no-display');
             }
         }
     });

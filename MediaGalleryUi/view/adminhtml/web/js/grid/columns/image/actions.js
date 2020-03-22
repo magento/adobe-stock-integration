@@ -38,7 +38,9 @@ define([
             $(this.imageModel().addSelectedBtnSelector).click(function () {
                 this.insertImage();
             }.bind(this));
-
+            $(this.imageModel().deleteSelectedBtnSelector).click(function () {
+                this.deleteImageAction(this.imageModel().selected());
+            }.bind(this));
             return this;
         },
 
@@ -146,6 +148,8 @@ define([
                     message = message || $.mage.__('You have successfully removed the image.');
                     this.reloadGrid();
                     this.addMessage('success', message);
+                    $(this.imageModel().deleteSelectedBtnSelector).addClass('no-display');
+                    $(this.imageModel().addSelectedBtnSelector).addClass('no-display');
                 }.bind(this),
 
                 /**
