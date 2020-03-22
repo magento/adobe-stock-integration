@@ -92,7 +92,7 @@ class ContentProcessor
                 foreach ($assetsInContent as $asset) {
                     if (!isset($relations[$asset->getId()])) {
                         $this->assignAsset->execute($asset->getId(), $contentType, $contentEntityId, $contentField);
-                        unset($assetsInContent[$asset]);
+                        unset($assetsInContent[$asset->getId()]);
                     }
                 }
 

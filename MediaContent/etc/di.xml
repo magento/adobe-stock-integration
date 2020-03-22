@@ -15,7 +15,7 @@
         <arguments>
             <argument name="searchPattern" xsi:type="array">
                 <item name="media_gallery" xsi:type="string">({{media url="(.*?)"}})</item>
-                <item name="catalog_image" xsi:type="string">(\/media\/(.*?))</item>
+                <item name="catalog_image" xsi:type="string">(media\/(.*))</item>
             </argument>
         </arguments>
     </type>
