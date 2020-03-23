@@ -26,17 +26,25 @@ class FolderTree
     private $path;
 
     /**
+     * @var array
+     */
+    private $excludeDirectories;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param string $path
+     * @param array $excludeDirectories
      */
     public function __construct(
         Filesystem $filesystem,
-        string $path
+        string $path,
+        array $excludeDirectories
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;
+        $this->excludeDirectories = $excludeDirectories;
     }
 
     /**
@@ -67,7 +75,7 @@ class FolderTree
         }
 
         foreach ($directory->readRecursively() as $index => $path) {
-            if (!$directory->isDirectory($path)) {
+            if (!$directory->isDirectory($path) || in_array(explode('/', $path)[0], $this->excludeDirectories)) {
                 continue;
             }
 

@@ -15,6 +15,20 @@
             </argument>
         </arguments>
     </type>
+     <type name="Magento\MediaGalleryUi\Model\FilesIndexer">
+         <arguments>
+	      <argument name="excludedDirectories" xsi:type="array">
+                <item name="captcha" xsi:type="string">/pub\/media\/captcha/</item>
+                <item name="catalog" xsi:type="string">/pub\/media\/catalog/</item>
+                <item name="customer" xsi:type="string">/pub\/media\/customer/</item>
+                <item name="downloadable" xsi:type="string">/pub\/media\/downloadable/</item>
+                <item name="import" xsi:type="string">/pub\/media\/import/</item>
+                <item name="theme" xsi:type="string">/pub\/media\/theme/</item>
+                <item name="theme_customization" xsi:type="string">/pub\/media\/theme_customization/</item>
+                <item name="tmp" xsi:type="string">/pub\/media\/tmp/</item>
+	    </argument>
+        </arguments>
+     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
