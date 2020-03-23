@@ -13,7 +13,6 @@ use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Quota;
 use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\Framework\Controller\Result\Json;
-use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;

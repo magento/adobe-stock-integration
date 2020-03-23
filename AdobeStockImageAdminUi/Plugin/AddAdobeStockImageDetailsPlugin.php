@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Plugin;
 
 use Exception;
-use Magento\AdobeStockAsset\Model\Asset;
-use Magento\AdobeStockAsset\Model\AssetFactory;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
 use Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId;
 use Psr\Log\LoggerInterface;
@@ -27,7 +27,7 @@ class AddAdobeStockImageDetailsPlugin
     private $assetResourceModel;
 
     /**
-     * @var AssetFactory
+     * @var AssetInterfaceFactory
      */
     private $assetFactory;
 
@@ -40,12 +40,12 @@ class AddAdobeStockImageDetailsPlugin
      * AddAdobeStockImageDetailsPlugin constructor.
      *
      * @param AssetResourceModel $assetResourceModel
-     * @param AssetFactory $assetFactory
+     * @param AssetInterfaceFactory $assetFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
         AssetResourceModel $assetResourceModel,
-        AssetFactory $assetFactory,
+        AssetInterfaceFactory $assetFactory,
         LoggerInterface $logger
     ) {
         $this->assetResourceModel = $assetResourceModel;
@@ -68,7 +68,7 @@ class AddAdobeStockImageDetailsPlugin
         int $assetId
     ): array {
         try {
-            /** @var Asset $asset */
+            /** @var AssetInterface $asset */
             $asset = $this->assetFactory->create();
             $this->assetResourceModel->load($asset, $assetId, self::FIELD_MEDIA_GALLERY_ID);
 
