@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Plugin;
 
 use Exception;
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset as AssetResourceModel;
+use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId;
 use Psr\Log\LoggerInterface;
 
@@ -19,17 +21,22 @@ use Psr\Log\LoggerInterface;
  */
 class AddAdobeStockImageDetailsPlugin
 {
-    private const FIELD_MEDIA_GALLERY_ID = 'media_gallery_id';
+    private const MEDIA_GALLERY_ID = 'media_gallery_id';
 
     /**
-     * @var AssetResourceModel
+     * @var SearchCriteriaBuilder
      */
-    private $assetResourceModel;
+    private $searchCriteriaBuilder;
 
     /**
-     * @var AssetInterfaceFactory
+     * @var AssetRepositoryInterface
      */
-    private $assetFactory;
+    private $assetRepository;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
 
     /**
      * @var LoggerInterface
@@ -39,17 +46,20 @@ class AddAdobeStockImageDetailsPlugin
     /**
      * AddAdobeStockImageDetailsPlugin constructor.
      *
-     * @param AssetResourceModel $assetResourceModel
-     * @param AssetInterfaceFactory $assetFactory
+     * @param FilterBuilder $filterBuilder
+     * @param AssetRepositoryInterface $assetRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
-        AssetResourceModel $assetResourceModel,
-        AssetInterfaceFactory $assetFactory,
+        FilterBuilder $filterBuilder,
+        AssetRepositoryInterface $assetRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger
     ) {
-        $this->assetResourceModel = $assetResourceModel;
-        $this->assetFactory = $assetFactory;
+        $this->filterBuilder = $filterBuilder;
+        $this->assetRepository = $assetRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
     }
 
@@ -68,11 +78,20 @@ class AddAdobeStockImageDetailsPlugin
         int $assetId
     ): array {
         try {
-            /** @var AssetInterface $asset */
-            $asset = $this->assetFactory->create();
-            $this->assetResourceModel->load($asset, $assetId, self::FIELD_MEDIA_GALLERY_ID);
+            $mediaGalleryIdFilter = $this->filterBuilder->setField(self::MEDIA_GALLERY_ID)
+                ->setValue($assetId)
+                ->create();
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilter($mediaGalleryIdFilter)
+                ->setPageSize(1)
+                ->create();
 
-            if ($asset) {
+            /** @var AssetSearchResultsInterface $asset */
+            $result = $this->assetRepository->getList($searchCriteria);
+            if ($result->getTotalCount() > 0) {
+                $item = $result->getItems();
+                /** @var AssetInterface $asset */
+                $asset = reset($item);
                 $imageDetails['adobe_stock'] = [
                     [
                         'title' => __('ID'),

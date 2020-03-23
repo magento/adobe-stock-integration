@@ -38,6 +38,7 @@ class DataProvider extends UiComponentDataProvider
      * @param GetImageListInterface $getImageList
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,
