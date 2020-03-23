@@ -98,11 +98,16 @@ define([
          * @param {String} nodePath
          */
         setActiveNodeFilter: function (nodePath) {
+            var filters = {},
+                applied = this.filterChips().get('applied');
 
             if (this.activeNode() === nodePath) {
 
                 $(this.directoryTreeSelector).jstree('deselect_all');
-                this.filterChips().set('applied', {});
+
+                filters = $.extend(true, filters, applied);
+                delete filters.directory;
+                this.filterChips().set('applied', filters);
                 this.activeNode(null);
                 this.directories().setInActive();
             } else {
@@ -125,9 +130,13 @@ define([
          * @param {String} path
          */
         applyFilter: function (path) {
-            this.filterChips().set('applied', {
-                'directory': path
-            });
+            var filters = {},
+                applied = this.filterChips().get('applied');
+
+            filters = $.extend(true, filters, applied);
+            filters.directory = path;
+            this.filterChips().set('applied', filters);
+
         },
 
         /**
