@@ -6,9 +6,8 @@
 define([
     'jquery',
     'underscore',
-    'uiComponent',
-    'mage/translate'
-], function ($, _, Component, $t) {
+    'uiComponent'
+], function ($, _, Component) {
     'use strict';
 
     return Component.extend({
@@ -153,7 +152,7 @@ define([
          * @return {String}
          */
         getTagText: function (tagText, tagIndex) {
-            return tagText + ((this.image().tags.length - 1) === tagIndex ? '' : ',');
+            return tagText + (this.image().tags.length - 1 === tagIndex ? '' : ',');
         },
 
         /**
@@ -162,5 +161,5 @@ define([
         showMoreImageTags: function () {
             this.showAllTags(true);
         }
-    })
+    });
 });
