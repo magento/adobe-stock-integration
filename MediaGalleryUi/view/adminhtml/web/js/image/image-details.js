@@ -43,7 +43,7 @@ define([
         /**
          * Show image details by ID
          *
-         * @param imageId
+         * @param {String} imageId
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
@@ -97,7 +97,7 @@ define([
                 return;
             }
 
-            if (this.image() && this.image().image_id === imageId) {
+            if (this.image() && this.image()['image_id'] === imageId) {
                 this.openImageDetailsModal();
 
                 return;

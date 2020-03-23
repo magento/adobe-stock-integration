@@ -135,7 +135,7 @@ class FolderTree
             return $result;
         }
 
-        foreach ($treeNode['children'] as $idx => &$tnode) {
+        foreach ($treeNode['children'] as &$tnode) {
             if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
                 return $this->findParent($node, $tnode, $level + 1);
             }
