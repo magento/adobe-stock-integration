@@ -3,7 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery', 'underscore', 'uiElement', 'mage/translate'], function ($, _, Element, $t) {
+define([
+    'jquery',
+    'underscore',
+    'uiElement'
+], function ($, _, Element) {
     'use strict';
 
     return Element.extend({

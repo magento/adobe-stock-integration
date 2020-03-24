@@ -48,7 +48,7 @@ define([
             $(this.imageModel().deleteSelectedBtnSelector).click(function () {
                 this.deleteImageAction(this.imageModel().selected());
             }.bind(this));
-            
+
             return this;
         },
 
