@@ -71,6 +71,7 @@ class AddAdobeStockImageDetailsPlugin
      * @param int $assetId
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         GetImageDetailsByAssetId $getImageDetailsByAssetId,
