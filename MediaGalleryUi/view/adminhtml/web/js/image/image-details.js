@@ -6,9 +6,8 @@
 define([
     'jquery',
     'underscore',
-    'uiComponent',
-    'mage/translate'
-], function ($, _, Component, $t) {
+    'uiComponent'
+], function ($, _, Component) {
     'use strict';
 
     return Component.extend({
@@ -43,7 +42,7 @@ define([
         /**
          * Show image details by ID
          *
-         * @param imageId
+         * @param {Number} imageId
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
@@ -97,7 +96,7 @@ define([
                 return;
             }
 
-            if (this.image() && this.image().image_id === imageId) {
+            if (this.image() && this.image()['image_id'] === imageId) {
                 this.openImageDetailsModal();
 
                 return;
@@ -149,11 +148,11 @@ define([
          * Get tag text
          *
          * @param {String} tagText
-         * @param {Int} tagIndex
+         * @param {Number} tagIndex
          * @return {String}
          */
         getTagText: function (tagText, tagIndex) {
-            return tagText + ((this.image().tags.length - 1) === tagIndex ? '' : ',');
+            return tagText + (this.image().tags.length - 1 === tagIndex ? '' : ',');
         },
 
         /**
@@ -162,5 +161,5 @@ define([
         showMoreImageTags: function () {
             this.showAllTags(true);
         }
-    })
+    });
 });
