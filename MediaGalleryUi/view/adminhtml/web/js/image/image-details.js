@@ -148,7 +148,7 @@ define([
          * Get tag text
          *
          * @param {String} tagText
-         * @param {Int} tagIndex
+         * @param {Number} tagIndex
          * @return {String}
          */
         getTagText: function (tagText, tagIndex) {
