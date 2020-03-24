@@ -56,7 +56,9 @@ define([
             }
 
             //select folder
-            imageFolder = $('.jstree a:contains("' + imageFolderName + '")');
+            imageFolder = $('.jstree a').filter(function () {
+                return $.trim($(this).text()) === imageFolderName;
+            });
 
             if (imageFolder.length) {
                 imageFolder[0].click();

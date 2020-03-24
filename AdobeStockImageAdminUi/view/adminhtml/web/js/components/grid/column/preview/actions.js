@@ -6,12 +6,13 @@
 // jscs:enable
 define([
     'uiComponent',
+    'uiRegistry',
     'jquery',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html'
-], function (Component, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
+], function (Component, uiRegistry, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
     'use strict';
 
     return Component.extend({
@@ -25,6 +26,8 @@ define([
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            imageItems: [],
+            mediaGalleryProvider: 'media_gallery_listing.media_gallery_listing_data_source',
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -34,7 +37,24 @@ define([
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
                 messages: '${ $.messagesName }'
+            },
+            imports: {
+                imageItems: '${ $.mediaGalleryProvider }:data.items'
             }
+        },
+
+        /**
+         * Init observable variables
+         *
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'imageItems'
+                ]);
+
+            return this;
         },
 
         /**
@@ -101,7 +121,18 @@ define([
         selectDisplayedImageInMediaGallery: function () {
             var image = mediaGallery.locate(this.preview().displayedRecord().path);
 
-            image ? image.click() : mediaGallery.notLocated();
+            if (!image) {
+                mediaGallery.notLocated();
+                return;
+            }
+
+            if (!this.isMediaBrowser()) {
+                var recordIndex = image.closest('.masonry-image-column').data('repeat-index'),
+                    record = this.imageItems()[recordIndex];
+                uiRegistry.get('index = thumbnail_url').selected(record);
+            } else {
+                image.click();
+            }
         },
 
         /**
@@ -226,6 +257,16 @@ define([
                     this.messages().scheduleCleanup(this.messageDelay);
                 }
             });
+        },
+
+        /**
+         * Is the media browser used in the content of the grid
+         *
+         * @returns {boolean}
+         */
+        isMediaBrowser: function () {
+            let mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser');
+            return typeof mediaBrowser !== "undefined";
         },
 
         /**
