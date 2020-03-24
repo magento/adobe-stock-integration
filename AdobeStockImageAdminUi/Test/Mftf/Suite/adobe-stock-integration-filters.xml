@@ -17,6 +17,10 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockDisableActionGroup" stepKey="disableAdobeStock"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <include>
             <group name="adobe_stock_integration_filters"/>
