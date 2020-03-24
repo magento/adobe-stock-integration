@@ -119,16 +119,19 @@ define([
          * Selects displayed image in media gallery
          */
         selectDisplayedImageInMediaGallery: function () {
-            var image = mediaGallery.locate(this.preview().displayedRecord().path);
+            var image = mediaGallery.locate(this.preview().displayedRecord().path),
+                recordIndex,
+                record;
 
             if (!image) {
                 mediaGallery.notLocated();
+
                 return;
             }
 
             if (!this.isMediaBrowser()) {
-                var recordIndex = image.closest('.masonry-image-column').data('repeat-index'),
-                    record = this.imageItems()[recordIndex];
+                recordIndex = image.closest('.masonry-image-column').data('repeat-index');
+                record = this.imageItems()[recordIndex];
                 uiRegistry.get('index = thumbnail_url').selected(record);
             } else {
                 image.click();
@@ -262,11 +265,12 @@ define([
         /**
          * Is the media browser used in the content of the grid
          *
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         isMediaBrowser: function () {
             let mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser');
-            return typeof mediaBrowser !== "undefined";
+
+            return typeof mediaBrowser !== 'undefined';
         },
 
         /**
