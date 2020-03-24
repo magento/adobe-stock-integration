@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSeeMoreFromSeriesTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1006"/>
+            <title value="Cover User clicks See more button on Preview of the same image for the second time"/>
+            <description value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4314856"/>
+            <severity value="MAJOR"/>
+            <group value="adobe_stock_integration_see_more"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
+        <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
+        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnTabMoreForThisModel"/>
+        <wait stepKey="waitForScrollUp" time="5"/>
+        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
+
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGridSecondTime"/>
+        <waitForAjaxLoad stepKey="waitForRelatedImagesToLoadSecondTime"/>
+        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnTabMoreForThisModelSecondTime"/>
+        <wait stepKey="waitForScrollUpSecondTime" time="5"/>
+        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInputSecondTime"/>
+    </test>
+</tests>
