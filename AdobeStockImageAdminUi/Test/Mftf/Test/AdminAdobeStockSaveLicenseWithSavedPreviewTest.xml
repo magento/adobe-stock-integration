@@ -14,7 +14,6 @@
             <title value="Adobe Stock Previewed Licensed Image Save"/>
             <description value="User saves previously licensed image with saved preview into Magento Media Gallery"/>
             <severity value="AVERAGE"/>
-            <group value="adobe_stock_integration_license"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
