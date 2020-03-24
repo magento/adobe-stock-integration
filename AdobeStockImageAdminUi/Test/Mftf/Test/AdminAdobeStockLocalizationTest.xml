@@ -22,6 +22,8 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Deploy ru_RU locale static content -->
+            <magentoCLI command="setup:static-content:deploy" arguments="-f ru_RU --area adminhtml" stepKey="staticDeployBeforeChangeLocaleToRU"/>
             <!--Set Admin "Interface Locale" to ru_RU-->
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
                 <argument name="InterfaceLocaleByValue" value="ru_RU"/>
@@ -46,7 +48,7 @@
             <argument name="keyword" value="машина"/>
         </actionGroup>
         <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="assertCategoryLocalized">
-            <argument name="attributeName" value="Транспорт"/>
+            <argument name="attributeName" value="Индустрия"/>
         </actionGroup>
     </test>
 </tests>
