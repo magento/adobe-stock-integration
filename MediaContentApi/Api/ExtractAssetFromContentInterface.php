@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaContentApi\Api;
 
 /**
- * Extract media asset from a media content
+ * Extract media asset from a media content.
  */
 interface ExtractAssetFromContentInterface
 {
@@ -19,7 +19,6 @@ interface ExtractAssetFromContentInterface
      * @param string $content
      *
      * @return \Magento\MediaGalleryApi\Api\Data\AssetInterface[]
-     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function execute(string $content): array;
 }

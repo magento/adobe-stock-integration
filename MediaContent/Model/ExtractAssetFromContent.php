@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaContent\Model;
 
-use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContentApi\Api\ExtractAssetFromContentInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
@@ -62,22 +61,37 @@ class ExtractAssetFromContent implements ExtractAssetFromContentInterface
                     $pathMatches += $uniqueMatches;
                 }
             }
-
-            $assets = [];
-            if (isset($pathMatches[0])) {
-                $assetPaths = array_unique($pathMatches);
-                foreach ($assetPaths as $path) {
-                    /** @var AssetInterface $asset */
-                    $asset = $this->getMediaAssetByPath->execute('/' . $path);
-                    $assets[$asset->getId()] = $asset;
-                }
-            }
+            $assets = $this->loadAssetsFromContent($pathMatches);
 
             return $assets;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred while searching for asset in media content');
-            throw new IntegrationException($message);
         }
+    }
+
+    /**
+     * Load media assets from the found content media paths
+     *
+     * @param array $pathMatches
+     *
+     * @return AssetInterface[]
+     */
+    private function loadAssetsFromContent(array $pathMatches): array
+    {
+        $assets = [];
+        if (isset($pathMatches[0])) {
+            $assetPaths = array_unique($pathMatches);
+            foreach ($assetPaths as $path) {
+                try {
+                    /** @var AssetInterface $asset */
+                    $asset = $this->getMediaAssetByPath->execute('/' . $path);
+                    $assets[$asset->getId()] = $asset;
+                } catch (\Exception $exception) {
+                    $this->logger->critical($exception);
+                }
+            }
+        }
+
+        return $assets;
     }
 }
