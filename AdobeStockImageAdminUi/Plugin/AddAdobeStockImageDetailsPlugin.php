@@ -86,7 +86,7 @@ class AddAdobeStockImageDetailsPlugin
                 ->setPageSize(1)
                 ->create();
 
-            /** @var AssetSearchResultsInterface $asset */
+            /** @var AssetSearchResultsInterface $result */
             $result = $this->assetRepository->getList($searchCriteria);
             if ($result->getTotalCount() > 0) {
                 $item = $result->getItems();
