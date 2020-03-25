@@ -10,7 +10,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockAssertUserLoggedActionGroup">
         <waitForAjaxLoad stepKey="waitForIMSProfileToLoad"/>
-        <wait stepKey="waitForProfileLoad" time="30"/>
         <seeElement selector="{{AdobeStockSection.userImageSmall}}" stepKey="seeUserIcon" />
     </actionGroup>
 </actionGroups>
