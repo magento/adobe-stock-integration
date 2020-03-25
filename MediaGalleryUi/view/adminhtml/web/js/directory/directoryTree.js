@@ -71,9 +71,19 @@ define([
         },
 
         /**
+         * Remove ability to multiple select on nodes
+         */
+        overrideMultiselectBehavior: function () {
+            $.jstree.defaults.ui['select_range_modifier'] = false;
+            $.jstree.defaults.ui['select_multiple_modifier'] = false;
+        },
+
+        /**
          *  Handle jstree events
          */
         initEvents: function () {
+            this.overrideMultiselectBehavior();
+
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
                 var path = $(data.rslt.obj).data('path');
 
