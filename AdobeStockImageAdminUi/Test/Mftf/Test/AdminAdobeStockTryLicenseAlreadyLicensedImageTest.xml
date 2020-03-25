@@ -15,7 +15,7 @@
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1051731/scenarios/4406205"/>
             <description value="Admin User saved licensed image then logout and try license image again"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration"/>
+            <group value="adobe_stock_integration_license"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

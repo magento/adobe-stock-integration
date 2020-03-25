@@ -11,7 +11,8 @@
     <actionGroup name="AdminAdobeStockImsPopupClickSignInActionGroup">
         <click selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="clickOnSignInButton"/>
         <makeScreenshot stepKey="postIMSSignInClickScreenshot" userInput="SignInClick"/>
-        <switchToNextTab stepKey="switchToTab"/>
+        <wait stepKey="waitLoginIms" time="5"/>
+        <switchToPreviousTab stepKey="switchToGridImages"/>
         <waitForPageLoad stepKey="waitForGridToReload" time="20"/>
     </actionGroup>
 </actionGroups>
