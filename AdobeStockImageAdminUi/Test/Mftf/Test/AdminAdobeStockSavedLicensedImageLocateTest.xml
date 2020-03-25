@@ -39,6 +39,7 @@
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
+        <waitForElementVisible selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="waitForSaveLicensedButton"/>
         <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForPromptModal"/>
         <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="grabSaveImageFileName"/>

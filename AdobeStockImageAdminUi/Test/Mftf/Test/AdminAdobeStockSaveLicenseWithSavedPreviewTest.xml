@@ -23,14 +23,13 @@
         </before>
         <after>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImage">
+                <argument name="name" value="{{AdobeStockImageData.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserLoggedOut"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryToRemoveImage"/>
-            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImage">
-                <argument name="name" value="{{AdobeStockImageData.name}}"/>
-            </actionGroup>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
