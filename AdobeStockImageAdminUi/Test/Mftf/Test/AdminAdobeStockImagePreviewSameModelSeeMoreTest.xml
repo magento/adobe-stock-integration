@@ -15,7 +15,6 @@
             <title value="User searches for images from the same model as the currently viewed one"/>
             <description value="User sees images with the same model filtered grid"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_see_more"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
