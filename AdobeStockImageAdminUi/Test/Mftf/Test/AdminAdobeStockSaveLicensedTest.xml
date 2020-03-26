@@ -15,7 +15,6 @@
             <description value="User saves previously licensed image into Magento Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_license"/>
-            <group value="adobe_stock_integration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

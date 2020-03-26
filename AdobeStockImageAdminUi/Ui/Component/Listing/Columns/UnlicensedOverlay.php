@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
