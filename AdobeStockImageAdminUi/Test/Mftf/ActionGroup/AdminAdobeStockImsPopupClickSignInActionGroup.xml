@@ -12,7 +12,8 @@
         <click selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="clickOnSignInButton"/>
         <makeScreenshot stepKey="postIMSSignInClickScreenshot" userInput="SignInClick"/>
         <conditionalClick selector="#acceptBtn" dependentSelector=".permission-message" visible="true" stepKey="allowApplicationToAccessAdobeProfile"/>
-        <switchToNextTab stepKey="switchToTab"/>
+        <wait stepKey="waitLoginIms" time="5"/>
+        <switchToPreviousTab stepKey="switchToGridImages"/>
         <waitForPageLoad stepKey="waitForGridToReload" time="20"/>
     </actionGroup>
 </actionGroups>
