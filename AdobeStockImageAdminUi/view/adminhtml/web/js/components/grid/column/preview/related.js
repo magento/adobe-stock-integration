@@ -214,14 +214,14 @@ define([
         /**
          * Apply series or model id filter and scroll to top of the page
          *
-         * @param {string} type
+         * @param {string} typeId
          * @param {string} recordId
          */
-        applyFilter: function (type, recordId) {
+        applyFilter: function (typeId, recordId) {
             this.filterChips().set(
                 'applied',
                 {
-                    [type]: recordId
+                    [typeId]: recordId
                 }
             );
 
