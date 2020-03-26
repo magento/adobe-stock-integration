@@ -7,7 +7,10 @@
 <div class="media-gallery-wrap" collapsible>
     <div class="media-gallery-image">
         <div class="masonry-image-block media-gallery-image-block" attr="'data-id': $col.getId($row())" css="{ selected: isSelected($row()) }">
-            <img attr="src: $col.getUrl($row())" class="media-gallery-image-column" click="function(){ select($row()) }" data-role="thumbnail"/>
+            <img attr="src: $col.getUrl($row())"
+                 class="media-gallery-image-column"
+                 click="function(){ if (!$collapsible.opened()) {select($row())} }"
+                 data-role="thumbnail"/>
         </div>
         <ul class="action-menu" css="_active: $collapsible.opened">
             <!-- ko scope: actions -->
@@ -24,7 +27,9 @@
         </ul>
         <div class="media-gallery-image-actions">
             <div class="action-select-wrap">
-                <span class="three-dots" toggleCollapsible></span>
+                <span class="three-dots"
+                      toggleCollapsible
+                      click="function () {if (!isSelected($row()) || $collapsible.opened()) {select($row())}}"></span>
             </div>
         </div>
     </div>
