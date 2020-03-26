@@ -10,7 +10,9 @@ namespace Magento\MediaContent\Model;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\ExtractAssetFromContentInterface;
+use Magento\MediaContentApi\Api\AssignAssetInterface;
+use Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface;
+use Magento\MediaContentApi\Api\UnassignAssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Psr\Log\LoggerInterface;
 
@@ -20,22 +22,22 @@ use Psr\Log\LoggerInterface;
 class ContentProcessor
 {
     /**
-     * @var ExtractAssetFromContentInterface
+     * @var ExtractAssetFromContent
      */
     private $extractAssetFromContent;
 
     /**
-     * @var AssignAsset
+     * @var AssignAssetInterface
      */
     private $assignAsset;
 
     /**
-     * @var GetAssetsUsedInContent
+     * @var GetAssetsUsedInContentInterface
      */
     private $getAssetsUsedInContent;
 
     /**
-     * @var UnassignAsset
+     * @var UnassignAssetInterface
      */
     private $unassignAsset;
 
@@ -47,17 +49,17 @@ class ContentProcessor
     /**
      * ContentProcessor constructor.
      *
-     * @param ExtractAssetFromContentInterface $extractAssetFromContent
-     * @param AssignAsset $assignAsset
-     * @param GetAssetsUsedInContent $getAssetsUsedInContent
-     * @param UnassignAsset $unassignAsset
+     * @param ExtractAssetFromContent $extractAssetFromContent
+     * @param AssignAssetInterface $assignAsset
+     * @param GetAssetsUsedInContentInterface $getAssetsUsedInContent
+     * @param UnassignAssetInterface $unassignAsset
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ExtractAssetFromContentInterface $extractAssetFromContent,
-        AssignAsset $assignAsset,
-        GetAssetsUsedInContent $getAssetsUsedInContent,
-        UnassignAsset $unassignAsset,
+        ExtractAssetFromContent $extractAssetFromContent,
+        AssignAssetInterface $assignAsset,
+        GetAssetsUsedInContentInterface $getAssetsUsedInContent,
+        UnassignAssetInterface $unassignAsset,
         LoggerInterface $logger
     ) {
         $this->extractAssetFromContent = $extractAssetFromContent;
@@ -68,62 +70,47 @@ class ContentProcessor
     }
 
     /**
-     * Create new relation between media asset and content or updated existed.
+     * Create new relation between media asset and content or updated existing
      *
-     * @param string $contentEntityId
-     * @param array $contentData
-     * @param string $contentType
-     *
-     * @throws IntegrationException
+     * @param string $type
+     * @param string $field
+     * @param string $entityId
+     * @param string $data
      */
-    public function execute(string $contentEntityId, array $contentData, string $contentType): void
+    public function execute(string $type, string $field, string $entityId, string $data): void
     {
         try {
-            foreach ($contentData as $contentField => $content) {
-                $this->updateRelation(
-                    $content,
-                    $contentField,
-                    $contentEntityId,
-                    $contentType
-                );
-            }
+            $this->updateRelation($type, $field, $entityId, $data);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred at processing relation between media asset and content.');
-            throw new IntegrationException($message);
         }
     }
 
     /**
-     * Add s newly added asset to content relation or remove not actual.
+     * Records a relation for the newly added asset
      *
-     * @param string|null $content
-     * @param string $contentField
-     * @param string $contentEntityId
-     * @param string $contentType
-     *
+     * @param string $type
+     * @param string $field
+     * @param string $entityId
+     * @param string $data
      * @throws CouldNotDeleteException
      * @throws CouldNotSaveException
      * @throws IntegrationException
      */
-    private function updateRelation(
-        string $content = null,
-        string $contentField,
-        string $contentEntityId,
-        string $contentType
-    ) {
-        $relations = $this->getAssetsUsedInContent->execute($contentType, $contentEntityId, $contentField);
-        $assetsInContent = ($content !== null) ? $this->extractAssetFromContent->execute($content) : [];
+    private function updateRelation(string $type, string $field, string $entityId, string $data)
+    {
+        $relations = $this->getAssetsUsedInContent->execute($type, $entityId, $field);
+        $assetsInContent = $this->extractAssetFromContent->execute($data);
         /** @var AssetInterface $asset */
         foreach ($assetsInContent as $asset) {
             if (!isset($relations[$asset->getId()])) {
-                $this->assignAsset->execute($asset->getId(), $contentType, $contentEntityId, $contentField);
+                $this->assignAsset->execute($asset->getId(), $type, $entityId, $field);
             }
         }
 
-        foreach ($relations as $assetId => $data) {
+        foreach ($relations as $assetId => $relationData) {
             if (!isset($assetsInContent[$assetId])) {
-                $this->unassignAsset->execute($assetId, $contentType, $contentEntityId, $contentField);
+                $this->unassignAsset->execute($assetId, $type, $entityId, $field);
             }
         }
     }

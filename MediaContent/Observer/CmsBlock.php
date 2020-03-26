@@ -10,8 +10,8 @@ namespace Magento\MediaContent\Observer;
 use Magento\Cms\Block\Block;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContent\Model\ContentProcessor;
+use Magento\Framework\Model\AbstractModel;
+use Magento\MediaContent\Model\ModelProcessor;
 
 /**
  * Observe cms_block_save_after event and run processing relation between cms block content and media asset
@@ -21,9 +21,9 @@ class CmsBlock implements ObserverInterface
     private const CONTENT_TYPE = 'cms_block';
 
     /**
-     * @var ContentProcessor
+     * @var ModelProcessor
      */
-    private $contentProcessor;
+    private $processor;
 
     /**
      * @var array
@@ -31,37 +31,28 @@ class CmsBlock implements ObserverInterface
     private $fields;
 
     /**
-     * CmsBlock constructor.
+     * CatalogCategory constructor.
      *
-     * @param ContentProcessor $contentProcessor
+     * @param ModelProcessor $processor
      * @param array $fields
      */
-    public function __construct(ContentProcessor $contentProcessor, array $fields)
+    public function __construct(ModelProcessor $processor, array $fields)
     {
-        $this->contentProcessor = $contentProcessor;
+        $this->processor = $processor;
         $this->fields = $fields;
     }
 
     /**
-     * Get changed content data matches to the search interest and run relation processor.
+     * Retrieve the saved block and pass it to the model processor to save content - asset relations
      *
      * @param Observer $observer
-     *
-     * @throws IntegrationException
      */
     public function execute(Observer $observer): void
     {
-        $content = [];
-        /** @var Block $cmsBlock */
-        $cmsBlock = $observer->getEvent()->getObject();
-        foreach ($this->fields as $field) {
-            if ($cmsBlock->dataHasChangedFor($field)) {
-                $content[$field] = $cmsBlock->getData($field);
-            }
-        }
-
-        if (!empty($content)) {
-            $this->contentProcessor->execute((string)$cmsBlock->getId(), $content, self::CONTENT_TYPE);
+        /** @var Block $model */
+        $model = $observer->getEvent()->getData('object');
+        if ($model instanceof AbstractModel) {
+            $this->processor->execute(self::CONTENT_TYPE, $model, $this->fields);
         }
     }
 }
