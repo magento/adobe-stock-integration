@@ -193,6 +193,14 @@ define([
         },
 
         /**
+         * Set inactive all nodes, adds disable state to Delete Folder Button
+         */
+        setInActive: function () {
+            this.selectedFolder(null);
+            $(this.deleteButtonSelector).attr('disabled', true).addClass('disabled');
+        },
+
+        /**
          * Set active node, remove disable state from Delete Forlder button
          *
          * @param {String} folderId
