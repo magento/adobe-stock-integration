@@ -15,15 +15,12 @@
             <title value="User views stock license status in Media Gallery grid"/>
             <description value="User views stock license status in Media Gallery grid"/>
             <severity value="MAJOR"/>
-            <group value="adobe_stock_integration_license"/>
+            <group value="adobe_stock_integration_ims_signed"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
-            <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
-            <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
-            <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
         </before>
         <after>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
@@ -32,9 +29,7 @@
                 <argument name="name" value="{{AdobeStockImageData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
-            <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForAddPreviewImage"/>
@@ -50,6 +45,6 @@
             <argument name="enabled" value="1"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForSeeStatusImage"/>
-        <seeElement selector="{{AdobeStockSection.unlicensedImageLabel}}" stepKey="seeIsEnabledField"/>
+        <seeElement selector="{{AdobeStockSection.unlicensedImageLabel}}" stepKey="seeUnlicensedLabel"/>
     </test>
 </tests>
