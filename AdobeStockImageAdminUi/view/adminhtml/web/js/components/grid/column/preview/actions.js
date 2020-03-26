@@ -175,7 +175,7 @@ define([
         /**
          * Set the record as selected
          *
-         * @param image
+         * @param {Object} image
          */
         selectRecord: function (image) {
             var recordIndex = image.closest('.masonry-image-column').data('repeat-index'),
