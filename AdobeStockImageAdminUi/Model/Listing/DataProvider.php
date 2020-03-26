@@ -14,7 +14,6 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
@@ -39,6 +38,7 @@ class DataProvider extends UiComponentDataProvider
      * @param GetImageListInterface $getImageList
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,
@@ -73,7 +73,7 @@ class DataProvider extends UiComponentDataProvider
     {
         try {
             return $this->searchResultToOutput($this->getSearchResult());
-        } catch (LocalizedException $exception) {
+        } catch (\Exception $exception) {
             return [
                 'items' => [],
                 'totalRecords' => 0,
