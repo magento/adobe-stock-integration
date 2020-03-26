@@ -119,23 +119,69 @@ define([
          * Selects displayed image in media gallery
          */
         selectDisplayedImageInMediaGallery: function () {
-            var image = mediaGallery.locate(this.preview().displayedRecord().path),
-                recordIndex,
-                record;
-
-            if (!image) {
-                mediaGallery.notLocated();
-
-                return;
-            }
-
             if (!this.isMediaBrowser()) {
-                recordIndex = image.closest('.masonry-image-column').data('repeat-index');
-                record = this.imageItems()[recordIndex];
-                uiRegistry.get('index = thumbnail_url').selected(record);
+                this.selectDisplayedImageForNewMediaGallery()
             } else {
-                image.click();
+                this.selectDisplayedImageForOldMediaGallery();
             }
+        },
+
+        /**
+         * Selects displayed image in media gallery for old gallery
+         */
+        selectDisplayedImageForOldMediaGallery: function () {
+            var image = mediaGallery.locate(this.preview().displayedRecord().path);
+
+            image ? image.click() : mediaGallery.notLocated();
+        },
+
+        /**
+         * Selects displayed image in media gallery for new gallery
+         */
+        selectDisplayedImageForNewMediaGallery: function () {
+            var self = this,
+                imagePath = self.preview().displayedRecord().path,
+                imageFolders = mediaGallery.getImageFolders(imagePath),
+                imageFilename = imagePath.substring(imagePath.lastIndexOf('/') + 1),
+                locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])'),
+                image,
+                subscription;
+
+            if (!locatedImage.length) {
+                subscription = this.imageItems.subscribe(function () {
+                    locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])');
+                    image = locatedImage.length ? locatedImage : false;
+
+                    if (!image) {
+                        mediaGallery.notLocated();
+
+                        return;
+                    }
+
+                    self.selectRecord(image);
+                    subscription.dispose();
+                });
+            }
+
+            if (imageFolders.length) {
+                imageFolders[0].click();
+            }
+
+            if (locatedImage.length) {
+                this.selectRecord(locatedImage);
+            }
+        },
+
+        /**
+         * Set the record as selected
+         *
+         * @param image
+         */
+        selectRecord: function (image) {
+            var recordIndex = image.closest('.masonry-image-column').data('repeat-index'),
+                record = this.imageItems()[recordIndex];
+
+            uiRegistry.get('index = thumbnail_url').selected(record);
         },
 
         /**
