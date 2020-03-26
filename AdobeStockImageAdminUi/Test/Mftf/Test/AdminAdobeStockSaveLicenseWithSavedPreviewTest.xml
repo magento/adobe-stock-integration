@@ -35,7 +35,7 @@
 
         <!-- Not logged in user opens an image that is supposed to be licensed -->
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotSavedLicensedImage">
-            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImageForPreviewSave"/>
 
@@ -54,6 +54,7 @@
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImageWithSavedPreview">
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImageForPreviewSave"/>
         <actionGroup ref="AdminAdobeStockSaveLicensedActionGroup" stepKey="saveLicensedImage"/>
 
         <!-- User sees the saved image in media gallery without the name confirmation popup -->
