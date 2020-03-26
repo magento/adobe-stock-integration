@@ -22,11 +22,5 @@
         "psr-4": {
             "Magento\\AdobeStockAsset\\": ""
         }
-    },
-    "repositories": {
-        "stock-api-libphp": {
-            "type": "vcs",
-            "url": "git@github.com:adobe/stock-api-libphp.git"
-        }
     }
 }
