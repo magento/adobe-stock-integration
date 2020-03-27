@@ -162,7 +162,7 @@ define([
         getComfirmationPopupDeleteFolder: function () {
             confirm({
                 title: $.mage.__('Are you sure you want to delete ?'),
-                content: 'Are you sure you want to delete folder: ' + this.selectedFolder(),
+                content: 'Next folder is going to be deleted: ' + this.selectedFolder(),
                 actions: {
 
                     /**
