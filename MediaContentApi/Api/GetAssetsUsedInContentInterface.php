@@ -16,11 +16,11 @@ interface GetAssetsUsedInContentInterface
 {
     /**
      * @param string $contentType
-     * @param string|null $contentEntityId
-     * @param string|null $contentField
+     * @param string $contentEntityId
+     * @param string $contentField
      *
      * @return int[]
      * @throws \Magento\Framework\Exception\IntegrationException
      */
-    public function execute(string $contentType, string $contentEntityId = null, string $contentField = null): array;
+    public function execute(string $contentType, string $contentEntityId, string $contentField): array;
 }
