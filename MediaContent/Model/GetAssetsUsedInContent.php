@@ -48,7 +48,7 @@ class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
     /**
      * @inheritDoc
      */
-    public function execute(string $contentType, string $contentEntityId = null, string $contentField = null): array
+    public function execute(string $contentType, string $contentEntityId, string $contentField): array
     {
         try {
             $connection = $this->resourceConnection->getConnection();

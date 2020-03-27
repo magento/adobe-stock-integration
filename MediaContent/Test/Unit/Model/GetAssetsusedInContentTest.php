@@ -120,27 +120,27 @@ class GetAssetsusedInContentTest extends TestCase
             [
                 [
                     'type' => 'cms_page',
-                    'entity_id' => null,
+                    'entity_id' => '2',
                     'field' => 'content'
                 ],
                 [2425168]
             ],
             [
                 [
-                    'type' => 'cms_page',
+                    'type' => 'catalog_category',
                     'entity_id' => '1',
-                    'field' => null
+                    'field' => 'content'
                 ],
                 [9374858]
             ],
             [
                 [
-                    'type' => 'cms_page',
-                    'entity_id' => null,
-                    'field' => null
+                    'type' => 'cbm_block',
+                    'entity_id' => '1',
+                    'field' => 'content'
                 ],
-                [1234123, 2425168, 9374858]
-            ],
+                [9374858]
+            ]
         ];
     }
 }
