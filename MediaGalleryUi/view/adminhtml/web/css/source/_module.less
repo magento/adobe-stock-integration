@@ -101,9 +101,15 @@
 
             .three-dots {
                 &:before {
-                    content: '•••';
+                    content: "\2807";
                     cursor: pointer;
                     color: #9e9e9e;
+                    display: inline-block;
+                    font-size: 26px;
+
+                    .lib-rotate(
+                        @_rotation: 90deg;
+                    );
                 }
             }
         }
