@@ -15,7 +15,7 @@
             </argument>
         </arguments>
     </type>
-     <type name="Magento\MediaGalleryUi\Model\FilesIndexer">
+     <type name="Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories">
          <arguments>
 	      <argument name="excludedDirectories" xsi:type="array">
                 <item name="captcha" xsi:type="string">/pub\/media\/captcha/</item>
