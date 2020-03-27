@@ -7,8 +7,18 @@
 
     .media-gallery-container {
 
-        .page-main-actions > .page-actions > button.no-display {
-            display: none;
+        .page-main-actions {
+            .page-actions {
+                .media-gallery-add-selected {
+                    order: unset;
+                }
+            }
+
+            & > .page-actions {
+                & > button.no-display {
+                    display: none;
+                }
+            }
         }
 
         .jstree-default .jstree-hovered {
