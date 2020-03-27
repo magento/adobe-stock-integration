@@ -9,11 +9,16 @@ namespace Magento\AdobeStockImageAdminUi\Plugin;
 
 use Exception;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,6 +39,16 @@ class AddAdobeStockImageDetailsPlugin
     private $assetRepository;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
+     * @var CreatorRepositoryInterface
+     */
+    private $creatorRepository;
+
+    /**
      * @var FilterBuilder
      */
     private $filterBuilder;
@@ -48,17 +63,23 @@ class AddAdobeStockImageDetailsPlugin
      *
      * @param FilterBuilder $filterBuilder
      * @param AssetRepositoryInterface $assetRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param CreatorRepositoryInterface $creatorRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         FilterBuilder $filterBuilder,
         AssetRepositoryInterface $assetRepository,
+        CategoryRepositoryInterface $categoryRepository,
+        CreatorRepositoryInterface $creatorRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->assetRepository = $assetRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->creatorRepository = $creatorRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
     }
@@ -93,16 +114,7 @@ class AddAdobeStockImageDetailsPlugin
                 $item = $result->getItems();
                 /** @var AssetInterface $asset */
                 $asset = reset($item);
-                $imageDetails['adobe_stock'] = [
-                    [
-                        'title' => __('ID'),
-                        'value' => $asset->getId()
-                    ],
-                    [
-                        'title' => __('Status'),
-                        'value' => $asset->getIsLicensed() ? __('Licensed') : __('Unlicensed')
-                    ]
-                ];
+                $imageDetails['adobe_stock'] = $this->loadAssetsInfo($asset);
             }
         } catch (Exception $exception) {
             $this->logger->critical($exception);
@@ -110,5 +122,40 @@ class AddAdobeStockImageDetailsPlugin
         }
 
         return $imageDetails;
+    }
+
+    /**
+     * Get an Adobe Stock asset info details.
+     *
+     * @param AssetInterface $asset
+     *
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function loadAssetsInfo(AssetInterface $asset): array
+    {
+        /** @var CategoryInterface $assetCategory */
+        $assetCategory = $this->categoryRepository->getById($asset->getCategoryId());
+        /** @var CreatorInterface $assetCreator */
+        $assetCreator = $this->creatorRepository->getById($asset->getCreatorId());
+
+        return [
+            [
+                'title' => __('ID'),
+                'value' => $asset->getId(),
+            ],
+            [
+                'title' => __('Status'),
+                'value' => $asset->getIsLicensed() ? __('Licensed') : __('Unlicensed'),
+            ],
+            [
+                'title' => __('Category'),
+                'value' => $assetCategory->getName(),
+            ],
+            [
+                'title' => __('Author'),
+                'value' => $assetCreator->getName(),
+            ],
+        ];
     }
 }
