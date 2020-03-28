@@ -1,0 +1,47 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="image-details" if="image">
+    <div class="image-details-image">
+        <img attr="src: image().image_url"/>
+    </div>
+    <div class="image-details-sidebar">
+        <div class="image-details-section">
+            <h3 class="image-title" data-bind="text: image().title"></h3>
+            <div class="image-type">
+                <span class="source"><img if="image().source" class="adobe-stock-icon" data-bind="attr: { src: image().source }" /></span>
+                <span class="type" data-bind="text: image().content_type"></span>
+            </div>
+        </div>
+        <div class="general-details image-details-section" if="image().details">
+            <h3 data-bind="i18n: 'Details'"></h3>
+            <div class="attributes">
+                <each args="image().details">
+                    <div class="attribute"  if="value">
+                        <span class="title" data-bind="i18n: title"></span>
+                        <div class="value" data-bind="text: value"></div>
+                    </div>
+                </each>
+            </div>
+        </div>
+        <div class="tags image-details-section" if="image().tags.length">
+            <h3 data-bind="i18n: 'Tags'"></h3>
+            <div class="tags-list" data-bind="css: {'show-all-tags': showAllTags}">
+                <each args="data: image().tags, as: '$tag'">
+                    <span class="tag-item"
+                          data-bind="text: $parent.getTagText($tag, $index()),
+                                     css: {'show-more-item': ($index() + 1) > $parent.tagListLimit}"></span>
+                </each>
+            </div>
+            <div class="show-more-link-container">
+                <a href="#" class="show-more-link" if="image().tags.length > tagListLimit"
+                   data-bind="i18n: 'Show More', click: showMoreImageTags"></a>
+            </div>
+        </div>
+
+        <each args="getRegion('additional_image_details')" render=""/>
+    </div>
+</div>

@@ -16,7 +16,6 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3216729"/>
             <description value="Admin should be able to filters images by type"/>
             <severity value="MAJOR"/>
-            <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

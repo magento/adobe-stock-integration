@@ -6,8 +6,9 @@
 // jscs:enable
 define([
     'Magento_Ui/js/grid/columns/overlay',
-    'jquery'
-], function (overlay, $) {
+    'jquery',
+    'underscore'
+], function (overlay, $, _) {
     'use strict';
 
     return overlay.extend({
@@ -44,7 +45,7 @@ define([
          * Set Licensed images data.
          */
         updateLicensed: function () {
-            if (!this.login().user().isAuthorized) {
+            if (_.isUndefined(this.login()) || !this.login().user().isAuthorized) {
                 this.licensed({});
 
                 return;
