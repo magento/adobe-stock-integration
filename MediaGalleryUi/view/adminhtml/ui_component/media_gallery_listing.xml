@@ -26,6 +26,11 @@
                 <class>cancel action-quaternary</class>
                 <label translate="true">Cancel</label>
             </button>
+            <button name="upload_image">
+                <param name="on_click" xsi:type="string">jQuery('#image-uploader-input').click();</param>
+                <class>action-default scalable action-quaternary</class>
+                <label translate="true">Upload Image</label>
+            </button>
             <button name="delete_folder">
                 <param name="on_click" xsi:type="string">jQuery('#delete_folder').trigger('delete_folder');</param>
                 <param name="disabled" xsi:type="string">disabled</param>
