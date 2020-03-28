@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * @var $block \Magento\MediaGalleryUi\Block\Adminhtml\ImageUploader
+ */
+?>
+<div data-bind="scope: 'image-uploader'" class="media-gallery-image-uploader-container">
+    <input id="image-uploader-input"
+           type="file"
+           name="image"
+           data-mage-init='{
+               "Magento_MediaGalleryUi/js/image-uploader": <?= /* @noEscape */ $block->getComponentJsonConfig() ?>
+           }'
+    />
+</div>

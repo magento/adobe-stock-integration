@@ -21,6 +21,9 @@
                     <argument name="imageDetailsUrl" xsi:type="url" path="media_gallery/image/details"/>
                 </arguments>
             </block>
+            <block name="media.gallery.image.uploader.container"
+                   class="Magento\MediaGalleryUi\Block\Adminhtml\ImageUploader"
+                   template="Magento_MediaGalleryUi::image-uploader.phtml" />
         </block>
     </container>
 </layout>
