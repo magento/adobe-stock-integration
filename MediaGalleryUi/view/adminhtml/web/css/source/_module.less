@@ -14,8 +14,18 @@
     .media-gallery-container,
     .media_gallery-media-index {
 
-        .page-main-actions > .page-actions > button.no-display {
-            display: none;
+        .page-main-actions {
+            .page-actions {
+                .media-gallery-add-selected {
+                    order: unset;
+                }
+            }
+
+            & > .page-actions {
+                & > button.no-display {
+                    display: none;
+                }
+            }
         }
         .jstree-default .jstree-hovered {
             background: @color-folders-background;
@@ -108,9 +118,14 @@
             .three-dots {
                 &:before {
                     color: @color-masonry-grey;
-                    content: '•••';
+                    content: "\2807";
                     cursor: pointer;
+                    display: inline-block;
+                    font-size: 26px;
 
+                    .lib-rotate(
+                        @_rotation: 90deg;
+                    );
                 }
             }
         }

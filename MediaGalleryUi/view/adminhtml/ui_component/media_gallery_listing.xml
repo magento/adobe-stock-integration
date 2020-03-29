@@ -18,27 +18,32 @@
         <buttons>
             <button name="add_selected">
                 <param name="on_click" xsi:type="string">return false;</param>
-                <class>action-primary no-display</class>
+                <param name="sort_order" xsi:type="number">50</param>
+                <class>action-primary no-display media-gallery-add-selected</class>
                 <label translate="true">Add Selected</label>
             </button>
             <button name="cancel">
                 <param name="on_click" xsi:type="string">MediabrowserUtility.closeDialog();</param>
+                <param name="sort_order" xsi:type="number">10</param>
                 <class>cancel action-quaternary</class>
                 <label translate="true">Cancel</label>
             </button>
             <button name="delete_folder">
                 <param name="on_click" xsi:type="string">jQuery('#delete_folder').trigger('delete_folder');</param>
                 <param name="disabled" xsi:type="string">disabled</param>
+                <param name="sort_order" xsi:type="number">20</param>
                 <class>action-default scalable action-quaternary</class>
                 <label translate="true">Delete Folder</label>
             </button>
             <button name="create_folder">
                 <param name="on_click" xsi:type="string">jQuery('#create_folder').trigger('create_folder');</param>
+                <param name="sort_order" xsi:type="number">40</param>
                 <class>action-default scalable add</class>
                 <label translate="true">Create Folder</label>
             </button>
             <button name="delete_selected">
                 <param name="on_click" xsi:type="string">return false;</param>
+                <param name="sort_order" xsi:type="number">30</param>
                 <class>action-default scalable action-quaternary no-display</class>
                 <label translate="true">Delete Selected</label>
             </button>
