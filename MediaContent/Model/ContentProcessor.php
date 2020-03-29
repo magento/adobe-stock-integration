@@ -108,7 +108,7 @@ class ContentProcessor
             }
         }
 
-        foreach ($relations as $assetId => $relationData) {
+        foreach (array_keys($relations) as $assetId) {
             if (!isset($assetsInContent[$assetId])) {
                 $this->unassignAsset->execute($assetId, $type, $entityId, $field);
             }

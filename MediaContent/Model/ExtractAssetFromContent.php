@@ -56,10 +56,8 @@ class ExtractAssetFromContent
     {
         $paths = [];
 
-        $contentDecoded = html_entity_decode($content);
-
         foreach ($this->searchPatterns as $pattern) {
-            preg_match_all($pattern, $contentDecoded, $matches, PREG_PATTERN_ORDER);
+            preg_match_all($pattern, $content, $matches, PREG_PATTERN_ORDER);
             if (!empty($matches[1])) {
                 $paths += array_unique($matches[1]);
             }
