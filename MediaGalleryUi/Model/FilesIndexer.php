@@ -51,7 +51,7 @@ class FilesIndexer
         foreach ($iterator as $item) {
             $filePath = $item->getPath() . '/' . $item->getFileName();
             
-            if (!preg_match($filePathPattern, $filePath) || $this->excludedDirectories->validate($item->getPath())) {
+            if (!preg_match($filePathPattern, $filePath) || $this->excludedDirectories->isExcluded($item->getPath())) {
                 continue;
             }
 

@@ -17,7 +17,7 @@
     </type>
      <type name="Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories">
          <arguments>
-	      <argument name="excludedDirectories" xsi:type="array">
+	      <argument name="patterns" xsi:type="array">
                 <item name="captcha" xsi:type="string">/pub\/media\/captcha/</item>
                 <item name="catalog" xsi:type="string">/pub\/media\/catalog/</item>
                 <item name="customer" xsi:type="string">/pub\/media\/customer/</item>

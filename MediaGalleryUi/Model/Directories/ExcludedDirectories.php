@@ -8,35 +8,33 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model\Directories;
 
 /**
- * Excluded directories validator
+ * Directory paths that should not be included in the media gallery
  */
 class ExcludedDirectories
 {
     /**
      * @var array
      */
-    private $excludedDirectories;
+    private $patterns;
 
     /**
-     * Constructor
-     *
-     * @param array $excludedDirectories
+     * @param array $patterns
      */
     public function __construct(
-        array $excludedDirectories
+        array $patterns
     ) {
-        $this->excludedDirectories = $excludedDirectories;
+        $this->patterns = $patterns;
     }
 
     /**
-     * Validate if directory might be excluded
+     * Check if the path is excluded from displaying in the media gallery
      *
      * @param string $path
      * @return bool
      */
-    public function validate(string $path): bool
+    public function isExcluded(string $path): bool
     {
-        foreach ($this->excludedDirectories as $pattern) {
+        foreach ($this->patterns as $pattern) {
             preg_match($pattern, $path, $result);
 
             if ($result) {
