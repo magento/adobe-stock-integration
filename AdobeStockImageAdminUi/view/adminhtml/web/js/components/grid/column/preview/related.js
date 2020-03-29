@@ -218,12 +218,11 @@ define([
          * @param {String} recordId
          */
         applyFilter: function (typeId, recordId) {
-            this.filterChips().set(
-                'applied',
-                {
-                    [typeId]: recordId
-                }
-            );
+            var data = {};
+
+            data[typeId] = recordId;
+
+            this.filterChips().set('applied', data);
 
             this.scrollToFilter();
         },
