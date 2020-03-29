@@ -38,8 +38,9 @@
         </actionGroup>
         <grabAttributeFrom selector="{{AdobeStockSection.firstImageInGrid}}" userInput="src"
                            stepKey="getImageSrcAfterSecondSort"/>
-        <assertNotEquals expected="{$getImageSrcAfterFirstSort}" expectedType="string"
-                         actual="{$getImageSrcAfterSecondSort}" actualType="string"
-                         stepKey="assertImagesDifferentAfterSort"/>
+        <assertNotEquals stepKey="assertImagesDifferentAfterSort">
+            <actualResult type="string">{$getImageSrcAfterSecondSort}</actualResult>
+            <expectedResult type="string">{$getImageSrcAfterFirstSort}</expectedResult>
+        </assertNotEquals>
     </test>
 </tests>
