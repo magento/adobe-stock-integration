@@ -20,6 +20,19 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotSavedLicensedImage">
+                <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
+            <!-- Delete saved licensed image if isset-->
+            <conditionalClick visible="true" dependentSelector="{{AdobeStockImagePreviewSection.openInMediaGallery}}" selector="{{AdobeStockImagePreviewSection.openInMediaGallery}}" stepKey="openImageInMediaGalleryIfExist"/>
+            <wait time="2" stepKey="waitMediaGalleryLoad"/>
+            <conditionalClick visible="true" dependentSelector="{{AdobeStockSection.mediaGalleryDeleteButton}}" selector="{{AdobeStockSection.mediaGalleryDeleteButton}}" stepKey="clickDeleteBurtonIfExist"/>
+            <wait time="2" stepKey="waitForConfirmationModalIfExist"/>
+            <conditionalClick visible="true" dependentSelector="{{AdobeStockImagePreviewSection.confirm}}" selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmDeleteButtonIfExist"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageAgain"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         </before>
         <after>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
@@ -35,7 +48,7 @@
 
         <!-- Not logged in user opens an image that is supposed to be licensed -->
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotSavedLicensedImage">
-            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImageForPreviewSave"/>
 
@@ -48,13 +61,9 @@
         <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
         <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
         <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
-        <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
 
         <!-- The logged in user saves licensed image with previously saved preview -->
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImageWithSavedPreview">
-            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImageForPreviewSave"/>
+        <waitForElementVisible selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" time="30" stepKey="waitForSaveLicensedButtonAppears"/>
         <actionGroup ref="AdminAdobeStockSaveLicensedActionGroup" stepKey="saveLicensedImage"/>
 
         <!-- User sees the saved image in media gallery without the name confirmation popup -->
