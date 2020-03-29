@@ -62,8 +62,14 @@
         <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
         <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
 
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageAgain"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotSavedLicensedImageAgain">
+            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
+        </actionGroup>
+
         <!-- The logged in user saves licensed image with previously saved preview -->
-        <waitForElementVisible selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" time="30" stepKey="waitForSaveLicensedButtonAppears"/>
+        <waitForElementVisible selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="waitForSaveLicensedButtonAppears"/>
         <actionGroup ref="AdminAdobeStockSaveLicensedActionGroup" stepKey="saveLicensedImage"/>
 
         <!-- User sees the saved image in media gallery without the name confirmation popup -->
