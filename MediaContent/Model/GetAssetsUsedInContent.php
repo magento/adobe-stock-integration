@@ -59,11 +59,11 @@ class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
                 )->where(self::TYPE . ' = ?', $contentType);
 
             if (null !== $contentEntityId) {
-                $select = $select->where(self::ENTITY_ID . '= ?' . $contentEntityId);
+                $select = $select->where(self::ENTITY_ID . '= ?', $contentEntityId);
             }
 
             if (null !== $contentField) {
-                $select = $select->where(self::FIELD . '= ?' . $contentField);
+                $select = $select->where(self::FIELD . '= ?', $contentField);
             }
 
             return $connection->fetchAssoc($select);
