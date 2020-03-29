@@ -70,6 +70,7 @@ define([
                 window.MediabrowserUtility.closeDialog();
                 throw 'Target element not found for content update';
             }
+            //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             targetElement.val(record.thumbnail_url)
                 .data('size', record.size)
                 .data('mime-type', record.content_type)
