@@ -214,8 +214,8 @@ define([
         /**
          * Apply series or model id filter and scroll to top of the page
          *
-         * @param {string} typeId
-         * @param {string} recordId
+         * @param {String} typeId
+         * @param {String} recordId
          */
         applyFilter: function (typeId, recordId) {
             this.filterChips().set(
