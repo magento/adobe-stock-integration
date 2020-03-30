@@ -18,11 +18,11 @@ interface GetAssetsUsedInContentInterface
      * Get media asset ids used in the content
      *
      * @param string $contentType
-     * @param string $contentEntityId
-     * @param string $contentField
+     * @param string|null $contentEntityId
+     * @param string|null $contentField
      *
      * @return int[]
      * @throws \Magento\Framework\Exception\IntegrationException
      */
-    public function execute(string $contentType, string $contentEntityId, string $contentField): array;
+    public function execute(string $contentType, string $contentEntityId = null, string $contentField= null): array;
 }
