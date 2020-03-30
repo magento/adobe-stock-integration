@@ -142,6 +142,7 @@ define([
                 prompt({
                     title: $.mage.__(data.title),
                     content:  $.mage.__(data.content),
+                    modalClass: 'media-gallery-folder-prompt',
                     validation: true,
                     validationRules: ['required-entry', 'validate-alphanum'],
                     attributesField: {
