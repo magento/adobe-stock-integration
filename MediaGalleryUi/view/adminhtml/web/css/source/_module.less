@@ -91,16 +91,16 @@
             width: 89%;
 
             .name {
-                word-wrap: anywhere;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                display: -webkit-box;
                 font-size: 15px;
                 font-weight: bold;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
                 line-height: 18px;
                 max-height: 50px;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                word-wrap: anywhere;
             }
 
             .type {
