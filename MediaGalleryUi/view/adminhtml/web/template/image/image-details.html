@@ -27,7 +27,7 @@
                 </each>
             </div>
         </div>
-        <div class="tags image-details-section" if="image().tags">
+        <div class="tags image-details-section" if="image().tags.length">
             <h3 data-bind="i18n: 'Tags'"></h3>
             <div class="tags-list" data-bind="css: {'show-all-tags': showAllTags}">
                 <each args="data: image().tags, as: '$tag'">

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="adobe-stock-image-details image-details-section" if="$parent.image().adobe_stock">
+<div class="adobe-stock-image-details image-details-section" if="$parent.image().adobe_stock.length">
     <h3 data-bind="i18n: 'Adobe Stock'"></h3>
     <div class="attributes">
         <each args="$parent.image().adobe_stock">
