@@ -8,13 +8,6 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockSection">
-        <element name="folderNewModalHeader" type="block" selector="//h1[contains(text(), 'New Folder Name')]"/>
-        <element name="folderNewCreateButton" type="button" selector="#create_folder"/>
-        <element name="folderDeleteButton" type="button" selector="#delete_folder"/>
-        <element name="folderConfirmDeleteButton" type="button" selector="//button//span[contains(text(), 'OK')]"/>
-        <element name="folderNameField" type="button" selector="[name=folder_name]"/>
-        <element name="folderConfirmCreateButton" type="button" selector="//button/span[contains(text(),'Confirm')]"/>
-        <element name="folderNameValidationMessage" type="block" selector="label.mage-error"/>
         <element name="slideOutPanelButton" type="button" selector="[data-ui-id=wysiwyg-images-content-search-adobe-stock-button]"/>
         <element name="unlicensedImageLabel" type="button" selector="//span[text()='Unlicensed']"/>
         <element name="modal" type="block" selector="aside.adobe-stock-modal"/>

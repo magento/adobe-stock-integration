@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenNewFolderFormActionGroup">
-        <click selector="{{AdobeStockSection.folderNewCreateButton}}" stepKey="clickCreateNewFolderButton"/>
-        <waitForElementVisible selector="{{AdobeStockSection.folderNewModalHeader}}" stepKey="waitForModalOpen"/>
+        <click selector="{{AdobeStockFolderSection.folderNewCreateButton}}" stepKey="clickCreateNewFolderButton"/>
+        <waitForElementVisible selector="{{AdobeStockFolderSection.folderNewModalHeader}}" stepKey="waitForModalOpen"/>
     </actionGroup>
 </actionGroups>

@@ -37,7 +37,7 @@
             <argument name="name" value="{{AdobeStockInvalidFolderData.name}}"/>
         </actionGroup>
 
-        <grabTextFrom selector="{{AdobeStockSection.folderNameValidationMessage}}" stepKey="grabValidationMessage"/>
+        <grabTextFrom selector="{{AdobeStockFolderSection.folderNameValidationMessage}}" stepKey="grabValidationMessage"/>
         <assertContains stepKey="assertFirst">
             <actualResult type="variable">grabValidationMessage</actualResult>
             <expectedResult type="string">Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.</expectedResult>
