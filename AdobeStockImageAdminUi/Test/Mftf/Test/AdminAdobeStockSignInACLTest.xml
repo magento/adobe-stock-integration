@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockACLTest">
+    <test name="AdminAdobeStockSignInACLTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
-            <stories value="[Story #19] User controls access to Adobe Stock images from Admin Panel in ACL"/>
-            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/42"/>
-            <title value="User controls access to Adobe Stock images from Admin Panel in ACL"/>
-            <description value="User controls access to Adobe Stock images from Admin Panel in ACL"/>
+            <stories value="[Story #19] User controls access to Adobe Stock sign in from Admin Panel in ACL"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/966"/>
+            <title value="User controls access to Adobe Stock sign in from Admin Panel in ACL"/>
+            <description value="User controls access to Adobe Stock sign in from Admin Panel in ACL"/>
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218882"/>
             <severity value="MAJOR"/>
             <group value="adobe_stock_integration_configuration"/>
@@ -37,7 +37,8 @@
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
-        <!--Create user role-->
+
+        <!-- Create user role -->
         <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Adobe Stock"/>
@@ -47,8 +48,10 @@
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Adobe Stock"/>
         </actionGroup>
-        <scrollTo selector="{{AdobeStockSection.systemAclActions}}"  x="0" y="-100" stepKey="scrollToResourceElement"/>
-        <click stepKey="clickAdobeSystemActions" selector="{{AdobeStockSection.systemAclActions}}"/>
+
+        <!-- Select Adobe IMS role resource -->
+        <scrollTo selector="{{AdobeStockSection.adobeImsACL}}" x="0" y="-100" stepKey="scrollToResourceElement"/>
+        <click stepKey="clickAdobeIMSActions" selector="{{AdobeStockSection.adobeImsACL}}"/>
 
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleAddEditNewPages">
             <argument name="User" value="adminRole"/>
@@ -56,33 +59,33 @@
         </actionGroup>
         <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
 
-        <!--Create user and assign role to it-->
+        <!-- Create user and assign role to it -->
         <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
             <argument name="role" value="adminRole"/>
             <argument name="User" value="admin2"/>
         </actionGroup>
 
-        <!--Log out of admin and login with newly created user-->
+        <!-- Log out of admin and login with newly created user -->
         <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
             <argument name="adminUser" value="admin2"/>
         </actionGroup>
 
-        <!-- verify that user can access to adobe stock image -->
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithAccess"/>
-        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithAccess"/>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
-                           stepKey="getUrlFromFirstImageWithoutSearch"/>
+        <!-- Verify that user can see Adobe Stock sign in button -->
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithIMSAccess"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithIMSAccess"/>
+        <seeElement stepKey="seeAdobeStockSigninButton" selector="{{AdobeStockSection.adobeSignIn}}"/>
 
-        <!--Change user role to not accessible -->
+        <!-- Remove Adobe IMS role access -->
         <actionGroup ref="logout" stepKey="logout"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <wait stepKey="test" time="30"/>
         <actionGroup ref="AdminNavigateToCreatedUserRoleActionGroup" stepKey="navigateToUserRoleEditPage">
             <argument name="userRoleName" value="{{adminRole.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="removeRestrictedRole">
             <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Adobe Stock"/>
+            <argument name="restrictedRole" value="Adobe IMS"/>
         </actionGroup>
         <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="saveRole" />
         <actionGroup ref="logout" stepKey="logoutAdmin"/>
@@ -90,9 +93,10 @@
             <argument name="adminUser" value="admin2"/>
         </actionGroup>
 
-        <!-- verify that user can't access to adobe stock image -->
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutAccess"/>
-        <dontSeeElement selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="dontSeeAdobeStockSearchButton" />
+        <!-- Verify that user can't see to Adobe Stock sign in button -->
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutIMSAccess"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithoutIMSAccess"/>
+        <dontSeeElement stepKey="doNotSeeAdobeStockSigninButton" selector="{{AdobeStockSection.adobeSignIn}}"/>
         <actionGroup ref="logout" stepKey="logoutFromCreatedUser"/>
     </test>
 </tests>

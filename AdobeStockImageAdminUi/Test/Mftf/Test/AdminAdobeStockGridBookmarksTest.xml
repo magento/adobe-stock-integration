@@ -5,18 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockGridFiltersTest">
+    <test name="AdminAdobeStockGridBookmarksTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="[Story #1] User accesses stock images from Magento Admin"/>
-            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/22"/>
-            <title value="User has access to filters"/>
-            <description value="User is able to see the available Adobe Stock images filters"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/860"/>
+            <title value="User has access to bookmarks"/>
+            <description value="User is able to see and use the available Adobe Stock grid bookmarks"/>
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3222613"/>
-            <severity value="BLOCKER"/>
+            <severity value="CRITICAL"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -28,26 +27,15 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
-                           stepKey="getUrlWithoutFilters"/>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSubcategoryFilter">
-            <argument name="filterName" value="Subcategory"/>
-        </actionGroup>
-        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkOrientationFilter">
-            <argument name="filterName" value="Orientation"/>
-        </actionGroup>
-        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkColorFilter">
-            <argument name="filterName" value="Color"/>
-        </actionGroup>
         <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Price"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkSafeSearchFilter">
-            <argument name="filterName" value="Safe search"/>
+        <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToStandard">
+            <argument name="type" value="Standard"/>
+            <argument name="filter" value="{{AdobeStockFilterSection.premiumPriceFilter}}"/>
+            <argument name="filterOption" value="premium_price_filter"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkIsolatedAssetsFilter">
-            <argument name="filterName" value="Isolated Assets"/>
-        </actionGroup>
+        <actionGroup ref="AdminAdobeStockSaveViewActionGroup" stepKey="saveAndDeleteView"/>
     </test>
 </tests>

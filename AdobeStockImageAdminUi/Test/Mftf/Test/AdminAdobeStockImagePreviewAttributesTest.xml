@@ -16,7 +16,6 @@
             <title value="User views the image details"/>
             <description value="Admin should be able to see images attributes in the image preview"/>
             <severity value="BLOCKER"/>
-            <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -25,22 +24,22 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
 
         <!-- Assert that image attributes visible "-->
-        <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeDimension">
+        <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="verifyAttributeDimension">
             <argument name="attributeName" value="Dimensions"/>
         </actionGroup>
-        <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeFileType">
+        <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="verifyAttributeFileType">
             <argument name="attributeName" value="File type"/>
         </actionGroup>
-        <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeCategory">
+        <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="verifyAttributeCategory">
             <argument name="attributeName" value="Category"/>
         </actionGroup>
-        <actionGroup ref="AssertVisibleImagePreviewAttributesActionGroup" stepKey="verifyAttributeFile">
+        <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="verifyAttributeFile">
             <argument name="attributeName" value="File #"/>
         </actionGroup>
         <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
@@ -48,8 +47,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
 
         <!-- Assert that file # attribute changed "-->
-        <assertNotContains actual="$getFileAttributeValue"
-                           expected="AdobeStockImagePreviewSection.attribute('File #')" expectedType="string"
-                           stepKey="assertAttributeFileChanged"/>
+        <assertNotContains stepKey="assertAttributeFileChanged">
+            <actualResult type="string">{$getFileAttributeValue}</actualResult>
+            <expectedResult type="string">AdobeStockImagePreviewSection.attribute('File #')</expectedResult>
+        </assertNotContains>
     </test>
 </tests>

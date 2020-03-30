@@ -16,7 +16,6 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579509"/>
             <description value="User sees images with the same series"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_see_more"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -25,7 +24,7 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -33,7 +32,7 @@
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
         <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
-        <actionGroup ref="AssertNumberOfImagesUnderMoreForThisSeriesActionGroup" stepKey="assertImagesUnderMoreForThisSeriesCount">
+        <actionGroup ref="AssertAdminAdobeStockImagesNumberMoreForThisSeriesActionGroup" stepKey="assertImagesUnderMoreForThisSeriesCount">
             <argument name="imagesNumber" value="4"/>
         </actionGroup>
     </test>

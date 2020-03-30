@@ -16,7 +16,6 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218324"/>
             <description value="Admin should be able to filters safe content images"/>
             <severity value="MAJOR"/>
-            <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -25,10 +24,10 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        
+
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForCars">
             <argument name="query" value="cars"/>
         </actionGroup>
@@ -40,7 +39,7 @@
             <actualResult type="variable">$countWithoutSafeFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
         </assertNotContains>
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Disabled"/>
         </actionGroup>
     </test>
