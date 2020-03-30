@@ -65,7 +65,14 @@ use Magento\Backend\Block\Template;
                     "mediaGalleryImageActions": {
                         "component": "Magento_MediaGalleryUi/js/image/image-actions",
                         "modalSelector": ".media-gallery-image-details-modal",
+                        "deleteImageUrl": "<?= $block->escapeUrl($block->getData('imageDeleteUrl')); ?>",
                         "actionsList": [
+                            {
+                                "title": "<?= $block->escapeJs(__('Delete Image')); ?>",
+                                "handler": "deleteImageAction",
+                                "name": "delete",
+                                "classes": "action-default scalable delete action-quaternary"
+                            },
                             {
                                 "title": "<?= $block->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
