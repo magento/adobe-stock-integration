@@ -8,11 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateNewFolderActionGroup">
+    <actionGroup name="AdminAssertFolderDoesNotExistActionGroup">
         <arguments>
             <argument name="name" type="string" defaultValue="{{AdobeStockValidFolderData.name}}"/>
         </arguments>
-        <fillField selector="{{AdobeStockFolderSection.folderNameField}}" userInput="{{name}}" stepKey="setFolderName" />
-        <click selector="{{AdobeStockFolderSection.folderConfirmCreateButton}}" stepKey="clickCreateButton"/>
+        <wait time="5" stepKey="waitForFolderTreeReloads"/>
+        <dontSeeElement selector="//div[contains(@class, 'media-directory-container')]//a[contains(text(), '{{name}}')]" stepKey="folderDoesNotExist"/>
     </actionGroup>
 </actionGroups>
