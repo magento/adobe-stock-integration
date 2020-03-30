@@ -3,6 +3,20 @@
  * See COPYING.txt for license details.
  */
 
+//
+//  Variables
+//  _____________________________________________
+
+@jstree-hovered-border-color: #7185f5;
+@jstree-hovered-background-color: #cdecf6;
+@three-dots-color: #9e9e9e;
+@image-type-label-color: #666;
+@image-attribute-title-color: #666;
+@masonry-image-overlay-background-color: #d9631c;
+@masonry-image-column-background-color: #e1e1e1;
+@media-gallery-image-block-selected-border-color: #4682b4;
+@masonry-image-description-background-color: #fff;
+
 & when (@media-common = true) {
 
     .media-gallery-container {
@@ -22,9 +36,9 @@
         }
 
         .jstree-default .jstree-hovered {
+            background: @jstree-hovered-background-color;
+            border-color: @jstree-hovered-border-color;
             border-radius: 6px;
-            background:#cdecf6;
-            border-color:#7185f5;
         }
 
         .jstree-default .jstree-leaf a .jstree-icon {
@@ -37,8 +51,8 @@
 
         .jstree-default .jstree-no-dots .jstree-open > a > ins {
             background-position: -52px -38px;
-            width: 29px;
             height: 20px;
+            width: 29px;
         }
 
         .jstree a > ins {
@@ -55,38 +69,38 @@
         }
 
         .jstree a {
-            padding-top: 4px;
-            padding-left: 6px;
             height: 30px;
-            width: 100%;
             margin: 1px;
+            padding-left: 6px;
+            padding-top: 4px;
+            width: 100%;
         }
 
         .jstree-default .jstree-clicked {
+            background: @jstree-hovered-background-color;
+            border-color: @jstree-hovered-border-color;
             border-radius: 6px;
-            background:#cdecf6;
-            border: solid 0.14em;
-            border-color:#7185f5;
+            border: solid .14em;
         }
 
         .masonry-image-overlay {
-            margin-left: 120px;
-            background-color: #d9631c;
-            margin-top: 170px;
+            background-color: @masonry-image-overlay-background-color;
             font-size: 11px;
+            margin-left: 120px;
+            margin-top: 170px;
             padding: .3rem;
         }
 
         .media-gallery-image-details {
+            float: left;
             list-style: none;
             margin-bottom: 0;
-            width: 90%;
             position: absolute;
-            float: left;
+            width: 90%;
 
             .name {
-                font-weight: bold;
                 font-size: 15px;
+                font-weight: bold;
             }
 
             .type {
@@ -104,16 +118,16 @@
         }
 
         .media-gallery-image-actions {
-            width: 10%;
-            position: absolute;
             float: right;
+            position: absolute;
             right: 0;
+            width: 10%;
 
             .three-dots {
                 &:before {
+                    color: @three-dots-color;
                     content: "\2807";
                     cursor: pointer;
-                    color: #9e9e9e;
                     display: inline-block;
                     font-size: 26px;
 
@@ -125,66 +139,66 @@
         }
 
         .media-gallery-image {
-            text-align: center;
-            margin: 0 auto;
-            width: 200px;
             height: 200px;
+            margin: 0 auto;
             position: relative;
+            text-align: center;
+            width: 200px;
         }
 
         .masonry-image-description {
+            background-color: @masonry-image-description-background-color;
             min-height: 90px;
-            background-color: white;
             padding-top: 10px;
             position: relative;
         }
 
         .masonry-image-column {
+            background-color: @masonry-image-column-background-color;
             width: 200px;
-            background-color: #e1e1e1;
         }
 
         .media-directory-container {
-            padding-right: 40px;
             float: left;
+            padding-right: 40px;
         }
 
         .media-gallery-image-block {
-            position: relative;
-            margin: 0 auto;
             height: 200px;
+            margin: 0 auto;
+            position: relative;
             &.selected {
-                border: 5px solid steelblue;
+                border: 5px solid @media-gallery-image-block-selected-border-color;
             }
         }
 
         .media-gallery-image {
             img {
+                bottom: 0;
+                height: auto;
+                left: 0;
+                margin: auto;
                 max-height: 100%;
                 max-width: 100%;
-                width: auto;
-                height: auto;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                margin: auto;
                 padding: 5px;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: auto;
             }
 
             .action-menu {
                 bottom: 0;
-                top: auto;
                 float: right;
                 left: auto;
+                top: auto;
                 z-index: 100;
             }
         }
 
         .adobe-stock-icon {
-            width: 29px;
             margin-bottom: -6px;
+            width: 29px;
         }
 
         .masonry-image-grid {
@@ -199,30 +213,30 @@
 
         .image-type {
             .adobe-stock-icon {
-                width: 29px;
                 margin-bottom: -6px;
+                width: 29px;
             }
 
             .type {
-                color: #666666;
+                color: @image-type-label-color;
             }
         }
 
         .image-details {
             .image-details-image {
-                width: auto;
-                max-width: 70%;
                 float: left;
+                max-width: 70%;
+                width: auto;
             }
 
             .image-details-sidebar {
+                float: left;
                 max-width: 30%;
                 padding-left: 40px;
-                float: left;
 
                 .image-details-section {
-                    .lib-clearfix();
                     margin-bottom: 40px;
+                    .lib-clearfix();
                 }
 
                 h3.image-title {
@@ -232,22 +246,22 @@
                 .attributes {
                     .attribute {
                         &:not(:last-child) {
-                            padding-bottom: 20px;
                             margin-bottom: 20px;
+                            padding-bottom: 20px;
                         }
 
                         & > * {
-                            width: 50%;
                             float: left;
+                            width: 50%;
                         }
 
                         .value {
-                            float: right;
                             display: inline;
+                            float: right;
                         }
 
                         .title {
-                            color: #666666;
+                            color: @image-attribute-title-color;
                         }
                     }
                 }
