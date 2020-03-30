@@ -78,13 +78,15 @@
         }
 
         .media-gallery-image-details {
+	    
             list-style: none;
             margin-bottom: 0;
-            width: 90%;
+            width: 87%;
             position: absolute;
             float: left;
 
             .name {
+		word-wrap: anywhere;
                 font-weight: bold;
                 font-size: 15px;
             }
@@ -111,15 +113,8 @@
 
             .three-dots {
                 &:before {
-                    content: "\2807";
+                    content: url("@{baseDir}Magento_MediaGalleryUi/images/3-dots.png");
                     cursor: pointer;
-                    color: #9e9e9e;
-                    display: inline-block;
-                    font-size: 26px;
-
-                    .lib-rotate(
-                        @_rotation: 90deg;
-                    );
                 }
             }
         }
