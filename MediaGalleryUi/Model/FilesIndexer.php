@@ -15,15 +15,12 @@ use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
  */
 class FilesIndexer
 {
-
     /**
-     * @var array
+     * @var ExcludedDirectories
      */
     private $excludedDirectories;
 
     /**
-     * FilesIndexer constructor.
-     *
      * @param ExcludedDirectories $excludedDirectories
      */
     public function __construct(
@@ -50,7 +47,7 @@ class FilesIndexer
         /** @var \SplFileInfo $item */
         foreach ($iterator as $item) {
             $filePath = $item->getPath() . '/' . $item->getFileName();
-            
+
             if (!preg_match($filePathPattern, $filePath) || $this->excludedDirectories->isExcluded($item->getPath())) {
                 continue;
             }
