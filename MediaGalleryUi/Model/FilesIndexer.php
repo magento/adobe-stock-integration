@@ -8,12 +8,27 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
+use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
 
 /**
  * Recursively iterate over files and call each indexer for each file
  */
 class FilesIndexer
 {
+    /**
+     * @var ExcludedDirectories
+     */
+    private $excludedDirectories;
+
+    /**
+     * @param ExcludedDirectories $excludedDirectories
+     */
+    public function __construct(
+        ExcludedDirectories $excludedDirectories
+    ) {
+        $this->excludedDirectories = $excludedDirectories;
+    }
+
     /**
      * Recursively iterate over files and call each indexer for each file
      *
@@ -33,7 +48,7 @@ class FilesIndexer
         foreach ($iterator as $item) {
             $filePath = $item->getPath() . '/' . $item->getFileName();
 
-            if (!preg_match($filePathPattern, $filePath)) {
+            if (!preg_match($filePathPattern, $filePath) || $this->excludedDirectories->isExcluded($item->getPath())) {
                 continue;
             }
 
