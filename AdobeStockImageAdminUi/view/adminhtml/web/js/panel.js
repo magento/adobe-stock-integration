@@ -36,7 +36,13 @@ define([
                 title: $t('Adobe Stock')
             }).on('openModal', function () {
                 this.masonry().setLayoutStylesWhenLoaded();
-            }.bind(this)).applyBindings();
+            }.bind(this));
+
+            try {
+                $(this.containerId).applyBindings();
+            } catch (e) {
+                //already bounded
+            }
 
             $(window).on('fileDeleted.mediabrowser', this.reloadGrid.bind(this));
 
