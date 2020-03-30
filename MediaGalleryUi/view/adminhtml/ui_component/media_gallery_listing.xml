@@ -162,4 +162,8 @@
             </settings>
         </column>
     </columns>
+    <container name="media_gallery_image_uploader"
+               class="Magento\MediaGalleryUi\Ui\Component\ImageUploader"
+               template="Magento_MediaGalleryUi/image-uploader"
+               component="Magento_MediaGalleryUi/js/image-uploader"/>
 </listing>

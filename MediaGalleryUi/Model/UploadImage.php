@@ -64,7 +64,7 @@ class UploadImage
         if (!$mediaDirectory->isDirectory($path)) {
             throw new LocalizedException(__('Directory %1 does not exist in media directory.', $path));
         }
-        $uploadResult = $this->imagesStorage->uploadFile($path, $type);
+        $uploadResult = $this->imagesStorage->uploadFile($mediaDirectory->getAbsolutePath($path), $type);
         return $this->getSplFileInfo->execute($uploadResult['path'] . '/' . $uploadResult['file']);
     }
 }
