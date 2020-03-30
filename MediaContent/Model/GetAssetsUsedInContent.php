@@ -48,7 +48,7 @@ class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
     /**
      * @inheritDoc
      */
-    public function execute(string $contentType, string $contentEntityId, string $contentField): array
+    public function execute(string $contentType, string $contentEntityId = null, string $contentField = null): array
     {
         try {
             $connection = $this->resourceConnection->getConnection();
@@ -56,10 +56,15 @@ class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
                 ->from(
                     $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME),
                     self::ASSET_ID
-                )
-                ->where(self::TYPE . ' = ?', $contentType)
-                ->where(self::ENTITY_ID . ' = ?', $contentEntityId)
-                ->where(self::FIELD . ' = ?', $contentField);
+                )->where(self::TYPE . ' = ?', $contentType);
+
+            if (null !== $contentEntityId) {
+                $select = $select->where(self::ENTITY_ID . '= ?', $contentEntityId);
+            }
+
+            if (null !== $contentField) {
+                $select = $select->where(self::FIELD . '= ?', $contentField);
+            }
 
             return $connection->fetchAssoc($select);
         } catch (\Exception $exception) {

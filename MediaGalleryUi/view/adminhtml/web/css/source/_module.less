@@ -7,8 +7,18 @@
 
     .media-gallery-container {
 
-        .page-main-actions > .page-actions > button.no-display {
-            display: none;
+        .page-main-actions {
+            .page-actions {
+                .media-gallery-add-selected {
+                    order: unset;
+                }
+            }
+
+            & > .page-actions {
+                & > button.no-display {
+                    display: none;
+                }
+            }
         }
 
         .jstree-default .jstree-hovered {
@@ -101,9 +111,15 @@
 
             .three-dots {
                 &:before {
-                    content: '•••';
+                    content: "\2807";
                     cursor: pointer;
                     color: #9e9e9e;
+                    display: inline-block;
+                    font-size: 26px;
+
+                    .lib-rotate(
+                        @_rotation: 90deg;
+                    );
                 }
             }
         }
@@ -169,6 +185,10 @@
         .adobe-stock-icon {
             width: 29px;
             margin-bottom: -6px;
+        }
+
+        .masonry-image-grid {
+            margin: 10px 0;
         }
     }
 

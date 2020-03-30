@@ -83,6 +83,8 @@ class GetAssetsusedInContentTest extends TestCase
 
     /**
      * Configure resource connection for the command. Based on the current implementation.
+     *
+     * @param array $expectedAssetIdList
      */
     private function configureResourceConnectionStub(array $expectedAssetIdList): void
     {
@@ -120,26 +122,26 @@ class GetAssetsusedInContentTest extends TestCase
             [
                 [
                     'type' => 'cms_page',
-                    'entity_id' => '2',
+                    'entity_id' => null,
                     'field' => 'content'
                 ],
-                [2425168]
+                [1234123, 2425168]
             ],
             [
                 [
                     'type' => 'catalog_category',
                     'entity_id' => '1',
-                    'field' => 'content'
+                    'field' => null
                 ],
-                [9374858]
+                [1234123]
             ],
             [
                 [
                     'type' => 'cbm_block',
-                    'entity_id' => '1',
-                    'field' => 'content'
+                    'entity_id' => null,
+                    'field' => null
                 ],
-                [9374858]
+                [1234123, 2425168]
             ]
         ];
     }
