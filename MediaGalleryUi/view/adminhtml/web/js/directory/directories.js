@@ -7,9 +7,10 @@ define([
     'jquery',
     'uiComponent',
     'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/alert',
     'underscore',
     'Magento_Ui/js/modal/prompt'
-], function ($, Component, confirm, _, prompt) {
+], function ($, Component, confirm, uiAlert, _, prompt) {
     'use strict';
 
     return Component.extend({
@@ -108,8 +109,9 @@ define([
                     } else {
                         message = response.responseJSON.message;
                     }
-                    this.messages().add('error', message);
-                    this.messages().scheduleCleanup(this.messageDelay);
+                    uiAlert({
+                        content: message
+                    });
                 }
             });
 
