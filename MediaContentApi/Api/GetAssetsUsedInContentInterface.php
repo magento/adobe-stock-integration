@@ -24,5 +24,5 @@ interface GetAssetsUsedInContentInterface
      * @return int[]
      * @throws \Magento\Framework\Exception\IntegrationException
      */
-    public function execute(string $contentType, string $contentEntityId = null, string $contentField= null): array;
+    public function execute(string $contentType, string $contentEntityId = null, string $contentField = null): array;
 }
