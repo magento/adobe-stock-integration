@@ -6,19 +6,23 @@
             "thumbnail_url": true,
             "preview_url": true,
             "content_type": true,
-            "source_icon_url": true,
             "name": true,
             "width": true,
             "height": true,
+            "size": true,
             "created_at": true,
-            "updated_at": true
+            "updated_at": true,
+            "keywords": true,
+            "source": true
         },
         "index": {
             "MEDIA_GALLERY_ID": true,
-            "MEDIA_GALLERY_ASSET_GRID_ID": true
+            "MEDIA_GALLERY_ASSET_GRID_ID": true,
+            "MEDIA_GALLERY_ASSET_GRID_NAME_KEYWORDS": true
         },
         "constraint": {
-            "PRIMARY": true
+            "PRIMARY": true,
+            "MEDIA_GALLERY_ASSET_GRID_ID_MEDIA_GALLERY_ASSET_ID": true
         }
     }
 }

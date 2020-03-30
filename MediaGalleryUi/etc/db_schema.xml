@@ -12,17 +12,26 @@
         <column xsi:type="varchar" name="thumbnail_url" length="255" nullable="true" comment="Thumbnail Url"/>
         <column xsi:type="varchar" name="preview_url" length="255" nullable="true" comment="Preview Url"/>
         <column xsi:type="varchar" name="content_type" length="255" nullable="true" comment="Content Type"/>
-        <column xsi:type="varchar" name="source_icon_url" length="255" nullable="true" comment="Image Source Icon Url"/>
+        <column xsi:type="varchar" name="source" length="255" nullable="true" comment="Image Source"/>
         <column xsi:type="varchar" name="name" length="255" nullable="true" comment="Image Name"/>
         <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
         <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="int" name="size" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Size"/>
         <column xsi:type="datetime" name="created_at" nullable="true" comment="Uploaded Date"/>
         <column xsi:type="datetime" name="updated_at" nullable="true" comment="Modification Date"/>
+        <column xsi:type="text" name="keywords" nullable="true" comment="Comma separated keywords"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
+        <constraint xsi:type="foreign" referenceId="MEDIA_GALLERY_ASSET_GRID_ID_MEDIA_GALLERY_ASSET_ID"
+                    table="media_gallery_asset_grid" column="id" referenceTable="media_gallery_asset"
+                    referenceColumn="id" onDelete="CASCADE"/>
         <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
             <column name="id"/>
+        </index>
+        <index referenceId="MEDIA_GALLERY_ASSET_GRID_NAME_KEYWORDS" indexType="fulltext">
+            <column name="name"/>
+            <column name="keywords"/>
         </index>
     </table>
 </schema>

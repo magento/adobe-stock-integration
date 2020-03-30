@@ -81,8 +81,11 @@ class SaveImage implements SaveImageInterface
     private $saveAssetKeywords;
 
     /**
-     * SaveImage constructor.
-     *
+     * @var SetLicensedInMediaGalleryGrid
+     */
+    private $setLicensedInMediaGalleryGrid;
+
+    /**
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
      * @param GetByIdInterface $getMediaAssetById
@@ -93,6 +96,7 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToAsset $documentToAsset
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
+     * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      */
     public function __construct(
         StorageSave $storageSave,
@@ -104,7 +108,8 @@ class SaveImage implements SaveImageInterface
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         DocumentToAsset $documentToAsset,
         SaveAssetKeywordsInterface $saveAssetKeywords,
-        DocumentToKeywords $documentToKeywords
+        DocumentToKeywords $documentToKeywords,
+        SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
     ) {
         $this->storageSave = $storageSave;
         $this->storageDelete = $storageDelete;
@@ -116,6 +121,7 @@ class SaveImage implements SaveImageInterface
         $this->documentToAsset = $documentToAsset;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
+        $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
     }
 
     /**
@@ -160,5 +166,6 @@ class SaveImage implements SaveImageInterface
 
         $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
         $this->saveAdobeStockAsset->execute($asset);
+        $this->setLicensedInMediaGalleryGrid->execute($asset);
     }
 }

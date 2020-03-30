@@ -1,0 +1,4 @@
+"Get related images list failed: %error","Get related images list failed: %error"
+"An error occurred during related images serialization: %error","An error occurred during related images serialization: %error"
+"Failed to delete the image: %error","Failed to delete the image: %error"
+"Image with the same file name already exits.","Image with the same file name already exits."

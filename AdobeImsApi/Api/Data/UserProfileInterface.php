@@ -19,16 +19,16 @@ interface UserProfileInterface extends ExtensibleDataInterface
     /**
      * Get ID
      *
-     * @return int
+     * @return int|null
      */
     public function getId();
 
     /**
      * Get user ID
      *
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int;
+    public function getUserId(): ?int;
 
     /**
      * Set user ID
@@ -86,9 +86,9 @@ interface UserProfileInterface extends ExtensibleDataInterface
     /**
      * Get account type
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccountType(): string;
+    public function getAccountType(): ?string;
 
     /**
      * Set account type
@@ -131,9 +131,9 @@ interface UserProfileInterface extends ExtensibleDataInterface
     /**
      * Get creation time
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreatedAt(): string;
+    public function getCreatedAt(): ?string;
 
     /**
      * Set creation time
@@ -146,9 +146,9 @@ interface UserProfileInterface extends ExtensibleDataInterface
     /**
      * Get update time
      *
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAt(): string;
+    public function getUpdatedAt(): ?string;
 
     /**
      * Set update time

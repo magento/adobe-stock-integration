@@ -18,6 +18,9 @@ use Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface;
  */
 class ImagesIndexer implements ImagesIndexerInterface
 {
+    /**
+     *  Regular expression for image extension
+     */
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
 
     /**
@@ -59,7 +62,9 @@ class ImagesIndexer implements ImagesIndexerInterface
         $this->filesIndexer->execute(
             $this->mediaDirectory->getAbsolutePath(),
             $this->indexers,
-            \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS,
+            \FilesystemIterator::SKIP_DOTS |
+            \FilesystemIterator::UNIX_PATHS |
+            \RecursiveDirectoryIterator::FOLLOW_SYMLINKS,
             self::IMAGE_FILE_NAME_PATTERN
         );
     }

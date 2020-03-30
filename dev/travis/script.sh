@@ -15,11 +15,13 @@ if [ $TEST_SUITE == 'phpstan' ];
 then
     composer require --dev phpstan/phpstan fooman/phpstan-magento2-magic-methods;
     vendor/bin/phpstan analyse -l 2 app/code/Magento/Adobe* -a dev/tests/api-functional/framework/autoload.php;
+    vendor/bin/phpstan analyse -l 2 app/code/Magento/MediaGalleryU* -a dev/tests/api-functional/framework/autoload.php;
 fi
 
 if [ $TEST_SUITE == 'static' ]; then
-    vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/Magento/Adobe*;
+    vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/Magento/Adobe* app/code/Magento/MediaGalleryU*;
     ! find app/code/Magento/Adobe*/ -type f -name "*.php" -exec grep -L strict_types=1 {} + | grep Adobe;
+    ! find app/code/Magento/MediaGalleryU*/ -type f -name "*.php" -exec grep -L strict_types=1 {} + | grep Media;
 fi
 
 if [ $TEST_SUITE == 'functional' ]; then

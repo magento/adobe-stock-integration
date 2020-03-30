@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaGalleryUi\Console\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
+use Magento\Framework\Console\Cli;
 use Magento\MediaGalleryUi\Model\ImagesIndexer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +31,7 @@ class IndexAssets extends Command
     private $state;
 
     /**
-     * Constructor
+     * IndexAssets constructor.
      *
      * @param ImagesIndexer $imagesIndexer
      * @param State $state
@@ -43,7 +46,7 @@ class IndexAssets extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -52,7 +55,7 @@ class IndexAssets extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -61,5 +64,6 @@ class IndexAssets extends Command
             $this->imagesIndexer->execute();
         });
         $output->writeln('Completed assets indexing.');
+        return Cli::RETURN_SUCCESS;
     }
 }

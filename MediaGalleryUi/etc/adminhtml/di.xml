@@ -6,15 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\MediaGalleryUi\Ui\Options\Directory">
+    <type name="Magento\MediaGalleryUi\Model\Directories\FolderTree">
         <arguments>
             <argument name="path" xsi:type="string">media</argument>
         </arguments>
-    </type>
-    <type name="Magento\Ui\Component\Form\Element\DataType\Media\Image">
-        <plugin name="updateOpenDialogUrl" type="Magento\MediaGalleryUi\Plugin\UpdateOpenDialogUrl"/>
-    </type>
-    <type name="Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider">
-        <plugin name="updateWysiwygOpenDialogUrl" type="Magento\MediaGalleryUi\Plugin\UpdateWysiwygOpenDialogUrl"/>
     </type>
 </config>

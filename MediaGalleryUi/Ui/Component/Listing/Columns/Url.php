@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns;
 
 use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 
@@ -46,16 +48,47 @@ class Url extends Column
      *
      * @param array $dataSource
      * @return array
+     * @throws NoSuchEntityException
      */
     public function prepareDataSource(array $dataSource): array
     {
-        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $mediaUrl . $item[$this->getData('name')];
+                $item[$this->getData('name')] = $this->getUrl($item[$this->getData('name')]);
             }
         }
 
         return $dataSource;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function prepare(): void
+    {
+        parent::prepare();
+        $this->setData(
+            'config',
+            array_replace_recursive(
+                (array)$this->getData('config'),
+                [
+                    'targetElementId' => $this->context->getRequestParam('target_element_id')
+                ]
+            )
+        );
+    }
+
+    /**
+     * Get URL for the provided media asset path
+     *
+     * @param string $path
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    private function getUrl(string $path): string
+    {
+        /** @var Store $store */
+        $store = $this->storeManager->getStore();
+        return $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $path;
     }
 }

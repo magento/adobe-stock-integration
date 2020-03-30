@@ -16,7 +16,6 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218832"/>
             <description value="Admin should be able to filter images by Isolated images"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -36,7 +35,7 @@
             <actualResult type="variable">$countWithoutSafeFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
         </assertNotContains>
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Isolated Only"/>
         </actionGroup>
     </test>

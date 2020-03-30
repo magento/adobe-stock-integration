@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Backend\Block\Template;
+
+/** @var Template $block */
+?>
+
+<script type="text/x-magento-init">
+{
+    "#media-gallery-image-details": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "mediaGalleryImageDetails": {
+                    "children": {
+                        "adobeStockImageDetails": {
+                            "displayArea": "additional_image_details",
+                            "component": "uiElement",
+                            "template": "Magento_AdobeStockImageAdminUi/image/adobe-stock-image-details"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</script>

@@ -15,6 +15,20 @@
             </argument>
         </arguments>
     </type>
+     <type name="Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories">
+         <arguments>
+	      <argument name="patterns" xsi:type="array">
+                <item name="captcha" xsi:type="string">/pub\/media\/captcha/</item>
+                <item name="catalog" xsi:type="string">/pub\/media\/catalog/</item>
+                <item name="customer" xsi:type="string">/pub\/media\/customer/</item>
+                <item name="downloadable" xsi:type="string">/pub\/media\/downloadable/</item>
+                <item name="import" xsi:type="string">/pub\/media\/import/</item>
+                <item name="theme" xsi:type="string">/pub\/media\/theme/</item>
+                <item name="theme_customization" xsi:type="string">/pub\/media\/theme_customization/</item>
+                <item name="tmp" xsi:type="string">/pub\/media\/tmp/</item>
+	    </argument>
+        </arguments>
+     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -37,5 +51,13 @@
     </virtualType>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface">
         <plugin name="updateAssetInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetInGrid"/>
+    </type>
+    <type name="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface">
+        <plugin name="updateAssetKeywordsInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetKeywordsInGrid"/>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\UpdateAssetInGrid">
+        <arguments>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
     </type>
 </config>

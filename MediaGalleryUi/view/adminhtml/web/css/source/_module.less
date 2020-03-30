@@ -2,26 +2,97 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+@color-folders-background: #a6a6a6;
+@color-folders-background-selected: #cdecf6;
+@color-folders-border: #7185f5;
+@color-masonry-overlay: #d9631c;
+@color-masonry-grey: #9e9e9e;
+@color-masonry-white: #e1e1e1;
 
 & when (@media-common = true) {
 
-    .media-gallery-container {
+    .media-gallery-container,
+    .media_gallery-media-index{
+
+        .page-main-actions {
+            .page-actions {
+                .media-gallery-add-selected {
+                    order: unset;
+                }
+            }
+
+            & > .page-actions {
+                & > button.no-display {
+                    display: none;
+                }
+            }
+        }
+        .jstree-default .jstree-hovered {
+            background: @color-folders-background;
+            border-color: @color-folders-border;
+            border-radius: 6px;
+        }
+
+        .jstree-default .jstree-leaf a .jstree-icon {
+            background-position: -52px -16px;
+        }
+
+
+        .jstree-default a .jstree-icon {
+            background-position: -52px -16px;
+        }
+
+        .jstree-default .jstree-no-dots .jstree-open > a > ins {
+            background-position: -52px -38px;
+            height: 20px;
+            width: 29px;
+        }
+
+        .jstree a > ins {
+            height: 22px;
+            width: 20px;
+        }
+
+        .jstree-default .jstree-no-dots .jstree-leaf > ins {
+            background-image: none;
+        }
+
+        .jstree-default ins {
+            background-image: url("@{baseDir}Magento_MediaGalleryUi/images/d.png");
+        }
+
+        .jstree a {
+            height: 30px;
+            margin: 1px;
+            padding-left: 6px;
+            padding-top: 4px;
+            width: 100%;
+        }
+
+        .jstree-default .jstree-clicked {
+            background: @color-folders-background-selected;
+            border: .14em solid @color-folders-border;
+            border-radius: 6px;
+        }
 
         .masonry-image-overlay {
-            margin-left: 120px;
-            background-color: #d9631c;
-            margin-top: 170px;
+            background-color: @color-masonry-overlay;
             font-size: 11px;
+            margin-left: 120px;
+            margin-top: 170px;
             padding: .3rem;
         }
 
         .media-gallery-image-details {
+            float: left;
             list-style: none;
             margin-bottom: 0;
+            position: absolute;
+            width: 90%;
 
             .name {
-                font-weight: bold;
                 font-size: 15px;
+                font-weight: bold;
             }
 
             .type {
@@ -38,59 +109,186 @@
             }
         }
 
+        .media-gallery-image-actions {
+            float: right;
+            position: absolute;
+            right: 0;
+            width: 10%;
+
+            .three-dots {
+                &:before {
+                    color: @color-masonry-grey;
+                    content: '\2807';
+                    cursor: pointer;
+                    display: inline-block;
+                    font-size: 26px;
+
+                    .lib-rotate(
+                        @_rotation: 90deg;
+                    );
+                }
+            }
+        }
+
         .media-gallery-image {
-            text-align: center;
-            margin: 0 auto;
-            width: 200px;
             height: 200px;
+            margin: 0 auto;
+            position: relative;
+            text-align: center;
+            width: 200px;
         }
 
         .masonry-image-description {
+            background-color: @color-white;
             min-height: 90px;
-            background-color: white;
             padding-top: 10px;
+            position: relative;
         }
 
         .masonry-image-column {
+            background-color: @color-masonry-white;
             width: 200px;
-            background-color: #e1e1e1 !important;
+        }
+
+        .media-directory-container {
+            float: left;
+            padding-right: 40px;
         }
 
         .media-gallery-image-block {
-            padding: 25px;
-            margin: 0 auto;
             height: 200px;
+            margin: 0 auto;
+            position: relative;
+
             &.selected {
                 border: 5px solid steelblue;
             }
         }
 
-        .media-gallery-image img {
-            object-fit: cover;
-        }
+        .media-gallery-image {
+            img {
+                bottom: 0;
+                height: auto;
+                left: 0;
+                margin: auto;
+                max-height: 100%;
+                max-width: 100%;
+                padding: 5px;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: auto;
+            }
 
-        .adobe-stock-icon {
-            width: 29px !important;
-            margin-bottom: -6px;
-        }
-
-        .masonry-sorting {
-            display: inline-block;
-
-            select {
-                border: none;
-                background-image: url(../images/arrows-bg.svg);
-                padding-right: 2.2rem;
-
-                &:active {
-                    background-image+: url('../images/arrows-bg.svg');
-                }
+            .action-menu {
+                bottom: 0;
+                float: right;
+                left: auto;
+                top: auto;
+                z-index: 100;
             }
         }
 
-        .masonry-results-number {
-            display: inline-block;
-            margin-right: 1.4rem;
+        .adobe-stock-icon {
+            margin-bottom: -6px;
+            width: 29px;
         }
+
+        .masonry-image-grid {
+            margin: 10px 0;
+        }
+    }
+
+    .media-gallery-image-details-modal {
+        .page-action-buttons {
+            float: right;
+        }
+
+        .image-type {
+            .adobe-stock-icon {
+                margin-bottom: -6px;
+                width: 29px;
+            }
+
+            .type {
+                color: @color-very-dark-gray;
+            }
+        }
+
+        .image-details {
+            .image-details-image {
+                float: left;
+                max-width: 70%;
+                width: auto;
+            }
+
+            .image-details-sidebar {
+                float: left;
+                max-width: 30%;
+                padding-left: 40px;
+
+                .image-details-section {
+                    .lib-clearfix();
+                    margin-bottom: 40px;
+                }
+
+                h3.image-title {
+                    font-weight: bold;
+                }
+
+                .attributes {
+                    .attribute {
+                        &:not(:last-child) {
+                            margin-bottom: 20px;
+                            padding-bottom: 20px;
+                        }
+
+                        & > * {
+                            float: left;
+                            width: 50%;
+                        }
+
+                        .value {
+                            display: inline;
+                            float: right;
+                        }
+
+                        .title {
+                            color: @color-very-dark-gray;
+                        }
+                    }
+                }
+
+                .tags {
+                    .tags-list {
+                        margin-bottom: 10px;
+
+                        .show-more-item {
+                            display: none;
+                        }
+
+                        &.show-all-tags {
+                            margin-bottom: 0;
+
+                            .show-more-item {
+                                display: inline;
+                            }
+
+                            & + .show-more-link-container {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .masonry-image-sortby {
+        display: inline-block;
+    }
+
+    .masonry-results-number {
+        display: inline-block;
+        margin-right: 1.4rem;
     }
 }

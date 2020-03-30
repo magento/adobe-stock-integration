@@ -17,7 +17,6 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579522"/>
             <description value="Admin should be able to able to see keywords in the image preview"/>
             <severity value="MAJOR"/>
-            <group value="adobe_stock_integration_keywords"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -37,7 +36,7 @@
         <executeJS function="document.querySelector('.keywords').scrollIntoView()" stepKey="scrollToKeywords"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
         <seeElement selector="{{AdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>
-        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCount">
+        <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCount">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
         <executeJS function="return document.querySelector('.keywords').childElementCount;" stepKey="expandedKeywordsCount"/>
@@ -55,7 +54,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="navigateToPreviousImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
-        <actionGroup ref="AssertNumberOfKeywordsInImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
+        <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
         <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButton"/>
