@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery">
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
                 <argument name="enabled" value="1"/>
             </actionGroup>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
