@@ -90,6 +90,7 @@ class UpdateAssetInGrid
                     'source' => $asset->getSource(),
                     'width' => $asset->getWidth(),
                     'height' => $asset->getHeight(),
+                    'size' => $asset->getSize(),
                     'created_at' => $asset->getCreatedAt(),
                     'updated_at' => $asset->getUpdatedAt(),
                     'keywords' => implode(",", $keywords) ?: null

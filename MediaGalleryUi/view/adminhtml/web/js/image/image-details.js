@@ -42,7 +42,7 @@ define([
         /**
          * Show image details by ID
          *
-         * @param {Number} imageId
+         * @param {String} imageId
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {

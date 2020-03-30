@@ -78,6 +78,7 @@ class AssetIndexer implements IndexerInterface
      * Create MediaGallery asset and save it to database based on file information
      *
      * @param \SplFileInfo $item
+     * @throws \Exception
      */
     public function execute(\SplFileInfo $item): void
     {
@@ -94,6 +95,7 @@ class AssetIndexer implements IndexerInterface
                     'updated_at' => (new \DateTime())->setTimestamp($item->getMTime())->format('Y-m-d H:i:s'),
                     'width' => $width,
                     'height' => $height,
+                    'size' => $item->getSize(),
                     'content_type' => 'image/' . $item->getExtension()
                 ]
             ]

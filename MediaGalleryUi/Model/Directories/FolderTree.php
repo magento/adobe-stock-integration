@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
+use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
 
 /**
  * Build folder tree structure by path
@@ -26,17 +27,25 @@ class FolderTree
     private $path;
 
     /**
+     * @var ExcludedDirectories
+     */
+    private $excludedDirectories;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param string $path
+     * @param ExcludedDirectories $excludedDirectories
      */
     public function __construct(
         Filesystem $filesystem,
-        string $path
+        string $path,
+        ExcludedDirectories $excludedDirectories
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;
+        $this->excludedDirectories = $excludedDirectories;
     }
 
     /**
@@ -67,7 +76,8 @@ class FolderTree
         }
 
         foreach ($directory->readRecursively() as $index => $path) {
-            if (!$directory->isDirectory($path)) {
+            if (!$directory->isDirectory($path) ||
+                $this->excludedDirectories->isExcluded($directory->getAbsolutePath($path))) {
                 continue;
             }
 
@@ -127,7 +137,7 @@ class FolderTree
             return $result;
         }
 
-        foreach ($treeNode['children'] as $idx => &$tnode) {
+        foreach ($treeNode['children'] as &$tnode) {
             if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
                 return $this->findParent($node, $tnode, $level + 1);
             }
