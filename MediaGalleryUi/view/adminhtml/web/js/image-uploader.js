@@ -6,10 +6,9 @@
 define([
     'uiComponent',
     'jquery',
-    'Magento_Ui/js/lib/spinner',
     'mage/translate',
     'jquery/file-uploader',
-], function (Component, $, loader) {
+], function (Component, $) {
     'use strict';
 
     return Component.extend({
