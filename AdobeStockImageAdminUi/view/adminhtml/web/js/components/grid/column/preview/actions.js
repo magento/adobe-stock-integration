@@ -28,6 +28,7 @@ define([
             messageDelay: 5,
             imageItems: [],
             mediaGalleryProvider: 'media_gallery_listing.media_gallery_listing_data_source',
+            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -36,7 +37,8 @@ define([
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
-                messages: '${ $.messagesName }'
+                messages: '${ $.messagesName }',
+                imageDirectory: '${ $.mediaGalleryDirectoryComponent }'
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
@@ -120,7 +122,7 @@ define([
          */
         selectDisplayedImageInMediaGallery: function () {
             if (!this.isMediaBrowser()) {
-                this.selectDisplayedImageForNewMediaGallery()
+                this.selectDisplayedImageForNewMediaGallery();
             } else {
                 this.selectDisplayedImageForOldMediaGallery();
             }
@@ -141,46 +143,51 @@ define([
         selectDisplayedImageForNewMediaGallery: function () {
             var self = this,
                 imagePath = self.preview().displayedRecord().path,
-                imageFolders = mediaGallery.getImageFolders(imagePath),
+                imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
                 imageFilename = imagePath.substring(imagePath.lastIndexOf('/') + 1),
                 locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])'),
-                image,
+                recordIndex,
+                record = null,
                 subscription;
 
             if (!locatedImage.length) {
-                subscription = this.imageItems.subscribe(function () {
-                    locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])');
-                    image = locatedImage.length ? locatedImage : false;
+                subscription = this.imageItems.subscribe(function (items) {
+                    subscription.dispose();
+                    items.each(function (item) {
+                        if (item.name === imageFilename) {
+                            record = item;
 
-                    if (!image) {
+                            return false;
+                        }
+                    });
+
+                    if (!record) {
                         mediaGallery.notLocated();
-
-                        return;
                     }
 
-                    self.selectRecord(image);
-                    subscription.dispose();
+                    self.selectRecord(record);
                 });
             }
 
-            if (imageFolders.length) {
-                imageFolders[0].click();
+            if (imageFolders) {
+                this.imageDirectory().setSelectedFolder(imageFolders);
+            } else {
+                this.imageDirectory().setDeselectedFolder();
             }
 
             if (locatedImage.length) {
-                this.selectRecord(locatedImage);
+                recordIndex = locatedImage.closest('.masonry-image-column').data('repeat-index');
+                record = this.imageItems()[recordIndex];
+                this.selectRecord(record);
             }
         },
 
         /**
          * Set the record as selected
          *
-         * @param {Object} image
+         * @param {Object} record
          */
-        selectRecord: function (image) {
-            var recordIndex = image.closest('.masonry-image-column').data('repeat-index'),
-                record = this.imageItems()[recordIndex];
-
+        selectRecord: function (record) {
             uiRegistry.get('index = thumbnail_url').selected(record);
         },
 
@@ -314,7 +321,7 @@ define([
          * @returns {Boolean}
          */
         isMediaBrowser: function () {
-            let mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser');
+            var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser');
 
             return typeof mediaBrowser !== 'undefined';
         },

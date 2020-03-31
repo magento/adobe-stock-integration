@@ -18,13 +18,11 @@ define([
          * @param {String} path
          */
         locate: function (path) {
-            var imageFolder = this.getImageFolders(path),
+            var imageFolder = this.selectFolder(path),
                 imageFilename = path.substring(path.lastIndexOf('/') + 1),
                 locatedImage;
 
             if (imageFolder.length) {
-                imageFolder[0].click();
-                //select image
                 locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])');
 
                 return locatedImage.length ? locatedImage : false;
@@ -36,11 +34,11 @@ define([
         },
 
         /**
-         * Get folders from path
+         * Select folder
          *
          * @param {String} path
          */
-        getImageFolders: function (path) {
+        selectFolder: function (path) {
             var i,
                 folderName,
                 openFolderChildrenButton,
@@ -79,6 +77,10 @@ define([
             imageFolder = $('.jstree a').filter(function () {
                 return $.trim($(this).text()) === imageFolderName;
             });
+
+            if (imageFolder.length) {
+                imageFolder[0].click();
+            }
 
             return imageFolder;
         },
