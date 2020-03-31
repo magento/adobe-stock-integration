@@ -87,6 +87,7 @@
             margin-left: 120px;
             margin-top: 170px;
             padding: .3rem;
+            pointer-events: none;
         }
 
         .media-gallery-image-details {
@@ -163,11 +164,13 @@
         }
 
         .media-gallery-image-block {
+            cursor: pointer;
             height: 200px;
             margin: 0 auto;
             position: relative;
 
-            &.selected {
+            &.selected,
+            &:hover {
                 border: 5px solid @color-masonry-steelblue;
             }
         }
