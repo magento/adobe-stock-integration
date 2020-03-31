@@ -16,6 +16,7 @@ define([
         defaults: {
             directoryTreeSelector: '#media-gallery-directory-tree',
             deleteButtonSelector: '#delete_folder',
+            uploadImageButtonSelector: '#upload_image',
             createFolderButtonSelector: '#create_folder',
             messageDelay: 5,
             messagesName: 'media_gallery_listing.media_gallery_listing.messages',
@@ -198,6 +199,7 @@ define([
         setInActive: function () {
             this.selectedFolder(null);
             $(this.deleteButtonSelector).attr('disabled', true).addClass('disabled');
+            $(this.uploadImageButtonSelector).attr('disabled', true).addClass('disabled');
         },
 
         /**
@@ -208,6 +210,7 @@ define([
         setActive: function (folderId) {
             this.selectedFolder(folderId);
             $(this.deleteButtonSelector).removeAttr('disabled').removeClass('disabled');
+            $(this.uploadImageButtonSelector).removeAttr('disabled').removeClass('disabled');
         }
     });
 });

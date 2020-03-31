@@ -78,7 +78,7 @@ class Upload extends Action
         if (!$imagePath) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Image Path is required.'),
+                'message' => __('Path parameter is required.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);

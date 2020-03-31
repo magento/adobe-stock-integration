@@ -4,9 +4,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="media-gallery-image-uploader-container no-display">
-    <form id="image-uploader-form" method="POST" enctype="multipart/form-data">
+<div class="media-gallery-image-uploader-container">
+    <form id="image-uploader-form" class="no-display" method="POST" enctype="multipart/form-data">
         <input data-bind="afterRender: initializeFileUpload" id="image-uploader-input" type="file" name="image" />
         <input type="hidden" name="path" data-bind="value: getSelectedFolder()" />
     </form>
+    <div data-role="spinner" class="admin__data-grid-loading-mask" data-bind="visible: loader">
+        <div class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
 </div>
