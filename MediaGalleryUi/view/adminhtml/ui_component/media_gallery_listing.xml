@@ -28,7 +28,6 @@
             </button>
             <button name="upload_image">
                 <param name="on_click" xsi:type="string">jQuery('#image-uploader-input').click();</param>
-                <param name="disabled" xsi:type="string">disabled</param>
                 <class>action-default scalable action-quaternary</class>
                 <label translate="true">Upload Image</label>
             </button>

@@ -52,18 +52,18 @@ class UploadImage
     /**
      * Uploads the image and returns file object
      *
-     * @param string $path
+     * @param string $targetFolder
      * @param string|null $type
      * @return \SplFileInfo
      * @throws LocalizedException
      */
-    public function execute(string $path, string $type = null) : \SplFileInfo
+    public function execute(string $targetFolder, string $type = null) : \SplFileInfo
     {
         $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        if (!$mediaDirectory->isDirectory($path)) {
-            throw new LocalizedException(__('Directory %1 does not exist in media directory.', $path));
+        if (!$mediaDirectory->isDirectory($targetFolder)) {
+            throw new LocalizedException(__('Directory %1 does not exist in media directory.', $targetFolder));
         }
-        $uploadResult = $this->imagesStorage->uploadFile($mediaDirectory->getAbsolutePath($path), $type);
+        $uploadResult = $this->imagesStorage->uploadFile($mediaDirectory->getAbsolutePath($targetFolder), $type);
         return $this->splFileInfoFactory->create($uploadResult['path'] . '/' . $uploadResult['file']);
     }
 }

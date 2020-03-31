@@ -59,7 +59,6 @@ define([
                         }]
                     );
                 },
-                sequentialUploads: true,
                 acceptFileTypes: this.acceptFileTypes,
                 allowedExtensions: this.allowedExtensions,
                 maxFileSize: this.maxFileSize,
@@ -83,12 +82,17 @@ define([
         },
 
         /**
-         * Returns the selected folder
+         * Gets Media Gallery selected folder
          *
-         * @returns {*}
+         * @returns {String}
          */
-        getSelectedFolder: function () {
-            return this.directories().selectedFolder;
+        getTargetFolder: function () {
+            var selectedFolder = this.directories().selectedFolder;
+            if (selectedFolder() === undefined) {
+                return '/';
+            }
+
+            return selectedFolder();
         },
 
         /**

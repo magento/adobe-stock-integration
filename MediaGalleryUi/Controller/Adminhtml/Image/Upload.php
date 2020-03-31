@@ -73,12 +73,12 @@ class Upload extends Action
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imagePath = $this->getRequest()->getParam('path');
+        $targetFolder = $this->getRequest()->getParam('target_folder');
 
-        if (!$imagePath) {
+        if (!$targetFolder) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Path parameter is required.'),
+                'message' => __('The target_folder parameter is required.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -87,7 +87,7 @@ class Upload extends Action
         }
 
         try {
-            $file = $this->uploadImage->execute($imagePath);
+            $file = $this->uploadImage->execute($targetFolder);
             $this->assetIndexer->execute($file);
 
             $responseCode = self::HTTP_OK;
