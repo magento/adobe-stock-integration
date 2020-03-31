@@ -7,17 +7,19 @@ define([
     'jquery',
     'underscore',
     'uiElement',
-    'mage/translate'
-], function ($, _, Element, $t) {
+    'mage/translate',
+    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
+], function ($, _, Element, $t, addSelected) {
     'use strict';
 
     return Element.extend({
         defaults: {
             modalSelector: '',
             template: 'Magento_MediaGalleryUi/image/actions',
-            targetElementId: null,
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
+            imageModelName: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url',
             modules: {
+                imageModel: '${ $.imageModelName }',
                 mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
             }
         },
@@ -39,61 +41,15 @@ define([
          * Add Image
          */
         addImage: function () {
-            var targetElement = this.getTargetElement(),
-                imageDetails = this.getImageData();
-
-            if (!targetElement.length) {
-                this.getMediaGalleryModal().closeDialog();
-                throw $t('Target element not found for content update');
-            }
-
-            targetElement.val(imageDetails['image_url'])
-                .data('size', imageDetails.size)
-                .data('mime-type', imageDetails['content_type'])
-                .trigger('change');
+            addSelected.insertImage(
+                this.imageModel().getSelected(),
+                {
+                    onInsertUrl: this.imageModel().onInsertUrl,
+                    targetElementId: this.imageModel().targetElementId,
+                    storeId: this.imageModel().storeId
+                }
+            );
             this.closeModal();
-            this.getMediaGalleryModal().closeDialog();
-            targetElement.focus();
-        },
-
-        /**
-         * Get image data
-         *
-         * @return {Object}
-         */
-        getImageData: function () {
-            if (!this.mediaGalleryImageDetails) {
-                return {};
-            }
-
-            return this.mediaGalleryImageDetails().getImageData();
-        },
-
-        /**
-         * Close media gallery grid modal
-         */
-        closeMediaGalleryGridModal: function () {
-            this.getMediaGalleryModal().closeDialog();
-        },
-
-        /**
-         * Get target element
-         *
-         * @return {HTMLElement}
-         */
-        getTargetElement: function () {
-            var targetElementSelector = '#{targetElementId}'.replace('{targetElementId}', this.targetElementId);
-
-            return $(targetElementSelector);
-        },
-
-        /**
-         * Get media gallery modal
-         *
-         * @return {Object}
-         */
-        getMediaGalleryModal: function () {
-            return window.MediabrowserUtility;
         }
     });
 });
