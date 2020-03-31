@@ -17,10 +17,11 @@ define([
             modalSelector: '',
             template: 'Magento_MediaGalleryUi/image/actions',
             targetElementId: null,
+            imageActionsName: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url_actions',
             modules: {
                 mediaGalleryImageDetails: '${ $.mediaGalleryImageDetail }',
-                imageActions: '${ $.imageActions }',
-            },
+                imageActions: '${ $.imageActionsName }'
+            }
         },
 
         /**
