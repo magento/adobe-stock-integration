@@ -94,11 +94,19 @@
             list-style: none;
             margin-bottom: 0;
             position: absolute;
-            width: 90%;
+            width: 89%;
 
             .name {
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                display: -webkit-box;
                 font-size: 15px;
                 font-weight: bold;
+                line-height: 18px;
+                max-height: 50px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                word-wrap: anywhere;
             }
 
             .type {
@@ -123,15 +131,8 @@
 
             .three-dots {
                 &:before {
-                    color: @color-masonry-grey;
-                    content: '\2807';
+                    content: url("@{baseDir}Magento_MediaGalleryUi/images/3-dots.png");
                     cursor: pointer;
-                    display: inline-block;
-                    font-size: 26px;
-
-                    .lib-rotate(
-                        @_rotation: 90deg;
-                    );
                 }
             }
         }
