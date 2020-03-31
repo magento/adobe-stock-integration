@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Cms\Helper\Wysiwyg\Images;
 
 /**
  * Overlay column
@@ -26,9 +27,22 @@ class Url extends Column
     private $storeManager;
 
     /**
+     * UrlInterface $urlInterface
+     */
+    private $urlInterface;
+
+    /**
+     * @var Images
+     */
+    private $images;
+
+    
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $urlInterface
+     * @param Images $images
      * @param array $components
      * @param array $data
      */
@@ -36,11 +50,15 @@ class Url extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         StoreManagerInterface $storeManager,
+        UrlInterface $urlInterface,
+        Images $images,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->storeManager = $storeManager;
+        $this->urlInterface = $urlInterface;
+        $this->images = $images;
     }
 
     /**
@@ -54,6 +72,7 @@ class Url extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
+                $item['encoded_id'] = $this->images->idEncode($item['thumbnail_url']);
                 $item[$this->getData('name')] = $this->getUrl($item[$this->getData('name')]);
             }
         }
@@ -72,7 +91,8 @@ class Url extends Column
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
-                    'targetElementId' => $this->context->getRequestParam('target_element_id')
+                    'targetElementId' => $this->context->getRequestParam('target_element_id'),
+                    'onInsertUrl' => $this->urlInterface->getUrl('cms/wysiwyg_images/oninsert')
                 ]
             )
         );

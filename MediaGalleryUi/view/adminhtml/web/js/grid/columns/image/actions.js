@@ -6,8 +6,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
-    'Magento_Ui/js/modal/confirm'
-], function ($, _, Component, confirmation) {
+    'Magento_Ui/js/modal/confirm',
+    'wysiwygAdapter'
+], function ($, _, Component, confirmation, wysiwyg) {
     'use strict';
 
     return Component.extend({
@@ -42,6 +43,15 @@ define([
          */
         initialize: function () {
             this._super();
+            this.initEvents();
+
+            return this;
+        },
+
+        /**
+         * Initialize image action events
+         */
+        initEvents: function () {
             $(this.imageModel().addSelectedBtnSelector).click(function () {
                 this.insertImage();
             }.bind(this));
@@ -49,7 +59,6 @@ define([
                 this.deleteImageAction(this.imageModel().selected());
             }.bind(this));
 
-            return this;
         },
 
         /**
@@ -71,12 +80,66 @@ define([
                 throw 'Target element not found for content update';
             }
 
-            targetElement.val(record['thumbnail_url'])
-                .data('size', record.size)
-                .data('mime-type', record['content_type'])
-                .trigger('change');
+            if (targetElement.is('textarea')) {
+                $.ajax({
+                    url: this.imageModel().onInsertUrl,
+                    data: {
+                        filename: record['encoded_id'],
+                        store: 1,
+                        'as_is': 1,
+                        'force_static_path': targetElement.data('force_static_path') ? 1 : 0,
+                        'form_key': FORM_KEY
+                    },
+                    context: this,
+                    showLoader: true
+                }).done($.proxy(function (data) {
+                    console.log(data);
+                    $.mage.mediabrowser().insertAtCursor(targetElement.get(0), data);
+                }, this));
+            } else {
+                targetElement.val(record['thumbnail_url'])
+                    .data('size', record.size)
+                    .data('mime-type', record['content_type'])
+                    .trigger('change');
+            }
             window.MediabrowserUtility.closeDialog();
             targetElement.focus();
+
+        },
+
+        /**
+         * Return opener Window object if it exists, not closed and editor is active
+         *
+         * return {Object|null}
+         */
+        getMediaBrowserOpener: function () {
+            if (typeof wysiwyg != 'undefined' &&
+                wysiwyg.get(this.imageModel().targetElementId) &&
+                typeof tinyMceEditors != 'undefined' &&
+                !tinyMceEditors.get(this.imageModel().targetElementId).getMediaBrowserOpener().closed
+            ) {
+                return tinyMceEditors.get(this.imageModel().targetElementId).getMediaBrowserOpener();
+            }
+
+            return null;
+        },
+
+        /**
+         * Get target element
+         *
+         * @returns {*|n.fn.init|jQuery|HTMLElement}
+         */
+        getTargetElement: function () {
+            var opener, targetElementId;
+
+            if (typeof wysiwyg != 'undefined' && wysiwyg.get(this.imageModel().targetElementId)) {
+                opener = this.getMediaBrowserOpener() || window;
+                targetElementId = tinyMceEditors.get(this.imageModel().targetElementId).getMediaBrowserTargetElementId();
+
+                return $(opener.document.getElementById(targetElementId));
+            }
+
+            return $('#' + this.imageModel().targetElementId);
         },
 
         /**
@@ -214,15 +277,6 @@ define([
         addMessage: function (code, message) {
             this.messages().add(code, message);
             this.messages().scheduleCleanup();
-        },
-
-        /**
-         * Get target element
-         *
-         * @returns {*|n.fn.init|jQuery|HTMLElement}
-         */
-        getTargetElement: function () {
-            return $('#' + this.imageModel().targetElementId);
         }
     });
 });
