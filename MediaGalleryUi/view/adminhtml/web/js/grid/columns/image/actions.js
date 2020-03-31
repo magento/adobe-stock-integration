@@ -85,6 +85,7 @@ define([
                     url: this.imageModel().onInsertUrl,
                     data: {
                         filename: record['encoded_id'],
+                        'store_id': this.imageModel().storeId,
                         'as_is': 1,
                         'force_static_path': targetElement.data('force_static_path') ? 1 : 0,
                         'form_key': FORM_KEY
