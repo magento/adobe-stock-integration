@@ -16,7 +16,6 @@
             <title value="User views the image details"/>
             <description value="Admin should be able to see images attributes in the image preview"/>
             <severity value="BLOCKER"/>
-            <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -48,8 +47,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
 
         <!-- Assert that file # attribute changed "-->
-        <assertNotContains actual="$getFileAttributeValue"
-                           expected="AdobeStockImagePreviewSection.attribute('File #')" expectedType="string"
-                           stepKey="assertAttributeFileChanged"/>
+        <assertNotContains stepKey="assertAttributeFileChanged">
+            <actualResult type="string">{$getFileAttributeValue}</actualResult>
+            <expectedResult type="string">AdobeStockImagePreviewSection.attribute('File #')</expectedResult>
+        </assertNotContains>
     </test>
 </tests>

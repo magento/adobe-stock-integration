@@ -53,7 +53,7 @@ class LoadById implements LoadByIdInterface
         $select = $connection->select()
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME))
             ->where(self::ADOBE_STOCK_ASSET_CATEGORY_ID . ' = ?', $categoryId);
-        $data = $connection->fetchAssoc($select);
+        $data = $connection->fetchRow($select);
         /** @var CategoryInterface $category */
         $category = $this->factory->create(['data' => $data]);
 

@@ -3,15 +3,19 @@
  * See COPYING.txt for license details.
  */
 define([
+    'jquery',
     'Magento_Ui/js/grid/columns/column',
     'uiLayout'
-], function (Column, layout) {
+], function ($, Column, layout) {
     'use strict';
 
     return Column.extend({
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
             deleteImageUrl: 'media_gallery/image/delete',
+            addSelectedBtnSelector: '#add_selected',
+            deleteSelectedBtnSelector: '#delete_selected',
+            targetElementId: null,
             selected: null,
             fields: {
                 id: 'id',
@@ -80,17 +84,30 @@ define([
          * Check if the record is currently selected
          *
          * @param {Object} record - Data to be preprocessed.
-         * @returns {Object}
+         * @returns {Boolean}
          */
         isSelected: function (record) {
-            return this.selected() === this.getId(record);
+            if (this.selected() === null) {
+                return false;
+            }
+
+            return this.getId(this.selected()) === this.getId(record);
         },
 
         /**
          * Set the record as selected
          */
         select: function (record) {
-            this.isSelected(record) ? this.selected(null) : this.selected(this.getId(record));
+            this.isSelected(record) ? this.selected(null) : this.selected(record);
+            this.toggleAddSelectedButton();
+        },
+
+        /**
+         * Get the selected record
+         * @returns {Object}
+         */
+        getSelected: function () {
+            return this.selected();
         },
 
         /**
@@ -102,6 +119,19 @@ define([
             layout(this.viewConfig);
 
             return this;
+        },
+
+        /**
+         * Toggle add selected button
+         */
+        toggleAddSelectedButton: function () {
+            if (this.selected() === null) {
+                $(this.addSelectedBtnSelector).addClass('no-display');
+                $(this.deleteSelectedBtnSelector).addClass('no-display');
+            } else {
+                $(this.addSelectedBtnSelector).removeClass('no-display');
+                $(this.deleteSelectedBtnSelector).removeClass('no-display');
+            }
         }
     });
 });

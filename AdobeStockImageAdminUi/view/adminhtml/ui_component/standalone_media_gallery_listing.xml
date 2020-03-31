@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <settings>
+        <buttons>
+            <button name="search_adobe_stock">
+                <param name="on_click" xsi:type="string">jQuery(".adobe-search-images-modal").trigger("openModal");</param>
+                <class>action-secondary</class>
+                <label translate="true">Search Adobe Stock</label>
+            </button>
+        </buttons>
+    </settings>
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters">
+            <filterSelect name="licensed" provider="${ $.parentName }" sortOrder="50">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Licensed\Options"/>
+                    <label translate="true">License Status</label>
+                    <dataScope>licensed</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+    <columns name="media_gallery_columns">
+        <column sortOrder="1" name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\UnlicensedOverlay">
+            <settings>
+                <label translate="true">Overlay</label>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+    </columns>
+</listing>

@@ -14,7 +14,6 @@ use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
