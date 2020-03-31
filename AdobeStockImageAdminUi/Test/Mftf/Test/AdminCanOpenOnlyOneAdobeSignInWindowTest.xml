@@ -31,7 +31,7 @@
         <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickSignTheThirdTime"/>
 
         <switchToNextTab stepKey="switchToAdobeSignInIms"/>
-        <switchToNextTab stepKey="switchToAdobeImsGallery"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
 
         <seeElement selector="{{AdobeStockSection.adobeSignIn}}" stepKey="seeSignInButton"/>
         <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
