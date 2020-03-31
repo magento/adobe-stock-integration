@@ -19,7 +19,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Options" type="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Options">
+    <type name="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Options">
         <arguments>
             <argument name="options" xsi:type="array">
                 <item name="photo_option" xsi:type="array">
@@ -32,5 +32,5 @@
                 </item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
 </config>

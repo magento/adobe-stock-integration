@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns;
+namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Option Provider using virtual type
+ * Option Provider for ContentType filter
  */
 class Options implements OptionSourceInterface
 {
