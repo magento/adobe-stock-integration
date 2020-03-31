@@ -32,7 +32,7 @@ class Options implements OptionSourceInterface
     /**
      * @inheritdoc
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $options = [];
         foreach ($this->_options as $option) {
