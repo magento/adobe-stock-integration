@@ -38,19 +38,19 @@
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create user role-->
-        <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
+        <actionGroup ref="AdminFillUserRoleRequiredData" stepKey="fillUserRoleRequiredData">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Adobe Stock"/>
         </actionGroup>
         <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab" />
-        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleAdobeStockPreview">
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleAdobeStockPreview">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Adobe Stock"/>
         </actionGroup>
         <scrollTo selector="{{AdobeStockSection.systemAclActions}}"  x="0" y="-100" stepKey="scrollToResourceElement"/>
         <click stepKey="clickAdobeSystemActions" selector="{{AdobeStockSection.systemAclActions}}"/>
 
-        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleAddEditNewPages">
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleAddEditNewPages">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Pages"/>
         </actionGroup>
@@ -80,7 +80,7 @@
         <actionGroup ref="AdminNavigateToCreatedUserRoleActionGroup" stepKey="navigateToUserRoleEditPage">
             <argument name="userRoleName" value="{{adminRole.name}}"/>
         </actionGroup>
-        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="removeRestrictedRole">
+        <actionGroup ref="AdminAddRestrictedRole" stepKey="removeRestrictedRole">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Adobe Stock"/>
         </actionGroup>

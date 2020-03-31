@@ -24,17 +24,17 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="select64rderPerPage">
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select64rderPerPage">
             <argument name="perPage" value="64"/>
         </actionGroup>
         <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="64" stepKey="seePerPageValueInDropDown"/>
         <actionGroup ref="AssertAdminAdobeStockThumbnailsNumberActionGroup" stepKey="see64imagesOnTheSecondPage">
             <argument name="thumbnailsNumber" value="64"/>
         </actionGroup>
-        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="select48rderPerPage">
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select48rderPerPage">
             <argument name="perPage" value="48"/>
         </actionGroup>
         <seeInField selector="{{AdminDataGridPaginationSection.perPageDropDownValue}}" userInput="48" stepKey="see48PerPageValueInDropDown"/>
