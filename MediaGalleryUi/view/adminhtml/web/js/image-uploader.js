@@ -14,18 +14,18 @@ define([
     return Component.extend({
         defaults: {
             imageUploadInputSelector: '#image-uploader-form',
-            directoriesComponentPath: 'media_gallery_listing.media_gallery_listing.media_gallery_directories_directories',
-            actionsComponentPath: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url_actions',
-            messagesComponentPath: 'media_gallery_listing.media_gallery_listing.messages',
+            directoriesPath: 'media_gallery_listing.media_gallery_listing.media_gallery_directories_directories',
+            actionsPath: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url_actions',
+            messagesPath: 'media_gallery_listing.media_gallery_listing.messages',
             imageUploadUrl: '',
             acceptFileTypes: '',
             allowedExtensions: '',
             maxFileSize: '',
             loader: false,
             modules: {
-                directories: '${ $.directoriesComponentPath }',
-                actions: '${ $.actionsComponentPath }',
-                mediaGridMessages: '${ $.messagesComponentPath }'
+                directories: '${ $.directoriesPath }',
+                actions: '${ $.actionsPath }',
+                mediaGridMessages: '${ $.messagesPath }'
             }
         },
 
@@ -66,14 +66,15 @@ define([
                     this.showLoader();
                     data.submit();
                 }.bind(this),
-                done: function (e, data) {
+                done: function () {
                     this.hideLoader();
                     this.actions().reloadGrid();
                 }.bind(this),
                 fail: function (e, data) {
-                    var responseData = data.jqXHR.responseJSON;
-                    if (responseData !== undefined && responseData.message) {
-                        this.mediaGridMessages().add('error', $.mage.__(responseData.message));
+                    var response = data.jqXHR.responseJSON;
+
+                    if (response !== undefined && response.message) {
+                        this.mediaGridMessages().add('error', $.mage.__(response.message));
                         this.mediaGridMessages().scheduleCleanup();
                     }
                     this.hideLoader();
@@ -88,6 +89,7 @@ define([
          */
         getTargetFolder: function () {
             var selectedFolder = this.directories().selectedFolder;
+
             if (selectedFolder() === undefined) {
                 return '/';
             }

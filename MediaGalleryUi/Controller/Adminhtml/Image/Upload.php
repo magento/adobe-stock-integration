@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Image;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -20,7 +21,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Controller responsible to upload the media gallery content
  */
-class Upload extends Action
+class Upload extends Action implements HttpPostActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;

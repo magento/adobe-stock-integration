@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Model\Filesystem;
 class SplFileInfoFactory
 {
     /**
-     * Factory Method - creates SplFileInfo from filename
+     * Creates SplFileInfo from filename
      *
      * @param string $fileName
      * @return \SplFileInfo
