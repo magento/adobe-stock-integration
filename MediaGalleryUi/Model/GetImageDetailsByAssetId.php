@@ -106,7 +106,7 @@ class GetImageDetailsByAssetId
         return [
             'image_url' => $this->getUrl($asset->getPath()),
             'title' => $asset->getTitle(),
-            'image_id' => $assetId,
+            'id' => $assetId,
             'details' => [
                 [
                     'title' => __('Created'),

@@ -140,14 +140,13 @@ define([
          */
         deleteImage: function (record) {
             var recordId = this.imageModel().getId(record);
-
             $.ajax({
                 type: 'POST',
                 url: this.imageModel().deleteImageUrl,
                 dataType: 'json',
                 showLoader: true,
                 data: {
-                    'image_id': recordId
+                    'id': recordId
                 },
                 context: this,
 
