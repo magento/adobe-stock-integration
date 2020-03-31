@@ -140,6 +140,7 @@ define([
          */
         deleteImage: function (record) {
             var recordId = this.imageModel().getId(record);
+
             $.ajax({
                 type: 'POST',
                 url: this.imageModel().deleteImageUrl,

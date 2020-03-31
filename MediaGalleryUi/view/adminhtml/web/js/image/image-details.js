@@ -96,7 +96,7 @@ define([
                 return;
             }
 
-            if (this.image() && this.image()['id'] === imageId) {
+            if (this.image() && this.image().id === imageId) {
                 this.openImageDetailsModal();
 
                 return;
