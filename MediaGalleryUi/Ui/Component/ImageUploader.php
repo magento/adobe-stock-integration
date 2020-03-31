@@ -12,11 +12,10 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Container;
 
 /**
- * Directories tree component
+ * Image Uploader component
  */
 class ImageUploader extends Container
 {
-    const IMAGE_UPLOADER_COMPONENT = 'Magento_MediaGalleryUi/js/image-uploader';
     const ACCEPT_FILE_TYPES = '/(\.|\/)(gif|jpe?g|png)$/i';
     const ALLOWED_EXTENSIONS = 'jpg jpeg png gif';
     const MAX_FILE_SIZE = '2097152';
