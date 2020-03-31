@@ -82,7 +82,7 @@ define([
          * @return {HTMLElement}
          */
         getTargetElement: function () {
-            var targetElementSelector = "#{targetElementId}".replace('{targetElementId}', this.targetElementId);
+            var targetElementSelector = '#{targetElementId}'.replace('{targetElementId}', this.targetElementId);
 
             return $(targetElementSelector);
         },
