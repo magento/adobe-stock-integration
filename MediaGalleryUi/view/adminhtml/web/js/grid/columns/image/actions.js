@@ -85,7 +85,6 @@ define([
                     url: this.imageModel().onInsertUrl,
                     data: {
                         filename: record['encoded_id'],
-                        store: 1,
                         'as_is': 1,
                         'force_static_path': targetElement.data('force_static_path') ? 1 : 0,
                         'form_key': FORM_KEY
@@ -93,7 +92,6 @@ define([
                     context: this,
                     showLoader: true
                 }).done($.proxy(function (data) {
-                    console.log(data);
                     $.mage.mediabrowser().insertAtCursor(targetElement.get(0), data);
                 }, this));
             } else {
