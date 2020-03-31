@@ -11,7 +11,7 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryUi\Model\Filesystem\GetSplFileInfo;
+use Magento\MediaGalleryUi\Model\Filesystem\SplFileInfoFactory;
 
 /**
  * Uploads an image to storage
@@ -29,23 +29,22 @@ class UploadImage
     private $filesystem;
 
     /**
-     * @var GetSplFileInfo
+     * @var SplFileInfoFactory
      */
-    private $getSplFileInfo;
+    private $splFileInfoFactory;
 
     /**
      * UploadImage constructor.
-     *
      * @param Storage $imagesStorage
-     * @param GetSplFileInfo $getSplFileInfo
+     * @param SplFileInfoFactory $splFileInfoFactory
      * @param Filesystem $filesystem
      */
     public function __construct(
         Storage $imagesStorage,
-        GetSplFileInfo $getSplFileInfo,
+        SplFileInfoFactory $splFileInfoFactory,
         Filesystem $filesystem
     ) {
-        $this->getSplFileInfo = $getSplFileInfo;
+        $this->splFileInfoFactory = $splFileInfoFactory;
         $this->imagesStorage = $imagesStorage;
         $this->filesystem = $filesystem;
     }
@@ -65,6 +64,6 @@ class UploadImage
             throw new LocalizedException(__('Directory %1 does not exist in media directory.', $path));
         }
         $uploadResult = $this->imagesStorage->uploadFile($mediaDirectory->getAbsolutePath($path), $type);
-        return $this->getSplFileInfo->execute($uploadResult['path'] . '/' . $uploadResult['file']);
+        return $this->splFileInfoFactory->create($uploadResult['path'] . '/' . $uploadResult['file']);
     }
 }
