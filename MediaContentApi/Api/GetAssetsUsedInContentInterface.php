@@ -9,12 +9,14 @@ declare(strict_types=1);
 namespace Magento\MediaContentApi\Api;
 
 /**
- * Get media asset id list which is used in the specified media content
+ * Get media asset ids used in the content
  * @api
  */
 interface GetAssetsUsedInContentInterface
 {
     /**
+     * Get media asset ids used in the content
+     *
      * @param string $contentType
      * @param string|null $contentEntityId
      * @param string|null $contentField
