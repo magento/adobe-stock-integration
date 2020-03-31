@@ -2,12 +2,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+//
+//  Variables
+//  _____________________________________________
+
 @color-folders-background: #a6a6a6;
 @color-folders-background-selected: #cdecf6;
 @color-folders-border: #7185f5;
 @color-masonry-overlay: #d9631c;
 @color-masonry-grey: #9e9e9e;
 @color-masonry-white: #e1e1e1;
+@color-masonry-steelblue: #4682b4;
 
 & when (@media-common = true) {
 
@@ -161,7 +167,7 @@
             position: relative;
 
             &.selected {
-                border: 5px solid steelblue;
+                border: 5px solid @color-masonry-steelblue;
             }
         }
 
@@ -220,6 +226,10 @@
                 float: left;
                 max-width: 70%;
                 width: auto;
+
+                img {
+                    max-height: 650px;
+                }
             }
 
             .image-details-sidebar {
@@ -228,8 +238,8 @@
                 padding-left: 40px;
 
                 .image-details-section {
-                    .lib-clearfix();
                     margin-bottom: 40px;
+                    .lib-clearfix();
                 }
 
                 h3.image-title {
