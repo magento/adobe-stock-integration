@@ -7,7 +7,7 @@ define([
     'uiComponent',
     'jquery',
     'mage/translate',
-    'jquery/file-uploader',
+    'jquery/file-uploader'
 ], function (Component, $) {
     'use strict';
 
@@ -47,15 +47,21 @@ define([
             $(this.imageUploadInputSelector).fileupload({
                 url: this.imageUploadUrl,
                 dataType: 'json',
+                /**
+                 * Extending the form data
+                 *
+                 * @param {Object} form
+                 * @returns {T[] | string | T[]}
+                 */
                 formData: function (form) {
                     return form.serializeArray().concat(
                         [{
                             name: 'isAjax',
-                            value: true,
+                            value: true
                         },
                         {
                             name: 'form_key',
-                            value: window.FORM_KEY,
+                            value: window.FORM_KEY
                         }]
                     );
                 },
@@ -100,7 +106,7 @@ define([
         /**
          * Shows spinner loader
          */
-        showLoader: function() {
+        showLoader: function () {
             this.loader(true);
         },
 
