@@ -7,23 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
-use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
-use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 
 /**
@@ -32,34 +25,9 @@ use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 class SaveImage implements SaveImageInterface
 {
     /**
-     * @var StorageSave
-     */
-    private $storageSave;
-
-    /**
-     * @var StorageDelete
-     */
-    private $storageDelete;
-
-    /**
-     * @var AssetRepositoryInterface
-     */
-    private $assetRepository;
-
-    /**
-     * @var SaveInterface
-     */
-    private $saveMediaAsset;
-
-    /**
      * @var SaveAssetInterface
      */
     private $saveAdobeStockAsset;
-
-    /**
-     * @var DocumentToMediaGalleryAsset
-     */
-    private $documentToMediaGalleryAsset;
 
     /**
      * @var DocumentToAsset
@@ -82,47 +50,34 @@ class SaveImage implements SaveImageInterface
     private $setLicensedInMediaGalleryGrid;
 
     /**
-     * @var Filesystem
+     * @var SaveImageFile
      */
-    private $fileSystem;
+    private $saveImageFile;
 
     /**
-     * @param StorageSave $storageSave
-     * @param StorageDelete $storageDelete
-     * @param AssetRepositoryInterface $assetRepository
-     * @param SaveInterface $saveMediaAsset
+     * SaveImage constructor.
+     *
      * @param SaveAssetInterface $saveAdobeStockAsset
-     * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param DocumentToAsset $documentToAsset
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
-     * @param Filesystem $fileSystem
+     * @param SaveImageFile $saveImageFile
      */
     public function __construct(
-        StorageSave $storageSave,
-        StorageDelete $storageDelete,
-        AssetRepositoryInterface $assetRepository,
-        SaveInterface $saveMediaAsset,
         SaveAssetInterface $saveAdobeStockAsset,
-        DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         DocumentToAsset $documentToAsset,
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        Filesystem $fileSystem
+        SaveImageFile $saveImageFile
     ) {
-        $this->storageSave = $storageSave;
-        $this->storageDelete = $storageDelete;
-        $this->assetRepository = $assetRepository;
-        $this->saveMediaAsset = $saveMediaAsset;
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
-        $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
         $this->documentToAsset = $documentToAsset;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
-        $this->fileSystem = $fileSystem;
+        $this->saveImageFile = $saveImageFile;
     }
 
     /**
@@ -132,41 +87,15 @@ class SaveImage implements SaveImageInterface
      * @param string $url
      * @param string $destinationPath
      *
-     * @throws CouldNotSaveException
      * @throws AlreadyExistsException
      * @throws CouldNotDeleteException
+     * @throws CouldNotSaveException
      * @throws FileSystemException
      * @throws NoSuchEntityException
      */
     public function execute(Document $document, string $url, string $destinationPath): void
     {
-        $pathAttribute = $document->getCustomAttribute('path');
-        $pathValue = $pathAttribute->getValue();
-        /* If the asset has been already saved, delete the previous version */
-        if (null !== $pathAttribute && $pathValue) {
-            $this->storageDelete->execute($pathValue);
-        }
-
-        $path = $this->storageSave->execute($url, $destinationPath);
-
-        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
-        $absolutePath = $mediaDirectory->getAbsolutePath($path);
-        $fileSize = $mediaDirectory->stat($absolutePath)['size'];
-
-        $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert(
-            $document,
-            [
-                'id' => null,
-                'path' => $path,
-                'source' => 'Adobe Stock',
-                'size' => $fileSize
-            ]
-        );
-        $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
-
-        if (!$mediaGalleryAssetId) {
-            $mediaGalleryAssetId = $this->assetRepository->getById($document->getId())->getMediaGalleryId();
-        }
+        $mediaGalleryAssetId = $this->saveImageFile->execute($document, $url, $destinationPath);
 
         $this->saveAssetKeywords->execute($this->documentToKeywords->convert($document), $mediaGalleryAssetId);
 
