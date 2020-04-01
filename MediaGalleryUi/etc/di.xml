@@ -26,7 +26,7 @@
                 <item name="theme" xsi:type="string">/pub\/media\/theme/</item>
                 <item name="theme_customization" xsi:type="string">/pub\/media\/theme_customization/</item>
                 <item name="tmp" xsi:type="string">/pub\/media\/tmp/</item>
-		<item name="directories-with-dots" xsi:type="string">/\./</item>
+                <item name="directories-with-dots" xsi:type="string">/\./</item>
 	    </argument>
         </arguments>
      </type>
