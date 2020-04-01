@@ -18,7 +18,7 @@ class Options implements OptionSourceInterface
     /**
      * @var array
      */
-    protected $_options = [];
+    private $_options = [];
 
     /**
      * Options constructor.
