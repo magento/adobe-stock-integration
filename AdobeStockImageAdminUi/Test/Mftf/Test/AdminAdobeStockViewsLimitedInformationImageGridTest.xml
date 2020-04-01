@@ -37,7 +37,7 @@
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
 
         <seeElement selector="{{AdobeStockSection.unlicensedImageLabel}}" stepKey="seeUnlicensedLabel"/>
-        <actionGroup ref="AdminAdobeStockImageInformationImageGridAssertActionGroup" stepKey="assertImageData"/>
+        <actionGroup ref="AdminAdobeStockImageInformationGridAssertActionGroup" stepKey="assertImageData"/>
 
         <actionGroup ref="AdminAdobeStockNewMediaGalleryDeleteImageActionGroup" stepKey="deleteImage">
             <argument name="name" value="{{AdobeStockImageData.name}}"/>
@@ -61,6 +61,6 @@
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForLicensedImage"/>
 
         <seeElement selector="{{AdobeStockSection.licensedImageLabel}}" stepKey="seeLicensedLabel"/>
-        <actionGroup ref="AdminAdobeStockImageInformationImageGridAssertActionGroup" stepKey="assertImageDataForLicensedImage"/>
+        <actionGroup ref="AdminAdobeStockImageInformationGridAssertActionGroup" stepKey="assertImageDataForLicensedImage"/>
     </test>
 </tests>

@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAdobeStockImageInformationImageGridAssertActionGroup">
+    <actionGroup name="AdminAdobeStockImageInformationGridAssertActionGroup">
         <seeElement selector="{{AdobeStockSection.imageDimensions}}" stepKey="seeDimensions"/>
         <seeElement selector="{{AdobeStockSection.imageName}}" stepKey="seeImageName"/>
         <seeElement selector="{{AdobeStockSection.imageType}}" stepKey="seeImageType"/>
