@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCanOpenOnlyOneAdobeSignInWindowTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1007"/>
+            <title value="User can not open several `Sign In Adobe ID` windows copy"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4314374"/>
+            <description value="User can open only one `Sign In Adobe ID` window"/>
+            <severity value="MAJOR"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickSignIn"/>
+        <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickSignTheSecondTime"/>
+        <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickSignTheThirdTime"/>
+
+        <switchToNextTab stepKey="switchToAdobeSignInIms"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+
+        <seeElement selector="{{AdobeStockSection.adobeSignIn}}" stepKey="seeSignInButton"/>
+        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
+    </test>
+</tests>

@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdobeStockSection">
         <element name="slideOutPanelButton" type="button" selector="[data-ui-id=wysiwyg-images-content-search-adobe-stock-button]"/>
+        <element name="unlicensedImageLabel" type="button" selector="//span[text()='Unlicensed']"/>
         <element name="modal" type="block" selector="aside.adobe-stock-modal"/>
         <element name="panelTitle" type="block" selector="[data-role=title]"/>
         <element name="searchInput" type="input" selector="input.data-grid-search-control"/>
@@ -24,6 +25,7 @@
         <element name="mediaGalleryImage" type="button" selector="//img[contains(@alt,'{{imageName}}')]" parameterized="true"/>
         <element name="mediaGalleryDeleteButton" type="button" selector="[data-ui-id=wysiwyg-images-content-delete-files-button]"/>
         <element name="systemAclActions" type="checkbox" selector="//a[text()='Adobe Stock']/parent::li[contains(.,'Actions')]//a"/>
+        <element name="adobeImsACL" type="checkbox" selector="//a[text()='Adobe IMS']"/>
         <element name="adobeSignIn" type="button" selector=".adobe-sign-in-button"/>
         <element name="adobeImsPopupUserEmail" type="button" selector="#adobeid_username"/>
         <element name="adobeImsPopUpUserPassword" type="button" selector="#adobeid_password"/>
@@ -37,5 +39,9 @@
         <element name="sortOption" type="button" selector="//div[@class='masonry-sorting'] //option[@value='{{sortOption}}']" parameterized="true"/>
         <element name="deleteMediaButton" type="button" selector="button#delete_files"/>
         <element name="licensedLabel" type="block" selector="//div[@class='masonry-image-column' and @data-repeat-index='0']//span[text()='Licensed']"/>
+        <element name="editViewButtonPartial" type="button" selector="/following-sibling::div/button[@class='action-edit']"/>
+        <element name="deleteViewButton" type="button" selector="//div[@data-bind='afterRender: \$data.setToolbarNode']//input/following-sibling::div/button[@class='action-delete']"/>
+        <element name="IncorrectSecretModalText" type="block" selector="//*[contains(@class, 'modal-popup')]//div[contains(text(), 'Login failed')]"/>
+        <element name="IncorrectSecretModalButton" type="button" selector="//*[contains(@class, 'modal-popup')]//*[@class='modal-footer']/button//span[text()='Ok']"/>
     </section>
 </sections>

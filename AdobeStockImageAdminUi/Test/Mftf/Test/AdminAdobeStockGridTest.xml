@@ -16,7 +16,6 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3819033"/>
             <description value="User can use pagination controls to page to the next page of results"/>
             <severity value="BLOCKER"/>
-            <group value="adobe_stock_integration_grid"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -28,11 +27,11 @@
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32images"/>
-        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeFirstPage"/>
+        <actionGroup ref="AssertAdminAdobeStockThumbnailsNumberActionGroup" stepKey="see32images"/>
+        <actionGroup ref="AssertAdminAdobeStockCurrentPageNumberActionGroup" stepKey="seeFirstPage"/>
         <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
-        <actionGroup ref="AdminAssertAdobeStockThumbnailsNumberActionGroup" stepKey="see32imagesOnTheSecondPage"/>
-        <actionGroup ref="AdminAssertAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
+        <actionGroup ref="AssertAdminAdobeStockThumbnailsNumberActionGroup" stepKey="see32imagesOnTheSecondPage"/>
+        <actionGroup ref="AssertAdminAdobeStockCurrentPageNumberActionGroup" stepKey="seeSecondPage">
             <argument name="pageNumber" value="2"/>
         </actionGroup>
     </test>

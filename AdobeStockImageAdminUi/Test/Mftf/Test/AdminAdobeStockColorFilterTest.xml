@@ -17,7 +17,6 @@
             <description value="Admin should be able to filter images by image color"/>
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218841"/>
             <severity value="MAJOR"/>
-            <group value="adobe_stock_integration_filters"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -36,7 +35,7 @@
             <argument name="color" value="#000000"/>
         </actionGroup>
         <!--Verify that filter is applied -->
-        <actionGroup ref="AssertsFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="#000000"/>
         </actionGroup>
         <!--Enter a search term to nullify the default gallery/collection shown-->

@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertAdobeStockCurrentPageNumberActionGroup">
+    <actionGroup name="AssertAdminAdobeStockCurrentPageNumberActionGroup">
         <arguments>
             <argument name="pageNumber" type="string" defaultValue="1"/>
         </arguments>

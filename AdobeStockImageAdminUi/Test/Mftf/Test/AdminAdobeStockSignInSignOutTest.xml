@@ -19,8 +19,7 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579351"/>
             <description value="Admin User is logged into Admin Panel and User signs in and out from Stock"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_ims"/>
-            <group value="adobe_stock_integration"/>
+            <group value="adobe_stock_integration_ims_signed"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -29,12 +28,10 @@
         </before>
         <after>
             <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
+            <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
+            <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
         </after>
-        <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
-        <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
-        <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
-        <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
 
         <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="LogOut"/>
         <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserNotLogged"/>

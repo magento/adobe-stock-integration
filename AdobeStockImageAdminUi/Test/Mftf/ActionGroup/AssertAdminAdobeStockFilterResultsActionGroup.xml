@@ -7,10 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertIsVisibleAdobeStockFilterElementActionGroup">
+    <actionGroup name="AssertAdminAdobeStockFilterResultsActionGroup">
         <arguments>
-            <argument name="filterName" type="string"/>
+            <argument name="resultValue" type="string"/>
         </arguments>
-        <seeElement selector="{{AdobeStockFilterSection.filterType(filterName)}}" stepKey="seeFilterType"/>
+        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFiltersToCheckAppliedFilter"/>
+        <see selector="{{AdobeStockFilterSection.activeFilter(resultValue)}}" userInput="{{resultValue}}" stepKey="verifyAppliedFilter"/>
     </actionGroup>
 </actionGroups>
