@@ -42,12 +42,13 @@ class UpdateOpenDialogUrlPageBuilder
      *
      * @param OpenDialogUrl $subject
      * @param array $itemName
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetData($subject, array $itemName)
     {
         $newItem = [];
         if ($this->config->isEnabled()) {
-            foreach ($itemName as $key => $item) {
+            foreach ($itemName as $key) {
                 $newItem[$key] = $this->url->getUrl('media_gallery/index/index');
             }
             return $newItem;
