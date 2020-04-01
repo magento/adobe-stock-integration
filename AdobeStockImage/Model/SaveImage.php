@@ -16,17 +16,19 @@ use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 
 /**
- * Test saving Adobe Stock Image to filesystem and database
+ * Save an image provided with the adobe Stock integration.
  */
 class SaveImage implements SaveImageInterface
 {
@@ -86,6 +88,11 @@ class SaveImage implements SaveImageInterface
     private $setLicensedInMediaGalleryGrid;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
      * @param GetByIdInterface $getMediaAssetById
@@ -97,6 +104,7 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
+     * @param Filesystem $filesystem
      */
     public function __construct(
         StorageSave $storageSave,
@@ -109,7 +117,8 @@ class SaveImage implements SaveImageInterface
         DocumentToAsset $documentToAsset,
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
-        SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
+        SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
+        Filesystem $filesystem
     ) {
         $this->storageSave = $storageSave;
         $this->storageDelete = $storageDelete;
@@ -122,6 +131,7 @@ class SaveImage implements SaveImageInterface
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -148,12 +158,17 @@ class SaveImage implements SaveImageInterface
 
         $path = $this->storageSave->execute($url, $destinationPath);
 
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $absolutePath = $mediaDirectory->getAbsolutePath($path);
+        $fileSize = $mediaDirectory->stat($absolutePath)['size'];
+
         $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert(
             $document,
             [
                 'id' => null,
                 'path' => $path,
-                'source' => 'Adobe Stock'
+                'source' => 'Adobe Stock',
+                'size' => $fileSize
             ]
         );
         $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);

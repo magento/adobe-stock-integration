@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
@@ -43,31 +41,23 @@ class UpdateAssetInGrid
     private $assetKeywords;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Constructor
      *
      * @param ResourceConnection $resource
      * @param DriverInterface $file
      * @param LoggerInterface $logger
      * @param GetAssetKeywords $assetKeywords
-     * @param Filesystem $filesystem
      */
     public function __construct(
         ResourceConnection $resource,
         DriverInterface $file,
         LoggerInterface $logger,
-        GetAssetKeywords $assetKeywords,
-        Filesystem $filesystem
+        GetAssetKeywords $assetKeywords
     ) {
         $this->resource = $resource;
         $this->file = $file;
         $this->logger = $logger;
         $this->assetKeywords = $assetKeywords;
-        $this->filesystem = $filesystem;
     }
 
     /**
@@ -81,15 +71,10 @@ class UpdateAssetInGrid
     public function execute(AssetInterface $asset): void
     {
         try {
-
             /* Get all keywords from media_gallery_keyword table for current asset */
             $keywords = array_map(function (KeywordInterface $keyword) {
                 return $keyword->getKeyword();
             }, $this->assetKeywords->execute($asset->getId()));
-
-            $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-            $absolutePath = $mediaDirectory->getAbsolutePath($asset->getPath());
-            $fileSize = $mediaDirectory->stat($absolutePath)['size'];
 
             $this->resource->getConnection()->insertOnDuplicate(
                 $this->resource->getTableName('media_gallery_asset_grid'),
@@ -104,7 +89,7 @@ class UpdateAssetInGrid
                     'source' => $asset->getSource(),
                     'width' => $asset->getWidth(),
                     'height' => $asset->getHeight(),
-                    'size' => $fileSize,
+                    'size' => $asset->getSize(),
                     'created_at' => $asset->getCreatedAt(),
                     'updated_at' => $asset->getUpdatedAt(),
                     'keywords' => implode(",", $keywords) ?: null
