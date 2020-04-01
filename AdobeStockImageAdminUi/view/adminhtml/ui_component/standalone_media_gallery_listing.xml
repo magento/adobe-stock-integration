@@ -11,6 +11,7 @@
         <buttons>
             <button name="search_adobe_stock">
                 <param name="on_click" xsi:type="string">jQuery(".adobe-search-images-modal").trigger("openModal");</param>
+		<param name="sort_order" xsi:type="number">100</param>
                 <class>action-secondary</class>
                 <label translate="true">Search Adobe Stock</label>
             </button>
