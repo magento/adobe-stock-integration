@@ -18,14 +18,15 @@ class UnlicensedOverlay extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     *
      * @return array
      */
     public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = isset($item['licensed']) && !$item['licensed'] ? 'Unlicensed' : '';
+                $item[$this->getData('name')] = isset($item['licensed']) && $item['licensed']
+                    ? 'Licensed'
+                    : 'Unlicensed';
             }
         }
 
