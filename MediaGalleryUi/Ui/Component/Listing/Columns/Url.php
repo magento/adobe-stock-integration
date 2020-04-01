@@ -26,9 +26,15 @@ class Url extends Column
     private $storeManager;
 
     /**
+     * UrlInterface $urlInterface
+     */
+    private $urlInterface;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $urlInterface
      * @param array $components
      * @param array $data
      */
@@ -36,11 +42,13 @@ class Url extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         StoreManagerInterface $storeManager,
+        UrlInterface $urlInterface,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->storeManager = $storeManager;
+        $this->urlInterface = $urlInterface;
     }
 
     /**
@@ -72,7 +80,8 @@ class Url extends Column
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
-                    'targetElementId' => $this->context->getRequestParam('target_element_id')
+                    'targetElementId' => $this->context->getRequestParam('target_element_id'),
+                    'deleteImageUrl' => $this->urlInterface->getUrl('media_gallery/image/delete')
                 ]
             )
         );
