@@ -41,23 +41,31 @@ class UpdateAssetInGrid
     private $assetKeywords;
 
     /**
+     * @var CreateGridThumbnail
+     */
+    private $createGridThumbnail;
+
+    /**
      * Constructor
      *
      * @param ResourceConnection $resource
      * @param DriverInterface $file
      * @param LoggerInterface $logger
      * @param GetAssetKeywords $assetKeywords
+     * @param CreateGridThumbnail $createGridThumbnail
      */
     public function __construct(
         ResourceConnection $resource,
         DriverInterface $file,
         LoggerInterface $logger,
-        GetAssetKeywords $assetKeywords
+        GetAssetKeywords $assetKeywords,
+        CreateGridThumbnail $createGridThumbnail
     ) {
         $this->resource = $resource;
         $this->file = $file;
         $this->logger = $logger;
         $this->assetKeywords = $assetKeywords;
+        $this->createGridThumbnail = $createGridThumbnail;
     }
 
     /**
@@ -76,13 +84,14 @@ class UpdateAssetInGrid
             $keywords = array_map(function (KeywordInterface $keyword) {
                 return $keyword->getKeyword();
             }, $this->assetKeywords->execute($asset->getId()));
+            $thumbnailPath = $this->createGridThumbnail->execute($asset->getPath());
 
             $this->resource->getConnection()->insertOnDuplicate(
                 $this->resource->getTableName('media_gallery_asset_grid'),
                 [
                     'id' => $asset->getId(),
                     'directory' => $this->file->getParentDirectory($asset->getPath()),
-                    'thumbnail_url' => $asset->getPath(),
+                    'thumbnail_url' => $thumbnailPath,
                     'preview_url' => $asset->getPath(),
                     //phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'name' => basename($asset->getPath()),
