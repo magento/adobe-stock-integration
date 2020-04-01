@@ -14,7 +14,7 @@ use Magento\Framework\Image\Adapter\AbstractAdapter;
 use Magento\Framework\Image\AdapterFactory as ImageAdapterFactory;
 
 /**
- * Create grid thumbnail
+ * Class creates a thumbnail grid by resizing original image
  */
 class CreateGridThumbnail
 {
