@@ -20,4 +20,11 @@ interface ImagesIndexerInterface
      * @return void
      */
     public function execute(): void;
+
+    /**
+     * Return indexer title
+     *
+     * @return string
+     */
+    public function getTitle(): string;
 }

@@ -36,6 +36,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGalleryUi\Console\Command\IndexAssets">
+        <arguments>
+            <argument name="indexers" xsi:type="array">
+                <item name="asset" xsi:type="object">Magento\MediaGalleryUi\Model\ImagesIndexer</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">

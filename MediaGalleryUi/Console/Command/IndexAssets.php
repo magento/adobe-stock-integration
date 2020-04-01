@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Console\Command;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
-use Magento\MediaGalleryUi\Model\ImagesIndexer;
+use Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,9 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class IndexAssets extends Command
 {
     /**
-     * @var ImagesIndexer
+     * @var ImagesIndexerInterface[]
      */
-    protected $imagesIndexer;
+    private $indexers;
 
     /**
      * @var State $state
@@ -33,14 +33,14 @@ class IndexAssets extends Command
     /**
      * IndexAssets constructor.
      *
-     * @param ImagesIndexer $imagesIndexer
+     * @param array $indexers
      * @param State $state
      */
     public function __construct(
-        ImagesIndexer $imagesIndexer,
+        array $indexers,
         State $state
     ) {
-        $this->imagesIndexer = $imagesIndexer;
+        $this->indexers= $indexers;
         $this->state = $state;
         parent::__construct();
     }
@@ -51,7 +51,9 @@ class IndexAssets extends Command
     protected function configure()
     {
         $this->setName('media-gallery:index');
-        $this->setDescription('Scan media directory for media gallery asset and write their parameters to database');
+        $this->setDescription(
+            'Run media gallery ui indexers.'
+        );
     }
 
     /**
@@ -59,11 +61,21 @@ class IndexAssets extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Uploading assets information from media directory to database...');
-        $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () {
-            $this->imagesIndexer->execute();
+        $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($output) {
+            foreach ($this->indexers as $indexer) {
+                /** @var ImagesIndexerInterface $indexer */
+                if ($indexer instanceof ImagesIndexerInterface) {
+                    $output->write($indexer->getTitle() . ' index ');
+                    $startTime = microtime(true);
+                    $indexer->execute();
+                    $resultTime = microtime(true) - $startTime;
+                    $output->writeln(
+                        __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', (int) $resultTime)])
+                    );
+                }
+            }
         });
-        $output->writeln('Completed assets indexing.');
+        $output->writeln('Completed media galley ui indexing.');
         return Cli::RETURN_SUCCESS;
     }
 }

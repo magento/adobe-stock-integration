@@ -23,6 +23,8 @@ class ImagesIndexer implements ImagesIndexerInterface
      */
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
 
+    private $title = 'Uploading assets information from media directory to database';
+
     /**
      * @var ReadInterface
      */
@@ -67,5 +69,15 @@ class ImagesIndexer implements ImagesIndexerInterface
             \RecursiveDirectoryIterator::FOLLOW_SYMLINKS,
             self::IMAGE_FILE_NAME_PATTERN
         );
+    }
+
+    /**
+     * Return indexer title
+     *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 }
