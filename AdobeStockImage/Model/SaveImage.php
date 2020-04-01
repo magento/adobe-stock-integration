@@ -23,7 +23,6 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 
@@ -41,11 +40,6 @@ class SaveImage implements SaveImageInterface
      * @var StorageDelete
      */
     private $storageDelete;
-
-    /**
-     * @var GetByIdInterface
-     */
-    private $getMediaAssetById;
 
     /**
      * @var AssetRepositoryInterface
@@ -95,7 +89,6 @@ class SaveImage implements SaveImageInterface
     /**
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
-     * @param GetByIdInterface $getMediaAssetById
      * @param AssetRepositoryInterface $assetRepository
      * @param SaveInterface $saveMediaAsset
      * @param SaveAssetInterface $saveAdobeStockAsset
@@ -109,7 +102,6 @@ class SaveImage implements SaveImageInterface
     public function __construct(
         StorageSave $storageSave,
         StorageDelete $storageDelete,
-        GetByIdInterface $getMediaAssetById,
         AssetRepositoryInterface $assetRepository,
         SaveInterface $saveMediaAsset,
         SaveAssetInterface $saveAdobeStockAsset,
@@ -122,7 +114,6 @@ class SaveImage implements SaveImageInterface
     ) {
         $this->storageSave = $storageSave;
         $this->storageDelete = $storageDelete;
-        $this->getMediaAssetById = $getMediaAssetById;
         $this->assetRepository = $assetRepository;
         $this->saveMediaAsset = $saveMediaAsset;
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
