@@ -25,6 +25,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     private const ID = 'id';
     private const MEDIA_GALLERY_ID = 'media_gallery_id';
     private const IS_LICENSED = 'is_licensed';
+    private const MEDIA_TYPE_ID = 'media_type_id';
     private const CREATION_DATE = 'creation_date';
     private const CATEGORY_ID = 'category_id';
     private const CREATOR_ID = 'creator_id';
@@ -91,6 +92,14 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function getIsLicensed(): int
     {
         return (int) $this->getData(self::IS_LICENSED);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMediaTypeId(): int
+    {
+        return (int) $this->getData(self::MEDIA_TYPE_ID);
     }
 
     /**

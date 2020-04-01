@@ -1,7 +1,8 @@
 {
     "media_gallery_asset_grid": {
         "column": {
-            "licensed": true
+            "licensed": true,
+            "media_type_id": true
         }
     }
 }

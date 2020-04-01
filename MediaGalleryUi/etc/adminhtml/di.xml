@@ -11,4 +11,16 @@
             <argument name="path" xsi:type="string">media</argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId">
+        <arguments>
+            <argument name="mediaTypeIds" xsi:type="array">
+                <item name="1" xsi:type="string">Photo</item>
+                <item name="2" xsi:type="string">Illustration</item>
+                <item name="3" xsi:type="string">Vector</item>
+                <item name="4" xsi:type="string">Video</item>
+                <item name="6" xsi:type="string">3D</item>
+                <item name="7" xsi:type="string">Template</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

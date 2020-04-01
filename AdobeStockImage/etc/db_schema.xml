@@ -8,5 +8,6 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="media_gallery_asset_grid" resource="default" engine="innodb" comment="Media Gallery Asset">
         <column xsi:type="boolean" name="licensed" comment="Licensed image"/>
+        <column xsi:type="int" name="media_type_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Media Type Id"/>
     </table>
 </schema>

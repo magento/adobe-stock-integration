@@ -65,6 +65,11 @@ class GetImageDetailsByAssetId
     private $sourceIconProvider;
 
     /**
+     * @var array
+     */
+    private $mediaTypeIds;
+
+    /**
      * GetImageDetailsByAssetId constructor.
      *
      * @param GetByIdInterface $getAssetById
@@ -72,19 +77,22 @@ class GetImageDetailsByAssetId
      * @param ResourceConnection $resource
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
+     * @param array $mediaTypeIds
      */
     public function __construct(
         GetByIdInterface $getAssetById,
         StoreManagerInterface $storeManager,
         ResourceConnection $resource,
         Filesystem $filesystem,
-        SourceIconProvider $sourceIconProvider
+        SourceIconProvider $sourceIconProvider,
+        array $mediaTypeIds = []
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
         $this->resource = $resource;
         $this->filesystem = $filesystem;
         $this->sourceIconProvider = $sourceIconProvider;
+        $this->mediaTypeIds = $mediaTypeIds;
     }
 
     /**
@@ -100,6 +108,8 @@ class GetImageDetailsByAssetId
     {
         $asset = $this->getAssetById->execute($assetId);
         $assetGridData = $this->getAssetGridDataById($assetId);
+
+        $mediaTypeId = (int) $assetGridData['media_type_id'];
         $tags = isset($assetGridData['keywords']) ? explode(',', $assetGridData['keywords']) : [];
         $type = $assetGridData['content_type'] ?? '';
         $size = $this->getImageSize($asset->getPath());
@@ -109,6 +119,10 @@ class GetImageDetailsByAssetId
             'title' => $asset->getTitle(),
             'image_id' => $assetId,
             'details' => [
+                [
+                    'title' => __('Type'),
+                    'value' => $this->getTypeImageByMediaTypeId($mediaTypeId),
+                ],
                 [
                     'title' => __('Created'),
                     'value' => $this->formatDate($asset->getCreatedAt())
@@ -135,6 +149,17 @@ class GetImageDetailsByAssetId
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
             'content_type' => $type
         ];
+    }
+
+    /**
+     * Return image type by image type id
+     *
+     * @param int $typeId
+     * @return string
+     */
+    private function getTypeImageByMediaTypeId(int $typeId): string
+    {
+        return isset($this->mediaTypeIds[$typeId]) ? $this->mediaTypeIds[$typeId] : '';
     }
 
     /**
