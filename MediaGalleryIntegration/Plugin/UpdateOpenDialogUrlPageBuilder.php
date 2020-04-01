@@ -52,5 +52,6 @@ class UpdateOpenDialogUrlPageBuilder
             }
             return $newItem;
         }
+        return $itemName;
     }
 }
