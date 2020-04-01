@@ -18,7 +18,7 @@ class Options implements OptionSourceInterface
     /**
      * @var array
      */
-    private $_options = [];
+    private $options = [];
 
     /**
      * Options constructor.
@@ -26,7 +26,7 @@ class Options implements OptionSourceInterface
      */
     public function __construct(array $options = [])
     {
-        $this->_options = $options;
+        $this->options = $options;
     }
 
     /**
@@ -35,7 +35,7 @@ class Options implements OptionSourceInterface
     public function toOptionArray(): array
     {
         $options = [];
-        foreach ($this->_options as $option) {
+        foreach ($this->options as $option) {
             if (isset($option['label'])) {
                 $option['label'] = __($option['label']);
             }
