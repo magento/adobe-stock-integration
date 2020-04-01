@@ -90,7 +90,7 @@ class SaveImage implements SaveImageInterface
     /**
      * @var Filesystem
      */
-    private $filesystem;
+    private $fileSystem;
 
     /**
      * @param StorageSave $storageSave
@@ -104,7 +104,7 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
-     * @param Filesystem $filesystem
+     * @param Filesystem $fileSystem
      */
     public function __construct(
         StorageSave $storageSave,
@@ -118,7 +118,7 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        Filesystem $filesystem
+        Filesystem $fileSystem
     ) {
         $this->storageSave = $storageSave;
         $this->storageDelete = $storageDelete;
@@ -131,11 +131,11 @@ class SaveImage implements SaveImageInterface
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
-        $this->filesystem = $filesystem;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
-     * Downloads the image and save it to filesystem and database
+     * Downloads the image and save it to file system database
      *
      * @param Document $document
      * @param string $url
@@ -158,7 +158,7 @@ class SaveImage implements SaveImageInterface
 
         $path = $this->storageSave->execute($url, $destinationPath);
 
-        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
         $absolutePath = $mediaDirectory->getAbsolutePath($path);
         $fileSize = $mediaDirectory->stat($absolutePath)['size'];
 

@@ -17,11 +17,15 @@ use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\Read;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -76,14 +80,29 @@ class SaveImageTest extends TestCase
     private $saveAssetKeywords;
 
     /**
-     * @var SaveImage
-     */
-    private $saveImage;
-
-    /**
      * @var SetLicensedInMediaGalleryGrid|MockObject
      */
     private $setLicensedInMediaGalleryGridMock;
+
+    /**
+     * @var FileSystem|MockObject
+     */
+    private $fileSystemMock;
+
+    /**
+     * @var ReadInterface|MockObject
+     */
+    private $readInterfaceMock;
+
+    /**
+     * @var Read|MockObject
+     */
+    private $mediaDirectoryMock;
+
+    /**
+     * @var SaveImage
+     */
+    private $saveImage;
 
     /**
      * @inheritdoc
@@ -100,6 +119,9 @@ class SaveImageTest extends TestCase
         $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
         $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
         $this->setLicensedInMediaGalleryGridMock = $this->createMock(SetLicensedInMediaGalleryGrid::class);
+        $this->fileSystemMock = $this->createMock(Filesystem::class);
+        $this->readInterfaceMock = $this->createMock(ReadInterface::class);
+        $this->mediaDirectoryMock = $this->createMock(Read::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -113,7 +135,8 @@ class SaveImageTest extends TestCase
                 'documentToAsset' =>  $this->documentToAsset,
                 'documentToKeywords' => $this->documentToKeywords,
                 'saveAssetKeywords' => $this->saveAssetKeywords,
-                'setLicensedInMediaGalleryGrid' => $this->setLicensedInMediaGalleryGridMock
+                'setLicensedInMediaGalleryGrid' => $this->setLicensedInMediaGalleryGridMock,
+                'fileSystem' => $this->fileSystemMock
             ]
         );
     }
@@ -128,6 +151,7 @@ class SaveImageTest extends TestCase
      */
     public function testExecute(Document $document, bool $delete): void
     {
+        $path = 'catalog/test-image.jpeg';
         if ($delete) {
             $this->storageDelete->expects($this->once())
                 ->method('execute');
@@ -137,7 +161,22 @@ class SaveImageTest extends TestCase
         }
 
         $this->storageSave->expects($this->once())
-            ->method('execute');
+            ->method('execute')
+            ->willReturn($path);
+
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($this->mediaDirectoryMock);
+
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with($path)
+            ->willReturn('root/pub/media/catalog/test-image.jpeg');
+
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('stat')
+            ->willReturn(['size' => 12345]);
 
         $this->documentToMediaGalleryAsset->expects($this->once())
             ->method('convert')
