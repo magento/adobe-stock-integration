@@ -68,7 +68,7 @@ class Create extends Action implements HttpPostActionInterface
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $path = $this->getRequest()->getParam('path');
         $name = $this->getRequest()->getParam('name');
-        
+
         if (!$path && !$name) {
             $responseContent = [
                 'success' => false,

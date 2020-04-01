@@ -2,17 +2,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+//
+//  Variables
+//  _____________________________________________
+
 @color-folders-background: #a6a6a6;
 @color-folders-background-selected: #cdecf6;
 @color-folders-border: #7185f5;
 @color-masonry-overlay: #d9631c;
 @color-masonry-grey: #9e9e9e;
 @color-masonry-white: #e1e1e1;
+@color-masonry-steelblue: #4682b4;
 
 & when (@media-common = true) {
 
-    .media-gallery-container,
-    .media_gallery-media-index{
+    .media-gallery-container {
 
         .page-main-actions {
             .page-actions {
@@ -88,11 +93,19 @@
             list-style: none;
             margin-bottom: 0;
             position: absolute;
-            width: 90%;
+            width: 89%;
 
             .name {
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                display: -webkit-box;
                 font-size: 15px;
                 font-weight: bold;
+                line-height: 18px;
+                max-height: 50px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                word-wrap: anywhere;
             }
 
             .type {
@@ -117,15 +130,8 @@
 
             .three-dots {
                 &:before {
-                    color: @color-masonry-grey;
-                    content: '\2807';
+                    content: url("@{baseDir}Magento_MediaGalleryUi/images/3-dots.png");
                     cursor: pointer;
-                    display: inline-block;
-                    font-size: 26px;
-
-                    .lib-rotate(
-                        @_rotation: 90deg;
-                    );
                 }
             }
         }
@@ -161,7 +167,7 @@
             position: relative;
 
             &.selected {
-                border: 5px solid steelblue;
+                border: 5px solid @color-masonry-steelblue;
             }
         }
 
@@ -220,6 +226,10 @@
                 float: left;
                 max-width: 70%;
                 width: auto;
+
+                img {
+                    max-height: 650px;
+                }
             }
 
             .image-details-sidebar {
@@ -228,8 +238,8 @@
                 padding-left: 40px;
 
                 .image-details-section {
-                    .lib-clearfix();
                     margin-bottom: 40px;
+                    .lib-clearfix();
                 }
 
                 h3.image-title {

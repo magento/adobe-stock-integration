@@ -102,6 +102,7 @@ class GetImageDetailsByAssetId
         $assetGridData = $this->getAssetGridDataById($assetId);
         $tags = isset($assetGridData['keywords']) ? explode(',', $assetGridData['keywords']) : [];
         $type = $assetGridData['content_type'] ?? '';
+        $size = $this->getImageSize($asset->getPath());
 
         return [
             'image_url' => $this->getUrl($asset->getPath()),
@@ -126,9 +127,10 @@ class GetImageDetailsByAssetId
                 ],
                 [
                     'title' => __('Size'),
-                    'value' => $this->getImageSize($asset->getPath())
+                    'value' => $this->formatImageSize($size)
                 ]
             ],
+            'size' => $size,
             'tags' => $tags,
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
             'content_type' => $type
@@ -189,20 +191,31 @@ class GetImageDetailsByAssetId
      *
      * @param string $path
      *
-     * @return string
+     * @return int
      *
      * @throws FileSystemException
      */
-    private function getImageSize(string $path): string
+    private function getImageSize(string $path): int
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $imageStatistics = $mediaDirectory->stat($path);
-        $size = $imageStatistics['size'] ?? 0;
 
-        if (!$size) {
+        return (int) ($imageStatistics['size'] ?? 0);
+    }
+
+    /**
+     * Format image size
+     *
+     * @param int $imageSize
+     *
+     * @return string
+     */
+    private function formatImageSize(int $imageSize): string
+    {
+        if (!$imageSize) {
             return '';
         }
 
-        return sprintf('%sKb', $size / 1000);
+        return sprintf('%sKb', $imageSize / 1000);
     }
 }

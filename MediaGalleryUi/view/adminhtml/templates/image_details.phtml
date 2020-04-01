@@ -65,12 +65,20 @@ use Magento\Backend\Block\Template;
                     "mediaGalleryImageActions": {
                         "component": "Magento_MediaGalleryUi/js/image/image-actions",
                         "modalSelector": ".media-gallery-image-details-modal",
+                        "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
+                        "targetElementId": "<?= $block->escapeJs($block->getData('targetElementId')); ?>",
                         "actionsList": [
                             {
                                 "title": "<?= $block->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
                                 "classes": "action-default scalable cancel action-quaternary"
+                            },
+                            {
+                                "title": "<?= $block->escapeJs(__('Add Image')); ?>",
+                                "handler": "addImage",
+                                "name": "add-image",
+                                "classes": "scalable action-primary add-image-action"
                             }
                         ]
                     }
