@@ -67,18 +67,13 @@ use Magento\Backend\Block\Template;
                         "modalSelector": ".media-gallery-image-details-modal",
                         "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
                         "targetElementId": "<?= $block->escapeJs($block->getData('targetElementId')); ?>",
+                        "skipButton": "<?= $block->escapeJs($block->getData('skipButton')); ?>",
                         "actionsList": [
                             {
                                 "title": "<?= $block->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
                                 "classes": "action-default scalable cancel action-quaternary"
-                            },
-                            {
-                                "title": "<?= $block->escapeJs(__('Add Image')); ?>",
-                                "handler": "addImage",
-                                "name": "add-image",
-                                "classes": "scalable action-primary add-image-action"
                             }
                         ]
                     }

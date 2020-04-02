@@ -36,27 +36,6 @@ define([
         },
 
         /**
-        * Init component
-        */
-        initialize: function () {
-            this._super();
-            this.verifyActionList();
-
-            return this;
-        },
-
-        /**
-         * Verify action list, if have skip button remove it
-         */
-        verifyActionList: function () {
-            $.each(this.actionsList, function (index, value) {
-                if (value.name === this.skipButton) {
-                    this.actionsList.splice(index, 1);
-                }
-            }.bind(this));
-        },
-
-        /**
          * Add Image
          */
         addImage: function () {
