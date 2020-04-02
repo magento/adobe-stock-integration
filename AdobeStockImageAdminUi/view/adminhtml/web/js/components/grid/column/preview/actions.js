@@ -6,12 +6,13 @@
 // jscs:enable
 define([
     'uiComponent',
+    'uiRegistry',
     'jquery',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html'
-], function (Component, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
+], function (Component, uiRegistry, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
     'use strict';
 
     return Component.extend({
@@ -25,6 +26,9 @@ define([
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            imageItems: [],
+            mediaGalleryProvider: 'media_gallery_listing.media_gallery_listing_data_source',
+            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -33,8 +37,26 @@ define([
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
-                messages: '${ $.messagesName }'
+                messages: '${ $.messagesName }',
+                imageDirectory: '${ $.mediaGalleryDirectoryComponent }'
+            },
+            imports: {
+                imageItems: '${ $.mediaGalleryProvider }:data.items'
             }
+        },
+
+        /**
+         * Init observable variables
+         *
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'imageItems'
+                ]);
+
+            return this;
         },
 
         /**
@@ -99,9 +121,74 @@ define([
          * Selects displayed image in media gallery
          */
         selectDisplayedImageInMediaGallery: function () {
+            if (!this.isMediaBrowser()) {
+                this.selectDisplayedImageForNewMediaGallery();
+            } else {
+                this.selectDisplayedImageForOldMediaGallery();
+            }
+        },
+
+        /**
+         * Selects displayed image in media gallery for old gallery
+         */
+        selectDisplayedImageForOldMediaGallery: function () {
             var image = mediaGallery.locate(this.preview().displayedRecord().path);
 
             image ? image.click() : mediaGallery.notLocated();
+        },
+
+        /**
+         * Selects displayed image in media gallery for new gallery
+         */
+        selectDisplayedImageForNewMediaGallery: function () {
+            var self = this,
+                imagePath = self.preview().displayedRecord().path,
+                imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
+                imageFilename = imagePath.substring(imagePath.lastIndexOf('/') + 1),
+                locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])'),
+                recordIndex,
+                record = null,
+                subscription;
+
+            if (!locatedImage.length) {
+                subscription = this.imageItems.subscribe(function (items) {
+                    subscription.dispose();
+                    items.each(function (item) {
+                        if (item.name === imageFilename) {
+                            record = item;
+
+                            return false;
+                        }
+                    });
+
+                    if (!record) {
+                        mediaGallery.notLocated();
+                    }
+
+                    self.selectRecord(record);
+                });
+            }
+
+            if (imageFolders) {
+                this.imageDirectory().selectFolder(imageFolders);
+            } else {
+                this.imageDirectory().selectStorageRoot();
+            }
+
+            if (locatedImage.length) {
+                recordIndex = locatedImage.closest('.masonry-image-column').data('repeat-index');
+                record = this.imageItems()[recordIndex];
+                this.selectRecord(record);
+            }
+        },
+
+        /**
+         * Set the record as selected
+         *
+         * @param {Object} record
+         */
+        selectRecord: function (record) {
+            uiRegistry.get('index = thumbnail_url').selected(record);
         },
 
         /**
@@ -226,6 +313,17 @@ define([
                     this.messages().scheduleCleanup(this.messageDelay);
                 }
             });
+        },
+
+        /**
+         * Is the media browser used in the content of the grid
+         *
+         * @returns {Boolean}
+         */
+        isMediaBrowser: function () {
+            var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser');
+
+            return typeof mediaBrowser !== 'undefined';
         },
 
         /**
