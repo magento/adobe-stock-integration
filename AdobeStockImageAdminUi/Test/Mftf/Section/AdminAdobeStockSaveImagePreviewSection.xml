@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdobeStockSaveImagePreviewSection">
+    <section name="AdminAdobeStockSaveImagePreviewSection">
         <element name="name" type="text" selector=".adobe-stock-save-preview-prompt input.admin__control-text[name='name']"/>
 
         <!-- TODO: Move the following element to Magento/MediaGallery module -->

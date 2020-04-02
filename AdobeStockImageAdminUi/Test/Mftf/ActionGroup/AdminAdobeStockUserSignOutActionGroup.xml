@@ -9,8 +9,8 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockUserSignOutActionGroup">
-        <click selector="{{AdobeStockSection.userNameButton}}" stepKey="clickOnUserNameButton"/>
-        <click selector="{{AdobeStockSection.userSignOut}}" stepKey="clickOnUserSignOutButton"/>
+        <click selector="{{AdminAdobeStockSection.userNameButton}}" stepKey="clickOnUserNameButton"/>
+        <click selector="{{AdminAdobeStockSection.userSignOut}}" stepKey="clickOnUserSignOutButton"/>
         <waitForPageLoad stepKey="waitForLoad"/>
     </actionGroup>
 </actionGroups>
