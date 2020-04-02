@@ -8,10 +8,10 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="AdobeStockValidFolderData">
+    <entity name="AdminMediaGalleryFolderData">
         <data key="name" unique="suffix">folder</data>
     </entity>
-    <entity name="AdobeStockInvalidFolderData">
-        <data key="name" unique="suffix">,.?/:;'[{]}|~`!@#$%^*()_=+</data>
+    <entity name="AdminMediaGalleryFolderInvalidData">
+        <data key="name">,.?/:;'[{]}|~`!@#$%^*()_=+</data>
     </entity>
 </entities>

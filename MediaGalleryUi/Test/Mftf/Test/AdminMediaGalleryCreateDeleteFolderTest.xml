@@ -7,9 +7,9 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateDeleteNewFolderTest">
+    <test name="AdminMediaGalleryCreateDeleteFolderTest">
         <annotations>
-            <features value="AdobeStockImagePanel"/>
+            <features value="AdminMediaGalleryImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1046; https://github.com/magento/adobe-stock-integration/issues/1047"/>
             <title value="Creating, deleting new folder functionality in Media Gallery"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4456547; https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4457075"/>
@@ -28,38 +28,38 @@
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
         </after>
 
-        <actionGroup ref="AdminOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
-        <actionGroup ref="AdminCreateNewFolderActionGroup" stepKey="createNewFolderWithNotValidName">
-            <argument name="name" value="{{AdobeStockInvalidFolderData.name}}"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolderWithNotValidName">
+            <argument name="name" value="{{AdminMediaGalleryFolderInvalidData.name}}"/>
         </actionGroup>
 
-        <grabTextFrom selector="{{AdobeStockFolderSection.folderNameValidationMessage}}" stepKey="grabValidationMessage"/>
+        <grabTextFrom selector="{{AdminMediaGalleryFolderSection.folderNameValidationMessage}}" stepKey="grabValidationMessage"/>
         <assertContains stepKey="assertFirst">
             <actualResult type="variable">grabValidationMessage</actualResult>
             <expectedResult type="string">Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.</expectedResult>
         </assertContains>
 
-        <actionGroup ref="AdminCreateNewFolderActionGroup" stepKey="createNewFolder"/>
-        <actionGroup ref="AdminAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
 
         <amOnPage url="admin/dashboard" stepKey="goToDashBoard"/>
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         <dontSeeElement selector="//span[contains(text(), 'Directory:')]" stepKey="folderNotSelected"/>
-        <seeElement selector="{{AdobeStockFolderSection.folderDeleteButton}}, :disabled" stepKey="deleteFolderButtonIsDisabled"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}, :disabled" stepKey="deleteFolderButtonIsDisabled"/>
 
-        <actionGroup ref="AdminFolderSelectActionGroup" stepKey="selectFolder"/>
-        <seeElement selector="{{AdobeStockFolderSection.folderDeleteButton}}" stepKey="deleteFolderButtonIsNotDisabled"/>
-        <actionGroup ref="AdminFolderSelectActionGroup" stepKey="unselectFolder"/>
-        <seeElement selector="{{AdobeStockFolderSection.folderDeleteButton}}, :disabled" stepKey="deleteFolderButtonIsDisabledAgain"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}" stepKey="deleteFolderButtonIsNotDisabled"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFolder"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}, :disabled" stepKey="deleteFolderButtonIsDisabledAgain"/>
 
-        <actionGroup ref="AdminFolderSelectActionGroup" stepKey="selectFolderForDelete"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderForDelete"/>
 
-        <click selector="{{AdobeStockFolderSection.folderDeleteButton}}" stepKey="clickDeleteButton"/>
-        <waitForElementVisible selector="{{AdobeStockFolderSection.folderCancelDeleteButton}}" stepKey="waitBeforeModalLoads"/>
-        <click selector="{{AdobeStockFolderSection.folderCancelDeleteButton}}" stepKey="cancelDeleteFolder"/>
-        <actionGroup ref="AdminAssertFolderNameActionGroup" stepKey="assertFolderWasNotDeleted"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}" stepKey="clickDeleteButton"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderCancelDeleteButton}}" stepKey="waitBeforeModalLoads"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderCancelDeleteButton}}" stepKey="cancelDeleteFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertFolderWasNotDeleted"/>
 
-        <actionGroup ref="AdminFolderDeleteActionGroup" stepKey="deleteFolder"/>
-        <actionGroup ref="AdminAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted"/>
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted"/>
     </test>
 </tests>
