@@ -47,6 +47,7 @@ define([
             $(this.imageUploadInputSelector).fileupload({
                 url: this.imageUploadUrl,
                 dataType: 'json',
+
                 /**
                  * Extending the form data
                  *
