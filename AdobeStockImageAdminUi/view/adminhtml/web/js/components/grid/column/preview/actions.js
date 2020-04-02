@@ -175,7 +175,7 @@ define([
         /**
          * Get image data by image file name
          *
-         * @param imageFilename
+         * @param {String} imageFilename
          * @returns {null|Object}
          */
         getRecordFromMediaGalleryProvider: function (imageFilename) {
