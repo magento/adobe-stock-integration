@@ -31,7 +31,7 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
-        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
         <actionGroup ref="AssertAdminAdobeStockImagesNumberMoreForThisSeriesActionGroup" stepKey="assertImagesUnderMoreForThisSeriesCount">
             <argument name="imagesNumber" value="4"/>
         </actionGroup>

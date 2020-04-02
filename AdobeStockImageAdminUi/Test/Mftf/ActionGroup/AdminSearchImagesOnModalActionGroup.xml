@@ -12,8 +12,8 @@
         <arguments>
             <argument name="query" type="string" defaultValue=""/>
         </arguments>
-        <fillField selector="{{AdobeStockSection.searchInput}}" userInput="{{query}}" stepKey="fillQueryInput"/>
-        <click selector="{{AdobeStockSection.searchButton}}" stepKey="applySearch"/>
+        <fillField selector="{{AdminAdobeStockSection.searchInput}}" userInput="{{query}}" stepKey="fillQueryInput"/>
+        <click selector="{{AdminAdobeStockSection.searchButton}}" stepKey="applySearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchForQuery"/>
     </actionGroup>
 </actionGroups>
