@@ -52,7 +52,7 @@ define([
                  * Extending the form data
                  *
                  * @param {Object} form
-                 * @returns {T[] | string | T[]}
+                 * @returns {Array}
                  */
                 formData: function (form) {
                     return form.serializeArray().concat(
