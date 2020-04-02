@@ -14,7 +14,7 @@
             <argument name="filterOption" type="string"/>
         </arguments>
         <click selector="{{filter}}" stepKey="clickOnFilter"/>
-        <click selector="{{AdobeStockFilterSection.filterOption(filterOption, type)}}" stepKey="selectFilter"/>
+        <click selector="{{AdminAdobeStockFilterSection.filterOption(filterOption, type)}}" stepKey="selectFilter"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>

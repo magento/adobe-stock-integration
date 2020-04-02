@@ -11,6 +11,6 @@
         <arguments>
             <argument name="filterName" type="string"/>
         </arguments>
-        <seeElement selector="{{AdobeStockFilterSection.filterType(filterName)}}" stepKey="seeFilterType"/>
+        <seeElement selector="{{AdminAdobeStockFilterSection.filterType(filterName)}}" stepKey="seeFilterType"/>
     </actionGroup>
 </actionGroups>

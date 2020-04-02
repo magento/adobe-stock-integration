@@ -11,7 +11,7 @@
         <arguments>
             <argument name="resultValue" type="string"/>
         </arguments>
-        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFiltersToCheckAppliedFilter"/>
-        <see selector="{{AdobeStockFilterSection.activeFilter(resultValue)}}" userInput="{{resultValue}}" stepKey="verifyAppliedFilter"/>
+        <click selector="{{AdminAdobeStockFilterSection.filters}}" stepKey="expandFiltersToCheckAppliedFilter"/>
+        <see selector="{{AdminAdobeStockFilterSection.activeFilter(resultValue)}}" userInput="{{resultValue}}" stepKey="verifyAppliedFilter"/>
     </actionGroup>
 </actionGroups>

@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockAssertUserNotLoggedActionGroup">
-        <dontSeeElement selector="{{AdobeStockSection.userImageSmall}}" stepKey="userIconIsNotVisible" />
-        <seeElement selector="{{AdobeStockSection.adobeSignIn}}" stepKey="signInLinkIsVisible" />
+        <dontSeeElement selector="{{AdminAdobeStockSection.userImageSmall}}" stepKey="userIconIsNotVisible" />
+        <seeElement selector="{{AdminAdobeStockSection.adobeSignIn}}" stepKey="signInLinkIsVisible" />
     </actionGroup>
 </actionGroups>
