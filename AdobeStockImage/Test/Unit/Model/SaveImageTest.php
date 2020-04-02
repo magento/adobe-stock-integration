@@ -13,7 +13,6 @@ use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImage\Model\SaveImage;
 use Magento\AdobeStockImage\Model\SaveImageFile;
 use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
-use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
@@ -77,9 +76,10 @@ class SaveImageTest extends TestCase
             [
                 'saveAdobeStockAsset' =>  $this->saveAdobeStockAsset,
                 'documentToAsset' =>  $this->documentToAsset,
-                'documentToKeywords' => $this->documentToKeywords,
                 'saveAssetKeywords' => $this->saveAssetKeywords,
+                'documentToKeywords' => $this->documentToKeywords,
                 'setLicensedInMediaGalleryGrid' => $this->setLicensedInMediaGalleryGridMock,
+                'saveImageFile' => $this->saveImageFileMock
             ]
         );
     }
@@ -95,6 +95,7 @@ class SaveImageTest extends TestCase
     public function testExecute(Document $document, string $url, string $destinationPath): void
     {
         $mediaGalleryAssetId = 42;
+        $keywords = [];
 
         $this->saveImageFileMock->expects($this->once())
             ->method('execute')
@@ -103,14 +104,16 @@ class SaveImageTest extends TestCase
 
         $this->documentToKeywords->expects($this->once())
             ->method('convert')
-            ->with($document);
+            ->with($document)
+            ->willReturn($keywords);
 
         $this->saveAssetKeywords->expects($this->once())
-            ->method('execute');
+            ->method('execute')
+            ->with($keywords, $mediaGalleryAssetId);
 
         $this->documentToAsset->expects($this->once())
             ->method('convert')
-            ->with($document);
+            ->with($document, ['media_gallery_id' => $mediaGalleryAssetId]);
 
         $this->saveAdobeStockAsset->expects($this->once())
             ->method('execute');
@@ -138,23 +141,12 @@ class SaveImageTest extends TestCase
     }
 
     /**
-     * Get document
+     * Get document mock object.
      *
-     * @param string|null $path
      * @return MockObject
      */
-    private function getDocument(?string $path = null): MockObject
+    private function getDocument(): MockObject
     {
-        $document = $this->createMock(Document::class);
-        $pathAttribute = $this->createMock(AttributeInterface::class);
-        $pathAttribute->expects($this->once())
-            ->method('getValue')
-            ->willReturn($path);
-        $document->expects($this->once())
-            ->method('getCustomAttribute')
-            ->with('path')
-            ->willReturn($pathAttribute);
-
-        return $document;
+        return $this->createMock(Document::class);
     }
 }

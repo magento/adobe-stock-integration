@@ -11,14 +11,13 @@ use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockImage\Model\SaveImage;
+use Magento\AdobeStockImage\Model\SaveImageFile;
 use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
@@ -30,9 +29,9 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test for Save image model.
+ * Test saving image file and create Media Gallery asset.
  */
-class SaveImageTest extends TestCase
+class SaveImageFileTest extends TestCase
 {
     /**
      * @var MockObject|StorageSave
@@ -100,9 +99,9 @@ class SaveImageTest extends TestCase
     private $mediaDirectoryMock;
 
     /**
-     * @var SaveImage
+     * @var SaveImageFile
      */
-    private $saveImage;
+    private $saveImageFile;
 
     /**
      * @inheritdoc
@@ -123,8 +122,8 @@ class SaveImageTest extends TestCase
         $this->readInterfaceMock = $this->createMock(ReadInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
 
-        $this->saveImage = (new ObjectManager($this))->getObject(
-            SaveImage::class,
+        $this->saveImageFile = (new ObjectManager($this))->getObject(
+            SaveImageFile::class,
             [
                 'storageSave' => $this->storageSave,
                 'storageDelete' => $this->storageDelete,
@@ -145,11 +144,12 @@ class SaveImageTest extends TestCase
      * Verify that image can be saved.
      *
      * @param Document $document
+     * @param string $url
+     * @param string $destinationPath
      * @param bool $delete
-     * @throws CouldNotSaveException
      * @dataProvider assetProvider
      */
-    public function testExecute(Document $document, bool $delete): void
+    public function testExecute(Document $document, string $url, string $destinationPath, bool $delete): void
     {
         $path = 'catalog/test-image.jpeg';
         if ($delete) {
@@ -188,24 +188,7 @@ class SaveImageTest extends TestCase
             ->method('execute')
             ->willReturn($mediaGalleryAssetId);
 
-        $this->documentToKeywords->expects($this->once())
-            ->method('convert')
-            ->with($document);
-
-        $this->saveAssetKeywords->expects($this->once())
-            ->method('execute');
-
-        $this->documentToAsset->expects($this->once())
-            ->method('convert')
-            ->with($document);
-
-        $this->saveAdobeStockAsset->expects($this->once())
-            ->method('execute');
-
-        $this->setLicensedInMediaGalleryGridMock->expects($this->once())
-            ->method('execute');
-
-        $this->saveImage->execute($document, 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg', 'path');
+        $this->saveImageFile->execute($document, $url, $destinationPath);
     }
 
     /**
@@ -218,10 +201,14 @@ class SaveImageTest extends TestCase
         return [
             [
                 'document' => $this->getDocument(),
+                'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
+                'destinationPath' => 'path',
                 'delete' => false
             ],
             [
                 'document' => $this->getDocument('filepath.jpg'),
+                'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
+                'destinationPath' => 'path',
                 'delete' => true
             ],
         ];

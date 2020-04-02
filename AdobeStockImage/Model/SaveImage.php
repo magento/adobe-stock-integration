@@ -97,7 +97,8 @@ class SaveImage implements SaveImageInterface
     {
         $mediaGalleryAssetId = $this->saveImageFile->execute($document, $url, $destinationPath);
 
-        $this->saveAssetKeywords->execute($this->documentToKeywords->convert($document), $mediaGalleryAssetId);
+        $keywords = $this->documentToKeywords->convert($document);
+        $this->saveAssetKeywords->execute($keywords, $mediaGalleryAssetId);
 
         $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
         $this->saveAdobeStockAsset->execute($asset);
