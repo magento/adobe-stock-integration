@@ -36,7 +36,8 @@ class MediaGalleryIndexerTrigger
      * Update media gallery grid table when configuration is saved and media gallery enabled
      *
      * @param Value $config
-     * @return void
+     * @param Value $result
+     * @return Value
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(Value $config, Value $result): Value
