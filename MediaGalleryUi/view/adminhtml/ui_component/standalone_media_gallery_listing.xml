@@ -162,5 +162,12 @@
                 <sortable>true</sortable>
             </settings>
         </column>
+        <column name="created_at">
+            <settings>
+                <label translate="true">Uploaded date</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
     </columns>
 </listing>
