@@ -39,11 +39,13 @@ class MediaGalleryIndexerTrigger
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(Value $config, Value $result): void
+    public function afterSave(Value $config, Value $result): Value
     {
         $isMediaGallery = $result->getPath() == self::MEDIA_GALLERY_CONFIG_VALUE;
         if ($isMediaGallery && $result->isValueChanged() && $result->getValue() == self::MEDIA_GALLERY_ENABLED_VALUE) {
             $this->imagesIndexer->execute();
         }
+
+        return $result;
     }
 }
