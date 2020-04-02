@@ -40,13 +40,13 @@
             <argument name="query" value="bmw"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
-        <click selector="{{AdobeStockImagePreviewSection.savePreview}}" stepKey="clickOnSavePreview"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="clickOnSavePreview"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="savePreviewImage"/>
 
         <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
             <argument name="enabled" value="1"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForSeeStatusImage"/>
-        <seeElement selector="{{AdobeStockSection.unlicensedImageLabel}}" stepKey="seeUnlicensedLabel"/>
+        <seeElement selector="{{AdminAdobeStockSection.unlicensedImageLabel}}" stepKey="seeUnlicensedLabel"/>
     </test>
 </tests>

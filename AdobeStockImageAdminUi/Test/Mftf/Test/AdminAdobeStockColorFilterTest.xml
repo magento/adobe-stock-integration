@@ -29,7 +29,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
-        <seeElement selector="{{AdobeStockFilterSection.colorFilter}}" stepKey="seeAdobeStockColorFilter"/>
+        <seeElement selector="{{AdminAdobeStockFilterSection.colorFilter}}" stepKey="seeAdobeStockColorFilter"/>
 
         <actionGroup ref="AdminApplyColorFilterValue" stepKey="userChoseAndApplyColorFilter">
             <argument name="color" value="#000000"/>
@@ -47,6 +47,6 @@
             <argument name="color" value="none"/>
         </actionGroup>
         <!--Verify message returns zero results if images was not found -->
-        <see selector="{{AdobeStockFilterSection.emptyText}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
+        <see selector="{{AdminAdobeStockFilterSection.emptyText}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
     </test>
 </tests>

@@ -31,12 +31,12 @@
         <actionGroup ref="AdminAdobeStockClickSortActionGroup" stepKey="sortByCreation">
             <argument name="sortName" value="creation"/>
         </actionGroup>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageInGrid}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageInGrid}}" userInput="src"
                            stepKey="getImageSrcAfterFirstSort"/>
         <actionGroup ref="AdminAdobeStockClickSortActionGroup" stepKey="sortByPopularity">
             <argument name="sortName" value="popularity"/>
         </actionGroup>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageInGrid}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageInGrid}}" userInput="src"
                            stepKey="getImageSrcAfterSecondSort"/>
         <assertNotEquals stepKey="assertImagesDifferentAfterSort">
             <actualResult type="string">{$getImageSrcAfterSecondSort}</actualResult>

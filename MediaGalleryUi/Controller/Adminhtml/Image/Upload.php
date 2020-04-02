@@ -10,21 +10,18 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Image;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
-use Magento\MediaGalleryUi\Model\DeleteImageByAssetId;
+use Magento\MediaGalleryUi\Model\AssetIndexer;
+use Magento\MediaGalleryUi\Model\UploadImage;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
- * Controller deleting the media gallery content
+ * Controller responsible to upload the media gallery content
  */
-class Delete extends Action implements HttpPostActionInterface
+class Upload extends Action implements HttpPostActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;
@@ -36,9 +33,14 @@ class Delete extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var DeleteImageByAssetId
+     * @var UploadImage
      */
-    private $deleteImageByAssetId;
+    private $uploadImage;
+
+    /**
+     * @var AssetIndexer
+     */
+    private $assetIndexer;
 
     /**
      * @var LoggerInterface
@@ -46,20 +48,22 @@ class Delete extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
-     * Delete constructor.
+     * Upload constructor.
      *
      * @param Context $context
-     * @param DeleteImageByAssetId $deleteImageByAssetId
+     * @param UploadImage $uploadImage
+     * @param AssetIndexer $assetIndexer
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        DeleteImageByAssetId $deleteImageByAssetId,
+        UploadImage $uploadImage,
+        AssetIndexer $assetIndexer,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
-
-        $this->deleteImageByAssetId = $deleteImageByAssetId;
+        $this->assetIndexer = $assetIndexer;
+        $this->uploadImage = $uploadImage;
         $this->logger = $logger;
     }
 
@@ -70,12 +74,12 @@ class Delete extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('image_id');
+        $targetFolder = $this->getRequest()->getParam('target_folder');
 
-        if (!$imageId) {
+        if (!$targetFolder) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Image ID is required.'),
+                'message' => __('The target_folder parameter is required.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -84,12 +88,13 @@ class Delete extends Action implements HttpPostActionInterface
         }
 
         try {
-            $this->deleteImageByAssetId->execute($imageId);
+            $file = $this->uploadImage->execute($targetFolder);
+            $this->assetIndexer->execute($file);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully removed the image.'),
+                'message' => __('You have successfully uploaded the image.'),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
@@ -102,7 +107,7 @@ class Delete extends Action implements HttpPostActionInterface
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred on attempt to save image.'),
+                'message' => __('An error occurred on attempt to uploaded the image.'),
             ];
         }
 

@@ -18,14 +18,33 @@ define([
          * @param {String} path
          */
         locate: function (path) {
+            var imageFolder = this.selectFolder(path),
+                imageFilename = path.substring(path.lastIndexOf('/') + 1),
+                locatedImage;
+
+            if (imageFolder.length) {
+                locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])');
+
+                return locatedImage.length ? locatedImage : false;
+            }
+
+            $.ajaxSetup({
+                async: true
+            });
+        },
+
+        /**
+         * Select folder
+         *
+         * @param {String} path
+         */
+        selectFolder: function (path) {
             var i,
                 folderName,
                 openFolderChildrenButton,
                 imageFolder,
-                locatedImage,
                 imagePath = path.replace(/^\/+/, ''),
                 imagePathParts = imagePath.split('/'),
-                imageFilename = imagePath,
                 imageFolderName = this.jsTreeRootFolderName;
 
             $.ajaxSetup({
@@ -33,7 +52,6 @@ define([
             });
 
             if (imagePathParts.length > 1) {
-                imageFilename = imagePathParts[imagePathParts.length - 1];
                 imageFolderName = imagePathParts[imagePathParts.length - 2];
 
                 for (i = 0; i < imagePathParts.length - 2; i++) {
@@ -56,19 +74,15 @@ define([
             }
 
             //select folder
-            imageFolder = $('.jstree a:contains("' + imageFolderName + '")');
+            imageFolder = $('.jstree a').filter(function () {
+                return $.trim($(this).text()) === imageFolderName;
+            });
 
             if (imageFolder.length) {
                 imageFolder[0].click();
-                //select image
-                locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])');
-
-                return locatedImage.length ?  locatedImage : false;
             }
 
-            $.ajaxSetup({
-                async: true
-            });
+            return imageFolder;
         },
 
         /**

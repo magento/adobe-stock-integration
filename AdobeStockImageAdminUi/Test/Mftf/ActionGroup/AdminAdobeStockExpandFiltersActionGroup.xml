@@ -8,7 +8,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockExpandFiltersActionGroup">
-        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <click selector="{{AdminAdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
         <waitForPageLoad stepKey="waitForFiltersOpen"/>
     </actionGroup>
 </actionGroups>

@@ -19,7 +19,8 @@ define([
             selected: null,
             fields: {
                 id: 'id',
-                url: 'url'
+                url: 'url',
+                alt: 'name'
             },
             modules: {
                 actions: '${ $.name }_actions'
@@ -78,6 +79,16 @@ define([
          */
         getId: function (record) {
             return record[this.fields.id];
+        },
+
+        /**
+         * Returns name to given record.
+         *
+         * @param {Object} record - Data to be preprocessed.
+         * @returns {String}
+         */
+        getImageAlt: function (record) {
+            return record[this.fields.alt];
         },
 
         /**

@@ -9,9 +9,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminAdobeStockImageSavedActionGroup">
         <waitForPageLoad stepKey="waitForMaskToDisappear" />
-        <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="imageName" />
-        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+        <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="imageName" />
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMaskToDisappear1" />
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$imageName})}}" stepKey="assertSavedImage" />
+        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$imageName})}}" stepKey="assertSavedImage" />
     </actionGroup>
 </actionGroups>

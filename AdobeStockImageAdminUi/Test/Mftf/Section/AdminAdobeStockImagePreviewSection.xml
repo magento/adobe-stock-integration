@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdobeStockImagePreviewSection">
+    <section name="AdminAdobeStockImagePreviewSection">
         <element name="savePreview" type="button" selector="//button[@class='action-secondary']//span[text()='Save Preview']"/>
         <element name="licenseAndSave" type="button" selector="//button[@class='action-default primary']//span[text()='License and Save']"/>
         <element name="save" type="block" selector="//button[@class='action-secondary']//span[text()='Save Preview']"/>
