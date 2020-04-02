@@ -11,6 +11,6 @@
         <arguments>
             <argument name="attributeName" type="string"/>
         </arguments>
-        <seeElement selector="{{AdobeStockImagePreviewSection.attributeTitle(attributeName)}}" stepKey="seeAttributeType"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.attributeTitle(attributeName)}}" stepKey="seeAttributeType"/>
     </actionGroup>
 </actionGroups>

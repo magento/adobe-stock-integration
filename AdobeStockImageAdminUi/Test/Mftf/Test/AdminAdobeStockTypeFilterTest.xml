@@ -35,7 +35,7 @@
         </actionGroup>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToPremium">
             <argument name="type" value="Photo"/>
-            <argument name="filter" value="{{AdobeStockFilterSection.filterByType}}"/>
+            <argument name="filter" value="{{AdminAdobeStockFilterSection.filterByType}}"/>
             <argument name="filterOption" value="content_type_filter"/>
         </actionGroup>
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>

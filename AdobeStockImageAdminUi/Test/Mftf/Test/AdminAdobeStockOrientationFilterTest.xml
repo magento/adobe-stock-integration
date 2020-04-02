@@ -36,7 +36,7 @@
         </actionGroup>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setOrientationFilterToHorizontal">
             <argument name="type" value="Horizontal"/>
-            <argument name="filter" value="{{AdobeStockFilterSection.orientationFilter}}"/>
+            <argument name="filter" value="{{AdminAdobeStockFilterSection.orientationFilter}}"/>
             <argument name="filterOption" value="orientation_filter"/>
         </actionGroup>
         <!-- Assert that filter are applied and grid updated -->

@@ -14,6 +14,7 @@
             <title value="User can not open several `Sign In Adobe ID` windows copy"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4314374"/>
             <description value="User can open only one `Sign In Adobe ID` window"/>
+            <stories value="User can open only one `Sign In Adobe ID` window"/>
             <severity value="MAJOR"/>
             <group value="adobe_stock_integration"/>
         </annotations>

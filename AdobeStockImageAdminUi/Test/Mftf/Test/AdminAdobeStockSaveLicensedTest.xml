@@ -27,10 +27,10 @@
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
-        <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForPromptModal" />
-        <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
-        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+        <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
         <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
         <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">

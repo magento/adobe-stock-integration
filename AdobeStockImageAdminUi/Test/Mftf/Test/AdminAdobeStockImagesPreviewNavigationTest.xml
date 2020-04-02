@@ -29,22 +29,22 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
-        <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.image}}" userInput="src" stepKey="getCurrentImageUrl"/>
-        <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="NavigateToNextImage"/>
+        <grabAttributeFrom selector="{{AdminAdobeStockImagePreviewSection.image}}" userInput="src" stepKey="getCurrentImageUrl"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.navigation('next')}}" stepKey="NavigateToNextImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <!-- Assert that User switched to the next image "-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getCurrentImageUrl)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToNextImage"/>
-        <grabAttributeFrom selector="{{AdobeStockImagePreviewSection.image}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminAdobeStockImagePreviewSection.image}}" userInput="src"
                            stepKey="getImageUrlAfterSwitchedToNextImage"/>
-        <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="NavigateToPreviousImage"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.navigation('previous')}}" stepKey="NavigateToPreviousImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
         <!-- Assert that User switched to the previous image "-->
         <dontSeeElement selector="{{AdobeStockSection.imageSrc($getImageUrlAfterSwitchedToNextImage)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToPreviousImage"/>
         <!-- Assert that User can close preview "-->
-        <click selector="{{AdobeStockImagePreviewSection.navigation('close')}}" stepKey="closeImagePopup"/>
-        <dontSeeElement selector="{{AdobeStockImagePreviewSection.image}}"
+        <click selector="{{AdminAdobeStockImagePreviewSection.navigation('close')}}" stepKey="closeImagePopup"/>
+        <dontSeeElement selector="{{AdminAdobeStockImagePreviewSection.image}}"
                         stepKey="checkThatImagePreviewClosed"/>
     </test>
 </tests>

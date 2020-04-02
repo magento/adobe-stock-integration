@@ -32,9 +32,9 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
-        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
-        <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnSeeMore"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisSeries}}" stepKey="clickOnTabMoreForThisSeries"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnSeeMore"/>
         <waitForPageLoad stepKey="waitForGridReload"/>
         <executeJS function="document.querySelector('.admin__data-grid-filters-current').scrollIntoView()" stepKey="scrollToAppliedFilters"/>
         <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">

@@ -8,7 +8,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockSavePreviewActionGroup">
-        <click selector="{{AdobeStockImagePreviewSection.save}}" stepKey="clickOnSavePreview"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.save}}" stepKey="clickOnSavePreview"/>
         <waitForPageLoad stepKey="waitForPageLoad" />
     </actionGroup>
 </actionGroups>

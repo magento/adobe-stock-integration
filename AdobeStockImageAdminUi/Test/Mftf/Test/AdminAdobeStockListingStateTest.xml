@@ -32,16 +32,16 @@
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setOrientationFilterToHorizontal">
             <argument name="type" value="Horizontal"/>
-            <argument name="filter" value="{{AdobeStockFilterSection.orientationFilter}}"/>
+            <argument name="filter" value="{{AdminAdobeStockFilterSection.orientationFilter}}"/>
             <argument name="filterOption" value="orientation_filter"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockOpenNextPageActionGroup" stepKey="openNextPage"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
 
-        <click selector="{{AdobeStockImagePreviewSection.savePreview}}" stepKey="clickSavePreview"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="clickSavePreview"/>
         <waitForPageLoad stepKey="waitForPromptModal" />
-        <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
-        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+        <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
         <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>

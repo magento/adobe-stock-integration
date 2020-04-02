@@ -10,8 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteSelectedAdobeStockImagePreviewActionGroup">
         <click selector="{{AdobeStockSection.deleteMediaButton}}" stepKey="clickDeleteMedia"/>
-        <waitForElementVisible selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
-        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
+        <waitForElementVisible selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
         <waitForPageLoad stepKey="waitForDeletionPageLoad"/>
     </actionGroup>
 </actionGroups>

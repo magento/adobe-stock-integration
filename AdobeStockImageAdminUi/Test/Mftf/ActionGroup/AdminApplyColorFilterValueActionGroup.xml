@@ -11,9 +11,9 @@
         <arguments>
             <argument name="color" type="string"/>
         </arguments>
-        <click selector="{{AdobeStockFilterSection.colorButton}}" stepKey="openColorPicker"/>
-        <click selector="{{AdobeStockFilterSection.selectColor(color)}}" stepKey="choseColor"/>
-        <click selector="{{AdobeStockFilterSection.colorApply}}" stepKey="ApplyColor"/>
+        <click selector="{{AdminAdobeStockFilterSection.colorButton}}" stepKey="openColorPicker"/>
+        <click selector="{{AdminAdobeStockFilterSection.selectColor(color)}}" stepKey="choseColor"/>
+        <click selector="{{AdminAdobeStockFilterSection.colorApply}}" stepKey="ApplyColor"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>

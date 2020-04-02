@@ -40,7 +40,7 @@
             <argument name="query" value="bmw"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
-        <click selector="{{AdobeStockImagePreviewSection.savePreview}}" stepKey="clickOnSavePreview"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="clickOnSavePreview"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="savePreviewImage"/>
 
         <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
