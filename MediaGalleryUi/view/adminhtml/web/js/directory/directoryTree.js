@@ -109,16 +109,16 @@ define([
          */
         setActiveNodeFilter: function (nodePath) {
             if (this.activeNode() === nodePath) {
-                this.setDeselectedFolder();
+                this.selectStorageRoot();
             } else {
-                this.setSelectedFolder(nodePath);
+                this.selectFolder(nodePath);
             }
         },
 
         /**
-         * Deselected Folder
+         * Remove folders selection -> select storage root
          */
-        setDeselectedFolder: function () {
+        selectStorageRoot: function () {
             var filters = {},
                 applied = this.filterChips().get('applied');
 
@@ -136,7 +136,7 @@ define([
          *
          * @param {String} path
          */
-        setSelectedFolder: function (path) {
+        selectFolder: function (path) {
             this.activeNode(path);
             this.directories().setActive(path);
             this.applyFilter(path);

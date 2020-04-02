@@ -170,9 +170,9 @@ define([
             }
 
             if (imageFolders) {
-                this.imageDirectory().setSelectedFolder(imageFolders);
+                this.imageDirectory().selectFolder(imageFolders);
             } else {
-                this.imageDirectory().setDeselectedFolder();
+                this.imageDirectory().selectStorageRoot();
             }
 
             if (locatedImage.length) {
