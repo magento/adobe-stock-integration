@@ -17,7 +17,6 @@ define([
             modalSelector: '',
             template: 'Magento_MediaGalleryUi/image/actions',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
-            imageModelName: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url',
             modules: {
                 imageModel: '${ $.imageModelName }',
                 mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'

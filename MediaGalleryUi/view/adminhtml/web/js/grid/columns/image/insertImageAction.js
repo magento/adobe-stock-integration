@@ -6,8 +6,9 @@
 /* global FORM_KEY, tinyMceEditors */
 define([
     'jquery',
-    'wysiwygAdapter'
-], function ($, wysiwyg) {
+    'wysiwygAdapter',
+    'underscore'
+], function ($, wysiwyg, _) {
     'use strict';
 
     return {
@@ -64,9 +65,7 @@ define([
          * return {Object|null}
          */
         getMediaBrowserOpener: function (targetElementId) {
-            if (typeof wysiwyg != 'undefined' &&
-                wysiwyg.get(targetElementId) &&
-                typeof tinyMceEditors != 'undefined' &&
+            if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId) && !_.isUndefined(tinyMceEditors) &&
                 !tinyMceEditors.get(targetElementId).getMediaBrowserOpener().closed
             ) {
                 return tinyMceEditors.get(targetElementId).getMediaBrowserOpener();
@@ -84,7 +83,7 @@ define([
         getTargetElement: function (targetElementId) {
             var opener;
 
-            if (typeof wysiwyg != 'undefined' && wysiwyg.get(targetElementId)) {
+            if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId)) {
                 opener = this.getMediaBrowserOpener(targetElementId) || window;
                 targetElementId = tinyMceEditors.get(targetElementId).getMediaBrowserTargetElementId();
 
