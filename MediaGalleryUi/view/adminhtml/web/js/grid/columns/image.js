@@ -138,10 +138,10 @@ define([
         toggleAddSelectedButton: function () {
             if (this.selected() === null) {
                 $(this.addSelectedBtnSelector).addClass('no-display');
-                $(this.deleteSelectedBtnSelector).addClass('no-display');
+                $(this.deleteSelectedBtnSelector).addClass('disabled').attr('disabled', true);
             } else {
                 $(this.addSelectedBtnSelector).removeClass('no-display');
-                $(this.deleteSelectedBtnSelector).removeClass('no-display');
+                $(this.deleteSelectedBtnSelector).removeClass('disabled').removeAttr('disabled');
             }
         }
     });
