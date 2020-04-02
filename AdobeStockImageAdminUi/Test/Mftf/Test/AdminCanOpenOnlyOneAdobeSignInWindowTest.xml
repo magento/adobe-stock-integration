@@ -34,7 +34,7 @@
         <switchToNextTab stepKey="switchToAdobeSignInIms"/>
         <switchToNextTab stepKey="switchToAdobeImsGallery"/>
 
-        <seeElement selector="{{AdobeStockSection.adobeSignIn}}" stepKey="seeSignInButton"/>
-        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
+        <seeElement selector="{{AdminAdobeStockSection.adobeSignIn}}" stepKey="seeSignInButton"/>
+        <seeElement selector="{{AdminAdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
     </test>
 </tests>

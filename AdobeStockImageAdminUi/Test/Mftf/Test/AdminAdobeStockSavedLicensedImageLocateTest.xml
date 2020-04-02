@@ -34,10 +34,10 @@
         <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabSaveImageFileName"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageSaved"/>
+        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageSaved"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
         <actionGroup ref="AdminAdobeStockImagePreviewLocateActionGroup" stepKey="locateImage"/>
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageLocated"/>
+        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageLocated"/>
         <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
             <argument name="name" value="{$grabSaveImageFileName}"/>
         </actionGroup>

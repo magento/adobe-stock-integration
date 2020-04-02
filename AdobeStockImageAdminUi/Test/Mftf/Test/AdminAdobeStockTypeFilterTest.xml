@@ -27,7 +27,7 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlWithoutFilters"/>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
@@ -38,7 +38,7 @@
             <argument name="filter" value="{{AdminAdobeStockFilterSection.filterByType}}"/>
             <argument name="filterOption" value="content_type_filter"/>
         </actionGroup>
-        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
+        <dontSeeElement selector="{{AdminAdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
         <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Photo"/>
         </actionGroup>

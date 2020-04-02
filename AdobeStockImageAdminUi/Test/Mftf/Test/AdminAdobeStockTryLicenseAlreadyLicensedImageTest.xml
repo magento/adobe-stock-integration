@@ -52,8 +52,8 @@
         <click selector="{{AdminAdobeStockImagePreviewSection.licenseAndSave}}" stepKey="clickLicenseAndSaveButton"/>
 
         <switchToNextTab stepKey="switchToLoginAdobeIms"/>
-        <seeElement selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="seeEmailField"/>
-        <seeElement selector="{{AdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="seePasswordField"/>
+        <seeElement selector="{{AdminAdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="seeEmailField"/>
+        <seeElement selector="{{AdminAdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="seePasswordField"/>
         <switchToPreviousTab stepKey="switchToImageGrid"/>
     </test>
 </tests>

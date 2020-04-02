@@ -27,7 +27,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithoutModelFilter"/>
+        <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithoutModelFilter"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
@@ -39,7 +39,7 @@
         <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="$getFileAttributeValue"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
+        <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
         <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutModelFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>

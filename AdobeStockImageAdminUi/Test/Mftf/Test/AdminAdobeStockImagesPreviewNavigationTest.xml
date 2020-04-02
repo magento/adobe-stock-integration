@@ -33,14 +33,14 @@
         <click selector="{{AdminAdobeStockImagePreviewSection.navigation('next')}}" stepKey="NavigateToNextImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
         <!-- Assert that User switched to the next image "-->
-        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getCurrentImageUrl)}}"
+        <dontSeeElement selector="{{AdminAdobeStockSection.imageSrc($getCurrentImageUrl)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToNextImage"/>
         <grabAttributeFrom selector="{{AdminAdobeStockImagePreviewSection.image}}" userInput="src"
                            stepKey="getImageUrlAfterSwitchedToNextImage"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.navigation('previous')}}" stepKey="NavigateToPreviousImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
         <!-- Assert that User switched to the previous image "-->
-        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getImageUrlAfterSwitchedToNextImage)}}"
+        <dontSeeElement selector="{{AdminAdobeStockSection.imageSrc($getImageUrlAfterSwitchedToNextImage)}}"
                         stepKey="checkImageNotSameAfterWeSwitchToPreviousImage"/>
         <!-- Assert that User can close preview "-->
         <click selector="{{AdminAdobeStockImagePreviewSection.navigation('close')}}" stepKey="closeImagePopup"/>

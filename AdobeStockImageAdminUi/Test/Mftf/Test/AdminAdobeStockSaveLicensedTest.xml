@@ -32,7 +32,7 @@
         <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen" />
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
+        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage" />
         <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
             <argument name="name" value="{$grabImageFileName}"/>
         </actionGroup>

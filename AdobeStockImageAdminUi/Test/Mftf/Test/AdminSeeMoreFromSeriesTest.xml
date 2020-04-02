@@ -32,12 +32,12 @@
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnTabMoreForThisModel"/>
         <wait stepKey="waitForScrollUp" time="5"/>
-        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
+        <seeElement selector="{{AdminAdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
 
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGridSecondTime"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoadSecondTime"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnTabMoreForThisModelSecondTime"/>
         <wait stepKey="waitForScrollUpSecondTime" time="5"/>
-        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInputSecondTime"/>
+        <seeElement selector="{{AdminAdobeStockSection.searchInput}}" stepKey="seeSearchInputSecondTime"/>
     </test>
 </tests>
