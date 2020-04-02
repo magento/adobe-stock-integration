@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockImagePreviewLocateActionGroup">
-        <click selector="{{AdobeStockImagePreviewSection.openInMediaGallery}}" stepKey="clickOpenInMediaGallery"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.openInMediaGallery}}" stepKey="clickOpenInMediaGallery"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
     </actionGroup>
 </actionGroups>

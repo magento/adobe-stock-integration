@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockApplyIsolatedFilterActionGroup">
-        <click selector="{{AdobeStockFilterSection.isolatedFilterCheckbox}}" stepKey="selectIsolatedAssetsFilter"/>
+        <click selector="{{AdminAdobeStockFilterSection.isolatedFilterCheckbox}}" stepKey="selectIsolatedAssetsFilter"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>

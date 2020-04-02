@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockTryLicenseAlreadyLicensedImageTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1009"/>
+            <title value="License Adobe Stock Images message should not popup when user is not logged in and tries to License and Save an already Licensed image copy"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1051731/scenarios/4406205"/>
+            <description value="Admin User saved licensed image then logout and try license image again"/>
+            <stories value="Admin User saved licensed image then logout and try license image again"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration_ims_signed"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
+            <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
+            <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
+        </after>
+
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
+            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
+
+        <waitForElement selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" time="30" stepKey="waitForSaveLicensedButton"/>
+        <actionGroup ref="AdminAdobeStockSaveLicensedActionGroup" stepKey="openTheSaveImagePreviewPopup"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AssertAdminImageIsVisibleInMediaGalleryActionGroup" stepKey="checkIfTheSavedImagesIsAvailable"/>
+
+        <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
+            <argument name="name" value="{{AdobeStockImageData.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="seeSaveLicensedButton"/>
+
+        <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="seeSavePreviewButton"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.licenseAndSave}}" stepKey="clickLicenseAndSaveButton"/>
+
+        <switchToNextTab stepKey="switchToLoginAdobeIms"/>
+        <seeElement selector="{{AdminAdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="seeEmailField"/>
+        <seeElement selector="{{AdminAdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="seePasswordField"/>
+        <switchToPreviousTab stepKey="switchToImageGrid"/>
+    </test>
+</tests>

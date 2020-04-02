@@ -7,9 +7,11 @@ define([
     'jquery',
     'uiComponent',
     'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/alert',
     'underscore',
-    'Magento_Ui/js/modal/prompt'
-], function ($, Component, confirm, _, prompt) {
+    'Magento_Ui/js/modal/prompt',
+    'validation'
+], function ($, Component, confirm, uiAlert, _, prompt) {
     'use strict';
 
     return Component.extend({
@@ -108,8 +110,9 @@ define([
                     } else {
                         message = response.responseJSON.message;
                     }
-                    this.messages().add('error', message);
-                    this.messages().scheduleCleanup(this.messageDelay);
+                    uiAlert({
+                        content: message
+                    });
                 }
             });
 
@@ -150,6 +153,10 @@ define([
                         'data-validate': '{required:true, validate-alphanum}',
                         maxlength: '128'
                     },
+                    attributesForm: {
+                        novalidate: 'novalidate',
+                        action: ''
+                    },
                     context: this,
                     actions: data.actions,
                     buttons: data.buttons
@@ -161,8 +168,10 @@ define([
           */
         getComfirmationPopupDeleteFolder: function () {
             confirm({
-                title: $.mage.__('Are you sure you want to delete ?'),
-                content: 'Are you sure you want to delete folder: ' + this.selectedFolder(),
+                title: $.mage.__('Are you sure you want to delete this folder?'),
+                modalClass: 'delete-folder-confirmation-popup',
+                content: $.mage.__('The following folder is going to be deleted: %1')
+                    .replace('%1', this.selectedFolder()),
                 actions: {
 
                     /**

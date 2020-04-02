@@ -12,9 +12,9 @@
         <data key="name" unique="suffix">my-image-</data>
     </entity>
     <entity name="AdobeStockLicensedImage">
-        <data key="id">{{_CREDS.adobe_stock_licensed_image}}</data>
+        <data key="id">{{_CREDS.magento/adobe_stock_licensed_image}}</data>
     </entity>
     <entity name="AdobeStockUnlicensedImage">
-        <data key="id">{{_CREDS.adobe_stock_not_licensed_image}}</data>
+        <data key="id">{{_CREDS.magento/adobe_stock_not_licensed_image}}</data>
     </entity>
 </entities>

@@ -12,6 +12,6 @@
         <arguments>
             <argument name="message" type="string" defaultValue="{{AdobeStockModalData.authenticationErrorMessage}}"/>
         </arguments>
-        <see selector="{{AdobeStockSection.modal}}" userInput="{{message}}" stepKey="seeFailedAuthenticationMessage"/>
+        <see selector="{{AdminAdobeStockSection.modal}}" userInput="{{message}}" stepKey="seeFailedAuthenticationMessage"/>
     </actionGroup>
 </actionGroups>

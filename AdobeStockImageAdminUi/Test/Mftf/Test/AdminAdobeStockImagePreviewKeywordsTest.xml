@@ -17,7 +17,6 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579522"/>
             <description value="Admin should be able to able to see keywords in the image preview"/>
             <severity value="MAJOR"/>
-            <group value="adobe_stock_integration_keywords"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -35,29 +34,29 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <!-- Verify view all button and numbers of keywords-->
         <executeJS function="document.querySelector('.keywords').scrollIntoView()" stepKey="scrollToKeywords"/>
-        <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
-        <seeElement selector="{{AdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>
         <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCount">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
         <executeJS function="return document.querySelector('.keywords').childElementCount;" stepKey="expandedKeywordsCount"/>
         <!-- Click view all keywords -->
-        <click selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="clickOnViewAlKeywords"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="clickOnViewAlKeywords"/>
         <!-- Verify that keywords expanded -->
         <assertGreaterThan stepKey="assertKeywordsExpanded">
             <actualResult type="variable">expandedKeywordsCount</actualResult>
             <expectedResult type="string">5</expectedResult>
         </assertGreaterThan>
-        <dontSeeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonDisappears"/>
+        <dontSeeElement selector="{{AdminAdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonDisappears"/>
         <!-- Verify that keywords closed after navigate to next image -->
         <executeJS function="document.querySelector('.action-next').scrollIntoView()" stepKey="scrollToActions"/>
-        <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
-        <click selector="{{AdobeStockImagePreviewSection.navigation('previous')}}" stepKey="navigateToPreviousImage"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.navigation('previous')}}" stepKey="navigateToPreviousImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
         <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
             <argument name="keywordsNumber" value="5"/>
         </actionGroup>
-        <seeElement selector="{{AdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButton"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButton"/>
     </test>
 </tests>

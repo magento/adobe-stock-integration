@@ -15,7 +15,6 @@
             <title value="User searches for an image by its keyword tag"/>
             <description value="User searches images by clicking on keywords in image preview"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_keywords"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>

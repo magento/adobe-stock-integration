@@ -16,7 +16,6 @@
             <title value="User views the image details"/>
             <description value="Admin should be able to see images attributes in the image preview"/>
             <severity value="BLOCKER"/>
-            <group value="adobe_stock_integration_preview"/>
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
@@ -43,13 +42,14 @@
         <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="verifyAttributeFile">
             <argument name="attributeName" value="File #"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
-        <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
 
         <!-- Assert that file # attribute changed "-->
-        <assertNotContains actual="$getFileAttributeValue"
-                           expected="AdobeStockImagePreviewSection.attribute('File #')" expectedType="string"
-                           stepKey="assertAttributeFileChanged"/>
+        <assertNotContains stepKey="assertAttributeFileChanged">
+            <actualResult type="string">{$getFileAttributeValue}</actualResult>
+            <expectedResult type="string">AdminAdobeStockImagePreviewSection.attribute('File #')</expectedResult>
+        </assertNotContains>
     </test>
 </tests>

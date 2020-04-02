@@ -193,12 +193,7 @@ define([
                 return;
             }
             this.serieFilterValue(record.id);
-            this.filterChips().set(
-                'applied',
-                {
-                    'serie_id': record.id.toString()
-                }
-            );
+            this.applyFilter('serie_id', record.id.toString());
         },
 
         /**
@@ -213,12 +208,23 @@ define([
                 return;
             }
             this.modelFilterValue(record.id);
-            this.filterChips().set(
-                'applied',
-                {
-                    'model_id': record.id.toString()
-                }
-            );
+            this.applyFilter('model_id', record.id.toString());
+        },
+
+        /**
+         * Apply series or model id filter and scroll to top of the page
+         *
+         * @param {String} typeId
+         * @param {String} recordId
+         */
+        applyFilter: function (typeId, recordId) {
+            var data = {};
+
+            data[typeId] = recordId;
+
+            this.filterChips().set('applied', data);
+
+            this.scrollToFilter();
         },
 
         /**
