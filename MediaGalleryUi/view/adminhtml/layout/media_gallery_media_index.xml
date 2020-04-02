@@ -16,6 +16,7 @@
                     <argument name="targetElementId" xsi:type="helper" helper="Magento\Framework\App\RequestInterface::getParam">
                         <param name="key">target_element_id</param>
                     </argument>
+		    <argument name="skipButton" xsi:type="string">add-image</argument>
                 </arguments>
 	    </block>
         </referenceContainer>
