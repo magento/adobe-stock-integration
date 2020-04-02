@@ -16,7 +16,6 @@ use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,11 +25,6 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveImageTest extends TestCase
 {
-    /**
-     * @var MockObject|SaveInterface
-     */
-    private $saveMediaAsset;
-
     /**
      * @var MockObject|SaveAssetInterface
      */
@@ -91,19 +85,20 @@ class SaveImageTest extends TestCase
     }
 
     /**
-     * Verify that image can be saved.
+     * Verify that image recieved from the Adobe Stock can be saved.
      *
      * @param Document $document
-     * @param bool $delete
-     *
+     * @param string $url
+     * @param string $destinationPath
      * @dataProvider assetProvider
      */
-    public function testExecute(Document $document, bool $delete): void
+    public function testExecute(Document $document, string $url, string $destinationPath): void
     {
         $mediaGalleryAssetId = 42;
 
-        $this->saveMediaAsset->expects($this->once())
+        $this->saveImageFileMock->expects($this->once())
             ->method('execute')
+            ->with($document, $url, $destinationPath)
             ->willReturn($mediaGalleryAssetId);
 
         $this->documentToKeywords->expects($this->once())
@@ -123,7 +118,7 @@ class SaveImageTest extends TestCase
         $this->setLicensedInMediaGalleryGridMock->expects($this->once())
             ->method('execute');
 
-        $this->saveImage->execute($document, 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg', 'path');
+        $this->saveImage->execute($document, $url, $destinationPath);
     }
 
     /**
@@ -136,12 +131,9 @@ class SaveImageTest extends TestCase
         return [
             [
                 'document' => $this->getDocument(),
-                'delete' => false
-            ],
-            [
-                'document' => $this->getDocument('filepath.jpg'),
-                'delete' => true
-            ],
+                'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
+                'destinationPath' => 'path'
+            ]
         ];
     }
 
