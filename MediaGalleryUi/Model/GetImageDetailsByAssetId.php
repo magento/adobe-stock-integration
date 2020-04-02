@@ -67,7 +67,7 @@ class GetImageDetailsByAssetId
     /**
      * @var array
      */
-    private $mediaTypeIds;
+    private $imageTypes;
 
     /**
      * GetImageDetailsByAssetId constructor.
@@ -77,7 +77,7 @@ class GetImageDetailsByAssetId
      * @param ResourceConnection $resource
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
-     * @param array $mediaTypeIds
+     * @param array $imageTypes
      */
     public function __construct(
         GetByIdInterface $getAssetById,
@@ -85,14 +85,14 @@ class GetImageDetailsByAssetId
         ResourceConnection $resource,
         Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
-        array $mediaTypeIds = []
+        array $imageTypes = []
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
         $this->resource = $resource;
         $this->filesystem = $filesystem;
         $this->sourceIconProvider = $sourceIconProvider;
-        $this->mediaTypeIds = $mediaTypeIds;
+        $this->imageTypes = $imageTypes;
     }
 
     /**
@@ -109,7 +109,6 @@ class GetImageDetailsByAssetId
         $asset = $this->getAssetById->execute($assetId);
         $assetGridData = $this->getAssetGridDataById($assetId);
 
-        $mediaTypeId = (int) $assetGridData['media_type_id'];
         $tags = isset($assetGridData['keywords']) ? explode(',', $assetGridData['keywords']) : [];
         $type = $assetGridData['content_type'] ?? '';
         $size = $this->getImageSize($asset->getPath());
@@ -121,7 +120,7 @@ class GetImageDetailsByAssetId
             'details' => [
                 [
                     'title' => __('Type'),
-                    'value' => $this->getTypeImageByMediaTypeId($mediaTypeId),
+                    'value' => $this->getImageTypeByContentType($asset->getContentType()),
                 ],
                 [
                     'title' => __('Created'),
@@ -152,14 +151,16 @@ class GetImageDetailsByAssetId
     }
 
     /**
-     * Return image type by image type id
+     * Return image type by content type
      *
-     * @param int $typeId
+     * @param string $contentType
      * @return string
      */
-    private function getTypeImageByMediaTypeId(int $typeId): string
+    private function getImageTypeByContentType(string $contentType): string
     {
-        return isset($this->mediaTypeIds[$typeId]) ? $this->mediaTypeIds[$typeId] : '';
+        $type = current(explode('/', $contentType));
+
+        return isset($this->imageTypes[$type]) ? $this->imageTypes[$type] : '';
     }
 
     /**

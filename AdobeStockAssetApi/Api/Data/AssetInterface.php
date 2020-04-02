@@ -66,13 +66,6 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getIsLicensed(): int;
 
     /**
-     * Return media type id
-     *
-     * @return int
-     */
-    public function getMediaTypeId(): int;
-
-    /**
      * Get creation date
      *
      * @return string
