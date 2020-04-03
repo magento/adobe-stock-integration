@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockImage\Model\SaveImageFile;
-use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
@@ -33,11 +32,6 @@ class SaveImageFileTest extends TestCase
     private $storageDelete;
 
     /**
-     * @var MockObject|SaveMediaGalleryAsset
-     */
-    private $saveMediaGalleryAsset;
-
-    /**
      * @var SaveImageFile
      */
     private $saveImageFile;
@@ -49,14 +43,12 @@ class SaveImageFileTest extends TestCase
     {
         $this->storageSave = $this->createMock(StorageSave::class);
         $this->storageDelete = $this->createMock(StorageDelete::class);
-        $this->saveMediaGalleryAsset = $this->createMock(SaveMediaGalleryAsset::class);
 
         $this->saveImageFile = (new ObjectManager($this))->getObject(
             SaveImageFile::class,
             [
                 'storageSave' => $this->storageSave,
-                'storageDelete' => $this->storageDelete,
-                'saveMediaGalleryAsset' =>  $this->saveMediaGalleryAsset
+                'storageDelete' => $this->storageDelete
             ]
         );
     }
@@ -86,11 +78,6 @@ class SaveImageFileTest extends TestCase
             ->method('execute')
             ->with($url, $destinationPath)
             ->willReturn($path);
-
-        $this->saveMediaGalleryAsset->expects($this->once())
-            ->method('execute')
-            ->with($document, $path)
-            ->willReturn($mediaGalleryAssetId);
 
         $this->saveImageFile->execute($document, $url, $destinationPath);
     }

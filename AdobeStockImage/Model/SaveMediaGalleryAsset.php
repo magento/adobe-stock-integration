@@ -96,6 +96,8 @@ class SaveMediaGalleryAsset
     }
 
     /**
+     * Calculates saved image file size.
+     *
      * @param string $destinationPath
      *
      * @return int

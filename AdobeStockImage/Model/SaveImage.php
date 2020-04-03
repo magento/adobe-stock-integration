@@ -55,6 +55,11 @@ class SaveImage implements SaveImageInterface
     private $saveImageFile;
 
     /**
+     * @var SaveMediaGalleryAsset
+     */
+    private $saveMediaGalleryAsset;
+
+    /**
      * SaveImage constructor.
      *
      * @param SaveAssetInterface $saveAdobeStockAsset
@@ -63,6 +68,7 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      * @param SaveImageFile $saveImageFile
+     * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
      */
     public function __construct(
         SaveAssetInterface $saveAdobeStockAsset,
@@ -70,7 +76,8 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        SaveImageFile $saveImageFile
+        SaveImageFile $saveImageFile,
+        SaveMediaGalleryAsset $saveMediaGalleryAsset
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToAsset = $documentToAsset;
@@ -78,6 +85,7 @@ class SaveImage implements SaveImageInterface
         $this->documentToKeywords = $documentToKeywords;
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
         $this->saveImageFile = $saveImageFile;
+        $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
     }
 
     /**
@@ -95,7 +103,8 @@ class SaveImage implements SaveImageInterface
      */
     public function execute(Document $document, string $url, string $destinationPath): void
     {
-        $mediaGalleryAssetId = $this->saveImageFile->execute($document, $url, $destinationPath);
+        $filePath = $this->saveImageFile->execute($document, $url, $destinationPath);
+        $mediaGalleryAssetId = $this->saveMediaGalleryAsset->execute($document, $filePath);
 
         $keywords = $this->documentToKeywords->convert($document);
         $this->saveAssetKeywords->execute($keywords, $mediaGalleryAssetId);

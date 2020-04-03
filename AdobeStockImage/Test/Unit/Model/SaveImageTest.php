@@ -12,6 +12,7 @@ use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImage\Model\SaveImage;
 use Magento\AdobeStockImage\Model\SaveImageFile;
+use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -55,6 +56,11 @@ class SaveImageTest extends TestCase
     private $saveImageFileMock;
 
     /**
+     * @var SaveMediaGalleryAsset|MockObject
+     */
+    private $saveMediaGalleryAssetMock;
+
+    /**
      * @var SaveImage
      */
     private $saveImage;
@@ -70,6 +76,7 @@ class SaveImageTest extends TestCase
         $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
         $this->setLicensedInMediaGalleryGridMock = $this->createMock(SetLicensedInMediaGalleryGrid::class);
         $this->saveImageFileMock = $this->createMock(SaveImageFile::class);
+        $this->saveMediaGalleryAssetMock = $this->createMock(SaveMediaGalleryAsset::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -79,7 +86,8 @@ class SaveImageTest extends TestCase
                 'saveAssetKeywords' => $this->saveAssetKeywords,
                 'documentToKeywords' => $this->documentToKeywords,
                 'setLicensedInMediaGalleryGrid' => $this->setLicensedInMediaGalleryGridMock,
-                'saveImageFile' => $this->saveImageFileMock
+                'saveImageFile' => $this->saveImageFileMock,
+                'saveMediaGalleryAsset' => $this->saveMediaGalleryAssetMock
             ]
         );
     }
@@ -100,6 +108,11 @@ class SaveImageTest extends TestCase
         $this->saveImageFileMock->expects($this->once())
             ->method('execute')
             ->with($document, $url, $destinationPath)
+            ->willReturn($destinationPath);
+
+        $this->saveMediaGalleryAssetMock->expects($this->once())
+            ->method('execute')
+            ->with($document, $destinationPath)
             ->willReturn($mediaGalleryAssetId);
 
         $this->documentToKeywords->expects($this->once())

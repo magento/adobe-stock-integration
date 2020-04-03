@@ -32,25 +32,17 @@ class SaveImageFile
     private $storageDelete;
 
     /**
-     * @var SaveMediaGalleryAsset
-     */
-    private $saveMediaGalleryAsset;
-
-    /**
      * SaveImageFile constructor.
      *
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
-     * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
      */
     public function __construct(
         StorageSave $storageSave,
-        StorageDelete $storageDelete,
-        SaveMediaGalleryAsset $saveMediaGalleryAsset
+        StorageDelete $storageDelete
     ) {
         $this->storageSave = $storageSave;
         $this->storageDelete = $storageDelete;
-        $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
     }
 
     /**
@@ -67,7 +59,7 @@ class SaveImageFile
      * @throws FileSystemException
      * @throws NoSuchEntityException
      */
-    public function execute(Document $document, string $url, string $destinationPath): int
+    public function execute(Document $document, string $url, string $destinationPath): string
     {
         $pathAttribute = $document->getCustomAttribute('path');
         $pathValue = $pathAttribute->getValue();
@@ -77,8 +69,7 @@ class SaveImageFile
         }
 
         $path = $this->storageSave->execute($url, $destinationPath);
-        $mediaGalleryId = $this->saveMediaGalleryAsset->execute($document, $path);
 
-        return $mediaGalleryId;
+        return $path;
     }
 }

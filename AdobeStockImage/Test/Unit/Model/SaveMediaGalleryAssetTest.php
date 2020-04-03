@@ -8,18 +8,18 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\MediaGallery\Model\Asset;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGallery\Model\Asset;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Directory\Read;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -150,7 +150,6 @@ class SaveMediaGalleryAssetTest extends TestCase
             $adobeStockAssetMock->expects($this->once())
                 ->method('getMediaGalleryId')
                 ->willReturn($mediaGalleryAssetId);
-
         }
 
         $this->assertEquals($mediaGalleryAssetId, $this->saveMediaGalleryAsset->execute($document, $destinationPath));
