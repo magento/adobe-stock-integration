@@ -60,7 +60,7 @@ class UpdateWysiwygOpenDialogUrl
             return $config;
         }
 
-        return $config->setData(
+        $config->setData(
             'files_browser_window_url',
             $this->url->getUrl(
                 'media_gallery/index/index',
@@ -69,5 +69,6 @@ class UpdateWysiwygOpenDialogUrl
                 ]
             )
         );
+        return $config->setData('is_new_media_gallery', 1);
     }
 }

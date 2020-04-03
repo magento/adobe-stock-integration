@@ -49,6 +49,7 @@ class UpdateOpenDialogUrl
 
         $data = $component->getData();
 
+        $data['config']['mediaGallery']['options']['is_new_media_gallery'] = 1;
         $data['config']['mediaGallery']['openDialogUrl'] = $this->url->getUrl('media_gallery/index/index');
 
         $component->setData($data);
