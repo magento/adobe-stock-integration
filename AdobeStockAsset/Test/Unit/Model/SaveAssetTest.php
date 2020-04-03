@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAsset\Model\SaveAsset;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test for save asset service.
@@ -46,9 +46,9 @@ class SaveAssetTest extends TestCase
     private $categoryRepository;
 
     /**
-     * @var MockObject|DataExtractorInterface
+     * @var MockObject|DataObjectProcessor
      */
-    private $dataExtractor;
+    private $objectProcessor;
 
     /**
      * @var SaveAsset
@@ -64,7 +64,7 @@ class SaveAssetTest extends TestCase
         $this->assetRepository = $this->createMock(AssetRepositoryInterface::class);
         $this->creatorRepository = $this->createMock(CreatorRepositoryInterface::class);
         $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-        $this->dataExtractor = $this->createMock(DataExtractorInterface::class);
+        $this->objectProcessor = $this->createMock(DataObjectProcessor::class);
 
         $this->saveAsset = (new ObjectManager($this))->getObject(
             SaveAsset::class,
@@ -73,7 +73,7 @@ class SaveAssetTest extends TestCase
                 'assetRepository' => $this->assetRepository,
                 'creatorRepository' => $this->creatorRepository,
                 'categoryRepository' => $this->categoryRepository,
-                'dataExtractor' => $this->dataExtractor
+                'objectProcessor' => $this->objectProcessor
             ]
         );
     }
@@ -95,7 +95,7 @@ class SaveAssetTest extends TestCase
 
         $asset = $this->createMock(AssetInterface::class);
 
-        $this->dataExtractor->expects($this->once())
+        $this->objectProcessor->expects($this->once())
             ->method('extract')
             ->with($asset, AssetInterface::class)
             ->willReturn($data);
