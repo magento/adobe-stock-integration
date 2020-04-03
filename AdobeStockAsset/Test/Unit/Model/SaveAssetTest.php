@@ -86,41 +86,44 @@ class SaveAssetTest extends TestCase
         ];
         $categoryId = 5;
         $creatorId = 6;
-        $finalData = [
-            'id' => 1,
-            'media_gallery_id' => 2,
-            'category_id' => $categoryId,
-            'creator_id' => $creatorId
-        ];
 
         $asset = $this->createMock(AssetInterface::class);
 
         $this->objectProcessor->expects($this->once())
-            ->method('extract')
+            ->method('buildOutputDataArray')
             ->with($asset, AssetInterface::class)
             ->willReturn($data);
 
-        $categoryMock = $this->createMock(CategoryInterface::class);
-        $categoryMock->expects($this->once())->method('getId')
+        $category = $this->createMock(CategoryInterface::class);
+        $category->expects($this->once())->method('getId')
             ->willReturn($categoryId);
         $asset->expects($this->once())
             ->method('getCategory')
-            ->willReturn($categoryMock);
+            ->willReturn($category);
         $this->categoryRepository->expects($this->once())->method('save')
-            ->with($categoryMock)
-            ->willReturn($categoryMock);
+            ->with($category)
+            ->willReturn($category);
 
-        $creatorInterface = $this->createMock(CreatorInterface::class);
-        $creatorInterface->expects($this->once())
+        $creator = $this->createMock(CreatorInterface::class);
+        $creator->expects($this->once())
             ->method('getId')
             ->willReturn($creatorId);
         $asset->expects($this->once())
             ->method('getCreator')
-            ->willReturn($creatorInterface);
+            ->willReturn($creator);
         $this->creatorRepository->expects($this->once())
             ->method('save')
-            ->with($creatorInterface)
-            ->willReturn($creatorInterface);
+            ->with($creator)
+            ->willReturn($creator);
+
+        $finalData = [
+            'id' => 1,
+            'media_gallery_id' => 2,
+            'category_id' => $categoryId,
+            'creator_id' => $creatorId,
+            'category' => $category,
+            'creator' => $creator
+        ];
 
         $finalAsset = $this->createMock(AssetInterface::class);
 

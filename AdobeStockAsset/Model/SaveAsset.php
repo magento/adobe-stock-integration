@@ -20,7 +20,9 @@ use Magento\Framework\Reflection\DataObjectProcessor;
  */
 class SaveAsset implements SaveAssetInterface
 {
+    private const CATEGORY = 'category';
     private const CATEGORY_ID = 'category_id';
+    private const CREATOR = 'creator';
     private const CREATOR_ID = 'creator_id';
 
     /**
@@ -81,12 +83,14 @@ class SaveAsset implements SaveAssetInterface
             $category = $this->categoryRepository->save($category);
         }
         $data[self::CATEGORY_ID] = $category->getId();
+        $data[self::CATEGORY] = $category;
 
         $creator = $asset->getCreator();
         if ($creator !== null) {
             $creator = $this->creatorRepository->save($creator);
         }
         $data[self::CREATOR_ID] = $creator->getId();
+        $data[self::CREATOR] = $creator;
 
         $this->assetRepository->save($this->assetFactory->create(['data' => $data]));
     }
