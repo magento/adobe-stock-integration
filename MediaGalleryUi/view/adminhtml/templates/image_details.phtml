@@ -5,8 +5,10 @@
  */
 
 use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
 
 /** @var Template $block */
+/** @var $escaper Escaper */
 
 // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
 ?>
@@ -17,7 +19,7 @@ use Magento\Backend\Block\Template;
             type: 'slide',
             buttons: [],
             modalClass: 'media-gallery-image-details',
-            title: '<?= $block->escapeHtmlAttr(__('Image Details')); ?>'
+            title: '<?= $escaper->escapeHtmlAttr(__('Image Details')); ?>'
         }
      }">
     <div class="page-main-actions">
@@ -45,7 +47,7 @@ use Magento\Backend\Block\Template;
                 "components": {
                     "mediaGalleryImageDetails": {
                         "component": "Magento_MediaGalleryUi/js/image/image-details",
-                        "imageDetailsUrl": "<?= $block->escapeUrl($block->getData('imageDetailsUrl')); ?>",
+                        "imageDetailsUrl": "<?= $escaper->escapeUrl($block->getData('imageDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "mediaGridMessages": "media_gallery_listing.media_gallery_listing.messages"
                     }
@@ -70,19 +72,19 @@ use Magento\Backend\Block\Template;
                         "imageModelName" : "media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url",
                         "actionsList": [
                             {
-                                "title": "<?= $block->escapeJs(__('Delete Image')); ?>",
+                                "title": "<?= $escaper->escapeJs(__('Delete Image')); ?>",
                                 "handler": "deleteImageAction",
                                 "name": "delete",
                                 "classes": "action-default scalable delete action-quaternary"
                             },
                             {
-                                "title": "<?= $block->escapeJs(__('Cancel')); ?>",
+                                "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
                                 "classes": "action-default scalable cancel action-quaternary"
                             },
                             {
-                                "title": "<?= $block->escapeJs(__('Add Image')); ?>",
+                                "title": "<?= $escaper->escapeJs(__('Add Image')); ?>",
                                 "handler": "addImage",
                                 "name": "add-image",
                                 "classes": "scalable action-primary add-image-action"
