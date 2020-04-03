@@ -114,6 +114,14 @@ define([
         },
 
         /**
+         * Deselect the record
+         */
+        deselectImage: function () {
+            this.selected(null);
+            this.toggleAddSelectedButton();
+        },
+
+        /**
          * Get the selected record
          * @returns {Object}
          */

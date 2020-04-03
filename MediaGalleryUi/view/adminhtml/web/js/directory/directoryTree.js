@@ -17,9 +17,11 @@ define([
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
+            imageName: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url',
             modules: {
                 directories: '${ $.name }_directories',
-                filterChips: '${ $.filterChipsProvider }'
+                filterChips: '${ $.filterChipsProvider }',
+                imageModel: '${ $.imageName }'
             },
             listens: {
                 '${ $.provider }:params.filters.directory': 'clearFiltersHandle'
@@ -140,6 +142,7 @@ define([
             this.activeNode(path);
             this.directories().setActive(path);
             this.applyFilter(path);
+            this.imageModel().deselectImage();
         },
 
         /**
