@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test saving a media gallery asset and file related to it.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveMediaGalleryAssetTest extends TestCase
 {
