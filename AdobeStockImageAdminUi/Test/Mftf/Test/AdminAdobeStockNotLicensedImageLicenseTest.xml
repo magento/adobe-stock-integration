@@ -30,6 +30,6 @@
             <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandPreviewedImage"/>
-        <seeElement selector="{{AdobeStockImagePreviewSection.licenseAndSave}}" stepKey="assertLicenseAndSaveButtonIsVisible"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.licenseAndSave}}" stepKey="assertLicenseAndSaveButtonIsVisible"/>
     </test>
 </tests>

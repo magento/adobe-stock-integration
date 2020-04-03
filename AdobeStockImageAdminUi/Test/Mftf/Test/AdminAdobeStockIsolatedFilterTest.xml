@@ -27,10 +27,10 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithoutSafeFilter"/>
+        <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithoutSafeFilter"/>
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminAdobeStockApplyIsolatedFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
-        <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
+        <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
         <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutSafeFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>

@@ -16,6 +16,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryUi\Model\DeleteImageByAssetId;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Controller deleting the media gallery content

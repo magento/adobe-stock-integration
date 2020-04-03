@@ -11,7 +11,7 @@
         <arguments>
             <argument name="color" type="string"/>
         </arguments>
-        <fillField selector="{{AdobeStockFilterSection.colorFilter}}" userInput="{{color}}" stepKey="insertNonValidValue" />
+        <fillField selector="{{AdminAdobeStockFilterSection.colorFilter}}" userInput="{{color}}" stepKey="insertNonValidValue" />
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickApplyFilters"/>
     </actionGroup>
 </actionGroups>

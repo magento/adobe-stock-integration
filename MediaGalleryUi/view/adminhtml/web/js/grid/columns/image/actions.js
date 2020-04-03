@@ -6,8 +6,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
-    'Magento_MediaGalleryUi/js/action/deleteImage'
-], function ($, _, Component, deleteImage) {
+    'Magento_MediaGalleryUi/js/action/deleteImage',
+    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
+], function ($, _, Component, deleteImage, image) {
     'use strict';
 
     return Component.extend({
@@ -39,41 +40,29 @@ define([
          */
         initialize: function () {
             this._super();
-            $(this.imageModel().addSelectedBtnSelector).click(function () {
-                this.insertImage();
-            }.bind(this));
-            $(this.imageModel().deleteSelectedBtnSelector).click(function () {
-                this.deleteImageAction(this.imageModel().selected());
-            }.bind(this));
+            this.initEvents();
 
             return this;
         },
 
         /**
-         * Insert selected image
-         *
-         * @returns {Boolean}
+         * Initialize image action events
          */
-        insertImage: function () {
-            var record = this.imageModel().getSelected(),
-                targetElement;
+        initEvents: function () {
+            $(this.imageModel().addSelectedBtnSelector).click(function () {
+                image.insertImage(
+                   this.imageModel().getSelected(),
+                    {
+                        onInsertUrl: this.imageModel().onInsertUrl,
+                        targetElementId: this.imageModel().targetElementId,
+                        storeId: this.imageModel().storeId
+                    }
+                );
+            }.bind(this));
+            $(this.imageModel().deleteSelectedBtnSelector).click(function () {
+                this.deleteImageAction(this.imageModel().selected());
+            }.bind(this));
 
-            if (record === null) {
-                return false;
-            }
-            targetElement = this.getTargetElement();
-
-            if (!targetElement.length) {
-                window.MediabrowserUtility.closeDialog();
-                throw 'Target element not found for content update';
-            }
-
-            targetElement.val(record['thumbnail_url'])
-                .data('size', record.size)
-                .data('mime-type', record['content_type'])
-                .trigger('change');
-            window.MediabrowserUtility.closeDialog();
-            targetElement.focus();
         },
 
         /**

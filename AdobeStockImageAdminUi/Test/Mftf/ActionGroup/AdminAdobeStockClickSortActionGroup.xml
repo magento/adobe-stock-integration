@@ -12,8 +12,8 @@
     <arguments>
         <argument name="sortName" type="string"/>
     </arguments>
-    <click selector="{{AdobeStockSection.sortDropdown}}" stepKey="clickOnSortDropdown"/>
-    <click selector="{{AdobeStockSection.sortOption(sortName)}}" stepKey="clickOnSortOption"/>
+    <click selector="{{AdminAdobeStockSection.sortDropdown}}" stepKey="clickOnSortDropdown"/>
+    <click selector="{{AdminAdobeStockSection.sortOption(sortName)}}" stepKey="clickOnSortOption"/>
     <waitForPageLoad stepKey="waitForLoad"/>
 </actionGroup>
 </actionGroups>
