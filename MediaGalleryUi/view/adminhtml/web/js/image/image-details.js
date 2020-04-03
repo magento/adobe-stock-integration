@@ -160,15 +160,7 @@ define([
          */
         showMoreImageTags: function () {
             this.showAllTags(true);
-        },
-
-        /**
-         * Get image data
-         *
-         * @return {Object}
-         */
-        getImageData: function () {
-            return this.image();
         }
+
     });
 });
