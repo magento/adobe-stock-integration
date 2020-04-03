@@ -10,15 +10,12 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
-use Magento\AdobeStockImage\Model\RetrieveMediaAssetIdFromDocument;
 use Magento\AdobeStockImage\Model\RetrieveMediaAssetIdFromDocumentInterface;
 use Magento\AdobeStockImage\Model\SaveImage;
 use Magento\AdobeStockImage\Model\RetrieveFilePathFromDocumentInterface;
-use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Save image model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImageTest extends TestCase
 {
