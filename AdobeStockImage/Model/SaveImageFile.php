@@ -7,19 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 
 /**
  * Save image file of provided with the adobe Stock integration.
@@ -37,44 +32,25 @@ class SaveImageFile
     private $storageDelete;
 
     /**
-     * @var AssetRepositoryInterface
+     * @var SaveMediaGalleryAsset
      */
-    private $assetRepository;
+    private $saveMediaGalleryAsset;
 
     /**
-     * @var SaveInterface
-     */
-    private $saveMediaAsset;
-
-    /**
-     * @var DocumentToMediaGalleryAsset
-     */
-    private $documentToMediaGalleryAsset;
-
-    /**
-     * @var Filesystem
-     */
-    private $fileSystem;
-
-    /**
+     * SaveImageFile constructor.
+     *
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
-     * @param SaveInterface $saveMediaAsset
-     * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
-     * @param Filesystem $fileSystem
+     * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
      */
     public function __construct(
         StorageSave $storageSave,
         StorageDelete $storageDelete,
-        SaveInterface $saveMediaAsset,
-        DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
-        Filesystem $fileSystem
+        SaveMediaGalleryAsset $saveMediaGalleryAsset
     ) {
         $this->storageSave = $storageSave;
         $this->storageDelete = $storageDelete;
-        $this->saveMediaAsset = $saveMediaAsset;
-        $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
-        $this->fileSystem = $fileSystem;
+        $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
     }
 
     /**
@@ -101,26 +77,8 @@ class SaveImageFile
         }
 
         $path = $this->storageSave->execute($url, $destinationPath);
+        $mediaGalleryId = $this->saveMediaGalleryAsset->execute($document, $path);
 
-        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
-        $absolutePath = $mediaDirectory->getAbsolutePath($path);
-        $fileSize = $mediaDirectory->stat($absolutePath)['size'];
-
-        $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert(
-            $document,
-            [
-                'id' => null,
-                'path' => $path,
-                'source' => 'Adobe Stock',
-                'size' => $fileSize
-            ]
-        );
-        $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
-
-        if (!$mediaGalleryAssetId) {
-            $mediaGalleryAssetId = $this->assetRepository->getById($document->getId())->getMediaGalleryId();
-        }
-
-        return $mediaGalleryAssetId;
+        return $mediaGalleryId;
     }
 }
