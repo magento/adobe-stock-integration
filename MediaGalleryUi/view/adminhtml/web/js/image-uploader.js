@@ -97,7 +97,8 @@ define([
          */
         getTargetFolder: function () {
 
-            if (_.isUndefined(this.directories().activeNode())) {
+            if (_.isUndefined(this.directories().activeNode()) ||
+                _.isNull(this.directories().activeNode())) {
                 return '/';
             }
 
