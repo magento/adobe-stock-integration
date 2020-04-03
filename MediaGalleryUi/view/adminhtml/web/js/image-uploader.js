@@ -97,11 +97,11 @@ define([
          */
         getTargetFolder: function () {
 
-            if (_.isUndefined(this.directories().selectedFolder)) {
+            if (_.isUndefined(this.directories().activeNode())) {
                 return '/';
             }
 
-            return this.directories().selectedFolder();
+            return this.directories().activeNode();
         },
 
         /**
