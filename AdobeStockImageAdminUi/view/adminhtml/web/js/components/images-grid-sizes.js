@@ -35,14 +35,14 @@ define([
         },
 
         /**
-         * @override
+         * @inheritDoc
          */
-        initialize: function () {
-            this._super();
-            this.options = this.sizes;
-            this.updateArray();
+        updateArray: function () {
+            if (_.isUndefined(this.options)) {
+                this.options = this.sizes;
+            }
 
-            return this;
-        }
+            return this._super();
+        },
     });
 });
