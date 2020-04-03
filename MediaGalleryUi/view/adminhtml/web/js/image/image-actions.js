@@ -7,9 +7,10 @@ define([
     'jquery',
     'underscore',
     'uiElement',
+    'Magento_MediaGalleryUi/js/action/deleteImage',
     'Magento_Ui/js/modal/confirm',
     'mage/translate'
-], function ($, _, Element, confirmation, $t) {
+], function ($, _, Element, deleteImage, confirmation, $t) {
     'use strict';
 
     return Element.extend({
@@ -17,11 +18,22 @@ define([
             modalSelector: '',
             template: 'Magento_MediaGalleryUi/image/actions',
             targetElementId: null,
-            imageActionsName: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url_actions',
+            deleteImageUrl: null,
             modules: {
-                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetail }',
-                imageActions: '${ $.imageActionsName }'
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetail }'
             }
+        },
+
+        /**
+         * Initialize the component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super();
+            $(window).on('fileDeleted.enhancedMediaGallery', this.closeModal.bind(this));
+
+            return this;
         },
 
         /**
@@ -39,56 +51,11 @@ define([
 
         /**
          * Delete image action
-         *
-         * @param {Object} record
          */
-        deleteImageAction: function (record) {
-            var baseContent = $.mage.__('Are you sure you want to delete "%s" image?'),
-              title = record.title,
-              cancelText = $.mage.__('Cancel'),
-              deleteImageText = $.mage.__('Delete Image'),
-              deleteImageCallback = this.deleteImage.bind(this),
-              image = this.getImageData();
+        deleteImageAction: function () {
+            var record = this.getImageData();
 
-            confirmation({
-                title: title,
-                content: baseContent.replace('%s', image.title),
-                buttons: [
-                    {
-                        text: cancelText,
-                        class: 'action-secondary action-dismiss',
-
-                        /**
-                         * Close modal
-                         */
-                        click: function () {
-                            this.closeModal();
-                        }
-                    },
-                    {
-                        text: deleteImageText,
-                        class: 'action-primary action-accept',
-
-                        /**
-                         * Delete Image and close modal
-                         */
-                        click: function () {
-                            deleteImageCallback(image);
-                            this.closeModal();
-                        }
-                    }
-                ]
-            });
-        },
-
-        /**
-         * Delete image
-         *
-         * @param {Object} record
-         */
-        deleteImage: function (record) {
-            this.imageActions().deleteImage(record);
-            this.closeModal();
+            deleteImage.deleteImageAction(record, this.deleteImageUrl);
         },
 
         /**

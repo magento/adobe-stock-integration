@@ -66,6 +66,7 @@ use Magento\Backend\Block\Template;
                         "component": "Magento_MediaGalleryUi/js/image/image-actions",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "mediaGalleryImageDetail": "mediaGalleryImageDetails",
+                        "deleteImageUrl": "<?= $block->getUrl('media_gallery/image/delete'); ?>",
                         "targetElementId": "<?= $block->escapeJs($block->getData('targetElementId')); ?>",
                         "actionsList": [
                             {
