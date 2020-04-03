@@ -24,7 +24,8 @@ use PHPUnit\Framework\TestCase;
 class UpdateWysiwygOpenDialogUrlTest extends TestCase
 {
     private const STUB_WINDOW_URL = 'stub.url';
-
+    private const STUB_VALUE_ID = 1;
+    
     /**
      * @var DefaultConfigProvider|MockObject
      */
@@ -105,9 +106,13 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
         $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->imagesHelperMock->expects($this->once())->method('idEncode')->with(Config::IMAGE_DIRECTORY);
         $this->urlMock->expects($this->once())->method('getUrl')->willReturn(self::STUB_WINDOW_URL);
-        $this->configDataObjectMock->expects($this->once())
+        $this->configDataObjectMock->expects($this->at(0))
             ->method('setData')
             ->with('files_browser_window_url', self::STUB_WINDOW_URL)
+            ->willReturnSelf();
+        $this->configDataObjectMock->expects($this->at(1))
+            ->method('setData')
+            ->with('is_new_media_gallery', self::STUB_VALUE_ID)
             ->willReturnSelf();
 
         $this->assertSame(
