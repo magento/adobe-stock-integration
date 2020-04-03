@@ -83,15 +83,6 @@ define([
             var recordId = this.imageModel().getId(record);
 
             this.mediaGalleryImageDetails().showImageDetailsById(recordId);
-        },
-
-        /**
-         * Get target element
-         *
-         * @returns {*|n.fn.init|jQuery|HTMLElement}
-         */
-        getTargetElement: function () {
-            return $('#' + this.imageModel().targetElementId);
         }
     });
 });
