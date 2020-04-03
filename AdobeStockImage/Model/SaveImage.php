@@ -67,8 +67,8 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
-     * @param SaveImageFile $saveImageFile
-     * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
+     * @param SaveImageFileInterface $saveImageFile
+     * @param SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
      */
     public function __construct(
         SaveAssetInterface $saveAdobeStockAsset,
@@ -76,8 +76,8 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        SaveImageFile $saveImageFile,
-        SaveMediaGalleryAsset $saveMediaGalleryAsset
+        SaveImageFileInterface $saveImageFile,
+        SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToAsset = $documentToAsset;

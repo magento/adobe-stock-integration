@@ -19,7 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Save image file of provided with the adobe Stock integration.
  */
-class SaveImageFile
+class SaveImageFile implements SaveImageFileInterface
 {
     /**
      * @var StorageSave
@@ -52,7 +52,7 @@ class SaveImageFile
      * @param string $url
      * @param string $destinationPath
      *
-     * @return int
+     * @return string
      * @throws CouldNotSaveException
      * @throws AlreadyExistsException
      * @throws CouldNotDeleteException

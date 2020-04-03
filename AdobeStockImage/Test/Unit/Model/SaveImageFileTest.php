@@ -65,7 +65,6 @@ class SaveImageFileTest extends TestCase
     public function testExecute(Document $document, string $url, string $destinationPath, bool $delete): void
     {
         $path = 'catalog/test-image.jpeg';
-        $mediaGalleryAssetId = 42;
         if ($delete) {
             $this->storageDelete->expects($this->once())
                 ->method('execute');
