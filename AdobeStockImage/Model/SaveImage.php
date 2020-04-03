@@ -12,16 +12,12 @@ use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Save an image provided with the adobe Stock integration.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImage implements SaveImageInterface
 {
@@ -51,14 +47,19 @@ class SaveImage implements SaveImageInterface
     private $setLicensedInMediaGalleryGrid;
 
     /**
-     * @var SaveImageFile
+     * @var RetrieveFilePathFromDocumentInterface
      */
-    private $saveImageFile;
+    private $retrieveFilePathFromDocument;
 
     /**
-     * @var SaveMediaGalleryAsset
+     * @var RetrieveMediaAssetIdFromDocumentInterface
      */
-    private $saveMediaGalleryAsset;
+    private $retrieveMediaAssetIdFromDocument;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * SaveImage constructor.
@@ -68,8 +69,9 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
-     * @param SaveImageFileInterface $saveImageFile
-     * @param SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
+     * @param RetrieveFilePathFromDocumentInterface $retrieveFilePathFromDocument
+     * @param RetrieveMediaAssetIdFromDocumentInterface $retrieveMediaAssetIdFromDocument
+     * @param LoggerInterface $logger
      */
     public function __construct(
         SaveAssetInterface $saveAdobeStockAsset,
@@ -77,16 +79,18 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        SaveImageFileInterface $saveImageFile,
-        SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
+        RetrieveFilePathFromDocumentInterface $retrieveFilePathFromDocument,
+        RetrieveMediaAssetIdFromDocumentInterface $retrieveMediaAssetIdFromDocument,
+        LoggerInterface $logger
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToAsset = $documentToAsset;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
-        $this->saveImageFile = $saveImageFile;
-        $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
+        $this->retrieveFilePathFromDocument = $retrieveFilePathFromDocument;
+        $this->retrieveMediaAssetIdFromDocument = $retrieveMediaAssetIdFromDocument;
+        $this->logger = $logger;
     }
 
     /**
@@ -96,22 +100,24 @@ class SaveImage implements SaveImageInterface
      * @param string $url
      * @param string $destinationPath
      *
-     * @throws AlreadyExistsException
-     * @throws CouldNotDeleteException
      * @throws CouldNotSaveException
-     * @throws FileSystemException
-     * @throws NoSuchEntityException
      */
     public function execute(Document $document, string $url, string $destinationPath): void
     {
-        $filePath = $this->saveImageFile->execute($document, $url, $destinationPath);
-        $mediaGalleryAssetId = $this->saveMediaGalleryAsset->execute($document, $filePath);
+        try {
+            $filePath = $this->retrieveFilePathFromDocument->execute($document, $url, $destinationPath);
+            $mediaGalleryAssetId = $this->retrieveMediaAssetIdFromDocument->execute($document, $filePath);
 
-        $keywords = $this->documentToKeywords->convert($document);
-        $this->saveAssetKeywords->execute($keywords, $mediaGalleryAssetId);
+            $keywords = $this->documentToKeywords->convert($document);
+            $this->saveAssetKeywords->execute($keywords, $mediaGalleryAssetId);
 
-        $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
-        $this->saveAdobeStockAsset->execute($asset);
-        $this->setLicensedInMediaGalleryGrid->execute($asset);
+            $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
+            $this->saveAdobeStockAsset->execute($asset);
+            $this->setLicensedInMediaGalleryGrid->execute($asset);
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $message = __('An error occurred during save image.');
+            throw new CouldNotSaveException($message);
+        }
     }
 }

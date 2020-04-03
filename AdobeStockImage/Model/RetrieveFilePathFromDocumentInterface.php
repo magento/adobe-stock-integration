@@ -15,9 +15,9 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Used for processing save an Adobe Stock image file to the filesystem.
+ * Used for retrieving an Adobe Stock image file path from filesystem.
  */
-interface SaveImageFileInterface
+interface RetrieveFilePathFromDocumentInterface
 {
     /**
      * Downloads the image and save it to the filesystem storage.

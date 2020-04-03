@@ -10,7 +10,8 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
-use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\RetrieveMediaAssetIdFromDocument;
+use Magento\AdobeStockImage\Model\RetrieveMediaAssetIdFromDocumentInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -26,10 +27,10 @@ use PHPUnit\Framework\TestCase;
  * Test saving a media gallery asset and file related to it.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveMediaGalleryAssetTest extends TestCase
+class RetrieveMediaAssetIdFromDocumentTest extends TestCase
 {
     /**
-     * @var SaveMediaGalleryAsset|MockObject
+     * @var RetrieveMediaAssetIdFromDocumentInterface|MockObject
      */
     private $saveMediaAssetMock;
 
@@ -59,9 +60,9 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $mediaDirectoryMock;
 
     /**
-     * @var SaveMediaGalleryAsset
+     * @var RetrieveMediaAssetIdFromDocumentInterface
      */
-    private $saveMediaGalleryAsset;
+    private $retrieveMediaAssetIdFromDocument;
 
     /**
      * @inheritdoc
@@ -75,8 +76,8 @@ class SaveMediaGalleryAssetTest extends TestCase
         $this->readInterfaceMock = $this->createMock(ReadInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
 
-        $this->saveMediaGalleryAsset = (new ObjectManager($this))->getObject(
-            SaveMediaGalleryAsset::class,
+        $this->retrieveMediaAssetIdFromDocument = (new ObjectManager($this))->getObject(
+            RetrieveMediaAssetIdFromDocument::class,
             [
                 'saveMediaAsset' =>  $this->saveMediaAssetMock,
                 'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAssetMock,
@@ -84,13 +85,13 @@ class SaveMediaGalleryAssetTest extends TestCase
                 'fileSystem' => $this->fileSystemMock
             ]
         );
-        $reflection = new \ReflectionClass(get_class($this->saveMediaGalleryAsset));
+        $reflection = new \ReflectionClass(get_class($this->retrieveMediaAssetIdFromDocument));
         $reflectionMethod = $reflection->getMethod('calculateFileSize');
         $reflectionMethod->setAccessible(true);
     }
 
     /**
-     * Verify that image can be saved.
+     * Verify getting media gallery asset id from documnt after asset save.
      *
      * @param Document $document
      * @param string $destinationPath
@@ -153,7 +154,10 @@ class SaveMediaGalleryAssetTest extends TestCase
                 ->willReturn($mediaGalleryAssetId);
         }
 
-        $this->assertEquals($mediaGalleryAssetId, $this->saveMediaGalleryAsset->execute($document, $destinationPath));
+        $this->assertEquals(
+            $mediaGalleryAssetId,
+            $this->retrieveMediaAssetIdFromDocument->execute($document, $destinationPath)
+        );
     }
 
     /**

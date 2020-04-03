@@ -12,14 +12,12 @@ use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Save image file of provided with the adobe Stock integration.
+ * Save asset file and retrieve its path.
  */
-class SaveImageFile implements SaveImageFileInterface
+class RetrieveFilePathFromDocument implements RetrieveFilePathFromDocumentInterface
 {
     /**
      * @var StorageSave
@@ -32,7 +30,7 @@ class SaveImageFile implements SaveImageFileInterface
     private $storageDelete;
 
     /**
-     * SaveImageFile constructor.
+     * RetrieveFilePathFromDocument constructor.
      *
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
@@ -46,18 +44,16 @@ class SaveImageFile implements SaveImageFileInterface
     }
 
     /**
-     * Downloads the image and save it to file system database.
+     * Save asset file to filesystem and return its path.
      *
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
      *
      * @return string
-     * @throws CouldNotSaveException
      * @throws AlreadyExistsException
      * @throws CouldNotDeleteException
      * @throws FileSystemException
-     * @throws NoSuchEntityException
      */
     public function execute(Document $document, string $url, string $destinationPath): string
     {

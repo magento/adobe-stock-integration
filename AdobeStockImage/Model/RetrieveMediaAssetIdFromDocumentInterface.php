@@ -12,9 +12,9 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Used for processing save a media gallery asset.
+ * Used for getting media gallery asset from document and asset save.
  */
-interface SaveMediaGalleryAssetInterface
+interface RetrieveMediaAssetIdFromDocumentInterface
 {
     /**
      * Process saving MediaGalleryAsset based on the search document and destination path.

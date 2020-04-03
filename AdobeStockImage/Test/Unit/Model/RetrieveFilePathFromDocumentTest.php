@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockImage\Model\SaveImageFile;
+use Magento\AdobeStockImage\Model\RetrieveFilePathFromDocument;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test saving image file and create Media Gallery asset.
  */
-class SaveImageFileTest extends TestCase
+class RetrieveFilePathFromDocumentTest extends TestCase
 {
     /**
      * @var MockObject|StorageSave
@@ -32,9 +32,9 @@ class SaveImageFileTest extends TestCase
     private $storageDelete;
 
     /**
-     * @var SaveImageFile
+     * @var RetrieveFilePathFromDocument
      */
-    private $saveImageFile;
+    private $retrieveFilePathFromDocument;
 
     /**
      * @inheritdoc
@@ -44,8 +44,8 @@ class SaveImageFileTest extends TestCase
         $this->storageSave = $this->createMock(StorageSave::class);
         $this->storageDelete = $this->createMock(StorageDelete::class);
 
-        $this->saveImageFile = (new ObjectManager($this))->getObject(
-            SaveImageFile::class,
+        $this->retrieveFilePathFromDocument = (new ObjectManager($this))->getObject(
+            RetrieveFilePathFromDocument::class,
             [
                 'storageSave' => $this->storageSave,
                 'storageDelete' => $this->storageDelete
@@ -54,7 +54,7 @@ class SaveImageFileTest extends TestCase
     }
 
     /**
-     * Verify that image can be saved.
+     * Verify getting path from document aster image save.
      *
      * @param Document $document
      * @param string $url
@@ -78,7 +78,7 @@ class SaveImageFileTest extends TestCase
             ->with($url, $destinationPath)
             ->willReturn($path);
 
-        $this->saveImageFile->execute($document, $url, $destinationPath);
+        $this->retrieveFilePathFromDocument->execute($document, $url, $destinationPath);
     }
 
     /**
