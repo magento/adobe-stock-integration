@@ -95,7 +95,7 @@ class SaveImage implements SaveImageInterface
     }
 
     /**
-     * Downloads the image and save it to file system database
+     * Downloads the image and save it to file system and data storage
      *
      * @param Document $document
      * @param string $url
