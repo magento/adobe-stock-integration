@@ -16,10 +16,8 @@ define([
         defaults: {
             modalSelector: '',
             template: 'Magento_MediaGalleryUi/image/actions',
-            mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             modules: {
-                imageModel: '${ $.imageModelName }',
-                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
+                imageModel: '${ $.imageModelName }'
             }
         },
 
@@ -52,9 +50,7 @@ define([
          * Delete image action
          */
         deleteImageAction: function () {
-            var record = this.getImageData();
-
-            deleteImage.deleteImageAction(record, this.deleteImageUrl);
+            deleteImage.deleteImageAction(this.imageModel().getSelected(), this.imageModel().deleteImageUrl);
         },
 
         /**

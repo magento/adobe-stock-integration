@@ -24,12 +24,11 @@ define([
                 title = $.mage.__('Delete image'),
                 cancelText = $.mage.__('Cancel'),
                 deleteImageText = $.mage.__('Delete Image'),
-                deleteImageCallback = this.deleteImage.bind(this),
-                imageName = record.name ? record.name : record.title;
+                deleteImageCallback = this.deleteImage.bind(this);
 
             confirmation({
                 title: title,
-                content: baseContent.replace('%s', imageName),
+                content: baseContent.replace('%s', record.name),
                 buttons: [
                     {
                         text: cancelText,
