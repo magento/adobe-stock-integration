@@ -14,6 +14,6 @@
             <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>
         </arguments>
         <waitForPageLoad stepKey="waitForGalleryLoad"/>
-        <seeElement selector="{{AdobeStockSaveImagePreviewSection.mediaImage(imageName)}}" stepKey="seeSavedImage"/>
+        <seeElement selector="{{AdminAdobeStockSaveImagePreviewSection.mediaImage(imageName)}}" stepKey="seeSavedImage"/>
     </actionGroup>
 </actionGroups>

@@ -14,6 +14,7 @@
             <title value="License Adobe Stock Images message should not popup when user is not logged in and tries to License and Save an already Licensed image copy"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1051731/scenarios/4406205"/>
             <description value="Admin User saved licensed image then logout and try license image again"/>
+            <stories value="Admin User saved licensed image then logout and try license image again"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_ims_signed"/>
         </annotations>
@@ -34,7 +35,7 @@
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
 
-        <waitForElement selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" time="30" stepKey="waitForSaveLicensedButton"/>
+        <waitForElement selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" time="30" stepKey="waitForSaveLicensedButton"/>
         <actionGroup ref="AdminAdobeStockSaveLicensedActionGroup" stepKey="openTheSaveImagePreviewPopup"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AssertAdminImageIsVisibleInMediaGalleryActionGroup" stepKey="checkIfTheSavedImagesIsAvailable"/>
@@ -44,15 +45,15 @@
         </actionGroup>
 
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
-        <seeElement selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="seeSaveLicensedButton"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="seeSaveLicensedButton"/>
 
         <actionGroup ref="AdminAdobeStockUserSignOutActionGroup" stepKey="adobeLogout"/>
-        <seeElement selector="{{AdobeStockImagePreviewSection.savePreview}}" stepKey="seeSavePreviewButton"/>
-        <click selector="{{AdobeStockImagePreviewSection.licenseAndSave}}" stepKey="clickLicenseAndSaveButton"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="seeSavePreviewButton"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.licenseAndSave}}" stepKey="clickLicenseAndSaveButton"/>
 
         <switchToNextTab stepKey="switchToLoginAdobeIms"/>
-        <seeElement selector="{{AdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="seeEmailField"/>
-        <seeElement selector="{{AdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="seePasswordField"/>
+        <seeElement selector="{{AdminAdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="seeEmailField"/>
+        <seeElement selector="{{AdminAdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="seePasswordField"/>
         <switchToPreviousTab stepKey="switchToImageGrid"/>
     </test>
 </tests>

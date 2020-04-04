@@ -29,15 +29,15 @@
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
-        <click selector="{{AdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForPromptModal"/>
-        <grabValueFrom selector="{{AdobeStockImagePreviewSection.imageNameField}}" stepKey="grabSaveImageFileName"/>
-        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+        <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabSaveImageFileName"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageSaved"/>
+        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageSaved"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
         <actionGroup ref="AdminAdobeStockImagePreviewLocateActionGroup" stepKey="locateImage"/>
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageLocated"/>
+        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageLocated"/>
         <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
             <argument name="name" value="{$grabSaveImageFileName}"/>
         </actionGroup>

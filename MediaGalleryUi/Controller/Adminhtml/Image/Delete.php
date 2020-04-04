@@ -19,11 +19,12 @@ use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryUi\Model\DeleteImageByAssetId;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Controller deleting the media gallery content
  */
-class Delete extends Action
+class Delete extends Action implements HttpPostActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;

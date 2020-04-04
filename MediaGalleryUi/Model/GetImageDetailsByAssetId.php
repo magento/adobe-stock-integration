@@ -65,6 +65,11 @@ class GetImageDetailsByAssetId
     private $sourceIconProvider;
 
     /**
+     * @var array
+     */
+    private $imageTypes;
+
+    /**
      * GetImageDetailsByAssetId constructor.
      *
      * @param GetByIdInterface $getAssetById
@@ -72,19 +77,22 @@ class GetImageDetailsByAssetId
      * @param ResourceConnection $resource
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
+     * @param array $imageTypes
      */
     public function __construct(
         GetByIdInterface $getAssetById,
         StoreManagerInterface $storeManager,
         ResourceConnection $resource,
         Filesystem $filesystem,
-        SourceIconProvider $sourceIconProvider
+        SourceIconProvider $sourceIconProvider,
+        array $imageTypes = []
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
         $this->resource = $resource;
         $this->filesystem = $filesystem;
         $this->sourceIconProvider = $sourceIconProvider;
+        $this->imageTypes = $imageTypes;
     }
 
     /**
@@ -100,6 +108,7 @@ class GetImageDetailsByAssetId
     {
         $asset = $this->getAssetById->execute($assetId);
         $assetGridData = $this->getAssetGridDataById($assetId);
+
         $tags = isset($assetGridData['keywords']) ? explode(',', $assetGridData['keywords']) : [];
         $type = $assetGridData['content_type'] ?? '';
         $size = $this->getImageSize($asset->getPath());
@@ -109,6 +118,10 @@ class GetImageDetailsByAssetId
             'title' => $asset->getTitle(),
             'image_id' => $assetId,
             'details' => [
+                [
+                    'title' => __('Type'),
+                    'value' => $this->getImageTypeByContentType($asset->getContentType()),
+                ],
                 [
                     'title' => __('Created'),
                     'value' => $this->formatDate($asset->getCreatedAt())
@@ -135,6 +148,19 @@ class GetImageDetailsByAssetId
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
             'content_type' => $type
         ];
+    }
+
+    /**
+     * Return image type by content type
+     *
+     * @param string $contentType
+     * @return string
+     */
+    private function getImageTypeByContentType(string $contentType): string
+    {
+        $type = current(explode('/', $contentType));
+
+        return isset($this->imageTypes[$type]) ? $this->imageTypes[$type] : '';
     }
 
     /**

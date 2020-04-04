@@ -33,7 +33,7 @@
         </actionGroup>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToStandard">
             <argument name="type" value="Standard"/>
-            <argument name="filter" value="{{AdobeStockFilterSection.premiumPriceFilter}}"/>
+            <argument name="filter" value="{{AdminAdobeStockFilterSection.premiumPriceFilter}}"/>
             <argument name="filterOption" value="premium_price_filter"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockSaveViewActionGroup" stepKey="saveAndDeleteView"/>

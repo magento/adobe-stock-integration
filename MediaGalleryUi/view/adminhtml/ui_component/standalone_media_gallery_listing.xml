@@ -19,6 +19,21 @@
         <deps>
             <dep>standalone_media_gallery_listing.media_gallery_listing_data_source</dep>
         </deps>
+        <buttons>
+            <button name="delete_folder">
+                <param name="on_click" xsi:type="string">jQuery('#delete_folder').trigger('delete_folder');</param>
+                <param name="disabled" xsi:type="string">disabled</param>
+                <param name="sort_order" xsi:type="number">30</param>
+                <class>action-default scalable action-quaternary</class>
+                <label translate="true">Delete Folder</label>
+            </button>
+            <button name="create_folder">
+                <param name="on_click" xsi:type="string">jQuery('#create_folder').trigger('create_folder');</param>
+                <param name="sort_order" xsi:type="number">40</param>
+                <class>action-default scalable add</class>
+                <label translate="true">Create Folder</label>
+            </button>
+        </buttons>
     </settings>
     <dataSource name="media_gallery_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
@@ -35,6 +50,15 @@
             </settings>
         </dataProvider>
     </dataSource>
+    <container name="messages"
+               sortOrder="20"
+               component="Magento_MediaGalleryUi/js/grid/messages">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="messageDelay" xsi:type="number">10</item>
+            </item>
+        </argument>
+    </container>
     <listingToolbar name="listing_top">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
@@ -108,7 +132,10 @@
                 <item name="config" xsi:type="array">
                     <item name="fields" xsi:type="array">
                         <item name="url" xsi:type="string">thumbnail_url</item>
-                    </item>
+                    </item>		    
+                    <item name="url" xsi:type="string">thumbnail_url</item>
+                    <item name="deleteImageUrl" xsi:type="url" path="media_gallery/image/delete"/>
+                    <item name="messagesName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.messages</item>
                 </item>
             </argument>
             <settings>

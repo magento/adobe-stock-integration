@@ -108,23 +108,38 @@ define([
          * @param {String} nodePath
          */
         setActiveNodeFilter: function (nodePath) {
+            if (this.activeNode() === nodePath) {
+                this.selectStorageRoot();
+            } else {
+                this.selectFolder(nodePath);
+            }
+        },
+
+        /**
+         * Remove folders selection -> select storage root
+         */
+        selectStorageRoot: function () {
             var filters = {},
                 applied = this.filterChips().get('applied');
 
-            if (this.activeNode() === nodePath) {
+            $(this.directoryTreeSelector).jstree('deselect_all');
 
-                $(this.directoryTreeSelector).jstree('deselect_all');
+            filters = $.extend(true, filters, applied);
+            delete filters.directory;
+            this.filterChips().set('applied', filters);
+            this.activeNode(null);
+            this.directories().setInActive();
+        },
 
-                filters = $.extend(true, filters, applied);
-                delete filters.directory;
-                this.filterChips().set('applied', filters);
-                this.activeNode(null);
-                this.directories().setInActive();
-            } else {
-                this.activeNode(nodePath);
-                this.directories().setActive(nodePath);
-                this.applyFilter(nodePath);
-            }
+        /**
+         * Set selected folder
+         *
+         * @param {String} path
+         */
+        selectFolder: function (path) {
+            this.activeNode(path);
+            this.directories().setActive(path);
+            this.applyFilter(path);
         },
 
         /**

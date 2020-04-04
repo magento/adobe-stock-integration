@@ -13,7 +13,7 @@ use Magento\MediaContentApi\Api\GetContentWithAssetInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used to return media asset list for the specified asset
+ * Used to return media asset list for the specified asset.
  */
 class GetContentWithAsset implements GetContentWithAssetInterface
 {
@@ -56,7 +56,7 @@ class GetContentWithAsset implements GetContentWithAssetInterface
             return $connection->fetchAssoc($select);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred at getting media content related to the media asset.');
+            $message = __('An error occurred at getting media asset to content relation by media asset id.');
             throw new IntegrationException($message);
         }
     }

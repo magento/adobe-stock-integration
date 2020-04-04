@@ -6,8 +6,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
-    'Magento_Ui/js/modal/confirm'
-], function ($, _, Component, confirmation) {
+    'Magento_Ui/js/modal/confirm',
+    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
+], function ($, _, Component, confirmation, image) {
     'use strict';
 
     return Component.extend({
@@ -42,41 +43,29 @@ define([
          */
         initialize: function () {
             this._super();
-            $(this.imageModel().addSelectedBtnSelector).click(function () {
-                this.insertImage();
-            }.bind(this));
-            $(this.imageModel().deleteSelectedBtnSelector).click(function () {
-                this.deleteImageAction(this.imageModel().selected());
-            }.bind(this));
+            this.initEvents();
 
             return this;
         },
 
         /**
-         * Insert selected image
-         *
-         * @returns {Boolean}
+         * Initialize image action events
          */
-        insertImage: function () {
-            var record = this.imageModel().getSelected(),
-                targetElement;
+        initEvents: function () {
+            $(this.imageModel().addSelectedBtnSelector).click(function () {
+                image.insertImage(
+                   this.imageModel().getSelected(),
+                    {
+                        onInsertUrl: this.imageModel().onInsertUrl,
+                        targetElementId: this.imageModel().targetElementId,
+                        storeId: this.imageModel().storeId
+                    }
+                );
+            }.bind(this));
+            $(this.imageModel().deleteSelectedBtnSelector).click(function () {
+                this.deleteImageAction(this.imageModel().selected());
+            }.bind(this));
 
-            if (record === null) {
-                return false;
-            }
-            targetElement = this.getTargetElement();
-
-            if (!targetElement.length) {
-                window.MediabrowserUtility.closeDialog();
-                throw 'Target element not found for content update';
-            }
-
-            targetElement.val(record['thumbnail_url'])
-                .data('size', record.size)
-                .data('mime-type', record['content_type'])
-                .trigger('change');
-            window.MediabrowserUtility.closeDialog();
-            targetElement.focus();
         },
 
         /**
@@ -93,6 +82,7 @@ define([
 
             confirmation({
                 title: title,
+                modalClass: 'media-gallery-delete-image-action',
                 content: baseContent.replace('%s', record.name),
                 buttons: [
                     {
@@ -214,15 +204,6 @@ define([
         addMessage: function (code, message) {
             this.messages().add(code, message);
             this.messages().scheduleCleanup();
-        },
-
-        /**
-         * Get target element
-         *
-         * @returns {*|n.fn.init|jQuery|HTMLElement}
-         */
-        getTargetElement: function () {
-            return $('#' + this.imageModel().targetElementId);
         }
     });
 });

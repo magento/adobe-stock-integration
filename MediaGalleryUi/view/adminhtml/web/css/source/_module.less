@@ -17,8 +17,15 @@
 
 & when (@media-common = true) {
 
-    .media-gallery-container,
-    .media_gallery-media-index {
+    .media-gallery-delete-image-action,
+    .delete-folder-confirmation-popup {
+        
+        .modal-content {
+            word-wrap: anywhere;
+        }
+    }
+
+    .media-gallery-container {
 
         .page-main-actions {
             .page-actions {
@@ -242,6 +249,7 @@
 
                 .image-details-section {
                     margin-bottom: 40px;
+                    word-wrap: anywhere;
                     .lib-clearfix();
                 }
 

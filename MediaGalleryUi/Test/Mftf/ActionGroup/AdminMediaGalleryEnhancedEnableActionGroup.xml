@@ -14,9 +14,9 @@
         </arguments>
         <amOnPage url="{{AdminConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <scrollTo selector="{{AdminConfigSystemSection.EnhancedMediaGalleryFieldset}}" stepKey="scrollToEnhancedMediaGalleryFieldset"/>
-        <conditionalClick stepKey="expandEnhancedMediaGalleryTab" selector="{{AdminConfigSystemSection.EnhancedMediaGalleryFieldset}}" dependentSelector="{{AdminConfigSystemSection.EnhancedMediaGalleryEnabledField}}" visible="false" />
-        <selectOption userInput="{{enabled}}" selector="{{AdminConfigSystemSection.EnhancedMediaGalleryEnabledField}}" stepKey="enableOrDisableMediaGallery"/>
+        <scrollTo selector="{{AdminConfigSystemSection.enhancedMediaGalleryFieldset}}" stepKey="scrollToEnhancedMediaGalleryFieldset"/>
+        <conditionalClick stepKey="expandEnhancedMediaGalleryTab" selector="{{AdminConfigSystemSection.enhancedMediaGalleryFieldset}}" dependentSelector="{{AdminConfigSystemSection.enhancedMediaGalleryEnabledField}}" visible="false" />
+        <selectOption userInput="{{enabled}}" selector="{{AdminConfigSystemSection.enhancedMediaGalleryEnabledField}}" stepKey="enableOrDisableMediaGallery"/>
         <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveConfiguration"/>
         <waitForPageLoad stepKey="waitForConfigurationToSave"/>
     </actionGroup>

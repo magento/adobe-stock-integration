@@ -8,7 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdobeStockFilterSection">
+    <section name="AdminAdobeStockFilterSection">
         <element name="filters" type="button" selector=".adobe-stock-images-search-modal-content button[data-action='grid-filter-expand']"/>
         <element name="colorFilter" type="input" selector="//*[@id='adobe-stock-images-search-modal']//input[@name='colors_filter']"/>
         <element name="colorButton" type="button" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='sp-preview']"/>
