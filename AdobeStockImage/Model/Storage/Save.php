@@ -48,11 +48,11 @@ class Save
      *
      * @param string $imageUrl
      * @param string $destinationPath
-     * @return string
+     * @return void
      * @throws AlreadyExistsException
      * @throws FileSystemException
      */
-    public function execute(string $imageUrl, string $destinationPath) : string
+    public function execute(string $imageUrl, string $destinationPath): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
@@ -62,8 +62,6 @@ class Save
 
         $fileContents = $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl));
         $mediaDirectory->writeFile($destinationPath, $fileContents);
-
-        return $destinationPath;
     }
 
     /**
