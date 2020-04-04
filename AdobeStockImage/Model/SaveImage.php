@@ -18,7 +18,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Save an image provided with the adobe Stock integration.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImage implements SaveImageInterface
 {

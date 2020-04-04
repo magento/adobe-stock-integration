@@ -14,6 +14,7 @@ use Magento\AdobeStockImage\Model\GetSavedMediaGalleryAssetId;
 use Magento\AdobeStockImage\Model\GetSavedMediaGalleryAssetIdInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -158,6 +159,28 @@ class GetSavedMediaGalleryAssetIdTest extends TestCase
             $mediaGalleryAssetId,
             $this->getSavedMediaGalleryAssetId->execute($document, $destinationPath)
         );
+    }
+
+    /**
+     * Test save media gallery asset with exception.
+     *
+     * @param Document $document
+     * @param string $destinationPath
+     * @param int $mediaGalleryAssetId
+     * @dataProvider assetProvider
+     */
+    public function testExecuteWithException(
+        Document $document,
+        string $destinationPath
+    ): void {
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA)
+            ->willThrowException(new \Exception('Some Exception'));
+
+        $this->expectException(CouldNotSaveException::class);
+
+        $this->getSavedMediaGalleryAssetId->execute($document, $destinationPath);
     }
 
     /**

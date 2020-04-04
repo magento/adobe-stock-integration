@@ -9,7 +9,6 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Used for getting media gallery asset id from document and asset save.
@@ -24,7 +23,6 @@ interface GetSavedMediaGalleryAssetIdInterface
      *
      * @return int
      * @throws CouldNotSaveException
-     * @throws NoSuchEntityException
      */
     public function execute(Document $document, string $destinationPath): int;
 }

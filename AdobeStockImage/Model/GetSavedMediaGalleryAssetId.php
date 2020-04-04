@@ -12,7 +12,6 @@ use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGa
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaGalleryAssetInterface;
@@ -71,28 +70,32 @@ class GetSavedMediaGalleryAssetId implements GetSavedMediaGalleryAssetIdInterfac
      *
      * @return int
      * @throws CouldNotSaveException
-     * @throws NoSuchEntityException
      */
     public function execute(Document $document, string $destinationPath): int
     {
-        $fileSize = $this->calculateFileSize($destinationPath);
-        $additionalData = [
-            'id' => null,
-            'path' => $destinationPath,
-            'source' => 'Adobe Stock',
-            'size' => $fileSize,
-        ];
+        try {
+            $fileSize = $this->calculateFileSize($destinationPath);
+            $additionalData = [
+                'id' => null,
+                'path' => $destinationPath,
+                'source' => 'Adobe Stock',
+                'size' => $fileSize,
+            ];
 
-        /** @var MediaGalleryAssetInterface $mediaGalleryAsset */
-        $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
-        $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
-        if (!$mediaGalleryAssetId) {
-            /** @var AssetInterface $mediaGalleryAsset */
-            $mediaGalleryAsset = $this->assetRepository->getById($document->getId());
-            $mediaGalleryAssetId = $mediaGalleryAsset->getMediaGalleryId();
+            /** @var MediaGalleryAssetInterface $mediaGalleryAsset */
+            $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
+            $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
+            if (!$mediaGalleryAssetId) {
+                /** @var AssetInterface $mediaGalleryAsset */
+                $mediaGalleryAsset = $this->assetRepository->getById($document->getId());
+                $mediaGalleryAssetId = $mediaGalleryAsset->getMediaGalleryId();
+            }
+
+            return $mediaGalleryAssetId;
+        } catch (\Exception $exception) {
+            $message = __('An error occurred during save media gallery asset.');
+            throw new CouldNotSaveException($message);
         }
-
-        return $mediaGalleryAssetId;
     }
 
     /**

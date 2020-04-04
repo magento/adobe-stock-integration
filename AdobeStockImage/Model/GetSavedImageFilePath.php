@@ -10,9 +10,7 @@ namespace Magento\AdobeStockImage\Model;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Save asset file and retrieve its path.
@@ -44,28 +42,24 @@ class GetSavedImageFilePath implements GetSavedImageFilePathInterface
     }
 
     /**
-     * Save asset file to filesystem and return its path.
-     *
-     * @param Document $document
-     * @param string $url
-     * @param string $destinationPath
-     *
-     * @return string
-     * @throws AlreadyExistsException
-     * @throws CouldNotDeleteException
-     * @throws FileSystemException
+     * @inheritdoc
      */
     public function execute(Document $document, string $url, string $destinationPath): string
     {
-        $pathAttribute = $document->getCustomAttribute('path');
-        $pathValue = $pathAttribute->getValue();
-        /* If the asset has been already saved, delete the previous version */
-        if (null !== $pathAttribute && $pathValue) {
-            $this->storageDelete->execute($pathValue);
+        try {
+            $pathAttribute = $document->getCustomAttribute('path');
+            $pathValue = $pathAttribute->getValue();
+            /* If the asset has been already saved, delete the previous version */
+            if (null !== $pathAttribute && $pathValue) {
+                $this->storageDelete->execute($pathValue);
+            }
+
+            $path = $this->storageSave->execute($url, $destinationPath);
+
+            return $path;
+        } catch (\Exception $exception) {
+            $message = __('An error occurred during save image file.');
+            throw new CouldNotSaveException($message);
         }
-
-        $path = $this->storageSave->execute($url, $destinationPath);
-
-        return $path;
     }
 }
