@@ -82,6 +82,7 @@ define([
 
             confirmation({
                 title: title,
+                modalClass: 'media-gallery-delete-image-action',
                 content: baseContent.replace('%s', record.name),
                 buttons: [
                     {
