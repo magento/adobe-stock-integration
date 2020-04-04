@@ -7,10 +7,9 @@ define([
     'uiComponent',
     'jquery',
     'underscore',
-    'Magento_Ui/js/modal/alert',
     'mage/translate',
     'jquery/file-uploader'
-], function (Component, $, _, uiAlert) {
+], function (Component, $, _) {
     'use strict';
 
     return Component.extend({
@@ -18,6 +17,7 @@ define([
             imageUploadInputSelector: '#image-uploader-form',
             directoriesPath: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             actionsPath: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url',
+            messagesPath: 'media_gallery_listing.media_gallery_listing.messages',
             imageUploadUrl: '',
             acceptFileTypes: '',
             allowedExtensions: '',
@@ -25,7 +25,8 @@ define([
             loader: false,
             modules: {
                 directories: '${ $.directoriesPath }',
-                actions: '${ $.actionsPath }'
+                actions: '${ $.actionsPath }',
+                mediaGridMessages: '${ $.messagesPath }'
             }
         },
 
@@ -81,9 +82,8 @@ define([
                     var response = data.jqXHR.responseJSON;
 
                     if (response !== undefined && response.message) {
-                        uiAlert({
-                            content: response.message
-                        });
+                        this.mediaGridMessages().add('error', $.mage.__(response.message));
+                        this.mediaGridMessages().scheduleCleanup();
                     }
                     this.hideLoader();
                 }.bind(this)
