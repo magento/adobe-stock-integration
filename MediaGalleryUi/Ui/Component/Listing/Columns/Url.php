@@ -35,7 +35,7 @@ class Url extends Column
      * @var Images
      */
     private $images;
-    
+
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory

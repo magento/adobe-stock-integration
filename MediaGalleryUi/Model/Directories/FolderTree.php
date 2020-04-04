@@ -9,7 +9,6 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
 
 /**
  * Build folder tree structure by path
