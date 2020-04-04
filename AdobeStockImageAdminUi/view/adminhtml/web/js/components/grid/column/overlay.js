@@ -19,14 +19,14 @@ define([
             getImagesUrl: 'adobe_stock/license/getlist',
             licensed: {},
             modules: {
-                login: '${ $.loginProvider }',
+                login: '${ $.loginProvider }'
             },
             listens: {
                 '${ $.provider }:data.items': 'handleItemsUpdate',
                 '${ $.loginProvider }:user': 'handleUserUpdate'
             },
             imports: {
-                rows: '${ $.provider }:data.items',
+                rows: '${ $.provider }:data.items'
             }
         },
 
@@ -48,7 +48,7 @@ define([
          *
          * @param {Array} items
          */
-        handleItemsUpdate: function(items) {
+        handleItemsUpdate: function (items) {
             var ids = this.getIds(items);
 
             this.updateLicensed(ids);
@@ -57,7 +57,7 @@ define([
         /**
          * Updates the licensed data when user data is updated.
          */
-        handleUserUpdate: function() {
+        handleUserUpdate: function () {
             var ids = this.getIds(this.rows);
 
             this.updateLicensed(ids);
@@ -107,7 +107,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isUserAuthorized: function() {
+        isUserAuthorized: function () {
             return !_.isUndefined(this.login()) && this.login().user().isAuthorized;
         },
 
