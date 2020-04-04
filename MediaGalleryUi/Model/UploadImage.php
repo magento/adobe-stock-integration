@@ -44,8 +44,8 @@ class UploadImage
         SplFileInfoFactory $splFileInfoFactory,
         Filesystem $filesystem
     ) {
-        $this->splFileInfoFactory = $splFileInfoFactory;
         $this->imagesStorage = $imagesStorage;
+        $this->splFileInfoFactory = $splFileInfoFactory;
         $this->filesystem = $filesystem;
     }
 
@@ -63,7 +63,8 @@ class UploadImage
         if (!$mediaDirectory->isDirectory($targetFolder)) {
             throw new LocalizedException(__('Directory %1 does not exist in media directory.', $targetFolder));
         }
-        $uploadResult = $this->imagesStorage->uploadFile($mediaDirectory->getAbsolutePath($targetFolder), $type);
+        $absolutePath = $mediaDirectory->getAbsolutePath($targetFolder);
+        $uploadResult = $this->imagesStorage->uploadFile($absolutePath, $type);
         return $this->splFileInfoFactory->create($uploadResult['path'] . '/' . $uploadResult['file']);
     }
 }
