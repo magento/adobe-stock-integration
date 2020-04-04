@@ -20,11 +20,13 @@ define([
             licensed: {},
             modules: {
                 login: '${ $.loginProvider }',
-                rowsProvider: '${ $.provider }',
             },
             listens: {
-                '${ $.provider }:data.items': 'updateLicensed',
-                '${ $.loginProvider }:user': 'updateLicensed'
+                '${ $.provider }:data.items': 'itemsEventUpdateLicensed',
+                '${ $.loginProvider }:user': 'loginEventUpdateLicensed'
+            },
+            imports: {
+                rows: '${ $.provider }:data.items',
             }
         },
 
@@ -42,10 +44,32 @@ define([
         },
 
         /**
-         * Set Licensed images data.
+         * Updates the licensed data when data provider gets updated.
+         *
+         * @param {Array} items
          */
-        updateLicensed: function () {
-            if (_.isUndefined(this.login()) || !this.login().user().isAuthorized) {
+        itemsEventUpdateLicensed: function(items) {
+            var ids = this.getIds(items);
+
+            this.updateLicensed(ids);
+        },
+
+        /**
+         * Updates the licensed data when user logs in.
+         */
+        loginEventUpdateLicensed: function() {
+            var ids = this.getIds(this.rows);
+
+            this.updateLicensed(ids);
+        },
+
+        /**
+         * Set Licensed images data.
+         *
+         * @param {Array} ids
+         */
+        updateLicensed: function (ids) {
+            if (this.isUserNotAuthorized() || ids.length === 0) {
                 this.licensed({});
 
                 return;
@@ -53,7 +77,7 @@ define([
 
             $.ajax({
                 type: 'GET',
-                url: this.getImagesUrl + '?ids=' + this.getIds().join(','),
+                url: this.getImagesUrl + '?ids=' + ids.join(','),
                 data: {
                     'form_key': window.FORM_KEY
                 },
@@ -79,14 +103,24 @@ define([
         },
 
         /**
-         * Get all ids from data provider
+         * Checks if user is logged in and authorized
          *
+         * @returns {Boolean}
+         */
+        isUserNotAuthorized: function() {
+            return _.isUndefined(this.login()) || !this.login().user().isAuthorized;
+        },
+
+        /**
+         * Get all ids from items array
+         *
+         * @param {Array} items
          * @returns {Number[]}
          */
-        getIds: function () {
+        getIds: function (items) {
             var ids = [];
 
-            this.rowsProvider().data.items.forEach(function (record) {
+            items.forEach(function (record) {
                 ids.push(record.id);
             });
 
