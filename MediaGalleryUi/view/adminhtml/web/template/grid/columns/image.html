@@ -9,7 +9,7 @@
         <div class="masonry-image-block media-gallery-image-block"
              attr="'data-id': $col.getId($row())"
              css="{ selected: isSelected($row()) }"
-             click="function(){ if (!$collapsible.opened()) {select($row())} }" >
+             click="function(){ clickOnImage($row(), $collapsible.opened()) }" >
             <img attr="src: $col.getUrl($row())"
                  class="media-gallery-image-column"
                  data-role="thumbnail"/>
@@ -31,7 +31,7 @@
             <div class="action-select-wrap">
                 <span class="three-dots"
                       toggleCollapsible
-                      click="function () {if (!isSelected($row()) || $collapsible.opened()) {select($row())}}"></span>
+                      click="function () { clickOnThreeDots($row(), $collapsible.opened()); }"></span>
             </div>
         </div>
     </div>
