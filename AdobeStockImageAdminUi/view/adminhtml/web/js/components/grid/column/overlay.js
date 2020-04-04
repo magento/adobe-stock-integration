@@ -22,8 +22,8 @@ define([
                 login: '${ $.loginProvider }',
             },
             listens: {
-                '${ $.provider }:data.items': 'itemsEventUpdateLicensed',
-                '${ $.loginProvider }:user': 'loginEventUpdateLicensed'
+                '${ $.provider }:data.items': 'handleItemsUpdate',
+                '${ $.loginProvider }:user': 'handleUserUpdate'
             },
             imports: {
                 rows: '${ $.provider }:data.items',
@@ -44,20 +44,20 @@ define([
         },
 
         /**
-         * Updates the licensed data when data provider gets updated.
+         * Updates the licensed data when items data is updated.
          *
          * @param {Array} items
          */
-        itemsEventUpdateLicensed: function(items) {
+        handleItemsUpdate: function(items) {
             var ids = this.getIds(items);
 
             this.updateLicensed(ids);
         },
 
         /**
-         * Updates the licensed data when user logs in.
+         * Updates the licensed data when user data is updated.
          */
-        loginEventUpdateLicensed: function() {
+        handleUserUpdate: function() {
             var ids = this.getIds(this.rows);
 
             this.updateLicensed(ids);
@@ -69,7 +69,7 @@ define([
          * @param {Array} ids
          */
         updateLicensed: function (ids) {
-            if (this.isUserNotAuthorized() || ids.length === 0) {
+            if (!this.isUserAuthorized() || ids.length === 0) {
                 this.licensed({});
 
                 return;
@@ -107,8 +107,8 @@ define([
          *
          * @returns {Boolean}
          */
-        isUserNotAuthorized: function() {
-            return _.isUndefined(this.login()) || !this.login().user().isAuthorized;
+        isUserAuthorized: function() {
+            return !_.isUndefined(this.login()) && this.login().user().isAuthorized;
         },
 
         /**
