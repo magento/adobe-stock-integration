@@ -58,6 +58,7 @@ class ImageUploaderStandAlone extends Container
                     'acceptFileTypes' => self::ACCEPT_FILE_TYPES,
                     'allowedExtensions' => self::ALLOWED_EXTENSIONS,
                     'maxFileSize' => self::MAX_FILE_SIZE,
+                    // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
                     'actionsPath' => 'standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url',
                     'directoriesPath' => 'standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_directories',
                     'messagesPath' => 'standalone_media_gallery_listing.standalone_media_gallery_listing.messages'
