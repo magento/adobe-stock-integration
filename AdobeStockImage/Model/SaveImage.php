@@ -48,14 +48,14 @@ class SaveImage implements SaveImageInterface
     private $setLicensedInMediaGalleryGrid;
 
     /**
-     * @var RetrieveFilePathFromDocumentInterface
+     * @var GetSavedImageFilePathInterface
      */
-    private $retrieveFilePathFromDocument;
+    private $getSavedImageFilePath;
 
     /**
-     * @var RetrieveMediaAssetIdFromDocumentInterface
+     * @var GetSavedMediaGalleryAssetIdInterface
      */
-    private $retrieveMediaAssetIdFromDocument;
+    private $getSavedMediaGalleryAssetId;
 
     /**
      * @var LoggerInterface
@@ -70,8 +70,8 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
-     * @param RetrieveFilePathFromDocumentInterface $retrieveFilePathFromDocument
-     * @param RetrieveMediaAssetIdFromDocumentInterface $retrieveMediaAssetIdFromDocument
+     * @param GetSavedImageFilePathInterface $getSavedImageFilePath
+     * @param GetSavedMediaGalleryAssetIdInterface $getSavedMediaGalleryAssetId
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -80,8 +80,8 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        RetrieveFilePathFromDocumentInterface $retrieveFilePathFromDocument,
-        RetrieveMediaAssetIdFromDocumentInterface $retrieveMediaAssetIdFromDocument,
+        GetSavedImageFilePathInterface $getSavedImageFilePath,
+        GetSavedMediaGalleryAssetIdInterface $getSavedMediaGalleryAssetId,
         LoggerInterface $logger
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
@@ -89,8 +89,8 @@ class SaveImage implements SaveImageInterface
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
-        $this->retrieveFilePathFromDocument = $retrieveFilePathFromDocument;
-        $this->retrieveMediaAssetIdFromDocument = $retrieveMediaAssetIdFromDocument;
+        $this->getSavedImageFilePath = $getSavedImageFilePath;
+        $this->getSavedMediaGalleryAssetId = $getSavedMediaGalleryAssetId;
         $this->logger = $logger;
     }
 
@@ -106,8 +106,8 @@ class SaveImage implements SaveImageInterface
     public function execute(Document $document, string $url, string $destinationPath): void
     {
         try {
-            $filePath = $this->retrieveFilePathFromDocument->execute($document, $url, $destinationPath);
-            $mediaGalleryAssetId = $this->retrieveMediaAssetIdFromDocument->execute($document, $filePath);
+            $filePath = $this->getSavedImageFilePath->execute($document, $url, $destinationPath);
+            $mediaGalleryAssetId = $this->getSavedMediaGalleryAssetId->execute($document, $filePath);
 
             $keywords = $this->documentToKeywords->convert($document);
             $this->saveAssetKeywords->execute($keywords, $mediaGalleryAssetId);

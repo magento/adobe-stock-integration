@@ -21,7 +21,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 /**
  * Process save action of the MediaGalleryAsset.
  */
-class RetrieveMediaAssetIdFromDocument implements RetrieveMediaAssetIdFromDocumentInterface
+class GetSavedMediaGalleryAssetId implements GetSavedMediaGalleryAssetIdInterface
 {
     /**
      * @var AssetRepositoryInterface

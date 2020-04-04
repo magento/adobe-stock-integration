@@ -17,7 +17,7 @@ use Magento\Framework\Exception\FileSystemException;
 /**
  * Save asset file and retrieve its path.
  */
-class RetrieveFilePathFromDocument implements RetrieveFilePathFromDocumentInterface
+class GetSavedImageFilePath implements GetSavedImageFilePathInterface
 {
     /**
      * @var StorageSave

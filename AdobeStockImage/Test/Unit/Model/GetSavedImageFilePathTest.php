@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockImage\Model\RetrieveFilePathFromDocument;
+use Magento\AdobeStockImage\Model\GetSavedImageFilePath;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
@@ -17,9 +17,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test saving image file and create Media Gallery asset.
+ * Test saving image file and return its saved path.
  */
-class RetrieveFilePathFromDocumentTest extends TestCase
+class GetSavedImageFilePathTest extends TestCase
 {
     /**
      * @var MockObject|StorageSave
@@ -32,9 +32,9 @@ class RetrieveFilePathFromDocumentTest extends TestCase
     private $storageDelete;
 
     /**
-     * @var RetrieveFilePathFromDocument
+     * @var GetSavedImageFilePath
      */
-    private $retrieveFilePathFromDocument;
+    private $getSavedImageFilePath;
 
     /**
      * @inheritdoc
@@ -44,8 +44,8 @@ class RetrieveFilePathFromDocumentTest extends TestCase
         $this->storageSave = $this->createMock(StorageSave::class);
         $this->storageDelete = $this->createMock(StorageDelete::class);
 
-        $this->retrieveFilePathFromDocument = (new ObjectManager($this))->getObject(
-            RetrieveFilePathFromDocument::class,
+        $this->getSavedImageFilePath = (new ObjectManager($this))->getObject(
+            GetSavedImageFilePath::class,
             [
                 'storageSave' => $this->storageSave,
                 'storageDelete' => $this->storageDelete
@@ -54,7 +54,7 @@ class RetrieveFilePathFromDocumentTest extends TestCase
     }
 
     /**
-     * Verify getting path from document aster image save.
+     * Test getting save image path.
      *
      * @param Document $document
      * @param string $url
@@ -78,7 +78,7 @@ class RetrieveFilePathFromDocumentTest extends TestCase
             ->with($url, $destinationPath)
             ->willReturn($path);
 
-        $this->retrieveFilePathFromDocument->execute($document, $url, $destinationPath);
+        $this->getSavedImageFilePath->execute($document, $url, $destinationPath);
     }
 
     /**

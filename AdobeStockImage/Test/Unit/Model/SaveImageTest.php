@@ -10,17 +10,17 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
-use Magento\AdobeStockImage\Model\RetrieveMediaAssetIdFromDocumentInterface;
+use Magento\AdobeStockImage\Model\GetSavedImageFilePathInterface;
+use Magento\AdobeStockImage\Model\GetSavedMediaGalleryAssetIdInterface;
 use Magento\AdobeStockImage\Model\SaveImage;
-use Magento\AdobeStockImage\Model\RetrieveFilePathFromDocumentInterface;
 use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for Save image model.
@@ -54,14 +54,14 @@ class SaveImageTest extends TestCase
     private $setLicensedInMediaGalleryGridMock;
 
     /**
-     * @var RetrieveFilePathFromDocumentInterface|MockObject
+     * @var GetSavedImageFilePathInterface|MockObject
      */
-    private $retrieveFilePathFromDocumentMock;
+    private $getSavedImageFilePathMock;
 
     /**
-     * @var RetrieveMediaAssetIdFromDocumentInterface|MockObject
+     * @var GetSavedMediaGalleryAssetIdInterface|MockObject
      */
-    private $retrieveMediaAssetIdFromDocumentMock;
+    private $getSavedMediaGalleryAssetIdMock;
 
     /**
      * @var LoggerInterface|MockObject
@@ -83,9 +83,9 @@ class SaveImageTest extends TestCase
         $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
         $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
         $this->setLicensedInMediaGalleryGridMock = $this->createMock(SetLicensedInMediaGalleryGrid::class);
-        $this->retrieveFilePathFromDocumentMock = $this->createMock(RetrieveFilePathFromDocumentInterface::class);
-        $this->retrieveMediaAssetIdFromDocumentMock = $this->createMock(
-            RetrieveMediaAssetIdFromDocumentInterface::class
+        $this->getSavedImageFilePathMock = $this->createMock(GetSavedImageFilePathInterface::class);
+        $this->getSavedMediaGalleryAssetIdMock = $this->createMock(
+            GetSavedMediaGalleryAssetIdInterface::class
         );
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 
@@ -97,8 +97,8 @@ class SaveImageTest extends TestCase
                 'saveAssetKeywords' => $this->saveAssetKeywords,
                 'documentToKeywords' => $this->documentToKeywords,
                 'setLicensedInMediaGalleryGrid' => $this->setLicensedInMediaGalleryGridMock,
-                'retrieveFilePathFromDocument' => $this->retrieveFilePathFromDocumentMock,
-                'retrieveMediaAssetIdFromDocument' => $this->retrieveMediaAssetIdFromDocumentMock,
+                'getSavedImageFilePath' => $this->getSavedImageFilePathMock,
+                'getSavedMediaGalleryAssetId' => $this->getSavedMediaGalleryAssetIdMock,
                 'logger' => $this->loggerMock
             ]
         );
@@ -117,12 +117,12 @@ class SaveImageTest extends TestCase
         $mediaGalleryAssetId = 42;
         $keywords = [];
 
-        $this->retrieveFilePathFromDocumentMock->expects($this->once())
+        $this->getSavedImageFilePathMock->expects($this->once())
             ->method('execute')
             ->with($document, $url, $destinationPath)
             ->willReturn($destinationPath);
 
-        $this->retrieveMediaAssetIdFromDocumentMock->expects($this->once())
+        $this->getSavedMediaGalleryAssetIdMock->expects($this->once())
             ->method('execute')
             ->with($document, $destinationPath)
             ->willReturn($mediaGalleryAssetId);
@@ -159,7 +159,7 @@ class SaveImageTest extends TestCase
      */
     public function testSaveImageWithException(Document $document, string $url, string $destinationPath): void
     {
-        $this->retrieveFilePathFromDocumentMock->expects($this->once())
+        $this->getSavedImageFilePathMock->expects($this->once())
             ->method('execute')
             ->with($document, $url, $destinationPath)
             ->willThrowException(new \Exception('Some Exception'));
