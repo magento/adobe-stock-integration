@@ -20,7 +20,7 @@ define([
             licensed: {},
             modules: {
                 login: '${ $.loginProvider }',
-                masonry: '${ $.parentName }'
+                rowsProvider: '${ $.provider }',
             },
             listens: {
                 '${ $.provider }:data.items': 'updateLicensed',
@@ -86,7 +86,7 @@ define([
         getIds: function () {
             var ids = [];
 
-            this.masonry().rows().forEach(function (record) {
+            this.rowsProvider().data.items.forEach(function (record) {
                 ids.push(record.id);
             });
 
