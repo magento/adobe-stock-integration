@@ -23,15 +23,15 @@ define([
                 alt: 'name'
             },
             modules: {
-                actions: '${ $.name }_actions'
+                actions: '${ $.name }_actions',
+                provider: '${ $.provider }',
+                messages: '${ $.messagesName }'
             },
             viewConfig: [
                 {
                     component: 'Magento_MediaGalleryUi/js/grid/columns/image/actions',
                     name: '${ $.name }_actions',
-                    providerName: '${ $.provider }',
-                    imageModelName: '${ $.name }',
-                    messagesName: '${ $.messagesName }'
+                    imageModelName: '${ $.name }'
                 }
             ]
         },
@@ -44,6 +44,7 @@ define([
         initialize: function () {
             this._super();
             this.initView();
+            $(window).on('fileDeleted.enhancedMediaGallery', this.reloadMediaGrid.bind(this));
 
             return this;
         },
@@ -137,12 +138,56 @@ define([
          */
         toggleAddSelectedButton: function () {
             if (this.selected() === null) {
-                $(this.addSelectedBtnSelector).addClass('no-display');
-                $(this.deleteSelectedBtnSelector).addClass('no-display');
+                this.hideAddSelectedAndDeleteButon();
             } else {
                 $(this.addSelectedBtnSelector).removeClass('no-display');
                 $(this.deleteSelectedBtnSelector).removeClass('no-display');
             }
+        },
+
+        /**
+         * Hide add selected and Delete button
+         */
+        hideAddSelectedAndDeleteButon: function () {
+            $(this.addSelectedBtnSelector).addClass('no-display');
+            $(this.deleteSelectedBtnSelector).addClass('no-display');
+        },
+
+        /**
+         * @param {jQuery.event} e
+         * @param {Object} data
+         */
+        reloadMediaGrid: function (e, data) {
+            if (data.reload) {
+                this.reloadGrid();
+            }
+
+            if (data.message && data.code) {
+                this.addMessage(data.code, data.message);
+            }
+            this.hideAddSelectedAndDeleteButon();
+        },
+
+        /**
+         * Reload grid
+         */
+        reloadGrid: function () {
+            var provider = this.provider(),
+                dataStorage = provider.storage();
+
+            dataStorage.clearRequests();
+            provider.reload();
+        },
+
+        /**
+         * Add message
+         *
+         * @param {String} code
+         * @param {String} message
+         */
+        addMessage: function (code, message) {
+            this.messages().add(code, message);
+            this.messages().scheduleCleanup();
         }
     });
 });

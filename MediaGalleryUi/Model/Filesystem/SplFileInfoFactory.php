@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Filesystem;
 
+/**
+ * Creates a new file based on the file name parameter.
+ */
 class SplFileInfoFactory
 {
     /**
