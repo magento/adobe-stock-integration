@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 
 /**
  * Recursively iterate over files and call each indexer for each file
@@ -21,12 +24,24 @@ class FilesIndexer
     private $excludedDirectories;
 
     /**
+     * @var Read
+     */
+    private $mediaDirectory;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param ExcludedDirectories $excludedDirectories
      */
     public function __construct(
-        ExcludedDirectories $excludedDirectories
+        ExcludedDirectories $excludedDirectories,
+        Filesystem $filesystem
     ) {
         $this->excludedDirectories = $excludedDirectories;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -48,7 +63,17 @@ class FilesIndexer
         foreach ($iterator as $item) {
             $filePath = $item->getPath() . '/' . $item->getFileName();
 
-            if (!preg_match($filePathPattern, $filePath) || $this->excludedDirectories->isExcluded($item->getPath())) {
+            $pathRelativeToMedia = $this->getMediaDirectory()->getRelativePath($item->getPath());
+
+            if (!$pathRelativeToMedia) {
+                continue;
+            }
+
+            if ($this->excludedDirectories->isExcluded($pathRelativeToMedia)) {
+                continue;
+            }
+
+            if (!preg_match($filePathPattern, $filePath)) {
                 continue;
             }
 
@@ -58,5 +83,18 @@ class FilesIndexer
                 }
             }
         }
+    }
+
+    /**
+     * Retrieve media directory instance with read permissions
+     *
+     * @return Read
+     */
+    private function getMediaDirectory(): Read
+    {
+        if (!$this->mediaDirectory) {
+            $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        }
+        return $this->mediaDirectory;
     }
 }
