@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockImage\Model\GetSavedImageFilePath;
+use Magento\AdobeStockImage\Model\SaveImageFile;
 use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
@@ -18,9 +18,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test saving image file and return its saved path.
+ * Test saving image file.
  */
-class GetSavedImageFilePathTest extends TestCase
+class SaveImageFileTest extends TestCase
 {
     /**
      * @var MockObject|StorageSave
@@ -33,9 +33,9 @@ class GetSavedImageFilePathTest extends TestCase
     private $storageDelete;
 
     /**
-     * @var GetSavedImageFilePath
+     * @var SaveImageFile
      */
-    private $getSavedImageFilePath;
+    private $saveImageFile;
 
     /**
      * @inheritdoc
@@ -45,8 +45,8 @@ class GetSavedImageFilePathTest extends TestCase
         $this->storageSave = $this->createMock(StorageSave::class);
         $this->storageDelete = $this->createMock(StorageDelete::class);
 
-        $this->getSavedImageFilePath = (new ObjectManager($this))->getObject(
-            GetSavedImageFilePath::class,
+        $this->saveImageFile = (new ObjectManager($this))->getObject(
+            SaveImageFile::class,
             [
                 'storageSave' => $this->storageSave,
                 'storageDelete' => $this->storageDelete
@@ -79,7 +79,7 @@ class GetSavedImageFilePathTest extends TestCase
             ->with($url, $destinationPath)
             ->willReturn($path);
 
-        $this->getSavedImageFilePath->execute($document, $url, $destinationPath);
+        $this->saveImageFile->execute($document, $url, $destinationPath);
     }
 
     /**
@@ -109,7 +109,7 @@ class GetSavedImageFilePathTest extends TestCase
 
         $this->expectException(CouldNotSaveException::class);
 
-        $this->getSavedImageFilePath->execute($document, $url, $destinationPath);
+        $this->saveImageFile->execute($document, $url, $destinationPath);
     }
 
     /**

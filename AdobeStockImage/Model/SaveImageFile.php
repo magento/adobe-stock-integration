@@ -13,9 +13,9 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Save asset file and retrieve its path.
+ * Process saving an image file. If the asset has been already saved, delete the previous version.
  */
-class GetSavedImageFilePath implements GetSavedImageFilePathInterface
+class SaveImageFile implements SaveImageFileInterface
 {
     /**
      * @var StorageSave
@@ -28,7 +28,7 @@ class GetSavedImageFilePath implements GetSavedImageFilePathInterface
     private $storageDelete;
 
     /**
-     * RetrieveFilePathFromDocument constructor.
+     * SaveImageFile constructor.
      *
      * @param StorageSave $storageSave
      * @param StorageDelete $storageDelete
@@ -44,19 +44,15 @@ class GetSavedImageFilePath implements GetSavedImageFilePathInterface
     /**
      * @inheritdoc
      */
-    public function execute(Document $document, string $url, string $destinationPath): string
+    public function execute(Document $document, string $url, string $destinationPath): void
     {
         try {
             $pathAttribute = $document->getCustomAttribute('path');
             $pathValue = $pathAttribute->getValue();
-            /* If the asset has been already saved, delete the previous version */
             if (null !== $pathAttribute && $pathValue) {
                 $this->storageDelete->execute($pathValue);
             }
-
-            $path = $this->storageSave->execute($url, $destinationPath);
-
-            return $path;
+            $this->storageSave->execute($url, $destinationPath);
         } catch (\Exception $exception) {
             $message = __('An error occurred during save image file.');
             throw new CouldNotSaveException($message);

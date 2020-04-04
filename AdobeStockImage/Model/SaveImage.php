@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Save an image provided with the adobe Stock integration.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImage implements SaveImageInterface
 {
@@ -47,14 +48,14 @@ class SaveImage implements SaveImageInterface
     private $setLicensedInMediaGalleryGrid;
 
     /**
-     * @var GetSavedImageFilePathInterface
+     * @var SaveImageFileInterface
      */
-    private $getSavedImageFilePath;
+    private $saveImageFile;
 
     /**
-     * @var GetSavedMediaGalleryAssetIdInterface
+     * @var SaveMediaGalleryAssetInterface
      */
-    private $getSavedMediaGalleryAssetId;
+    private $saveMediaGalleryAsset;
 
     /**
      * @var LoggerInterface
@@ -69,8 +70,8 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
-     * @param GetSavedImageFilePathInterface $getSavedImageFilePath
-     * @param GetSavedMediaGalleryAssetIdInterface $getSavedMediaGalleryAssetId
+     * @param SaveImageFileInterface $saveImageFile
+     * @param SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -79,8 +80,8 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        GetSavedImageFilePathInterface $getSavedImageFilePath,
-        GetSavedMediaGalleryAssetIdInterface $getSavedMediaGalleryAssetId,
+        SaveImageFileInterface $saveImageFile,
+        SaveMediaGalleryAssetInterface $saveMediaGalleryAsset,
         LoggerInterface $logger
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
@@ -88,8 +89,8 @@ class SaveImage implements SaveImageInterface
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
-        $this->getSavedImageFilePath = $getSavedImageFilePath;
-        $this->getSavedMediaGalleryAssetId = $getSavedMediaGalleryAssetId;
+        $this->saveImageFile = $saveImageFile;
+        $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
         $this->logger = $logger;
     }
 
@@ -105,8 +106,8 @@ class SaveImage implements SaveImageInterface
     public function execute(Document $document, string $url, string $destinationPath): void
     {
         try {
-            $filePath = $this->getSavedImageFilePath->execute($document, $url, $destinationPath);
-            $mediaGalleryAssetId = $this->getSavedMediaGalleryAssetId->execute($document, $filePath);
+            $this->saveImageFile->execute($document, $url, $destinationPath);
+            $mediaGalleryAssetId = $this->saveMediaGalleryAsset->execute($document, $destinationPath);
 
             $keywords = $this->documentToKeywords->convert($document);
             $this->saveAssetKeywords->execute($keywords, $mediaGalleryAssetId);

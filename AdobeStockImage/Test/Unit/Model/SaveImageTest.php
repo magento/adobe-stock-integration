@@ -10,8 +10,8 @@ namespace Magento\AdobeStockImage\Test\Unit\Model;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
-use Magento\AdobeStockImage\Model\GetSavedImageFilePathInterface;
-use Magento\AdobeStockImage\Model\GetSavedMediaGalleryAssetIdInterface;
+use Magento\AdobeStockImage\Model\SaveImageFile;
+use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SaveImage;
 use Magento\AdobeStockImage\Model\SetLicensedInMediaGalleryGrid;
 use Magento\Framework\Api\Search\Document;
@@ -54,14 +54,14 @@ class SaveImageTest extends TestCase
     private $setLicensedInMediaGalleryGridMock;
 
     /**
-     * @var GetSavedImageFilePathInterface|MockObject
+     * @var SaveImageFile|MockObject
      */
-    private $getSavedImageFilePathMock;
+    private $saveImageFileMock;
 
     /**
-     * @var GetSavedMediaGalleryAssetIdInterface|MockObject
+     * @var SaveMediaGalleryAsset|MockObject
      */
-    private $getSavedMediaGalleryAssetIdMock;
+    private $saveMediaGalleryAssetMock;
 
     /**
      * @var LoggerInterface|MockObject
@@ -83,10 +83,8 @@ class SaveImageTest extends TestCase
         $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
         $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
         $this->setLicensedInMediaGalleryGridMock = $this->createMock(SetLicensedInMediaGalleryGrid::class);
-        $this->getSavedImageFilePathMock = $this->createMock(GetSavedImageFilePathInterface::class);
-        $this->getSavedMediaGalleryAssetIdMock = $this->createMock(
-            GetSavedMediaGalleryAssetIdInterface::class
-        );
+        $this->saveImageFileMock = $this->createMock(SaveImageFile::class);
+        $this->saveMediaGalleryAssetMock = $this->createMock(SaveMediaGalleryAsset::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
@@ -97,15 +95,15 @@ class SaveImageTest extends TestCase
                 'saveAssetKeywords' => $this->saveAssetKeywords,
                 'documentToKeywords' => $this->documentToKeywords,
                 'setLicensedInMediaGalleryGrid' => $this->setLicensedInMediaGalleryGridMock,
-                'getSavedImageFilePath' => $this->getSavedImageFilePathMock,
-                'getSavedMediaGalleryAssetId' => $this->getSavedMediaGalleryAssetIdMock,
+                'saveImageFile' => $this->saveImageFileMock,
+                'saveMediaGalleryAsset' => $this->saveMediaGalleryAssetMock,
                 'logger' => $this->loggerMock
             ]
         );
     }
 
     /**
-     * Verify that image recieved from the Adobe Stock can be saved.
+     * Verify that image from the Adobe Stock can be saved.
      *
      * @param Document $document
      * @param string $url
@@ -117,12 +115,11 @@ class SaveImageTest extends TestCase
         $mediaGalleryAssetId = 42;
         $keywords = [];
 
-        $this->getSavedImageFilePathMock->expects($this->once())
+        $this->saveImageFileMock->expects($this->once())
             ->method('execute')
-            ->with($document, $url, $destinationPath)
-            ->willReturn($destinationPath);
+            ->with($document, $url, $destinationPath);
 
-        $this->getSavedMediaGalleryAssetIdMock->expects($this->once())
+        $this->saveMediaGalleryAssetMock->expects($this->once())
             ->method('execute')
             ->with($document, $destinationPath)
             ->willReturn($mediaGalleryAssetId);
@@ -159,7 +156,7 @@ class SaveImageTest extends TestCase
      */
     public function testSaveImageWithException(Document $document, string $url, string $destinationPath): void
     {
-        $this->getSavedImageFilePathMock->expects($this->once())
+        $this->saveImageFileMock->expects($this->once())
             ->method('execute')
             ->with($document, $url, $destinationPath)
             ->willThrowException(new \Exception('Some Exception'));

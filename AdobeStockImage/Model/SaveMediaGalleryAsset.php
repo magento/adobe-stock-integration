@@ -18,9 +18,9 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaGalleryAssetInterfac
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 
 /**
- * Process save action of the MediaGalleryAsset.
+ * Process save action of the media gallery asset.
  */
-class GetSavedMediaGalleryAssetId implements GetSavedMediaGalleryAssetIdInterface
+class SaveMediaGalleryAsset implements SaveMediaGalleryAssetInterface
 {
     /**
      * @var AssetRepositoryInterface
@@ -63,13 +63,7 @@ class GetSavedMediaGalleryAssetId implements GetSavedMediaGalleryAssetIdInterfac
     }
 
     /**
-     * Process saving MediaGalleryAsset based on the search document and destination path.
-     *
-     * @param Document $document
-     * @param string $destinationPath
-     *
-     * @return int
-     * @throws CouldNotSaveException
+     * @inheritdoc
      */
     public function execute(Document $document, string $destinationPath): int
     {

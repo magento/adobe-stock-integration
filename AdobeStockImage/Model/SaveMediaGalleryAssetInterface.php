@@ -11,19 +11,18 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Used for retrieving an Adobe Stock image file path from filesystem.
+ * Used for getting a media gallery asset id from document and asset save.
  */
-interface GetSavedImageFilePathInterface
+interface SaveMediaGalleryAssetInterface
 {
     /**
-     * Downloads the image and save it to the filesystem storage.
+     * Process saving MediaGalleryAsset based on the search document and destination path.
      *
      * @param Document $document
-     * @param string $url
      * @param string $destinationPath
      *
-     * @return string
+     * @return int
      * @throws CouldNotSaveException
      */
-    public function execute(Document $document, string $url, string $destinationPath): string;
+    public function execute(Document $document, string $destinationPath): int;
 }

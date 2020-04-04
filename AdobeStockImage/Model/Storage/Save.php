@@ -52,7 +52,7 @@ class Save
      * @throws AlreadyExistsException
      * @throws FileSystemException
      */
-    public function execute(string $imageUrl, string $destinationPath = '') : string
+    public function execute(string $imageUrl, string $destinationPath) : string
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
