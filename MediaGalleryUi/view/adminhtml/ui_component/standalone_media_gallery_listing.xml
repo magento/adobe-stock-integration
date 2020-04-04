@@ -34,7 +34,6 @@
                 <label translate="true">Create Folder</label>
             </button>
             <button name="delete_selected">
-                <param name="disabled" xsi:type="string">disabled</param>
                 <param name="on_click" xsi:type="string">return false;</param>
                 <param name="sort_order" xsi:type="number">40</param>
                 <class>action-default scalable action-quaternary no-display</class>
@@ -195,7 +194,7 @@
         </column>
     </columns>
      <container name="media_gallery_image_uploader"
-                class="Magento\MediaGalleryUi\Ui\Component\ImageUploader"
+                class="Magento\MediaGalleryUi\Ui\Component\ImageUploaderStandAlone"
                 template="Magento_MediaGalleryUi/image-uploader"
-                component="Magento_MediaGalleryUi/js/image-uploader-standalone-page"/>
+                component="Magento_MediaGalleryUi/js/image-uploader"/>
 </listing>

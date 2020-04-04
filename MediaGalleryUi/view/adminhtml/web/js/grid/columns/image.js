@@ -141,7 +141,7 @@ define([
                 this.hideAddSelectedAndDeleteButon();
             } else {
                 $(this.addSelectedBtnSelector).removeClass('no-display');
-                $(this.deleteSelectedBtnSelector).removeClass('disabled').removeAttr('disabled');
+                $(this.deleteSelectedBtnSelector).removeClass('no-display');
             }
         },
 
