@@ -7,20 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Service for saving asset object
  */
 class SaveAsset implements SaveAssetInterface
 {
+    private const CATEGORY = 'category';
     private const CATEGORY_ID = 'category_id';
+    private const CREATOR = 'creator';
     private const CREATOR_ID = 'creator_id';
 
     /**
@@ -39,9 +41,9 @@ class SaveAsset implements SaveAssetInterface
     private $creatorRepository;
 
     /**
-     * @var DataExtractorInterface
+     * @var DataObjectProcessor
      */
-    private $dataExtractor;
+    private $objectProcessor;
 
     /**
      * @var AssetInterfaceFactory
@@ -53,20 +55,20 @@ class SaveAsset implements SaveAssetInterface
      * @param AssetRepositoryInterface $assetRepository
      * @param CreatorRepositoryInterface $creatorRepository
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param DataExtractorInterface $dataExtractor
+     * @param DataObjectProcessor $objectProcessor
      */
     public function __construct(
         AssetInterfaceFactory $assetFactory,
         AssetRepositoryInterface $assetRepository,
         CreatorRepositoryInterface $creatorRepository,
         CategoryRepositoryInterface $categoryRepository,
-        DataExtractorInterface $dataExtractor
+        DataObjectProcessor $objectProcessor
     ) {
         $this->assetFactory = $assetFactory;
         $this->assetRepository = $assetRepository;
         $this->creatorRepository = $creatorRepository;
         $this->categoryRepository = $categoryRepository;
-        $this->dataExtractor = $dataExtractor;
+        $this->objectProcessor = $objectProcessor;
     }
 
     /**
@@ -74,19 +76,21 @@ class SaveAsset implements SaveAssetInterface
      */
     public function execute(AssetInterface $asset): void
     {
-        $data = $this->dataExtractor->extract($asset, AssetInterface::class);
+        $data = $this->objectProcessor->buildOutputDataArray($asset, AssetInterface::class);
 
         $category = $asset->getCategory();
         if ($category !== null) {
             $category = $this->categoryRepository->save($category);
         }
         $data[self::CATEGORY_ID] = $category->getId();
+        $data[self::CATEGORY] = $category;
 
         $creator = $asset->getCreator();
         if ($creator !== null) {
             $creator = $this->creatorRepository->save($creator);
         }
         $data[self::CREATOR_ID] = $creator->getId();
+        $data[self::CREATOR] = $creator;
 
         $this->assetRepository->save($this->assetFactory->create(['data' => $data]));
     }
