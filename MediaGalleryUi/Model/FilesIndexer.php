@@ -12,6 +12,7 @@ use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Recursively iterate over files and call each indexer for each file
@@ -34,7 +35,9 @@ class FilesIndexer
     private $filesystem;
 
     /**
+     * FilesIndexer constructor.
      * @param ExcludedDirectories $excludedDirectories
+     * @param Filesystem $filesystem
      */
     public function __construct(
         ExcludedDirectories $excludedDirectories,
@@ -51,6 +54,7 @@ class FilesIndexer
      * @param IndexerInterface[] $indexers
      * @param int $flags
      * @param string $filePathPattern
+     * @throws ValidatorException
      */
     public function execute(string $path, array $indexers, int $flags, string $filePathPattern): void
     {
