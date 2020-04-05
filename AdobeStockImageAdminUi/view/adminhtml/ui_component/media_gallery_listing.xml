@@ -30,7 +30,7 @@
         </filters>
     </listingToolbar>
     <columns name="media_gallery_columns">
-        <column sortOrder="1" name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\UnlicensedOverlay">
+        <column name="overlay" component="Magento_Ui/js/grid/columns/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\UnlicensedOverlay">
             <settings>
                 <label translate="true">Overlay</label>
                 <visible>true</visible>
