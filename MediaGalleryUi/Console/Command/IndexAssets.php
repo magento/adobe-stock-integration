@@ -65,7 +65,7 @@ class IndexAssets extends Command
             foreach ($this->indexers as $indexer) {
                 /** @var ImagesIndexerInterface $indexer */
                 if ($indexer instanceof ImagesIndexerInterface) {
-                    $indexTitle = __($indexer->getTitle() . ' index ');
+                    $indexTitle = __('%title index ', ['title' => $indexer->getTitle()]);
                     $output->write($indexTitle);
                     $startTime = microtime(true);
                     $indexer->execute();
