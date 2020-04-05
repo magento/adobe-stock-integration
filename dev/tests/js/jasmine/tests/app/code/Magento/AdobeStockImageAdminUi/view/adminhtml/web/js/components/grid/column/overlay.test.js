@@ -71,16 +71,16 @@ define([
 
             it('Check Ajax Success request', function () {
                 var login = {
-                    /**
-                     * Check if user is authorized or not
-                     */
-                    user: function () {
-                        return {
-                            isAuthorized: true
-                        };
-                    }
-                },
-                ids = [1,2,3];
+                        /**
+                         * Check if user is authorized or not
+                         */
+                        user: function () {
+                            return {
+                                isAuthorized: true
+                            };
+                        }
+                    },
+                    ids = [1,2,3];
 
                 spyOn(overlayObj, 'licensed').and.callFake(function () {
                     return [];
@@ -88,30 +88,27 @@ define([
                 spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
                 });
-                spyOn(overlayObj, 'getIds').and.callFake(function () {
-                    return ids;
-                });
                 spyOn($, 'ajax').and.callFake(function () {
                     return overlayObj.licensed([1,2]);
                 });
-                overlayObj.updateLicensed();
-                expect(overlayObj.updateLicensed()).toBeUndefined();
+
+                overlayObj.updateLicensed(ids);
+                expect(overlayObj.updateLicensed(ids)).toBeUndefined();
                 expect($.ajax).toHaveBeenCalled();
-                expect(overlayObj.getIds).toHaveBeenCalled();
             });
 
             it('Check Ajax error request', function () {
                 var login = {
-                    /**
-                     * Check if user is authorized or not
-                     */
-                    user: function () {
-                        return {
-                            isAuthorized: true
-                        };
-                    }
-                },
-                ids = [];
+                        /**
+                         * Check if user is authorized or not
+                         */
+                        user: function () {
+                            return {
+                                isAuthorized: true
+                            };
+                        }
+                    },
+                    ids = [1,2,3];
 
                 spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
@@ -122,24 +119,23 @@ define([
                 spyOn($, 'ajax').and.callFake(function () {
                     return 'error';
                 });
-                overlayObj.updateLicensed();
-                expect(overlayObj.updateLicensed()).toBeUndefined();
+                overlayObj.updateLicensed(ids   );
+                expect(overlayObj.updateLicensed(ids)).toBeUndefined();
                 expect($.ajax).toHaveBeenCalled();
-                expect(overlayObj.getIds).toHaveBeenCalled();
             });
 
             it('If user is not authorized', function () {
                 var login = {
-                    /**
-                     * Check if user is authorized or not
-                     */
-                    user: function () {
-                        return {
-                            isAuthorized: false
-                        };
-                    }
-                },
-                ids = [1,2,3];
+                        /**
+                         * Check if user is authorized or not
+                         */
+                        user: function () {
+                            return {
+                                isAuthorized: false
+                            };
+                        }
+                    },
+                    ids = [1,2,3];
 
                 spyOn(overlayObj, 'login').and.callFake(function () {
                     return login;
@@ -168,9 +164,10 @@ define([
             });
 
             it('Return array if getIds is called', function () {
+                var parameter = [{id:1}];
                 var returnValue = [1];
 
-                expect(overlayObj.getIds()).toEqual(returnValue);
+                expect(overlayObj.getIds(parameter)).toEqual(returnValue);
             });
 
         });
