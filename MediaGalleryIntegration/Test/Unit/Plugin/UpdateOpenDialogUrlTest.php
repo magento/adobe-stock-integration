@@ -66,9 +66,19 @@ class UpdateOpenDialogUrlTest extends TestCase
      */
     public function testAfterPrepareWhenConfigDisabled(): void
     {
-        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(false);
-        $this->imageComponentMock->expects($this->never())->method('setData');
-        $this->urlMock->expects($this->never())->method('getUrl');
+        $this->configMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+
+        $this->imageComponentMock->expects($this->never())
+            ->method('getData');
+
+        $this->urlMock->expects($this->never())
+            ->method('getUrl');
+
+        $this->imageComponentMock->expects($this->never())
+            ->method('setData')
+            ->willReturnSelf();
 
         $this->plugin->afterPrepare($this->imageComponentMock);
     }
@@ -78,9 +88,32 @@ class UpdateOpenDialogUrlTest extends TestCase
      */
     public function testAfterPrepareExpectsSetDataCalled(): void
     {
-        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
-        $this->urlMock->expects($this->once())->method('getUrl')->with('media_gallery/index/index');
-        $this->imageComponentMock->expects($this->once())->method('setData');
+        $urlPath = 'media_gallery/index/index';
+        $openDialogUrl = 'https://project/open_dialog_url';
+        $configData = [
+            'config' => [
+                'mediaGallery' => [
+                    'openDialogUrl' => $openDialogUrl
+                ]
+            ]
+        ];
+
+        $this->configMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->imageComponentMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([]);
+
+        $this->urlMock->expects($this->once())
+            ->method('getUrl')
+            ->with($urlPath)
+            ->willReturn($openDialogUrl);
+
+        $this->imageComponentMock->expects($this->once())
+            ->method('setData')
+            ->with($configData);
 
         $this->plugin->afterPrepare($this->imageComponentMock);
     }

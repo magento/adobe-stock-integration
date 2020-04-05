@@ -60,14 +60,15 @@ class UpdateWysiwygOpenDialogUrl
             return $config;
         }
 
-        return $config->setData(
-            'files_browser_window_url',
-            $this->url->getUrl(
-                'media_gallery/index/index',
-                [
-                    'current_tree_path' => $this->imagesHelper->idEncode(Config::IMAGE_DIRECTORY)
-                ]
-            )
+        $currentTreePath = $this->imagesHelper->idEncode(Config::IMAGE_DIRECTORY);
+        $filesBrowserWindowUrl = $this->url->getUrl(
+            'media_gallery/index/index',
+            [
+                'current_tree_path' => $currentTreePath,
+            ]
         );
+        $config->setData('files_browser_window_url', $filesBrowserWindowUrl);
+
+        return $config;
     }
 }

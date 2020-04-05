@@ -23,8 +23,6 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateWysiwygOpenDialogUrlTest extends TestCase
 {
-    private const STUB_WINDOW_URL = 'stub.url';
-
     /**
      * @var DefaultConfigProvider|MockObject
      */
@@ -53,7 +51,7 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
     /**
      * @var UpdateWysiwygOpenDialogUrl
      */
-    private $plugin;
+    private $updateWysiwygOpenDialogUrl;
 
     /**
      * @inheritDoc
@@ -73,7 +71,7 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
             ->getMockForAbstractClass();
         $this->imagesHelperMock = $this->createMock(Images::class);
 
-        $this->plugin = (new ObjectManagerHelper($this))->getObject(
+        $this->updateWysiwygOpenDialogUrl = (new ObjectManagerHelper($this))->getObject(
             UpdateWysiwygOpenDialogUrl::class,
             [
                 'url' => $this->urlMock,
@@ -88,12 +86,19 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
      */
     public function testAfterGetConfigWhenConfigDisabled(): void
     {
-        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(false);
-        $this->configDataObjectMock->expects($this->never())->method('setData');
+        $this->configMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+
+        $this->configDataObjectMock->expects($this->never())
+            ->method('setData');
 
         $this->assertSame(
             $this->configDataObjectMock,
-            $this->plugin->afterGetConfig($this->defaultConfigProviderMock, $this->configDataObjectMock)
+            $this->updateWysiwygOpenDialogUrl->afterGetConfig(
+                $this->defaultConfigProviderMock,
+                $this->configDataObjectMock
+            )
         );
     }
 
@@ -102,17 +107,29 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
      */
     public function testAfterGetConfigExpectsSetDataCalled(): void
     {
-        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
-        $this->imagesHelperMock->expects($this->once())->method('idEncode')->with(Config::IMAGE_DIRECTORY);
-        $this->urlMock->expects($this->once())->method('getUrl')->willReturn(self::STUB_WINDOW_URL);
+        $stubUrl = 'stub.url';
+        $this->configMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->imagesHelperMock->expects($this->once())
+            ->method('idEncode')
+            ->with(Config::IMAGE_DIRECTORY);
+
+        $this->urlMock->expects($this->once())->method('getUrl')
+            ->willReturn($stubUrl);
+
         $this->configDataObjectMock->expects($this->once())
             ->method('setData')
-            ->with('files_browser_window_url', self::STUB_WINDOW_URL)
+            ->with('files_browser_window_url', $stubUrl)
             ->willReturnSelf();
 
         $this->assertSame(
             $this->configDataObjectMock,
-            $this->plugin->afterGetConfig($this->defaultConfigProviderMock, $this->configDataObjectMock)
+            $this->updateWysiwygOpenDialogUrl->afterGetConfig(
+                $this->defaultConfigProviderMock,
+                $this->configDataObjectMock
+            )
         );
     }
 }
