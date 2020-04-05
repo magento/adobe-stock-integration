@@ -76,7 +76,7 @@ class FolderTree
 
         foreach ($directory->readRecursively() as $index => $path) {
             if (!$directory->isDirectory($path) ||
-                $this->excludedDirectories->isExcluded($directory->getAbsolutePath($path))) {
+                $this->excludedDirectories->isExcluded($path)) {
                 continue;
             }
 
