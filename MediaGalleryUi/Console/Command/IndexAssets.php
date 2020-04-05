@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Scan media directory for media gallery asset and write their parameters to database
+ * Run indexers responsible for updating the MediaGalleryUi storage with information about a media content.
  */
 class IndexAssets extends Command
 {
@@ -40,7 +40,7 @@ class IndexAssets extends Command
         array $indexers,
         State $state
     ) {
-        $this->indexers= $indexers;
+        $this->indexers = $indexers;
         $this->state = $state;
         parent::__construct();
     }
@@ -65,7 +65,8 @@ class IndexAssets extends Command
             foreach ($this->indexers as $indexer) {
                 /** @var ImagesIndexerInterface $indexer */
                 if ($indexer instanceof ImagesIndexerInterface) {
-                    $output->write($indexer->getTitle() . ' index ');
+                    $indexTitle = __($indexer->getTitle() . ' index ');
+                    $output->write($indexTitle);
                     $startTime = microtime(true);
                     $indexer->execute();
                     $resultTime = microtime(true) - $startTime;
@@ -75,7 +76,7 @@ class IndexAssets extends Command
                 }
             }
         });
-        $output->writeln('Completed media galley ui indexing.');
+        $output->writeln(__('Completed media galley ui indexing.'));
         return Cli::RETURN_SUCCESS;
     }
 }
