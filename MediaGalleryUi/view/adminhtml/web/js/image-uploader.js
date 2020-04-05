@@ -64,9 +64,13 @@ define([
                         {
                             name: 'form_key',
                             value: window.FORM_KEY
+                        },
+                        {
+                            name: 'target_folder',
+                            value: this.getTargetFolder()
                         }]
                     );
-                },
+                }.bind(this),
                 acceptFileTypes: this.acceptFileTypes,
                 allowedExtensions: this.allowedExtensions,
                 maxFileSize: this.maxFileSize,
