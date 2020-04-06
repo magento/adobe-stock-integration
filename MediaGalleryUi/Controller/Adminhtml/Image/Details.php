@@ -66,7 +66,7 @@ class Details extends Action implements HttpGetActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('image_id');
+        $imageId = (int) $this->getRequest()->getParam('id');
 
         if (!$imageId) {
             $responseContent = [

@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockExpandImagePreviewActionGroup">
-        <click selector="{{AdobeStockSection.modal}} {{AdobeStockSection.firstImageInGrid}}" stepKey="clickOnThumbnail"/>
+        <click selector="{{AdminAdobeStockSection.modal}} {{AdminAdobeStockSection.firstImageInGrid}}" stepKey="clickOnThumbnail"/>
         <waitForLoadingMaskToDisappear stepKey="waitForImagePreviewToExpand"/>
     </actionGroup>
 </actionGroups>

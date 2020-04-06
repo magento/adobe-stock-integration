@@ -50,8 +50,8 @@
         </actionGroup>
 
         <!-- Select Adobe IMS role resource -->
-        <scrollTo selector="{{AdobeStockSection.adobeImsACL}}" x="0" y="-100" stepKey="scrollToResourceElement"/>
-        <click stepKey="clickAdobeIMSActions" selector="{{AdobeStockSection.adobeImsACL}}"/>
+        <scrollTo selector="{{AdminAdobeStockSection.adobeImsACL}}" x="0" y="-100" stepKey="scrollToResourceElement"/>
+        <click stepKey="clickAdobeIMSActions" selector="{{AdminAdobeStockSection.adobeImsACL}}"/>
 
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleAddEditNewPages">
             <argument name="User" value="adminRole"/>
@@ -74,7 +74,7 @@
         <!-- Verify that user can see Adobe Stock sign in button -->
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithIMSAccess"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithIMSAccess"/>
-        <seeElement stepKey="seeAdobeStockSigninButton" selector="{{AdobeStockSection.adobeSignIn}}"/>
+        <seeElement stepKey="seeAdobeStockSigninButton" selector="{{AdminAdobeStockSection.adobeSignIn}}"/>
 
         <!-- Remove Adobe IMS role access -->
         <actionGroup ref="logout" stepKey="logout"/>
@@ -96,7 +96,7 @@
         <!-- Verify that user can't see to Adobe Stock sign in button -->
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutIMSAccess"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithoutIMSAccess"/>
-        <dontSeeElement stepKey="doNotSeeAdobeStockSigninButton" selector="{{AdobeStockSection.adobeSignIn}}"/>
+        <dontSeeElement stepKey="doNotSeeAdobeStockSigninButton" selector="{{AdminAdobeStockSection.adobeSignIn}}"/>
         <actionGroup ref="logout" stepKey="logoutFromCreatedUser"/>
     </test>
 </tests>

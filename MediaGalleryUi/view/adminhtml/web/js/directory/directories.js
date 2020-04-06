@@ -9,7 +9,8 @@ define([
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
     'underscore',
-    'Magento_Ui/js/modal/prompt'
+    'Magento_Ui/js/modal/prompt',
+    'validation'
 ], function ($, Component, confirm, uiAlert, _, prompt) {
     'use strict';
 
@@ -151,6 +152,10 @@ define([
                         name: 'folder_name',
                         'data-validate': '{required:true, validate-alphanum}',
                         maxlength: '128'
+                    },
+                    attributesForm: {
+                        novalidate: 'novalidate',
+                        action: ''
                     },
                     context: this,
                     actions: data.actions,

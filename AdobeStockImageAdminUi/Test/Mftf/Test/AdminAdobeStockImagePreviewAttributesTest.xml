@@ -42,14 +42,14 @@
         <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="verifyAttributeFile">
             <argument name="attributeName" value="File #"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
-        <click selector="{{AdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.navigation('next')}}" stepKey="navigateToNextImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
 
         <!-- Assert that file # attribute changed "-->
         <assertNotContains stepKey="assertAttributeFileChanged">
             <actualResult type="string">{$getFileAttributeValue}</actualResult>
-            <expectedResult type="string">AdobeStockImagePreviewSection.attribute('File #')</expectedResult>
+            <expectedResult type="string">AdminAdobeStockImagePreviewSection.attribute('File #')</expectedResult>
         </assertNotContains>
     </test>
 </tests>

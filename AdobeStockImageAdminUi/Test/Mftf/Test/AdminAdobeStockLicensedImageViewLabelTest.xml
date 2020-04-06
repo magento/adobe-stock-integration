@@ -31,6 +31,6 @@
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
-        <seeElementInDOM selector="{{AdobeStockSection.licensedLabel}}" stepKey="seeLicensedLabel"/>
+        <seeElementInDOM selector="{{AdminAdobeStockSection.licensedLabel}}" stepKey="seeLicensedLabel"/>
     </test>
 </tests>
