@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMediaGalleryNewDeleteImageActionGroup">
+        <arguments>
+            <argument name="image" type="string"/>
+        </arguments>
+        <seeElement selector="{{AdminAdobeStockSection.newMediaGalleryImage(image)}}" stepKey="seeImageToDelete12"/>
+        <click selector="{{AdminAdobeStockSection.newMediaGalleryImage(image)}}" stepKey="clickImageToDelete"/>
+        <!-- Click image again, in case image was already selected and above step unselected the image by clicking it -->
+        <conditionalClick
+            visible="false"
+            dependentSelector="{{AdminAdobeStockSection.newMediaGalleryDeleteButton}}"
+            selector="{{AdminAdobeStockSection.newMediaGalleryImage(image)}}"
+            stepKey="clickImageToDeleteAgain"/>
+        <waitForElementVisible selector="{{AdminAdobeStockSection.newMediaGalleryDeleteButton}}" stepKey="waitForDeleteButton"/>
+        <click selector="{{AdminAdobeStockSection.newMediaGalleryDeleteButton}}" stepKey="clickDeleteButton"/>
+        <waitForElementVisible selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
+        <waitForPageLoad stepKey="waitForMaskDisappeared"/>
+        <dontSeeElement selector="{{AdminAdobeStockSection.newMediaGalleryImage(image)}}" stepKey="assertImageIsDeleted"/>
+    </actionGroup>
+</actionGroups>
