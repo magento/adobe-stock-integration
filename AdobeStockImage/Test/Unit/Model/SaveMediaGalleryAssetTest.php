@@ -145,7 +145,6 @@ class SaveMediaGalleryAssetTest extends TestCase
      *
      * @param Document $document
      * @param string $destinationPath
-     * @param int $mediaGalleryAssetId
      * @dataProvider assetProvider
      */
     public function testExecuteWithException(
