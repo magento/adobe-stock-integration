@@ -16,7 +16,7 @@ define([
         defaults: {
             imageUploadInputSelector: '#image-uploader-form',
             directoriesPath: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
-            actionsPath: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url_actions',
+            actionsPath: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url',
             messagesPath: 'media_gallery_listing.media_gallery_listing.messages',
             imageUploadUrl: '',
             acceptFileTypes: '',
@@ -64,9 +64,13 @@ define([
                         {
                             name: 'form_key',
                             value: window.FORM_KEY
+                        },
+                        {
+                            name: 'target_folder',
+                            value: this.getTargetFolder()
                         }]
                     );
-                },
+                }.bind(this),
                 acceptFileTypes: this.acceptFileTypes,
                 allowedExtensions: this.allowedExtensions,
                 maxFileSize: this.maxFileSize,
