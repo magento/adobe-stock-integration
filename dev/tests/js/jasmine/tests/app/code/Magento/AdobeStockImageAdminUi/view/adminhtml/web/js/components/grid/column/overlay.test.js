@@ -119,7 +119,7 @@ define([
                 spyOn($, 'ajax').and.callFake(function () {
                     return 'error';
                 });
-                overlayObj.updateLicensed(ids   );
+                overlayObj.updateLicensed(ids);
                 expect(overlayObj.updateLicensed(ids)).toBeUndefined();
                 expect($.ajax).toHaveBeenCalled();
             });
@@ -164,8 +164,10 @@ define([
             });
 
             it('Return array if getIds is called', function () {
-                var parameter = [{id:1}];
-                var returnValue = [1];
+                var parameter = [{
+                    id:1
+                }],
+                returnValue = [1];
 
                 expect(overlayObj.getIds(parameter)).toEqual(returnValue);
             });
