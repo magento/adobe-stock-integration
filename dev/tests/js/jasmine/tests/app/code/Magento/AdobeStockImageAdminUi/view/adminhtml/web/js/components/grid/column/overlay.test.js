@@ -165,7 +165,7 @@ define([
 
             it('Return array if getIds is called', function () {
                 var parameter = [{
-                    id:1
+                    id: 1
                 }],
                 returnValue = [1];
 
