@@ -136,6 +136,10 @@
             right: 0;
             width: 10%;
 
+	    .action-select-wrap {
+		cursor: pointer;
+	    }
+	    
             .three-dots {
                 &:before {
                     content: url("@{baseDir}Magento_MediaGalleryUi/images/3-dots.png");
@@ -246,6 +250,7 @@
                 padding-left: 40px;
 
                 .image-details-section {
+		    min-width: 350px;
                     margin-bottom: 40px;
                     word-wrap: anywhere;
                     .lib-clearfix();
