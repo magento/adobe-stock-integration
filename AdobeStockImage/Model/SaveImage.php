@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
@@ -58,6 +61,16 @@ class SaveImage implements SaveImageInterface
     private $saveMediaGalleryAsset;
 
     /**
+     * @var GetByPathInterface
+     */
+    private $getMediaGalleryAssetByPath;
+
+    /**
+     * @var AssetRepositoryInterface
+     */
+    private $assetRepository;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -72,6 +85,8 @@ class SaveImage implements SaveImageInterface
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      * @param SaveImageFileInterface $saveImageFile
      * @param SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
+     * @param GetByPathInterface $getMediaGalleryAssetByPath
+     * @param AssetRepositoryInterface $assetRepository
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -82,6 +97,8 @@ class SaveImage implements SaveImageInterface
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
         SaveImageFileInterface $saveImageFile,
         SaveMediaGalleryAssetInterface $saveMediaGalleryAsset,
+        GetByPathInterface $getMediaGalleryAssetByPath,
+        AssetRepositoryInterface $assetRepository,
         LoggerInterface $logger
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
@@ -91,6 +108,8 @@ class SaveImage implements SaveImageInterface
         $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
         $this->saveImageFile = $saveImageFile;
         $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
+        $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
+        $this->assetRepository = $assetRepository;
         $this->logger = $logger;
     }
 
@@ -107,17 +126,27 @@ class SaveImage implements SaveImageInterface
     {
         try {
             $this->saveImageFile->execute($document, $url, $destinationPath);
-            $mediaGalleryAssetId = $this->saveMediaGalleryAsset->execute($document, $destinationPath);
+            $this->saveMediaGalleryAsset->execute($document, $destinationPath);
+            $mediaAsset = $this->getMediaGalleryAssetByPath->execute($destinationPath);
+            $mediaAssetId = $mediaAsset->getId();
+            if (!$mediaAssetId) {
+                /** @var AssetInterface $mediaAsset */
+                $mediaAsset = $this->assetRepository->getById($document->getId());
+                $mediaAssetId = $mediaAsset->getMediaGalleryId();
+            }
 
             $keywords = $this->documentToKeywords->convert($document);
-            $this->saveAssetKeywords->execute($keywords, $mediaGalleryAssetId);
+            $this->saveAssetKeywords->execute($keywords, $mediaAssetId);
 
-            $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaGalleryAssetId]);
+            $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
             $this->setLicensedInMediaGalleryGrid->execute($asset);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred during save image.');
+            $message = __(
+                'An error occurred during save image: %error',
+                ['error' => $exception->getMessage()]
+            );
             throw new CouldNotSaveException($message);
         }
     }

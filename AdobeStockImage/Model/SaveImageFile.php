@@ -54,7 +54,7 @@ class SaveImageFile implements SaveImageFileInterface
             }
             $this->storageSave->execute($url, $destinationPath);
         } catch (\Exception $exception) {
-            $message = __('An error occurred during save image file.');
+            $message = __('%error', ['error' => $exception->getMessage()]);
             throw new CouldNotSaveException($message);
         }
     }

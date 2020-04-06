@@ -11,7 +11,7 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Used for getting a media gallery asset id from document and asset save.
+ * Used for saving a media gallery asset.
  */
 interface SaveMediaGalleryAssetInterface
 {
@@ -21,8 +21,8 @@ interface SaveMediaGalleryAssetInterface
      * @param Document $document
      * @param string $destinationPath
      *
-     * @return int
+     * @return void
      * @throws CouldNotSaveException
      */
-    public function execute(Document $document, string $destinationPath): int;
+    public function execute(Document $document, string $destinationPath): void;
 }

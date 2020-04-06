@@ -7,14 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaGalleryAssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 
 /**
@@ -22,11 +19,6 @@ use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
  */
 class SaveMediaGalleryAsset implements SaveMediaGalleryAssetInterface
 {
-    /**
-     * @var AssetRepositoryInterface
-     */
-    private $assetRepository;
-
     /**
      * @var SaveInterface
      */
@@ -47,25 +39,22 @@ class SaveMediaGalleryAsset implements SaveMediaGalleryAssetInterface
      *
      * @param SaveInterface $saveMediaAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
-     * @param AssetRepositoryInterface $assetRepository
      * @param Filesystem $fileSystem
      */
     public function __construct(
         SaveInterface $saveMediaAsset,
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
-        AssetRepositoryInterface $assetRepository,
         Filesystem $fileSystem
     ) {
         $this->saveMediaAsset = $saveMediaAsset;
         $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
-        $this->assetRepository = $assetRepository;
         $this->fileSystem = $fileSystem;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(Document $document, string $destinationPath): int
+    public function execute(Document $document, string $destinationPath): void
     {
         try {
             $fileSize = $this->calculateFileSize($destinationPath);
@@ -76,16 +65,8 @@ class SaveMediaGalleryAsset implements SaveMediaGalleryAssetInterface
                 'size' => $fileSize,
             ];
 
-            /** @var MediaGalleryAssetInterface $mediaGalleryAsset */
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
-            $mediaGalleryAssetId = $this->saveMediaAsset->execute($mediaGalleryAsset);
-            if (!$mediaGalleryAssetId) {
-                /** @var AssetInterface $mediaGalleryAsset */
-                $mediaGalleryAsset = $this->assetRepository->getById($document->getId());
-                $mediaGalleryAssetId = $mediaGalleryAsset->getMediaGalleryId();
-            }
-
-            return $mediaGalleryAssetId;
+            $this->saveMediaAsset->execute($mediaGalleryAsset);
         } catch (\Exception $exception) {
             $message = __('An error occurred during save media gallery asset.');
             throw new CouldNotSaveException($message);

@@ -41,11 +41,6 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $documentToMediaGalleryAssetMock;
 
     /**
-     * @var AssetRepositoryInterface|MockObject
-     */
-    private $assetRepositoryMock;
-
-    /**
      * @var FileSystem|MockObject
      */
     private $fileSystemMock;
@@ -72,7 +67,6 @@ class SaveMediaGalleryAssetTest extends TestCase
     {
         $this->saveMediaAssetMock = $this->createMock(SaveInterface::class);
         $this->documentToMediaGalleryAssetMock = $this->createMock(DocumentToMediaGalleryAsset::class);
-        $this->assetRepositoryMock = $this->createMock(AssetRepositoryInterface::class);
         $this->fileSystemMock = $this->createMock(Filesystem::class);
         $this->readInterfaceMock = $this->createMock(ReadInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
@@ -82,7 +76,6 @@ class SaveMediaGalleryAssetTest extends TestCase
             [
                 'saveMediaAsset' =>  $this->saveMediaAssetMock,
                 'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAssetMock,
-                'assetRepository' => $this->assetRepositoryMock,
                 'fileSystem' => $this->fileSystemMock
             ]
         );
@@ -144,21 +137,7 @@ class SaveMediaGalleryAssetTest extends TestCase
                 ->with($mediaGalleryAssetMock)
                 ->willReturn(0);
 
-        if (!$isMediaAssetExists) {
-            $adobeStockAssetMock = $this->createMock(AssetInterface::class);
-            $this->assetRepositoryMock->expects($this->once())
-                ->method('getById')
-                ->with($document->getId())
-                ->willReturn($adobeStockAssetMock);
-            $adobeStockAssetMock->expects($this->once())
-                ->method('getMediaGalleryId')
-                ->willReturn($mediaGalleryAssetId);
-        }
-
-        $this->assertEquals(
-            $mediaGalleryAssetId,
-            $this->saveMediaAsset->execute($document, $destinationPath)
-        );
+        $this->saveMediaAsset->execute($document, $destinationPath);
     }
 
     /**
@@ -198,7 +177,7 @@ class SaveMediaGalleryAssetTest extends TestCase
                 'isMediaAssetExists' => true
             ],
             [
-                'document' => $this->getDocument(12345),
+                'document' => $this->getDocument(),
                 'destinationPath' => 'path',
                 'mediaGalleryAssetId' => 12345,
                 'isMediaAssetExists' => false
@@ -209,17 +188,11 @@ class SaveMediaGalleryAssetTest extends TestCase
     /**
      * Get document
      *
-     * @param int|null $assetId
-     *
      * @return MockObject
      */
-    private function getDocument(int $assetId = null): MockObject
+    private function getDocument(): MockObject
     {
         $document = $this->createMock(Document::class);
-        if ($assetId) {
-            $document->method('getId')
-                ->willReturn($assetId);
-        }
 
         return $document;
     }
