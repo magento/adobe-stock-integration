@@ -57,7 +57,7 @@
 		provider="adobe_stock_images_listing.adobe_stock_images_listing_data_source"
 		displayArea="sorting"
 		sortOrder="20"
-		component="Magento_AdobeStockImageAdminUi/js/components/sorting">
+		component="Magento_Ui/js/grid/sortBy">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="deps" xsi:type="array">

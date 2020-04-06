@@ -28,6 +28,11 @@
                 <class>cancel action-quaternary</class>
                 <label translate="true">Cancel</label>
             </button>
+            <button name="upload_image">
+                <param name="on_click" xsi:type="string">jQuery('#image-uploader-input').click();</param>
+                <class>action-default scalable action-quaternary</class>
+                <label translate="true">Upload Image</label>
+            </button>
             <button name="delete_folder">
                 <param name="on_click" xsi:type="string">jQuery('#delete_folder').trigger('delete_folder');</param>
                 <param name="disabled" xsi:type="string">disabled</param>
@@ -77,7 +82,7 @@
             </item>
         </argument>
     </container>
-    <listingToolbar name="listing_top">
+    <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <filterInput name="directory" provider="${ $.parentName }" sortOrder="100">
@@ -127,6 +132,22 @@
                 <pageSize>32</pageSize>
             </settings>
         </paging>
+        <container
+            name="sorting"
+            provider="media_gallery_listing.media_gallery_listing_data_source"
+            displayArea="sorting"
+            sortOrder="20"
+            component="Magento_Ui/js/grid/sortBy">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">
+                            media_gallery_listing.media_gallery_listing.media_gallery_columns
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </container>
     </listingToolbar>
     <container name="media_gallery_directories"
                class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
@@ -153,7 +174,8 @@
                     </item>
                     <item name="deleteImageUrl" xsi:type="url" path="media_gallery/image/delete"/>
                     <item name="messagesName" xsi:type="string">media_gallery_listing.media_gallery_listing.messages</item>
-                </item>
+                    <item name="imageModelname" xsi:type="string">media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url</item>
+		</item>
             </argument>
             <settings>
                 <label translate="true">Thumbnail Image</label>
@@ -161,5 +183,30 @@
                 <sortable>false</sortable>
             </settings>
         </column>
+        <column name="name">
+            <settings>
+                <label translate="true">Name</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="directory">
+            <settings>
+                <label translate="true">Directory</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="created_at">
+            <settings>
+                <label translate="true">Uploaded date</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
     </columns>
+    <container name="media_gallery_image_uploader"
+               class="Magento\MediaGalleryUi\Ui\Component\ImageUploader"
+               template="Magento_MediaGalleryUi/image-uploader"
+               component="Magento_MediaGalleryUi/js/image-uploader"/>
 </listing>

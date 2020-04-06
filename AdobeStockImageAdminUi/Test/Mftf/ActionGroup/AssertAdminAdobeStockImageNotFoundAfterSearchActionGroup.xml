@@ -12,8 +12,8 @@
         <arguments>
             <argument name="src" type="string" defaultValue=""/>
         </arguments>
-        <dontSeeElement selector="{{AdobeStockSection.imageSrc(src)}}" stepKey="checkFirstPopularImageNotFoundAfterSearch"/>
-        <dontSeeElement selector="{{AdobeStockSection.modalError}}" stepKey="errorModalIsAbsentAfterSearch"/>
-        <dontSeeElement selector="{{AdobeStockSection.gridSpinner}}" stepKey="spinnerIsAbsentAfterSearch"/>
+        <dontSeeElement selector="{{AdminAdobeStockSection.imageSrc(src)}}" stepKey="checkFirstPopularImageNotFoundAfterSearch"/>
+        <dontSeeElement selector="{{AdminAdobeStockSection.modalError}}" stepKey="errorModalIsAbsentAfterSearch"/>
+        <dontSeeElement selector="{{AdminAdobeStockSection.gridSpinner}}" stepKey="spinnerIsAbsentAfterSearch"/>
     </actionGroup>
 </actionGroups>

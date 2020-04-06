@@ -47,8 +47,8 @@
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Adobe Stock"/>
         </actionGroup>
-        <scrollTo selector="{{AdobeStockSection.systemAclActions}}"  x="0" y="-100" stepKey="scrollToResourceElement"/>
-        <click stepKey="clickAdobeSystemActions" selector="{{AdobeStockSection.systemAclActions}}"/>
+        <scrollTo selector="{{AdminAdobeStockSection.systemAclActions}}"  x="0" y="-100" stepKey="scrollToResourceElement"/>
+        <click stepKey="clickAdobeSystemActions" selector="{{AdminAdobeStockSection.systemAclActions}}"/>
 
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleAddEditNewPages">
             <argument name="User" value="adminRole"/>
@@ -71,7 +71,7 @@
         <!-- verify that user can access to adobe stock image -->
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithAccess"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithAccess"/>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
 
         <!--Change user role to not accessible -->
@@ -92,7 +92,7 @@
 
         <!-- verify that user can't access to adobe stock image -->
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutAccess"/>
-        <dontSeeElement selector="{{AdobeStockSection.slideOutPanelButton}}" stepKey="dontSeeAdobeStockSearchButton" />
+        <dontSeeElement selector="{{AdminAdobeStockSection.slideOutPanelButton}}" stepKey="dontSeeAdobeStockSearchButton" />
         <actionGroup ref="logout" stepKey="logoutFromCreatedUser"/>
     </test>
 </tests>

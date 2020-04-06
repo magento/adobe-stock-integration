@@ -28,19 +28,19 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <grabAttributeFrom selector="{{AdobeStockSection.firstImageAfterSearch}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlWithoutFilters"/>
-        <click selector="{{AdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
+        <click selector="{{AdminAdobeStockFilterSection.filters}}" stepKey="expandFilters"/>
         <waitForPageLoad stepKey="waitForFiltersOpen"/>
         <actionGroup ref="AssertAdminIsVisibleAdobeStockFilterElementActionGroup" stepKey="checkPriceFilter">
             <argument name="filterName" value="Price"/>
         </actionGroup>
         <actionGroup ref="AdminFilterResultsActionGroup" stepKey="setPriceFilterToPremium">
             <argument name="type" value="Premium"/>
-            <argument name="filter" value="{{AdobeStockFilterSection.premiumPriceFilter}}"/>
+            <argument name="filter" value="{{AdminAdobeStockFilterSection.premiumPriceFilter}}"/>
             <argument name="filterOption" value="premium_price_filter"/>
         </actionGroup>
-        <dontSeeElement selector="{{AdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
+        <dontSeeElement selector="{{AdminAdobeStockSection.imageSrc($getUrlWithoutFilters)}}" stepKey="assertImagesUpdated"/>
         <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Premium"/>
         </actionGroup>

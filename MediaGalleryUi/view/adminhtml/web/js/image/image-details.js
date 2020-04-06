@@ -52,7 +52,7 @@ define([
                     dataType: 'json',
                     showLoader: true,
                     data: {
-                        'image_id': imageId
+                        'id': imageId
                     },
                     context: this,
 
@@ -96,7 +96,7 @@ define([
                 return;
             }
 
-            if (this.image() && this.image()['image_id'] === imageId) {
+            if (this.image() && this.image().id === imageId) {
                 this.openImageDetailsModal();
 
                 return;
@@ -160,15 +160,7 @@ define([
          */
         showMoreImageTags: function () {
             this.showAllTags(true);
-        },
-
-        /**
-         * Get image data
-         *
-         * @return {Object}
-         */
-        getImageData: function () {
-            return this.image();
         }
+
     });
 });

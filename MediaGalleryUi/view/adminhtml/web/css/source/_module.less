@@ -17,6 +17,14 @@
 
 & when (@media-common = true) {
 
+    .media-gallery-delete-image-action,
+    .delete-folder-confirmation-popup {
+        
+        .modal-content {
+            word-wrap: anywhere;
+        }
+    }
+
     .media-gallery-container {
 
         .page-main-actions {
@@ -239,6 +247,7 @@
 
                 .image-details-section {
                     margin-bottom: 40px;
+                    word-wrap: anywhere;
                     .lib-clearfix();
                 }
 
@@ -292,5 +301,13 @@
                 }
             }
         }
+    }
+    .masonry-image-sortby {
+        display: inline-block;
+    }
+
+    .masonry-results-number {
+        display: inline-block;
+        margin-right: 1.4rem;
     }
 }
