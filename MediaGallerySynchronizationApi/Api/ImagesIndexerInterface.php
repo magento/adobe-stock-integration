@@ -6,11 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUiApi\Api;
+namespace Magento\MediaGallerySynchronizationApi\Api;
 
 /**
  * ImagesIndexer is used to read the media files across the media directory provided as a path in the method argument.
- * @api
  */
 interface ImagesIndexerInterface
 {

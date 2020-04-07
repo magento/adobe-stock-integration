@@ -47,7 +47,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface">
+    <type name="Magento\MediaGallerySynchronizationApi\Api\ImagesIndexerInterface">
         <arguments>
             <argument name="indexers" xsi:type="array">
                 <item name="200" xsi:type="object">Magento\AdobeStockImage\Model\AssetIndexer</item>

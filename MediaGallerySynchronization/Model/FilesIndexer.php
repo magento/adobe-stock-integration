@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Model;
+namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
-use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\Exception\ValidatorException;
+use Magento\MediaGallerySynchronization\Model\Directories\ExcludedDirectories;
+use Magento\MediaGallerySynchronizationApi\Api\AssetImagesSynchronizationInterface;
 
 /**
  * Recursively iterate over files and call each indexer for each file
@@ -51,7 +51,7 @@ class FilesIndexer
      * Recursively iterate over files and call each indexer for each file
      *
      * @param string $path
-     * @param IndexerInterface[] $indexers
+     * @param AssetImagesSynchronizationInterface[] $indexers
      * @param int $flags
      * @param string $filePathPattern
      * @throws ValidatorException
@@ -82,7 +82,7 @@ class FilesIndexer
             }
 
             foreach ($indexers as $indexer) {
-                if ($indexer instanceof IndexerInterface) {
+                if ($indexer instanceof AssetImagesSynchronizationInterface) {
                     $indexer->execute($item);
                 }
             }

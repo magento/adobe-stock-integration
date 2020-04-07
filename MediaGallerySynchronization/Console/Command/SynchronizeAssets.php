@@ -5,20 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Console\Command;
+namespace Magento\MediaGallerySynchronization\Console\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
-use Magento\MediaGalleryUi\Model\ImagesIndexer;
+use Magento\MediaGallerySynchronization\Model\ImagesIndexer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Scan media directory for media gallery asset and write their parameters to database
+ * Synchronize objects and data contains media asset and store this information into the related data storage tables.
  */
-class IndexAssets extends Command
+class SynchronizeAssets extends Command
 {
     /**
      * @var ImagesIndexer
@@ -31,7 +31,7 @@ class IndexAssets extends Command
     private $state;
 
     /**
-     * IndexAssets constructor.
+     * SynchronizeAssets constructor.
      *
      * @param ImagesIndexer $imagesIndexer
      * @param State $state
@@ -50,8 +50,10 @@ class IndexAssets extends Command
      */
     protected function configure()
     {
-        $this->setName('media-gallery:index');
-        $this->setDescription('Scan media directory for media gallery asset and write their parameters to database');
+        $this->setName('media-gallery:sync');
+        $this->setDescription(
+            'Synchronize media data between objects and files contains media asset and media gallery'
+        );
     }
 
     /**

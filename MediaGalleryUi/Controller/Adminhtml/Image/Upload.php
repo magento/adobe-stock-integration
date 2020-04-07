@@ -14,7 +14,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryUi\Model\AssetIndexer;
+use Magento\MediaGallerySynchronizationApi\Api\AssetImagesSynchronizationInterface;
 use Magento\MediaGalleryUi\Model\UploadImage;
 use Psr\Log\LoggerInterface;
 
@@ -38,9 +38,9 @@ class Upload extends Action implements HttpPostActionInterface
     private $uploadImage;
 
     /**
-     * @var AssetIndexer
+     * @var AssetImagesSynchronizationInterface
      */
-    private $assetIndexer;
+    private $assetImagesSynchronization;
 
     /**
      * @var LoggerInterface
@@ -52,17 +52,17 @@ class Upload extends Action implements HttpPostActionInterface
      *
      * @param Context $context
      * @param UploadImage $uploadImage
-     * @param AssetIndexer $assetIndexer
+     * @param AssetImagesSynchronizationInterface $assetImagesSynchronization
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         UploadImage $uploadImage,
-        AssetIndexer $assetIndexer,
+        AssetImagesSynchronizationInterface $assetImagesSynchronization,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
-        $this->assetIndexer = $assetIndexer;
+        $this->assetImagesSynchronization = $assetImagesSynchronization;
         $this->uploadImage = $uploadImage;
         $this->logger = $logger;
     }
@@ -89,7 +89,7 @@ class Upload extends Action implements HttpPostActionInterface
 
         try {
             $file = $this->uploadImage->execute($targetFolder);
-            $this->assetIndexer->execute($file);
+            $this->assetImagesSynchronization->execute($file);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

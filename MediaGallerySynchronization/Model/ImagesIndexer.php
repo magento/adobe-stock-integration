@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Model;
+namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
-use Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface;
+use Magento\MediaGallerySynchronizationApi\Api\AssetImagesSynchronizationInterface;
+use Magento\MediaGallerySynchronizationApi\Api\ImagesIndexerInterface;
 
 /**
  * @inheritdoc
@@ -34,7 +34,7 @@ class ImagesIndexer implements ImagesIndexerInterface
     private $filesIndexer;
 
     /**
-     * @var IndexerInterface[]
+     * @var AssetImagesSynchronizationInterface[]
      */
     private $indexers;
 

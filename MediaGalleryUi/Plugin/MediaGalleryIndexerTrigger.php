@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Plugin;
 
-use Magento\MediaGalleryUi\Model\ImagesIndexer;
+use Magento\MediaGallerySynchronizationApi\Api\ImagesIndexerInterface;
 use Magento\Framework\App\Config\Value;
 
 /**
@@ -17,18 +17,19 @@ class MediaGalleryIndexerTrigger
 {
     private const MEDIA_GALLERY_CONFIG_VALUE = 'system/media_gallery/enabled';
     private const MEDIA_GALLERY_ENABLED_VALUE = 1;
-    
+
     /**
-     * @var ImagesIndexer
+     * @var ImagesIndexerInterface
      */
     private $imagesIndexer;
-       
+
     /**
-     * @param ImagesIndexer $imagesIndexer
+     * MediaGalleryIndexerTrigger constructor.
+     *
+     * @param ImagesIndexerInterface $imagesIndexer
      */
-    public function __construct(
-        ImagesIndexer $imagesIndexer
-    ) {
+    public function __construct(ImagesIndexerInterface $imagesIndexer)
+    {
         $this->imagesIndexer = $imagesIndexer;
     }
 

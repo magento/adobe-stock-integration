@@ -14,14 +14,13 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
-use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
+use Magento\MediaGallerySynchronizationApi\Api\AssetImagesSynchronizationInterface;
 
 /**
  * Check is image licensed and save it to media gallery asset grid
  */
-class AssetIndexer implements IndexerInterface
+class AssetIndexer implements AssetImagesSynchronizationInterface
 {
-
     /**
      * @var GetByPathInterface
      */

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Model;
+namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -13,13 +13,13 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
-use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
+use Magento\MediaGallerySynchronizationApi\Api\AssetImagesSynchronizationInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Create MediaGallery asset and save it to database based on file information
  */
-class AssetIndexer implements IndexerInterface
+class AssetImagesSynchronization implements AssetImagesSynchronizationInterface
 {
     /**
      * @var AssetInterfaceFactory
@@ -75,10 +75,7 @@ class AssetIndexer implements IndexerInterface
     }
 
     /**
-     * Create MediaGallery asset and save it to database based on file information
-     *
-     * @param \SplFileInfo $item
-     * @throws \Exception
+     * @inheritDoc
      */
     public function execute(\SplFileInfo $item): void
     {
