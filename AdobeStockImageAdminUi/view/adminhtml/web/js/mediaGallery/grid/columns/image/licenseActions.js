@@ -52,7 +52,7 @@ define([
         isVisible: function (record, name) {
 
             if (name === this.licenseAction.name) {
-                return parseInt(record.licensed) === 0  ? true  : false;
+                return parseInt(record.licensed, 16) === 0  ? true  : false;
             }
 
             return true;
