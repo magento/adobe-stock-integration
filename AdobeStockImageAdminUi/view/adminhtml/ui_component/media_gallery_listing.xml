@@ -37,5 +37,12 @@
                 <sortable>false</sortable>
             </settings>
         </column>
+	<column name="thumbnail_url" component="Magento_AdobeStockImageAdminUi/js/mediaGallery/grid/columns/licenseImage">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="imageDetailsurl" xsi:type="url" path="media_gallery/image/details"/>
+		</item>
+	    </argument>
+	</column>
     </columns>
 </listing>
