@@ -14,7 +14,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/related',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
-            filterInputSelector: 'input#words',
+            filterInputSelector: '#words',
             tabImagesLimit: 4,
             serieFilterValue: '',
             modelFilterValue: '',
