@@ -60,7 +60,4 @@
             <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
-    <type name="Magento\AdobeStockAssetApi\Api\SaveAssetInterface">
-        <plugin name="updateAssetKeywordsInGrid" type="Magento\AdobeStockImage\Plugin\SetLicensedInMediaGalleryGrid"/>
-    </type>
 </config>
