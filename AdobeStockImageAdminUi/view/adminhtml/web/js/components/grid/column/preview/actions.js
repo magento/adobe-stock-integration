@@ -6,12 +6,13 @@
 // jscs:enable
 define([
     'uiComponent',
+    'uiRegistry',
     'jquery',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/prompt',
     'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html'
-], function (Component, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
+], function (Component, uiRegistry, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
     'use strict';
 
     return Component.extend({
@@ -25,6 +26,9 @@ define([
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            imageItems: [],
+            mediaGalleryProvider: 'media_gallery_listing.media_gallery_listing_data_source',
+            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -33,8 +37,26 @@ define([
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
-                messages: '${ $.messagesName }'
+                messages: '${ $.messagesName }',
+                imageDirectory: '${ $.mediaGalleryDirectoryComponent }'
+            },
+            imports: {
+                imageItems: '${ $.mediaGalleryProvider }:data.items'
             }
+        },
+
+        /**
+         * Init observable variables
+         *
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'imageItems'
+                ]);
+
+            return this;
         },
 
         /**
@@ -99,9 +121,84 @@ define([
          * Selects displayed image in media gallery
          */
         selectDisplayedImageInMediaGallery: function () {
+            if (!this.isMediaBrowser()) {
+                this.selectDisplayedImageForNewMediaGallery();
+            } else {
+                this.selectDisplayedImageForOldMediaGallery();
+            }
+        },
+
+        /**
+         * Selects displayed image in media gallery for old gallery
+         */
+        selectDisplayedImageForOldMediaGallery: function () {
             var image = mediaGallery.locate(this.preview().displayedRecord().path);
 
             image ? image.click() : mediaGallery.notLocated();
+        },
+
+        /**
+         * Selects displayed image in media gallery for new gallery
+         */
+        selectDisplayedImageForNewMediaGallery: function () {
+            var self = this,
+                imagePath = self.preview().displayedRecord().path,
+                imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
+                imageFilename = imagePath.substring(imagePath.lastIndexOf('/') + 1),
+                record = this.getRecordFromMediaGalleryProvider(imageFilename),
+                subscription;
+
+            if (!record) {
+                subscription = this.imageItems.subscribe(function () {
+                    subscription.dispose();
+                    record = self.getRecordFromMediaGalleryProvider(imageFilename);
+
+                    if (!record) {
+                        mediaGallery.notLocated();
+                    }
+
+                    self.selectRecord(record);
+                });
+            }
+
+            if (imageFolders) {
+                this.imageDirectory().selectFolder(imageFolders);
+            } else {
+                this.imageDirectory().selectStorageRoot();
+            }
+
+            if (record) {
+                this.selectRecord(record);
+            }
+        },
+
+        /**
+         * Get image data by image file name
+         *
+         * @param {String} imageFilename
+         * @returns {null|Object}
+         */
+        getRecordFromMediaGalleryProvider: function (imageFilename) {
+            var report = null;
+
+            this.imageItems.each(function (item) {
+                if (item.name === imageFilename) {
+                    report = item;
+
+                    return false;
+                }
+            });
+
+            return report;
+        },
+
+        /**
+         * Set the record as selected
+         *
+         * @param {Object} record
+         */
+        selectRecord: function (record) {
+            uiRegistry.get('index = thumbnail_url').selected(record);
         },
 
         /**
@@ -149,11 +246,9 @@ define([
          * @param {bool} isLicensed
          */
         save: function (record, fileName, license, isLicensed) {
-            var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
-                requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
+            var requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
                     license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
-                    this.getImageExtension(record);
+                destinationPath = this.getDestinationPath(fileName, record);
 
             $.ajax({
                 type: 'POST',
@@ -191,7 +286,7 @@ define([
                     $.ajaxSetup({
                         async: false
                     });
-                    mediaBrowser.reload();
+                    this.reloadGrid();
                     $.ajaxSetup({
                         async: true
                     });
@@ -226,6 +321,64 @@ define([
                     this.messages().scheduleCleanup(this.messageDelay);
                 }
             });
+        },
+
+        /**
+         * Get image destination path
+         *
+         * @param {String} fileName
+         * @param {Object} record
+         * @returns {String}
+         */
+        getDestinationPath: function (fileName, record) {
+            var activeNodePath;
+
+            if (this.isMediaBrowser()) {
+                activeNodePath = this.getMageMediaBrowserData().activeNode.path || '';
+            } else {
+                activeNodePath = this.imageDirectory().activeNode() || '';
+            }
+
+            return activeNodePath  + '/' + fileName + '.' + this.getImageExtension(record);
+        },
+
+        /**
+         * Reload grid
+         *
+         * @returns {*}
+         */
+        reloadGrid: function () {
+            var provider,
+                dataStorage;
+
+            if (this.isMediaBrowser()) {
+                return this.getMageMediaBrowserData().reload();
+            }
+
+            provider = uiRegistry.get('index = media_gallery_listing_data_source'),
+            dataStorage = provider.storage();
+
+            // this.subscriptionOnImageItems();
+            dataStorage.clearRequests();
+            provider.reload();
+        },
+
+        /**
+         * Get data for media browser
+         *
+         * @returns {Undefined|Object}
+         */
+        getMageMediaBrowserData: function () {
+            return $(this.preview().mediaGallerySelector).data('mageMediabrowser');
+        },
+
+        /**
+         * Is the media browser used in the content of the grid
+         *
+         * @returns {Boolean}
+         */
+        isMediaBrowser: function () {
+            return typeof this.getMageMediaBrowserData() !== 'undefined';
         },
 
         /**

@@ -14,9 +14,9 @@
             <argument name="password" type="string" defaultValue="{{AdobeStockLogin.password}}"/>
         </arguments>
         <switchToWindow stepKey="switchToWindow"/>
-        <fillField selector="{{AdobeStockSection.adobeImsPopupUserEmail}}" userInput="{{email}}" stepKey="fillUserEmail" />
-        <click selector="{{AdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="clickPasswordField" />
+        <fillField selector="{{AdminAdobeStockSection.adobeImsPopupUserEmail}}" userInput="{{email}}" stepKey="fillUserEmail" />
+        <click selector="{{AdminAdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="clickPasswordField" />
         <waitForPageLoad stepKey="waitForUserEmailToLoad"/>
-        <fillField selector="{{AdobeStockSection.adobeImsPopUpUserPassword}}" userInput="{{password}}" stepKey="fillUserPassword" />
+        <fillField selector="{{AdminAdobeStockSection.adobeImsPopUpUserPassword}}" userInput="{{password}}" stepKey="fillUserPassword" />
     </actionGroup>
 </actionGroups>

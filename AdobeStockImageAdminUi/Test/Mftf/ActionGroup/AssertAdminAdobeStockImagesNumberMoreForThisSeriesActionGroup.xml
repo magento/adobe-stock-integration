@@ -11,6 +11,6 @@
         <arguments>
             <argument name="imagesNumber" type="string"/>
         </arguments>
-        <seeNumberOfElements selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesImages}}" userInput="{{imagesNumber}}" stepKey="seeCorrectImagesNumber"/>
+        <seeNumberOfElements selector="{{AdminAdobeStockImagePreviewSection.moreFromThisSeriesImages}}" userInput="{{imagesNumber}}" stepKey="seeCorrectImagesNumber"/>
     </actionGroup>
 </actionGroups>
