@@ -11,7 +11,6 @@ define([
     return Action.extend({
         defaults: {
             adobeStockModalSelector: '.adobe-search-images-modal',
-            imageComponent: 'adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview',
             template: 'Magento_AdobeStockImageAdminUi/mediaGallery/grid/columns/image/licenseActions',
             licenseAction: {
                 name: 'license',

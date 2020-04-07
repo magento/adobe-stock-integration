@@ -41,7 +41,8 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="imageDetailsurl" xsi:type="url" path="media_gallery/image/details"/>
-		</item>
+                    <item name="imageComponent" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview</item>
+                </item>
 	    </argument>
 	</column>
     </columns>

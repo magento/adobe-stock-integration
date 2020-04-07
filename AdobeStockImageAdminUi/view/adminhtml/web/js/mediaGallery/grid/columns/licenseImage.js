@@ -14,7 +14,8 @@ define([
                     component: 'Magento_AdobeStockImageAdminUi/js/mediaGallery/grid/columns/image/licenseActions',
                     name: '${ $.name }_actions',
                     imageModelName: '${ $.name }',
-                    imageDetailsUrl: '${ $.imageDetailsurl }'
+                    imageDetailsUrl: '${ $.imageDetailsurl }',
+                    imageComponent: '${ $.imageComponent }'
                 }
             ]
         }
