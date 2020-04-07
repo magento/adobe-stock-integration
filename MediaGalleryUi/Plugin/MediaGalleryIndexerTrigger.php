@@ -17,12 +17,12 @@ class MediaGalleryIndexerTrigger
 {
     private const MEDIA_GALLERY_CONFIG_VALUE = 'system/media_gallery/enabled';
     private const MEDIA_GALLERY_ENABLED_VALUE = 1;
-    
+
     /**
      * @var ImagesIndexer
      */
     private $imagesIndexer;
-       
+
     /**
      * @param ImagesIndexer $imagesIndexer
      */

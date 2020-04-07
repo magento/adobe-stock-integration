@@ -13,7 +13,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryUi\Model\Directories\CreateByPath;
+use Magento\MediaGalleryApi\Model\Directory\Command\CreateByPathInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
@@ -32,7 +32,7 @@ class Create extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var CreateByPath
+     * @var CreateByPathInterface
      */
     private $createFolderByPath;
 
@@ -45,12 +45,12 @@ class Create extends Action implements HttpPostActionInterface
      * Delete constructor.
      *
      * @param Context $context
-     * @param CreateByPath $createFolderByPath
+     * @param CreateByPathInterface $createFolderByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        CreateByPath $createFolderByPath,
+        CreateByPathInterface $createFolderByPath,
         LoggerInterface $logger
     ) {
         parent::__construct($context);

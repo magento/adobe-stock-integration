@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Directories;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
+use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
 
 /**
  * Build folder tree structure by path
@@ -27,25 +28,25 @@ class FolderTree
     private $path;
 
     /**
-     * @var ExcludedDirectories
+     * @var IsBlacklistedInterface
      */
-    private $excludedDirectories;
+    private $isBlacklisted;
 
     /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param string $path
-     * @param ExcludedDirectories $excludedDirectories
+     * @param IsBlacklistedInterface $isBlacklisted
      */
     public function __construct(
         Filesystem $filesystem,
         string $path,
-        ExcludedDirectories $excludedDirectories
+        IsBlacklistedInterface $isBlacklisted
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;
-        $this->excludedDirectories = $excludedDirectories;
+        $this->isBlacklisted = $isBlacklisted;
     }
 
     /**
@@ -53,6 +54,7 @@ class FolderTree
      *
      * @param bool $skipRoot
      * @return array
+     * @throws ValidatorException
      */
     public function buildTree(bool $skipRoot = true): array
     {
@@ -63,6 +65,7 @@ class FolderTree
      * Build directory tree array in format for jstree strandart
      *
      * @return array
+     * @throws ValidatorException
      */
     private function getDirectories(): array
     {
@@ -77,7 +80,7 @@ class FolderTree
 
         foreach ($directory->readRecursively() as $index => $path) {
             if (!$directory->isDirectory($path) ||
-                $this->excludedDirectories->isExcluded($path)) {
+                $this->isBlacklisted->execute($path)) {
                 continue;
             }
 

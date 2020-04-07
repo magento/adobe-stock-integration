@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
-use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Exception\ValidatorException;
@@ -20,9 +20,9 @@ use Magento\Framework\Exception\ValidatorException;
 class FilesIndexer
 {
     /**
-     * @var ExcludedDirectories
+     * @var IsBlacklistedInterface
      */
-    private $excludedDirectories;
+    private $isBlacklisted;
 
     /**
      * @var Read
@@ -35,15 +35,14 @@ class FilesIndexer
     private $filesystem;
 
     /**
-     * FilesIndexer constructor.
-     * @param ExcludedDirectories $excludedDirectories
+     * @param IsBlacklistedInterface $isBlacklisted
      * @param Filesystem $filesystem
      */
     public function __construct(
-        ExcludedDirectories $excludedDirectories,
+        IsBlacklistedInterface $isBlacklisted,
         Filesystem $filesystem
     ) {
-        $this->excludedDirectories = $excludedDirectories;
+        $this->isBlacklisted = $isBlacklisted;
         $this->filesystem = $filesystem;
     }
 
@@ -73,7 +72,7 @@ class FilesIndexer
                 continue;
             }
 
-            if ($this->excludedDirectories->isExcluded($pathRelativeToMedia)) {
+            if ($this->isBlacklisted->execute($pathRelativeToMedia)) {
                 continue;
             }
 
