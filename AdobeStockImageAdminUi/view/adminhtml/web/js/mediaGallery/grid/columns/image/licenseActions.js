@@ -4,13 +4,13 @@
  */
 define([
     'jquery',
-    'Magento_MediaGalleryUi/js/grid/columns/image/actions'
-], function ($, Action) {
+    'Magento_MediaGalleryUi/js/grid/columns/image/actions',
+    'Magento_Ui/js/modal/alert'
+], function ($, Action, uiAlert) {
     'use strict';
 
     return Action.extend({
         defaults: {
-            adobeStockModalSelector: '.adobe-search-images-modal',
             template: 'Magento_AdobeStockImageAdminUi/mediaGallery/grid/columns/image/licenseActions',
             licenseAction: {
                 name: 'license',
@@ -28,7 +28,7 @@ define([
          * @returns {Object}
          */
         initialize: function () {
-            this._super().observe(['visible', 'licenseImage']);
+            this._super().observe(['visible']);
             this.actionsList.push(this.licenseAction);
 
             return this;
@@ -36,26 +36,32 @@ define([
 
         /**
          * License image
+         *
+         * @param {Object} record
          */
         licenseImageAction: function (record) {
-            console.log(record.id);
             this.getImageRecord(record.id);
         },
 
         /**
          * Check if image licensed
+         *
+         * @param {Object} record
+         * @param {Object} name
          */
         isVisible: function (record, name) {
 
             if (name === this.licenseAction.name) {
-                return record.licensed  ? true  : false;
+                return (record.licensed == 0)  ? true  : false;
             }
 
             return true;
         },
 
         /**
-         * Return image record fo license action
+         * Get image record and start license process
+         *
+         * @param {Number} imageId
          */
         getImageRecord: function (imageId) {
             $.ajax({
@@ -103,7 +109,10 @@ define([
                     } else {
                         message = response.responseJSON.message;
                     }
-                    console.log(response);
+                    uiAlert({
+                        content: message
+                    });
+
                 }.bind(this)
             });
         }
