@@ -45,6 +45,7 @@ define([
             this._super();
             this.initView();
             $(window).on('fileDeleted.enhancedMediaGallery', this.reloadMediaGrid.bind(this));
+            $(window).on('reload.MediaGallery', this.reloadGrid.bind(this));
 
             return this;
         },
