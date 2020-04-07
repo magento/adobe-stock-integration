@@ -52,7 +52,7 @@ define([
         isVisible: function (record, name) {
 
             if (name === this.licenseAction.name) {
-                return (record.licensed == 0)  ? true  : false;
+                return record.licensed === 0  ? true  : false;
             }
 
             return true;
@@ -114,7 +114,7 @@ define([
                         content: message
                     });
 
-                }.bind(this)
+                }
             });
         }
     });
