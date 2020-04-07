@@ -14,7 +14,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/related',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
-            filterTitleSelector: '.admin__current-filters-title-wrap',
+            filterInputSelector: 'input#words',
             tabImagesLimit: 4,
             serieFilterValue: '',
             modelFilterValue: '',
@@ -248,10 +248,10 @@ define([
         },
 
         /**
-         * Scrolls user window to the filter title
+         * Scrolls user window to the filter input
          */
         scrollToFilter: function () {
-            $(this.filterTitleSelector).get(0).scrollIntoView({
+            $(this.filterInputSelector).get(0).scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
                 inline: 'nearest'
