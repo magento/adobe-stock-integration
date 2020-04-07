@@ -86,7 +86,8 @@ define([
 
                     response.imageDetails.id =  response.imageDetails['adobe_stock'][0].value;
                     response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
-                    this.image().actions().showLicenseConfirmation(response.imageDetails);
+                    this.image().displayedRecord(response.imageDetails);
+                    this.image().actions().licenseProcess();
 
                     $.ajaxSetup({
                         async: true
