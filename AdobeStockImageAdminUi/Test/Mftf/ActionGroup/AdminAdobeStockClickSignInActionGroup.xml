@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockClickSignInActionGroup">
-        <click selector="{{AdobeStockSection.adobeSignIn}}" stepKey="clickOnSignInButton"/>
+        <click selector="{{AdminAdobeStockSection.adobeSignIn}}" stepKey="clickOnSignInButton"/>
         <waitForPageLoad stepKey="waitForLoad"/>
     </actionGroup>
 </actionGroups>

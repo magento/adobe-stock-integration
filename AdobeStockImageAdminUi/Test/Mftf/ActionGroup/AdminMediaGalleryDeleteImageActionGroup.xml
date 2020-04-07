@@ -11,19 +11,19 @@
         <arguments>
             <argument name="name" type="string"/>
         </arguments>
-        <seeElement selector="{{AdobeStockSection.mediaGalleryImage(name)}}" stepKey="seeImageToDelete"/>
-        <click selector="{{AdobeStockSection.mediaGalleryImage(name)}}" stepKey="clickImageToDelete"/>
+        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage(name)}}" stepKey="seeImageToDelete"/>
+        <click selector="{{AdminAdobeStockSection.mediaGalleryImage(name)}}" stepKey="clickImageToDelete"/>
         <!-- Click image again, incase image was already selected and above step unselected the image by clicking it -->
         <conditionalClick
             visible="false"
-            dependentSelector="{{AdobeStockSection.mediaGalleryDeleteButton}}"
-            selector="{{AdobeStockSection.mediaGalleryImage(name)}}"
+            dependentSelector="{{AdminAdobeStockSection.mediaGalleryDeleteButton}}"
+            selector="{{AdminAdobeStockSection.mediaGalleryImage(name)}}"
             stepKey="clickImageToDeleteAgain"/>
-        <waitForElementVisible selector="{{AdobeStockSection.mediaGalleryDeleteButton}}" stepKey="waitForDeleteButton"/>
-        <click selector="{{AdobeStockSection.mediaGalleryDeleteButton}}" stepKey="clickDeleteButton"/>
-        <waitForElementVisible selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
-        <click selector="{{AdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
+        <waitForElementVisible selector="{{AdminAdobeStockSection.mediaGalleryDeleteButton}}" stepKey="waitForDeleteButton"/>
+        <click selector="{{AdminAdobeStockSection.mediaGalleryDeleteButton}}" stepKey="clickDeleteButton"/>
+        <waitForElementVisible selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
         <waitForPageLoad stepKey="waitForMaskDisappeared"/>
-        <dontSeeElement selector="{{AdobeStockSection.mediaGalleryImage(name)}}" stepKey="assertImageIsDeleted"/>
+        <dontSeeElement selector="{{AdminAdobeStockSection.mediaGalleryImage(name)}}" stepKey="assertImageIsDeleted"/>
     </actionGroup>
 </actionGroups>

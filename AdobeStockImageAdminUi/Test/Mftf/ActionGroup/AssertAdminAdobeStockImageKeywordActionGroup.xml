@@ -11,6 +11,6 @@
         <arguments>
             <argument name="keyword" type="string"/>
         </arguments>
-        <seeElement selector="{{AdobeStockImagePreviewSection.keyword(keyword)}}" stepKey="seeKeyword"/>
+        <seeElement selector="{{AdminAdobeStockImagePreviewSection.keyword(keyword)}}" stepKey="seeKeyword"/>
     </actionGroup>
 </actionGroups>
