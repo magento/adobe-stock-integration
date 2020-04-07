@@ -46,11 +46,6 @@ class SaveImage implements SaveImageInterface
     private $saveAssetKeywords;
 
     /**
-     * @var SetLicensedInMediaGalleryGrid
-     */
-    private $setLicensedInMediaGalleryGrid;
-
-    /**
      * @var SaveImageFileInterface
      */
     private $saveImageFile;
@@ -82,7 +77,6 @@ class SaveImage implements SaveImageInterface
      * @param DocumentToAsset $documentToAsset
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
-     * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
      * @param SaveImageFileInterface $saveImageFile
      * @param SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
      * @param GetByPathInterface $getMediaGalleryAssetByPath
@@ -94,7 +88,6 @@ class SaveImage implements SaveImageInterface
         DocumentToAsset $documentToAsset,
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
-        SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
         SaveImageFileInterface $saveImageFile,
         SaveMediaGalleryAssetInterface $saveMediaGalleryAsset,
         GetByPathInterface $getMediaGalleryAssetByPath,
@@ -105,7 +98,6 @@ class SaveImage implements SaveImageInterface
         $this->documentToAsset = $documentToAsset;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
-        $this->setLicensedInMediaGalleryGrid = $setLicensedInMediaGalleryGrid;
         $this->saveImageFile = $saveImageFile;
         $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
         $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
@@ -140,7 +132,6 @@ class SaveImage implements SaveImageInterface
 
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
-            $this->setLicensedInMediaGalleryGrid->execute($asset);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __(
