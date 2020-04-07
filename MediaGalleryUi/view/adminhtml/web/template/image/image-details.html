@@ -19,10 +19,10 @@
         <div class="general-details image-details-section" if="image().details">
             <h3 data-bind="i18n: 'Details'"></h3>
             <div class="attributes">
-                <each args="image().details">
-                    <div class="attribute"  if="value">
+                <each args="image().details, as ">
+                    <div class="attribute"  if="$parent.getValue(value)">
                         <span class="title" data-bind="i18n: title"></span>
-                        <div class="value" data-bind="text: value"></div>
+                        <div class="value" data-bind="html: $parent.getValue(value)"></div>
                     </div>
                 </each>
             </div>

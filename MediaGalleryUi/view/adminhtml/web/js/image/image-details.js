@@ -160,7 +160,25 @@ define([
          */
         showMoreImageTags: function () {
             this.showAllTags(true);
-        }
+        },
 
+        /**
+         * Get image details value
+         *
+         * @param {Object|String} value
+         * @return {String}
+         */
+        getValue: function (value) {
+            var usedIn = '';
+            if (_.isObject(value))
+            {
+                _.each(value, function(key, name) {
+                    usedIn += key + ' ' + name + '</br>';
+                });
+                return usedIn;
+            } else {
+                return value;
+            }
+        }
     });
 });

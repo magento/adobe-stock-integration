@@ -7,17 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
+use DateTime;
+use Exception;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Filesystem;
-use DateTime;
-use Magento\Framework\Exception\FileSystemException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Load Media Asset from database by id add all related data to it
@@ -70,6 +74,19 @@ class GetImageDetailsByAssetId
     private $imageTypes;
 
     /**
+     * @var GetAssetsUsedInContentInterface
+     */
+    private $getAssetsUsedInContentInterface;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
+     * @var array
+     */
+    private $assetContentTypes;
+
+    /**
      * GetImageDetailsByAssetId constructor.
      *
      * @param GetByIdInterface $getAssetById
@@ -77,7 +94,10 @@ class GetImageDetailsByAssetId
      * @param ResourceConnection $resource
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
+     * @param GetAssetsUsedInContentInterface $getAssetsUsedInContentInterface
+     * @param LoggerInterface $logger
      * @param array $imageTypes
+     * @param array $assetContentTypes
      */
     public function __construct(
         GetByIdInterface $getAssetById,
@@ -85,7 +105,10 @@ class GetImageDetailsByAssetId
         ResourceConnection $resource,
         Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
-        array $imageTypes = []
+        GetAssetsUsedInContentInterface $getAssetsUsedInContentInterface,
+        LoggerInterface $logger,
+        array $imageTypes = [],
+        array $assetContentTypes = []
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
@@ -93,16 +116,18 @@ class GetImageDetailsByAssetId
         $this->filesystem = $filesystem;
         $this->sourceIconProvider = $sourceIconProvider;
         $this->imageTypes = $imageTypes;
+        $this->getAssetsUsedInContentInterface = $getAssetsUsedInContentInterface;
+        $this->logger = $logger;
+        $this->assetContentTypes = $assetContentTypes;
     }
 
     /**
      * Get image details by asset ID
      *
      * @param int $assetId
-     *
-     * @return array
-     *
      * @throws LocalizedException
+     * @throws Exception
+     * @return array
      */
     public function execute(int $assetId): array
     {
@@ -141,6 +166,10 @@ class GetImageDetailsByAssetId
                 [
                     'title' => __('Size'),
                     'value' => $this->formatImageSize($size)
+                ],
+                [
+                    'title' => __('Used In'),
+                    'value' => $this->getUsedIn($assetId)
                 ]
             ],
             'size' => $size,
@@ -167,9 +196,7 @@ class GetImageDetailsByAssetId
      * Get URL for the provided media asset path
      *
      * @param string $path
-     *
      * @return string
-     *
      * @throws LocalizedException
      */
     private function getUrl(string $path): string
@@ -202,8 +229,8 @@ class GetImageDetailsByAssetId
      * Format date
      *
      * @param string $date
-     *
      * @return string
+     * @throws Exception
      */
     private function formatDate(string $date): string
     {
@@ -216,9 +243,7 @@ class GetImageDetailsByAssetId
      * Get image size
      *
      * @param string $path
-     *
      * @return int
-     *
      * @throws FileSystemException
      */
     private function getImageSize(string $path): int
@@ -233,7 +258,6 @@ class GetImageDetailsByAssetId
      * Format image size
      *
      * @param int $imageSize
-     *
      * @return string
      */
     private function formatImageSize(int $imageSize): string
@@ -243,5 +267,29 @@ class GetImageDetailsByAssetId
         }
 
         return sprintf('%sKb', $imageSize / 1000);
+    }
+
+    /**
+     * Retrive assets used in the Content
+     *
+     * @param int $assetId
+     * @return array
+     */
+    private function getUsedIn(int $assetId): array
+    {
+        $usedIn = [];
+        try {
+            foreach ($this->assetContentTypes as $assetContentTypeKey => $assetContentType) {
+                $getAssetIds = $this->getAssetsUsedInContentInterface->execute($assetContentTypeKey);
+                if (isset($getAssetIds[$assetId])) {
+                    $fetchCurrentAssetIdArray = $this->getAssetsUsedInContentInterface
+                        ->execute($assetContentTypeKey)[$assetId];
+                    $usedIn[$assetContentType] = count($fetchCurrentAssetIdArray);
+                }
+            }
+        } catch (IntegrationException $exception) {
+            $this->logger->critical($exception->getMessage());
+        }
+        return $usedIn;
     }
 }
