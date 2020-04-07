@@ -10,16 +10,12 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Image;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryUi\Model\DeleteImageByAssetId;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Controller deleting the media gallery content
@@ -70,7 +66,7 @@ class Delete extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('image_id');
+        $imageId = (int) $this->getRequest()->getParam('id');
 
         if (!$imageId) {
             $responseContent = [

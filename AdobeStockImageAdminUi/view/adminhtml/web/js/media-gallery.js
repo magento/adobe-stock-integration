@@ -78,6 +78,10 @@ define([
                 return $.trim($(this).text()) === imageFolderName;
             });
 
+            if (!imageFolder.length) {
+                imageFolder = $('.jstree a:contains("' + this.jsTreeRootFolderName + '")');
+            }
+
             if (imageFolder.length) {
                 imageFolder[0].click();
             }

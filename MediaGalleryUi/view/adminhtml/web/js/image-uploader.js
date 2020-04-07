@@ -6,16 +6,17 @@
 define([
     'uiComponent',
     'jquery',
+    'underscore',
     'mage/translate',
     'jquery/file-uploader'
-], function (Component, $) {
+], function (Component, $, _) {
     'use strict';
 
     return Component.extend({
         defaults: {
             imageUploadInputSelector: '#image-uploader-form',
-            directoriesPath: 'media_gallery_listing.media_gallery_listing.media_gallery_directories_directories',
-            actionsPath: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url_actions',
+            directoriesPath: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
+            actionsPath: 'media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url',
             messagesPath: 'media_gallery_listing.media_gallery_listing.messages',
             imageUploadUrl: '',
             acceptFileTypes: '',
@@ -63,9 +64,13 @@ define([
                         {
                             name: 'form_key',
                             value: window.FORM_KEY
+                        },
+                        {
+                            name: 'target_folder',
+                            value: this.getTargetFolder()
                         }]
                     );
-                },
+                }.bind(this),
                 acceptFileTypes: this.acceptFileTypes,
                 allowedExtensions: this.allowedExtensions,
                 maxFileSize: this.maxFileSize,
@@ -95,13 +100,13 @@ define([
          * @returns {String}
          */
         getTargetFolder: function () {
-            var selectedFolder = this.directories().selectedFolder;
 
-            if (selectedFolder() === undefined) {
+            if (_.isUndefined(this.directories().activeNode()) ||
+                _.isNull(this.directories().activeNode())) {
                 return '/';
             }
 
-            return selectedFolder();
+            return this.directories().activeNode();
         },
 
         /**

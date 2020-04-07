@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command;
 
 use Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface;
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Command for saving the Adobe Stock asset creator object data
@@ -25,20 +25,20 @@ class Save implements SaveInterface
     private $insertIgnore;
 
     /**
-     * @var DataExtractorInterface
+     * @var DataObjectProcessor
      */
-    private $dataExtractor;
+    private $objectProcessor;
 
     /**
      * @param InsertIgnore $insertIgnore
-     * @param DataExtractorInterface $dataExtractor
+     * @param DataObjectProcessor $objectProcessor
      */
     public function __construct(
         InsertIgnore $insertIgnore,
-        DataExtractorInterface $dataExtractor
+        DataObjectProcessor $objectProcessor
     ) {
         $this->insertIgnore = $insertIgnore;
-        $this->dataExtractor = $dataExtractor;
+        $this->objectProcessor = $objectProcessor;
     }
 
     /**
@@ -49,7 +49,7 @@ class Save implements SaveInterface
      */
     public function execute(CreatorInterface $creator): void
     {
-        $data = $this->dataExtractor->extract($creator, CreatorInterface::class);
+        $data = $this->objectProcessor->buildOutputDataArray($creator, CreatorInterface::class);
         $this->insertIgnore->execute(
             $data,
             self::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME,
