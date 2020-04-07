@@ -172,8 +172,8 @@ define([
             var usedIn = '';
             if (_.isObject(value))
             {
-                _.each(value, function(key, name) {
-                    usedIn += key + ' ' + name + '</br>';
+                _.each(value, function(numberOfTimeUsed, moduleName) {
+                    usedIn += numberOfTimeUsed + ' ' + moduleName + '</br>';
                 });
                 return usedIn;
             } else {
