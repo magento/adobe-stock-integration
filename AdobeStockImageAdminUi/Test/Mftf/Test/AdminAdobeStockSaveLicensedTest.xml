@@ -9,6 +9,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockSaveLicensedTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1065"/>
+            </skip>
             <features value="AdobeStockImagePanel"/>
             <stories value="User saves licensed image into Magento Media Gallery"/>
             <title value="Adobe Stock Not Previewed Licensed Image Save"/>
