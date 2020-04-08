@@ -334,7 +334,9 @@ define([
             var activeNodePath;
 
             if (this.isMediaBrowser()) {
-                activeNodePath = this.getMageMediaBrowserData().activeNode.path || '';
+                var activeNode = this.getMageMediaBrowserData().activeNode;
+
+                activeNodePath = $('[data-id="' + activeNode.id + '"]').length === 0 ? '' : activeNode.path;
             } else {
                 activeNodePath = this.imageDirectory().activeNode() || '';
             }
