@@ -5,8 +5,9 @@
 define([
     'jquery',
     'Magento_MediaGalleryUi/js/grid/columns/image/actions',
-    'Magento_Ui/js/modal/alert'
-], function ($, Action, uiAlert) {
+    'Magento_Ui/js/modal/alert',
+    'underscore'
+], function ($, Action, uiAlert, _) {
     'use strict';
 
     return Action.extend({
@@ -28,8 +29,22 @@ define([
          * @returns {Object}
          */
         initialize: function () {
-            this._super().observe(['visible']);
+            this._super();
             this.actionsList.push(this.licenseAction);
+
+            return this;
+        },
+
+        /**
+         * Init observable variables
+         *
+         * @return {Object}
+         */
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'visible'
+                ]);
 
             return this;
         },
@@ -51,6 +66,10 @@ define([
          */
         isVisible: function (record, name) {
             if (name === this.licenseAction.name) {
+                if (_.isNull(record.licensed)) {
+                    return false;
+                }
+
                 return !parseInt(record.licensed, 16);
             }
 
