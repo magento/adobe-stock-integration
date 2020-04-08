@@ -33,8 +33,6 @@ define([
                 throw 'Target element not found for content update';
             }
 
-            console.log(record['encoded_id']);
-
             if (targetElement.is('textarea')) {
                 $.ajax({
                     url: config.onInsertUrl,
