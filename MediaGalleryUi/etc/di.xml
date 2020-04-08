@@ -40,25 +40,13 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="media_gallery_listing_data_source" xsi:type="string">mediaGallerySearchResult</item>
+                <item name="media_gallery_listing_data_source" xsi:type="string">Magento\MediaGalleryUi\Ui\Component\Listing\Provider</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="mediaGallerySearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Provider">
         <arguments>
-            <argument name="mainTable" xsi:type="string">media_gallery_asset_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface">
-        <plugin name="updateAssetInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetInGrid"/>
-    </type>
-    <type name="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface">
-        <plugin name="updateAssetKeywordsInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetKeywordsInGrid"/>
-    </type>
-    <type name="Magento\MediaGalleryUi\Model\UpdateAssetInGrid">
-        <arguments>
-            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="mainTable" xsi:type="string">media_gallery_asset</argument>
         </arguments>
     </type>
 </config>

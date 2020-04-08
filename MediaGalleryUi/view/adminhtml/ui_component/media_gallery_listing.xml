@@ -183,16 +183,9 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="name">
+        <column name="title">
             <settings>
                 <label translate="true">Name</label>
-                <visible>false</visible>
-                <sortable>true</sortable>
-            </settings>
-        </column>
-        <column name="directory">
-            <settings>
-                <label translate="true">Directory</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
