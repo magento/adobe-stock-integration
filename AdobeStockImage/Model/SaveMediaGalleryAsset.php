@@ -17,7 +17,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 /**
  * Process save action of the media gallery asset.
  */
-class SaveMediaGalleryAsset implements SaveMediaGalleryAssetInterface
+class SaveMediaGalleryAsset
 {
     /**
      * @var SaveInterface
@@ -52,7 +52,13 @@ class SaveMediaGalleryAsset implements SaveMediaGalleryAssetInterface
     }
 
     /**
-     * @inheritdoc
+     * Process saving MediaGalleryAsset based on the search document and destination path.
+     *
+     * @param Document $document
+     * @param string $destinationPath
+     *
+     * @return void
+     * @throws CouldNotSaveException
      */
     public function execute(Document $document, string $destinationPath): void
     {

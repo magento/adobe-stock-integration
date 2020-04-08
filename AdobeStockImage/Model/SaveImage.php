@@ -52,12 +52,12 @@ class SaveImage implements SaveImageInterface
     private $setLicensedInMediaGalleryGrid;
 
     /**
-     * @var SaveImageFileInterface
+     * @var SaveImageFile
      */
     private $saveImageFile;
 
     /**
-     * @var SaveMediaGalleryAssetInterface
+     * @var SaveMediaGalleryAsset
      */
     private $saveMediaGalleryAsset;
 
@@ -84,8 +84,8 @@ class SaveImage implements SaveImageInterface
      * @param SaveAssetKeywordsInterface $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid
-     * @param SaveImageFileInterface $saveImageFile
-     * @param SaveMediaGalleryAssetInterface $saveMediaGalleryAsset
+     * @param SaveImageFile $saveImageFile
+     * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
      * @param GetByPathInterface $getMediaGalleryAssetByPath
      * @param AssetRepositoryInterface $assetRepository
      * @param LoggerInterface $logger
@@ -96,8 +96,8 @@ class SaveImage implements SaveImageInterface
         SaveAssetKeywordsInterface $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SetLicensedInMediaGalleryGrid $setLicensedInMediaGalleryGrid,
-        SaveImageFileInterface $saveImageFile,
-        SaveMediaGalleryAssetInterface $saveMediaGalleryAsset,
+        SaveImageFile $saveImageFile,
+        SaveMediaGalleryAsset $saveMediaGalleryAsset,
         GetByPathInterface $getMediaGalleryAssetByPath,
         AssetRepositoryInterface $assetRepository,
         LoggerInterface $logger

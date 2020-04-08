@@ -15,7 +15,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 /**
  * Process saving an image file. If the asset has been already saved, delete the previous version.
  */
-class SaveImageFile implements SaveImageFileInterface
+class SaveImageFile
 {
     /**
      * @var StorageSave
@@ -42,7 +42,14 @@ class SaveImageFile implements SaveImageFileInterface
     }
 
     /**
-     * @inheritdoc
+     * Save image file.
+     *
+     * @param Document $document
+     * @param string $url
+     * @param string $destinationPath
+     *
+     * @return void
+     * @throws CouldNotSaveException
      */
     public function execute(Document $document, string $url, string $destinationPath): void
     {

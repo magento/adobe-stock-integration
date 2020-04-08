@@ -12,8 +12,6 @@
     <preference for="Magento\AdobeStockImageApi\Api\SaveLicensedImageInterface" type="Magento\AdobeStockImage\Model\SaveLicensedImage"/>
     <preference for="Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface" type="Magento\AdobeStockImage\Model\GetRelatedImages"/>
     <preference for="Magento\AdobeStockImageApi\Api\ConfigInterface" type="Magento\AdobeStockImage\Model\Config"/>
-    <preference for="Magento\AdobeStockImage\Model\SaveMediaGalleryAssetInterface" type="Magento\AdobeStockImage\Model\SaveMediaGalleryAsset"/>
-    <preference for="Magento\AdobeStockImage\Model\SaveImageFileInterface" type="Magento\AdobeStockImage\Model\SaveImageFile"/>
     <type name="Magento\AdobeStockImage\Model\GetImageList">
         <arguments>
             <argument name="defaultFilters" xsi:type="array">

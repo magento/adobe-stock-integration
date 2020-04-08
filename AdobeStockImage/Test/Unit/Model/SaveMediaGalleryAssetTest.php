@@ -7,11 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
 use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
-use Magento\AdobeStockImage\Model\SaveMediaGalleryAssetInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -31,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 class SaveMediaGalleryAssetTest extends TestCase
 {
     /**
-     * @var SaveMediaGalleryAssetInterface|MockObject
+     * @var SaveInterface|MockObject
      */
     private $saveMediaAssetMock;
 
