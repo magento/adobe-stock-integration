@@ -28,6 +28,9 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
