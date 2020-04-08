@@ -331,10 +331,11 @@ define([
          * @returns {String}
          */
         getDestinationPath: function (fileName, record) {
-            var activeNodePath;
+            var activeNodePath,
+                activeNode;
 
             if (this.isMediaBrowser()) {
-                var activeNode = this.getMageMediaBrowserData().activeNode;
+                activeNode = this.getMageMediaBrowserData().activeNode;
 
                 activeNodePath = $('[data-id="' + activeNode.id + '"]').length === 0 ? '' : activeNode.path;
             } else {
