@@ -14,7 +14,7 @@ define([
         defaults: {
             template: 'Magento_AdobeStockImageAdminUi/grid/column/preview/related',
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
-            filterInputSelector: '#words',
+            filterBookmarksSelector: '.admin__data-grid-action-bookmarks',
             tabImagesLimit: 4,
             serieFilterValue: '',
             modelFilterValue: '',
@@ -251,7 +251,7 @@ define([
          * Scrolls user window to the filter input
          */
         scrollToFilter: function () {
-            $(this.filterInputSelector).get(0).scrollIntoView({
+            $(this.filterBookmarksSelector).get(0).scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
                 inline: 'nearest'
