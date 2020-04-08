@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminAdobeStockImagesNumberMoreForThisSeriesActionGroup">
         <arguments>
-            <argument name="imagesNumber" type="string"/>
+            <argument name="imagesNumber" defaultValue="1" type="string"/>
         </arguments>
         <seeNumberOfElements selector="{{AdminAdobeStockImagePreviewSection.moreFromThisSeriesImages}}" userInput="{{imagesNumber}}" stepKey="seeCorrectImagesNumber"/>
     </actionGroup>
