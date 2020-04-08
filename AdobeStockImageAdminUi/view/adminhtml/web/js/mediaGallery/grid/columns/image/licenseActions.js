@@ -14,7 +14,7 @@ define([
             template: 'Magento_AdobeStockImageAdminUi/mediaGallery/grid/columns/image/licenseActions',
             licenseAction: {
                 name: 'license',
-                title: 'License',
+                title: $.mage.__('License'),
                 handler: 'licenseImageAction'
             },
             modules: {
@@ -50,9 +50,8 @@ define([
          * @param {Object} name
          */
         isVisible: function (record, name) {
-
             if (name === this.licenseAction.name) {
-                return parseInt(record.licensed, 16) === 0  ? true  : false;
+                return !parseInt(record.licensed, 16);
             }
 
             return true;
@@ -80,19 +79,12 @@ define([
                  * @param {Object} response
                  */
                 success: function (response) {
-                    $.ajaxSetup({
-                        async: false
-                    });
-
                     response.imageDetails.id =  response.imageDetails['adobe_stock'][0].value;
                     response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
                     this.image().displayedRecord(response.imageDetails);
                     this.image().actions().licenseProcess();
-
-                    $.ajaxSetup({
-                        async: true
-                    });
                     this.imageModel().reloadGrid();
+
                 }.bind(this),
 
                 /**
@@ -106,7 +98,7 @@ define([
                     if (typeof response.responseJSON === 'undefined' ||
                         typeof response.responseJSON.message === 'undefined'
                     ) {
-                        message = 'There was an error on attempt to get the image details.';
+                        message = $.mage.__('There was an error on attempt to get the image details.');
                     } else {
                         message = response.responseJSON.message;
                     }
