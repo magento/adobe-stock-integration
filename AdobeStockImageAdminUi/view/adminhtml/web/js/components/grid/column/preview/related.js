@@ -248,7 +248,7 @@ define([
         },
 
         /**
-         * Scrolls user window to the filter input
+         * Scrolls user window to the filter bookmarks
          */
         scrollToFilter: function () {
             $(this.filterBookmarksSelector).get(0).scrollIntoView({
