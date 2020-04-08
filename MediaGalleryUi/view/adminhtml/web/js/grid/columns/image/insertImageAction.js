@@ -33,6 +33,8 @@ define([
                 throw 'Target element not found for content update';
             }
 
+            console.log(record['encoded_id']);
+
             if (targetElement.is('textarea')) {
                 $.ajax({
                     url: config.onInsertUrl,
@@ -47,6 +49,8 @@ define([
                     showLoader: true
                 }).done($.proxy(function (data) {
                     $.mage.mediabrowser().insertAtCursor(targetElement.get(0), data);
+                    targetElement.focus();
+                    $(targetElement).change();
                 }, this));
             } else {
                 targetElement.val(record['thumbnail_url'])
