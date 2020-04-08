@@ -9,6 +9,9 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockTryLicenseAlreadyLicensedImageTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1151" />
+            </skip>
             <features value="AdobeStockImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1009"/>
             <title value="License Adobe Stock Images message should not popup when user is not logged in and tries to License and Save an already Licensed image copy"/>
