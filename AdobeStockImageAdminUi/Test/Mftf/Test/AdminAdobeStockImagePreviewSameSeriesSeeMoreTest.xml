@@ -31,6 +31,9 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForCars">
+            <argument name="query" value="cars"/>
+        </actionGroup>
         <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithoutModelFilter"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
