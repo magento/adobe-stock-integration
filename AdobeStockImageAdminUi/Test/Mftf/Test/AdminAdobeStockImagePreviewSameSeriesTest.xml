@@ -27,7 +27,9 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForCars">
+            <argument name="query" value="cars"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
