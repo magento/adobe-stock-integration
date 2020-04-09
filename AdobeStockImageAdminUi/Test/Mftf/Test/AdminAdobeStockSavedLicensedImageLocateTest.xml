@@ -24,22 +24,28 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForSeeStatusImage"/>
+            <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
+                <argument name="name" value="{{AdobeStockImageData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         </after>
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
-            <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
+
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForAddPreviewImage"/>
+        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
+            <argument name="query" value="bmw"/>
         </actionGroup>
-        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
-        <click selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForPromptModal"/>
-        <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabSaveImageFileName"/>
-        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
-        <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
-        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageSaved"/>
-        <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
-        <actionGroup ref="AdminAdobeStockImagePreviewLocateActionGroup" stepKey="locateImage"/>
-        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageLocated"/>
-        <actionGroup ref="AdminMediaGalleryDeleteImage" stepKey="deleteImageActionGroup">
-            <argument name="name" value="{$grabSaveImageFileName}"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="clickOnSavePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="savePreviewImage"/>
+
+        <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
+            <argument name="enabled" value="1"/>
         </actionGroup>
+        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForSeeStatusImage"/>
+        <seeElement selector="{{AdminAdobeStockSection.unlicensedImageLabel}}" stepKey="seeUnlicensedLabel"/>
     </test>
 </tests>
