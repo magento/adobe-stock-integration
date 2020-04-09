@@ -16,9 +16,10 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider;
+use Magento\MediaGalleryUiApi\Api\GetAssetUsedInInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -74,7 +75,7 @@ class GetImageDetailsByAssetId
     private $imageTypes;
 
     /**
-     * @var GetAssetsUsedInContentInterface
+     * @var GetAssetUsedInInterface
      */
     private $getAssetsUsedInContentInterface;
     /**
@@ -94,7 +95,7 @@ class GetImageDetailsByAssetId
      * @param ResourceConnection $resource
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
-     * @param GetAssetsUsedInContentInterface $getAssetsUsedInContentInterface
+     * @param GetAssetUsedInInterface $getAssetsUsedInContentInterface
      * @param LoggerInterface $logger
      * @param array $imageTypes
      * @param array $assetContentTypes
@@ -105,7 +106,7 @@ class GetImageDetailsByAssetId
         ResourceConnection $resource,
         Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
-        GetAssetsUsedInContentInterface $getAssetsUsedInContentInterface,
+        GetAssetUsedInInterface $getAssetsUsedInContentInterface,
         LoggerInterface $logger,
         array $imageTypes = [],
         array $assetContentTypes = []
@@ -136,75 +137,16 @@ class GetImageDetailsByAssetId
 
         $tags = isset($assetGridData['keywords']) ? explode(',', $assetGridData['keywords']) : [];
         $type = $assetGridData['content_type'] ?? '';
-        $size = $this->getImageSize($asset->getPath());
 
         return [
             'image_url' => $this->getUrl($asset->getPath()),
             'title' => $asset->getTitle(),
             'id' => $assetId,
-            'details' => [
-                [
-                    'title' => __('Type'),
-                    'value' => $this->getImageTypeByContentType($asset->getContentType()),
-                ],
-                [
-                    'title' => __('Created'),
-                    'value' => $this->formatDate($asset->getCreatedAt())
-                ],
-                [
-                    'title' => __('Modified'),
-                    'value' => $this->formatDate($asset->getUpdatedAt())
-                ],
-                [
-                    'title' => __('Width'),
-                    'value' => sprintf('%spx', $asset->getWidth())
-                ],
-                [
-                    'title' => __('Height'),
-                    'value' => sprintf('%spx', $asset->getHeight())
-                ],
-                [
-                    'title' => __('Size'),
-                    'value' => $this->formatImageSize($size)
-                ],
-                [
-                    'title' => __('Used In'),
-                    'value' => $this->getUsedIn($assetId)
-                ]
-            ],
-            'size' => $size,
+            'details' => $this->getImageAttribute($asset, $assetId),
             'tags' => $tags,
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
             'content_type' => $type
         ];
-    }
-
-    /**
-     * Return image type by content type
-     *
-     * @param string $contentType
-     * @return string
-     */
-    private function getImageTypeByContentType(string $contentType): string
-    {
-        $type = current(explode('/', $contentType));
-
-        return isset($this->imageTypes[$type]) ? $this->imageTypes[$type] : '';
-    }
-
-    /**
-     * Get URL for the provided media asset path
-     *
-     * @param string $path
-     * @return string
-     * @throws LocalizedException
-     */
-    private function getUrl(string $path): string
-    {
-        /** @var Store $store */
-        $store = $this->storeManager->getStore();
-
-        return $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $path;
     }
 
     /**
@@ -226,17 +168,62 @@ class GetImageDetailsByAssetId
     }
 
     /**
-     * Format date
+     * Get URL for the provided media asset path
      *
-     * @param string $date
+     * @param string $path
      * @return string
+     * @throws LocalizedException
+     */
+    private function getUrl(string $path): string
+    {
+        /** @var Store $store */
+        $store = $this->storeManager->getStore();
+
+        return $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $path;
+    }
+
+    /**
+     * Get image attributes
+     *
+     * @param AssetInterface $asset
+     * @param int $assetId
+     * @return array
      * @throws Exception
      */
-    private function formatDate(string $date): string
+    private function getImageAttribute(AssetInterface $asset, int $assetId): array
     {
-        $dateTime = new DateTime($date);
+        $size = $this->getImageSize($asset->getPath());
 
-        return $dateTime->format(self::DATE_FORMAT);
+        return [
+            [
+                'title' => __('Type'),
+                'value' => $this->getImageTypeByContentType($asset->getContentType()),
+            ],
+            [
+                'title' => __('Created'),
+                'value' => $this->formatDate($asset->getCreatedAt())
+            ],
+            [
+                'title' => __('Modified'),
+                'value' => $this->formatDate($asset->getUpdatedAt())
+            ],
+            [
+                'title' => __('Width'),
+                'value' => sprintf('%spx', $asset->getWidth())
+            ],
+            [
+                'title' => __('Height'),
+                'value' => sprintf('%spx', $asset->getHeight())
+            ],
+            [
+                'title' => __('Size'),
+                'value' => $this->formatImageSize($size)
+            ],
+            [
+                'title' => __('Used In'),
+                'value' => $this->getUsedIn($assetId)
+            ]
+        ];
     }
 
     /**
@@ -255,6 +242,33 @@ class GetImageDetailsByAssetId
     }
 
     /**
+     * Return image type by content type
+     *
+     * @param string $contentType
+     * @return string
+     */
+    private function getImageTypeByContentType(string $contentType): string
+    {
+        $type = current(explode('/', $contentType));
+
+        return isset($this->imageTypes[$type]) ? $this->imageTypes[$type] : '';
+    }
+
+    /**
+     * Format date
+     *
+     * @param string $date
+     * @return string
+     * @throws Exception
+     */
+    private function formatDate(string $date): string
+    {
+        $dateTime = new DateTime($date);
+
+        return $dateTime->format(self::DATE_FORMAT);
+    }
+
+    /**
      * Format image size
      *
      * @param int $imageSize
@@ -270,7 +284,7 @@ class GetImageDetailsByAssetId
     }
 
     /**
-     * Retrive assets used in the Content
+     * Retrieve assets used in the Content
      *
      * @param int $assetId
      * @return array
@@ -280,11 +294,10 @@ class GetImageDetailsByAssetId
         $usedIn = [];
         try {
             foreach ($this->assetContentTypes as $assetContentTypeKey => $assetContentType) {
-                $getAssetIds = $this->getAssetsUsedInContentInterface->execute($assetContentTypeKey);
-                if (isset($getAssetIds[$assetId])) {
-                    $fetchCurrentAssetIdArray = $this->getAssetsUsedInContentInterface
-                        ->execute($assetContentTypeKey)[$assetId];
-                    $usedIn[$assetContentType] = count($fetchCurrentAssetIdArray);
+                $getAssetIds = $this->getAssetsUsedInContentInterface
+                    ->execute($assetId, $assetContentTypeKey);
+                if ($getAssetIds) {
+                    $usedIn[$assetContentType] = $getAssetIds;
                 }
             }
         } catch (IntegrationException $exception) {
