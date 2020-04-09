@@ -85,10 +85,10 @@
     <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <filterInput name="directory" provider="${ $.parentName }" sortOrder="100">
+            <filterInput name="path" provider="${ $.parentName }" sortOrder="100">
                 <settings>
                     <visible>false</visible>
-                    <dataScope>directory</dataScope>
+                    <dataScope>path</dataScope>
                     <label translate="true">Directory</label>
                 </settings>
             </filterInput>

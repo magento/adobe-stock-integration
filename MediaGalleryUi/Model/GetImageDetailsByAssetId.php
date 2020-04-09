@@ -112,7 +112,6 @@ class GetImageDetailsByAssetId
             $tags[] = $keyword->getKeyword();
         }
 
-        $type = $assetGridData['content_type'] ?? '';
         $size = $this->getImageSize($asset->getPath());
 
         return [
@@ -148,7 +147,7 @@ class GetImageDetailsByAssetId
             'size' => $size,
             'tags' => $tags,
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
-            'content_type' => $type
+            'content_type' => $asset->getContentType()
         ];
     }
 

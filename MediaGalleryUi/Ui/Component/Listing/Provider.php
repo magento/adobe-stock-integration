@@ -29,9 +29,9 @@ class Provider extends SearchResult
      * @param EventManager $eventManager
      * @param GetAssetKeywordsInterface $getAssetKeywords
      * @param string $mainTable
-     * @param null $resourceModel
-     * @param null $identifierName
-     * @param null $connectionName
+     * @param null|string $resourceModel
+     * @param null|string $identifierName
+     * @param null|string $connectionName
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -64,7 +64,14 @@ class Provider extends SearchResult
     protected function _afterLoad()
     {
         parent::_afterLoad();
-        $keywords = $this->loadAssetsKeywords($this->_items);
+
+        $keywords = [];
+        foreach ($this->_items as $asset) {
+            //TODO: Must be replaced with new bulk interface: \Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface
+            $keywords[$asset->getId()] = array_map(function (KeywordInterface $keyword) {
+                return $keyword->getKeyword();
+            }, $this->getAssetKeywords->execute($asset->getId()));
+        }
 
         /** @var AssetInterface $asset */
         foreach ($this->_items as $key => $asset) {
@@ -72,25 +79,9 @@ class Provider extends SearchResult
             $this->_items[$key]->setData('preview_url', $asset->getPath());
             $this->_items[$key]->setData(
                 'keywords',
-                isset($keywords[$asset->getId()]) ? implode(",",  $keywords[$asset->getId()]) : ''
+                isset($keywords[$asset->getId()]) ? implode(",", $keywords[$asset->getId()]) : ''
             );
         }
         return $this;
-    }
-
-    /**
-     * @param array $assets
-     * @return array
-     */
-    private function loadAssetsKeywords(array $assets) : array
-    {
-        //TODO: Must be replaced with new bulk interface: \Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface
-        $result = [];
-        foreach ($assets as $asset) {
-            $result[$asset->getId()] = array_map(function (KeywordInterface $keyword) {
-                return $keyword->getKeyword();
-            }, $this->getAssetKeywords->execute($asset->getId()));
-        }
-        return $result;
     }
 }
