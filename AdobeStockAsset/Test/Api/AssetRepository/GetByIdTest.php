@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Test Adobe Stock Asset retrieval by ID
+ * Test getting and Adobe Stock asset by id through the Web API.
  */
 class GetByIdTest extends WebapiAbstract
 {
@@ -55,7 +55,7 @@ class GetByIdTest extends WebapiAbstract
      */
     public function testGetNoSuchEntityException(): void
     {
-        $notExistedAssetId = -1;
+        $notExistedAssetId = 1;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . DIRECTORY_SEPARATOR . $notExistedAssetId,
@@ -67,8 +67,7 @@ class GetByIdTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Object with id "%1" does not exist.';
-
+        $expectedMessage = 'Adobe Stock asset with id %id does not exist.';
         try {
             if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $this->_webApiCall($serviceInfo);
@@ -80,7 +79,7 @@ class GetByIdTest extends WebapiAbstract
             if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($expectedMessage, $errorData['message']);
-                self::assertEquals($notExistedAssetId, $errorData['parameters'][0]);
+                self::assertEquals($notExistedAssetId, $errorData['parameters']['id']);
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
             } elseif (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);

@@ -146,12 +146,13 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getById(int $id): AssetInterface
     {
-        $assets = $this->loadByIdCommand->execute($id);
-        if (empty($assets)) {
-            throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
+        $asset = $this->loadByIdCommand->execute($id);
+        if (null === $asset->getId()) {
+            $message = __('Adobe Stock asset with id %id does not exist.', ['id' => $id]);
+            throw new NoSuchEntityException($message);
         }
 
-        return reset($assets);
+        return $asset;
     }
 
     /**

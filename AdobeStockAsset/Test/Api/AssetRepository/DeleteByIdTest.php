@@ -7,19 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Api\AssetRepository;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory;
 use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection;
+use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Testing delete asset web api
+ * Testing deleting and Adobe Stock asset by id through the WEB API.
  */
-class DeleteTest extends WebapiAbstract
+class DeleteByIdTest extends WebapiAbstract
 {
     private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
     private const RESOURCE_PATH = '/V1/adobestock/asset';
@@ -60,27 +59,19 @@ class DeleteTest extends WebapiAbstract
     }
 
     /**
-     * Test delete assert with exception
+     * Test delete asset with incorrect asset id
      *
      * @return void
-     * @throws \Exception
      */
-    public function testDeleteWithException(): void
+    public function testDeleteWithIncorrectAssetId(): void
     {
+
         $notExistedAssetId = -1;
-        try {
-            $this->deleteAsset($notExistedAssetId);
-            $this->fail('Expected throwing exception');
-        } catch (\Exception $e) {
-            if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
-                $errorData = $this->processRestExceptionResult($e);
-                self::assertEquals($notExistedAssetId, $errorData['parameters'][0]);
-                self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
-            } elseif (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_SOAP) {
-                $this->assertInstanceOf('SoapFault', $e);
-            } else {
-                throw $e;
-            }
+        $response = $this->deleteAsset($notExistedAssetId);
+        if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
+            $this->assertSame([], $response);
+        } else {
+            $this->assertNull($response);
         }
     }
 
