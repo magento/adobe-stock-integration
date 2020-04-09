@@ -11,7 +11,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Model\Asset\Command\SaveInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,9 +27,9 @@ class Save implements SaveInterface
     private $resourceConnection;
 
     /**
-     * @var DataExtractorInterface
+     * @var DataObjectProcessor
      */
-    private $dataExtractor;
+    private $objectProcessor;
 
     /**
      * @var LoggerInterface
@@ -40,16 +40,16 @@ class Save implements SaveInterface
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param DataExtractorInterface $dataExtractor
+     * @param DataObjectProcessor $objectProcessor
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DataExtractorInterface $dataExtractor,
+        DataObjectProcessor $objectProcessor,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->dataExtractor = $dataExtractor;
+        $this->objectProcessor = $objectProcessor;
         $this->logger = $logger;
     }
 
@@ -63,7 +63,7 @@ class Save implements SaveInterface
     public function execute(AssetInterface $asset): void
     {
         try {
-            $data = $this->dataExtractor->extract($asset, AssetInterface::class);
+            $data = $this->objectProcessor->buildOutputDataArray($asset, AssetInterface::class);
 
             if (empty($data)) {
                 return;
