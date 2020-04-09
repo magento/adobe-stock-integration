@@ -27,8 +27,8 @@ class Provider extends SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param $mainTable
      * @param GetAssetKeywordsInterface $getAssetKeywords
+     * @param string $mainTable
      * @param null $resourceModel
      * @param null $identifierName
      * @param null $connectionName
@@ -39,8 +39,8 @@ class Provider extends SearchResult
         Logger $logger,
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
-        $mainTable,
         GetAssetKeywordsInterface $getAssetKeywords,
+        $mainTable = 'media_gallery_asset',
         $resourceModel = null,
         $identifierName = null,
         $connectionName = null

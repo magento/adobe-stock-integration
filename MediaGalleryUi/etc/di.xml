@@ -44,9 +44,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Provider">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">media_gallery_asset</argument>
-        </arguments>
-    </type>
 </config>
