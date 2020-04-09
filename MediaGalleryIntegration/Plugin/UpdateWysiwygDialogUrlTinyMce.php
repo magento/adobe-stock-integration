@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryIntegration\Plugin;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\DataObject;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
+use Magento\Tinymce3\Model\Config\Gallery\Config;
 
 /**
  * Plugin to update open media gallery dialog URL for tinyMCE3
@@ -41,9 +42,11 @@ class UpdateWysiwygDialogUrlTinyMce
     /**
      * Update open media gallery dialog URL for wysiwyg instance
      *
+     * @param Config $subject
      * @param DataObject $config
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetConfig($subject, DataObject $config): DataObject
+    public function afterGetConfig(Config $subject, DataObject $config): DataObject
     {
         if (!$this->config->isEnabled()) {
             return $config;
