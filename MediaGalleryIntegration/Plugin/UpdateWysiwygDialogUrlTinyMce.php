@@ -12,9 +12,9 @@ use Magento\Framework\DataObject;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 
 /**
- * Plugin to update open media gallery dialog URL for image-uploader component
+ * Plugin to update open media gallery dialog URL for tinyMCE3
  */
-class UpdateWysiwygOpenDialogUrlTinyMce
+class UpdateWysiwygDialogUrlTinyMce
 {
     /**
      * @var UrlInterface
@@ -39,15 +39,18 @@ class UpdateWysiwygOpenDialogUrlTinyMce
     }
 
     /**
-     * Update open media gallery dialog URL for image-uploader component
+     * Update open media gallery dialog URL for wysiwyg instance
      *
-     * @param Image $component
+     * @param DataObject $config
      */
-    public function afterPrepare(DataObject $config): void
+    public function afterGetConfig($subject, DataObject $config): DataObject
     {
         if (!$this->config->isEnabled()) {
-            return;
+            return $config;
         }
+        
         $config->setData('files_browser_window_url', $this->url->getUrl('media_gallery/index/index'));
+
+        return $config;
     }
 }
