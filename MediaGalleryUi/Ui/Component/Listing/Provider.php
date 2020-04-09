@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryUi\Ui\Component\Listing;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
@@ -32,7 +33,7 @@ class Provider extends SearchResult
      * @param null|string $resourceModel
      * @param null|string $identifierName
      * @param null|string $connectionName
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -61,10 +62,9 @@ class Provider extends SearchResult
     /**
      * @inheritdoc
      */
-    protected function _afterLoad()
+    public function getData()
     {
-        parent::_afterLoad();
-
+        $data = parent::getData();
         $keywords = [];
         foreach ($this->_items as $asset) {
             //TODO: Must be replaced with new bulk interface: \Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface
@@ -74,14 +74,11 @@ class Provider extends SearchResult
         }
 
         /** @var AssetInterface $asset */
-        foreach ($this->_items as $key => $asset) {
-            $this->_items[$key]->setData('thumbnail_url', $asset->getPath());
-            $this->_items[$key]->setData('preview_url', $asset->getPath());
-            $this->_items[$key]->setData(
-                'keywords',
-                isset($keywords[$asset->getId()]) ? implode(",", $keywords[$asset->getId()]) : ''
-            );
+        foreach ($data as $key => $asset) {
+            $data[$key]['thumbnail_url'] = $asset['path'];
+            $data[$key]['preview_url'] = $asset['path'];
+            $data[$key]['keywords'] = isset($keywords[$asset['id']]) ? implode(",", $keywords[$asset['id']]) : '';
         }
-        return $this;
+        return $data;
     }
 }
