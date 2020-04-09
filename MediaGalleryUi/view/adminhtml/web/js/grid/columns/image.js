@@ -15,7 +15,6 @@ define([
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
-            targetElementId: null,
             selected: null,
             fields: {
                 id: 'id',

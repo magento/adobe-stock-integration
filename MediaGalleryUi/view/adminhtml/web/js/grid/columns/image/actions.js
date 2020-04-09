@@ -54,7 +54,6 @@ define([
                    this.imageModel().getSelected(),
                     {
                         onInsertUrl: this.imageModel().onInsertUrl,
-                        targetElementId: this.imageModel().targetElementId,
                         storeId: this.imageModel().storeId
                     }
                 );
