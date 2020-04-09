@@ -71,7 +71,6 @@ class UpdateAssetInGrid
     public function execute(AssetInterface $asset): void
     {
         try {
-
             /* Get all keywords from media_gallery_keyword table for current asset */
             $keywords = array_map(function (KeywordInterface $keyword) {
                 return $keyword->getKeyword();

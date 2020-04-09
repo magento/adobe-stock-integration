@@ -17,6 +17,9 @@
             <stories value="Admin User saved licensed image then logout and try license image again"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_ims_signed"/>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1151" />
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
