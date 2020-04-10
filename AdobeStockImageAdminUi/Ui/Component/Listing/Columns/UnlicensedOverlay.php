@@ -25,7 +25,9 @@ class UnlicensedOverlay extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = isset($item['is_licensed']) && !$item['is_licensed'] ? 'Unlicensed' : '';
+                $item[$this->getData('name')] = isset($item['is_licensed']) && !$item['is_licensed']
+                    ? 'Unlicensed'
+                    : '';
             }
         }
 
