@@ -11,8 +11,8 @@ use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Service for getting asset by content id
@@ -64,7 +64,7 @@ class GetAssetById implements GetAssetByIdInterface
         $items = $this->getAssetList->execute($searchCriteria)->getItems();
         if (empty($items) || 1 < count($items)) {
             $message = __('Requested image doesn\'t exists');
-            throw new NoSuchEntityException($message);
+            throw new NotFoundException($message);
         }
 
         return reset($items);

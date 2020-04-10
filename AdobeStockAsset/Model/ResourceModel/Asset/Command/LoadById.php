@@ -56,8 +56,11 @@ class LoadById implements LoadByIdInterface
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME))
             ->where(self::ADOBE_STOCK_ASSET_ID . ' = ?', $id);
         $data = $connection->fetchAssoc($select);
+        $assetData = isset($data[$id]) ?
+            $data[$id]
+            : [];
         /** @var AssetInterface $asset */
-        $asset = $this->factory->create(['data' => $data]);
+        $asset = $this->factory->create(['data' => $assetData]);
 
         return $asset;
     }
