@@ -19,13 +19,21 @@ class AddLicenseDataToAsset
      * Add license data to assets.
      *
      * @param Provider $subject
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return array
      */
-    public function beforeLoadWithFilter(Provider $subject) : void
-    {
+    public function beforeLoadWithFilter(
+        Provider $subject,
+        $printQuery = false,
+        $logQuery = false
+    ) : array {
         $subject->getSelect()->joinLeft(
-            'adobe_stock_asset',
+            $subject->getConnection()->getTableName('adobe_stock_asset'),
             'adobe_stock_asset.media_gallery_id = main_table.id',
             ['is_licensed']
         );
+
+        return [$printQuery, $logQuery];
     }
 }
