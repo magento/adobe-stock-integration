@@ -19,12 +19,12 @@
     </settings>
     <listingToolbar name="listing_top">
         <filters name="listing_filters">
-            <filterSelect name="licensed" provider="${ $.parentName }" sortOrder="50">
+            <filterSelect name="is_licensed" provider="${ $.parentName }" sortOrder="50">
                 <settings>
                     <caption translate="true">All</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Licensed\Options"/>
                     <label translate="true">License Status</label>
-                    <dataScope>licensed</dataScope>
+                    <dataScope>is_licensed</dataScope>
                 </settings>
             </filterSelect>
         </filters>
