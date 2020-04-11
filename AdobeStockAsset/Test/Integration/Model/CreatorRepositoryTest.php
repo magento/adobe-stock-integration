@@ -6,12 +6,13 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeStockAsset\Test\Integration;
+namespace Magento\AdobeStockAsset\Test\Integration\Model;
 
-use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -22,62 +23,64 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Provide integration tests for the Adobe Stock CategoryRepository functionality.
+ * Provide integration tests for the Adobe Stock CreatorRepository functionality.
  */
-class CategoryRepositoryTest extends TestCase
+class CreatorRepositoryTest extends TestCase
 {
-    private const FIXTURE_ASSET_CATEGORY_ID = 42;
+    private const FIXTURE_ASSET_CREATOR_ID = 42;
 
     /**
-     * @var CategoryRepositoryInterface
+     * @var CreatorRepositoryInterface
      */
-    private $categoryRepository;
+    private $creatorRepository;
 
     /**
      * @inheritdoc
      */
     public function setUp()
     {
-        $this->categoryRepository = Bootstrap::getObjectManager()->get(CategoryRepositoryInterface::class);
+        $this->creatorRepository = Bootstrap::getObjectManager()->get(CreatorRepositoryInterface::class);
     }
 
     /**
-     * Test getting an Adobe Stock category by id.
+     * Test getting an Adobe Stock creator by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
+     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
      */
     public function testGetById(): void
     {
-        /** @var CategoryInterface $expectedCategory */
-        $expectedCategory = $this->categoryRepository->getById(self::FIXTURE_ASSET_CATEGORY_ID);
+        /** @var CreatorInterface $expectedCreator */
+        $expectedCreator = $this->creatorRepository->getById(self::FIXTURE_ASSET_CREATOR_ID);
 
-        $this->assertEquals($expectedCategory->getId(), self::FIXTURE_ASSET_CATEGORY_ID);
+        $this->assertEquals($expectedCreator->getId(), self::FIXTURE_ASSET_CREATOR_ID);
     }
 
     /**
-     * Test delete an Adobe Stock category by id.
+     * Test delete an Adobe Stock creator by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
+     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @param AssetInterface $asset
      */
     public function testDeleteById(): void
     {
-        $this->categoryRepository->deleteById(self::FIXTURE_ASSET_CATEGORY_ID);
+        $this->creatorRepository->deleteById(self::FIXTURE_ASSET_CREATOR_ID);
         try {
-            $this->categoryRepository->getById(self::FIXTURE_ASSET_CATEGORY_ID);
+            $this->creatorRepository->getById(self::FIXTURE_ASSET_CREATOR_ID);
             $this->fail('Expected NoSuchEntityException caught');
         } catch (NoSuchEntityException $exception) {
             $message = __(
-                'Adobe Stock asset category with id "%1" does not exist.',
-                self::FIXTURE_ASSET_CATEGORY_ID
+                'Adobe Stock asset creator with id "%1" does not exist.',
+                self::FIXTURE_ASSET_CREATOR_ID
             );
             $this->assertEquals($message, $exception->getMessage());
         }
     }
 
     /**
-     * Test getting a list of Adobe Stock categories by search criteria.
+     * Test getting a list of Adobe Stock creators by search criteria.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
+     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @param AssetInterface $asset
      */
     public function testGetList(): void
     {
@@ -90,7 +93,7 @@ class CategoryRepositoryTest extends TestCase
         /** @var FilterBuilder $filterBuilder */
         $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         $idFilter = $filterBuilder->setField('id')
-            ->setValue(self::FIXTURE_ASSET_CATEGORY_ID)
+            ->setValue(self::FIXTURE_ASSET_CREATOR_ID)
             ->setConditionType('eq')
             ->create();
 
@@ -111,34 +114,38 @@ class CategoryRepositoryTest extends TestCase
         $searchCriteria->setFilterGroups([$filterGroup]);
 
         /** @var AssetSearchResultsInterface $searchResult */
-        $searchResult = $this->categoryRepository->getList($searchCriteria);
+        $searchResult = $this->creatorRepository->getList($searchCriteria);
 
         $this->assertTrue($searchResult->getTotalCount() > 0);
         $this->assertEquals(
-            $searchResult->getItems()[self::FIXTURE_ASSET_CATEGORY_ID]->getId(),
-            self::FIXTURE_ASSET_CATEGORY_ID
+            $searchResult->getItems()[self::FIXTURE_ASSET_CREATOR_ID]->getId(),
+            self::FIXTURE_ASSET_CREATOR_ID
         );
     }
 
     /**
-     * Test saving an Adobe Stock category.
+     * Test saving an Adobe Stock creator.
+     *
+     * @param AssetInterface $asset
      */
     public function testSave(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        $categoryFactory = $objectManager->get(CategoryInterfaceFactory::class);
-        /** @var CategoryInterface $category */
-        $category = $categoryFactory->create(
+
+        /** @var CreatorInterface $creatorFactory */
+        $creatorFactory = $objectManager->get(CreatorInterfaceFactory::class);
+        /** @var CreatorInterface $creator */
+        $creator = $creatorFactory->create(
             [
                 'data' => [
-                    'id' => self::FIXTURE_ASSET_CATEGORY_ID,
-                    'name' => 'Test category'
+                    'id' => 42,
+                    'name' => 'Test creator'
                 ]
             ]
         );
-        $this->categoryRepository->save($category);
-        $expectedCategory = $this->categoryRepository->getById(self::FIXTURE_ASSET_CATEGORY_ID);
-        $this->assertEquals($expectedCategory->getId(), self::FIXTURE_ASSET_CATEGORY_ID);
-        $this->categoryRepository->deleteById(self::FIXTURE_ASSET_CATEGORY_ID);
+        $this->creatorRepository->save($creator);
+        $expectedCreator = $this->creatorRepository->getById(self::FIXTURE_ASSET_CREATOR_ID);
+        $this->assertEquals($expectedCreator->getId(), self::FIXTURE_ASSET_CREATOR_ID);
+        $this->creatorRepository->deleteById(self::FIXTURE_ASSET_CREATOR_ID);
     }
 }
