@@ -22,7 +22,7 @@
                 <each args="image().details">
                     <div class="attribute"  if="$parent.getValue(value)">
                         <span class="title" data-bind="i18n: title"></span>
-                        <div class="value" data-bind="html: $parent.getValue(value)"></div>
+                        <div class="value" html="$parent.getValue(value)"></div>
                     </div>
                 </each>
             </div>

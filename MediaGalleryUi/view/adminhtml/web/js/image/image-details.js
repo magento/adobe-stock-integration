@@ -170,15 +170,16 @@ define([
          */
         getValue: function (value) {
             var usedIn = '';
-            if (_.isObject(value))
-            {
-                _.each(value, function(numberOfTimeUsed, moduleName) {
+
+            if (_.isObject(value)) {
+                _.each(value, function (numberOfTimeUsed, moduleName) {
                     usedIn += numberOfTimeUsed + ' ' + moduleName + '</br>';
                 });
+
                 return usedIn;
-            } else {
-                return value;
             }
+
+            return value;
         }
     });
 });
