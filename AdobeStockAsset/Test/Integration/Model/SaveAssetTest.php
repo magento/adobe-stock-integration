@@ -71,8 +71,6 @@ class SaveAssetTest extends TestCase
 
     /**
      * Test save an Adobe Stock asset.
-     *
-     * @param AssetInterface $asset
      */
     public function testExecute(): void
     {
@@ -91,8 +89,6 @@ class SaveAssetTest extends TestCase
 
     /**
      * Prepare an Adobe Stock asset test object.
-     *
-     * @return AssetInterface
      */
     public function prepareAsset(): AssetInterface
     {
@@ -127,7 +123,7 @@ class SaveAssetTest extends TestCase
             ]
         );
 
-        /** @var CreatorInterface $creatorFactory */
+        /** @var CreatorInterfaceFactory $creatorFactory */
         $creatorFactory = Bootstrap::getObjectManager()->get(CreatorInterfaceFactory::class);
         /** @var CreatorInterface $creator */
         $creator = $creatorFactory->create(

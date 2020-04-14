@@ -59,7 +59,6 @@ class CreatorRepositoryTest extends TestCase
      * Test delete an Adobe Stock creator by id.
      *
      * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
-     * @param AssetInterface $asset
      */
     public function testDeleteById(): void
     {
@@ -80,7 +79,6 @@ class CreatorRepositoryTest extends TestCase
      * Test getting a list of Adobe Stock creators by search criteria.
      *
      * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
-     * @param AssetInterface $asset
      */
     public function testGetList(): void
     {
@@ -125,14 +123,12 @@ class CreatorRepositoryTest extends TestCase
 
     /**
      * Test saving an Adobe Stock creator.
-     *
-     * @param AssetInterface $asset
      */
     public function testSave(): void
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        /** @var CreatorInterface $creatorFactory */
+        /** @var CreatorInterfaceFactory $creatorFactory */
         $creatorFactory = $objectManager->get(CreatorInterfaceFactory::class);
         /** @var CreatorInterface $creator */
         $creator = $creatorFactory->create(

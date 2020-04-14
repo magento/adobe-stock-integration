@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 
-/** @var CreatorInterface $creatorFactory */
+/** @var CreatorInterfaceFactory $creatorFactory */
 $creatorFactory = $objectManager->get(CreatorInterfaceFactory::class);
 /** @var CreatorInterface $creator */
 $creator = $creatorFactory->create(

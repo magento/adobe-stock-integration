@@ -42,6 +42,7 @@ $mediaAsset = $mediaAssetFactory->create(
 $mediaSave = $objectManager->get(SaveInterface::class);
 $mediaId = $mediaSave->execute($mediaAsset);
 
+/** @var CategoryInterfaceFactory $categoryFactory */
 $categoryFactory = $objectManager->get(CategoryInterfaceFactory::class);
 /** @var CategoryInterface $category */
 $category = $categoryFactory->create(
@@ -56,7 +57,7 @@ $category = $categoryFactory->create(
 $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
 $categoryId = $categoryRepository->save($category)->getId();
 
-/** @var CreatorInterface $creatorFactory */
+/** @var CreatorInterfaceFactory $creatorFactory */
 $creatorFactory = $objectManager->get(CreatorInterfaceFactory::class);
 /** @var CreatorInterface $creator */
 $creator = $creatorFactory->create(
