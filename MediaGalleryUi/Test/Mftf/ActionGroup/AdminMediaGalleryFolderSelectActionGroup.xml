@@ -12,6 +12,7 @@
         <arguments>
             <argument name="name" type="string" defaultValue="{{AdminMediaGalleryFolderData.name}}"/>
         </arguments>
+        <wait time="2" stepKey="waitBeforeClickOnFolder"/>
         <click selector="//div[contains(@class, 'media-directory-container')]//a[contains(text(), '{{name}}')]" stepKey="selectFolder"/>
     </actionGroup>
 </actionGroups>
