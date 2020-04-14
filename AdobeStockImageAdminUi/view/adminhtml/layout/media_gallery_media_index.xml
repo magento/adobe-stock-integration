@@ -10,6 +10,10 @@
     <body>
         <referenceContainer name="content">
             <block class="Magento\Backend\Block\Template" name="stock.panel" template="Magento_AdobeStockImageAdminUi::panel.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
+		<arguments>
+		    <argument name="masonry_component_path" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.adobe_stock_images_columns</argument>
+		    <argument name="data_source_path" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing_data_source</argument>
+                </arguments>
                 <block class="Magento\AdobeIms\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdobeIms::signIn.phtml" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images">
                     <arguments>
                         <argument name="configProviders" xsi:type="array">
@@ -17,11 +21,11 @@
                         </argument>
                     </arguments>
                 </block>
-                <uiComponent name="adobe_stock_images_listing"/>
+                <uiComponent name="standalone_adobe_stock_images_listing"/>
             </block>
-            <referenceBlock name="media.gallery.container">
+            <referenceContainer name="content">
                 <block class="Magento\Backend\Block\Template" name="adobe.stock.image.details" template="Magento_AdobeStockImageAdminUi::image_details/adobe_stock.phtml" after="image.details" aclResource="Magento_AdobeStockImageAdminUi::save_preview_images"/>
-            </referenceBlock>
+            </referenceContainer>
         </referenceContainer>
     </body>
 </page>

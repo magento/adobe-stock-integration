@@ -9,9 +9,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMediaGalleryCreateDeleteFolderTest">
         <annotations>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1141"/>
-            </skip>
             <features value="AdminMediaGalleryImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1046; https://github.com/magento/adobe-stock-integration/issues/1047"/>
             <title value="Creating, deleting new folder functionality in Media Gallery"/>
@@ -21,7 +18,7 @@
             <group value="adobe_stock_integration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery">
                 <argument name="enabled" value="1"/>
             </actionGroup>

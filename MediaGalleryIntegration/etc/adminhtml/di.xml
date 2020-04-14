@@ -15,4 +15,7 @@
     <type name="Magento\PageBuilder\Model\Config\ContentType\AdditionalData\Provider\Uploader\OpenDialogUrl">
         <plugin name="updateOpenDialogUrlPageBuilder" type="Magento\MediaGalleryIntegration\Plugin\UpdateOpenDialogUrlPageBuilder"/>
     </type>
+        <type name="Magento\Tinymce3\Model\Config\Gallery\Config">
+        <plugin name="updateWysiwygOpendialogurlTinyMce3" type="Magento\MediaGalleryIntegration\Plugin\UpdateWysiwygDialogUrlTinyMce"/>
+    </type>
 </config>

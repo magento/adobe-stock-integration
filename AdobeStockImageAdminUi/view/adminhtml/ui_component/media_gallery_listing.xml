@@ -27,6 +27,14 @@
                     <dataScope>licensed</dataScope>
                 </settings>
             </filterSelect>
+            <filterSelect name="source" provider="${ $.parentName }" sortOrder="60">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Source\Options"/>
+                    <label translate="true">Source</label>
+                    <dataScope>source</dataScope>
+                </settings>
+            </filterSelect>
         </filters>
     </listingToolbar>
     <columns name="media_gallery_columns">

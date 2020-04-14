@@ -35,7 +35,7 @@ class Url extends Column
      * @var Images
      */
     private $images;
-    
+
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
@@ -71,7 +71,7 @@ class Url extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item['encoded_id'] = $this->images->idEncode($item[$this->getData('name')]);
+                $item['encoded_id'] = $this->images->idEncode($item['name']);
                 $item[$this->getData('name')] = $this->getUrl($item[$this->getData('name')]);
             }
         }
