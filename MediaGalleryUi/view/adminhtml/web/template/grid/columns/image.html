@@ -6,10 +6,13 @@
 -->
 <div class="media-gallery-wrap" collapsible>
     <div class="media-gallery-image">
-        <div data-row="file" class="masonry-image-block media-gallery-image-block" attr="'data-id': $col.getId($row())" css="{ selected: isSelected($row()) }">
+        <div data-row="file"
+             class="masonry-image-block media-gallery-image-block"
+             attr="'data-id': $col.getId($row())"
+             css="{ selected: isSelected($row()) }"
+             click="function(){ clickOnImage($row(), $collapsible.opened()) }" >
             <img attr="src: $col.getUrl($row()), alt: $col.getImageAlt($row())"
                  class="media-gallery-image-column"
-                 click="function(){ if (!$collapsible.opened()) {select($row())} }"
                  data-role="thumbnail"/>
         </div>
         <ul class="action-menu" css="_active: $collapsible.opened">
@@ -29,7 +32,7 @@
             <div class="action-select-wrap">
                 <span class="three-dots"
                       toggleCollapsible
-                      click="function () {if (!isSelected($row()) || $collapsible.opened()) {select($row())}}"></span>
+                      click="function () { clickOnThreeDots($row(), $collapsible.opened()); }"></span>
             </div>
         </div>
     </div>

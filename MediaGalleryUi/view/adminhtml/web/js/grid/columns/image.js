@@ -107,6 +107,30 @@ define([
         },
 
         /**
+         * Click on image
+         *
+         * @param {Object} record
+         * @param {Boolean} collapsibleOpened
+         */
+        clickOnImage: function (record, collapsibleOpened) {
+            if (!collapsibleOpened) {
+                this.select(record);
+            }
+        },
+
+        /**
+         * Click on three-dots
+         *
+         * @param {Object} record
+         * @param {Boolean} collapsibleOpened
+         */
+        clickOnThreeDots: function (record, collapsibleOpened) {
+            if (!this.isSelected(record) || collapsibleOpened) {
+                this.select(record);
+            }
+        },
+
+        /**
          * Set the record as selected
          */
         select: function (record) {
