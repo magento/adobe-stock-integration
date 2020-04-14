@@ -17,6 +17,7 @@ define([
             deleteSelectedBtnSelector: '#delete_selected',
             targetElementId: null,
             selected: null,
+            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             fields: {
                 id: 'id',
                 url: 'url',
@@ -26,6 +27,12 @@ define([
                 actions: '${ $.name }_actions',
                 provider: '${ $.provider }',
                 messages: '${ $.messagesName }'
+            },
+            imports: {
+                activeDirectory: '${ $.mediaGalleryDirectoryComponent }:activeNode'
+            },
+            listens: {
+                activeDirectory: 'selectDirectoryHandle'
             },
             viewConfig: [
                 {
@@ -139,6 +146,14 @@ define([
         },
 
         /**
+         * Deselect the record
+         */
+        deselectImage: function () {
+            this.selected(null);
+            this.toggleAddSelectedButton();
+        },
+
+        /**
          * Get the selected record
          * @returns {Object}
          */
@@ -212,6 +227,17 @@ define([
         addMessage: function (code, message) {
             this.messages().add(code, message);
             this.messages().scheduleCleanup();
+        },
+
+        /**
+         * Listener to select directory event
+         *
+         * @param {String} path
+         */
+        selectDirectoryHandle: function (path) {
+            if (this.selected() && this.selected().directory !== path) {
+                this.deselectImage();
+            }
         }
     });
 });
