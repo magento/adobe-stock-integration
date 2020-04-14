@@ -47,6 +47,8 @@ define([
                     showLoader: true
                 }).done($.proxy(function (data) {
                     $.mage.mediabrowser().insertAtCursor(targetElement.get(0), data);
+                    targetElement.focus();
+                    $(targetElement).change();
                 }, this));
             } else {
                 targetElement.val(record['thumbnail_url'])
