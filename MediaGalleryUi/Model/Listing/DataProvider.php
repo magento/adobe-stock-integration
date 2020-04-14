@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model\Listing;
 
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
@@ -57,9 +57,9 @@ class DataProvider extends UiComponentDataProvider
     /**
      * Returns search result
      *
-     * @return SearchResultInterface
+     * @return SearchResult
      */
-    private function getPreparedSearchResult(): SearchResultInterface
+    private function getPreparedSearchResult(): SearchResult
     {
         $searchResult = $this->getSearchResult();
         if (isset($this->fulltextFilter)) {
@@ -72,10 +72,10 @@ class DataProvider extends UiComponentDataProvider
     /**
      * Apply OR filters
      *
-     * @param SearchResultInterface $searchResult
+     * @param SearchResult $searchResult
      * @return void
      */
-    private function applyOrFilters(SearchResultInterface $searchResult): void
+    private function applyOrFilters(SearchResult $searchResult): void
     {
         foreach ($this->columns as $column) {
             $searchResult->getSelect()
