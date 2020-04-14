@@ -78,6 +78,7 @@ class Provider extends SearchResult
             $data[$key]['thumbnail_url'] = $asset['path'];
             $data[$key]['preview_url'] = $asset['path'];
             $data[$key]['keywords'] = isset($keywords[$asset['id']]) ? implode(",", $keywords[$asset['id']]) : '';
+            $data[$key]['source'] = empty($asset['source']) ? 'Local' : $asset['source'];
         }
         return $data;
     }
