@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Listing;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
@@ -15,18 +17,72 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiCo
 class DataProvider extends UiComponentDataProvider
 {
     /**
+     * @var Filter|null
+     */
+    private $fulltextFilter;
+
+    /**
+     * @var array
+     */
+    private $columns = ['name'];
+
+    /**
      * @inheritdoc
      */
     public function getData(): array
     {
         try {
-            return $this->searchResultToOutput($this->getSearchResult());
+            return $this->searchResultToOutput($this->getPreparedSearchResult());
         } catch (\Exception $exception) {
             return [
                 'items' => [],
                 'totalRecords' => 0,
                 'errorMessage' => $exception->getMessage()
             ];
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addFilter(Filter $filter)
+    {
+        if ($filter->getField() === 'fulltext' && $filter->getValue() !== '') {
+            $this->fulltextFilter = $filter;
+        }
+
+        parent::addFilter($filter);
+    }
+
+    /**
+     * Returns search result
+     *
+     * @return SearchResultInterface
+     */
+    private function getPreparedSearchResult(): SearchResultInterface
+    {
+        $searchResult = $this->getSearchResult();
+        if (isset($this->fulltextFilter)) {
+            $this->applyOrFilters($searchResult);
+        }
+
+        return $searchResult;
+    }
+
+    /**
+     * Apply OR filters
+     *
+     * @param SearchResultInterface $searchResult
+     * @return void
+     */
+    private function applyOrFilters(SearchResultInterface $searchResult): void
+    {
+        foreach ($this->columns as $column) {
+            $searchResult->getSelect()
+                ->orWhere(
+                    $column . ' LIKE ?',
+                    sprintf('%%%s%%', $this->fulltextFilter->getValue())
+                );
         }
     }
 }

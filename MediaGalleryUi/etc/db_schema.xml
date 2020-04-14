@@ -29,8 +29,10 @@
         <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
             <column name="id"/>
         </index>
-        <index referenceId="MEDIA_GALLERY_ASSET_GRID_NAME_KEYWORDS" indexType="fulltext">
+        <index referenceId="MEDIA_GALLERY_ASSET_GRID_NAME" indexType="btree">
             <column name="name"/>
+        </index>
+        <index referenceId="MEDIA_GALLERY_ASSET_GRID_KEYWORDS" indexType="fulltext">
             <column name="keywords"/>
         </index>
     </table>
