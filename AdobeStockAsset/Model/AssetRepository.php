@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Centralize common data access functionality for the Adobe Stock asset
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssetRepository implements AssetRepositoryInterface
 {
