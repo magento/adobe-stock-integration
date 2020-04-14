@@ -20,6 +20,8 @@ use Psr\Log\LoggerInterface;
  */
 class UpdateAssetInGrid
 {
+    private const SOURCE_LOCAL = 'Local';
+
     /**
      * @var ResourceConnection
      */
@@ -71,7 +73,6 @@ class UpdateAssetInGrid
     public function execute(AssetInterface $asset): void
     {
         try {
-
             /* Get all keywords from media_gallery_keyword table for current asset */
             $keywords = array_map(function (KeywordInterface $keyword) {
                 return $keyword->getKeyword();
@@ -87,7 +88,7 @@ class UpdateAssetInGrid
                     //phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'name' => basename($asset->getPath()),
                     'content_type' => strtoupper(str_replace('image/', '', $asset->getContentType())),
-                    'source' => $asset->getSource(),
+                    'source' => $asset->getSource() ?: self::SOURCE_LOCAL,
                     'width' => $asset->getWidth(),
                     'height' => $asset->getHeight(),
                     'size' => $asset->getSize(),
