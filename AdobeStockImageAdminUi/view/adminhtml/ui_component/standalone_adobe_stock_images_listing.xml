@@ -8,14 +8,14 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source
+            <item name="provider" xsi:type="string">standalone_adobe_stock_images_listing.adobe_stock_images_listing_data_source
             </item>
         </item>
     </argument>
     <settings>
         <spinner>adobe_stock_images_columns</spinner>
         <deps>
-            <dep>adobe_stock_images_listing.adobe_stock_images_listing_data_source</dep>
+            <dep>standalone_adobe_stock_images_listing.adobe_stock_images_listing_data_source</dep>
         </deps>
     </settings>
     <dataSource name="adobe_stock_images_listing_data_source" component="Magento_Ui/js/grid/provider">
@@ -54,7 +54,7 @@
         </paging>
 	<container
 		name="sorting"
-		provider="adobe_stock_images_listing.adobe_stock_images_listing_data_source"
+		provider="standalone_adobe_stock_images_listing.adobe_stock_images_listing_data_source"
 		displayArea="sorting"
 		sortOrder="20"
 		component="Magento_Ui/js/grid/sortBy">
@@ -62,7 +62,7 @@
                 <item name="config" xsi:type="array">
                     <item name="deps" xsi:type="array">
                         <item name="0" xsi:type="string">
-                            adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns
+                            standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.adobe_stock_images_columns
                         </item>
                     </item>
                 </item>
@@ -202,9 +202,9 @@
         <column name="preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="messagesName" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.messages</item>
-                    <item name="mediaGalleryName" xsi:type="string">media_gallery_listing.media_gallery_listing.media_gallery_directories</item>
-                    <item name="mediaGalleryProvider" xsi:type="string">media_gallery_listing.media_gallery_listing_data_source</item>
+                    <item name="messagesName" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.messages</item>
+                    <item name="mediaGalleryName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_directories</item>		    
+                    <item name="mediaGalleryProvider" xsi:type="string">standalone_media_gallery_listing.media_gallery_listing_data_source</item>
 		</item>
             </argument>
             <settings>
