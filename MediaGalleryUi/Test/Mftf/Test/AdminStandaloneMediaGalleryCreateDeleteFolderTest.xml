@@ -15,13 +15,14 @@
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503041; https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503101"/>
             <description value="Creating, deleting new folder functionality in Standalone Media Gallery"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration"/>
+            <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryForPage"/>
         </before>
         <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
