@@ -27,8 +27,6 @@ define([
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
             imageItems: [],
-            mediaGalleryProvider: 'media_gallery_listing.media_gallery_listing_data_source',
-            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -38,7 +36,7 @@ define([
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
                 messages: '${ $.messagesName }',
-                imageDirectory: '${ $.mediaGalleryDirectoryComponent }'
+                imageDirectory: '${ $.mediaGalleryName }'
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
