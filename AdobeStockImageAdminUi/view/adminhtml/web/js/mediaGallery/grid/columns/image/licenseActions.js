@@ -66,11 +66,11 @@ define([
          */
         isVisible: function (record, name) {
             if (name === this.licenseAction.name) {
-                if (_.isNull(record.licensed)) {
+                if (_.isNull(record['is_licensed'])) {
                     return false;
                 }
 
-                return !parseInt(record.licensed, 16);
+                return !parseInt(record['is_licensed'], 16);
             }
 
             return true;
