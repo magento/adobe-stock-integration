@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryIntegration\Plugin;
 
 use Magento\Framework\UrlInterface;
-use Magento\Ui\Component\Form\Element\DataType\Media\Image;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\PageBuilder\Model\Config\ContentType\AdditionalData\Provider\Uploader\OpenDialogUrl;
 
@@ -28,6 +27,8 @@ class UpdateOpenDialogUrlPageBuilder
     private $config;
 
     /**
+     * UpdateOpenDialogUrlPageBuilder constructor
+     *
      * @param UrlInterface $url
      * @param ConfigInterface $config
      */
@@ -43,15 +44,13 @@ class UpdateOpenDialogUrlPageBuilder
      * @param OpenDialogUrl $subject
      * @param array $itemName
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @return string[]
      */
-    public function afterGetData($subject, array $itemName)
+    public function afterGetData($subject, array $itemName): array
     {
-        $newItem = [];
         if ($this->config->isEnabled()) {
-            foreach ($itemName as $key) {
-                $newItem[$key] = $this->url->getUrl('media_gallery/index/index');
-            }
-            return $newItem;
+            $itemName['openDialogUrl'] = $this->url->getUrl('media_gallery/index/index');
         }
         return $itemName;
     }

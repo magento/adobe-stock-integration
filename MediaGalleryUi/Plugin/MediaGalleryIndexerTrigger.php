@@ -17,12 +17,12 @@ class MediaGalleryIndexerTrigger
 {
     private const MEDIA_GALLERY_CONFIG_VALUE = 'system/media_gallery/enabled';
     private const MEDIA_GALLERY_ENABLED_VALUE = 1;
-    
+
     /**
      * @var ImagesIndexer
      */
     private $imagesIndexer;
-       
+
     /**
      * @param ImagesIndexer $imagesIndexer
      */
@@ -42,8 +42,10 @@ class MediaGalleryIndexerTrigger
      */
     public function afterSave(Value $config, Value $result): Value
     {
-        $isMediaGallery = $result->getPath() == self::MEDIA_GALLERY_CONFIG_VALUE;
-        if ($isMediaGallery && $result->isValueChanged() && $result->getValue() == self::MEDIA_GALLERY_ENABLED_VALUE) {
+        if ($result->getPath() === self::MEDIA_GALLERY_CONFIG_VALUE
+            && $result->isValueChanged()
+            && (int) $result->getValue() === self::MEDIA_GALLERY_ENABLED_VALUE
+        ) {
             $this->imagesIndexer->execute();
         }
 

@@ -18,12 +18,12 @@ define([
             actionsList: [
                 {
                     name: 'image-details',
-                    title: 'View Details',
+                    title: $.mage.__('View Details'),
                     handler: 'viewImageDetails'
                 },
                 {
                     name: 'delete',
-                    title: 'Delete',
+                    title: $.mage.__('Delete'),
                     handler: 'deleteImageAction'
                 }
             ],
