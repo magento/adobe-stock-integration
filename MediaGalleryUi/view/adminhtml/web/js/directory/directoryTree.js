@@ -22,7 +22,7 @@ define([
                 filterChips: '${ $.filterChipsProvider }'
             },
             listens: {
-                '${ $.provider }:params.filters.directory': 'clearFiltersHandle'
+                '${ $.provider }:params.filters.path': 'clearFiltersHandle'
             },
             viewConfig: [{
                 component: 'Magento_MediaGalleryUi/js/directory/directories',
@@ -95,7 +95,7 @@ define([
          * Listener to clear filters event
          */
         clearFiltersHandle: function () {
-            if (_.isUndefined(this.filterChips().filters.directory)) {
+            if (_.isUndefined(this.filterChips().filters.path)) {
                 $(this.directoryTreeSelector).jstree('deselect_all');
                 this.activeNode(null);
                 this.directories().setInActive();
@@ -125,7 +125,7 @@ define([
             $(this.directoryTreeSelector).jstree('deselect_all');
 
             filters = $.extend(true, filters, applied);
-            delete filters.directory;
+            delete filters.path;
             this.filterChips().set('applied', filters);
             this.activeNode(null);
             this.directories().setInActive();
@@ -159,7 +159,7 @@ define([
                 applied = this.filterChips().get('applied');
 
             filters = $.extend(true, filters, applied);
-            filters.directory = path;
+            filters.path = path;
             this.filterChips().set('applied', filters);
 
         },
