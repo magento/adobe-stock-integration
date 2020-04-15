@@ -22,7 +22,8 @@
                     "stock_panel": {
                         "component": "Magento_AdobeStockImageAdminUi/js/panel",
                         "containerId": ".adobe-search-images-modal",
-                        "masonryComponentPath": "adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns"
+                        "masonryComponentPath":"<?= $block->escapeJs($block->getData('masonry_component_path')); ?>",
+                        "dataSourcePath": "<?= $block->escapeJs($block->getData('data_source_path')); ?>"
                     }
                 }
             },

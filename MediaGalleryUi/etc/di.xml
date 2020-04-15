@@ -10,7 +10,7 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="media_gallery_listing_data_source" xsi:type="string">mediaGallerySearchResult</item>
+                <item name="media_gallery_listing_data_source" xsi:type="string">Magento\MediaGalleryUi\Ui\Component\Listing\Provider</item>
             </argument>
         </arguments>
     </type>

@@ -8,12 +8,11 @@
         "magento/module-adobe-stock-asset-api": "*",
         "magento/module-adobe-stock-image-api": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery-ui-api": "*",
-        "magento/module-media-gallery-ui": "*",
         "magento/module-cms": "*"
     },
     "suggest": {
-        "magento/module-catalog": "*"
+        "magento/module-catalog": "*",
+        "magento/module-media-gallery-ui": "*"
     },
     "type": "magento2-module",
     "license": [

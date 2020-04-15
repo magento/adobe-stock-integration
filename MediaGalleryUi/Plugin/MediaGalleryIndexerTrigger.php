@@ -43,8 +43,10 @@ class MediaGalleryIndexerTrigger
      */
     public function afterSave(Value $config, Value $result): Value
     {
-        $isMediaGallery = $result->getPath() == self::MEDIA_GALLERY_CONFIG_VALUE;
-        if ($isMediaGallery && $result->isValueChanged() && $result->getValue() == self::MEDIA_GALLERY_ENABLED_VALUE) {
+        if ($result->getPath() === self::MEDIA_GALLERY_CONFIG_VALUE
+            && $result->isValueChanged()
+            && (int) $result->getValue() === self::MEDIA_GALLERY_ENABLED_VALUE
+        ) {
             $this->imagesIndexer->execute();
         }
 
