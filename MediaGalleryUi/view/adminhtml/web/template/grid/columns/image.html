@@ -10,7 +10,8 @@
              class="masonry-image-block media-gallery-image-block"
              attr="'data-id': $col.getId($row())"
              css="{ selected: isSelected($row()) }"
-             click="function(){ clickOnImage($row(), $collapsible.opened()) }" >
+             click="function(){ clickOnImage($row(), $collapsible.opened()) }"
+        >
             <img attr="src: $col.getUrl($row()), alt: $col.getImageAlt($row())"
                  class="media-gallery-image-column"
                  data-role="thumbnail"/>
@@ -23,8 +24,10 @@
     </div>
     <div class="masonry-image-description">
         <ul class="media-gallery-image-details">
-            <li class="name" data-bind="text: $row().name"></li>
-            <li class="source"><img if="$row().source" class="adobe-stock-icon" data-bind="attr: { src: $row().source }" /></li>
+            <li class="name" data-bind="text: $row().title"></li>
+            <li class="source">
+                <img if="$row().source" class="adobe-stock-icon" data-bind="attr: { src: $row().source }" />
+            </li>
             <li class="type" data-bind="text: $row().content_type"></li> &#8226;
             <li class="dimensions" data-bind="text: $row().width + 'x' + $row().height"></li>
         </ul>
