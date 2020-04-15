@@ -31,10 +31,10 @@
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminAdobeStockApplyIsolatedFilterActionGroup" stepKey="see32imagesOnTheSecondPage"/>
         <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
-        <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
+        <assertNotEquals stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutSafeFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
-        </assertNotContains>
+        </assertNotEquals>
         <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Isolated Only"/>
         </actionGroup>

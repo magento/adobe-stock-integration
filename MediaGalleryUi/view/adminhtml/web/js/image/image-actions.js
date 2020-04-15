@@ -28,7 +28,6 @@ define([
          */
         initialize: function () {
             this._super();
-            $(window).on('fileDeleted.enhancedMediaGallery', this.closeModal.bind(this));
 
             return this;
         },
@@ -51,6 +50,7 @@ define([
          */
         deleteImageAction: function () {
             deleteImage.deleteImageAction(this.imageModel().getSelected(), this.imageModel().deleteImageUrl);
+            this.closeModal();
         },
 
         /**
