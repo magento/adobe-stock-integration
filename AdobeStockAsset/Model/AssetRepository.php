@@ -21,6 +21,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
@@ -134,8 +135,8 @@ class AssetRepository implements AssetRepositoryInterface
             return $searchResults;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred during get asset list: %error', ['error' => $exception->getMessage()]);
-            throw new IntegrationException($message, $exception);
+            $message = __('Could not retrieve assets.');
+            throw new LocalizedException($message, $exception);
         }
     }
 
@@ -144,13 +145,7 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getById(int $id): AssetInterface
     {
-        $asset = $this->loadByIdCommand->execute($id);
-        if (null === $asset->getId()) {
-            $message = __('Adobe Stock asset with id %id does not exist.', ['id' => $id]);
-            throw new NoSuchEntityException($message);
-        }
-
-        return $asset;
+        return $this->loadByIdCommand->execute($id);
     }
 
     /**
