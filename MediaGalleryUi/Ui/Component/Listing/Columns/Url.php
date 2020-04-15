@@ -15,7 +15,6 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Cms\Helper\Wysiwyg\Images;
-use Magento\Framework\Filesystem\Io\File;
 
 /**
  * Overlay column
@@ -38,11 +37,6 @@ class Url extends Column
     private $images;
 
     /**
-     * @var File
-     */
-    private $driver;
-
-    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
@@ -57,7 +51,6 @@ class Url extends Column
         StoreManagerInterface $storeManager,
         UrlInterface $urlInterface,
         Images $images,
-        File $file,
         array $components = [],
         array $data = []
     ) {
@@ -65,7 +58,6 @@ class Url extends Column
         $this->storeManager = $storeManager;
         $this->urlInterface = $urlInterface;
         $this->images = $images;
-        $this->driver = $file;
     }
 
     /**
