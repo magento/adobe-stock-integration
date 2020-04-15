@@ -71,7 +71,7 @@ class Url extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item['encoded_id'] = $this->images->idEncode($item['path']);
+                $item['encoded_id'] = $this->images->idEncode(basename($item['path']));
                 $item[$this->getData('name')] = $this->getUrl($item[$this->getData('name')]);
             }
         }
