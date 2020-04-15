@@ -15,6 +15,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Cms\Helper\Wysiwyg\Images;
+use Magento\Framework\Filesystem\Io\File;
 
 /**
  * Overlay column
@@ -37,6 +38,11 @@ class Url extends Column
     private $images;
 
     /**
+     * @var File
+     */
+    private $driver;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
@@ -51,6 +57,7 @@ class Url extends Column
         StoreManagerInterface $storeManager,
         UrlInterface $urlInterface,
         Images $images,
+        File $file,
         array $components = [],
         array $data = []
     ) {
@@ -58,6 +65,7 @@ class Url extends Column
         $this->storeManager = $storeManager;
         $this->urlInterface = $urlInterface;
         $this->images = $images;
+        $this->driver = $file;
     }
 
     /**
@@ -71,7 +79,7 @@ class Url extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item['encoded_id'] = $this->images->idEncode(basename($item['path']));
+                $item['encoded_id'] = $this->images->idEncode($item['path']);
                 $item[$this->getData('name')] = $this->getUrl($item[$this->getData('name')]);
             }
         }
