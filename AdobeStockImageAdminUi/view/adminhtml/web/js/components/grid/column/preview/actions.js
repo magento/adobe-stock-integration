@@ -142,8 +142,7 @@ define([
             var self = this,
                 imagePath = self.preview().displayedRecord().path,
                 imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
-                imageFilename = imagePath.substring(imagePath.lastIndexOf('/') + 1),
-                record = this.getRecordFromMediaGalleryProvider(imageFilename),
+                record = this.getRecordFromMediaGalleryProvider(imagePath),
                 subscription;
 
             if (!record) {
@@ -173,14 +172,14 @@ define([
         /**
          * Get image data by image file name
          *
-         * @param {String} imageFilename
+         * @param {String} path
          * @returns {null|Object}
          */
-        getRecordFromMediaGalleryProvider: function (imageFilename) {
+        getRecordFromMediaGalleryProvider: function (path) {
             var report = null;
 
             this.imageItems.each(function (item) {
-                if (item.name === imageFilename) {
+                if (item.path === path) {
                     report = item;
 
                     return false;
