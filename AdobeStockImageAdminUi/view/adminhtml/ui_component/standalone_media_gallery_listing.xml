@@ -12,19 +12,19 @@
             <button name="search_adobe_stock">
                 <param name="on_click" xsi:type="string">jQuery(".adobe-search-images-modal").trigger("openModal");</param>
                 <param name="sort_order" xsi:type="number">100</param>
-                <class>action-secondary</class>
+                <class>media-gallery-actions-buttons</class>
                 <label translate="true">Search Adobe Stock</label>
             </button>
         </buttons>
     </settings>
     <listingToolbar name="listing_top">
         <filters name="listing_filters">
-            <filterSelect name="licensed" provider="${ $.parentName }" sortOrder="50">
+            <filterSelect name="is_licensed" provider="${ $.parentName }" sortOrder="50">
                 <settings>
                     <caption translate="true">All</caption>
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Licensed\Options"/>
                     <label translate="true">License Status</label>
-                    <dataScope>licensed</dataScope>
+                    <dataScope>is_licensed</dataScope>
                 </settings>
             </filterSelect>
             <filterSelect name="source" provider="${ $.parentName }" sortOrder="60">
@@ -45,5 +45,13 @@
                 <sortable>false</sortable>
             </settings>
         </column>
+        <column name="thumbnail_url" component="Magento_AdobeStockImageAdminUi/js/mediaGallery/grid/columns/licenseImage">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="imageDetailsurl" xsi:type="url" path="media_gallery/image/details"/>
+                    <item name="imageComponent" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns.preview</item>
+                </item>
+	    </argument>
+	</column>
     </columns>
 </listing>
