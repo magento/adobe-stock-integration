@@ -8,10 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Api\AssetRepository;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -23,21 +21,6 @@ class GetByIdTest extends WebapiAbstract
     private const RESOURCE_PATH = '/V1/adobestock/asset';
     private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
     private const SERVICE_OPERATION = 'GetById';
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * Set up
-     *
-     * @return void
-     */
-    public function setUp(): void
-    {
-        $this->objectManager = Bootstrap::getObjectManager();
-    }
 
     /**
      * Test get asset by id API with NoSuchEntityException

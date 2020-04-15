@@ -7,11 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Api\AssetRepository;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -24,26 +21,6 @@ class DeleteByIdTest extends WebapiAbstract
     private const RESOURCE_PATH = '/V1/adobestock/asset';
     private const SERVICE_OPERATION_DELETE_BY_ID = 'DeleteById';
     private const SERVICE_OPERATION_GET_BY_ID = 'GetById';
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $assetCollectionFactory;
-
-    /**
-     * Set up
-     *
-     * @return void
-     */
-    public function setUp(): void
-    {
-        $this->objectManager = Bootstrap::getObjectManager();
-    }
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
