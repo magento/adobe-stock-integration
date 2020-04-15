@@ -6,19 +6,38 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\MediaGallerySynchronizationApi\Api\ImagesIndexerInterface" type="Magento\MediaGallerySynchronization\Model\ImagesIndexer"/>
+    <preference for="Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface" type="Magento\MediaGallerySynchronization\Model\Synchronize"/>
+    <preference for="Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface" type="Magento\MediaGallerySynchronization\Model\SynchronizeFiles"/>
     <preference for="Magento\MediaGallerySynchronizationApi\Api\ExcludedDirectoriesInterface" type="Magento\MediaGallerySynchronization\Model\Directories\ExcludedDirectories"/>
-    <type name="Magento\MediaGallerySynchronizationApi\Api\ImagesIndexerInterface">
+    <type name="Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool">
         <arguments>
-            <argument name="indexers" xsi:type="array">
-                <item name="100" xsi:type="object">Magento\MediaGallerySynchronization\Model\AssetImagesSynchronization</item>
+            <argument name="synchronizers" xsi:type="array">
+                <item name="media_gallery_asset_synchronizer" xsi:type="object">Magento\MediaGallerySynchronization\Model\SynchronizeFiles</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="mediaGallerySynchronization" xsi:type="object">Magento\MediaGallerySynchronization\Console\Command\SynchronizeAssets</item>
+                <item name="mediaGallerySynchronization" xsi:type="object">Magento\MediaGallerySynchronization\Console\Command\Synchronize</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\Value">
+        <plugin name="admin_system_config_adobe_stock_save_plugin" type="Magento\MediaGallerySynchronization\Plugin\MediaGallerySyncTrigger"/>
+    </type>
+    <type name="Magento\MediaGallerySynchronizationApi\Api\ExcludedDirectoriesInterface">
+        <arguments>
+            <argument name="patterns" xsi:type="array">
+                <item name="captcha" xsi:type="string">/^captcha/</item>
+                <item name="catalog" xsi:type="string">/^catalog\/product/</item>
+                <item name="customer" xsi:type="string">/^customer/</item>
+                <item name="downloadable" xsi:type="string">/^downloadable/</item>
+                <item name="import" xsi:type="string">/^import/</item>
+                <item name="theme" xsi:type="string">/^theme/</item>
+                <item name="theme_customization" xsi:type="string">/^theme_customization/</item>
+                <item name="tmp" xsi:type="string">/^tmp/</item>
+                <item name="directories-with-dots" xsi:type="string">/^\./</item>
             </argument>
         </arguments>
     </type>

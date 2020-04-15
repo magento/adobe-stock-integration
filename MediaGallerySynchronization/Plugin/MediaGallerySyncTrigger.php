@@ -5,30 +5,28 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Plugin;
+namespace Magento\MediaGallerySynchronization\Plugin;
 
-use Magento\MediaGallerySynchronizationApi\Api\ImagesIndexerInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\Framework\App\Config\Value;
 
 /**
- * Plugin to update media gallery grid table when media gallery enabled in configuration
+ * Plugin to synchronize media storage and media assets database recoders when media gallery enabled in configuration
  */
-class MediaGalleryIndexerTrigger
+class MediaGallerySyncTrigger
 {
     private const MEDIA_GALLERY_CONFIG_VALUE = 'system/media_gallery/enabled';
     private const MEDIA_GALLERY_ENABLED_VALUE = 1;
 
     /**
-     * @var ImagesIndexerInterface
+     * @var SynchronizeInterface
      */
     private $imagesIndexer;
 
     /**
-     * MediaGalleryIndexerTrigger constructor.
-     *
-     * @param ImagesIndexerInterface $imagesIndexer
+     * @param SynchronizeInterface $imagesIndexer
      */
-    public function __construct(ImagesIndexerInterface $imagesIndexer)
+    public function __construct(SynchronizeInterface $imagesIndexer)
     {
         $this->imagesIndexer = $imagesIndexer;
     }
@@ -39,6 +37,7 @@ class MediaGalleryIndexerTrigger
      * @param Value $config
      * @param Value $result
      * @return Value
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(Value $config, Value $result): Value

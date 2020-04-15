@@ -49,16 +49,4 @@
     <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Provider">
         <plugin name="add_license_data_to_media_asset" type="Magento\AdobeStockImage\Model\Plugin\AddLicenseDataToAsset"/>
     </type>
-    <type name="Magento\MediaGallerySynchronizationApi\Api\ImagesIndexerInterface">
-        <arguments>
-            <argument name="indexers" xsi:type="array">
-                <item name="200" xsi:type="object">Magento\AdobeStockImage\Model\AssetIndexer</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\AdobeStockImage\Model\AssetIndexer">
-        <arguments>
-            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
-        </arguments>
-    </type>
 </config>
