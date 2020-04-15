@@ -195,7 +195,7 @@ define([
          * @param {Object} record
          */
         selectRecord: function (record) {
-            uiRegistry.get('index = thumbnail_url').selected(record);
+            uiRegistry.get('name =' + this.mediaGallery).selected(record);
         },
 
         /**
