@@ -33,4 +33,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGalleryUi\Model\FilterParametersProviderComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="licenseData" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\FilterParametersProvider\LicenseData</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -7,6 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Listing;
 
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\ReportingInterface;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Magento\Framework\App\RequestInterface;
+use Magento\MediaGalleryUi\Model\SelectModifierInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
@@ -15,12 +21,60 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiCo
 class DataProvider extends UiComponentDataProvider
 {
     /**
+     * @var SelectModifierInterface
+     */
+    private $filterParametersProvider;
+
+    /**
+     * @param $name
+     * @param $primaryFieldName
+     * @param $requestFieldName
+     * @param ReportingInterface $reporting
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
+     * @param SelectModifierInterface $filterParametersProvider
+     * @param array $meta
+     * @param array $data
+     */
+    public function __construct(
+        $name,
+        $primaryFieldName,
+        $requestFieldName,
+        ReportingInterface $reporting,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        RequestInterface $request,
+        FilterBuilder $filterBuilder,
+        SelectModifierInterface $filterParametersProvider,
+        array $meta = [],
+        array $data = []
+    ) {
+        parent::__construct(
+            $name,
+            $primaryFieldName,
+            $requestFieldName,
+            $reporting,
+            $searchCriteriaBuilder,
+            $request,
+            $filterBuilder,
+            $meta,
+            $data
+        );
+
+        $this->filterParametersProvider = $filterParametersProvider;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getData(): array
     {
         try {
-            return $this->searchResultToOutput($this->getSearchResult());
+            /** @var SearchResult $searchResult */
+            $searchResult = $this->getSearchResult();
+            $this->filterParametersProvider->apply($searchResult->getSelect(), $this->getSearchCriteria());
+
+            return $this->searchResultToOutput($searchResult);
         } catch (\Exception $exception) {
             return [
                 'items' => [],
