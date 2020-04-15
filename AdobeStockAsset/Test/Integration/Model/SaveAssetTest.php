@@ -27,6 +27,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Provides integration tests for saving and Adobe Stock asset.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveAssetTest extends TestCase
 {
