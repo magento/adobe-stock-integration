@@ -148,7 +148,7 @@ define([
             if (!record) {
                 subscription = this.imageItems.subscribe(function () {
                     subscription.dispose();
-                    record = self.getRecordFromMediaGalleryProvider(imageFilename);
+                    record = self.getRecordFromMediaGalleryProvider(imagePath);
 
                     if (!record) {
                         mediaGallery.notLocated();
