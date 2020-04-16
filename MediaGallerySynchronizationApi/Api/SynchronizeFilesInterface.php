@@ -7,12 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronizationApi\Api;
 
-use Magento\MediaGallerySynchronizationApi\Model\SynchronizerInterface;
-
 /**
- * Synchronize assets from the provided path in the media storage to database
+ * Synchronize assets from the provided files information to database
  */
-interface SynchronizeFilesInterface extends SynchronizerInterface
+interface SynchronizeFilesInterface
 {
-
+    /**
+     * Create media gallery assets based on files information and save them to database
+     *
+     * @param \SplFileInfo[] $items
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function execute(array $items): void;
 }

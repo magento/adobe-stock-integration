@@ -9,12 +9,11 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\MediaGallerySynchronization\Model\Directories\ExcludedDirectories;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
-use Magento\MediaGallerySynchronizationApi\Model\SynchronizerInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool;
 use Psr\Log\LoggerInterface;
 
@@ -51,20 +50,29 @@ class Synchronize implements SynchronizeInterface
     private $synchronizerPool;
 
     /**
-     * FilesIndexer constructor.
+     * @var GetAssetsIterator
+     */
+    private $getAssetsIterator;
+
+    /**
      * @param ExcludedDirectories $excludedDirectories
      * @param Filesystem $filesystem
+     * @param LoggerInterface $log
+     * @param SynchronizerPool $synchronizerPool
+     * @param GetAssetsIterator $assetsIterator
      */
     public function __construct(
         ExcludedDirectories $excludedDirectories,
         Filesystem $filesystem,
         LoggerInterface $log,
-        SynchronizerPool $synchronizerPool
+        SynchronizerPool $synchronizerPool,
+        GetAssetsIterator $assetsIterator
     ) {
         $this->excludedDirectories = $excludedDirectories;
         $this->filesystem = $filesystem;
         $this->log = $log;
         $this->synchronizerPool = $synchronizerPool;
+        $this->getAssetsIterator = $assetsIterator;
     }
 
     /**
@@ -72,27 +80,17 @@ class Synchronize implements SynchronizeInterface
      */
     public function execute(): void
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
-                $this->getMediaDirectory()->getAbsolutePath(),
-                \FilesystemIterator::SKIP_DOTS |
-                \FilesystemIterator::UNIX_PATHS |
-                \RecursiveDirectoryIterator::FOLLOW_SYMLINKS
-            ),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-
         $failedItems = [];
 
         /** @var \SplFileInfo $item */
-        foreach ($iterator as $item) {
+        foreach ($this->getAssetsIterator->execute($this->getMediaDirectory()->getAbsolutePath()) as $item) {
             $path = $item->getPath() . '/' . $item->getFilename();
             if (!$this->isApplicable($path)) {
                 continue;
             }
 
             foreach ($this->synchronizerPool->get() as $synchronizer) {
-                if ($synchronizer instanceof SynchronizerInterface) {
+                if ($synchronizer instanceof SynchronizeFilesInterface) {
                     try {
                         $synchronizer->execute([$item]);
                     } catch (\Exception $exception) {
@@ -127,11 +125,10 @@ class Synchronize implements SynchronizeInterface
             return $this->getMediaDirectory()->getRelativePath($path)
                 && !$this->excludedDirectories->isExcluded($path)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
-        } catch (ValidatorException $exception) {
+        } catch (\Exception $exception) {
             $this->log->critical($exception);
             return false;
         }
-
     }
 
     /**

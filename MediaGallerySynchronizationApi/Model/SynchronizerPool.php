@@ -7,21 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronizationApi\Model;
 
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+
 /**
  * A pool of Media storage to database synchronizers
- * @see SynchronizerInterface
+ * @see SynchronizeFilesInterface
  */
 class SynchronizerPool
 {
     /**
      * Media storage to database synchronizers
      *
-     * @var SynchronizerInterface[]
+     * @var SynchronizeFilesInterface[]
      */
     private $synchronizers;
 
     /**
-     * @param SynchronizerInterface[] $synchronizers
+     * @param SynchronizeFilesInterface[] $synchronizers
      */
     public function __construct(array $synchronizers = [])
     {
@@ -31,7 +33,7 @@ class SynchronizerPool
     /**
      * Get all synchronizers from the pool
      *
-     * @return SynchronizerInterface[]
+     * @return SynchronizeFilesInterface[]
      */
     public function get(): array
     {

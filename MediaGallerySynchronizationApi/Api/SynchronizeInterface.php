@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronizationApi\Api;
 
 /**
- * Synchronize assets from the provided path in the media storage to database
+ * Synchronize assets from the media storage to database
  */
 interface SynchronizeInterface
 {
     /**
-     * Synchronize assets from the provided path in the media storage to database
+     * Synchronize assets from the media storage to database
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */

@@ -23,7 +23,7 @@ class Synchronize extends Command
     /**
      * @var SynchronizeInterface
      */
-    protected $synchronizeAssets;
+    private $synchronizeAssets;
 
     /**
      * @var State $state
