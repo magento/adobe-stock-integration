@@ -27,11 +27,10 @@ class Fulltext implements SelectModifierInterface
      */
     public function apply(Select $select, SearchCriteriaInterface $searchCriteria): void
     {
-        $connection = $select->getConnection();
         $value = $this->getValueFromFulltextSearch($searchCriteria);
 
         if ($value) {
-            $select->where($this->getWhereCondition($value, $connection));
+            $select->where($this->getWhereCondition($value, $select->getConnection()));
         }
     }
 

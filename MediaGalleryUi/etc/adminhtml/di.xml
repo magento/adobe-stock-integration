@@ -23,12 +23,12 @@
     </type>
     <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
         <arguments>
-            <argument name="filterParametersProvider" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProviderComposite</argument>
+            <argument name="filterParametersProvider" xsi:type="object">Magento\MediaGalleryUi\Model\SelectModifierComposite</argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\FilterParametersProviderComposite">
+    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
         <arguments>
-            <argument name="providers" xsi:type="array">
+            <argument name="selectModifiers" xsi:type="array">
                 <item name="fulltextFilter" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Fulltext</item>
             </argument>
         </arguments>

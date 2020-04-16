@@ -13,9 +13,9 @@ use Magento\Framework\DB\Select;
 use Magento\MediaGalleryUi\Model\SelectModifierInterface;
 
 /**
- * Apply license data
+ * Add license state
  */
-class LicenseData implements SelectModifierInterface
+class IsLicensed implements SelectModifierInterface
 {
     /**
      * @inheritdoc

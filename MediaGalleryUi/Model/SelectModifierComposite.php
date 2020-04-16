@@ -14,19 +14,19 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * A class that keeping the list of asset list filters
  */
-class FilterParametersProviderComposite implements SelectModifierInterface
+class SelectModifierComposite implements SelectModifierInterface
 {
     /**
      * @var SelectModifierInterface[]
      */
-    private $providers;
+    private $selectModifiers;
 
     /**
-     * @param SelectModifierInterface[] $providers
+     * @param SelectModifierInterface[] $selectModifiers
      */
-    public function __construct(array $providers = [])
+    public function __construct(array $selectModifiers = [])
     {
-        $this->providers = $providers;
+        $this->selectModifiers = $selectModifiers;
     }
 
     /**
@@ -38,8 +38,8 @@ class FilterParametersProviderComposite implements SelectModifierInterface
      */
     public function apply(Select $select, SearchCriteriaInterface $searchCriteria): void
     {
-        foreach ($this->providers as $provider) {
-            $provider->apply($select, $searchCriteria);
+        foreach ($this->selectModifiers as $selectModifier) {
+            $selectModifier->apply($select, $searchCriteria);
         }
     }
 }

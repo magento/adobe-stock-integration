@@ -33,10 +33,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\FilterParametersProviderComposite">
+    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
         <arguments>
-            <argument name="providers" xsi:type="array">
-                <item name="licenseData" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\FilterParametersProvider\LicenseData</item>
+            <argument name="selectModifiers" xsi:type="array">
+                <item name="isLicensed" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\FilterParametersProvider\IsLicensed</item>
             </argument>
         </arguments>
     </type>
