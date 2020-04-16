@@ -8,12 +8,17 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Filesystem;
 use DateTime;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Load Media Asset from database by id add all related data to it
@@ -36,6 +41,16 @@ class GetImageDetailsByAssetId
     private $storeManager;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @var SourceIconProvider
      */
     private $sourceIconProvider;
@@ -46,31 +61,35 @@ class GetImageDetailsByAssetId
     private $imageTypes;
 
     /**
-     * @var GetAssetGridDataById
+     * @var GetAssetKeywordsInterface
      */
-    private $getAssetGridDataById;
+    private $getAssetKeywords;
 
     /**
-     * GetImageDetailsByAssetId constructor.
-     *
      * @param GetByIdInterface $getAssetById
      * @param StoreManagerInterface $storeManager
+     * @param ResourceConnection $resource
+     * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
-     * @param GetAssetGridDataById $getAssetGridDataById
+     * @param GetAssetKeywordsInterface $getAssetKeywords
      * @param array $imageTypes
      */
     public function __construct(
         GetByIdInterface $getAssetById,
         StoreManagerInterface $storeManager,
+        ResourceConnection $resource,
+        Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
-        GetAssetGridDataById $getAssetGridDataById,
+        GetAssetKeywordsInterface $getAssetKeywords,
         array $imageTypes = []
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
+        $this->resource = $resource;
+        $this->filesystem = $filesystem;
         $this->sourceIconProvider = $sourceIconProvider;
-        $this->getAssetGridDataById = $getAssetGridDataById;
         $this->imageTypes = $imageTypes;
+        $this->getAssetKeywords = $getAssetKeywords;
     }
 
     /**
@@ -85,41 +104,41 @@ class GetImageDetailsByAssetId
     public function execute(int $assetId): array
     {
         $asset = $this->getAssetById->execute($assetId);
-        $assetGridData = $this->getAssetGridDataById->execute($assetId);
 
-        $imageUrl = $this->getUrl($asset->getPath());
-        $imageType = $this->getImageTypeByContentType($assetGridData['content_type']);
-        $source = $assetGridData['source']
-            ? $this->sourceIconProvider->getSourceIconUrl($assetGridData['source'])
-            : null;
-        $tags = explode(',', $assetGridData['keywords']);
-        $size = (int) $assetGridData['size'] ?? 0;
-        $contentType = $assetGridData['content_type'] ?? '';
+        $tags = [];
+        //TODO: Must be replaced with new bulk interface: \Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface
+        $keywords = $this->getAssetKeywords->execute($asset->getId());
+        foreach ($keywords as $keyword) {
+            $tags[] = $keyword->getKeyword();
+        }
+
+        $size = $this->getImageSize($asset->getPath());
 
         return [
-            'image_url' => $imageUrl,
+            'image_url' => $this->getUrl($asset->getPath()),
             'title' => $asset->getTitle(),
+            'path' => $asset->getPath(),
             'id' => $assetId,
             'details' => [
                 [
                     'title' => __('Type'),
-                    'value' => $imageType,
+                    'value' => $this->getImageTypeByContentType($asset->getContentType()),
                 ],
                 [
                     'title' => __('Created'),
-                    'value' => $this->formatDate($assetGridData['created_at'])
+                    'value' => $this->formatDate($asset->getCreatedAt())
                 ],
                 [
                     'title' => __('Modified'),
-                    'value' => $this->formatDate($assetGridData['updated_at'])
+                    'value' => $this->formatDate($asset->getUpdatedAt())
                 ],
                 [
                     'title' => __('Width'),
-                    'value' => sprintf('%spx', $assetGridData['width'])
+                    'value' => sprintf('%spx', $asset->getWidth())
                 ],
                 [
                     'title' => __('Height'),
-                    'value' => sprintf('%spx', $assetGridData['height'])
+                    'value' => sprintf('%spx', $asset->getHeight())
                 ],
                 [
                     'title' => __('Size'),
@@ -128,8 +147,8 @@ class GetImageDetailsByAssetId
             ],
             'size' => $size,
             'tags' => $tags,
-            'source' => $source,
-            'content_type' => $contentType
+            'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
+            'content_type' => $asset->getContentType()
         ];
     }
 
@@ -167,14 +186,31 @@ class GetImageDetailsByAssetId
      * Format date
      *
      * @param string $date
-     *
      * @return string
+     * @throws \Exception
      */
     private function formatDate(string $date): string
     {
         $dateTime = new DateTime($date);
 
         return $dateTime->format(self::DATE_FORMAT);
+    }
+
+    /**
+     * Get image size
+     *
+     * @param string $path
+     *
+     * @return int
+     *
+     * @throws FileSystemException
+     */
+    private function getImageSize(string $path): int
+    {
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $imageStatistics = $mediaDirectory->stat($path);
+
+        return (int) ($imageStatistics['size'] ?? 0);
     }
 
     /**
