@@ -36,6 +36,7 @@ class DataProvider extends UiComponentDataProvider
      * @param SelectModifierInterface $filterParametersProvider
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
