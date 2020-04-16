@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model\Client;
 
 use AdobeStock\Api\Request\Files as FilesRequest;
-use \AdobeStock\Api\Response\Files as FilesResponse;
+use AdobeStock\Api\Response\Files as FilesResponse;
 use Magento\AdobeImsApi\Api\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeStockClient\Model\ConnectionFactory;
 use Magento\AdobeStockClient\Model\FilesRequestFactory;
+use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
 use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -61,13 +61,15 @@ class Files implements FilesInterface
     private $logger;
 
     /**
+     * Files constructor.
+     *
      * @param ImsConfig $imsConfig
      * @param ClientConfig $clientConfig
      * @param LocaleResolver $localeResolver
      * @param GetAccessTokenInterface $getAccessToken
      * @param ConnectionFactory $connectionFactory
      * @param FilesRequestFactory $requestFilesFactory
-     * @param LoggerInterface $log
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ImsConfig $imsConfig,
