@@ -21,7 +21,7 @@ use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Psr\Log\LoggerInterface;
 
 /**
- * Command for retrieving files information from Adobe Stock API
+ * Used for retrieving files information from Adobe Stock API
  */
 class Files implements FilesInterface
 {

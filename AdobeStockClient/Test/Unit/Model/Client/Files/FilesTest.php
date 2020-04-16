@@ -8,10 +8,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Test\Unit\Model\Client\Files;
 
 use AdobeStock\Api\Client\AdobeStock;
-use AdobeStock\Api\Response\Files as FilesResponse;
-use AdobeStock\Api\Request\Files;
+use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\Files as FilesRequest;
-use \AdobeStock\Api\Models\StockFile;
+use AdobeStock\Api\Response\Files as FilesResponse;
 use Magento\AdobeIms\Model\Config as ImsConfig;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeStockClient\Model\Client\Files as AdobeStockFiles;
@@ -26,7 +25,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test case when the curl files requests returns and empty files data
+ * Provides unit test for the \Magento\AdobeStockClient\Model\Client\Files
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilesTest extends TestCase
 {
