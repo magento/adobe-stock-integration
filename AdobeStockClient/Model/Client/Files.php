@@ -8,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model\Client;
 
 use AdobeStock\Api\Request\Files as FilesRequest;
+use \AdobeStock\Api\Response\Files as FilesResponse;
 use Magento\AdobeImsApi\Api\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeStockClient\Model\ConnectionFactory;
+use Magento\AdobeStockClient\Model\FilesRequestFactory;
 use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\AdobeStockClientApi\Api\Client\FilesInterface;
 use Psr\Log\LoggerInterface;
@@ -48,9 +51,14 @@ class Files implements FilesInterface
     private $connectionFactory;
 
     /**
+     * @var FilesRequestFactory
+     */
+    private $requestFilesFactory;
+
+    /**
      * @var LoggerInterface
      */
-    private $log;
+    private $logger;
 
     /**
      * @param ImsConfig $imsConfig
@@ -58,6 +66,7 @@ class Files implements FilesInterface
      * @param LocaleResolver $localeResolver
      * @param GetAccessTokenInterface $getAccessToken
      * @param ConnectionFactory $connectionFactory
+     * @param FilesRequestFactory $requestFilesFactory
      * @param LoggerInterface $log
      */
     public function __construct(
@@ -66,14 +75,16 @@ class Files implements FilesInterface
         LocaleResolver $localeResolver,
         GetAccessTokenInterface $getAccessToken,
         ConnectionFactory $connectionFactory,
-        LoggerInterface $log
+        FilesRequestFactory $requestFilesFactory,
+        LoggerInterface $logger
     ) {
         $this->imsConfig = $imsConfig;
         $this->clientConfig = $clientConfig;
         $this->localeResolver = $localeResolver;
         $this->getAccessToken = $getAccessToken;
         $this->connectionFactory = $connectionFactory;
-        $this->log = $log;
+        $this->requestFilesFactory = $requestFilesFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -91,16 +102,19 @@ class Files implements FilesInterface
             $this->clientConfig->getProductName(),
             $this->clientConfig->getTargetEnvironment()
         );
-        $request = new FilesRequest();
-        $request->setIds($ids)
+
+        /** @var FilesRequest $requestFiles */
+        $requestFiles = $this->requestFilesFactory->create();
+        $requestFiles->setIds($ids)
             ->setLocale($locale)
             ->setResultColumns($columns);
 
         try {
-            $response = $client->getFiles($request, $this->getAccessToken->execute());
+            /** @var FilesResponse $response */
+            $response = $client->getFiles($requestFiles, $this->getAccessToken->execute());
         } catch (\Exception $exception) {
-            $this->log->error($exception);
-            throw new IntegrationException(__('Could not retrieve files information.'), $exception);
+            $this->logger->error($exception);
+            throw new LocalizedException(__('Could not retrieve files information.'), $exception);
         }
 
         $result = array_map(
