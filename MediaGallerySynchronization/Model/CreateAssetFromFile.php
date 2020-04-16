@@ -78,7 +78,8 @@ class CreateAssetFromFile
                     'width' => $width,
                     'height' => $height,
                     'size' => $file->getSize(),
-                    'content_type' => 'image/' . $file->getExtension()
+                    'content_type' => 'image/' . $file->getExtension(),
+                    'source' => 'Local'
                 ]
             ]
         );
