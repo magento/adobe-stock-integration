@@ -23,15 +23,26 @@
             <button name="delete_folder">
                 <param name="on_click" xsi:type="string">jQuery('#delete_folder').trigger('delete_folder');</param>
                 <param name="disabled" xsi:type="string">disabled</param>
-                <param name="sort_order" xsi:type="number">30</param>
-                <class>action-default scalable action-quaternary</class>
+                <param name="sort_order" xsi:type="number">20</param>
+                <class>action-default scalable add media-gallery-actions-buttons</class>
                 <label translate="true">Delete Folder</label>
             </button>
             <button name="create_folder">
                 <param name="on_click" xsi:type="string">jQuery('#create_folder').trigger('create_folder');</param>
-                <param name="sort_order" xsi:type="number">40</param>
-                <class>action-default scalable add</class>
+                <param name="sort_order" xsi:type="number">30</param>
+                <class>action-default scalable add media-gallery-actions-buttons</class>
                 <label translate="true">Create Folder</label>
+            </button>
+            <button name="delete_selected">
+                <param name="on_click" xsi:type="string">return false;</param>
+                <param name="sort_order" xsi:type="number">40</param>
+                <class>action-default scalable add media-gallery-actions-buttons no-display</class>
+                <label translate="true">Delete Selected</label>
+            </button>
+            <button name="upload_image">
+                <param name="on_click" xsi:type="string">jQuery('#image-uploader-input').click();</param>
+                <class>action-default scalable add media-gallery-actions-buttons</class>
+                <label translate="true">Upload Image</label>
             </button>
         </buttons>
     </settings>
@@ -59,13 +70,13 @@
             </item>
         </argument>
     </container>
-    <listingToolbar name="listing_top">
+    <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <filterInput name="directory" provider="${ $.parentName }" sortOrder="10">
+            <filterInput name="path" provider="${ $.parentName }" sortOrder="100">
                 <settings>
                     <visible>false</visible>
-                    <dataScope>directory</dataScope>
+                    <dataScope>path</dataScope>
                     <label translate="true">Directory</label>
                 </settings>
             </filterInput>
@@ -109,6 +120,22 @@
                 <pageSize>32</pageSize>
             </settings>
         </paging>
+        <container
+            name="sorting"
+            provider="standalone_media_gallery_listing.media_gallery_listing_data_source"
+            displayArea="sorting"
+            sortOrder="20"
+            component="Magento_Ui/js/grid/sortBy">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">
+                            standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </container>
     </listingToolbar>
     <container name="media_gallery_directories"
                class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
@@ -132,7 +159,7 @@
                 <item name="config" xsi:type="array">
                     <item name="fields" xsi:type="array">
                         <item name="url" xsi:type="string">thumbnail_url</item>
-                    </item>		    
+                    </item>
                     <item name="url" xsi:type="string">thumbnail_url</item>
                     <item name="deleteImageUrl" xsi:type="url" path="media_gallery/image/delete"/>
                     <item name="messagesName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.messages</item>
@@ -144,5 +171,23 @@
                 <sortable>false</sortable>
             </settings>
         </column>
+        <column name="title">
+            <settings>
+                <label translate="true">Name</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="created_at">
+            <settings>
+                <label translate="true">Uploaded date</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
     </columns>
+     <container name="media_gallery_image_uploader"
+                class="Magento\MediaGalleryUi\Ui\Component\ImageUploaderStandAlone"
+                template="Magento_MediaGalleryUi/image-uploader"
+                component="Magento_MediaGalleryUi/js/image-uploader"/>
 </listing>

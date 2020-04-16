@@ -27,8 +27,6 @@ define([
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
             imageItems: [],
-            mediaGalleryProvider: 'media_gallery_listing.media_gallery_listing_data_source',
-            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -38,7 +36,7 @@ define([
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
                 messages: '${ $.messagesName }',
-                imageDirectory: '${ $.mediaGalleryDirectoryComponent }'
+                imageDirectory: '${ $.mediaGalleryName }'
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
@@ -144,22 +142,13 @@ define([
             var self = this,
                 imagePath = self.preview().displayedRecord().path,
                 imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
-                imageFilename = imagePath.substring(imagePath.lastIndexOf('/') + 1),
-                locatedImage = $('div[data-row="file"]:has(img[alt=\"' + imageFilename + '\"])'),
-                recordIndex,
-                record = null,
+                record = this.getRecordFromMediaGalleryProvider(imagePath),
                 subscription;
 
-            if (!locatedImage.length) {
-                subscription = this.imageItems.subscribe(function (items) {
+            if (!record) {
+                subscription = this.imageItems.subscribe(function () {
                     subscription.dispose();
-                    items.each(function (item) {
-                        if (item.name === imageFilename) {
-                            record = item;
-
-                            return false;
-                        }
-                    });
+                    record = self.getRecordFromMediaGalleryProvider(imagePath);
 
                     if (!record) {
                         mediaGallery.notLocated();
@@ -175,11 +164,29 @@ define([
                 this.imageDirectory().selectStorageRoot();
             }
 
-            if (locatedImage.length) {
-                recordIndex = locatedImage.closest('.masonry-image-column').data('repeat-index');
-                record = this.imageItems()[recordIndex];
+            if (record) {
                 this.selectRecord(record);
             }
+        },
+
+        /**
+         * Get image data by image file name
+         *
+         * @param {String} path
+         * @returns {null|Object}
+         */
+        getRecordFromMediaGalleryProvider: function (path) {
+            var report = null;
+
+            this.imageItems.each(function (item) {
+                if (item.path === path) {
+                    report = item;
+
+                    return false;
+                }
+            });
+
+            return report;
         },
 
         /**
@@ -188,7 +195,7 @@ define([
          * @param {Object} record
          */
         selectRecord: function (record) {
-            uiRegistry.get('index = thumbnail_url').selected(record);
+            uiRegistry.get('name =' + this.mediaGallery).selected(record);
         },
 
         /**
@@ -236,11 +243,9 @@ define([
          * @param {bool} isLicensed
          */
         save: function (record, fileName, license, isLicensed) {
-            var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser'),
-                requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
+            var requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
                     license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
-                destinationPath = (mediaBrowser.activeNode.path || '') + '/' + fileName + '.' +
-                    this.getImageExtension(record);
+                destinationPath = this.getDestinationPath(fileName, record);
 
             $.ajax({
                 type: 'POST',
@@ -278,7 +283,7 @@ define([
                     $.ajaxSetup({
                         async: false
                     });
-                    mediaBrowser.reload();
+                    this.reloadGrid();
                     $.ajaxSetup({
                         async: true
                     });
@@ -316,14 +321,64 @@ define([
         },
 
         /**
+         * Get image destination path
+         *
+         * @param {String} fileName
+         * @param {Object} record
+         * @returns {String}
+         */
+        getDestinationPath: function (fileName, record) {
+            var activeNodePath,
+                activeNode;
+
+            if (this.isMediaBrowser()) {
+                activeNode = this.getMageMediaBrowserData().activeNode;
+
+                activeNodePath = $('[data-id="' + activeNode.id + '"]').length === 0 ? '' : activeNode.path;
+            } else {
+                activeNodePath = this.imageDirectory().activeNode() || '';
+            }
+
+            return activeNodePath  + '/' + fileName + '.' + this.getImageExtension(record);
+        },
+
+        /**
+         * Reload grid
+         *
+         * @returns {*}
+         */
+        reloadGrid: function () {
+            var provider,
+                dataStorage;
+
+            if (this.isMediaBrowser()) {
+                return this.getMageMediaBrowserData().reload();
+            }
+
+            provider = uiRegistry.get('index = media_gallery_listing_data_source'),
+            dataStorage = provider.storage();
+
+            // this.subscriptionOnImageItems();
+            dataStorage.clearRequests();
+            provider.reload();
+        },
+
+        /**
+         * Get data for media browser
+         *
+         * @returns {Undefined|Object}
+         */
+        getMageMediaBrowserData: function () {
+            return $(this.preview().mediaGallerySelector).data('mageMediabrowser');
+        },
+
+        /**
          * Is the media browser used in the content of the grid
          *
          * @returns {Boolean}
          */
         isMediaBrowser: function () {
-            var mediaBrowser = $(this.preview().mediaGallerySelector).data('mageMediabrowser');
-
-            return typeof mediaBrowser !== 'undefined';
+            return typeof this.getMageMediaBrowserData() !== 'undefined';
         },
 
         /**
