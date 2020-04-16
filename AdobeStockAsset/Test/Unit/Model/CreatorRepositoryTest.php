@@ -72,7 +72,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->creatorCollectionFactory = $this->createMock(CreatorCollectionFactory::class);
         $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);

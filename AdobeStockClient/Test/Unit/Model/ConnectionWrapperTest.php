@@ -85,7 +85,7 @@ class ConnectionWrapperTest extends TestCase
         $this->getAccessToken = $this->createMock(GetAccessTokenInterface::class);
         $this->flushToken = $this->createMock(FlushUserTokensInterface::class);
         $this->httpInterface = $this->createMock(HttpInterface::class);
-        $this->adobeStockMock = $adobeStockMock = $this->createMock(AdobeStock::class);
+        $this->adobeStockMock = $this->createMock(AdobeStock::class);
         $this->connectionFactory->expects($this->once())->method('create')->willReturn($this->adobeStockMock);
         $this->configInterface->expects($this->once())->method('getProductName')->willReturn('name');
         $this->configInterface->expects($this->once())->method('getTargetEnvironment')->willReturn('target');

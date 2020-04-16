@@ -21,7 +21,6 @@ use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
-use Psr\Log\LoggerInterface;
 
 /**
  * Adapter for Adobe Stock SDK
@@ -37,11 +36,6 @@ class ConnectionWrapper
      * @var ImsConfig
      */
     private $imsConfig;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
 
     /**
      * @var GetAccessTokenInterface
@@ -72,7 +66,6 @@ class ConnectionWrapper
      * @param ClientConfig $clientConfig
      * @param ConnectionFactory $connectionFactory
      * @param ImsConfig $imsConfig
-     * @param LoggerInterface $logger
      * @param GetAccessTokenInterface $getAccessToken
      * @param FlushUserTokensInterface $flushUserTokens
      * @param HttpInterface|null $httpClient
@@ -81,7 +74,6 @@ class ConnectionWrapper
         ClientConfig $clientConfig,
         ConnectionFactory $connectionFactory,
         ImsConfig $imsConfig,
-        LoggerInterface $logger,
         GetAccessTokenInterface $getAccessToken,
         FlushUserTokensInterface $flushUserTokens,
         HttpInterface $httpClient = null
@@ -89,7 +81,6 @@ class ConnectionWrapper
         $this->clientConfig = $clientConfig;
         $this->connectionFactory = $connectionFactory;
         $this->imsConfig = $imsConfig;
-        $this->log = $logger;
         $this->getAccessToken = $getAccessToken;
         $this->flushUserTokens = $flushUserTokens;
         $this->httpClient = $httpClient;

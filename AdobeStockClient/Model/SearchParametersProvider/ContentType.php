@@ -29,13 +29,10 @@ class ContentType implements SearchParameterProviderInterface
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === self::CONTENT_TYPE_FILTER) {
-                    switch ($filter->getValue()) {
-                        case self::PHOTO:
-                            $searchParams->setFilterContentTypePhotos(true);
-                            break;
-                        case self::ILLUSRATION:
-                            $searchParams->setFilterContentTypeIllustration(true);
-                            break;
+                    if ($filter->getValue() == self::PHOTO) {
+                        $searchParams->setFilterContentTypePhotos(true);
+                    } elseif ($filter->getValue() == self::ILLUSRATION) {
+                        $searchParams->setFilterContentTypeIllustration(true);
                     }
                 }
             }

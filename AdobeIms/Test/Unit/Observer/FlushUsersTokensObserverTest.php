@@ -21,7 +21,7 @@ class FlushUsersTokensObserverTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\AdobeIms\Observer\FlushUsersTokensObserver */
     protected $model;
 
-    protected function setUp()
+    protected function setUp():void
     {
         $this->flushUserTokens = $this->createMock(\Magento\AdobeIms\Model\FlushUserTokens::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -36,7 +36,7 @@ class FlushUsersTokensObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test flush tokens observer
      */
-    public function testFlushUsersTokensObserver()
+    public function testFlushUsersTokensObserver(): void
     {
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserverMock */
         $eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);

@@ -65,11 +65,6 @@ class CallbackTest extends TestCase
     private $callback;
 
     /**
-     * @var MockObject $request
-     */
-    private $request;
-
-    /**
      * @var MockObject $authMock
      */
     private $authMock;
@@ -105,7 +100,6 @@ class CallbackTest extends TestCase
             ]
         );
         $this->userMock = $this->createMock(User::class);
-        $this->request = $this->createMock(Http::class);
         $this->userProfileRepositoryInterface = $this->createMock(UserProfileRepositoryInterface::class);
         $this->userProfileInterfaceFactory = $this->createMock(UserProfileInterfaceFactory::class);
         $this->getTokenInterface = $this->createMock(GetTokenInterface::class);

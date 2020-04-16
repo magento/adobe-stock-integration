@@ -54,7 +54,7 @@ class UserAuthorized implements UserAuthorizedInterface
                 && !empty($userProfile->getAccessToken())
                 && !empty($userProfile->getAccessTokenExpiresAt())
                 && strtotime($userProfile->getAccessTokenExpiresAt()) >= strtotime('now');
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             return false;
         }
     }
