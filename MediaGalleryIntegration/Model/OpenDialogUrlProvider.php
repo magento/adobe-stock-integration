@@ -11,7 +11,7 @@ use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Plugin to update open media gallery dialog URL for WYSIWYG
+ * Provider to get open media gallery dialog URL for WYSIWYG and widgets
  */
 class OpenDialogUrlProvider extends DataObject
 {
@@ -29,7 +29,7 @@ class OpenDialogUrlProvider extends DataObject
     }
 
     /**
-     * Update open media gallery dialog URL for WYSIWYG
+     * Get Url based on media gallery configuration
      *
      * @return DataObject
      */
