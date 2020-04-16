@@ -99,7 +99,7 @@ class Create extends Action implements HttpPostActionInterface
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred on attempt to cerate folder.'),
+                'message' => __('An error occurred on attempt to create folder.'),
             ];
         }
 
