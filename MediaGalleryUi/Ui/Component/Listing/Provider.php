@@ -77,8 +77,8 @@ class Provider extends SearchResult
         foreach ($data as $key => $asset) {
             $data[$key]['thumbnail_url'] = $asset['path'];
             $data[$key]['preview_url'] = $asset['path'];
-            $data[$key]['keywords'] = isset($keywords[$asset['id']]) ? implode(",", $keywords[$asset['id']]) : '';
-            $data[$key]['source'] = empty($asset['source']) ? 'Local' : $asset['source'];
+            $data[$key]['keywords'] = isset($keywords[$asset['id']]) ? implode(',', $keywords[$asset['id']]) : '';
+            $data[$key]['source'] = $asset['source'];
         }
         return $data;
     }
