@@ -13,7 +13,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Model\Directory\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
@@ -32,9 +32,9 @@ class Delete extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var DeleteByPathInterface
+     * @var DeleteAssetsByPathsInterface
      */
-    private $deleteFolderByPath;
+    private $deleteAssetsByPaths;
 
     /**
      * @var LoggerInterface
@@ -43,17 +43,17 @@ class Delete extends Action implements HttpPostActionInterface
 
     /**
      * @param Context $context
-     * @param DeleteByPathInterface $deleteFolderByPath
+     * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        DeleteByPathInterface $deleteFolderByPath,
+        DeleteAssetsByPathsInterface $deleteAssetsByPaths,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->deleteFolderByPath = $deleteFolderByPath;
+        $this->deleteAssetsByPaths = $deleteAssetsByPaths;
         $this->logger = $logger;
     }
 
@@ -78,7 +78,7 @@ class Delete extends Action implements HttpPostActionInterface
         }
 
         try {
-            $this->deleteFolderByPath->execute($path);
+            $this->deleteAssetsByPaths->execute([$path]);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

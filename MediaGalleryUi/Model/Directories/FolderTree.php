@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 
 /**
  * Build folder tree structure by path
@@ -28,7 +28,7 @@ class FolderTree
     private $path;
 
     /**
-     * @var IsBlacklistedInterface
+     * @var IsPathBlacklistedInterface
      */
     private $isBlacklisted;
 
@@ -37,12 +37,12 @@ class FolderTree
      *
      * @param Filesystem $filesystem
      * @param string $path
-     * @param IsBlacklistedInterface $isBlacklisted
+     * @param IsPathBlacklistedInterface $isBlacklisted
      */
     public function __construct(
         Filesystem $filesystem,
         string $path,
-        IsBlacklistedInterface $isBlacklisted
+        IsPathBlacklistedInterface $isBlacklisted
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;

@@ -14,7 +14,8 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Model\File\Command\DeleteByAssetIdInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -32,9 +33,14 @@ class Delete extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var DeleteByAssetIdInterface
+     * @var DeleteAssetsByPathsInterface
      */
-    private $deleteImageByAssetId;
+    private $deleteAssetsByPaths;
+
+    /**
+     * @var GetAssetsByIdsInterface
+     */
+    private $getAssetsByIds;
 
     /**
      * @var LoggerInterface
@@ -42,20 +48,21 @@ class Delete extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
-     * Delete constructor.
-     *
      * @param Context $context
-     * @param DeleteByAssetIdInterface $deleteImageByAssetId
+     * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
+     * @param GetAssetsByIdsInterface $getAssetsByIds
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        DeleteByAssetIdInterface $deleteImageByAssetId,
+        DeleteAssetsByPathsInterface $deleteAssetsByPaths,
+        GetAssetsByIdsInterface $getAssetsByIds,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->deleteImageByAssetId = $deleteImageByAssetId;
+        $this->deleteAssetsByPaths = $deleteAssetsByPaths;
+        $this->getAssetsByIds = $getAssetsByIds;
         $this->logger = $logger;
     }
 
@@ -80,7 +87,9 @@ class Delete extends Action implements HttpPostActionInterface
         }
 
         try {
-            $this->deleteImageByAssetId->execute($imageId);
+            $assets = $this->getAssetsByIds->execute([$imageId]);
+            $asset = current($assets);
+            $this->deleteAssetsByPaths->execute([$asset->getPath()]);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

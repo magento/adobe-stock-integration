@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\IndexerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
@@ -20,7 +20,7 @@ use Magento\Framework\Exception\ValidatorException;
 class FilesIndexer
 {
     /**
-     * @var IsBlacklistedInterface
+     * @var IsPathBlacklistedInterface
      */
     private $isBlacklisted;
 
@@ -35,11 +35,11 @@ class FilesIndexer
     private $filesystem;
 
     /**
-     * @param IsBlacklistedInterface $isBlacklisted
+     * @param IsPathBlacklistedInterface $isBlacklisted
      * @param Filesystem $filesystem
      */
     public function __construct(
-        IsBlacklistedInterface $isBlacklisted,
+        IsPathBlacklistedInterface $isBlacklisted,
         Filesystem $filesystem
     ) {
         $this->isBlacklisted = $isBlacklisted;
