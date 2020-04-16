@@ -31,14 +31,10 @@ class OpenDialogUrlProvider extends DataObject
     /**
      * Get Url based on media gallery configuration
      *
-     * @return DataObject
+     * @return string
      */
     public function getUrl(): string
     {
-        if ($this->config->isEnabled()) {
-            return 'media_gallery/index/index';
-        }
-
-        return 'cms/wysiwyg_images/index';
+        return $this->config->isEnabled() ? 'media_gallery/index/index' :  'cms/wysiwyg_images/index';
     }
 }
