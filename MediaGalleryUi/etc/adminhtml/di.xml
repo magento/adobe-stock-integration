@@ -21,4 +21,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
+        <arguments>
+            <argument name="selectModifier" xsi:type="object">Magento\MediaGalleryUi\Model\SelectModifierComposite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
+        <arguments>
+            <argument name="selectModifiers" xsi:type="array">
+                <item name="fulltextFilter" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Fulltext</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
