@@ -58,20 +58,12 @@ class CategoryRepositoryTest extends TestCase
      * Test delete an Adobe Stock category by id.
      *
      * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDeleteById(): void
     {
         $this->categoryRepository->deleteById(self::FIXTURE_ASSET_CATEGORY_ID);
-        try {
-            $this->categoryRepository->getById(self::FIXTURE_ASSET_CATEGORY_ID);
-            $this->fail('Expected NoSuchEntityException caught');
-        } catch (NoSuchEntityException $exception) {
-            $message = __(
-                'Adobe Stock asset category with id "%1" does not exist.',
-                self::FIXTURE_ASSET_CATEGORY_ID
-            );
-            $this->assertEquals($message, $exception->getMessage());
-        }
+        $this->categoryRepository->getById(self::FIXTURE_ASSET_CATEGORY_ID);
     }
 
     /**
@@ -113,7 +105,7 @@ class CategoryRepositoryTest extends TestCase
         /** @var AssetSearchResultsInterface $searchResult */
         $searchResult = $this->categoryRepository->getList($searchCriteria);
 
-        $this->assertTrue($searchResult->getTotalCount() > 0);
+        $this->assertEquals(1, $searchResult->getTotalCount());
         $this->assertEquals(
             $searchResult->getItems()[self::FIXTURE_ASSET_CATEGORY_ID]->getId(),
             self::FIXTURE_ASSET_CATEGORY_ID

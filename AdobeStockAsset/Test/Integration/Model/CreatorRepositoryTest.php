@@ -59,20 +59,12 @@ class CreatorRepositoryTest extends TestCase
      * Test delete an Adobe Stock creator by id.
      *
      * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDeleteById(): void
     {
         $this->creatorRepository->deleteById(self::FIXTURE_ASSET_CREATOR_ID);
-        try {
-            $this->creatorRepository->getById(self::FIXTURE_ASSET_CREATOR_ID);
-            $this->fail('Expected NoSuchEntityException caught');
-        } catch (NoSuchEntityException $exception) {
-            $message = __(
-                'Adobe Stock asset creator with id "%1" does not exist.',
-                self::FIXTURE_ASSET_CREATOR_ID
-            );
-            $this->assertEquals($message, $exception->getMessage());
-        }
+        $this->creatorRepository->getById(self::FIXTURE_ASSET_CREATOR_ID);
     }
 
     /**
@@ -114,7 +106,7 @@ class CreatorRepositoryTest extends TestCase
         /** @var AssetSearchResultsInterface $searchResult */
         $searchResult = $this->creatorRepository->getList($searchCriteria);
 
-        $this->assertTrue($searchResult->getTotalCount() > 0);
+        $this->assertEquals(1, $searchResult->getTotalCount());
         $this->assertEquals(
             $searchResult->getItems()[self::FIXTURE_ASSET_CREATOR_ID]->getId(),
             self::FIXTURE_ASSET_CREATOR_ID

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAssetApi\Model\Asset\Command;
 
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Used to load Adobe Stock assets for gotten asset id.
@@ -16,11 +17,12 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 interface LoadByIdInterface
 {
     /**
-     * Load an Adobe Stock asset by id
+     * Load asset by the id value
      *
      * @param int $id
      *
      * @return AssetInterface
+     * @throws NoSuchEntityException
      */
     public function execute(int $id): AssetInterface;
 }

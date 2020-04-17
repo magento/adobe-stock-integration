@@ -57,17 +57,12 @@ class AssetRepositoryTest extends TestCase
      * Test delete an Adobe Stock asset by id.
      *
      * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDeleteById(): void
     {
         $this->assetRepository->deleteById(self::FIXTURE_ASSET_ID);
-        try {
-            $this->assetRepository->getById(self::FIXTURE_ASSET_ID);
-            $this->fail('Expected NoSuchEntityException caught');
-        } catch (NoSuchEntityException $exception) {
-            $message = __('Adobe Stock asset with id %id does not exist.', ['id' => self::FIXTURE_ASSET_ID]);
-            $this->assertEquals($message, $exception->getMessage());
-        }
+        $this->assetRepository->getById(self::FIXTURE_ASSET_ID);
     }
 
     /**
@@ -109,7 +104,7 @@ class AssetRepositoryTest extends TestCase
         /** @var AssetSearchResultsInterface $searchResult */
         $searchResult = $this->assetRepository->getList($searchCriteria);
 
-        $this->assertTrue($searchResult->getTotalCount() > 0);
+        $this->assertEquals(1, $searchResult->getTotalCount());
         $this->assertEquals($searchResult->getItems()[self::FIXTURE_ASSET_ID]->getId(), self::FIXTURE_ASSET_ID);
     }
 }

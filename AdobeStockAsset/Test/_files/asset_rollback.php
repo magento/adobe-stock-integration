@@ -13,23 +13,18 @@ use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 
 $objectManager = Bootstrap::getObjectManager();
 
-try {
-    /** @var DeleteByPathInterface $deleteByPath */
-    $deleteByPath = $objectManager->get(DeleteByPathInterface::class);
-    $deleteByPath->execute('some/path.jpg');
+/** @var DeleteByPathInterface $deleteByPath */
+$deleteByPath = $objectManager->get(DeleteByPathInterface::class);
+$deleteByPath->execute('some/path.jpg');
 
+/** @var CreatorRepositoryInterface $creatorRepository */
+$creatorRepository = $objectManager->get(CreatorRepositoryInterface::class);
+$creatorRepository->deleteById(42);
 
-    /** @var CreatorRepositoryInterface $creatorRepository */
-    $creatorRepository = $objectManager->get(CreatorRepositoryInterface::class);
-    $creatorRepository->deleteById(42);
+/** @var CategoryRepositoryInterface $categoryRepository */
+$categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
+$categoryRepository->deleteById(42);
 
-    /** @var CategoryRepositoryInterface $categoryRepository */
-    $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
-    $categoryRepository->deleteById(42);
-
-    /** @var AssetRepositoryInterface $assetRepositoryRepository */
-    $assetRepositoryRepository = $objectManager->get(AssetRepositoryInterface::class);
-    $assetRepositoryRepository->deleteById(1);
-} catch (\Exception $exception) {
-
-}
+/** @var AssetRepositoryInterface $assetRepositoryRepository */
+$assetRepositoryRepository = $objectManager->get(AssetRepositoryInterface::class);
+$assetRepositoryRepository->deleteById(1);

@@ -10,10 +10,6 @@ use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 
 $objectManager = Bootstrap::getObjectManager();
 
-try {
-    /** @var CategoryRepositoryInterface $categoryRepository */
-    $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
-    $categoryRepository->deleteById(42);
-} catch (\Exception $exception) {
-
-}
+/** @var CategoryRepositoryInterface $categoryRepository */
+$categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
+$categoryRepository->deleteById(42);

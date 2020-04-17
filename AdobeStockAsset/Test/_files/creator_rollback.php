@@ -10,10 +10,6 @@ use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 
 $objectManager = Bootstrap::getObjectManager();
 
-try {
-    /** @var CreatorRepositoryInterface $creatorRepository */
-    $creatorRepository = $objectManager->get(CreatorRepositoryInterface::class);
-    $creatorRepository->deleteById(42);
-} catch (\Exception $exception) {
-
-}
+/** @var CreatorRepositoryInterface $creatorRepository */
+$creatorRepository = $objectManager->get(CreatorRepositoryInterface::class);
+$creatorRepository->deleteById(42);
