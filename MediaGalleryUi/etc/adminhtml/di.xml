@@ -23,7 +23,7 @@
     </type>
     <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
         <arguments>
-            <argument name="filterParametersProvider" xsi:type="object">Magento\MediaGalleryUi\Model\SelectModifierComposite</argument>
+            <argument name="selectModifier" xsi:type="object">Magento\MediaGalleryUi\Model\SelectModifierComposite</argument>
         </arguments>
     </type>
     <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">

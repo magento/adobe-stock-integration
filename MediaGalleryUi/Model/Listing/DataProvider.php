@@ -23,7 +23,7 @@ class DataProvider extends UiComponentDataProvider
     /**
      * @var SelectModifierInterface
      */
-    private $filterParametersProvider;
+    private $selectModifier;
 
     /**
      * @param string $name
@@ -33,7 +33,7 @@ class DataProvider extends UiComponentDataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
-     * @param SelectModifierInterface $filterParametersProvider
+     * @param SelectModifierInterface $selectModifier
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -46,7 +46,7 @@ class DataProvider extends UiComponentDataProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        SelectModifierInterface $filterParametersProvider,
+        SelectModifierInterface $selectModifier,
         array $meta = [],
         array $data = []
     ) {
@@ -62,7 +62,7 @@ class DataProvider extends UiComponentDataProvider
             $data
         );
 
-        $this->filterParametersProvider = $filterParametersProvider;
+        $this->selectModifier = $selectModifier;
     }
 
     /**
@@ -73,7 +73,7 @@ class DataProvider extends UiComponentDataProvider
         try {
             /** @var SearchResult $searchResult */
             $searchResult = $this->getSearchResult();
-            $this->filterParametersProvider->apply($searchResult->getSelect(), $this->getSearchCriteria());
+            $this->selectModifier->apply($searchResult->getSelect(), $this->getSearchCriteria());
 
             return $this->searchResultToOutput($searchResult);
         } catch (\Exception $exception) {
