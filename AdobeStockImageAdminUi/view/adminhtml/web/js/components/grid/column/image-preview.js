@@ -20,7 +20,6 @@ define([
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '.adobe-search-images-modal',
             activeMediaGallerySelector: 'aside.modal-slide.adobe-stock-modal._show',
-            messagesName: 'adobe_stock_images_listing.adobe_stock_images_listing.messages',
             modules: {
                 keywords: '${ $.name }_keywords',
                 related: '${ $.name }_related',
@@ -39,7 +38,10 @@ define([
                     component: 'Magento_AdobeStockImageAdminUi/js/components/grid/column/preview/actions',
                     name: '${ $.name }_actions',
                     provider: '${ $.provider }',
-                    messagesName: '${ $.messagesName }'
+                    mediaGallery: '${ $.mediaGalleryComponent }',
+                    mediaGalleryName: '${ $.mediaGalleryName }',
+                    messagesName: '${ $.messagesName }',
+                    mediaGalleryProvider: '${ $.mediaGalleryProvider }'
                 }
             ]
         },

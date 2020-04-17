@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">standalone_adobe_stock_images_listing.adobe_stock_images_listing_data_source
+            </item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>adobe_stock_images_columns</spinner>
+        <deps>
+            <dep>standalone_adobe_stock_images_listing.adobe_stock_images_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="adobe_stock_images_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_AdobeStockImageAdminUi::save_preview_images</aclResource>
+        <dataProvider class="Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider" name="adobe_stock_images_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <container name="messages"
+               sortOrder="10"
+               component="Magento_MediaGalleryUi/js/grid/messages">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="messageDelay" xsi:type="number">10</item>
+            </item>
+        </argument>
+    </container>
+    <listingToolbar name="listing_top" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
+        <bookmark name="bookmarks"/>
+        <filterSearch name="words"/>
+        <paging name="listing_paging">
+            <settings>
+                <sizesConfig>
+                    <component>Magento_AdobeStockImageAdminUi/js/components/images-grid-sizes</component>
+                </sizesConfig>
+            </settings>
+        </paging>
+	<container
+		name="sorting"
+		provider="standalone_adobe_stock_images_listing.adobe_stock_images_listing_data_source"
+		displayArea="sorting"
+		sortOrder="20"
+		component="Magento_Ui/js/grid/sortBy">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">
+                            standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.adobe_stock_images_columns
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </container>
+        <filters name="listing_filters" sortOrder="10">
+            <filterSelect name="content_type_filter" provider="${ $.parentName }" sortOrder="10">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Options"/>
+                    <label translate="true">Subcategory</label>
+                    <dataScope>content_type_filter</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="orientation_filter" provider="${ $.parentName }" sortOrder="20">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Orientation\Options"/>
+                    <label translate="true">Orientation</label>
+                    <dataScope>orientation_filter</dataScope>
+                </settings>
+            </filterSelect>
+	    <filterInput
+		    name="colors_filter"
+		    class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color"
+		    template="Magento_AdobeStockImageAdminUi/grid/filter/color"
+		    provider="${ $.parentName }"
+		    sortOrder="30"
+		    component="Magento_Ui/js/form/element/color-picker">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="colorFormat" xsi:type="string">HEX</item>
+                    </item>
+                </argument>
+                <settings>
+                    <dataScope>colors_filter</dataScope>
+                    <placeholder>HEX color</placeholder>
+                    <label translate="true">Color</label>
+                </settings>
+            </filterInput>
+            <filterSelect name="premium_price_filter" provider="${ $.parentName }" sortOrder="40">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\PremiumPrice\Options"/>
+                    <label translate="true">Price</label>
+                    <dataScope>premium_price_filter</dataScope>
+                </settings>
+            </filterSelect>
+	    <filterInput
+		    name="offensive_filter"
+		    class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox"
+		    template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox"
+		    provider="${ $.parentName }"
+		    sortOrder="50"
+		    component="Magento_Ui/js/form/element/single-checkbox">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">Disabled</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">Disabled</item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <dataScope>offensive_filter</dataScope>
+                    <label translate="true">Safe search</label>
+                </settings>
+            </filterInput>
+	    <filterInput
+		    name="isolated_filter"
+		    class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Checkbox"
+		    template="Magento_AdobeStockImageAdminUi/grid/filter/checkbox"
+		    provider="${ $.parentName }"
+		    sortOrder="60"
+		    component="Magento_Ui/js/form/element/single-checkbox">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">Isolated Only</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">Isolated Only</item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <additionalClasses>
+                        <class name="admin__isolated_filter">true</class>
+                    </additionalClasses>
+                    <tooltip>
+                        <description>Isolated assets have subjects appear alone on a solid background.</description>
+                    </tooltip>
+                    <dataScope>isolated_filter</dataScope>
+                    <label translate="true">Isolated Assets</label>
+                </settings>
+            </filterInput>
+            <filterInput name="serie_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages" provider="${ $.parentName }" sortOrder="70">
+                <argument name="data" xsi:type="array">
+                </argument>
+                <settings>
+                    <visible>false</visible>
+                    <dataScope>serie_id</dataScope>
+                    <label translate="true">Serie Id</label>
+                </settings>
+            </filterInput>
+            <filterInput name="model_id" class="\Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\RelatedImages" provider="${ $.parentName }" sortOrder="80">
+                <argument name="data" xsi:type="array">
+                </argument>
+                <settings>
+                    <visible>false</visible>
+                    <dataScope>model_id</dataScope>
+                    <label translate="true">Model Id</label>
+                </settings>
+            </filterInput>
+        </filters>
+    </listingToolbar>
+    <columns name="adobe_stock_images_columns" component="Magento_Ui/js/grid/masonry" template="ui/grid/masonry">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
+            </item>
+        </argument>
+        <column name="overlay" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/overlay" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\LicensedOverlay">
+            <settings>
+                <label translate="true">Overlay</label>
+                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/overlay</bodyTmpl>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="thumbnail_url" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Image" component="Magento_Ui/js/grid/columns/image">
+            <settings>
+                <label translate="true">Thumbnail Image</label>
+                <bodyTmpl>ui/grid/columns/image</bodyTmpl>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="preview" class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ImagePreview" component="Magento_AdobeStockImageAdminUi/js/components/grid/column/image-preview">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="messagesName" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.messages</item>
+                    <item name="mediaGalleryName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_directories</item>
+                    <item name="mediaGalleryComponent" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url</item>
+                    <item name="mediaGalleryProvider" xsi:type="string">standalone_media_gallery_listing.media_gallery_listing_data_source</item>
+		</item>
+            </argument>
+            <settings>
+                <label translate="true">Image Preview</label>
+                <bodyTmpl>Magento_AdobeStockImageAdminUi/grid/column/image-preview</bodyTmpl>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="relevance">
+            <settings>
+                <label translate="true">Relevance</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="creation">
+            <settings>
+                <label translate="true">Most Recent</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="popularity">
+            <settings>
+                <label translate="true">Popularity</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="nb_downloads">
+            <settings>
+                <label translate="true">Downloads</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="undiscovered">
+            <settings>
+                <label translate="true">Undiscovered</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+    </columns>
+    <listingToolbar name="listing_bottom" template="Magento_AdobeStockImageAdminUi/grid/toolbar">
+        <paging name="listing_paging">
+            <settings>
+                <sizesConfig>
+                    <component>Magento_AdobeStockImageAdminUi/js/components/images-grid-sizes</component>
+                </sizesConfig>
+            </settings>
+        </paging>
+    </listingToolbar>
+</listing>
