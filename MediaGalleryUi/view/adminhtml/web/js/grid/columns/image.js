@@ -17,7 +17,7 @@ define([
             deleteSelectedBtnSelector: '#delete_selected',
             targetElementId: null,
             selected: null,
-            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
+            mediaGalleryDirectoryComponent: '${ $.ns }.${ $.ns }.media_gallery_directories',
             fields: {
                 id: 'id',
                 url: 'url',
