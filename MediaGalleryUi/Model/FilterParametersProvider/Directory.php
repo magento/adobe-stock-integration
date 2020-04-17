@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 use Magento\MediaGalleryUi\Model\SelectModifierInterface;
 
 /**
- * Apply fulltext filter
+ * Apply path filter with regex to match path  from beginning
  */
 class Directory implements SelectModifierInterface
 {
