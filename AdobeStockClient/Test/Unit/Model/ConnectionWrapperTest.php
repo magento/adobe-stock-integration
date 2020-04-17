@@ -21,7 +21,6 @@ use Magento\AdobeStockClient\Model\ConnectionWrapper;
 use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 /**
  * Test the Adobe Stock SDK wrapper
@@ -42,11 +41,6 @@ class ConnectionWrapperTest extends TestCase
      * @var MockObject|ImsConfig $imsConfig
      */
     private $imsConfig;
-
-    /**
-     * @var LoggerInterface|MockObject $logger
-     */
-    private $logger;
 
     /**
      * @var MockObject|GetAccessTokenInterface $getAccessToken
@@ -81,7 +75,6 @@ class ConnectionWrapperTest extends TestCase
         $this->connectionFactory = $this->createMock(ConnectionFactory::class);
         $this->configInterface = $this->createMock(ConfigInterface::class);
         $this->imsConfig = $this->createMock(ImsConfig::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
         $this->getAccessToken = $this->createMock(GetAccessTokenInterface::class);
         $this->flushToken = $this->createMock(FlushUserTokensInterface::class);
         $this->httpInterface = $this->createMock(HttpInterface::class);
@@ -94,7 +87,6 @@ class ConnectionWrapperTest extends TestCase
             $this->configInterface,
             $this->connectionFactory,
             $this->imsConfig,
-            $this->logger,
             $this->getAccessToken,
             $this->flushToken,
             $this->httpInterface
@@ -261,7 +253,7 @@ class ConnectionWrapperTest extends TestCase
         $this->adobeStockMock->expects($this->once())
             ->method('downloadAssetUrl')
             ->willThrowException(new \Exception('Oauth token is not valid!'));
-        $this->flushToken->expects($this->once())->method('execute')->willReturn(true);
+        $this->flushToken->expects($this->once())->method('execute');
         $this->connectionWrapper->downloadAssetUrl(new LicenseRequest());
     }
 
