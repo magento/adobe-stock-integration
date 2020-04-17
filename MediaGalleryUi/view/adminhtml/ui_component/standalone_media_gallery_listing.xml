@@ -125,7 +125,7 @@
             provider="standalone_media_gallery_listing.media_gallery_listing_data_source"
             displayArea="sorting"
             sortOrder="20"
-            component="Magento_Ui/js/grid/sortBy">
+            component="Magento_MediaGalleryUi/js/grid/sortBy">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="deps" xsi:type="array">
@@ -141,7 +141,7 @@
                class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
                template="Magento_MediaGalleryUi/grid/directories/directoryTree"
                component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
-    <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
+    <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Sorting">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="containerId" xsi:type="string">media-gallery-masonry-grid</item>
@@ -171,23 +171,74 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="title">
+        <column name="created_at">
             <settings>
-                <label translate="true">Name</label>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
         </column>
-        <column name="created_at">
+        <column name="newest_first">
             <settings>
-                <label translate="true">Uploaded date</label>
+                <label translate="true">Newest first</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="oldest_first">
+            <settings>
+                <label translate="true">Oldest first</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="path">
+            <settings>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="directory_desc">
+            <settings>
+                <label translate="true">Directory: Descending</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="directory_asc">
+            <settings>
+                <label translate="true">Directory: Ascending</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="title">
+            <settings>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="name_az">
+            <settings>
+                <label translate="true">Name A-Z</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="name_za">
+            <settings>
+                <label translate="true">Name Z-A</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+                <sorting>desc</sorting>
             </settings>
         </column>
     </columns>
-     <container name="media_gallery_image_uploader"
-                class="Magento\MediaGalleryUi\Ui\Component\ImageUploaderStandAlone"
-                template="Magento_MediaGalleryUi/image-uploader"
-                component="Magento_MediaGalleryUi/js/image-uploader"/>
+    <container name="media_gallery_image_uploader"
+               class="Magento\MediaGalleryUi\Ui\Component\ImageUploaderStandAlone"
+               template="Magento_MediaGalleryUi/image-uploader"
+               component="Magento_MediaGalleryUi/js/image-uploader"/>
 </listing>
