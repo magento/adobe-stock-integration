@@ -18,7 +18,7 @@ use Magento\Framework\View\Result\Layout;
  */
 class Index extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
+    public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
      * @var LayoutFactory

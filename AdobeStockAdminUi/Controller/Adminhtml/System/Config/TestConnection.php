@@ -32,7 +32,7 @@ class TestConnection extends Action implements HttpGetActionInterface
     /**
      * Constant for value of an obscured API key
      */
-    public const OBSCURED_KEY = '******';
+    private const OBSCURED_KEY = '******';
 
     /**
      * @var JsonFactory
