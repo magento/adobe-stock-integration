@@ -24,6 +24,7 @@ use Magento\Framework\Exception\IntegrationException;
 
 /**
  * Adapter for Adobe Stock SDK
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConnectionWrapper
 {

@@ -23,6 +23,7 @@ use Magento\AdobeIms\Model\GetImage;
 
 /**
  * User repository test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CallbackTest extends TestCase
 {

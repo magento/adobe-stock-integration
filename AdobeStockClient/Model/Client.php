@@ -30,6 +30,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Client for communication to Adobe Stock API
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Client implements ClientInterface
 {

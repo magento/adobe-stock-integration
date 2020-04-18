@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test the Adobe Stock SDK wrapper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConnectionWrapperTest extends TestCase
 {

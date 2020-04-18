@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for the Adobe Stock Asset Creator repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatorRepositoryTest extends TestCase
 {
