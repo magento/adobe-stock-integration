@@ -10,9 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockImagePreviewSameSeriesSeeMoreTest">
         <annotations>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
-            </skip>
             <features value="AdobeStockImagePanel"/>
             <stories value="[Story #31] User searches for images from the same series as the currently viewed one"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/346"/>
@@ -35,6 +32,9 @@
             <argument name="query" value="cars"/>
         </actionGroup>
         <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithoutModelFilter"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
@@ -47,9 +47,9 @@
             <argument name="resultValue" value="$getFileAttributeValue"/>
         </actionGroup>
         <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
-        <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
+        <assertNotEquals stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutModelFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
-        </assertNotContains>
+        </assertNotEquals>
     </test>
 </tests>

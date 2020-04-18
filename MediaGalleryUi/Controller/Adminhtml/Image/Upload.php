@@ -14,7 +14,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryUi\Model\AssetIndexer;
 use Magento\MediaGalleryUi\Model\UploadImage;
 use Psr\Log\LoggerInterface;
 
@@ -38,31 +37,21 @@ class Upload extends Action implements HttpPostActionInterface
     private $uploadImage;
 
     /**
-     * @var AssetIndexer
-     */
-    private $assetIndexer;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * Upload constructor.
-     *
      * @param Context $context
      * @param UploadImage $uploadImage
-     * @param AssetIndexer $assetIndexer
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         UploadImage $uploadImage,
-        AssetIndexer $assetIndexer,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
-        $this->assetIndexer = $assetIndexer;
         $this->uploadImage = $uploadImage;
         $this->logger = $logger;
     }
@@ -88,13 +77,12 @@ class Upload extends Action implements HttpPostActionInterface
         }
 
         try {
-            $file = $this->uploadImage->execute($targetFolder);
-            $this->assetIndexer->execute($file);
+            $this->uploadImage->execute($targetFolder);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully uploaded the image.'),
+                'message' => __('The image was uploaded successfully.'),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
@@ -107,7 +95,7 @@ class Upload extends Action implements HttpPostActionInterface
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred on attempt to uploaded the image.'),
+                'message' => __('Could not upload image.'),
             ];
         }
 

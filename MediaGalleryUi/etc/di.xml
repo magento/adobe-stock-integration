@@ -7,41 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\MediaGalleryUiApi\Api\ConfigInterface" type="Magento\MediaGalleryUi\Model\Config"/>
-    <preference for="Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface" type="Magento\MediaGalleryUi\Model\ImagesIndexer"/>
     <preference for="Magento\MediaGalleryUiApi\Api\GetAssetUsedInInterface" type="Magento\MediaGalleryUi\Model\GetAssetsUsedIn"/>
-    <type name="Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface">
-        <arguments>
-            <argument name="indexers" xsi:type="array">
-                <item name="100" xsi:type="object">Magento\MediaGalleryUi\Model\AssetIndexer</item>
-            </argument>
-        </arguments>
-    </type>
-     <type name="Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories">
-         <arguments>
-	      <argument name="patterns" xsi:type="array">
-                <item name="captcha" xsi:type="string">/^captcha/</item>
-                <item name="catalog" xsi:type="string">/^catalog\/product/</item>
-                <item name="customer" xsi:type="string">/^customer/</item>
-                <item name="downloadable" xsi:type="string">/^downloadable/</item>
-                <item name="import" xsi:type="string">/^import/</item>
-                <item name="theme" xsi:type="string">/^theme/</item>
-                <item name="theme_customization" xsi:type="string">/^theme_customization/</item>
-                <item name="tmp" xsi:type="string">/^tmp/</item>
-                <item name="directories-with-dots" xsi:type="string">/^\./</item>
-	    </argument>
-        </arguments>
-     </type>
-    <type name="Magento\Framework\Console\CommandListInterface">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="mediaGalleryIndexer" xsi:type="object">Magento\MediaGalleryUi\Console\Command\IndexAssets</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="media_gallery_listing_data_source" xsi:type="string">mediaGallerySearchResult</item>
+                <item name="media_gallery_listing_data_source" xsi:type="string">Magento\MediaGalleryUi\Ui\Component\Listing\Provider</item>
             </argument>
         </arguments>
     </type>
@@ -51,15 +21,4 @@
             <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface">
-        <plugin name="updateAssetInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetInGrid"/>
-    </type>
-    <type name="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface">
-        <plugin name="updateAssetKeywordsInGrid" type="Magento\MediaGalleryUi\Plugin\UpdateAssetKeywordsInGrid"/>
-    </type>
-    <type name="Magento\MediaGalleryUi\Model\UpdateAssetInGrid">
-        <arguments>
-            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
-        </arguments>
-    </type>
 </config>

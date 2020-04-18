@@ -11,9 +11,6 @@
             <argument name="path" xsi:type="string">media</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\Value">
-        <plugin name="admin_system_config_adobe_stock_save_plugin" type="Magento\MediaGalleryUi\Plugin\MediaGalleryIndexerTrigger" sortOrder="1"/>
-    </type>
     <type name="Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId">
         <arguments>
             <argument name="imageTypes" xsi:type="array">

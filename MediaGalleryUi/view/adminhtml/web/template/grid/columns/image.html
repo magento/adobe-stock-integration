@@ -6,10 +6,14 @@
 -->
 <div class="media-gallery-wrap" collapsible>
     <div class="media-gallery-image">
-        <div data-row="file" class="masonry-image-block media-gallery-image-block" attr="'data-id': $col.getId($row())" css="{ selected: isSelected($row()) }">
+        <div data-row="file"
+             class="masonry-image-block media-gallery-image-block"
+             attr="'data-id': $col.getId($row())"
+             css="{ selected: isSelected($row()) }"
+             click="function(){ clickOnImage($row(), $collapsible.opened()) }"
+        >
             <img attr="src: $col.getUrl($row()), alt: $col.getImageAlt($row())"
                  class="media-gallery-image-column"
-                 click="function(){ if (!$collapsible.opened()) {select($row())} }"
                  data-role="thumbnail"/>
         </div>
         <ul class="action-menu" css="_active: $collapsible.opened">
@@ -20,8 +24,10 @@
     </div>
     <div class="masonry-image-description">
         <ul class="media-gallery-image-details">
-            <li class="name" data-bind="text: $row().name"></li>
-            <li class="source"><img if="$row().source" class="adobe-stock-icon" data-bind="attr: { src: $row().source }" /></li>
+            <li class="name" data-bind="text: $row().title"></li>
+            <li class="source">
+                <img if="$row().source" class="adobe-stock-icon" data-bind="attr: { src: $row().source }" />
+            </li>
             <li class="type" data-bind="text: $row().content_type"></li> &#8226;
             <li class="dimensions" data-bind="text: $row().width + 'x' + $row().height"></li>
         </ul>
@@ -29,7 +35,7 @@
             <div class="action-select-wrap">
                 <span class="three-dots"
                       toggleCollapsible
-                      click="function () {if (!isSelected($row()) || $collapsible.opened()) {select($row())}}"></span>
+                      click="function () { clickOnThreeDots($row(), $collapsible.opened()); }"></span>
             </div>
         </div>
     </div>
