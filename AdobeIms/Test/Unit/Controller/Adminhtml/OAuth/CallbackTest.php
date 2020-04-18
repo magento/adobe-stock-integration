@@ -131,9 +131,9 @@ class CallbackTest extends TestCase
     /**
      * Get user profile mock
      *
-     * @return UserProfileInterface|MockObject
+     * @return MockObject
      */
-    private function getUserProfile(): UserProfileInterface
+    private function getUserProfile(): MockObject
     {
         $userProfile = $this->createMock(UserProfileInterface::class);
         $userProfile->expects($this->once())
