@@ -11,7 +11,6 @@ namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\User;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -28,32 +27,32 @@ use PHPUnit\Framework\TestCase;
 class ProfileTest extends TestCase
 {
     /**
-     * @var MockObject|UserProfileRepositoryInterface $userProfileRepository
+     * @var MockObject|UserProfileRepositoryInterface
      */
     private $userProfileRepository;
 
     /**
-     * @var MockObject|UserContextInterface $userContext
+     * @var MockObject|UserContextInterface
      */
     private $userContext;
 
     /**
-     * @var MockObject|Context $action
+     * @var MockObject|Context
      */
     private $action;
 
     /**
-     * @var MockObject|ResultFactory $resultFactory
+     * @var MockObject|ResultFactory
      */
     private $resultFactory;
 
     /**
-     * @var MockObject|LoggerInterface $logger
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
     /**
-     * @var Profile $profile
+     * @var Profile
      */
     private $profile;
 

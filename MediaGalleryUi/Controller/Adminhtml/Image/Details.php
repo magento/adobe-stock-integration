@@ -68,7 +68,7 @@ class Details extends Action implements HttpGetActionInterface
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $imageId = (int) $this->getRequest()->getParam('id');
 
-        if (!$imageId) {
+        if ($imageId === 0) {
             $responseContent = [
                 'success' => false,
                 'message' => __('Image ID is required.'),

@@ -7,36 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\MediaGalleryUiApi\Api\ConfigInterface" type="Magento\MediaGalleryUi\Model\Config"/>
-    <preference for="Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface" type="Magento\MediaGalleryUi\Model\ImagesIndexer"/>
-    <type name="Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface">
-        <arguments>
-            <argument name="indexers" xsi:type="array">
-                <item name="100" xsi:type="object">Magento\MediaGalleryUi\Model\AssetIndexer</item>
-            </argument>
-        </arguments>
-    </type>
-     <type name="Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories">
-         <arguments>
-	      <argument name="patterns" xsi:type="array">
-                <item name="captcha" xsi:type="string">/^captcha/</item>
-                <item name="catalog" xsi:type="string">/^catalog\/product/</item>
-                <item name="customer" xsi:type="string">/^customer/</item>
-                <item name="downloadable" xsi:type="string">/^downloadable/</item>
-                <item name="import" xsi:type="string">/^import/</item>
-                <item name="theme" xsi:type="string">/^theme/</item>
-                <item name="theme_customization" xsi:type="string">/^theme_customization/</item>
-                <item name="tmp" xsi:type="string">/^tmp/</item>
-                <item name="directories-with-dots" xsi:type="string">/^\./</item>
-	    </argument>
-        </arguments>
-     </type>
-    <type name="Magento\Framework\Console\CommandListInterface">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="mediaGalleryIndexer" xsi:type="object">Magento\MediaGalleryUi\Console\Command\IndexAssets</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
@@ -44,4 +14,10 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="mediaGallerySearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">media_gallery_asset_grid</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset</argument>
+        </arguments>
+    </virtualType>
 </config>

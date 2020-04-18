@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
+use Magento\MediaGallerySynchronizationApi\Api\ExcludedDirectoriesInterface;
 
 /**
  * Build folder tree structure by path
@@ -26,7 +27,7 @@ class FolderTree
     private $path;
 
     /**
-     * @var ExcludedDirectories
+     * @var ExcludedDirectoriesInterface
      */
     private $excludedDirectories;
 
@@ -35,12 +36,12 @@ class FolderTree
      *
      * @param Filesystem $filesystem
      * @param string $path
-     * @param ExcludedDirectories $excludedDirectories
+     * @param ExcludedDirectoriesInterface $excludedDirectories
      */
     public function __construct(
         Filesystem $filesystem,
         string $path,
-        ExcludedDirectories $excludedDirectories
+        ExcludedDirectoriesInterface $excludedDirectories
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;

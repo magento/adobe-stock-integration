@@ -16,9 +16,7 @@ use AdobeStock\Api\Request\License as LicenseRequest;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License;
-use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterfaceFactory;
 use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterface;
@@ -32,6 +30,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Client for communication to Adobe Stock API
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Client implements ClientInterface
 {
@@ -81,50 +81,34 @@ class Client implements ClientInterface
     private $licenseConfirmationFactory;
 
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var UserAuthorizedInterface
-     */
-    private $authorized;
-
-    /**
      * @var array
      */
     private $searchResultFields;
 
     /**
-     * @param ConfigInterface $config
      * @param ConnectionWrapperFactory $connectionFactory
      * @param SearchResultFactory $searchResultFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
      * @param LocaleResolver $localeResolver
      * @param LicenseRequestFactory $licenseRequestFactory
      * @param LoggerInterface $logger
-     * @param UserAuthorizedInterface $authorized
      * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param StockFileToDocument $stockFileToDocument
      * @param LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
      * @param array $searchResultFields
      */
     public function __construct(
-        ConfigInterface $config,
         ConnectionWrapperFactory $connectionFactory,
         SearchResultFactory $searchResultFactory,
         SearchParameterProviderInterface $searchParametersProvider,
         LocaleResolver $localeResolver,
         LicenseRequestFactory $licenseRequestFactory,
         LoggerInterface $logger,
-        UserAuthorizedInterface $authorized,
         UserQuotaInterfaceFactory $userQuotaFactory,
         StockFileToDocument $stockFileToDocument,
         LicenseConfirmationInterfaceFactory $licenseConfirmationFactory,
         array $searchResultFields
     ) {
-        $this->authorized = $authorized;
-        $this->config = $config;
         $this->connectionFactory = $connectionFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->searchParametersProvider = $searchParametersProvider;
@@ -218,7 +202,7 @@ class Client implements ClientInterface
     {
         $purchaseOptions = $this->getLicenseInfo($contentId)->getPurchaseOptions();
         $message = $purchaseOptions->getMessage();
-        $canPurchase = $purchaseOptions->getPurchaseState() == 'possible';
+        $canPurchase = $purchaseOptions->getPurchaseState() === 'possible';
         /** @var LicenseConfirmationInterface $userQuota */
         $userQuota = $this->licenseConfirmationFactory->create();
         $userQuota->setMessage($message);
