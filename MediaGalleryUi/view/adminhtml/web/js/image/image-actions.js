@@ -49,8 +49,8 @@ define([
          * Delete image action
          */
         deleteImageAction: function () {
-            deleteImage.deleteImageAction(this.imageModel().getSelected(), this.imageModel().deleteImageUrl);
             this.closeModal();
+            deleteImage.deleteImageAction(this.imageModel().getSelected(), this.imageModel().deleteImageUrl);
         },
 
         /**

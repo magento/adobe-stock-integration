@@ -10,6 +10,9 @@
         "magento/module-cms": "*",
         "magento/module-tinymce-3": "*"
     },
+    "suggest": {
+        "magento/module-page-builder": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
