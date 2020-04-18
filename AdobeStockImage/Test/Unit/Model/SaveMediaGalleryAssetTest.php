@@ -14,7 +14,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
@@ -43,11 +42,6 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $fileSystemMock;
 
     /**
-     * @var ReadInterface|MockObject
-     */
-    private $readInterfaceMock;
-
-    /**
      * @var Read|MockObject
      */
     private $mediaDirectoryMock;
@@ -65,7 +59,6 @@ class SaveMediaGalleryAssetTest extends TestCase
         $this->saveMediaAssetMock = $this->createMock(SaveInterface::class);
         $this->documentToMediaGalleryAssetMock = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->fileSystemMock = $this->createMock(Filesystem::class);
-        $this->readInterfaceMock = $this->createMock(ReadInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
 
         $this->saveMediaAsset = (new ObjectManager($this))->getObject(
@@ -188,8 +181,6 @@ class SaveMediaGalleryAssetTest extends TestCase
      */
     private function getDocument(): MockObject
     {
-        $document = $this->createMock(Document::class);
-
-        return $document;
+        return $this->createMock(Document::class);
     }
 }

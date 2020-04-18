@@ -82,9 +82,7 @@ class InsertIgnore
      */
     private function getColumns(array $columns): string
     {
-        $connection = $this->getConnection();
-        $sql = implode(', ', array_map([$connection, 'quoteIdentifier'], $columns));
-        return $sql;
+        return implode(', ', array_map([$this->getConnection(), 'quoteIdentifier'], $columns));
     }
 
     /**

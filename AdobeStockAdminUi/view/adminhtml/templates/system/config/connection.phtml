@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\TestConnection */
+/** @var \Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\TestConnection $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <div data-bind="scope: 'adobe-stock-test-connection'" class="scalable">
     <!-- ko template: getTemplate() --><!-- /ko -->
@@ -16,9 +17,9 @@
                 "components": {
                     "adobe-stock-test-connection": {
                         "component": "Magento_AdobeStockAdminUi/js/connection",
-                        "success": "<?= $block->escapeHtmlAttr($block->isConnectionSuccessful()) ?>",
-                        "url": "<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>",
-                        "buttonLabel": "<?= $block->escapeHtml($block->getButtonLabel()) ?>"
+                        "success": "<?= $escaper->escapeHtmlAttr($block->isConnectionSuccessful()) ?>",
+                        "url": "<?= $escaper->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>",
+                        "buttonLabel": "<?= $escaper->escapeHtml($block->getButtonLabel()) ?>"
                     }
                 }
             }
