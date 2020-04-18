@@ -5,7 +5,7 @@
  */
 
 // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
-
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 
 <div id="adobe-stock-images-search-modal" class="adobe-search-images-modal" style="display: none;">
@@ -22,8 +22,8 @@
                     "stock_panel": {
                         "component": "Magento_AdobeStockImageAdminUi/js/panel",
                         "containerId": ".adobe-search-images-modal",
-                        "masonryComponentPath":"<?= $block->escapeJs($block->getData('masonry_component_path')); ?>",
-                        "dataSourcePath": "<?= $block->escapeJs($block->getData('data_source_path')); ?>"
+                        "masonryComponentPath":"<?= $escaper->escapeJs($block->getData('masonry_component_path')); ?>",
+                        "dataSourcePath": "<?= $escaper->escapeJs($block->getData('data_source_path')); ?>"
                     }
                 }
             },

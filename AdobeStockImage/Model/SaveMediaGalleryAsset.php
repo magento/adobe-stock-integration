@@ -35,8 +35,6 @@ class SaveMediaGalleryAsset
     private $fileSystem;
 
     /**
-     * SaveMediaGalleryAsset constructor.
-     *
      * @param SaveInterface $saveMediaAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param Filesystem $fileSystem
@@ -56,7 +54,6 @@ class SaveMediaGalleryAsset
      *
      * @param Document $document
      * @param string $destinationPath
-     *
      * @return void
      * @throws CouldNotSaveException
      */
@@ -74,8 +71,7 @@ class SaveMediaGalleryAsset
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
             $this->saveMediaAsset->execute($mediaGalleryAsset);
         } catch (\Exception $exception) {
-            $message = __('An error occurred during save media gallery asset.');
-            throw new CouldNotSaveException($message);
+            throw new CouldNotSaveException(__('Could not save media gallery asset.'), $exception);
         }
     }
 
@@ -83,15 +79,11 @@ class SaveMediaGalleryAsset
      * Calculates saved image file size.
      *
      * @param string $destinationPath
-     *
      * @return int
      */
     private function calculateFileSize(string $destinationPath): int
     {
         $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
-        $absolutePath = $mediaDirectory->getAbsolutePath($destinationPath);
-        $fileSize = $mediaDirectory->stat($absolutePath)['size'];
-
-        return $fileSize;
+        return $mediaDirectory->stat($mediaDirectory->getAbsolutePath($destinationPath))['size'];
     }
 }

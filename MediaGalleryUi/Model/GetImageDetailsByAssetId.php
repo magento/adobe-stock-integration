@@ -9,7 +9,6 @@ namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
@@ -41,11 +40,6 @@ class GetImageDetailsByAssetId
     private $storeManager;
 
     /**
-     * @var ResourceConnection
-     */
-    private $resource;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -68,7 +62,6 @@ class GetImageDetailsByAssetId
     /**
      * @param GetByIdInterface $getAssetById
      * @param StoreManagerInterface $storeManager
-     * @param ResourceConnection $resource
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
      * @param GetAssetKeywordsInterface $getAssetKeywords
@@ -77,7 +70,6 @@ class GetImageDetailsByAssetId
     public function __construct(
         GetByIdInterface $getAssetById,
         StoreManagerInterface $storeManager,
-        ResourceConnection $resource,
         Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
         GetAssetKeywordsInterface $getAssetKeywords,
@@ -85,7 +77,6 @@ class GetImageDetailsByAssetId
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
-        $this->resource = $resource;
         $this->filesystem = $filesystem;
         $this->sourceIconProvider = $sourceIconProvider;
         $this->imageTypes = $imageTypes;
@@ -222,7 +213,7 @@ class GetImageDetailsByAssetId
      */
     private function formatImageSize(int $imageSize): string
     {
-        if (!$imageSize) {
+        if ($imageSize === 0) {
             return '';
         }
 
