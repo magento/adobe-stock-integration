@@ -61,7 +61,7 @@ class SaveImageFile
                 $this->storageDelete->execute($pathValue);
             }
             $this->storageSave->execute($url, $destinationPath);
-        } catch(LocalizedException $localizedException) {
+        } catch (LocalizedException $localizedException) {
             throw $localizedException;
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Could not save image.'), $exception);
