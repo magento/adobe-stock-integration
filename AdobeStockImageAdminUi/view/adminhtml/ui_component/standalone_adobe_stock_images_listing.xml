@@ -203,7 +203,8 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="messagesName" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.messages</item>
-                    <item name="mediaGalleryName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_directories</item>		    
+                    <item name="mediaGalleryName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_directories</item>
+                    <item name="mediaGalleryComponent" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url</item>
                     <item name="mediaGalleryProvider" xsi:type="string">standalone_media_gallery_listing.media_gallery_listing_data_source</item>
 		</item>
             </argument>
