@@ -15,7 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
+use Magento\MediaGallerySynchronizationApi\Api\ExcludedDirectoriesInterface;
 
 /**
  * Save images to the file system
@@ -35,19 +35,19 @@ class Save
     private $driver;
 
     /**
-     * @var ExcludedDirectories
+     * @var ExcludedDirectoriesInterface
      */
     private $excludedDirectories;
 
     /**
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param ExcludedDirectories $excludedDirectories
+     * @param ExcludedDirectoriesInterface $excludedDirectories
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        ExcludedDirectories $excludedDirectories
+        ExcludedDirectoriesInterface $excludedDirectories
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;

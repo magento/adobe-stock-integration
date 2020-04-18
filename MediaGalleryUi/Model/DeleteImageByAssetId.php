@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
-use Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories;
+use Magento\MediaGallerySynchronizationApi\Api\ExcludedDirectoriesInterface;
 
 /**
  * Load Media Asset path from database by id and delete the file
@@ -37,7 +37,7 @@ class DeleteImageByAssetId
     private $filesystem;
 
     /**
-     * @var ExcludedDirectories
+     * @var ExcludedDirectoriesInterface
      */
     private $excludedDirectories;
 
@@ -45,13 +45,13 @@ class DeleteImageByAssetId
      * @param GetByIdInterface $getAssetById
      * @param Storage $imagesStorage
      * @param Filesystem $filesystem
-     * @param ExcludedDirectories $excludedDirectories
+     * @param ExcludedDirectoriesInterface $excludedDirectories
      */
     public function __construct(
         GetByIdInterface $getAssetById,
         Storage $imagesStorage,
         Filesystem $filesystem,
-        ExcludedDirectories $excludedDirectories
+        ExcludedDirectoriesInterface $excludedDirectories
     ) {
         $this->getAssetById = $getAssetById;
         $this->imagesStorage = $imagesStorage;
