@@ -5,25 +5,25 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Console\Command;
+namespace Magento\MediaGallerySynchronization\Console\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
-use Magento\MediaGalleryUi\Model\ImagesIndexer;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Scan media directory for media gallery asset and write their parameters to database
+ * Synchronize files in media storage and media assets database records
  */
-class IndexAssets extends Command
+class Synchronize extends Command
 {
     /**
-     * @var ImagesIndexer
+     * @var SynchronizeInterface
      */
-    protected $imagesIndexer;
+    private $synchronizeAssets;
 
     /**
      * @var State $state
@@ -31,16 +31,14 @@ class IndexAssets extends Command
     private $state;
 
     /**
-     * IndexAssets constructor.
-     *
-     * @param ImagesIndexer $imagesIndexer
+     * @param SynchronizeInterface $synchronizeAssets
      * @param State $state
      */
     public function __construct(
-        ImagesIndexer $imagesIndexer,
+        SynchronizeInterface $synchronizeAssets,
         State $state
     ) {
-        $this->imagesIndexer = $imagesIndexer;
+        $this->synchronizeAssets = $synchronizeAssets;
         $this->state = $state;
         parent::__construct();
     }
@@ -50,8 +48,10 @@ class IndexAssets extends Command
      */
     protected function configure()
     {
-        $this->setName('media-gallery:index');
-        $this->setDescription('Scan media directory for media gallery asset and write their parameters to database');
+        $this->setName('media-gallery:sync');
+        $this->setDescription(
+            'Synchronize media storage and media assets in the database'
+        );
     }
 
     /**
@@ -59,11 +59,11 @@ class IndexAssets extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Uploading assets information from media directory to database...');
+        $output->writeln('Synchronizing assets information from media storage to database...');
         $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () {
-            $this->imagesIndexer->execute();
+            $this->synchronizeAssets->execute();
         });
-        $output->writeln('Completed assets indexing.');
+        $output->writeln('Completed assets synchronization.');
         return Cli::RETURN_SUCCESS;
     }
 }

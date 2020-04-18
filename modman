@@ -13,3 +13,5 @@
 @import MediaContent
 @import MediaContentApi
 @import MediaGalleryIntegration
+@import MediaGallerySynchronization
+@import MediaGallerySynchronizationApi
