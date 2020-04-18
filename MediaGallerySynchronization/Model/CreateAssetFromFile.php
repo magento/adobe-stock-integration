@@ -70,17 +70,15 @@ class CreateAssetFromFile
 
         return $this->assetFactory->create(
             [
-                'data' => [
-                    'path' => $this->getPath($path),
-                    'title' => $file->getBasename('.' . $file->getExtension()),
-                    'created_at' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
-                    'updated_at' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
-                    'width' => $width,
-                    'height' => $height,
-                    'size' => $file->getSize(),
-                    'content_type' => 'image/' . $file->getExtension(),
-                    'source' => 'Local'
-                ]
+                'path' => $this->getPath($path),
+                'title' => $file->getBasename('.' . $file->getExtension()),
+                'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
+                'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
+                'width' => $width,
+                'height' => $height,
+                'size' => $file->getSize(),
+                'contentType' => 'image/' . $file->getExtension(),
+                'source' => 'Local'
             ]
         );
     }

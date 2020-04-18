@@ -95,7 +95,7 @@ class Synchronize implements SynchronizeInterface
                         $synchronizer->execute([$item]);
                     } catch (\Exception $exception) {
                         $this->log->critical($exception);
-                        $failedItems[] = $path;
+                        $failedItems[] = $item->getFilename();
                     }
                 }
             }

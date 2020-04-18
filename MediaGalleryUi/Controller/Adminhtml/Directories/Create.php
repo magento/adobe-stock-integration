@@ -79,7 +79,7 @@ class Create extends Action implements HttpPostActionInterface
         }
 
         try {
-            $this->createDirectoriesByPaths->execute([$path]);
+            $this->createDirectoriesByPaths->execute([$path . '/' . $name]);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
