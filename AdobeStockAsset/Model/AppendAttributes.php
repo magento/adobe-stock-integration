@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command\LoadByIds;
+use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -28,7 +28,7 @@ class AppendAttributes
     private $attributeValueFactory;
 
     /**
-     * @var LoadByIds
+     * @var LoadByIdsInterface
      */
     private $loadByIds;
 
@@ -39,12 +39,12 @@ class AppendAttributes
 
     /**
      * @param AttributeValueFactory $attributeValueFactory
-     * @param LoadByIds $loadByIds
+     * @param LoadByIdsInterface $loadByIds
      * @param GetByIdInterface $getMediaGalleryAssetById
      */
     public function __construct(
         AttributeValueFactory $attributeValueFactory,
-        LoadByIds $loadByIds,
+        LoadByIdsInterface $loadByIds,
         GetByIdInterface $getMediaGalleryAssetById
     ) {
         $this->attributeValueFactory = $attributeValueFactory;
@@ -76,7 +76,7 @@ class AppendAttributes
 
         $assets = $this->loadByIds->execute($ids);
 
-        foreach ($items as $key => $item) {
+        foreach ($items as $item) {
             if (!isset($assets[$item->getId()])) {
                 $this->addAttributes(
                     $item,
