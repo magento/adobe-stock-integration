@@ -15,7 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGallerySynchronizationApi\Api\ExcludedDirectoriesInterface;
+use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 
 /**
  * Save images to the file system
@@ -35,23 +35,23 @@ class Save
     private $driver;
 
     /**
-     * @var ExcludedDirectoriesInterface
+     * @var IsPathBlacklistedInterface
      */
-    private $excludedDirectories;
+    private $isPathBlacklisted;
 
     /**
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param ExcludedDirectoriesInterface $excludedDirectories
+     * @param IsPathBlacklistedInterface $isPathBlacklisted
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        ExcludedDirectoriesInterface $excludedDirectories
+        IsPathBlacklistedInterface $isPathBlacklisted
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->excludedDirectories = $excludedDirectories;
+        $this->isPathBlacklisted = $isPathBlacklisted;
     }
 
     /**
@@ -67,7 +67,7 @@ class Save
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
-        if ($this->excludedDirectories->isExcluded($destinationPath)) {
+        if ($this->isPathBlacklisted->execute($destinationPath)) {
             throw new LocalizedException(__('Could not save image: destination directory is restricted.'));
         }
 
