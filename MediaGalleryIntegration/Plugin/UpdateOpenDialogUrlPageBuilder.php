@@ -47,7 +47,7 @@ class UpdateOpenDialogUrlPageBuilder
      *
      * @return string[]
      */
-    public function afterGetData($subject, array $itemName): array
+    public function afterGetData(OpenDialogUrl $subject, array $itemName): array
     {
         if ($this->config->isEnabled()) {
             $itemName['openDialogUrl'] = $this->url->getUrl('media_gallery/index/index');
