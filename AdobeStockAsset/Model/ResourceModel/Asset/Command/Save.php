@@ -75,10 +75,7 @@ class Save implements SaveInterface
             $connection->insertOnDuplicate($tableName, $saveData);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __(
-                'An error occurred during adobe stock asset save: %error',
-                ['error' => $exception->getMessage()]
-            );
+            $message = __('An error occurred during adobe stock asset save.');
             throw new CouldNotSaveException($message, $exception);
         }
     }

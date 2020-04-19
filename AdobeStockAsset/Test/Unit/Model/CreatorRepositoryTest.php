@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for the Adobe Stock Asset Creator repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatorRepositoryTest extends TestCase
 {
@@ -72,7 +73,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->creatorCollectionFactory = $this->createMock(CreatorCollectionFactory::class);
         $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);
