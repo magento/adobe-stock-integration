@@ -11,7 +11,6 @@ namespace Magento\AdobeStockClient\Model;
 use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\UrlInterface;
 
 /**
  * Used for managing the Adobe Stock integration config settings
@@ -28,11 +27,6 @@ class Config implements ConfigInterface
     private $scopeConfig;
 
     /**
-     * @var UrlInterface
-     */
-    private $url;
-
-    /**
      * @var ProductMetadataInterface
      */
     private $metadataInterface;
@@ -41,16 +35,13 @@ class Config implements ConfigInterface
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
-     * @param UrlInterface $url
      * @param ProductMetadataInterface $metadataInterface
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        UrlInterface $url,
         ProductMetadataInterface $metadataInterface
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->url = $url;
         $this->metadataInterface = $metadataInterface;
     }
 

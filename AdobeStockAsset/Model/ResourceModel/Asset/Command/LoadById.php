@@ -11,6 +11,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Command for loading Adobe Stock asset by id
@@ -44,10 +45,7 @@ class LoadById implements LoadByIdInterface
     }
 
     /**
-     * Load asset by the id value
-     *
-     * @param int $id
-     * @return AssetInterface
+     * @inheritdoc
      */
     public function execute(int $id): AssetInterface
     {
@@ -56,8 +54,11 @@ class LoadById implements LoadByIdInterface
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME))
             ->where(self::ADOBE_STOCK_ASSET_ID . ' = ?', $id);
         $data = $connection->fetchAssoc($select);
+        if (!isset($data[$id])) {
+            throw new NoSuchEntityException(__('Adobe Stock asset with id %id does not exist.', ['id' => $id]));
+        }
         /** @var AssetInterface $asset */
-        $asset = $this->factory->create(['data' => $data]);
+        $asset = $this->factory->create(['data' =>  $data[$id]]);
 
         return $asset;
     }
