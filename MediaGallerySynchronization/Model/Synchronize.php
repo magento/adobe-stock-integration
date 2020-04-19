@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\MediaGallerySynchronization\Model\Directories\ExcludedDirectories;
+use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool;
@@ -25,9 +25,9 @@ class Synchronize implements SynchronizeInterface
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
 
     /**
-     * @var ExcludedDirectories
+     * @var IsPathBlacklistedInterface
      */
-    private $excludedDirectories;
+    private $isPathBlacklisted;
 
     /**
      * @var Read
@@ -55,20 +55,20 @@ class Synchronize implements SynchronizeInterface
     private $getAssetsIterator;
 
     /**
-     * @param ExcludedDirectories $excludedDirectories
+     * @param IsPathBlacklistedInterface $isPathBlacklisted
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
      * @param SynchronizerPool $synchronizerPool
      * @param GetAssetsIterator $assetsIterator
      */
     public function __construct(
-        ExcludedDirectories $excludedDirectories,
+        IsPathBlacklistedInterface $isPathBlacklisted,
         Filesystem $filesystem,
         LoggerInterface $log,
         SynchronizerPool $synchronizerPool,
         GetAssetsIterator $assetsIterator
     ) {
-        $this->excludedDirectories = $excludedDirectories;
+        $this->isPathBlacklisted = $isPathBlacklisted;
         $this->filesystem = $filesystem;
         $this->log = $log;
         $this->synchronizerPool = $synchronizerPool;
@@ -95,7 +95,7 @@ class Synchronize implements SynchronizeInterface
                         $synchronizer->execute([$item]);
                     } catch (\Exception $exception) {
                         $this->log->critical($exception);
-                        $failedItems[] = $path;
+                        $failedItems[] = $item->getFilename();
                     }
                 }
             }
@@ -123,7 +123,7 @@ class Synchronize implements SynchronizeInterface
     {
         try {
             return $this->getMediaDirectory()->getRelativePath($path)
-                && !$this->excludedDirectories->isExcluded($path)
+                && !$this->isPathBlacklisted->execute($path)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);
