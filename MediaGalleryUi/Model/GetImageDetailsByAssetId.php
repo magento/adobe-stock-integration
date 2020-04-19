@@ -15,11 +15,10 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider;
-use Magento\MediaGalleryUiApi\Api\GetAssetUsedInInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -60,9 +59,9 @@ class GetImageDetailsByAssetId
     private $imageTypes;
 
     /**
-     * @var GetAssetUsedInInterface
+     * @var GetContentByAssetIdsInterface
      */
-    private $getAssetsUsedInContentInterface;
+    private $getContent;
 
     /**
      * @var LoggerInterface
@@ -85,7 +84,7 @@ class GetImageDetailsByAssetId
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
      * @param GetAssetKeywordsInterface $getAssetKeywords
-     * @param GetAssetUsedInInterface $getAssetsUsedInContentInterface
+     * @param GetContentByAssetIdsInterface $getContent
      * @param LoggerInterface $logger
      * @param array $imageTypes
      * @param array $assetContentTypes
@@ -96,7 +95,7 @@ class GetImageDetailsByAssetId
         Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
         GetAssetKeywordsInterface $getAssetKeywords,
-        GetAssetUsedInInterface $getAssetsUsedInContentInterface,
+        GetContentByAssetIdsInterface $getContent,
         LoggerInterface $logger,
         array $imageTypes = [],
         array $assetContentTypes = []
@@ -107,7 +106,7 @@ class GetImageDetailsByAssetId
         $this->sourceIconProvider = $sourceIconProvider;
         $this->imageTypes = $imageTypes;
         $this->getAssetKeywords = $getAssetKeywords;
-        $this->getAssetsUsedInContentInterface = $getAssetsUsedInContentInterface;
+        $this->getContent = $getContent;
         $this->logger = $logger;
         $this->assetContentTypes = $assetContentTypes;
     }
@@ -257,20 +256,19 @@ class GetImageDetailsByAssetId
      *
      * @param int $assetId
      * @return array
+     * @throws IntegrationException
      */
     private function getUsedIn(int $assetId): array
     {
         $usedIn = [];
-        try {
-            foreach ($this->assetContentTypes as $assetContentTypeKey => $assetContentType) {
-                $getAssetIds = $this->getAssetsUsedInContentInterface
-                    ->execute($assetId, $assetContentTypeKey);
-                if ($getAssetIds) {
-                    $usedIn[$assetContentType] = $getAssetIds;
-                }
+        $contentIdentities = $this->getContent->execute([$assetId]);
+        foreach ($contentIdentities as $contentIdentity) {
+            $type = $this->assetContentTypes[$contentIdentity->getEntityType()] ?? $contentIdentity->getEntityType();
+            if (!isset($usedIn[$type])) {
+                $usedIn[$type] = 1;
+            } else {
+                $usedIn[$type] += 1;
             }
-        } catch (IntegrationException $exception) {
-            $this->logger->critical($exception->getMessage());
         }
         return $usedIn;
     }
