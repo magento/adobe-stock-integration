@@ -148,7 +148,7 @@ class AddAdobeStockImageDetailsPlugin
             ],
             [
                 'title' => __('Status'),
-                'value' => $asset->getIsLicensed() ? __('Licensed') : __('Unlicensed'),
+                'value' => $asset->getIsLicensed() !== 0 ? __('Licensed') : __('Unlicensed'),
             ],
             [
                 'title' => __('Category'),

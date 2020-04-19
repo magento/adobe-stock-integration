@@ -61,8 +61,7 @@ class SaveImageFile
             }
             $this->storageSave->execute($url, $destinationPath);
         } catch (\Exception $exception) {
-            $message = __('%error', ['error' => $exception->getMessage()]);
-            throw new CouldNotSaveException($message);
+            throw new CouldNotSaveException(__('Could not save image.'), $exception);
         }
     }
 }

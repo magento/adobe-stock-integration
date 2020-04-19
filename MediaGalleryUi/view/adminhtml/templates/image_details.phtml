@@ -9,7 +9,7 @@ use Magento\Framework\Escaper;
 
 // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
 /** @var Template $block */
-/** @var $escaper Escaper */
+/** @var Escaper $escaper */
 
 ?>
 
@@ -47,7 +47,7 @@ use Magento\Framework\Escaper;
                 "components": {
                     "mediaGalleryImageDetails": {
                         "component": "Magento_MediaGalleryUi/js/image/image-details",
-                        "imageDetailsUrl": "<?= $escaper->escapeUrl($block->getData('imageDetailsUrl')); ?>",
+                        "imageDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "mediaGridMessages": "media_gallery_listing.media_gallery_listing.messages"
                     }

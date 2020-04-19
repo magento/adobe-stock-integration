@@ -11,6 +11,7 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\SplFileInfoFactory;
 
 /**
@@ -34,19 +35,26 @@ class UploadImage
     private $splFileInfoFactory;
 
     /**
-     * UploadImage constructor.
+     * @var SynchronizeFilesInterface
+     */
+    private $synchronizeFiles;
+
+    /**
      * @param Storage $imagesStorage
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param Filesystem $filesystem
+     * @param SynchronizeFilesInterface $synchronizeFiles
      */
     public function __construct(
         Storage $imagesStorage,
         SplFileInfoFactory $splFileInfoFactory,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        SynchronizeFilesInterface $synchronizeFiles
     ) {
         $this->imagesStorage = $imagesStorage;
         $this->splFileInfoFactory = $splFileInfoFactory;
         $this->filesystem = $filesystem;
+        $this->synchronizeFiles = $synchronizeFiles;
     }
 
     /**
@@ -54,10 +62,9 @@ class UploadImage
      *
      * @param string $targetFolder
      * @param string|null $type
-     * @return \SplFileInfo
      * @throws LocalizedException
      */
-    public function execute(string $targetFolder, string $type = null) : \SplFileInfo
+    public function execute(string $targetFolder, string $type = null): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         if (!$mediaDirectory->isDirectory($targetFolder)) {
@@ -65,6 +72,12 @@ class UploadImage
         }
         $absolutePath = $mediaDirectory->getAbsolutePath($targetFolder);
         $uploadResult = $this->imagesStorage->uploadFile($absolutePath, $type);
-        return $this->splFileInfoFactory->create($uploadResult['path'] . '/' . $uploadResult['file']);
+        $this->synchronizeFiles->execute(
+            [
+                $this->splFileInfoFactory->create(
+                    $uploadResult['path'] . '/' . $uploadResult['file']
+                )
+            ]
+        );
     }
 }

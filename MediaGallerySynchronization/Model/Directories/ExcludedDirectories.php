@@ -5,12 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Model\Directories;
+namespace Magento\MediaGallerySynchronization\Model\Directories;
+
+use Magento\MediaGallerySynchronizationApi\Api\ExcludedDirectoriesInterface;
 
 /**
  * Directory paths that should not be included in the media gallery
  */
-class ExcludedDirectories
+class ExcludedDirectories implements ExcludedDirectoriesInterface
 {
     /**
      * @var array
@@ -27,10 +29,7 @@ class ExcludedDirectories
     }
 
     /**
-     * Check if the path is excluded from displaying in the media gallery
-     *
-     * @param string $path
-     * @return bool
+     * @inheritDoc
      */
     public function isExcluded(string $path): bool
     {
