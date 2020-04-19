@@ -19,7 +19,7 @@ class Offensive implements SearchParameterProviderInterface
 {
     private const OFFENSIVE_FILTER = 'offensive_filter';
     private const DISABLED = 'Disabled';
-    
+
     /**
      * @inheritdoc
      */
@@ -27,11 +27,9 @@ class Offensive implements SearchParameterProviderInterface
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === self::OFFENSIVE_FILTER) {
-                    if ($filter->getValue() === self::DISABLED) {
-                        $searchParams->setFilterOffensive2(true);
-                        break;
-                    }
+                if ($filter->getField() === self::OFFENSIVE_FILTER && $filter->getValue() === self::DISABLED) {
+                    $searchParams->setFilterOffensive2(true);
+                    break;
                 }
             }
         }

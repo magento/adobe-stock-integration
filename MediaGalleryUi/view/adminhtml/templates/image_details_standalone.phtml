@@ -8,6 +8,7 @@ use Magento\Backend\Block\Template;
 
 // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
 /** @var Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 
 <div class="media-gallery-image-details-modal"
@@ -44,7 +45,7 @@ use Magento\Backend\Block\Template;
                 "components": {
                     "mediaGalleryImageDetails": {
                         "component": "Magento_MediaGalleryUi/js/image/image-details",
-                        "imageDetailsUrl": "<?= $block->escapeUrl($block->getData('imageDetailsUrl')); ?>",
+                        "imageDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "mediaGridMessages": "media_gallery_listing.media_gallery_listing.messages"
                     }
@@ -67,8 +68,8 @@ use Magento\Backend\Block\Template;
                         "component": "Magento_MediaGalleryUi/js/image/image-actions",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
-                        "targetElementId": "<?= $block->escapeJs($block->getData('targetElementId')); ?>",
-                        "skipButton": "<?= $block->escapeJs($block->getData('skipButton')); ?>",
+                        "targetElementId": "<?= $escaper->escapeJs($block->getData('targetElementId')); ?>",
+                        "skipButton": "<?= $escaper->escapeJs($block->getData('skipButton')); ?>",
                         "imageModelName" : "standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url",
                         "actionsList": [
                            {
@@ -79,7 +80,7 @@ use Magento\Backend\Block\Template;
                             },
 
                             {
-                                "title": "<?= $block->escapeJs(__('Cancel')); ?>",
+                                "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
                                 "classes": "action-default scalable cancel action-quaternary"

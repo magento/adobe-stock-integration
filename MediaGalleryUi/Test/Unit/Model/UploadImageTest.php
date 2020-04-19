@@ -11,6 +11,7 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\SplFileInfoFactory;
 use Magento\MediaGalleryUi\Model\UploadImage;
 use Magento\Framework\Filesystem\Directory\Read;
@@ -44,6 +45,11 @@ class UploadImageTest extends TestCase
     private $mediaDirectoryMock;
 
     /**
+     * @var SynchronizeFilesInterface|MockObject
+     */
+    private $synchronizeFilesMock;
+
+    /**
      * @var UploadImage
      */
     private $uploadImage;
@@ -57,13 +63,15 @@ class UploadImageTest extends TestCase
         $this->fileSystemMock = $this->createMock(Filesystem::class);
         $this->splFileInfoFactoryMock = $this->createMock(SplFileInfoFactory::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
+        $this->synchronizeFilesMock = $this->createMock(SynchronizeFilesInterface::class);
 
         $this->uploadImage = (new ObjectManager($this))->getObject(
             UploadImage::class,
             [
                 'imagesStorage' => $this->imagesStorageMock,
                 'splFileInfoFactory' => $this->splFileInfoFactoryMock,
-                'filesystem' => $this->fileSystemMock
+                'filesystem' => $this->fileSystemMock,
+                'synchronizeFiles' => $this->synchronizeFilesMock
             ]
         );
     }
