@@ -25,6 +25,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Load Media Asset from database by id add all related data to it
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetImageDetailsByAssetId
 {

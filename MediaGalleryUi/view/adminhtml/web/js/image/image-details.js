@@ -168,7 +168,7 @@ define([
          * @param {Object|String} value
          * @return {String}
          */
-        getValue: function (value) {
+        getValueUnsanitizedHtml: function (value) {
             var usedIn = '';
 
             if (_.isObject(value)) {
