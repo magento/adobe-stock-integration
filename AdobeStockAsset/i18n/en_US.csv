@@ -1,5 +1,5 @@
 "An error occurred during get asset list: %error","An error occurred during get asset list: %error"
-"Object with id ""%1"" does not exist.","Object with id ""%1"" does not exist."
+"Adobe Stock asset with id %id does not exist.","Adobe Stock asset with id %id does not exist."
 "Requested image doesn't exists","Requested image doesn't exists"
 "Failed to authenticate to Adobe Stock API. <br> Please correct the API credentials in <a href=""%1"">Configuration → System → Adobe Stock Integration.</a>","Failed to authenticate to Adobe Stock API. <br> Please correct the API credentials in <a href=""%1"">Configuration → System → Adobe Stock Integration.</a>"
 "Cannot retrieve assets from Adobe Stock.","Cannot retrieve assets from Adobe Stock."

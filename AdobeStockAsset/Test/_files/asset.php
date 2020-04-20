@@ -6,18 +6,18 @@
 
 declare(strict_types=1);
 
-use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
-use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
+use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -29,7 +29,13 @@ $mediaAssetFactory = $objectManager->get(MediaAssetFactory::class);
 $mediaAsset = $mediaAssetFactory->create(
     [
         'data' => [
-            'path' => 'some/path.jpg'
+            'path' => 'some/path.jpg',
+            'title' => 'Web API test image',
+            'source' => 'Adobe Stock',
+            'content_type' => 'image/jpeg',
+            'width' => 6529,
+            'height' => 4355,
+            'size' => 424242
         ]
     ]
 );
