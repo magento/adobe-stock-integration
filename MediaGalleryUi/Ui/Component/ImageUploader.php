@@ -16,9 +16,9 @@ use Magento\Ui\Component\Container;
  */
 class ImageUploader extends Container
 {
-    const ACCEPT_FILE_TYPES = '/(\.|\/)(gif|jpe?g|png)$/i';
-    const ALLOWED_EXTENSIONS = 'jpg jpeg png gif';
-    const MAX_FILE_SIZE = '2097152';
+    private const ACCEPT_FILE_TYPES = '/(\.|\/)(gif|jpe?g|png)$/i';
+    private const ALLOWED_EXTENSIONS = 'jpg jpeg png gif';
+    private const MAX_FILE_SIZE = '2097152';
 
     /**
      * @var UrlInterface

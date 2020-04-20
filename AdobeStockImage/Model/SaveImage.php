@@ -15,6 +15,7 @@ use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Psr\Log\LoggerInterface;
@@ -133,13 +134,11 @@ class SaveImage implements SaveImageInterface
 
             $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaAssetId]);
             $this->saveAdobeStockAsset->execute($asset);
+        } catch (LocalizedException $localizedException) {
+            throw $localizedException;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __(
-                'An error occurred during save image: %error',
-                ['error' => $exception->getMessage()]
-            );
-            throw new CouldNotSaveException($message);
+            throw new CouldNotSaveException(__('Could not save image.'), $exception);
         }
     }
 }
