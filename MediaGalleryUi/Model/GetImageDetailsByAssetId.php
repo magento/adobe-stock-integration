@@ -7,20 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
+use DateTime;
+use Exception;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Filesystem;
-use DateTime;
-use Magento\Framework\Exception\FileSystemException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Load Media Asset from database by id add all related data to it
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetImageDetailsByAssetId
 {
@@ -55,6 +60,21 @@ class GetImageDetailsByAssetId
     private $imageTypes;
 
     /**
+     * @var GetContentByAssetIdsInterface
+     */
+    private $getContent;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var array
+     */
+    private $assetContentTypes;
+
+    /**
      * @var GetAssetKeywordsInterface
      */
     private $getAssetKeywords;
@@ -65,7 +85,10 @@ class GetImageDetailsByAssetId
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
      * @param GetAssetKeywordsInterface $getAssetKeywords
+     * @param GetContentByAssetIdsInterface $getContent
+     * @param LoggerInterface $logger
      * @param array $imageTypes
+     * @param array $assetContentTypes
      */
     public function __construct(
         GetByIdInterface $getAssetById,
@@ -73,7 +96,10 @@ class GetImageDetailsByAssetId
         Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
         GetAssetKeywordsInterface $getAssetKeywords,
-        array $imageTypes = []
+        GetContentByAssetIdsInterface $getContent,
+        LoggerInterface $logger,
+        array $imageTypes = [],
+        array $assetContentTypes = []
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
@@ -81,16 +107,18 @@ class GetImageDetailsByAssetId
         $this->sourceIconProvider = $sourceIconProvider;
         $this->imageTypes = $imageTypes;
         $this->getAssetKeywords = $getAssetKeywords;
+        $this->getContent = $getContent;
+        $this->logger = $logger;
+        $this->assetContentTypes = $assetContentTypes;
     }
 
     /**
      * Get image details by asset ID
      *
      * @param int $assetId
-     *
-     * @return array
-     *
      * @throws LocalizedException
+     * @throws Exception
+     * @return array
      */
     public function execute(int $assetId): array
     {
@@ -134,6 +162,10 @@ class GetImageDetailsByAssetId
                 [
                     'title' => __('Size'),
                     'value' => $this->formatImageSize($size)
+                ],
+                [
+                    'title' => __('Used In'),
+                    'value' => $this->getUsedIn($assetId)
                 ]
             ],
             'size' => $size,
@@ -178,7 +210,7 @@ class GetImageDetailsByAssetId
      *
      * @param string $date
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     private function formatDate(string $date): string
     {
@@ -218,5 +250,27 @@ class GetImageDetailsByAssetId
         }
 
         return sprintf('%sKb', $imageSize / 1000);
+    }
+
+    /**
+     * Retrieve assets used in the Content
+     *
+     * @param int $assetId
+     * @return array
+     * @throws IntegrationException
+     */
+    private function getUsedIn(int $assetId): array
+    {
+        $usedIn = [];
+        $contentIdentities = $this->getContent->execute([$assetId]);
+        foreach ($contentIdentities as $contentIdentity) {
+            $type = $this->assetContentTypes[$contentIdentity->getEntityType()] ?? $contentIdentity->getEntityType();
+            if (!isset($usedIn[$type])) {
+                $usedIn[$type] = 1;
+            } else {
+                $usedIn[$type] += 1;
+            }
+        }
+        return $usedIn;
     }
 }
