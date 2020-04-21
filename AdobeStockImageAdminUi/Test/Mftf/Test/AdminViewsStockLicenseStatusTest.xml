@@ -10,6 +10,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminViewsStockLicenseStatusTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1151" />
+            </skip>
             <features value="AdobeStockImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/430"/>
             <stories value="[Story #40] User views stock license status in Media Gallery grid"/>

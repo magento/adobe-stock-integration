@@ -19,7 +19,6 @@ interface LoadByIdsInterface
      * Load an Adobe Stock asset by id
      *
      * @param int[] $id
-     *
      * @return AssetInterface[]
      */
     public function execute(array $id): array;

@@ -160,7 +160,26 @@ define([
          */
         showMoreImageTags: function () {
             this.showAllTags(true);
-        }
+        },
 
+        /**
+         * Get image details value
+         *
+         * @param {Object|String} value
+         * @return {String}
+         */
+        getValueUnsanitizedHtml: function (value) {
+            var usedIn = '';
+
+            if (_.isObject(value)) {
+                _.each(value, function (numberOfTimeUsed, moduleName) {
+                    usedIn += numberOfTimeUsed + ' ' + moduleName + '</br>';
+                });
+
+                return usedIn;
+            }
+
+            return value;
+        }
     });
 });

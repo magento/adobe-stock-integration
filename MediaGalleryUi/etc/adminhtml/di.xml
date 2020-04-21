@@ -16,6 +16,25 @@
             <argument name="imageTypes" xsi:type="array">
                 <item name="image" xsi:type="string">Image</item>
             </argument>
+            <argument name="assetContentTypes" xsi:type="array">
+                <item name="catalog_category" xsi:type="string">Category</item>
+                <item name="catalog_product" xsi:type="string">Product</item>
+                <item name="cms_block" xsi:type="string">Block</item>
+                <item name="cms_page" xsi:type="string">Page</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
+        <arguments>
+            <argument name="selectModifier" xsi:type="object">Magento\MediaGalleryUi\Model\SelectModifierComposite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
+        <arguments>
+            <argument name="selectModifiers" xsi:type="array">
+                <item name="fulltextFilter" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Fulltext</item>
+                <item name="directory" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Directory</item>
+            </argument>
         </arguments>
     </type>
 </config>
