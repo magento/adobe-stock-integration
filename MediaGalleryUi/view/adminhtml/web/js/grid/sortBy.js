@@ -9,7 +9,7 @@ define([
 
     return Element.extend({
         defaults: {
-            columnIndexMap: {},
+            columnIndexMap: {}
         },
 
         /**
@@ -20,7 +20,7 @@ define([
                 sortBy;
 
             if (columns && columns.length > 0) {
-                columns.map(function (column, i) {
+                columns.map(function (column) {
                     if (column.sortable === true) {
                         sortBy = column['sort_by'] || {};
                         this.options.push({
