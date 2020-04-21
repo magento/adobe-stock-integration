@@ -9,7 +9,6 @@ namespace Magento\AdobeImsApi\Api;
 
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\User\Api\Data\UserInterface;
 
 /**
  * Declare functionality for user login from the Adobe account
@@ -19,9 +18,9 @@ interface LogInInterface
     /**
      * Log in User to Adobe Account
      *
-     * @param UserInterface $user
+     * @param int $userId
      * @param TokenResponseInterface $tokenResponse
      * @throws CouldNotSaveException
      */
-    public function execute(UserInterface $user, TokenResponseInterface $tokenResponse): void;
+    public function execute(int $userId, TokenResponseInterface $tokenResponse): void;
 }

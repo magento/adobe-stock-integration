@@ -95,7 +95,7 @@ class Callback extends Action implements HttpGetActionInterface
             $tokenResponse = $this->getToken->execute(
                 (string)$this->getRequest()->getParam(self::REQUEST_PARAM_CODE)
             );
-            $this->login->execute($this->getUser(), $tokenResponse);
+            $this->login->execute((int) $this->getUser()->getId(), $tokenResponse);
 
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,

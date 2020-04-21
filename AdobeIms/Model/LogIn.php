@@ -54,14 +54,14 @@ class LogIn implements LogInInterface
     /**
      * @inheritdoc
      */
-    public function execute(UserInterface $user, TokenResponseInterface $tokenResponse): void
+    public function execute(int $userId, TokenResponseInterface $tokenResponse): void
     {
         $userImage = $this->getUserImage->execute($tokenResponse->getAccessToken());
-        $userProfile = $this->getUserProfile((int) $user->getId());
+        $userProfile = $this->getUserProfile(($userId);
         $userProfile->setName($tokenResponse->getName());
         $userProfile->setEmail($tokenResponse->getEmail());
         $userProfile->setImage($userImage);
-        $userProfile->setUserId((int) $user->getId());
+        $userProfile->setUserId($userId);
         $userProfile->setAccessToken($tokenResponse->getAccessToken());
         $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
         $userProfile->setAccessTokenExpiresAt(
