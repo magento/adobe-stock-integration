@@ -15,6 +15,7 @@ define([
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
+            targetElementId: null,
             selected: null,
             mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             fields: {
@@ -51,7 +52,6 @@ define([
             this._super();
             this.initView();
             $(window).on('fileDeleted.enhancedMediaGallery', this.reloadMediaGrid.bind(this));
-            $(window).on('reload.MediaGallery', this.reloadGrid.bind(this));
 
             return this;
         },

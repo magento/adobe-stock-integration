@@ -14,8 +14,7 @@
         "magento/module-media-gallery-ui": "*"
     },
     "suggest": {
-        "magento/module-cms": "*",
-        "magento/module-media-gallery-ui": "*"
+        "magento/module-cms": "*"
     },
     "type": "magento2-module",
     "license": [
