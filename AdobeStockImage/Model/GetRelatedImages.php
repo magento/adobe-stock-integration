@@ -124,7 +124,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
                 __(
                     'An error occurred during related images serialization: %error',
                     ['error' => $exception->getMessage()]
-                )
+                ),
+                $exception
             );
         }
     }

@@ -58,7 +58,7 @@ class SaveAssetTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
         $this->assetRepository = $this->createMock(AssetRepositoryInterface::class);

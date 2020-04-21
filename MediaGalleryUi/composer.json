@@ -9,6 +9,8 @@
         "magento/module-store": "*",
         "magento/module-media-gallery-ui-api": "*",
         "magento/module-media-gallery-api": "*",
+        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-content-api": "*",
         "magento/module-cms": "*"
     },
     "type": "magento2-module",
