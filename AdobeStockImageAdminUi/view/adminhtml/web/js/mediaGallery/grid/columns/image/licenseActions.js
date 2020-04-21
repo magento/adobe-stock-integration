@@ -120,7 +120,7 @@ define([
                                 content: error
                             });
 
-                        }.bind(this))
+                        })
                         .finally(function () {
                             this.imageModel().reloadGrid();
                         }.bind(this));
