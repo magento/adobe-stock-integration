@@ -32,7 +32,7 @@ class CreateAssetFromFile
     private $driver;
 
     /**
-     * @var GetByPathInterface
+     * @var GetAssetsByPathsInterface
      */
     private $getMediaGalleryAssetByPath;
     
@@ -50,7 +50,7 @@ class CreateAssetFromFile
      * @param Filesystem $filesystem
      * @param AssetInterfaceFactory $assetFactory
      * @param File $driver
-     * @param GetByPathInterface $getMediaGalleryAssetByPath
+     * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      */
     public function __construct(
         Filesystem $filesystem,
@@ -74,12 +74,11 @@ class CreateAssetFromFile
     public function execute(\SplFileInfo $file)
     {
         $path = $file->getPath() . '/' . $file->getFileName();
-
+        
         [$width, $height] = getimagesize($path);
 
-        return $this->assetFactory->create(
+        return $this->getAsset($path) ?? $this->assetFactory->create(
             [
-                'id' => $this->getAssetId($path),
                 'path' => $this->getPath($path),
                 'title' => $file->getBasename('.' . $file->getExtension()),
                 'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
@@ -96,16 +95,14 @@ class CreateAssetFromFile
     /**
      * Returns asset id if asset already exist by provided path
      *
-     * @param string $path
-     * @return null|int
+     * @param string $relativePath
+     * @return null|AssetInterface
+     * @throws ValidatorException
      */
-    private function getAssetId(string $path): ?int
+    private function getAsset(string $relativePath): ?AssetInterface
     {
-        $asset = $this->getMediaGalleryAssetByPath->execute([$this->getPath($path)]);
-        if (!empty($asset)) {
-            return $asset[0]->getId();
-        }
-        return null;
+        $asset = $this->getMediaGalleryAssetByPath->execute([$this->getPath($relativePath)]);
+        return !empty($asset) ? $asset[0] : null;
     }
     
     /**
