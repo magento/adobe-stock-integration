@@ -200,9 +200,6 @@ define([
         reloadMediaGrid: function (e, data) {
             if (data.reload) {
                 this.reloadGrid();
-                this.adobeListingDataProvider().reload({
-                    refresh: true
-                });
             }
 
             if (data.message && data.code) {
@@ -216,10 +213,14 @@ define([
          */
         reloadGrid: function () {
             var provider = this.provider(),
-                dataStorage = provider.storage();
+                dataStorage = provider.storage(),
+                adobeGridProvider = this.adobeListingDataProvider();
 
             dataStorage.clearRequests();
             provider.reload();
+            adobeGridProvider.reload({
+                refresh: true
+            });
         },
 
         /**
