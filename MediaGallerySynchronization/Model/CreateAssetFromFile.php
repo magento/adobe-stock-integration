@@ -95,7 +95,7 @@ class CreateAssetFromFile
     /**
      * Returns asset if asset already exist by provided path
      *
-     * @param string $relativePath
+     * @param string $path
      * @return null|AssetInterface
      * @throws ValidatorException
      */
