@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 
 /**
  * Create media asset object based on the file information
@@ -31,6 +32,11 @@ class CreateAssetFromFile
     private $driver;
 
     /**
+     * @var GetByPathInterface
+     */
+    private $getMediaGalleryAssetByPath;
+    
+    /**
      * @var Read
      */
     private $mediaDirectory;
@@ -44,15 +50,18 @@ class CreateAssetFromFile
      * @param Filesystem $filesystem
      * @param AssetInterfaceFactory $assetFactory
      * @param File $driver
+     * @param GetByPathInterface $getMediaGalleryAssetByPath
      */
     public function __construct(
         Filesystem $filesystem,
         AssetInterfaceFactory $assetFactory,
-        File $driver
+        File $driver,
+        GetAssetsByPathsInterface $getMediaGalleryAssetByPath
     ) {
         $this->filesystem = $filesystem;
         $this->assetFactory = $assetFactory;
         $this->driver = $driver;
+        $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
     }
 
     /**
@@ -67,9 +76,11 @@ class CreateAssetFromFile
         $path = $file->getPath() . '/' . $file->getFileName();
 
         [$width, $height] = getimagesize($path);
+        
 
         return $this->assetFactory->create(
             [
+                'id' => $this->getAssetId($path),
                 'path' => $this->getPath($path),
                 'title' => $file->getBasename('.' . $file->getExtension()),
                 'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
@@ -83,6 +94,21 @@ class CreateAssetFromFile
         );
     }
 
+    /**
+     * Return asset id if asset already exist by provided path
+     *
+     * @param string $path
+     * @return null|int
+     */
+    private function getAssetId(string $path): ?int
+    {
+        $asset = $this->getMediaGalleryAssetByPath->execute([$this->getPath($path)]);
+        if (!empty($asset)) {
+            return $asset[0]->getId();
+        }
+        return null;
+    }
+    
     /**
      * Get correct path for media asset
      *
