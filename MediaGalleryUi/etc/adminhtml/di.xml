@@ -21,16 +21,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Sorting">
-        <arguments>
-            <argument name="filterFieldsMap" xsi:type="array">
-                <item name="name_az" xsi:type="string">title</item>
-                <item name="name_za" xsi:type="string">title</item>
-                <item name="directory_desc" xsi:type="string">path</item>
-                <item name="directory_asc" xsi:type="string">path</item>
-                <item name="newest_first" xsi:type="string">created_at</item>
-                <item name="oldest_first" xsi:type="string">created_at</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

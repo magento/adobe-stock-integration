@@ -16,17 +16,19 @@ define([
          * Prepared sort order options
          */
         preparedOptions: function (columns) {
-            var index = 0;
+            var index = 0,
+                sortBy;
 
             if (columns && columns.length > 0) {
                 columns.map(function (column, i) {
                     if (column.sortable === true) {
+                        sortBy = column['sort_by'] || {};
                         this.options.push({
-                                value: column.index,
-                                label: column.label,
-                                sortByField: column.sortByField,
-                                sortDirection: column.sortDirection
-                            });
+                            value: column.index,
+                            label: column.label,
+                            sortByField: sortBy.field,
+                            sortDirection: sortBy.direction
+                        });
 
                         this.columnIndexMap[column.index] = index++;
 
