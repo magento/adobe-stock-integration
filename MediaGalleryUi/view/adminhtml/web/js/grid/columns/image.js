@@ -26,8 +26,7 @@ define([
             modules: {
                 actions: '${ $.name }_actions',
                 provider: '${ $.provider }',
-                messages: '${ $.messagesName }',
-                adobeListingDataProvider: '${ $.adobeListingDataProvider }'
+                messages: '${ $.messagesName }'
             },
             imports: {
                 activeDirectory: '${ $.mediaGalleryDirectoryComponent }:activeNode'
@@ -213,14 +212,10 @@ define([
          */
         reloadGrid: function () {
             var provider = this.provider(),
-                dataStorage = provider.storage(),
-                adobeGridProvider = this.adobeListingDataProvider();
+                dataStorage = provider.storage();
 
             dataStorage.clearRequests();
             provider.reload();
-            adobeGridProvider.reload({
-                refresh: true
-            });
         },
 
         /**
