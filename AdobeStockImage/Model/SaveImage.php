@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Save an image provided with the adobe Stock integration.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImage implements SaveImageInterface
 {
@@ -39,9 +40,9 @@ class SaveImage implements SaveImageInterface
     private $documentToKeywords;
 
     /**
-     * @var SaveAssetsKeywordsInterface
+     * @var SaveKeywords
      */
-    private $saveAssetKeywords;
+    private $saveKeywords;
 
     /**
      * @var SaveImageFile
@@ -85,7 +86,7 @@ class SaveImage implements SaveImageInterface
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToAsset = $documentToAsset;
-        $this->saveAssetKeywords = $saveAssetKeywords;
+        $this->saveKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->saveImageFile = $saveImageFile;
         $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
@@ -109,7 +110,7 @@ class SaveImage implements SaveImageInterface
             $this->saveMediaGalleryAsset->execute($document, $destinationPath);
             $mediaAssetId = $this->getMediaGalleryAssetByPath->execute([$destinationPath])[0]->getId();
 
-            $this->saveAssetKeywords->execute(
+            $this->saveKeywords->execute(
                 $mediaAssetId,
                 $this->documentToKeywords->convert($document)
             );

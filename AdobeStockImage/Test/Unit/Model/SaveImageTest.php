@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Save image model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImageTest extends TestCase
 {

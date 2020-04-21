@@ -83,7 +83,6 @@ class SaveMediaGalleryAssetTest extends TestCase
     {
         $document = $this->createMock(Document::class);
         $destinationPath = 'path';
-        $mediaGalleryAssetId = 56;
 
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')

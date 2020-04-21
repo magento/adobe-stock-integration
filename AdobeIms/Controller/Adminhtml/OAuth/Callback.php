@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Callback action for managing user authentication with the Adobe services
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Callback extends Action implements HttpGetActionInterface
 {
