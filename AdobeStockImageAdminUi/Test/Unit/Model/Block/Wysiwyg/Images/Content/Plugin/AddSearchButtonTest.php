@@ -11,11 +11,11 @@ namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model\Block\Wysiwyg\Images\Co
 use Magento\AdobeStockImageAdminUi\Model\IsAdobeStockIntegrationEnabled;
 use Magento\AdobeStockImageAdminUi\Plugin\AddSearchButton;
 use Magento\Backend\Block\Widget\Container;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\AuthorizationInterface;
 
 /**
  * Test adding Adobe Stock Search button to the media gallery toolbar.

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\OAuth;
 
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeIms\Model\GetImage;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
@@ -19,7 +20,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeIms\Model\GetImage;
 
 /**
  * User repository test.
