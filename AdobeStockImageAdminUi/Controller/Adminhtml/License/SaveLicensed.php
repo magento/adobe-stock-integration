@@ -42,17 +42,17 @@ class SaveLicensed extends Action implements HttpPostActionInterface
 
     /**
      * @param Action\Context $context
-     * @param SaveLicensedImageInterface $saveLicensedImage
+     * @param SaveLicensedImageInterface $saveLicensed
      * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        SaveLicensedImageInterface $saveLicensedImage,
+        SaveLicensedImageInterface $saveLicensed,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->saveLicensedImage = $saveLicensedImage;
+        $this->saveLicensedImage = $saveLicensed;
         $this->logger = $logger;
     }
 

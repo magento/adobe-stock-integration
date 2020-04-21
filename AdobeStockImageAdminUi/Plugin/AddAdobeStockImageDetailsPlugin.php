@@ -17,7 +17,7 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId;
+use Magento\MediaGalleryUi\Model\GetDetailsByAssetId;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
@@ -59,8 +59,6 @@ class AddAdobeStockImageDetailsPlugin
     private $logger;
 
     /**
-     * AddAdobeStockImageDetailsPlugin constructor.
-     *
      * @param FilterBuilder $filterBuilder
      * @param AssetRepositoryInterface $assetRepository
      * @param CategoryRepositoryInterface $categoryRepository
@@ -87,15 +85,14 @@ class AddAdobeStockImageDetailsPlugin
     /**
      * Adds an Adobe Stock image details
      *
-     * @param GetImageDetailsByAssetId $getImageDetailsByAssetId
+     * @param GetDetailsByAssetId $getImageDetailsByAssetId
      * @param array $imageDetails
      * @param int $assetId
-     *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
-        GetImageDetailsByAssetId $getImageDetailsByAssetId,
+        GetDetailsByAssetId $getImageDetailsByAssetId,
         array $imageDetails,
         int $assetId
     ): array {

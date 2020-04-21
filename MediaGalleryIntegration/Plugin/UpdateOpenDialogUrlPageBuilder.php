@@ -43,9 +43,8 @@ class UpdateOpenDialogUrlPageBuilder
      *
      * @param OpenDialogUrl $subject
      * @param array $itemName
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
      * @return string[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetData(OpenDialogUrl $subject, array $itemName): array
     {

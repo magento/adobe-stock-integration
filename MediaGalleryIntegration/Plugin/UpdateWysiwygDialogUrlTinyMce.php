@@ -44,6 +44,7 @@ class UpdateWysiwygDialogUrlTinyMce
      *
      * @param Config $subject
      * @param DataObject $config
+     * @return DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetConfig(Config $subject, DataObject $config): DataObject
@@ -51,7 +52,7 @@ class UpdateWysiwygDialogUrlTinyMce
         if (!$this->config->isEnabled()) {
             return $config;
         }
-        
+
         $config->setData('files_browser_window_url', $this->url->getUrl('media_gallery/index/index'));
 
         return $config;

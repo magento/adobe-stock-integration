@@ -43,16 +43,16 @@ class Upload extends Action implements HttpPostActionInterface
 
     /**
      * @param Context $context
-     * @param UploadImage $uploadImage
+     * @param UploadImage $upload
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        UploadImage $uploadImage,
+        UploadImage $upload,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
-        $this->uploadImage = $uploadImage;
+        $this->uploadImage = $upload;
         $this->logger = $logger;
     }
 

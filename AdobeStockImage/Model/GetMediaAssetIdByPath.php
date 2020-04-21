@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
@@ -20,9 +22,9 @@ use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Save an image provided with the adobe Stock integration.
+ * Get media asset id by media asset path
  */
-class SaveImage implements SaveImageInterface
+class GetMediaAssetIdByPath
 {
     /**
      * @var SaveAssetInterface
@@ -60,6 +62,11 @@ class SaveImage implements SaveImageInterface
     private $getMediaGalleryAssetByPath;
 
     /**
+     * @var AssetRepositoryInterface
+     */
+    private $assetRepository;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -72,6 +79,7 @@ class SaveImage implements SaveImageInterface
      * @param SaveImageFile $saveImageFile
      * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
+     * @param AssetRepositoryInterface $assetRepository
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -82,6 +90,7 @@ class SaveImage implements SaveImageInterface
         SaveImageFile $saveImageFile,
         SaveMediaGalleryAsset $saveMediaGalleryAsset,
         GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
+        AssetRepositoryInterface $assetRepository,
         LoggerInterface $logger
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
@@ -91,6 +100,7 @@ class SaveImage implements SaveImageInterface
         $this->saveImageFile = $saveImageFile;
         $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
         $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
+        $this->assetRepository = $assetRepository;
         $this->logger = $logger;
     }
 
@@ -100,28 +110,20 @@ class SaveImage implements SaveImageInterface
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
+     *
      * @throws CouldNotSaveException
      * @throws LocalizedException
      */
     public function execute(Document $document, string $url, string $destinationPath): void
     {
-        try {
-            $this->saveImageFile->execute($document, $url, $destinationPath);
-            $this->saveMediaGalleryAsset->execute($document, $destinationPath);
-            $mediaAssetId = $this->getMediaGalleryAssetByPath->execute([$destinationPath])[0]->getId();
-
-            $this->saveAssetKeywords->execute(
-                $mediaAssetId,
-                $this->documentToKeywords->convert($document)
-            );
-            $this->saveAdobeStockAsset->execute(
-                $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaAssetId])
-            );
-        } catch (LocalizedException $localizedException) {
-            throw $localizedException;
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            throw new CouldNotSaveException(__('Could not save image.'), $exception);
+        $mediaAssets = $this->getMediaGalleryAssetByPath->execute([$destinationPath]);
+        if (empty($mediaAssets)) {
+            /** @var AssetInterface $mediaAsset */
+            $adobeAsset = $this->assetRepository->getById($document->getId());
+            $mediaAssetId = $adobeAsset->getMediaGalleryId();
+        } else {
+            $mediaAssetId = $mediaAssets[0]->getId();
         }
+        return $mediaAssetId;
     }
 }
