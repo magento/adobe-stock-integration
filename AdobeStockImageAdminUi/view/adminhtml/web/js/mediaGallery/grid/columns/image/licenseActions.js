@@ -102,8 +102,8 @@ define([
                     response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
                     this.image().displayedRecord(response.imageDetails);
                     $.ajaxSetup({
-                                async: false
-                            });
+                        async: false
+                    });
                     this.image().actions().login().login()
                         .then(function () {
                             if (this.image().actions().isLicensed()) {
