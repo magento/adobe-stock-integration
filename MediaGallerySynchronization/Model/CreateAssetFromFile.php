@@ -79,7 +79,7 @@ class CreateAssetFromFile
 
         return $this->getAsset($path) ?? $this->assetFactory->create(
             [
-                'path' => $this->getPath($path),
+                'path' => $this->getRelativePath($path),
                 'title' => $file->getBasename('.' . $file->getExtension()),
                 'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
@@ -93,15 +93,15 @@ class CreateAssetFromFile
     }
 
     /**
-     * Returns asset id if asset already exist by provided path
+     * Returns asset if asset already exist by provided path
      *
      * @param string $relativePath
      * @return null|AssetInterface
      * @throws ValidatorException
      */
-    private function getAsset(string $relativePath): ?AssetInterface
+    private function getAsset(string $path): ?AssetInterface
     {
-        $asset = $this->getMediaGalleryAssetByPath->execute([$this->getPath($relativePath)]);
+        $asset = $this->getMediaGalleryAssetByPath->execute([$this->getRelativePath($path)]);
         return !empty($asset) ? $asset[0] : null;
     }
     
@@ -112,7 +112,7 @@ class CreateAssetFromFile
      * @return string
      * @throws ValidatorException
      */
-    private function getPath(string $file): string
+    private function getRelativePath(string $file): string
     {
         $path = $this->getMediaDirectory()->getRelativePath($file);
 
