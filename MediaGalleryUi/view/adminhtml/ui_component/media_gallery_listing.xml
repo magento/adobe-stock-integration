@@ -184,14 +184,6 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <column name="created_at">
-            <settings>
-                <filter>dateRange</filter>
-                <dataType>date</dataType>
-                <visible>false</visible>
-                <sortable>true</sortable>
-            </settings>
-        </column>
         <column name="newest_first">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -217,6 +209,14 @@
             </argument>
             <settings>
                 <label translate="true">Oldest first</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="created_at">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
