@@ -26,7 +26,8 @@ define([
             modules: {
                 actions: '${ $.name }_actions',
                 provider: '${ $.provider }',
-                messages: '${ $.messagesName }'
+                messages: '${ $.messagesName }',
+                adobeListingDataProvider: '${ $.adobeListingDataProvider }'
             },
             imports: {
                 activeDirectory: '${ $.mediaGalleryDirectoryComponent }:activeNode'
@@ -199,6 +200,9 @@ define([
         reloadMediaGrid: function (e, data) {
             if (data.reload) {
                 this.reloadGrid();
+                this.adobeListingDataProvider().reload({
+                    refresh: true
+                });
             }
 
             if (data.message && data.code) {
