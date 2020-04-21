@@ -43,5 +43,4 @@ class AssetDetailsProviderPool
         }
         return $details;
     }
-
 }

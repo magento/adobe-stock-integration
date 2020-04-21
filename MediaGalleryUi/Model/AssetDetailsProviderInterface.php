@@ -21,5 +21,4 @@ interface AssetDetailsProviderInterface
      * @return array
      */
     public function execute(AssetInterface $asset): array;
-
 }

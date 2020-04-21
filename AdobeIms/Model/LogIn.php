@@ -74,6 +74,7 @@ class LogIn implements LogInInterface
     /**
      * Get user profile entity
      *
+     * @param int $userId
      * @return UserProfileInterface
      */
     private function getUserProfile(int $userId): UserProfileInterface
