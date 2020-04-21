@@ -101,8 +101,29 @@ define([
                     response.imageDetails.id =  response.imageDetails['adobe_stock'][0].value;
                     response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
                     this.image().displayedRecord(response.imageDetails);
-                    this.image().actions().licenseProcess();
-                    this.imageModel().reloadGrid();
+                    $.ajaxSetup({
+                                async: false
+                            });
+                    this.image().actions().login().login()
+                        .then(function () {
+                            if (this.image().actions().isLicensed()) {
+                                this.image().actions().saveLicensed();
+                            } else {
+                                this.image().actions().showLicenseConfirmation(this.image().displayedRecord());
+                            }
+                            $.ajaxSetup({
+                                async: true
+                            });
+                        }.bind(this))
+                        .catch(function (error) {
+                            uiAlert({
+                                content: error
+                            });
+
+                        }.bind(this))
+                        .finally(function () {
+                            this.imageModel().reloadGrid();
+                        }.bind(this));
 
                 }.bind(this),
 
