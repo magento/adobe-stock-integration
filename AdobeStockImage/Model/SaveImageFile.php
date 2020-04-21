@@ -11,6 +11,7 @@ use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Process saving an image file. If the asset has been already saved, delete the previous version.
@@ -60,9 +61,10 @@ class SaveImageFile
                 $this->storageDelete->execute($pathValue);
             }
             $this->storageSave->execute($url, $destinationPath);
+        } catch (LocalizedException $localizedException) {
+            throw $localizedException;
         } catch (\Exception $exception) {
-            $message = __('%error', ['error' => $exception->getMessage()]);
-            throw new CouldNotSaveException($message);
+            throw new CouldNotSaveException(__('Could not save image.'), $exception);
         }
     }
 }

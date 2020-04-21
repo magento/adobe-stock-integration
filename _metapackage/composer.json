@@ -16,7 +16,7 @@
         "magento/module-media-gallery-ui": "*",
         "magento/module-media-gallery-ui-api": "*",
         "magento/module-media-gallery-integration": "*",
-        "magento/module-media-content-api": "*",
-        "magento/module-media-content": "*"
+        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-gallery-synchronization": "*"
     }
 }
