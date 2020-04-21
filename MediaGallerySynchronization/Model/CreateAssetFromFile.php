@@ -76,7 +76,6 @@ class CreateAssetFromFile
         $path = $file->getPath() . '/' . $file->getFileName();
 
         [$width, $height] = getimagesize($path);
-        
 
         return $this->assetFactory->create(
             [
@@ -95,7 +94,7 @@ class CreateAssetFromFile
     }
 
     /**
-     * Return asset id if asset already exist by provided path
+     * Returns asset id if asset already exist by provided path
      *
      * @param string $path
      * @return null|int
