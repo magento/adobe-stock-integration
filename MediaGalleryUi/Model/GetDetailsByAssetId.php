@@ -10,6 +10,8 @@ namespace Magento\MediaGalleryUi\Model;
 use Exception;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider;
@@ -77,13 +79,7 @@ class GetDetailsByAssetId
      */
     public function execute(int $assetId): array
     {
-        $asset = $this->getAssetById->execute([$assetId])[0];
-
-        $tags = [];
-        $keywords = $this->getAssetKeywords->execute([$asset->getId()])[0]->getKeywords();
-        foreach ($keywords as $keyword) {
-            $tags[] = $keyword->getKeyword();
-        }
+        $asset = current($this->getAssetById->execute([$assetId]));
 
         return [
             'image_url' => $this->getUrl($asset->getPath()),
@@ -92,10 +88,34 @@ class GetDetailsByAssetId
             'id' => $assetId,
             'details' => $this->detailsProviderPool->execute($asset),
             'size' => $asset->getSize(),
-            'tags' => $tags,
+            'tags' => $this->getKeywords($asset),
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
             'content_type' => $asset->getContentType()
         ];
+    }
+
+    /**
+     * Key asset keywords
+     *
+     * @param AssetInterface $asset
+     * @return string[]
+     */
+    private function getKeywords(AssetInterface $asset): array
+    {
+        $assetKeywords = $this->getAssetKeywords->execute([$asset->getId()]);
+
+        if (empty($assetKeywords)) {
+            return [];
+        }
+
+        $keywords = current($assetKeywords)->getKeywords();
+
+        return array_map(
+            function (KeywordInterface $keyword) {
+                return $keyword->getKeyword();
+            },
+            $keywords
+        );
     }
 
     /**

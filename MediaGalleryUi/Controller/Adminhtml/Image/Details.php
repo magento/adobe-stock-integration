@@ -80,12 +80,12 @@ class Details extends Action implements HttpGetActionInterface
         }
 
         try {
-            $imageDetails = $this->getDetailsByAssetId->execute($id);
+            $details = $this->getDetailsByAssetId->execute($id);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'imageDetails' => $imageDetails
+                'imageDetails' => $details
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
