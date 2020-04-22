@@ -98,9 +98,9 @@ define([
                  * @param {Object} response
                  */
                 success: function (response) {
-                    response.imageDetails.id =  response.imageDetails['adobe_stock'][0].value;
-                    response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
-                    this.image().displayedRecord(response.imageDetails);
+                    response.imageDetails.id =  response.imageDetails['adobe_stock']['info'][0].value;
+                    response.imageDetails.category =  response.imageDetails['adobe_stock']['info'][3].value;
+                    this.image().displayedRecord(response.imageDetails['adobe_stock']['object']);
                     this.image().actions().licenseProcess();
                     this.imageModel().reloadGrid();
 

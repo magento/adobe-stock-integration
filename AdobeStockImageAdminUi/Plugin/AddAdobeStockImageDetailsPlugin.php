@@ -15,6 +15,8 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
+use Magento\AdobeStockImage\Model\SerializeImage;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId;
@@ -59,6 +61,13 @@ class AddAdobeStockImageDetailsPlugin
     private $logger;
 
     /**
+     * @var GetAssetByIdInterface
+     */
+    private $getAssetById;
+
+    private $serializeImage;
+
+    /**
      * AddAdobeStockImageDetailsPlugin constructor.
      *
      * @param FilterBuilder $filterBuilder
@@ -73,8 +82,10 @@ class AddAdobeStockImageDetailsPlugin
         AssetRepositoryInterface $assetRepository,
         CategoryRepositoryInterface $categoryRepository,
         CreatorRepositoryInterface $creatorRepository,
+        GetAssetByIdInterface $getAssetById,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SerializeImage $serializeImage
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->assetRepository = $assetRepository;
@@ -82,6 +93,8 @@ class AddAdobeStockImageDetailsPlugin
         $this->creatorRepository = $creatorRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
+        $this->getAssetById = $getAssetById;
+        $this->serializeImage = $serializeImage;
     }
 
     /**
@@ -111,13 +124,16 @@ class AddAdobeStockImageDetailsPlugin
             /** @var AssetSearchResultsInterface $result */
             $result = $this->assetRepository->getList($searchCriteria);
             $adobeStockInfo = [];
+            $adobeStockObject = [];
             if ($result->getTotalCount() > 0) {
                 $item = $result->getItems();
                 /** @var AssetInterface $asset */
                 $asset = reset($item);
                 $adobeStockInfo = $this->loadAssetsInfo($asset);
+                $adobeStockObject = $this->getAssetById->execute($asset->getId());
             }
-            $imageDetails['adobe_stock'] = $adobeStockInfo;
+            $imageDetails['adobe_stock']['info'] = $adobeStockInfo;
+            $imageDetails['adobe_stock']['object'] = $this->serializeImage->execute($adobeStockObject);
         } catch (Exception $exception) {
             $this->logger->critical($exception);
             $imageDetails['adobe_stock'] = [];
