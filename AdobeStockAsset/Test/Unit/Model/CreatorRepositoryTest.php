@@ -35,17 +35,17 @@ class CreatorRepositoryTest extends TestCase
     private $creatorCollectionFactory;
 
     /**
-     * @var MockObject|JoinProcessorInterface $joinProcessorInterface
+     * @var MockObject|JoinProcessorInterface
      */
     private $joinProcessorInterface;
 
     /**
-     * @var MockObject|CollectionProcessorInterface $collectionProcessorInterface
+     * @var MockObject|CollectionProcessorInterface
      */
     private $collectionProcessorInterface;
 
     /**
-     * @var MockObject|CreatorSearchResultsInterfaceFactory $creatorSearchResultInterfaceFactory
+     * @var MockObject|CreatorSearchResultsInterfaceFactory
      */
     private $creatorSearchResultInterfaceFactory;
 

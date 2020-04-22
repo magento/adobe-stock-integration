@@ -16,7 +16,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,24 +27,24 @@ use PHPUnit\Framework\TestCase;
 class SaveMediaGalleryAssetTest extends TestCase
 {
     /**
-     * @var SaveInterface|MockObject
+     * @var SaveAssetsInterface|MockObject
      */
-    private $saveMediaAssetMock;
+    private $saveAssets;
 
     /**
      * @var DocumentToMediaGalleryAsset|MockObject
      */
-    private $documentToMediaGalleryAssetMock;
+    private $convertor;
 
     /**
      * @var FileSystem|MockObject
      */
-    private $fileSystemMock;
+    private $filesystem;
 
     /**
      * @var Read|MockObject
      */
-    private $mediaDirectoryMock;
+    private $mediaDirectory;
 
     /**
      * @var SaveMediaGalleryAsset
@@ -56,17 +56,17 @@ class SaveMediaGalleryAssetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->saveMediaAssetMock = $this->createMock(SaveInterface::class);
-        $this->documentToMediaGalleryAssetMock = $this->createMock(DocumentToMediaGalleryAsset::class);
-        $this->fileSystemMock = $this->createMock(Filesystem::class);
-        $this->mediaDirectoryMock = $this->createMock(Read::class);
+        $this->saveAssets = $this->createMock(SaveAssetsInterface::class);
+        $this->convertor = $this->createMock(DocumentToMediaGalleryAsset::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->mediaDirectory = $this->createMock(Read::class);
 
         $this->saveMediaAsset = (new ObjectManager($this))->getObject(
             SaveMediaGalleryAsset::class,
             [
-                'saveMediaAsset' =>  $this->saveMediaAssetMock,
-                'documentToMediaGalleryAsset' =>  $this->documentToMediaGalleryAssetMock,
-                'fileSystem' => $this->fileSystemMock
+                'saveMediaAsset' =>  $this->saveAssets,
+                'documentToMediaGalleryAsset' =>  $this->convertor,
+                'fileSystem' => $this->filesystem
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->saveMediaAsset));
@@ -77,31 +77,25 @@ class SaveMediaGalleryAssetTest extends TestCase
     /**
      * Verify successful save of a media gallery asset id.
      *
-     * @param Document $document
-     * @param string $destinationPath
-     * @param int $mediaGalleryAssetId
-     * @param bool $isMediaAssetExists
-     *
-     * @dataProvider assetProvider
+     * @throws CouldNotSaveException
      */
-    public function testExecute(
-        Document $document,
-        string $destinationPath,
-        int $mediaGalleryAssetId,
-        bool $isMediaAssetExists
-    ): void {
-        $this->fileSystemMock->expects($this->once())
+    public function testExecute(): void
+    {
+        $document = $this->createMock(Document::class);
+        $destinationPath = 'path';
+
+        $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
-            ->willReturn($this->mediaDirectoryMock);
+            ->willReturn($this->mediaDirectory);
 
-        $this->mediaDirectoryMock->expects($this->once())
+        $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
             ->with($destinationPath)
             ->willReturn('root/pub/media/catalog/test-image.jpeg');
 
         $fileSize = 42;
-        $this->mediaDirectoryMock->expects($this->once())
+        $this->mediaDirectory->expects($this->once())
             ->method('stat')
             ->willReturn(['size' => $fileSize]);
 
@@ -112,75 +106,15 @@ class SaveMediaGalleryAssetTest extends TestCase
             'size' => $fileSize,
         ];
         $mediaGalleryAssetMock = $this->createMock(Asset::class);
-        $this->documentToMediaGalleryAssetMock->expects($this->once())
+        $this->convertor->expects($this->once())
             ->method('convert')
             ->with($document, $additionalData)
             ->willReturn($mediaGalleryAssetMock);
 
-        $isMediaAssetExists ?
-            $this->saveMediaAssetMock->expects($this->once())
-                ->method('execute')
-                ->with($mediaGalleryAssetMock)
-                ->willReturn($mediaGalleryAssetId)
-            : $this->saveMediaAssetMock->expects($this->once())
-                ->method('execute')
-                ->with($mediaGalleryAssetMock)
-                ->willReturn(0);
+        $this->saveAssets->expects($this->once())
+            ->method('execute')
+            ->with([$mediaGalleryAssetMock]);
 
         $this->saveMediaAsset->execute($document, $destinationPath);
-    }
-
-    /**
-     * Test save media gallery asset with exception.
-     *
-     * @param Document $document
-     * @param string $destinationPath
-     * @dataProvider assetProvider
-     */
-    public function testExecuteWithException(
-        Document $document,
-        string $destinationPath
-    ): void {
-        $this->fileSystemMock->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::MEDIA)
-            ->willThrowException(new \Exception('Some Exception'));
-
-        $this->expectException(CouldNotSaveException::class);
-
-        $this->saveMediaAsset->execute($document, $destinationPath);
-    }
-
-    /**
-     * Data provider for testExecute
-     *
-     * @return array
-     */
-    public function assetProvider(): array
-    {
-        return [
-            [
-                'document' => $this->getDocument(),
-                'destinationPath' => 'path',
-                'mediaGalleryAssetId' => 12345,
-                'isMediaAssetExists' => true
-            ],
-            [
-                'document' => $this->getDocument(),
-                'destinationPath' => 'path',
-                'mediaGalleryAssetId' => 12345,
-                'isMediaAssetExists' => false
-            ]
-        ];
-    }
-
-    /**
-     * Get document
-     *
-     * @return MockObject
-     */
-    private function getDocument(): MockObject
-    {
-        return $this->createMock(Document::class);
     }
 }
