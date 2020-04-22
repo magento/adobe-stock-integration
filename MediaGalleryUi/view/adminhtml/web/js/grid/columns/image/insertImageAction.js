@@ -26,7 +26,7 @@ define([
             if (record === null) {
                 return false;
             }
-            targetElement = this.getTargetElement(config.targetElementId);
+            targetElement = this.getTargetElement(window.MediabrowserUtility.targetElementId);
 
             if (!targetElement.length) {
                 window.MediabrowserUtility.closeDialog();

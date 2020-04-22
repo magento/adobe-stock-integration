@@ -10,7 +10,6 @@ namespace Magento\MediaGalleryUiApi\Api;
 
 /**
  * Class responsible to provide API access to system configuration related to the Media Gallery
- * @api
  */
 interface ConfigInterface
 {

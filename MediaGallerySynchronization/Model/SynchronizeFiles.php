@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Psr\Log\LoggerInterface;
 
@@ -23,7 +23,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $createAssetFromFile;
 
     /**
-     * @var SaveInterface
+     * @var SaveAssetsInterface
      */
     private $saveAsset;
 
@@ -34,12 +34,12 @@ class SynchronizeFiles implements SynchronizeFilesInterface
 
     /**
      * @param CreateAssetFromFile $createAssetFromFile
-     * @param SaveInterface $saveAsset
+     * @param SaveAssetsInterface $saveAsset
      * @param LoggerInterface $log
      */
     public function __construct(
         CreateAssetFromFile $createAssetFromFile,
-        SaveInterface $saveAsset,
+        SaveAssetsInterface $saveAsset,
         LoggerInterface $log
     ) {
         $this->createAssetFromFile = $createAssetFromFile;
@@ -55,7 +55,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         $failedFiles = [];
         foreach ($files as $file) {
             try {
-                $this->saveAsset->execute($this->createAssetFromFile->execute($file));
+                $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
             } catch (\Exception $exception) {
                 $this->log->critical($exception);
                 $failedFiles[] = $file->getFilename();
