@@ -166,6 +166,7 @@ class GetRelatedImagesTest extends TestCase
      * Series Data provider.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function relatedImagesDataProvider(): array
     {
