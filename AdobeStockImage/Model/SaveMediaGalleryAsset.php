@@ -12,7 +12,7 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 
 /**
  * Process save action of the media gallery asset.
@@ -20,7 +20,7 @@ use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 class SaveMediaGalleryAsset
 {
     /**
-     * @var SaveInterface
+     * @var SaveAssetsInterface
      */
     private $saveMediaAsset;
 
@@ -35,12 +35,12 @@ class SaveMediaGalleryAsset
     private $fileSystem;
 
     /**
-     * @param SaveInterface $saveMediaAsset
+     * @param SaveAssetsInterface $saveMediaAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param Filesystem $fileSystem
      */
     public function __construct(
-        SaveInterface $saveMediaAsset,
+        SaveAssetsInterface $saveMediaAsset,
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         Filesystem $fileSystem
     ) {
@@ -69,7 +69,7 @@ class SaveMediaGalleryAsset
             ];
 
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
-            $this->saveMediaAsset->execute($mediaGalleryAsset);
+            $this->saveMediaAsset->execute([$mediaGalleryAsset]);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Could not save media gallery asset.'), $exception);
         }
