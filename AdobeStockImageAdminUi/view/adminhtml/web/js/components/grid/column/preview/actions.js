@@ -142,21 +142,7 @@ define([
             var self = this,
                 imagePath = self.preview().displayedRecord().path,
                 imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
-                record = this.getRecordFromMediaGalleryProvider(imagePath),
-                subscription;
-
-            if (!record) {
-                subscription = this.imageItems.subscribe(function () {
-                    subscription.dispose();
-                    record = self.getRecordFromMediaGalleryProvider(imagePath);
-
-                    if (!record) {
-                        mediaGallery.notLocated();
-                    }
-
-                    self.selectRecord(record);
-                });
-            }
+                record = this.getRecordFromMediaGalleryProvider(imagePath);
 
             if (imageFolders) {
                 this.imageDirectory().selectFolder(imageFolders);
