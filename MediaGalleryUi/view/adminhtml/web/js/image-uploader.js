@@ -7,9 +7,10 @@ define([
     'uiComponent',
     'jquery',
     'underscore',
+    'Magento_Ui/js/lib/validation/validator',
     'mage/translate',
     'jquery/file-uploader'
-], function (Component, $, _) {
+], function (Component, $, _, validator) {
     'use strict';
 
     return Component.extend({
@@ -80,6 +81,15 @@ define([
                 }.bind(this),
 
                 add: function (e, data) {
+                    if (!this.isSizeExceeded(data.files[0])) {
+                        this.mediaGridMessages().add(
+                            'error',
+                            $.mage.__('Cannot upload <b>' + data.files[0].name + '</b>. file exceeds maximum file size limit.')
+                        );
+
+                        return;
+                    }
+
                     this.showLoader();
                     this.count(1);
                     data.submit();
@@ -106,6 +116,17 @@ define([
                     this.actions().reloadGrid();
                 }.bind(this)
             });
+        },
+
+        /**
+         * Checks if size of provided file exceeds
+         * defined in configuration size limits.
+         *
+         * @param {Object} file - File to be checked.
+         * @returns {Boolean}
+         */
+        isSizeExceeded: function (file) {
+            return validator('validate-max-size', file.size, this.maxFileSize);
         },
 
         /**
