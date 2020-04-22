@@ -115,7 +115,10 @@ define([
          */
         showErrorMessage: function (data) {
             data.files.each(function (file) {
-                this.mediaGridMessages().add('error', $.mage.__('Cannot upload <b>' + file.name + '</b>. This file is not supported'));
+                this.mediaGridMessages().add(
+                    'error',
+                    $.mage.__('Cannot upload <b>' + file.name + '</b>. This file is not supported')
+                );
             }.bind(this));
 
             this.hideLoader();
@@ -123,10 +126,8 @@ define([
 
         /**
          * Show success message, and files counts
-         *
-         * @param {Object} data
          */
-        showSuccessMessage: function (data) {
+        showSuccessMessage: function () {
             var prefix = this.count() === 1 ? 'an image' : this.count() + ' images';
 
             this.mediaGridMessages().messages.remove(function (item) {

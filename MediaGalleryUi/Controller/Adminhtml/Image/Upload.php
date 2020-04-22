@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
 class Upload extends Action implements HttpPostActionInterface
 {
     private const HTTP_OK = 200;
+    private const HTTP_BAD_REQUEST = 400;
 
     /**
      * @see _isAllowed()
