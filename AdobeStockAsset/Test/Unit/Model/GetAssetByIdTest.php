@@ -11,13 +11,13 @@ use Magento\AdobeStockAsset\Model\GetAssetById;
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteria;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
 
 /**
  * Test for get asset by id service.

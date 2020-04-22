@@ -8,6 +8,10 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\OAuth;
 
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeIms\Model\GetImage;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
+use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
+use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdobeImsApi\Api\LogInInterface;
