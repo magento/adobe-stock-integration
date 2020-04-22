@@ -6,16 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Ui\Component\Form\Element\DataType\Media\Image">
-        <plugin name="updateOpenDialogUrl" type="Magento\MediaGalleryIntegration\Plugin\UpdateOpenDialogUrl"/>
-    </type>
-    <type name="Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider">
-        <plugin name="updateWysiwygOpenDialogUrl" type="Magento\MediaGalleryIntegration\Plugin\UpdateWysiwygOpenDialogUrl"/>
-    </type>
-    <type name="Magento\PageBuilder\Model\Config\ContentType\AdditionalData\Provider\Uploader\OpenDialogUrl">
-        <plugin name="updateOpenDialogUrlPageBuilder" type="Magento\MediaGalleryIntegration\Plugin\UpdateOpenDialogUrlPageBuilder"/>
-    </type>
-        <type name="Magento\Tinymce3\Model\Config\Gallery\Config">
-        <plugin name="updateWysiwygOpendialogurlTinyMce3" type="Magento\MediaGalleryIntegration\Plugin\UpdateWysiwygDialogUrlTinyMce"/>
+    <type name="Magento\Ui\Component\Form\Element\DataType\Media\OpenDialogUrl">
+        <arguments>
+            <argument name="url" xsi:type="object">Magento\MediaGalleryIntegration\Model\OpenDialogUrlProvider</argument>
+        </arguments>
     </type>
 </config>
