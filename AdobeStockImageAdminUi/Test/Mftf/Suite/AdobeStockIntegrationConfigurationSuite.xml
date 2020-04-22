@@ -8,18 +8,19 @@
 
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
-    <suite name="adobe_stock_integration_suite">
+    <suite name="AdobeStockIntegrationConfigurationSuite">
         <before>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery">
                 <argument name="enabled" value="0"/>
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </after>
         <include>
-            <group name="adobe_stock_integration"/>
+            <group name="adobe_stock_integration_configuration"/>
         </include>
     </suite>
 </suites>

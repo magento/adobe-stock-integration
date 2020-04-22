@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryIntegration\Test\Integration\Plugin;
 
 use Magento\Cms\Helper\Wysiwyg\Images;
-use Magento\Cms\Model\Wysiwyg\CompositeConfigProvider;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider;
 use Magento\Framework\DataObject;
@@ -27,14 +26,14 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
     private const FILES_BROWSER_WINDOW_URL = 'files_browser_window_url';
 
     /**
-     * @var DataObject
-     */
-    private $wysiwygConfig;
-
-    /**
      * @var ObjectManagerInterface
      */
     private $objectManger;
+
+    /**
+     * @var DataObject
+     */
+    private $configDataObject;
 
     /**
      * @var string
@@ -47,20 +46,7 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManger = Bootstrap::getObjectManager();
-        $compositeConfigProvider = $this->objectManger->create(
-            CompositeConfigProvider::class,
-            [
-                'variablePluginConfigProvider' => ['default' => 'Magento\Variable\Model\Variable\ConfigProvider'],
-                'widgetPluginConfigProvider' => ['default' => 'Magento\Widget\Model\Widget\Config'],
-                'wysiwygConfigPostProcessor' => ['default' => 'Magento\Cms\Model\Wysiwyg\DefaultConfigProvider'],
-                'galleryConfigProvider' => ['default' => 'Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider']
-            ]
-        );
-        $model = $this->objectManger->create(
-            Config::class,
-            ['configProvider' => $compositeConfigProvider]
-        );
-        $this->wysiwygConfig = $model->getConfig();
+        $this->configDataObject = $this->objectManger->create(DataObject::class);
 
         $url = $this->objectManger->create(UrlInterface::class);
         $imageHelper = $this->objectManger->create(Images::class);
@@ -77,7 +63,7 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
     {
         /** @var DefaultConfigProvider $defaultConfigProvider */
         $defaultConfigProvider = $this->objectManger->create(DefaultConfigProvider::class);
-        $config = $defaultConfigProvider->getConfig($this->wysiwygConfig);
+        $config = $defaultConfigProvider->getConfig($this->configDataObject);
         self::assertNotEquals($this->filesBrowserWindowUrl, $config->getData(self::FILES_BROWSER_WINDOW_URL));
     }
 
@@ -89,7 +75,7 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
     {
         /** @var DefaultConfigProvider $defaultConfigProvider */
         $defaultConfigProvider = $this->objectManger->create(DefaultConfigProvider::class);
-        $config = $defaultConfigProvider->getConfig($this->wysiwygConfig);
+        $config = $defaultConfigProvider->getConfig($this->configDataObject);
         self::assertEquals($this->filesBrowserWindowUrl, $config->getData(self::FILES_BROWSER_WINDOW_URL));
     }
 }
