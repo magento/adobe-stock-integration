@@ -26,7 +26,7 @@ define([
             if (record === null) {
                 return false;
             }
-            targetElement = this.getTargetElement(config.targetElementId);
+            targetElement = this.getTargetElement(window.MediabrowserUtility.targetElementId);
 
             if (!targetElement.length) {
                 window.MediabrowserUtility.closeDialog();
@@ -47,6 +47,8 @@ define([
                     showLoader: true
                 }).done($.proxy(function (data) {
                     $.mage.mediabrowser().insertAtCursor(targetElement.get(0), data);
+                    targetElement.focus();
+                    $(targetElement).change();
                 }, this));
             } else {
                 targetElement.val(record['thumbnail_url'])

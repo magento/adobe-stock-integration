@@ -8,44 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Api\AssetRepository;
 
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\Collection;
-use Magento\AdobeStockAsset\Model\ResourceModel\Asset\CollectionFactory;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Test Adobe Stock Asset retrieval by ID
+ * Test getting and Adobe Stock asset by id through the Web API.
  */
 class GetByIdTest extends WebapiAbstract
 {
+    private const FIXTURE_ASSET_ID = 1;
     private const RESOURCE_PATH = '/V1/adobestock/asset';
     private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
     private const SERVICE_OPERATION = 'GetById';
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $assetCollectionFactory;
-
-    /**
-     * Set up
-     *
-     * @return void
-     */
-    public function setUp(): void
-    {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->assetCollectionFactory = $this->objectManager->get(CollectionFactory::class);
-    }
 
     /**
      * Test get asset by id API with NoSuchEntityException
@@ -55,7 +30,7 @@ class GetByIdTest extends WebapiAbstract
      */
     public function testGetNoSuchEntityException(): void
     {
-        $notExistedAssetId = -1;
+        $notExistedAssetId = 1;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . DIRECTORY_SEPARATOR . $notExistedAssetId,
@@ -67,8 +42,7 @@ class GetByIdTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Object with id "%1" does not exist.';
-
+        $expectedMessage = 'Adobe Stock asset with id %id does not exist.';
         try {
             if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $this->_webApiCall($serviceInfo);
@@ -80,7 +54,7 @@ class GetByIdTest extends WebapiAbstract
             if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($expectedMessage, $errorData['message']);
-                self::assertEquals($notExistedAssetId, $errorData['parameters'][0]);
+                self::assertEquals($notExistedAssetId, $errorData['parameters']['id']);
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
             } elseif (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
@@ -100,10 +74,9 @@ class GetByIdTest extends WebapiAbstract
      */
     public function testGetAssetById(): void
     {
-        $assetId = $this->getAssetId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $assetId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . self::FIXTURE_ASSET_ID,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -115,24 +88,9 @@ class GetByIdTest extends WebapiAbstract
         if (constant('TESTS_WEB_API_ADAPTER') === self::ADAPTER_REST) {
             $assetResultData = $this->_webApiCall($serviceInfo);
         } else {
-            $assetResultData = $this->_webApiCall($serviceInfo, ['id' => $assetId]);
+            $assetResultData = $this->_webApiCall($serviceInfo, ['id' => self::FIXTURE_ASSET_ID]);
         }
 
-        self::assertEquals($assetId, $assetResultData['id']);
-    }
-
-    /**
-     * Get asset id
-     *
-     * @return int
-     */
-    private function getAssetId(): int
-    {
-        /** @var Collection $collection */
-        $collection = $this->assetCollectionFactory->create();
-        /** @var AssetInterface $asset */
-        $asset = $collection->getLastItem();
-
-        return (int) $asset->getId();
+        self::assertEquals(self::FIXTURE_ASSET_ID, $assetResultData['id']);
     }
 }

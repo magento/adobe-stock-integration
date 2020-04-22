@@ -77,12 +77,16 @@ class GetAssetList implements GetAssetListInterface
                     'Failed to authenticate to Adobe Stock API. <br> Please correct the API credentials in '
                     . '<a href="%1">Configuration → System → Adobe Stock Integration.</a>',
                     $this->url->getUrl('adminhtml/system_config/edit/section/system')
-                )
+                ),
+                $exception
             );
         } catch (\Exception $exception) {
-            $message = __('Cannot retrieve assets from Adobe Stock.');
             $this->log->critical($exception);
-            throw new LocalizedException($message, $exception, $exception->getCode());
+            throw new LocalizedException(
+                __('Cannot retrieve assets from Adobe Stock.'),
+                $exception,
+                $exception->getCode()
+            );
         }
     }
 }

@@ -15,8 +15,8 @@ define([
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
-            targetElementId: null,
             selected: null,
+            mediaGalleryDirectoryComponent: 'media_gallery_listing.media_gallery_listing.media_gallery_directories',
             fields: {
                 id: 'id',
                 url: 'url',
@@ -26,6 +26,12 @@ define([
                 actions: '${ $.name }_actions',
                 provider: '${ $.provider }',
                 messages: '${ $.messagesName }'
+            },
+            imports: {
+                activeDirectory: '${ $.mediaGalleryDirectoryComponent }:activeNode'
+            },
+            listens: {
+                activeDirectory: 'selectDirectoryHandle'
             },
             viewConfig: [
                 {
@@ -45,6 +51,7 @@ define([
             this._super();
             this.initView();
             $(window).on('fileDeleted.enhancedMediaGallery', this.reloadMediaGrid.bind(this));
+            $(window).on('reload.MediaGallery', this.reloadGrid.bind(this));
 
             return this;
         },
@@ -107,10 +114,42 @@ define([
         },
 
         /**
+         * Click on image
+         *
+         * @param {Object} record
+         * @param {Boolean} collapsibleOpened
+         */
+        clickOnImage: function (record, collapsibleOpened) {
+            if (!collapsibleOpened) {
+                this.select(record);
+            }
+        },
+
+        /**
+         * Click on three-dots
+         *
+         * @param {Object} record
+         * @param {Boolean} collapsibleOpened
+         */
+        clickOnThreeDots: function (record, collapsibleOpened) {
+            if (!this.isSelected(record) || collapsibleOpened) {
+                this.select(record);
+            }
+        },
+
+        /**
          * Set the record as selected
          */
         select: function (record) {
             this.isSelected(record) ? this.selected(null) : this.selected(record);
+            this.toggleAddSelectedButton();
+        },
+
+        /**
+         * Deselect the record
+         */
+        deselectImage: function () {
+            this.selected(null);
             this.toggleAddSelectedButton();
         },
 
@@ -188,6 +227,17 @@ define([
         addMessage: function (code, message) {
             this.messages().add(code, message);
             this.messages().scheduleCleanup();
+        },
+
+        /**
+         * Listener to select directory event
+         *
+         * @param {String} path
+         */
+        selectDirectoryHandle: function (path) {
+            if (this.selected() && this.selected().directory !== path) {
+                this.deselectImage();
+            }
         }
     });
 });

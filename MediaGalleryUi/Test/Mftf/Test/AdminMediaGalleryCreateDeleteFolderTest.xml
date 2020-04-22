@@ -15,17 +15,15 @@
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4456547; https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4457075"/>
             <description value="Creating, deleting new folder functionality in Media Gallery"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration"/>
+            <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery">
-                <argument name="enabled" value="1"/>
-            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         </before>
         <after>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>

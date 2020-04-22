@@ -7,33 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
+use DateTime;
+use Exception;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Filesystem;
-use DateTime;
-use Magento\Framework\Exception\FileSystemException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Load Media Asset from database by id add all related data to it
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetImageDetailsByAssetId
 {
-    /**
-     * Media gallery asset grid table
-     */
-    private const MEDIA_GALLERY_ASSET_GRID_TABLE = 'media_gallery_asset_grid';
-
-    /**
-     * Media gallery asset grid id
-     */
-    private const MEDIA_GALLERY_ASSET_GRID_ID = 'id';
-
     /**
      * Date format
      */
@@ -48,11 +43,6 @@ class GetImageDetailsByAssetId
      * @var StoreManagerInterface
      */
     private $storeManager;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resource;
 
     /**
      * @var Filesystem
@@ -70,52 +60,83 @@ class GetImageDetailsByAssetId
     private $imageTypes;
 
     /**
-     * GetImageDetailsByAssetId constructor.
-     *
+     * @var GetContentByAssetIdsInterface
+     */
+    private $getContent;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var array
+     */
+    private $assetContentTypes;
+
+    /**
+     * @var GetAssetKeywordsInterface
+     */
+    private $getAssetKeywords;
+
+    /**
      * @param GetByIdInterface $getAssetById
      * @param StoreManagerInterface $storeManager
-     * @param ResourceConnection $resource
      * @param Filesystem $filesystem
      * @param SourceIconProvider $sourceIconProvider
+     * @param GetAssetKeywordsInterface $getAssetKeywords
+     * @param GetContentByAssetIdsInterface $getContent
+     * @param LoggerInterface $logger
      * @param array $imageTypes
+     * @param array $assetContentTypes
      */
     public function __construct(
         GetByIdInterface $getAssetById,
         StoreManagerInterface $storeManager,
-        ResourceConnection $resource,
         Filesystem $filesystem,
         SourceIconProvider $sourceIconProvider,
-        array $imageTypes = []
+        GetAssetKeywordsInterface $getAssetKeywords,
+        GetContentByAssetIdsInterface $getContent,
+        LoggerInterface $logger,
+        array $imageTypes = [],
+        array $assetContentTypes = []
     ) {
         $this->getAssetById = $getAssetById;
         $this->storeManager = $storeManager;
-        $this->resource = $resource;
         $this->filesystem = $filesystem;
         $this->sourceIconProvider = $sourceIconProvider;
         $this->imageTypes = $imageTypes;
+        $this->getAssetKeywords = $getAssetKeywords;
+        $this->getContent = $getContent;
+        $this->logger = $logger;
+        $this->assetContentTypes = $assetContentTypes;
     }
 
     /**
      * Get image details by asset ID
      *
      * @param int $assetId
-     *
-     * @return array
-     *
      * @throws LocalizedException
+     * @throws Exception
+     * @return array
      */
     public function execute(int $assetId): array
     {
         $asset = $this->getAssetById->execute($assetId);
-        $assetGridData = $this->getAssetGridDataById($assetId);
 
-        $tags = isset($assetGridData['keywords']) ? explode(',', $assetGridData['keywords']) : [];
-        $type = $assetGridData['content_type'] ?? '';
+        $tags = [];
+        //TODO: Must be replaced with new bulk interface: \Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface
+        $keywords = $this->getAssetKeywords->execute($asset->getId());
+        foreach ($keywords as $keyword) {
+            $tags[] = $keyword->getKeyword();
+        }
+
         $size = $this->getImageSize($asset->getPath());
 
         return [
             'image_url' => $this->getUrl($asset->getPath()),
             'title' => $asset->getTitle(),
+            'path' => $asset->getPath(),
             'id' => $assetId,
             'details' => [
                 [
@@ -141,12 +162,16 @@ class GetImageDetailsByAssetId
                 [
                     'title' => __('Size'),
                     'value' => $this->formatImageSize($size)
+                ],
+                [
+                    'title' => __('Used In'),
+                    'value' => $this->getUsedIn($assetId)
                 ]
             ],
             'size' => $size,
             'tags' => $tags,
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
-            'content_type' => $type
+            'content_type' => $asset->getContentType()
         ];
     }
 
@@ -181,29 +206,11 @@ class GetImageDetailsByAssetId
     }
 
     /**
-     * Get asset grid data by ID
-     *
-     * @param int $assetId
-     *
-     * @return array
-     */
-    private function getAssetGridDataById(int $assetId): array
-    {
-        $connection = $this->resource->getConnection();
-        $select = $connection->select();
-        $select->from($this->resource->getTableName(self::MEDIA_GALLERY_ASSET_GRID_TABLE));
-        $select->where(self::MEDIA_GALLERY_ASSET_GRID_ID . ' = ?', $assetId);
-        $assetGridDataById = $connection->fetchAssoc($select);
-
-        return $assetGridDataById[$assetId] ?? [];
-    }
-
-    /**
      * Format date
      *
      * @param string $date
-     *
      * @return string
+     * @throws Exception
      */
     private function formatDate(string $date): string
     {
@@ -238,10 +245,32 @@ class GetImageDetailsByAssetId
      */
     private function formatImageSize(int $imageSize): string
     {
-        if (!$imageSize) {
+        if ($imageSize === 0) {
             return '';
         }
 
         return sprintf('%sKb', $imageSize / 1000);
+    }
+
+    /**
+     * Retrieve assets used in the Content
+     *
+     * @param int $assetId
+     * @return array
+     * @throws IntegrationException
+     */
+    private function getUsedIn(int $assetId): array
+    {
+        $usedIn = [];
+        $contentIdentities = $this->getContent->execute([$assetId]);
+        foreach ($contentIdentities as $contentIdentity) {
+            $type = $this->assetContentTypes[$contentIdentity->getEntityType()] ?? $contentIdentity->getEntityType();
+            if (!isset($usedIn[$type])) {
+                $usedIn[$type] = 1;
+            } else {
+                $usedIn[$type] += 1;
+            }
+        }
+        return $usedIn;
     }
 }

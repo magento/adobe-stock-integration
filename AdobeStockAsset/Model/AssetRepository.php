@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Centralize common data access functionality for the Adobe Stock asset
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssetRepository implements AssetRepositoryInterface
 {
@@ -132,12 +133,10 @@ class AssetRepository implements AssetRepositoryInterface
             $searchResults->setTotalCount($collection->getSize());
 
             return $searchResults;
-        } catch (LocalizedException $exception) {
-            throw $exception;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred during get asset list: %error', ['error' => $exception->getMessage()]);
-            throw new IntegrationException($message, $exception);
+            $message = __('Could not retrieve assets.');
+            throw new LocalizedException($message, $exception);
         }
     }
 
@@ -146,12 +145,7 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getById(int $id): AssetInterface
     {
-        $assets = $this->loadByIdCommand->execute($id);
-        if (empty($assets)) {
-            throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
-        }
-
-        return reset($assets);
+        return $this->loadByIdCommand->execute($id);
     }
 
     /**

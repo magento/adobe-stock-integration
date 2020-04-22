@@ -19,7 +19,7 @@ use Magento\Framework\Exception\SerializationException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test retrieving the related images (same model and same series) of the adobe stock image asset
+ * Get list of related images by the image id.
  */
 class GetRelatedImages implements GetRelatedImagesInterface
 {
@@ -124,7 +124,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
                 __(
                     'An error occurred during related images serialization: %error',
                     ['error' => $exception->getMessage()]
-                )
+                ),
+                $exception
             );
         }
     }

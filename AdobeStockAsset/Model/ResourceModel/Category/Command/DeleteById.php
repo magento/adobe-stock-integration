@@ -63,10 +63,7 @@ class DeleteById implements DeleteByIdInterface
             $connection->delete($tableName, [self::ADOBE_STOCK_ASSET_CATEGORY_ID . ' = ?' => $categoryId]);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __(
-                'Could not delete Adobe Stock asset category with id %id: %error',
-                ['id' => $categoryId, 'error' => $exception->getMessage()]
-            );
+            $message = __('Could not delete Adobe Stock asset category with id %id', ['id' => $categoryId]);
             throw new CouldNotDeleteException($message, $exception);
         }
     }

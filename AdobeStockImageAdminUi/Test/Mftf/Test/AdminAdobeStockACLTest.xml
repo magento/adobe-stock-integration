@@ -20,11 +20,11 @@
             <group value="adobe_stock_integration_configuration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminBefore"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminBefore"/>
             <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminAfter"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
             <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
             <waitForPageLoad stepKey="waitForRolesGridLoad" />
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
@@ -35,7 +35,7 @@
             <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
                 <argument name="userName" value="{{admin2.username}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create user role-->
         <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
@@ -63,9 +63,10 @@
         </actionGroup>
 
         <!--Log out of admin and login with newly created user-->
-        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
-            <argument name="adminUser" value="admin2"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
         </actionGroup>
 
         <!-- verify that user can access to adobe stock image -->
@@ -75,8 +76,8 @@
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
 
         <!--Change user role to not accessible -->
-        <actionGroup ref="logout" stepKey="logout"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminNavigateToCreatedUserRoleActionGroup" stepKey="navigateToUserRoleEditPage">
             <argument name="userRoleName" value="{{adminRole.name}}"/>
         </actionGroup>
@@ -85,14 +86,15 @@
             <argument name="restrictedRole" value="Adobe Stock"/>
         </actionGroup>
         <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="saveRole" />
-        <actionGroup ref="logout" stepKey="logoutAdmin"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginNewUserRole">
-            <argument name="adminUser" value="admin2"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginNewUserRole">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
         </actionGroup>
 
         <!-- verify that user can't access to adobe stock image -->
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutAccess"/>
         <dontSeeElement selector="{{AdminAdobeStockSection.slideOutPanelButton}}" stepKey="dontSeeAdobeStockSearchButton" />
-        <actionGroup ref="logout" stepKey="logoutFromCreatedUser"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromCreatedUser"/>
     </test>
 </tests>

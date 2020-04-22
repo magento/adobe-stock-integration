@@ -18,12 +18,12 @@ define([
             actionsList: [
                 {
                     name: 'image-details',
-                    title: 'View Details',
+                    title: $.mage.__('View Details'),
                     handler: 'viewImageDetails'
                 },
                 {
                     name: 'delete',
-                    title: 'Delete',
+                    title: $.mage.__('Delete'),
                     handler: 'deleteImageAction'
                 }
             ],
@@ -54,7 +54,6 @@ define([
                    this.imageModel().getSelected(),
                     {
                         onInsertUrl: this.imageModel().onInsertUrl,
-                        targetElementId: this.imageModel().targetElementId,
                         storeId: this.imageModel().storeId
                     }
                 );
