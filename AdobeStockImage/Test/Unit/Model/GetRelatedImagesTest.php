@@ -44,7 +44,7 @@ class GetRelatedImagesTest extends TestCase
     private $filterBuilder;
 
     /**
-     * @var SerializeImage
+     * @var SerializeImage|MockObject
      */
     private $serializeImage;
 
