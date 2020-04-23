@@ -36,7 +36,8 @@ define([
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
                 messages: '${ $.messagesName }',
-                imageDirectory: '${ $.mediaGalleryName }'
+                imageDirectory: '${ $.mediaGalleryName }',
+                mediaGallerySortBy: '${ $.mediaGallerySortBy }',
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
@@ -120,6 +121,7 @@ define([
          */
         selectDisplayedImageInMediaGallery: function () {
             if (!this.isMediaBrowser()) {
+                this.selectDefaultSortBy();
                 this.selectDisplayedImageForNewMediaGallery();
             } else {
                 this.selectDisplayedImageForOldMediaGallery();
@@ -142,7 +144,21 @@ define([
             var self = this,
                 imagePath = self.preview().displayedRecord().path,
                 imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
-                record = this.getRecordFromMediaGalleryProvider(imagePath);
+                record = this.getRecordFromMediaGalleryProvider(imagePath),
+                subscription;
+
+            if (!record) {
+                subscription = this.imageItems.subscribe(function () {
+                    subscription.dispose();
+                    record = self.getRecordFromMediaGalleryProvider(imagePath);
+
+                    if (!record) {
+                        mediaGallery.notLocated();
+                    }
+
+                    self.selectRecord(record);
+                });
+            }
 
             if (imageFolders) {
                 this.imageDirectory().selectFolder(imageFolders);
@@ -182,6 +198,15 @@ define([
          */
         selectRecord: function (record) {
             uiRegistry.get('name =' + this.mediaGallery).selected(record);
+        },
+
+        /**
+         * Select default sortBy on media gallery
+         */
+        selectDefaultSortBy: function () {
+            var defaultOption = this.mediaGallerySortBy().options[0].value;
+
+            this.mediaGallerySortBy().selectedOption(defaultOption);
         },
 
         /**

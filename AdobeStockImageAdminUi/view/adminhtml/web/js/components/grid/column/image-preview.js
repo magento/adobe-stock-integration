@@ -41,7 +41,8 @@ define([
                     mediaGallery: '${ $.mediaGalleryComponent }',
                     mediaGalleryName: '${ $.mediaGalleryName }',
                     messagesName: '${ $.messagesName }',
-                    mediaGalleryProvider: '${ $.mediaGalleryProvider }'
+                    mediaGalleryProvider: '${ $.mediaGalleryProvider }',
+                    mediaGallerySortBy: '${ $.mediaGallerySortBy }'
                 }
             ]
         },
