@@ -40,7 +40,6 @@ define([
                     provider: '${ $.provider }',
                     mediaGallery: '${ $.mediaGalleryComponent }',
                     mediaGalleryName: '${ $.mediaGalleryName }',
-                    messagesName: '${ $.messagesName }',
                     mediaGalleryProvider: '${ $.mediaGalleryProvider }'
                 }
             ]
