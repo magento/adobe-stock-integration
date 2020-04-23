@@ -13,9 +13,6 @@
 	        <block name="image.details" class="Magento\Backend\Block\Template" template="Magento_MediaGalleryUi::image_details_standalone.phtml">
                 <arguments>
                     <argument name="imageDetailsUrl" xsi:type="url" path="media_gallery/image/details"/>
-                    <argument name="targetElementId" xsi:type="helper" helper="Magento\Framework\App\RequestInterface::getParam">
-                        <param name="key">target_element_id</param>
-                    </argument>
                 </arguments>
 	        </block>
         </referenceContainer>
