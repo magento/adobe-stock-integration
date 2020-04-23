@@ -16,7 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Get user acces toke test
+ * Get user acces took test
  */
 class GetAccessTokenTest extends TestCase
 {
