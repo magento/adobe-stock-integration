@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,19 +26,27 @@ class ResolveNonExistedAssets
     private $resourceConnection;
 
     /**
+     * @var DeleteAssetsByPathsInterface
+     */
+    private $deleteAssetsByPaths;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
      * @param ResourceConnection $resourceConnection
+     * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
+        DeleteAssetsByPathsInterface $deleteAssetsByPaths,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->deleteAssetsByPaths = $deleteAssetsByPaths;
         $this->logger = $logger;
     }
 
@@ -50,11 +59,28 @@ class ResolveNonExistedAssets
     public function execute(array $assetsPaths): void
     {
         try {
-            $connection = $this->resourceConnection->getConnection();
-            $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
-            $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_PATH . ' NOT IN (?)' => $assetsPaths]);
+            $this->deleteAssetsByPaths->execute($this->getAssetsPathsToDelete($assetsPaths));
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }
+    }
+
+    /**
+     * Assets paths which not existed and should be deleted
+     *
+     * @param array $assetsPaths
+     * @return array
+     */
+    private function getAssetsPathsToDelete(array $assetsPaths): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select()
+            ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET), ['path']);
+
+        if (!empty($assetsPaths)) {
+            $select->where(self::MEDIA_GALLERY_ASSET_PATH . ' NOT IN (?)', $assetsPaths);
+        }
+
+        return $connection->fetchCol($select);
     }
 }
