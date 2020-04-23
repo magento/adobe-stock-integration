@@ -16,7 +16,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
-use Magento\AdobeStockImage\Model\SerializeImage;
+use Magento\AdobeStockImageApi\Api\SerializeImageInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -66,7 +66,7 @@ class AddAdobeStockImageDetailsPlugin
     private $getAssetById;
 
     /**
-     * @var SerializeImage
+     * @var SerializeImageInterface
      */
     private $serializeImage;
 
@@ -79,7 +79,7 @@ class AddAdobeStockImageDetailsPlugin
      * @param GetAssetByIdInterface $getAssetById
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
-     * @param SerializeImage $serializeImage
+     * @param SerializeImageInterface $serializeImage
      */
     public function __construct(
         FilterBuilder $filterBuilder,
@@ -89,7 +89,7 @@ class AddAdobeStockImageDetailsPlugin
         GetAssetByIdInterface $getAssetById,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger,
-        SerializeImage $serializeImage
+        SerializeImageInterface $serializeImage
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->assetRepository = $assetRepository;

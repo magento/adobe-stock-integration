@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
+use Magento\AdobeStockImageApi\Api\SerializeImageInterface;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\SerializationException;
@@ -14,7 +15,7 @@ use Magento\Framework\Exception\SerializationException;
 /**
  * Class used to serialize a Document object
  */
-class SerializeImage
+class SerializeImage implements SerializeImageInterface
 {
     /**
      * Serializes a Document object

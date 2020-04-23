@@ -10,6 +10,7 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
+use Magento\AdobeStockImageApi\Api\SerializeImageInterface;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -49,7 +50,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
     private $fields;
 
     /**
-     * @var SerializeImage
+     * @var SerializeImageInterface
      */
     private $serializeImage;
 
@@ -58,7 +59,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
-     * @param SerializeImage $serializeImage
+     * @param SerializeImageInterface $serializeImage
      * @param LoggerInterface $logger
      * @param array $fields
      */
@@ -66,7 +67,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        SerializeImage $serializeImage,
+        SerializeImageInterface $serializeImage,
         LoggerInterface $logger,
         array $fields = []
     ) {
