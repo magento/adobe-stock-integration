@@ -30,6 +30,7 @@ class Fulltext implements SelectModifierInterface
         $value = $this->getValueFromFulltextSearch($searchCriteria);
 
         if ($value) {
+            $select->reset('where');
             $select->where($this->getWhereCondition($value, $select->getConnection()));
         }
     }
@@ -67,10 +68,10 @@ class Fulltext implements SelectModifierInterface
                 self::TABLE_ALIAS . '.title',
                 ['like' => sprintf('%%%s%%', $value)]
             ),
-            $connection->prepareSqlCondition(
-                self::TABLE_ALIAS . '.id',
-                ['in' => $this->getSelectByKeyword($value, $connection)]
-            ),
+             $connection->prepareSqlCondition(
+                 self::TABLE_ALIAS . '.id',
+                 ['in' => $this->getSelectByKeyword($value, $connection)]
+             ),
         ];
 
         return '(' . implode(' ' . Select::SQL_OR . ' ', $conditions) . ')';

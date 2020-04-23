@@ -29,7 +29,7 @@ class Directory implements SelectModifierInterface
                 if ($filter->getField() === self::DIRECTORY_FIELD_TYPE) {
                     $select->reset('where');
                     $value = str_replace('%', '', $filter->getValue());
-                    $select->where('path REGEXP ?', '^' . $value);
+                    $select->where("REGEXP_REPLACE(path, '/[^/]*$', '') like ?", $value);
                 }
             }
         }
