@@ -10,11 +10,11 @@
         "magento/module-adobe-stock-image-api": "*",
         "magento/module-adobe-stock-client-api": "*",
         "magento/module-backend": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-media-gallery-ui": "*"
     },
     "suggest": {
-        "magento/module-cms": "*",
-        "magento/module-media-gallery-ui": "*"
+        "magento/module-cms": "*"
     },
     "type": "magento2-module",
     "license": [
