@@ -76,8 +76,10 @@ class AddAdobeStockImageDetailsPlugin
      * @param AssetRepositoryInterface $assetRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CreatorRepositoryInterface $creatorRepository
+     * @param GetAssetByIdInterface $getAssetById
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
+     * @param SerializeImage $serializeImage
      */
     public function __construct(
         FilterBuilder $filterBuilder,
