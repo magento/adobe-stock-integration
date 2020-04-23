@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
+        <arguments>
+            <argument name="selectModifier" xsi:type="object">Magento\MediaGalleryUi\Model\SelectModifierComposite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
+        <arguments>
+            <argument name="selectModifiers" xsi:type="array">
+                <item name="fulltextFilter" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Fulltext</item>
+                <item name="directory" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Directory</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
