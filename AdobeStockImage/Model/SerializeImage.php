@@ -17,6 +17,8 @@ use Magento\Framework\Exception\SerializationException;
 class SerializeImage
 {
     /**
+     * Serializes a Document object
+     *
      * @param Document $image
      * @return array
      * @throws SerializationException
