@@ -8,8 +8,9 @@
 
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
-    <suite name="media_gallery_ui_suite">
+    <suite name="MediaGalleryUiSuite">
         <before>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
                 <argument name="enabled" value="1"/>
@@ -18,6 +19,7 @@
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
         </after>
         <include>
             <group name="media_gallery_ui"/>

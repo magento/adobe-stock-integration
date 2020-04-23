@@ -163,6 +163,7 @@
                     <item name="url" xsi:type="string">thumbnail_url</item>
                     <item name="deleteImageUrl" xsi:type="url" path="media_gallery/image/delete"/>
                     <item name="messagesName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.messages</item>
+                    <item name="mediaGalleryDirectoryComponent" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_directories</item>
                 </item>
             </argument>
             <settings>
