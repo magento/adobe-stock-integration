@@ -20,12 +20,12 @@ use Magento\AdobeStockAssetApi\Model\Creator\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for the Adobe Stock Asset Creator repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatorRepositoryTest extends TestCase
 {
@@ -35,17 +35,17 @@ class CreatorRepositoryTest extends TestCase
     private $creatorCollectionFactory;
 
     /**
-     * @var MockObject|JoinProcessorInterface $joinProcessorInterface
+     * @var MockObject|JoinProcessorInterface
      */
     private $joinProcessorInterface;
 
     /**
-     * @var MockObject|CollectionProcessorInterface $collectionProcessorInterface
+     * @var MockObject|CollectionProcessorInterface
      */
     private $collectionProcessorInterface;
 
     /**
-     * @var MockObject|CreatorSearchResultsInterfaceFactory $creatorSearchResultInterfaceFactory
+     * @var MockObject|CreatorSearchResultsInterfaceFactory
      */
     private $creatorSearchResultInterfaceFactory;
 
@@ -72,7 +72,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->creatorCollectionFactory = $this->createMock(CreatorCollectionFactory::class);
         $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);

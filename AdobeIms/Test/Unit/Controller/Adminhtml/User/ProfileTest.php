@@ -8,19 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\User;
 
+use Magento\AdobeIms\Controller\Adminhtml\User\Profile;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Log\LoggerInterface;
-use Magento\AdobeIms\Controller\Adminhtml\User\Profile;
-use Magento\Framework\Controller\Result\Json;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Ensure that User Profile data can be returned.
@@ -28,32 +27,32 @@ use PHPUnit\Framework\TestCase;
 class ProfileTest extends TestCase
 {
     /**
-     * @var MockObject|UserProfileRepositoryInterface $userProfileRepository
+     * @var MockObject|UserProfileRepositoryInterface
      */
     private $userProfileRepository;
 
     /**
-     * @var MockObject|UserContextInterface $userContext
+     * @var MockObject|UserContextInterface
      */
     private $userContext;
 
     /**
-     * @var MockObject|Context $action
+     * @var MockObject|Context
      */
     private $action;
 
     /**
-     * @var MockObject|ResultFactory $resultFactory
+     * @var MockObject|ResultFactory
      */
     private $resultFactory;
 
     /**
-     * @var MockObject|LoggerInterface $logger
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
     /**
-     * @var Profile $profile
+     * @var Profile
      */
     private $profile;
 

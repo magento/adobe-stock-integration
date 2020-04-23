@@ -7,26 +7,32 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Observer;
 
+use Magento\AdobeIms\Model\FlushUserTokens;
+use Magento\AdobeIms\Observer\FlushUsersTokensObserver;
 use Magento\Authorization\Model\Role;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Flush users tokens observer tests
  */
-class FlushUsersTokensObserverTest extends \PHPUnit\Framework\TestCase
+class FlushUsersTokensObserverTest extends TestCase
 {
-    /** @var \Magento\AdobeIms\Model\FlushUserTokens|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FlushUserTokens|MockObject */
     protected $flushUserTokens;
 
-    /** @var \Magento\AdobeIms\Observer\FlushUsersTokensObserver */
+    /** @var FlushUsersTokensObserver */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->flushUserTokens = $this->createMock(\Magento\AdobeIms\Model\FlushUserTokens::class);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->flushUserTokens = $this->createMock(FlushUserTokens::class);
+        $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\AdobeIms\Observer\FlushUsersTokensObserver::class,
+            FlushUsersTokensObserver::class,
             [
                 'flushUserTokens' => $this->flushUserTokens
             ]
@@ -36,10 +42,10 @@ class FlushUsersTokensObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test flush tokens observer
      */
-    public function testFlushUsersTokensObserver()
+    public function testFlushUsersTokensObserver(): void
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserverMock */
-        $eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        /** @var Observer|MockObject $eventObserverMock */
+        $eventObserverMock = $this->createMock(Observer::class);
         $requestMock = $this->createMock(RequestInterface::class);
         $requestMock->expects($this->once())->method("getParam")->willReturn(["Magento_AnyModule::anything"]);
         $roleMock = $this->createMock(Role::class);

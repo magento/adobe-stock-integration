@@ -11,15 +11,19 @@ namespace Magento\AdobeStockImage\Model\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 
 /**
  * Save images to the file system
  */
 class Save
 {
+    private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
+
     /**
      * @var Filesystem
      */
@@ -31,16 +35,23 @@ class Save
     private $driver;
 
     /**
-     * Storage constructor.
+     * @var IsPathBlacklistedInterface
+     */
+    private $isPathBlacklisted;
+
+    /**
      * @param Filesystem $filesystem
      * @param Https $driver
+     * @param IsPathBlacklistedInterface $isPathBlacklisted
      */
     public function __construct(
         Filesystem $filesystem,
-        Https $driver
+        Https $driver,
+        IsPathBlacklistedInterface $isPathBlacklisted
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
+        $this->isPathBlacklisted = $isPathBlacklisted;
     }
 
     /**
@@ -48,13 +59,21 @@ class Save
      *
      * @param string $imageUrl
      * @param string $destinationPath
-     * @return void
      * @throws AlreadyExistsException
      * @throws FileSystemException
+     * @throws LocalizedException
      */
     public function execute(string $imageUrl, string $destinationPath): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+
+        if ($this->isPathBlacklisted->execute($destinationPath)) {
+            throw new LocalizedException(__('Could not save image: destination directory is restricted.'));
+        }
+
+        if (!preg_match(self::IMAGE_FILE_NAME_PATTERN, $destinationPath)) {
+            throw new LocalizedException(__('Could not save image: unsupported file type.'));
+        }
 
         if ($mediaDirectory->isExist($destinationPath)) {
             throw new AlreadyExistsException(__('Image with the same file name already exits.'));

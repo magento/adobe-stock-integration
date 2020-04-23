@@ -11,7 +11,7 @@
     <test name="AdminViewsStockLicenseStatusTest">
         <annotations>
             <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1203"/>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1151" />
             </skip>
             <features value="AdobeStockImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/430"/>

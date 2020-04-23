@@ -25,6 +25,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Test for controller downloading Adobe Stock asset preview version
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DownloadTest extends TestCase
 {

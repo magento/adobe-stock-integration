@@ -7,22 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset as DocumentToAsset;
 use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Save an image provided with the adobe Stock integration.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class SaveImage implements SaveImageInterface
 {
@@ -42,9 +40,9 @@ class SaveImage implements SaveImageInterface
     private $documentToKeywords;
 
     /**
-     * @var SaveAssetKeywordsInterface
+     * @var SaveKeywords
      */
-    private $saveAssetKeywords;
+    private $saveKeywords;
 
     /**
      * @var SaveImageFile
@@ -57,14 +55,9 @@ class SaveImage implements SaveImageInterface
     private $saveMediaGalleryAsset;
 
     /**
-     * @var GetByPathInterface
+     * @var GetAssetsByPathsInterface
      */
     private $getMediaGalleryAssetByPath;
-
-    /**
-     * @var AssetRepositoryInterface
-     */
-    private $assetRepository;
 
     /**
      * @var LoggerInterface
@@ -72,37 +65,32 @@ class SaveImage implements SaveImageInterface
     private $logger;
 
     /**
-     * SaveImage constructor.
-     *
      * @param SaveAssetInterface $saveAdobeStockAsset
      * @param DocumentToAsset $documentToAsset
-     * @param SaveAssetKeywordsInterface $saveAssetKeywords
+     * @param SaveKeywords $saveAssetKeywords
      * @param DocumentToKeywords $documentToKeywords
      * @param SaveImageFile $saveImageFile
      * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
-     * @param GetByPathInterface $getMediaGalleryAssetByPath
-     * @param AssetRepositoryInterface $assetRepository
+     * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
         SaveAssetInterface $saveAdobeStockAsset,
         DocumentToAsset $documentToAsset,
-        SaveAssetKeywordsInterface $saveAssetKeywords,
+        SaveKeywords $saveAssetKeywords,
         DocumentToKeywords $documentToKeywords,
         SaveImageFile $saveImageFile,
         SaveMediaGalleryAsset $saveMediaGalleryAsset,
-        GetByPathInterface $getMediaGalleryAssetByPath,
-        AssetRepositoryInterface $assetRepository,
+        GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
         LoggerInterface $logger
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToAsset = $documentToAsset;
-        $this->saveAssetKeywords = $saveAssetKeywords;
+        $this->saveKeywords = $saveAssetKeywords;
         $this->documentToKeywords = $documentToKeywords;
         $this->saveImageFile = $saveImageFile;
         $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
         $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
-        $this->assetRepository = $assetRepository;
         $this->logger = $logger;
     }
 
@@ -112,34 +100,28 @@ class SaveImage implements SaveImageInterface
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
-     *
      * @throws CouldNotSaveException
+     * @throws LocalizedException
      */
     public function execute(Document $document, string $url, string $destinationPath): void
     {
         try {
             $this->saveImageFile->execute($document, $url, $destinationPath);
             $this->saveMediaGalleryAsset->execute($document, $destinationPath);
-            $mediaAsset = $this->getMediaGalleryAssetByPath->execute($destinationPath);
-            $mediaAssetId = $mediaAsset->getId();
-            if (!$mediaAssetId) {
-                /** @var AssetInterface $mediaAsset */
-                $mediaAsset = $this->assetRepository->getById($document->getId());
-                $mediaAssetId = $mediaAsset->getMediaGalleryId();
-            }
+            $mediaAssetId = $this->getMediaGalleryAssetByPath->execute([$destinationPath])[0]->getId();
 
-            $keywords = $this->documentToKeywords->convert($document);
-            $this->saveAssetKeywords->execute($keywords, $mediaAssetId);
-
-            $asset = $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaAssetId]);
-            $this->saveAdobeStockAsset->execute($asset);
+            $this->saveKeywords->execute(
+                $mediaAssetId,
+                $this->documentToKeywords->convert($document)
+            );
+            $this->saveAdobeStockAsset->execute(
+                $this->documentToAsset->convert($document, ['media_gallery_id' => $mediaAssetId])
+            );
+        } catch (LocalizedException $localizedException) {
+            throw $localizedException;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __(
-                'An error occurred during save image: %error',
-                ['error' => $exception->getMessage()]
-            );
-            throw new CouldNotSaveException($message);
+            throw new CouldNotSaveException(__('Could not save image.'), $exception);
         }
     }
 }

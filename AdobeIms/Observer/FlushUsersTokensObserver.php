@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Observer;
 
 use Magento\AdobeIms\Controller\Adminhtml\User\Logout;
-use Magento\AdobeIms\Model\FlushUserTokens;
+use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\Authorization\Model\Role;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ObserverInterface;
@@ -19,16 +19,15 @@ use Magento\Framework\Event\ObserverInterface;
 class FlushUsersTokensObserver implements ObserverInterface
 {
     /**
-     * @var FlushUserTokens
+     * @var FlushUserTokensInterface
      */
     private $flushUserTokens;
 
     /**
-     * FlushUsersTokensObserver constructor.
-     * @param FlushUserTokens $flushUserTokens
+     * @param FlushUserTokensInterface $flushUserTokens
      */
     public function __construct(
-        FlushUserTokens $flushUserTokens
+        FlushUserTokensInterface $flushUserTokens
     ) {
         $this->flushUserTokens = $flushUserTokens;
     }

@@ -6,18 +6,19 @@
 
 declare(strict_types=1);
 
-use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
-use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
+use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -28,14 +29,22 @@ $mediaAssetFactory = $objectManager->get(MediaAssetFactory::class);
 /** @var MediaAsset $mediaAsset */
 $mediaAsset = $mediaAssetFactory->create(
     [
-        'data' => [
-            'path' => 'some/path.jpg'
-        ]
+        'path' => 'some/path.jpg',
+        'title' => 'Web API test image',
+        'source' => 'Adobe Stock',
+        'contentType' => 'image/jpeg',
+        'width' => 6529,
+        'height' => 4355,
+        'size' => 424242
     ]
 );
-/** @var SaveInterface $mediaSave */
-$mediaSave = $objectManager->get(SaveInterface::class);
-$mediaId = $mediaSave->execute($mediaAsset);
+/** @var SaveAssetsInterface $mediaSave */
+$mediaSave = $objectManager->get(SaveAssetsInterface::class);
+$mediaSave->execute([$mediaAsset]);
+/** @var GetAssetsByPathsInterface $mediaGetByPath */
+$mediaGetByPath = $objectManager->get(GetAssetsByPathsInterface::class);
+$savedMeidaAsset = $mediaGetByPath->execute([$mediaAsset->getPath()])[0];
+
 
 $categoryFactory = $objectManager->get(CategoryInterfaceFactory::class);
 /** @var CategoryInterface $category */
@@ -75,7 +84,7 @@ $asset = $assetFactory->create(
             'is_licensed' => 1,
             'category_id' => $categoryId,
             'creator_id' => $creatorId,
-            'media_gallery_id' => $mediaId
+            'media_gallery_id' => $savedMeidaAsset->getId()
         ]
     ]
 );

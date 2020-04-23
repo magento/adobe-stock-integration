@@ -7,40 +7,51 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\MediaGalleryUiApi\Api\ConfigInterface" type="Magento\MediaGalleryUi\Model\Config"/>
-    <preference for="Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface" type="Magento\MediaGalleryUi\Model\ImagesIndexer"/>
-    <type name="Magento\MediaGalleryUiApi\Api\ImagesIndexerInterface">
-        <arguments>
-            <argument name="indexers" xsi:type="array">
-                <item name="100" xsi:type="object">Magento\MediaGalleryUi\Model\AssetIndexer</item>
-            </argument>
-        </arguments>
-    </type>
-     <type name="Magento\MediaGalleryUi\Model\Directories\ExcludedDirectories">
-         <arguments>
-	      <argument name="patterns" xsi:type="array">
-                <item name="captcha" xsi:type="string">/^captcha/</item>
-                <item name="catalog" xsi:type="string">/^catalog\/product/</item>
-                <item name="customer" xsi:type="string">/^customer/</item>
-                <item name="downloadable" xsi:type="string">/^downloadable/</item>
-                <item name="import" xsi:type="string">/^import/</item>
-                <item name="theme" xsi:type="string">/^theme/</item>
-                <item name="theme_customization" xsi:type="string">/^theme_customization/</item>
-                <item name="tmp" xsi:type="string">/^tmp/</item>
-                <item name="directories-with-dots" xsi:type="string">/^\./</item>
-	    </argument>
-        </arguments>
-     </type>
-    <type name="Magento\Framework\Console\CommandListInterface">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="mediaGalleryIndexer" xsi:type="object">Magento\MediaGalleryUi\Console\Command\IndexAssets</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="media_gallery_listing_data_source" xsi:type="string">Magento\MediaGalleryUi\Ui\Component\Listing\Provider</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="mediaGallerySearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">media_gallery_asset_grid</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\MediaGalleryUi\Model\Directories\FolderTree">
+        <arguments>
+            <argument name="path" xsi:type="string">media</argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\Type">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="image" xsi:type="string">Image</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
+        <arguments>
+            <argument name="contentTypes" xsi:type="array">
+                <item name="catalog_category" xsi:type="string">Category</item>
+                <item name="catalog_product" xsi:type="string">Product</item>
+                <item name="cms_block" xsi:type="string">Block</item>
+                <item name="cms_page" xsi:type="string">Page</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProviderPool">
+        <arguments>
+            <argument name="detailsProviders" xsi:type="array">
+                <item name="10" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Type</item>
+                <item name="20" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\CreatedAt</item>
+                <item name="30" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\UpdatedAt</item>
+                <item name="40" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Width</item>
+                <item name="50" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Height</item>
+                <item name="60" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Size</item>
+                <item name="70" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn</item>
             </argument>
         </arguments>
     </type>
