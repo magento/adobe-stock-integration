@@ -9,17 +9,17 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Controller\Adminhtml\License;
 
 use Exception;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockImageAdminUi\Controller\Adminhtml\License\Confirmation;
+use Magento\Backend\App\Action\Context as ActionContext;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Backend\App\Action\Context as ActionContext;
 
 /**
  * License confirmation test.

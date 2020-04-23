@@ -8,17 +8,17 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Test\Unit\Model;
 
 use Magento\AdobeStockAsset\Model\SaveAsset;
+use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
+use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for save asset service.
