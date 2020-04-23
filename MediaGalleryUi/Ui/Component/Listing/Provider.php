@@ -12,14 +12,15 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 class Provider extends SearchResult
 {
     /**
-     * @var GetAssetKeywordsInterface
+     * @var GetAssetsKeywordsInterface
      */
     private $getAssetKeywords;
 
@@ -28,7 +29,7 @@ class Provider extends SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param GetAssetKeywordsInterface $getAssetKeywords
+     * @param GetAssetsKeywordsInterface $getAssetKeywords
      * @param string $mainTable
      * @param null|string $resourceModel
      * @param null|string $identifierName
@@ -40,7 +41,7 @@ class Provider extends SearchResult
         Logger $logger,
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
-        GetAssetKeywordsInterface $getAssetKeywords,
+        GetAssetsKeywordsInterface $getAssetKeywords,
         $mainTable = 'media_gallery_asset',
         $resourceModel = null,
         $identifierName = null,
@@ -67,10 +68,11 @@ class Provider extends SearchResult
         $data = parent::getData();
         $keywords = [];
         foreach ($this->_items as $asset) {
-            //TODO: Must be replaced with new bulk interface: \Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface
-            $keywords[$asset->getId()] = array_map(function (KeywordInterface $keyword) {
-                return $keyword->getKeyword();
-            }, $this->getAssetKeywords->execute($asset->getId()));
+            $keywords[$asset->getId()] = array_map(function (AssetKeywordsInterface $assetKeywords) {
+                return array_map(function (KeywordInterface $keyword) {
+                    return $keyword->getKeyword();
+                }, $assetKeywords->getKeywords());
+            }, $this->getAssetKeywords->execute([$asset->getId()]));
         }
 
         /** @var AssetInterface $asset */

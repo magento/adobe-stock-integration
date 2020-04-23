@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 
 /**
  * Create media asset object based on the file information
@@ -31,6 +32,11 @@ class CreateAssetFromFile
     private $driver;
 
     /**
+     * @var GetAssetsByPathsInterface
+     */
+    private $getMediaGalleryAssetByPath;
+    
+    /**
      * @var Read
      */
     private $mediaDirectory;
@@ -44,15 +50,18 @@ class CreateAssetFromFile
      * @param Filesystem $filesystem
      * @param AssetInterfaceFactory $assetFactory
      * @param File $driver
+     * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      */
     public function __construct(
         Filesystem $filesystem,
         AssetInterfaceFactory $assetFactory,
-        File $driver
+        File $driver,
+        GetAssetsByPathsInterface $getMediaGalleryAssetByPath
     ) {
         $this->filesystem = $filesystem;
         $this->assetFactory = $assetFactory;
         $this->driver = $driver;
+        $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
     }
 
     /**
@@ -65,12 +74,12 @@ class CreateAssetFromFile
     public function execute(\SplFileInfo $file)
     {
         $path = $file->getPath() . '/' . $file->getFileName();
-
+        
         [$width, $height] = getimagesize($path);
 
-        return $this->assetFactory->create(
+        return $this->getAsset($path) ?? $this->assetFactory->create(
             [
-                'path' => $this->getPath($path),
+                'path' => $this->getRelativePath($path),
                 'title' => $file->getBasename('.' . $file->getExtension()),
                 'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
@@ -84,13 +93,26 @@ class CreateAssetFromFile
     }
 
     /**
+     * Returns asset if asset already exist by provided path
+     *
+     * @param string $path
+     * @return null|AssetInterface
+     * @throws ValidatorException
+     */
+    private function getAsset(string $path): ?AssetInterface
+    {
+        $asset = $this->getMediaGalleryAssetByPath->execute([$this->getRelativePath($path)]);
+        return !empty($asset) ? $asset[0] : null;
+    }
+    
+    /**
      * Get correct path for media asset
      *
      * @param string $file
      * @return string
      * @throws ValidatorException
      */
-    private function getPath(string $file): string
+    private function getRelativePath(string $file): string
     {
         $path = $this->getMediaDirectory()->getRelativePath($file);
 

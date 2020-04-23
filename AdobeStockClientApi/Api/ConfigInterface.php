@@ -32,6 +32,7 @@ interface ConfigInterface
      * Get Adobe Stock API files url
      *
      * @return string
+     * @deprecated since 1.1.0
      */
     public function getFilesUrl(): string;
 }
