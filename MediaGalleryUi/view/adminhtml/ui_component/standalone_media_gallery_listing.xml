@@ -289,6 +289,9 @@
                 <item name="sortByName" xsi:type="string">
                     standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.sorting
                 </item>
+                <item name="listingPagingName" xsi:type="string">
+                    standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.listing_paging
+                </item>
             </item>
         </argument>
     </container>

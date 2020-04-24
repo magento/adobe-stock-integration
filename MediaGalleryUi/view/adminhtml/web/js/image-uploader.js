@@ -28,7 +28,8 @@ define([
                 directories: '${ $.directoriesPath }',
                 actions: '${ $.actionsPath }',
                 mediaGridMessages: '${ $.messagesPath }',
-                sortBy: '${ $.sortByName }'
+                sortBy: '${ $.sortByName }',
+                listingPaging: '${ $.listingPagingName }'
             }
         },
 
@@ -114,6 +115,8 @@ define([
                         return;
                     }
                     this.sortBy().selectDefaultOption();
+                    this.listingPaging().goFirst();
+
                     this.showSuccessMessage(data);
                     this.hideLoader();
                     this.actions().reloadGrid();
