@@ -37,7 +37,8 @@ define([
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
                 imageDirectory: '${ $.mediaGalleryName }',
-                mediaGallerySortBy: '${ $.mediaGallerySortBy }'
+                mediaGallerySortBy: '${ $.mediaGallerySortBy }',
+                listingPaging: '${ $.listingPaging }'
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
@@ -120,11 +121,12 @@ define([
         /**
          * Selects displayed image in media gallery
          *
-         * @param {Boolean} switchSortBy
+         * @param {Boolean} switchToDefault
          */
-        selectDisplayedImageInMediaGallery: function (switchSortBy = false) {
+        selectDisplayedImageInMediaGallery: function (switchToDefault = false) {
             if (!this.isMediaBrowser()) {
-                if (switchSortBy) {
+                if (switchToDefault) {
+                    this.listingPaging().goFirst();
                     this.mediaGallerySortBy().selectDefaultOption();
                 }
                 this.selectDisplayedImageForNewMediaGallery();

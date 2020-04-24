@@ -41,7 +41,8 @@ define([
                     mediaGallery: '${ $.mediaGalleryComponent }',
                     mediaGalleryName: '${ $.mediaGalleryName }',
                     mediaGalleryProvider: '${ $.mediaGalleryProvider }',
-                    mediaGallerySortBy: '${ $.mediaGallerySortBy }'
+                    mediaGallerySortBy: '${ $.mediaGallerySortBy }',
+                    listingPaging: '${ $.listingPaging }'
                 }
             ]
         },
