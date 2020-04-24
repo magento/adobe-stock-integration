@@ -40,9 +40,7 @@ define([
                     provider: '${ $.provider }',
                     mediaGallery: '${ $.mediaGalleryComponent }',
                     mediaGalleryName: '${ $.mediaGalleryName }',
-                    messagesName: '${ $.messagesName }',
-                    mediaGalleryProvider: '${ $.mediaGalleryProvider }',
-                    mediaGallerySortBy: '${ $.mediaGallerySortBy }'
+                    mediaGalleryProvider: '${ $.mediaGalleryProvider }'
                 }
             ]
         },
@@ -54,6 +52,7 @@ define([
          */
         initialize: function () {
             this._super().initView();
+            $(window).on('fileDeleted.enhancedMediaGallery', this.reloadAdobeGrid.bind(this));
 
             return this;
         },
@@ -174,6 +173,15 @@ define([
                     value: this.displayedRecord().id
                 }
             ];
+        },
+
+        /**
+         * Reload Adobe grid after deleting image
+         */
+        reloadAdobeGrid: function () {
+            this.actions().source().reload({
+                refresh: true
+            });
         }
     });
 });

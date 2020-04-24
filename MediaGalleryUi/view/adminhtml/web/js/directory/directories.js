@@ -196,6 +196,7 @@ define([
                 errorMessage = 'There was an error on attempt to delete folder!',
                 callback = function () {
                     this.directoryTree().removeNode();
+                    this.directoryTree().selectStorageRoot();
                 }.bind(this);
 
             this.sendPostRequest(this.directoryTree().deleteDirectoryUrl, data, errorMessage, callback);

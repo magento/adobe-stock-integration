@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Test\Unit\Model;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUi\Model\Filesystem\SplFileInfoFactory;
 use Magento\MediaGalleryUi\Model\UploadImage;
-use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

@@ -8,7 +8,6 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- TODO: move this action group to Magento/MediaGallery module -->
     <actionGroup name="AssertAdminImageIsVisibleInMediaGalleryActionGroup">
         <arguments>
             <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>

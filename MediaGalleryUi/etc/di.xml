@@ -20,4 +20,39 @@
             <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\MediaGalleryUi\Model\Directories\FolderTree">
+        <arguments>
+            <argument name="path" xsi:type="string">media</argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\Type">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="image" xsi:type="string">Image</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
+        <arguments>
+            <argument name="contentTypes" xsi:type="array">
+                <item name="catalog_category" xsi:type="string">Category</item>
+                <item name="catalog_product" xsi:type="string">Product</item>
+                <item name="cms_block" xsi:type="string">Block</item>
+                <item name="cms_page" xsi:type="string">Page</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProviderPool">
+        <arguments>
+            <argument name="detailsProviders" xsi:type="array">
+                <item name="10" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Type</item>
+                <item name="20" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\CreatedAt</item>
+                <item name="30" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\UpdatedAt</item>
+                <item name="40" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Width</item>
+                <item name="50" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Height</item>
+                <item name="60" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Size</item>
+                <item name="70" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
