@@ -119,10 +119,14 @@ define([
 
         /**
          * Selects displayed image in media gallery
+         *
+         * @param {Boolean} switchSortBy
          */
-        selectDisplayedImageInMediaGallery: function () {
+        selectDisplayedImageInMediaGallery: function (switchSortBy = false) {
             if (!this.isMediaBrowser()) {
-                this.mediaGallerySortBy().selectDefaultOption();
+                if (switchSortBy) {
+                    this.mediaGallerySortBy().selectDefaultOption();
+                }
                 this.selectDisplayedImageForNewMediaGallery();
             } else {
                 this.selectDisplayedImageForOldMediaGallery();
@@ -290,7 +294,7 @@ define([
                     $.ajaxSetup({
                         async: true
                     });
-                    this.selectDisplayedImageInMediaGallery();
+                    this.selectDisplayedImageInMediaGallery(true);
                 },
 
                 /**
