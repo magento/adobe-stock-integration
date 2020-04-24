@@ -98,11 +98,29 @@ define([
                  * @param {Object} response
                  */
                 success: function (response) {
-                    response.imageDetails.id =  response.imageDetails['adobe_stock'][0].value;
+                    var currentRecord = this.image().displayedRecord();
+
+                    response.imageDetails.id = response.imageDetails['adobe_stock'][0].value;
                     response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
                     this.image().displayedRecord(response.imageDetails);
-                    this.image().actions().licenseProcess();
-                    this.imageModel().reloadGrid();
+                    this.image().actions().login().login()
+                        .then(function () {
+                            if (this.image().actions().isLicensed()) {
+                                this.image().actions().saveLicensed();
+                            } else {
+                                this.image().actions().showLicenseConfirmation(this.image().displayedRecord());
+                            }
+                        }.bind(this))
+                        .catch(function (error) {
+                            uiAlert({
+                                content: error
+                            });
+
+                        })
+                        .finally(function () {
+                            this.image().displayedRecord(currentRecord);
+                            this.imageModel().reloadGrid();
+                        }.bind(this));
 
                 }.bind(this),
 
@@ -124,7 +142,6 @@ define([
                     uiAlert({
                         content: message
                     });
-
                 }
             });
         }
