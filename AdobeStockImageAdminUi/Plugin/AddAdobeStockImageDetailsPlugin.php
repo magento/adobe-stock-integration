@@ -15,8 +15,6 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
-use Magento\AdobeStockImageApi\Api\SerializeImageInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -61,35 +59,20 @@ class AddAdobeStockImageDetailsPlugin
     private $logger;
 
     /**
-     * @var GetAssetByIdInterface
-     */
-    private $getAssetById;
-
-    /**
-     * @var SerializeImageInterface
-     */
-    private $serializeImage;
-
-    /**
-     * AddAdobeStockImageDetailsPlugin constructor.
      * @param FilterBuilder $filterBuilder
      * @param AssetRepositoryInterface $assetRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CreatorRepositoryInterface $creatorRepository
-     * @param GetAssetByIdInterface $getAssetById
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
-     * @param SerializeImageInterface $serializeImage
      */
     public function __construct(
         FilterBuilder $filterBuilder,
         AssetRepositoryInterface $assetRepository,
         CategoryRepositoryInterface $categoryRepository,
         CreatorRepositoryInterface $creatorRepository,
-        GetAssetByIdInterface $getAssetById,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        LoggerInterface $logger,
-        SerializeImageInterface $serializeImage
+        LoggerInterface $logger
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->assetRepository = $assetRepository;
@@ -97,8 +80,6 @@ class AddAdobeStockImageDetailsPlugin
         $this->creatorRepository = $creatorRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
-        $this->getAssetById = $getAssetById;
-        $this->serializeImage = $serializeImage;
     }
 
     /**
