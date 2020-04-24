@@ -27,7 +27,8 @@ define([
             modules: {
                 directories: '${ $.directoriesPath }',
                 actions: '${ $.actionsPath }',
-                mediaGridMessages: '${ $.messagesPath }'
+                mediaGridMessages: '${ $.messagesPath }',
+                sortBy: '${ $.sortByName }'
             }
         },
 
@@ -112,6 +113,7 @@ define([
 
                         return;
                     }
+                    this.sortBy().selectDefaultOption();
                     this.showSuccessMessage(data);
                     this.hideLoader();
                     this.actions().reloadGrid();

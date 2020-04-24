@@ -36,7 +36,8 @@ define([
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
-                imageDirectory: '${ $.mediaGalleryName }'
+                imageDirectory: '${ $.mediaGalleryName }',
+                mediaGallerySortBy: '${ $.mediaGallerySortBy }'
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
@@ -121,6 +122,7 @@ define([
          */
         selectDisplayedImageInMediaGallery: function () {
             if (!this.isMediaBrowser()) {
+                this.mediaGallerySortBy().selectDefaultOption();
                 this.selectDisplayedImageForNewMediaGallery();
             } else {
                 this.selectDisplayedImageForOldMediaGallery();

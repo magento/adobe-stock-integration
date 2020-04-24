@@ -283,5 +283,13 @@
     <container name="media_gallery_image_uploader"
                class="Magento\MediaGalleryUi\Ui\Component\ImageUploaderStandAlone"
                template="Magento_MediaGalleryUi/image-uploader"
-               component="Magento_MediaGalleryUi/js/image-uploader"/>
+               component="Magento_MediaGalleryUi/js/image-uploader">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sortByName" xsi:type="string">
+                    standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.sorting
+                </item>
+            </item>
+        </argument>
+    </container>
 </listing>

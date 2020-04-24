@@ -60,6 +60,13 @@ define([
          */
         getColumn: function (optionIndex) {
             return this.options[this.columnIndexMap[optionIndex]];
+        },
+
+        /**
+         * Select default option
+         */
+        selectDefaultOption: function () {
+            this.selectedOption(this.options[0].value);
         }
     });
 });
