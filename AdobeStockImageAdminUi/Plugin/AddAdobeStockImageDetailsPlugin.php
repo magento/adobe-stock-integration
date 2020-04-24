@@ -15,10 +15,12 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
+use Magento\AdobeStockImageApi\Api\SerializeImageInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\MediaGalleryUi\Model\GetDetailsByAssetId;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\MediaGalleryUi\Model\GetDetailsByAssetId;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -59,20 +61,35 @@ class AddAdobeStockImageDetailsPlugin
     private $logger;
 
     /**
+     * @var GetAssetByIdInterface
+     */
+    private $getAssetById;
+
+    /**
+     * @var SerializeImageInterface
+     */
+    private $serializeImage;
+
+    /**
+     * AddAdobeStockImageDetailsPlugin constructor.
      * @param FilterBuilder $filterBuilder
      * @param AssetRepositoryInterface $assetRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CreatorRepositoryInterface $creatorRepository
+     * @param GetAssetByIdInterface $getAssetById
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
+     * @param SerializeImageInterface $serializeImage
      */
     public function __construct(
         FilterBuilder $filterBuilder,
         AssetRepositoryInterface $assetRepository,
         CategoryRepositoryInterface $categoryRepository,
         CreatorRepositoryInterface $creatorRepository,
+        GetAssetByIdInterface $getAssetById,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SerializeImageInterface $serializeImage
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->assetRepository = $assetRepository;
@@ -80,6 +97,8 @@ class AddAdobeStockImageDetailsPlugin
         $this->creatorRepository = $creatorRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
+        $this->getAssetById = $getAssetById;
+        $this->serializeImage = $serializeImage;
     }
 
     /**
@@ -108,13 +127,16 @@ class AddAdobeStockImageDetailsPlugin
             /** @var AssetSearchResultsInterface $result */
             $result = $this->assetRepository->getList($searchCriteria);
             $adobeStockInfo = [];
+            $adobeStockObject = [];
             if ($result->getTotalCount() > 0) {
                 $item = $result->getItems();
                 /** @var AssetInterface $asset */
                 $asset = reset($item);
                 $adobeStockInfo = $this->loadAssetsInfo($asset);
+                $adobeStockObject = $this->getAssetById->execute($asset->getId());
             }
-            $imageDetails['adobe_stock'] = $adobeStockInfo;
+            $imageDetails['adobe_stock']['info'] = $adobeStockInfo;
+            $imageDetails['adobe_stock']['object'] = $this->serializeImage->execute($adobeStockObject);
         } catch (Exception $exception) {
             $this->logger->critical($exception);
             $imageDetails['adobe_stock'] = [];

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
+use Magento\AdobeStockImage\Model\SerializeImage;
 use Magento\AdobeStockImage\Model\GetRelatedImages;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\AttributeValue;
@@ -43,6 +44,11 @@ class GetRelatedImagesTest extends TestCase
     private $filterBuilder;
 
     /**
+     * @var SerializeImage|MockObject
+     */
+    private $serializeImage;
+
+    /**
      * @var LoggerInterface|MockObject
      */
     private $logger;
@@ -66,11 +72,13 @@ class GetRelatedImagesTest extends TestCase
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
         $this->getImageListInterface = $this->createMock(GetImageListInterface::class);
+        $this->serializeImage = $this->createMock(SerializeImage::class);
         $this->fields = ['same_series' => 'serie_id', 'same_model' => 'model_id'];
         $this->getRelatedSeries = new GetRelatedImages(
             $this->getImageListInterface,
             $this->searchCriteriaBuilder,
             $this->filterBuilder,
+            $this->serializeImage,
             $this->logger,
             $this->fields
         );
@@ -115,6 +123,10 @@ class GetRelatedImagesTest extends TestCase
         $searchCriteriaMock->expects($this->any())
             ->method('getItems')
             ->willReturn($relatedImagesProvider);
+
+        $this->serializeImage->expects($this->any())
+            ->method('execute')
+            ->willReturn($expectedResult['same_model'][0]);
 
         $this->assertEquals($expectedResult, $this->getRelatedSeries->execute(12345678, 30));
     }
