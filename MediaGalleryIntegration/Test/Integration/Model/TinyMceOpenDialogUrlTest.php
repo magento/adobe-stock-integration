@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryIntegration\Test\Integration\Plugin;
+namespace Magento\MediaGalleryIntegration\Test\Integration\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
@@ -16,10 +16,10 @@ use Magento\Tinymce3\Model\Config\Gallery\Config;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Provide integration tests covers update open dialog url functionality for media editor.
+ * Provide integration tests cover update open dialog url functionality for media editor.
  * @magentoAppArea adminhtml
  */
-class UpdateWysiwygDialogUrlTinyMceTest extends TestCase
+class TinyMceOpenDialogUrlTest extends TestCase
 {
     private const FILES_BROWSER_WINDOW_URL = 'files_browser_window_url';
 
@@ -58,6 +58,7 @@ class UpdateWysiwygDialogUrlTinyMceTest extends TestCase
 
     /**
      * Test image open dialog url when enhanced media gallery not enabled.
+     * @magentoConfigFixture default/system/media_gallery/enabled 0
      */
     public function testWithEnhancedMediaGalleryDisabled(): void
     {

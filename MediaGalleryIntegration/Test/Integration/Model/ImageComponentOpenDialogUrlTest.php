@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryIntegration\Test\Integration\Plugin;
+namespace Magento\MediaGalleryIntegration\Test\Integration\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
@@ -15,10 +15,10 @@ use Magento\Ui\Component\Form\Element\DataType\Media\Image;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Provide integration tests covers update open dialog url functionality for media editor.
+ * Provide integration tests cover update open dialog url functionality for media editor.
  * @magentoAppArea adminhtml
  */
-class UpdateOpenDialogUrlTest extends TestCase
+class ImageComponentOpenDialogUrlTest extends TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -50,6 +50,7 @@ class UpdateOpenDialogUrlTest extends TestCase
 
     /**
      * Test image open dialog url when enhanced media gallery not enabled.
+     * @magentoConfigFixture default/system/media_gallery/enabled 0
      */
     public function testWithEnhancedMediaGalleryDisabled(): void
     {

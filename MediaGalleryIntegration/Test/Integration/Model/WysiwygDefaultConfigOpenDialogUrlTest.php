@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryIntegration\Test\Integration\Plugin;
+namespace Magento\MediaGalleryIntegration\Test\Integration\Model;
 
 use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Config;
@@ -18,10 +18,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Provide integration tests covers update wysiwyg editor dialog url update when media gallery enabled.
+ * Provide integration tests cover update wysiwyg editor dialog url update when media gallery enabled.
  * @magentoAppArea adminhtml
  */
-class UpdateWysiwygOpenDialogUrlTest extends TestCase
+class WysiwygDefaultConfigOpenDialogUrlTest extends TestCase
 {
     private const FILES_BROWSER_WINDOW_URL = 'files_browser_window_url';
 
@@ -58,6 +58,7 @@ class UpdateWysiwygOpenDialogUrlTest extends TestCase
 
     /**
      * Test update wysiwyg editor open dialog url when enhanced media gallery not enabled.
+     * @magentoConfigFixture default/system/media_gallery/enabled 0
      */
     public function testWithEnhancedMediaGalleryDisabled(): void
     {
