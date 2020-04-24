@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Synchronize media storage and media assets database records
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Synchronize implements SynchronizeInterface
 {
@@ -98,8 +99,7 @@ class Synchronize implements SynchronizeInterface
                 continue;
             }
 
-            $relativePath = $this->getRelativePath($path);
-            $assetsPaths[] = $relativePath === $item->getFilename() ? '/' . $relativePath : $relativePath;
+            $assetsPaths[] = $this->getRelativePath($path, $item->getFilename());
 
             foreach ($this->synchronizerPool->get() as $synchronizer) {
                 if ($synchronizer instanceof SynchronizeFilesInterface) {
@@ -163,10 +163,13 @@ class Synchronize implements SynchronizeInterface
      * Return asset's relative path
      *
      * @param string $assetPath
+     * @param string $fileName
      * @return string
      */
-    private function getRelativePath(string $assetPath): string
+    private function getRelativePath(string $assetPath, string $fileName): string
     {
-        return substr($assetPath, strlen($this->getMediaDirectory()->getAbsolutePath()));
+        $relativePath = $this->getMediaDirectory()->getRelativePath($assetPath);
+
+        return $relativePath === $fileName ? '/' . $relativePath : $relativePath;
     }
 }
