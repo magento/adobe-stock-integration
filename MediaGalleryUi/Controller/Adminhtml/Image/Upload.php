@@ -23,7 +23,6 @@ use Psr\Log\LoggerInterface;
 class Upload extends Action implements HttpPostActionInterface
 {
     private const HTTP_OK = 200;
-    private const HTTP_INTERNAL_ERROR = 500;
     private const HTTP_BAD_REQUEST = 400;
 
     /**
@@ -85,14 +84,14 @@ class Upload extends Action implements HttpPostActionInterface
                 'message' => __('The image was uploaded successfully.'),
             ];
         } catch (LocalizedException $exception) {
-            $responseCode = self::HTTP_BAD_REQUEST;
+            $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => false,
                 'message' => $exception->getMessage(),
             ];
         } catch (Exception $exception) {
             $this->logger->critical($exception);
-            $responseCode = self::HTTP_INTERNAL_ERROR;
+            $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => false,
                 'message' => __('Could not upload image.'),
