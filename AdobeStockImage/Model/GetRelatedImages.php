@@ -10,13 +10,10 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
-use Magento\AdobeStockImageApi\Api\SerializeImageInterface;
-use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -50,16 +47,15 @@ class GetRelatedImages implements GetRelatedImagesInterface
     private $fields;
 
     /**
-     * @var SerializeImageInterface
+     * @var SerializeImage
      */
     private $serializeImage;
 
     /**
-     * GetRelatedImages constructor.
      * @param GetImageListInterface $getImageList
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
-     * @param SerializeImageInterface $serializeImage
+     * @param SerializeImage $serializeImage
      * @param LoggerInterface $logger
      * @param array $fields
      */
@@ -67,7 +63,7 @@ class GetRelatedImages implements GetRelatedImagesInterface
         GetImageListInterface $getImageList,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        SerializeImageInterface $serializeImage,
+        SerializeImage $serializeImage,
         LoggerInterface $logger,
         array $fields = []
     ) {
@@ -98,8 +94,15 @@ class GetRelatedImages implements GetRelatedImagesInterface
             return $relatedImageGroups;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('Get related images list failed: %error', ['error' => $exception->getMessage()]);
-            throw new IntegrationException($message, $exception);
+            throw new LocalizedException(
+                __(
+                    'Could not load related assets for asset id: %id',
+                    [
+                        'id' => $imageId
+                    ]
+                ),
+                $exception
+            );
         }
     }
 
@@ -108,7 +111,6 @@ class GetRelatedImages implements GetRelatedImagesInterface
      *
      * @param Document[] $images
      * @return array
-     * @throws SerializationException
      */
     private function serializeRelatedImages(array $images): array
     {

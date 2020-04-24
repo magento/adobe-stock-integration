@@ -127,16 +127,13 @@ class AddAdobeStockImageDetailsPlugin
             /** @var AssetSearchResultsInterface $result */
             $result = $this->assetRepository->getList($searchCriteria);
             $adobeStockInfo = [];
-            $adobeStockObject = [];
             if ($result->getTotalCount() > 0) {
                 $item = $result->getItems();
                 /** @var AssetInterface $asset */
                 $asset = reset($item);
                 $adobeStockInfo = $this->loadAssetsInfo($asset);
-                $adobeStockObject = $this->getAssetById->execute($asset->getId());
             }
-            $imageDetails['adobe_stock']['info'] = $adobeStockInfo;
-            $imageDetails['adobe_stock']['object'] = $this->serializeImage->execute($adobeStockObject);
+            $imageDetails['adobe_stock'] = $adobeStockInfo;
         } catch (Exception $exception) {
             $this->logger->critical($exception);
             $imageDetails['adobe_stock'] = [];
