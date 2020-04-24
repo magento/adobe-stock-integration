@@ -20,8 +20,8 @@ use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -49,12 +49,12 @@ class SaveAssetTest extends TestCase
     private $assetRepository;
 
     /**
-     * @var DeleteByPathInterface
+     * @var DeleteAssetsByPathsInterface
      */
     private $deleteMediaAssetByPath;
 
     /**
-     * @var SaveAssetInterface
+     * @var SaveAssetsInterface
      */
     private $saveAsset;
 
@@ -66,7 +66,7 @@ class SaveAssetTest extends TestCase
         $this->categoryRepository = Bootstrap::getObjectManager()->get(CategoryRepositoryInterface::class);
         $this->creatorRepository = Bootstrap::getObjectManager()->get(CreatorRepositoryInterface::class);
         $this->assetRepository = Bootstrap::getObjectManager()->get(AssetRepositoryInterface::class);
-        $this->deleteMediaAssetByPath = Bootstrap::getObjectManager()->get(DeleteByPathInterface::class);
+        $this->deleteMediaAssetByPath = Bootstrap::getObjectManager()->get(DeleteAssetsByPathsInterface::class);
         $this->saveAsset = Bootstrap::getObjectManager()->get(SaveAssetInterface::class);
     }
 
@@ -109,8 +109,8 @@ class SaveAssetTest extends TestCase
                 ]
             ]
         );
-        /** @var SaveInterface $mediaSave */
-        $mediaSave = Bootstrap::getObjectManager()->get(SaveInterface::class);
+        /** @var SaveAssetsInterface $mediaSave */
+        $mediaSave = Bootstrap::getObjectManager()->get(SaveAssetsInterface::class);
         $mediaId = $mediaSave->execute($mediaAsset);
 
         $categoryFactory = Bootstrap::getObjectManager()->get(CategoryInterfaceFactory::class);

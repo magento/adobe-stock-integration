@@ -122,8 +122,9 @@ class Synchronize implements SynchronizeInterface
     private function isApplicable(string $path): bool
     {
         try {
-            return $this->getMediaDirectory()->getRelativePath($path)
-                && !$this->isPathBlacklisted->execute($path)
+            $relativePath = $this->getMediaDirectory()->getRelativePath($path);
+            return $relativePath
+                && !$this->isPathBlacklisted->execute($relativePath)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);

@@ -8,18 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\User;
 
+use Magento\AdobeIms\Controller\Adminhtml\User\Profile;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Log\LoggerInterface;
-use Magento\AdobeIms\Controller\Adminhtml\User\Profile;
-use Magento\Framework\Controller\Result\Json;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Ensure that User Profile data can be returned.

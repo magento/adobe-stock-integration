@@ -90,7 +90,6 @@ class Url extends Column
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
-                    'targetElementId' => $this->context->getRequestParam('target_element_id'),
                     'onInsertUrl' => $this->urlInterface->getUrl('cms/wysiwyg_images/oninsert'),
                     'storeId' => $this->storeManager->getStore()->getId()
                 ]
