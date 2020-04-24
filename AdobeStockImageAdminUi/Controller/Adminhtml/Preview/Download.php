@@ -49,19 +49,19 @@ class Download extends Action implements HttpPostActionInterface
 
     /**
      * @param Action\Context $context
-     * @param SaveImageInterface $saveImage
+     * @param SaveImageInterface $save
      * @param LoggerInterface $logger
      * @param GetAssetByIdInterface $getAssetById
      */
     public function __construct(
         Action\Context $context,
-        SaveImageInterface $saveImage,
+        SaveImageInterface $save,
         LoggerInterface $logger,
         GetAssetByIdInterface $getAssetById
     ) {
         parent::__construct($context);
 
-        $this->saveImage = $saveImage;
+        $this->saveImage = $save;
         $this->getAssetById = $getAssetById;
         $this->logger = $logger;
     }

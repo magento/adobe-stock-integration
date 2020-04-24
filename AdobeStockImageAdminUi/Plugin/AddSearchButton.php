@@ -52,7 +52,6 @@ class AddSearchButton
      *
      * @param Container $subject
      * @param LayoutInterface $layout
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSetLayout(Container $subject, LayoutInterface $layout): void

@@ -27,6 +27,7 @@ define([
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
             imageItems: [],
+            messages: [],
             listens: {
                 '${ $.provider }:data.items': 'updateActions'
             },
@@ -35,7 +36,6 @@ define([
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
-                messages: '${ $.messagesName }',
                 imageDirectory: '${ $.mediaGalleryName }'
             },
             imports: {
@@ -51,7 +51,8 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'imageItems'
+                    'imageItems',
+                    'messages'
                 ]);
 
             return this;
@@ -314,8 +315,11 @@ define([
                             });
                         }
                     }
-                    this.messages().add('error', message);
-                    this.messages().scheduleCleanup(this.messageDelay);
+                    this.messages.push({
+                        code: 'error',
+                        message: message
+                    });
+                    this.messagesCleanup();
                 }
             });
         },
@@ -414,7 +418,7 @@ define([
          * @return {Array}
          */
         getMessages: function () {
-            return this.messages().get();
+            return this.messages();
         },
 
         /**
@@ -535,8 +539,11 @@ define([
                             errorMessage = $.mage.__('Your admin role does not have permissions to license an image');
                         }
 
-                        this.messages().add('error', errorMessage);
-                        this.messages().scheduleCleanup(this.messageDelay);
+                        this.messages.push({
+                            code: 'error',
+                            message: errorMessage
+                        });
+                        this.messagesCleanup();
                     }
                 }
             );
@@ -594,10 +601,13 @@ define([
                     });
                 }.bind(this))
                 .catch(function (error) {
-                    this.messages().add('error', error);
+                    this.messages.push({
+                        code: 'error',
+                        message: error
+                    });
                 }.bind(this))
                 .finally(function () {
-                    this.messages().scheduleCleanup(this.messageDelay);
+                    this.messagesCleanup();
                 }.bind(this));
         },
 
@@ -675,6 +685,19 @@ define([
                 imageIndex = filePathArray.length - 1;
 
             return filePathArray[imageIndex].substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+        },
+
+        /**
+         * Messages cleanup
+         */
+        messagesCleanup: function () {
+            // eslint-disable-next-line no-unused-vars
+            var timerId;
+
+            timerId = setTimeout(function () {
+                clearTimeout(timerId);
+                this.messages.removeAll();
+            }.bind(this), Number(this.messageDelay) * 1000);
         }
     });
 });

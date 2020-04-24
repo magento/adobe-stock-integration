@@ -8,9 +8,13 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Controller\Adminhtml\OAuth;
 
 use Magento\AdobeIms\Controller\Adminhtml\OAuth\Callback;
+use Magento\AdobeIms\Model\GetImage;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
+use Magento\AdobeImsApi\Api\GetTokenInterface;
+use Magento\AdobeImsApi\Api\LogInInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Auth;
 use Magento\Framework\Controller\Result\Raw;
@@ -19,11 +23,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\AdobeIms\Model\GetImage;
 
 /**
- * User repository test.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Authentication callback controller test
  */
 class CallbackTest extends TestCase
 {
@@ -33,14 +35,9 @@ class CallbackTest extends TestCase
     private $context;
 
     /**
-     * @var MockObject|UserProfileRepositoryInterface
+     * @var MockObject|GetTokenInterface
      */
-    private $userProfileRepository;
-
-    /**
-     * @var MockObject|UserProfileInterfaceFactory
-     */
-    private $userProfileFactory;
+    private $getToken;
 
     /**
      * @var Auth|MockObject
@@ -58,9 +55,9 @@ class CallbackTest extends TestCase
     private $resultFactory;
 
     /**
-     * @var GetImage|MockObject
+     * @var LogInInterface|MockObject
      */
-    private $getImage;
+    private $login;
 
     /**
      * @var Callback
@@ -83,41 +80,39 @@ class CallbackTest extends TestCase
             ]
         );
         $this->user = $this->createMock(User::class);
-        $this->userProfileRepository = $this->createMock(UserProfileRepositoryInterface::class);
-        $this->userProfileFactory = $this->createMock(UserProfileInterfaceFactory::class);
-        $this->getImage = $this->createMock(GetImage::class);
+        $this->getToken = $this->createMock(GetTokenInterface::class);
+        $this->login = $this->createMock(LogInInterface::class);
         $this->callback = $objectManager->getObject(
             Callback::class,
             [
                 'context' => $this->context,
-                'userProfileRepository' => $this->userProfileRepository,
-                'userProfileFactory' => $this->userProfileFactory,
-                'getImage' => $this->getImage
+                'getToken' => $this->getToken,
+                'login' => $this->login
             ]
         );
     }
 
     /**
-     * Test execute.
+     * Authentication callback controller test
      */
     public function testExecute(): void
     {
+        $userId = 55;
+        $token = $this->createMock(TokenResponseInterface::class);
+
         $this->authMock->method('getUser')
             ->will($this->returnValue($this->user));
         $this->user->method('getId')
-            ->willReturn(1);
+            ->willReturn($userId);
 
-        $this->getImage->expects($this->once())
+        $this->getToken->expects($this->once())
             ->method('execute')
-            ->willReturn('https://image.url/image.png');
-        $this->userProfileRepository->expects($this->exactly(1))
-            ->method('getByUserId')
-            ->willReturn($this->getUserProfile());
+            ->willReturn($token);
+        $this->login->expects($this->once())
+            ->method('execute')
+            ->with($userId, $token);
 
         $result = $this->createMock(Raw::class);
-        $this->userProfileRepository->expects($this->once())
-            ->method('save')
-            ->willReturn(null);
         $result->expects($this->once())
             ->method('setContents')
             ->with('auth[code=success;message=Authorization was successful]')
@@ -127,24 +122,5 @@ class CallbackTest extends TestCase
             ->willReturn($result);
 
         $this->assertEquals($result, $this->callback->execute());
-    }
-
-    /**
-     * Get user profile mock
-     *
-     * @return MockObject
-     */
-    private function getUserProfile(): MockObject
-    {
-        $userProfile = $this->createMock(UserProfileInterface::class);
-        $userProfile->expects($this->once())
-            ->method('setAccessToken');
-        $userProfile->expects($this->once())
-            ->method('setRefreshToken');
-        $userProfile->expects($this->once())
-            ->method('setAccessTokenExpiresAt');
-        $userProfile->expects($this->once())
-            ->method('setImage');
-        return $userProfile;
     }
 }

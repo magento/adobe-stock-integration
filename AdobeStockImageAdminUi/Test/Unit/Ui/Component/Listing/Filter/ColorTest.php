@@ -12,18 +12,19 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Ui\Component\Filters\Type\Input;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\Element\UiComponent\Processor;
 
 /**
  * ColorTest test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ColorTest extends TestCase
 {
@@ -90,7 +91,6 @@ class ColorTest extends TestCase
      */
     private function createObject(array $data, ContextInterface $context): Color
     {
-
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->filterModifier = $this->createMock(FilterModifier::class);
