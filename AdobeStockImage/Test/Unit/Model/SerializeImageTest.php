@@ -57,20 +57,4 @@ class SerializeImageTest extends TestCase
         $result = $this->serializeImage->execute($this->documentMock);
         $this->assertEquals($expectedResult, $result);
     }
-
-    /**
-     * Test exception throw from execute serialize image method
-     */
-    public function testExceptionThrownOnExecute(): void
-    {
-        $attributeCategoryMock = $this->createMock(AttributeInterface::class);
-        $attributeCategoryMock->method('getAttributeCode')->willReturn('category');
-        $attributeCategoryMock->method('getValue')->willThrowException(new \Exception());
-        $this->documentMock->expects($this->once())
-            ->method('getCustomAttributes')
-            ->willReturn([$attributeCategoryMock]);
-
-        $this->expectException(SerializationException::class);
-        $this->serializeImage->execute($this->documentMock);
-    }
 }

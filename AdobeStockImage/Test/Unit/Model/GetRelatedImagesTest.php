@@ -17,7 +17,7 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -169,7 +169,7 @@ class GetRelatedImagesTest extends TestCase
         $this->logger->expects($this->any())
             ->method('critical')
             ->willReturnSelf();
-        $this->expectException(IntegrationException::class);
+        $this->expectException(LocalizedException::class);
 
         $this->getRelatedSeries->execute(12345678, 30);
     }
