@@ -2,7 +2,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 define([
     'jquery'
 ], function ($) {
@@ -21,7 +20,7 @@ define([
                 context: this,
 
                 /**
-                 * Success handler for deleting image
+                 * Resolve with image details if success, reject with response message othervise
                  *
                  * @param {Object} response
                  */
@@ -36,7 +35,7 @@ define([
                 },
 
                 /**
-                 * Error handler for deleting image
+                 * Extract the message and reject
                  *
                  * @param {Object} response
                  */

@@ -2,7 +2,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 define([
     'jquery'
 ], function ($) {
@@ -10,43 +9,43 @@ define([
 
     return function (requestUrl, adobeAssetId) {
         return new window.Promise(function (resolve, reject) {
-            $.ajax(
-                {
-                    type: 'GET',
-                    url: requestUrl,
-                    dataType: 'json',
-                    data: {
-                        'media_id': adobeAssetId
-                    },
-                    showLoader: true,
+            $.ajax({
+                type: 'GET',
+                url: requestUrl,
+                dataType: 'json',
+                data: {
+                    'media_id': adobeAssetId
+                },
+                showLoader: true,
 
-                    /**
-                     * On success result
-                     *
-                     * @param {Object} response
-                     */
-                    success: function (response) {
-                        resolve({
-                            canLicense: response.result.canLicense,
-                            message: response.result.message
-                        });
-                    },
+                /**
+                 * Extract the data from the response and resolve
+                 *
+                 * @param {Object} response
+                 */
+                success: function (response) {
+                    resolve({
+                        canLicense: response.result.canLicense,
+                        message: response.result.message
+                    });
+                },
 
-                    /**
-                     * On error
-                     */
-                    error: function (response) {
-                        var message = response.JSON ? response.JSON.message
-                            : $.mage.__('Could not fetch licensing information.');
+                /**
+                 * Extract the error message and reject
+                 *
+                 * @param {Object} response
+                 */
+                error: function (response) {
+                    var message = response.JSON ? response.JSON.message
+                        : $.mage.__('Could not fetch licensing information.');
 
-                        if (response.status === 403) {
-                            message = $.mage.__('Your admin role does not have permissions to license an image');
-                        }
-
-                        reject(message);
+                    if (response.status === 403) {
+                        message = $.mage.__('Your admin role does not have permissions to license an image');
                     }
+
+                    reject(message);
                 }
-            );
+            });
         });
     }
 });

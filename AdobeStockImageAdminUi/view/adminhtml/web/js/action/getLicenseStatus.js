@@ -2,7 +2,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 define([
     'jquery'
 ], function ($) {
@@ -19,6 +18,8 @@ define([
                 dataType: 'json',
 
                 /**
+                 * Resolve with the response result
+                 *
                  * @param {Object} response
                  * @returns void
                  */
@@ -27,6 +28,8 @@ define([
                 },
 
                 /**
+                 * Reject with the message from response
+                 *
                  * @param {Object} response
                  * @returns {String}
                  */

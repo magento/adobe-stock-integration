@@ -2,7 +2,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 define([
     'jquery'
 ], function ($) {
@@ -21,16 +20,14 @@ define([
                 },
 
                 /**
-                 * Success handler for Adobe Stock preview or licensed asset
-                 * download
+                 * Resolve on success
                  */
                 success: function () {
                     resolve();
                 },
 
                 /**
-                 * Error handler for Adobe Stock preview or licensed asset
-                 * download
+                 * Extract the error message and reject
                  *
                  * @param {Object} response
                  */
