@@ -49,5 +49,5 @@ define([
                 reject(error);
             });
         });
-    }
+    };
 });

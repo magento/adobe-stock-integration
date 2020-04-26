@@ -57,6 +57,6 @@ define([], function () {
          */
         buildPath: function (directoryPath, fileName, contentType) {
             return directoryPath + '/' + fileName + '.' + this.getImageExtension(contentType);
-        },
+        }
     };
 });

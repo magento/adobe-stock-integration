@@ -14,37 +14,36 @@ define([
         return new window.Promise(function (resolve, reject) {
             var confirmationContent = $.mage.__('License "' + recordTitle + '"'),
                 displayFieldName = !isPreviewDownloaded ? '<b>' + $.mage.__('File Name') + '</b>' : '',
-                content = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>' + displayFieldName;
+                content = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>' + displayFieldName,
+                data = {
+                    'title': $.mage.__('License Adobe Stock Images?'),
+                    'content': content,
+                    'visible': !isPreviewDownloaded,
+                    'actions': {
+                        /**
+                         * Confirm action
+                         */
+                        confirm: function (fileName) {
+                            resolve(fileName);
+                        }
+                    },
+                    'buttons': [{
+                        text: $.mage.__('Cancel'),
+                        class: 'action-secondary action-dismiss',
 
-            var data = {
-                'title': $.mage.__('License Adobe Stock Images?'),
-                'content': content,
-                'visible': !isPreviewDownloaded,
-                'actions': {
-                    /**
-                     * Confirm action
-                     */
-                    confirm: function (fileName) {
-                        resolve(fileName);
-                    }
-                },
-                'buttons': [{
-                    text: $.mage.__('Cancel'),
-                    class: 'action-secondary action-dismiss',
+                        /**
+                         * Close modal
+                         */
+                        click: function () {
+                            this.closeModal();
+                            reject();
+                        }
+                    }, {
+                        text: $.mage.__('Confirm'),
+                        class: 'action-primary action-accept'
+                    }]
 
-                    /**
-                     * Close modal
-                     */
-                    click: function () {
-                        this.closeModal();
-                        reject();
-                    }
-                }, {
-                    text: $.mage.__('Confirm'),
-                    class: 'action-primary action-accept'
-                }]
-
-            };
+                };
 
             prompt({
                 title: data.title,
@@ -72,5 +71,5 @@ define([
                 buttons: data.buttons
             });
         });
-    }
+    };
 });

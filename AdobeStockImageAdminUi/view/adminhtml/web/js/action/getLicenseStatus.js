@@ -21,7 +21,6 @@ define([
                  * Resolve with the response result
                  *
                  * @param {Object} response
-                 * @returns void
                  */
                 success: function (response) {
                     resolve(response.result);
@@ -31,12 +30,11 @@ define([
                  * Reject with the message from response
                  *
                  * @param {Object} response
-                 * @returns {String}
                  */
                 error: function (response) {
                     reject(response.message);
                 }
             });
         });
-    }
+    };
 });

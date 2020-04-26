@@ -31,5 +31,5 @@ define([
                 reject(error);
             });
         });
-    }
+    };
 });

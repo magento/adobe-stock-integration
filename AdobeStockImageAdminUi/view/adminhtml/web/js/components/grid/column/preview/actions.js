@@ -154,7 +154,7 @@ define([
         selectDisplayedImageForNewMediaGallery: function (path) {
             var imageFolders = path.substring(0, path.indexOf('/')),
                 record = this.getRecordFromMediaGalleryProvider(path),
-                subscription;
+                subscription; // eslint-disable-line no-unused-vars
 
             if (!record) {
                 subscription = this.imageItems.subscribe(function () {
@@ -240,11 +240,12 @@ define([
             var record = this.preview().displayedRecord();
 
             record['is_downloaded'] = 1;
+
             if (record.path === '') {
                 record.path = path;
             }
 
-            this.preview().displayedRecord(record)
+            this.preview().displayedRecord(record);
         },
 
         /**
@@ -264,7 +265,7 @@ define([
             record['is_licensed'] = 1;
             record['is_licensed_locally'] = 1;
 
-            this.preview().displayedRecord(record)
+            this.preview().displayedRecord(record);
         },
 
         /**
@@ -472,7 +473,7 @@ define([
                                     resolve(destinationPath);
                                 }).catch(function (error) {
                                     reject(error);
-                                })
+                                });
                             }.bind(this));
                         }
                         $.ajaxSetup({
@@ -512,7 +513,7 @@ define([
                 this.updateGridsAndSelectSavedAsset(destinationPath);
             }.bind(this)).catch(function (error) {
                 if (error) {
-                    this.showErrorMessage(message);
+                    this.showErrorMessage(error);
                 }
             }.bind(this));
         },
@@ -547,7 +548,7 @@ define([
         showErrorMessage: function (message) {
             this.messages.push({
                 code: 'error',
-                message: message
+                messageUnsanitizedHtml: message
             });
             this.messagesCleanup();
         },

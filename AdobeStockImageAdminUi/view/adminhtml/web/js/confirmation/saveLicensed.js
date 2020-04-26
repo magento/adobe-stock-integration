@@ -17,9 +17,14 @@ define([
                 'content': $.mage.__('File Name'),
                 'visible': true,
                 'actions': {
+                    /**
+                     * Resolve with the specified file name
+                     *
+                     * @param fileName
+                     */
                     confirm: function (fileName) {
-                        resolve(fileName)
-                    }.bind(this)
+                        resolve(fileName);
+                    }
                 },
                 'buttons': [
                     {
@@ -67,5 +72,5 @@ define([
                 buttons: data.buttons
             });
         });
-    }
+    };
 });

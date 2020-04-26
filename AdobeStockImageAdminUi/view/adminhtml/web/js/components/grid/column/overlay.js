@@ -6,7 +6,7 @@ define([
     'jquery',
     'underscore',
     'Magento_Ui/js/grid/columns/overlay',
-    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus',
+    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus'
 ], function ($, _, overlay, getLicenseStatus) {
     'use strict';
 

@@ -92,7 +92,7 @@ define([
                         this.image().actions().overlay().getImagesUrl,
                         [id]
                     ).then(function (licensedInfo) {
-                        var isLicensed = licensedInfo[id] ?? false;
+                        var isLicensed = licensedInfo[id] || false;
 
                         this.image().actions().licenseProcess(
                             id,
