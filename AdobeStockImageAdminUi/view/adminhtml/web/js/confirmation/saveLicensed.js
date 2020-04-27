@@ -20,7 +20,7 @@ define([
                     /**
                      * Resolve with the specified file name
                      *
-                     * @param fileName
+                     * @param {String} fileName
                      */
                     confirm: function (fileName) {
                         resolve(fileName);

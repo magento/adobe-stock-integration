@@ -19,8 +19,8 @@ define([
                 'actions': {
                     /**
                      * Resolve with the specified file name
-                     * 
-                     * @param specifiedFileName
+                     *
+                     * @param {String} specifiedFileName
                      */
                     confirm: function (specifiedFileName) {
                         resolve(specifiedFileName);

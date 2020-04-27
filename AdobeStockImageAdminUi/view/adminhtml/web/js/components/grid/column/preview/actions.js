@@ -317,7 +317,6 @@ define([
             return activeNodePath;
         },
 
-
         /**
          * Reload grid
          *

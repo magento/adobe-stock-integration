@@ -22,6 +22,8 @@ define([
                     'actions': {
                         /**
                          * Confirm action
+                         *
+                         * @param {String} fileName
                          */
                         confirm: function (fileName) {
                             resolve(fileName);

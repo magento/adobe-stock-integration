@@ -89,7 +89,6 @@ class GetRelatedImagesTest extends TestCase
      *
      * @param array $relatedImagesProvider
      * @param array $expectedResult
-     * @throws IntegrationException
      * @dataProvider relatedImagesDataProvider
      */
     public function testExecute(array $relatedImagesProvider, array $expectedResult): void
