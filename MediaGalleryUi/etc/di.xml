@@ -36,7 +36,9 @@
         <arguments>
             <argument name="contentTypes" xsi:type="array">
                 <item name="catalog_category" xsi:type="string">Categories</item>
+                <item name="catalog_category_single" xsi:type="string">Category</item>
                 <item name="catalog_product" xsi:type="string">Products</item>
+                <item name="catalog_product_single" xsi:type="string">Product</item>
                 <item name="cms_block" xsi:type="string">Blocks</item>
                 <item name="cms_page" xsi:type="string">Pages</item>
             </argument>

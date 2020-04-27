@@ -65,17 +65,23 @@ class UsedIn implements AssetDetailsProviderInterface
     {
         $usedIn = [];
         $entityIds = [];
-        
+
         $contentIdentities = $this->getContent->execute([$assetId]);
 
         foreach ($contentIdentities as $contentIdentity) {
             $entityId = $contentIdentity->getEntityId();
             $type = $this->contentTypes[$contentIdentity->getEntityType()] ?? $contentIdentity->getEntityType();
-
-            if (!isset($usedIn[$type])) {
-                $usedIn[$type] = 1;
+            $singleType = $this->contentTypes[$contentIdentity->getEntityType() . '_single'] ?? $type;
+            
+            if (!isset($entityIds[$type])) {
+                $usedIn[$singleType] = 1;
             } elseif ($entityIds[$type]['entity_id'] !== $entityId) {
-                $usedIn[$type] += 1;
+                if (isset($usedIn[$type])) {
+                    $usedIn[$type] +=1;
+                } else {
+                    $usedIn[$type] = $usedIn[$singleType]+1;
+                    unset($usedIn[$singleType]);
+                }
             }
             $entityIds[$type]['entity_id'] = $entityId;
         }
