@@ -99,6 +99,7 @@ define([
                 }.bind(this),
 
                 stop: function () {
+                    this.openNewestImages();
                     this.mediaGridMessages().scheduleCleanup();
                 }.bind(this),
 
@@ -114,9 +115,6 @@ define([
 
                         return;
                     }
-                    this.sortBy().selectDefaultOption();
-                    this.listingPaging().goFirst();
-
                     this.showSuccessMessage(data);
                     this.hideLoader();
                     this.actions().reloadGrid();
@@ -133,6 +131,20 @@ define([
          */
         isSizeExceeded: function (file) {
             return validator('validate-max-size', file.size, this.maxFileSize);
+        },
+
+        /**
+         * Go to recently uploaded images if at least one uploaded successfully
+         */
+        openNewestImages: function () {
+            this.mediaGridMessages().get().each(function (message) {
+                if (message.code === 'success') {
+                    this.sortBy().selectDefaultOption();
+                    this.listingPaging().goFirst();
+
+                    return false;
+                }
+            }.bind(this));
         },
 
         /**

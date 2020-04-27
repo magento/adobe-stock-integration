@@ -121,9 +121,9 @@ define([
         /**
          * Selects displayed image in media gallery
          *
-         * @param {Boolean} switchToDefault
+         * @param {Boolean|Undefined} switchToDefault
          */
-        selectDisplayedImageInMediaGallery: function (switchToDefault = false) {
+        selectDisplayedImageInMediaGallery: function (switchToDefault) {
             if (!this.isMediaBrowser()) {
                 if (switchToDefault) {
                     this.listingPaging().goFirst();
