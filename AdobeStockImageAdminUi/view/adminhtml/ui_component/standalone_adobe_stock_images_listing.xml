@@ -80,7 +80,7 @@
                     <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\ContentType\Options"/>
                     <label translate="true">Subcategory</label>
                     <dataScope>content_type_filter</dataScope>
-               </settings>
+                </settings>
             </filterSelect>
             <filterSelect name="orientation_filter" provider="${ $.parentName }" sortOrder="20">
                 <settings>
