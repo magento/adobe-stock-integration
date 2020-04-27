@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageApi\Api;
 
-use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Retrieve array of related images categorized by relation
@@ -22,9 +22,8 @@ interface GetRelatedImagesInterface
      *
      * @param int $imageId
      * @param int $limit
-     *
      * @return array
-     * @throws IntegrationException
+     * @throws LocalizedException
      */
     public function execute(int $imageId, int $limit): array;
 }

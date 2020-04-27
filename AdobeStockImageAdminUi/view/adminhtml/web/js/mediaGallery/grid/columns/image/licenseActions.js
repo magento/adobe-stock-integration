@@ -4,10 +4,12 @@
  */
 define([
     'jquery',
-    'Magento_MediaGalleryUi/js/grid/columns/image/actions',
+    'underscore',
     'Magento_Ui/js/modal/alert',
-    'underscore'
-], function ($, Action, uiAlert, _) {
+    'Magento_MediaGalleryUi/js/grid/columns/image/actions',
+    'Magento_MediaGalleryUi/js/action/getDetails',
+    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus'
+], function ($, _, uiAlert, Action, getDetails, getLicenseStatus) {
     'use strict';
 
     return Action.extend({
@@ -82,50 +84,43 @@ define([
          * @param {Number} imageId
          */
         getImageRecord: function (imageId) {
-            $.ajax({
-                type: 'GET',
-                url: this.imageDetailsUrl,
-                dataType: 'json',
-                showLoader: true,
-                data: {
-                    'id': imageId
-                },
-                context: this,
+            this.image().actions().login().login().then(function () {
+                getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
+                    var id = imageDetails['adobe_stock'][0].value;
 
-                /**
-                 * Success handler for deleting image
-                 *
-                 * @param {Object} response
-                 */
-                success: function (response) {
-                    response.imageDetails.id =  response.imageDetails['adobe_stock'][0].value;
-                    response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
-                    this.image().displayedRecord(response.imageDetails);
-                    this.image().actions().licenseProcess();
-                    this.imageModel().reloadGrid();
+                    getLicenseStatus(
+                        this.image().actions().overlay().getImagesUrl,
+                        [id]
+                    ).then(function (licensedInfo) {
+                        var isLicensed = licensedInfo[id] || false;
 
-                }.bind(this),
-
-                /**
-                 * Error handler for deleting image
-                 *
-                 * @param {Object} response
-                 */
-                error: function (response) {
-                    var message;
-
-                    if (typeof response.responseJSON === 'undefined' ||
-                        typeof response.responseJSON.message === 'undefined'
-                    ) {
-                        message = $.mage.__('There was an error on attempt to get the image details.');
-                    } else {
-                        message = response.responseJSON.message;
-                    }
+                        this.image().actions().licenseProcess(
+                            id,
+                            imageDetails.title,
+                            imageDetails.path,
+                            imageDetails['content_type'],
+                            isLicensed,
+                            true
+                        ).then(function () {
+                            this.image().actions().login().getUserQuota();
+                            this.imageModel().reloadGrid();
+                        }.bind(this)).catch(function (error) {
+                            if (error) {
+                                uiAlert({
+                                    content: error
+                                });
+                            }
+                        });
+                    }.bind(this));
+                }.bind(this)).catch(function (message) {
                     uiAlert({
                         content: message
                     });
-
-                }
+                });
+            }.bind(this)).catch(function (error) {
+                uiAlert({
+                    content: error
+                });
             });
         }
     });
