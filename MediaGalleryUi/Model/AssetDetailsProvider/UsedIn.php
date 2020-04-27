@@ -64,14 +64,20 @@ class UsedIn implements AssetDetailsProviderInterface
     private function getUsedIn(int $assetId): array
     {
         $usedIn = [];
+        $entityIds = [];
+        
         $contentIdentities = $this->getContent->execute([$assetId]);
+
         foreach ($contentIdentities as $contentIdentity) {
+            $entityId = $contentIdentity->getEntityId();
             $type = $this->contentTypes[$contentIdentity->getEntityType()] ?? $contentIdentity->getEntityType();
+
             if (!isset($usedIn[$type])) {
                 $usedIn[$type] = 1;
-            } else {
+            } elseif ($entityIds[$type]['entity_id'] !== $entityId) {
                 $usedIn[$type] += 1;
             }
+            $entityIds[$type]['entity_id'] = $entityId;
         }
         return $usedIn;
     }
