@@ -42,7 +42,6 @@ define([
                 this.getJsonTree();
                 this.initEvents();
                 this.checkChipFiltersState();
-
             }.bind(this));
 
             return this;
@@ -120,7 +119,6 @@ define([
          * Listener to clear filters event
          */
         clearFiltersHandle: function () {
-
             if (_.isUndefined(this.filterChips().filters.path)) {
                 $(this.directoryTreeSelector).jstree('deselect_all');
                 this.activeNode(null);
@@ -222,7 +220,6 @@ define([
                  */
                 success: function (data) {
                     this.createTree(data);
-
                 }.bind(this),
 
                 /**

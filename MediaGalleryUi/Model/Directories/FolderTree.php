@@ -78,7 +78,7 @@ class FolderTree
             return $directories;
         }
 
-        foreach ($directory->readRecursively() as $index => $path) {
+        foreach ($directory->readRecursively() as $path) {
             if (!$directory->isDirectory($path) || $this->isBlacklisted->execute($path)) {
                 continue;
             }
