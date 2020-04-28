@@ -49,9 +49,7 @@ class Synchronize extends Command
     protected function configure()
     {
         $this->setName('media-content:sync');
-        $this->setDescription(
-            'Synchronize content with assets'
-        );
+        $this->setDescription('Synchronize content with assets');
     }
 
     /**

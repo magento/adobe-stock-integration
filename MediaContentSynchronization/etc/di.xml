@@ -10,7 +10,7 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="mediaContentSynchronization" xsi:type="object">Magento\MediaGallerySynchronization\Console\Command\Synchronize</item>
+                <item name="mediaContentSynchronization" xsi:type="object">Magento\MediaContentSynchronization\Console\Command\Synchronize</item>
             </argument>
         </arguments>
     </type>

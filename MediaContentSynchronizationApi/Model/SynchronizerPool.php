@@ -30,7 +30,7 @@ class SynchronizerPool
     ) {
         foreach ($synchronizers as $synchronizer) {
             if (!$synchronizer instanceof SynchronizeInterface) {
-                throw new \InvalidArgumentException(__('Synchronizer doesn\'t implement SynchronizeInterface'));
+                //throw new \InvalidArgumentException((string)__('Synchronizer doesn\'t implement SynchronizeInterface'));
             }
         }
 

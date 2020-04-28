@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentSynchronizationCms\Model;
+namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Psr\Log\LoggerInterface;
@@ -32,8 +32,8 @@ class Page implements SynchronizerInterface
     /**
      * @inheritdoc
      */
-    public function execute(): void
+    public function execute(): array
     {
-        //implementation
+        return [];
     }
 }
