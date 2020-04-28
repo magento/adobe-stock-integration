@@ -86,7 +86,7 @@ class FolderTree
             $pathArray = explode('/', $path);
             $directories[] = [
                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                'attr' => ['id' => $index],
+                'attr' => ['id' => $path],
                 'metadata' => [
                     'path' => $path
                 ],
