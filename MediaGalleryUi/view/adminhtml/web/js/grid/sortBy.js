@@ -23,6 +23,11 @@ define([
                 columns.map(function (column) {
                     if (column.sortable === true) {
                         sortBy = column['sort_by'] || {};
+
+                        if (sortBy.excluded) {
+                            return;
+                        }
+
                         this.options.push({
                             value: column.index,
                             label: column.label,
