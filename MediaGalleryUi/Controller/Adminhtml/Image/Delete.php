@@ -10,12 +10,14 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Image;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
+use Magento\MediaGalleryUi\Model\DeleteImage;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -33,9 +35,9 @@ class Delete extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var DeleteAssetsByPathsInterface
+     * @var DeleteImage
      */
-    private $deleteAssetsByPaths;
+    private $deleteImage;
 
     /**
      * @var GetAssetsByIdsInterface
@@ -43,26 +45,36 @@ class Delete extends Action implements HttpPostActionInterface
     private $getAssetsByIds;
 
     /**
+     * @var Storage
+     */
+    private $imagesStorage;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
+     * Delete constructor.
+     *
      * @param Context $context
-     * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
+     * @param DeleteImage $deleteImage
      * @param GetAssetsByIdsInterface $getAssetsByIds
+     * @param Storage $imagesStorage
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        DeleteAssetsByPathsInterface $deleteAssetsByPaths,
+        DeleteImage $deleteImage,
         GetAssetsByIdsInterface $getAssetsByIds,
+        Storage $imagesStorage,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->deleteAssetsByPaths = $deleteAssetsByPaths;
+        $this->deleteImage = $deleteImage;
         $this->getAssetsByIds = $getAssetsByIds;
+        $this->imagesStorage = $imagesStorage;
         $this->logger = $logger;
     }
 
@@ -88,13 +100,13 @@ class Delete extends Action implements HttpPostActionInterface
 
         try {
             $assets = $this->getAssetsByIds->execute([$imageId]);
+            /** @var AssetInterface $asset */
             $asset = current($assets);
-            $this->deleteAssetsByPaths->execute([$asset->getPath()]);
-
+            $this->deleteImage->execute($asset);
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully removed the image.'),
+                'message' => __('You have successfully removed the %image', ['image' => $asset->getTitle()]),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;

@@ -81,7 +81,7 @@
                     <label translate="true">Directory</label>
                 </settings>
             </filterInput>
-            <filterRange name="created_at"
+            <filterRange name="created_at_date"
                          class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
                          template="ui/grid/filters/elements/group" sortOrder="30">
@@ -203,7 +203,15 @@
             </settings>
         </column>
         <column name="created_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
             <settings>
+                <label translate="true">Uploaded Date</label>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
                 <visible>false</visible>
@@ -284,5 +292,16 @@
     <container name="media_gallery_image_uploader"
                class="Magento\MediaGalleryUi\Ui\Component\ImageUploaderStandAlone"
                template="Magento_MediaGalleryUi/image-uploader"
-               component="Magento_MediaGalleryUi/js/image-uploader"/>
+               component="Magento_MediaGalleryUi/js/image-uploader">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sortByName" xsi:type="string">
+                    standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.sorting
+                </item>
+                <item name="listingPagingName" xsi:type="string">
+                    standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.listing_paging
+                </item>
+            </item>
+        </argument>
+    </container>
 </listing>

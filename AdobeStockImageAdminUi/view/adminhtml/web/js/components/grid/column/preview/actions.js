@@ -48,7 +48,9 @@ define([
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
-                imageDirectory: '${ $.mediaGalleryName }'
+                imageDirectory: '${ $.mediaGalleryName }',
+                mediaGallerySortBy: '${ $.mediaGallerySortBy }',
+                listingPaging: '${ $.listingPaging }'
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
@@ -130,13 +132,25 @@ define([
 
         /**
          * Selects displayed image in media gallery
+         *
+         * @param {String} path
+         * @param {Boolean|Undefined} openNewest
          */
-        selectInMediaGallery: function (path) {
+        selectInMediaGallery: function (path, openNewest) {
             if (!this.isMediaBrowser()) {
+                !openNewest || this.openNewestImage();
                 this.selectDisplayedImageForNewMediaGallery(path);
             } else {
                 this.selectDisplayedImageForOldMediaGallery(path);
             }
+        },
+
+        /**
+         * Open recently saved image and go to first page
+         */
+        openNewestImage: function () {
+            this.listingPaging().goFirst();
+            this.mediaGallerySortBy().selectDefaultOption();
         },
 
         /**
@@ -283,7 +297,7 @@ define([
             $.ajaxSetup({
                 async: true
             });
-            this.selectInMediaGallery(path);
+            this.selectInMediaGallery(path, true);
         },
 
         /**
