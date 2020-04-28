@@ -19,7 +19,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Synchronize media storage and media assets database records
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Synchronize implements SynchronizeInterface
 {
@@ -56,32 +55,24 @@ class Synchronize implements SynchronizeInterface
     private $getAssetsIterator;
 
     /**
-     * @var ResolveNonExistedAssets
-     */
-    private $resolveNonExistedAssets;
-
-    /**
      * @param IsPathBlacklistedInterface $isPathBlacklisted
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
      * @param SynchronizerPool $synchronizerPool
      * @param GetAssetsIterator $assetsIterator
-     * @param ResolveNonExistedAssets $resolveNonExistedAssets
      */
     public function __construct(
         IsPathBlacklistedInterface $isPathBlacklisted,
         Filesystem $filesystem,
         LoggerInterface $log,
         SynchronizerPool $synchronizerPool,
-        GetAssetsIterator $assetsIterator,
-        ResolveNonExistedAssets $resolveNonExistedAssets
+        GetAssetsIterator $assetsIterator
     ) {
         $this->isPathBlacklisted = $isPathBlacklisted;
         $this->filesystem = $filesystem;
         $this->log = $log;
         $this->synchronizerPool = $synchronizerPool;
         $this->getAssetsIterator = $assetsIterator;
-        $this->resolveNonExistedAssets = $resolveNonExistedAssets;
     }
 
     /**
@@ -90,7 +81,6 @@ class Synchronize implements SynchronizeInterface
     public function execute(): void
     {
         $failedItems = [];
-        $assetsPaths = [];
 
         /** @var \SplFileInfo $item */
         foreach ($this->getAssetsIterator->execute($this->getMediaDirectory()->getAbsolutePath()) as $item) {
@@ -98,8 +88,6 @@ class Synchronize implements SynchronizeInterface
             if (!$this->isApplicable($path)) {
                 continue;
             }
-
-            $assetsPaths[] = $this->getRelativePath($path, $item->getFilename());
 
             foreach ($this->synchronizerPool->get() as $synchronizer) {
                 if ($synchronizer instanceof SynchronizeFilesInterface) {
@@ -112,8 +100,6 @@ class Synchronize implements SynchronizeInterface
                 }
             }
         }
-
-        $this->resolveNonExistedAssets->execute($assetsPaths);
 
         if (!empty($failedItems)) {
             throw new LocalizedException(
@@ -157,19 +143,5 @@ class Synchronize implements SynchronizeInterface
             $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
-    }
-
-    /**
-     * Return asset's relative path
-     *
-     * @param string $assetPath
-     * @param string $fileName
-     * @return string
-     */
-    private function getRelativePath(string $assetPath, string $fileName): string
-    {
-        $relativePath = $this->getMediaDirectory()->getRelativePath($assetPath);
-
-        return $relativePath === $fileName ? '/' . $relativePath : $relativePath;
     }
 }
