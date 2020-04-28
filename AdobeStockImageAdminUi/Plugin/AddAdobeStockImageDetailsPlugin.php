@@ -17,8 +17,8 @@ use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\MediaGalleryUi\Model\GetDetailsByAssetId;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\MediaGalleryUi\Model\GetDetailsByAssetId;
 use Psr\Log\LoggerInterface;
 
 /**

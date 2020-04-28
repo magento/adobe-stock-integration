@@ -18,7 +18,7 @@
                     "adobe-stock-test-connection": {
                         "component": "Magento_AdobeStockAdminUi/js/connection",
                         "success": "<?= $escaper->escapeHtmlAttr($block->isConnectionSuccessful()) ?>",
-                        "url": "<?= $escaper->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>",
+                        "url": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getAjaxUrl())) ?>",
                         "buttonLabel": "<?= $escaper->escapeHtml($block->getButtonLabel()) ?>"
                     }
                 }
