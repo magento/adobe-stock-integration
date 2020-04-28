@@ -41,7 +41,7 @@ define([
             this.waitForContainer(function () {
                 this.getJsonTree();
                 this.initEvents();
-                this.checkChipCiltersState();
+                this.checkChipFiltersState();
 
             }.bind(this));
 
@@ -96,7 +96,7 @@ define([
         /**
          * Verify directory filter on init event, select folder per directory filter state
          */
-        checkChipCiltersState: function () {
+        checkChipFiltersState: function () {
             if (!_.isUndefined(this.filterChips().filters.path) && this.filterChips().filters.path !== '') {
                 $(this.directoryTreeSelector).on('loaded.jstree', function () {
                     this.locateNode(this.filterChips().filters.path);
