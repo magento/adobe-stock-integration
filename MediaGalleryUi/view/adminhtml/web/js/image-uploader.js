@@ -139,6 +139,7 @@ define([
         openNewestImages: function () {
             this.mediaGridMessages().get().each(function (message) {
                 if (message.code === 'success') {
+                    this.actions().deselectImage();
                     this.sortBy().selectDefaultOption();
                     this.listingPaging().goFirst();
 
