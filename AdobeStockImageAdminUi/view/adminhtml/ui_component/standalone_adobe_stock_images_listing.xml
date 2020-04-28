@@ -69,6 +69,11 @@
             </argument>
         </container>
         <filters name="listing_filters" sortOrder="10">
+            <settings>
+                <chipsConfig>
+                    <param name="template" xsi:type="string">Magento_AdobeStockImageAdminUi/grid/filter/chips</param>
+                </chipsConfig>
+            </settings>
             <filterSelect name="content_type_filter" provider="${ $.parentName }" sortOrder="10">
                 <settings>
                     <caption translate="true">All</caption>
