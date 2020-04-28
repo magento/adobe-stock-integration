@@ -14,4 +14,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentSynchronizationCms\Model\Synchronizer\Block">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContentSynchronizationCms\Model\Synchronizer\Page">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

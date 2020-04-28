@@ -17,5 +17,5 @@ interface SynchronizerInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(): array;
+    public function execute(): void;
 }

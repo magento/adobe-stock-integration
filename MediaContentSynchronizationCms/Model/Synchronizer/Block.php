@@ -7,33 +7,86 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
+use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Synchronize content with assets
  */
 class Block implements SynchronizerInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
+    private const CONTENT_TYPE = 'cms_block';
+    private const TYPE = 'entityType';
+    private const ENTITY_ID = 'entityId';
+    private const FIELD = 'field';
 
     /**
-     * @param LoggerInterface $log
+     * @var BlockRepositoryInterface
+     */
+    private $repository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var UpdateContentAssetLinksInterface
+     */
+    private $updateContentAssetLinks;
+
+    /**
+     * @var ContentIdentityInterfaceFactory
+     */
+    private $contentIdentityFactory;
+
+    /**
+     * @var array
+     */
+    private $fields;
+
+    /**
+     * @param BlockRepositoryInterface $repository
+     * @param ContentIdentityInterfaceFactory $contentIdentityFactory
+     * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param array $fields
      */
     public function __construct(
-        LoggerInterface $log
+        BlockRepositoryInterface $repository,
+        ContentIdentityInterfaceFactory $contentIdentityFactory,
+        UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        array $fields = []
     ) {
-        $this->log = $log;
+        $this->repository = $repository;
+        $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->fields = $fields;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(): array
+    public function execute(): void
     {
-        return [];
+        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
+            foreach ($this->fields as $field) {
+                $this->updateContentAssetLinks->execute(
+                    $this->contentIdentityFactory->create(
+                        [
+                            self::TYPE => self::CONTENT_TYPE,
+                            self::FIELD => $field,
+                            self::ENTITY_ID => $item->getId()
+                        ]
+                    ),
+                    $item->getData($field)
+                );
+            }
+        }
     }
 }

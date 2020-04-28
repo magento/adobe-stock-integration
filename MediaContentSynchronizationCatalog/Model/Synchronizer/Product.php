@@ -7,18 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCatalog\Model\Synchronizer;
 
-use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
+use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaContentSynchronizationCatalog\Model\ResourceModel\GetContents;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Synchronize content with assets
+ * Synchronize product content with assets
  */
 class Product implements SynchronizerInterface
 {
+    private const TYPE = 'entityType';
+    private const ENTITY_ID = 'entityId';
+    private const FIELD = 'field';
     private const ENTITY = 'catalog_product';
 
     /**
@@ -27,75 +30,77 @@ class Product implements SynchronizerInterface
     private $metadataPool;
 
     /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
-
-    /**
      * @var array
      */
     private $fields;
 
     /**
-     * @var Config
+     * @var GetContents
      */
-    private $config;
+    private $getContents;
 
     /**
-     * @param LoggerInterface $log
-     * @param Config $config
-     * @param ResourceConnection $resourceConnection
+     * @var UpdateContentAssetLinksInterface
+     */
+    private $updateContentAssetLinks;
+
+    /**
+     * @var ContentIdentityInterfaceFactory
+     */
+    private $contentIdentityFactory;
+
+    /**
+     * @param ContentIdentityInterfaceFactory $contentIdentityFactory
+     * @param GetContents $getContents
      * @param MetadataPool $metadataPool
+     * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
-        LoggerInterface $log,
-        Config $config,
-        ResourceConnection $resourceConnection,
+        ContentIdentityInterfaceFactory $contentIdentityFactory,
+        GetContents $getContents,
         MetadataPool $metadataPool,
+        UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields = []
     ) {
-        $this->log = $log;
+        $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->getContents = $getContents;
         $this->metadataPool = $metadataPool;
+        $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
-        $this->config = $config;
-        $this->resourceConnection = $resourceConnection;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(): array
+    public function execute(): void
     {
-        $connection = $this->resourceConnection->getConnection();
-        $entityIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $contents = [];
-
         foreach ($this->fields as $field) {
-            $attribute = $this->config->getAttribute(self::ENTITY, $field);
-            $select = $connection->select()->from(
-                ['abt' => $attribute->getBackendTable()],
-                [
-                    'content_type' => new \Zend_Db_Expr("'" . self::ENTITY . "'"),
-                    'entity_id' => new \Zend_Db_Expr('abt.' . $entityIdField),
-                    'field' => new \Zend_Db_Expr("'$field'"),
-                    'content' => new \Zend_Db_Expr("GROUP_CONCAT(abt.value SEPARATOR'" . PHP_EOL . "')")
-                ]
-            )->where(
-                $connection->quoteIdentifier('abt.attribute_id') . ' = ?',
-                $attribute->getAttributeId()
-            )->group(
-                'abt.entity_id'
-            )->distinct(true);
+            $contentsData = $this->getContents->execute(self::ENTITY, $field, $this->getEntityIdField());
 
-            $contents = array_merge($contents, $connection->fetchAll($select));
+            foreach ($contentsData as $contentData) {
+                $this->updateContentAssetLinks->execute(
+                    $this->contentIdentityFactory->create(
+                        [
+                            self::TYPE => $contentData['content_type'],
+                            self::FIELD => $contentData['field'],
+                            self::ENTITY_ID => $contentData['entity_id']
+                        ]
+                    ),
+                    $contentData['content']
+                );
+            }
         }
+    }
 
-        return $contents;
+    /**
+     * Retrieve entity id field name
+     *
+     * @return string
+     * @throws \Exception
+     */
+    private function getEntityIdField(): string
+    {
+        return $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
     }
 }

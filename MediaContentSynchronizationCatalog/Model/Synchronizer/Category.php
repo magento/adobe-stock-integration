@@ -7,33 +7,100 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCatalog\Model\Synchronizer;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
-use Psr\Log\LoggerInterface;
+use Magento\MediaContentSynchronizationCatalog\Model\ResourceModel\GetContents;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Synchronize content with assets
+ * Synchronize category content with assets
  */
 class Category implements SynchronizerInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
+    private const TYPE = 'entityType';
+    private const ENTITY_ID = 'entityId';
+    private const FIELD = 'field';
+    private const ENTITY = 'catalog_category';
 
     /**
-     * @param LoggerInterface $log
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var array
+     */
+    private $fields;
+
+    /**
+     * @var GetContents
+     */
+    private $getContents;
+
+    /**
+     * @var UpdateContentAssetLinksInterface
+     */
+    private $updateContentAssetLinks;
+
+    /**
+     * @var ContentIdentityInterfaceFactory
+     */
+    private $contentIdentityFactory;
+
+    /**
+     * @param ContentIdentityInterfaceFactory $contentIdentityFactory
+     * @param GetContents $getContents
+     * @param MetadataPool $metadataPool
+     * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param array $fields
      */
     public function __construct(
-        LoggerInterface $log
+        ContentIdentityInterfaceFactory $contentIdentityFactory,
+        GetContents $getContents,
+        MetadataPool $metadataPool,
+        UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        array $fields = []
     ) {
-        $this->log = $log;
+        $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->getContents = $getContents;
+        $this->metadataPool = $metadataPool;
+        $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->fields = $fields;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(): array
+    public function execute(): void
     {
-        return [];
+        foreach ($this->fields as $field) {
+            $contentsData = $this->getContents->execute(self::ENTITY, $field, $this->getEntityIdField());
+
+            foreach ($contentsData as $contentData) {
+                $this->updateContentAssetLinks->execute(
+                    $this->contentIdentityFactory->create(
+                        [
+                            self::TYPE => $contentData['content_type'],
+                            self::FIELD => $contentData['field'],
+                            self::ENTITY_ID => $contentData['entity_id']
+                        ]
+                    ),
+                    $contentData['content']
+                );
+            }
+        }
+    }
+
+    /**
+     * Retrieve entity id field name
+     *
+     * @return string
+     * @throws \Exception
+     */
+    private function getEntityIdField(): string
+    {
+        return $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
     }
 }
