@@ -133,6 +133,9 @@ define([
                 errorMessage = 'There was an error on attempt to create folder!',
                 callback = function () {
                     this.directoryTree().reloadJsTree();
+                    $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
+                        this.directoryTree().locateNode(folder + '/' + path);
+                    }.bind(this));
                 }.bind(this);
 
             this.sendPostRequest(this.directoryTree().createDirectoryUrl, data, errorMessage, callback);
@@ -196,6 +199,7 @@ define([
                 errorMessage = 'There was an error on attempt to delete folder!',
                 callback = function () {
                     this.directoryTree().removeNode();
+                    this.directoryTree().selectStorageRoot();
                 }.bind(this);
 
             this.sendPostRequest(this.directoryTree().deleteDirectoryUrl, data, errorMessage, callback);

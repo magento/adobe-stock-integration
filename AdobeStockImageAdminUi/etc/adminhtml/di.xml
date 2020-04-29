@@ -9,7 +9,7 @@
     <type name="Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content">
         <plugin name="add_search_button" type="Magento\AdobeStockImageAdminUi\Plugin\AddSearchButton"/>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId">
+    <type name="Magento\MediaGalleryUi\Model\GetDetailsByAssetId">
         <plugin name="add_adobe_stock_image_details_plugin" type="Magento\AdobeStockImageAdminUi\Plugin\AddAdobeStockImageDetailsPlugin"/>
     </type>
     <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
@@ -30,6 +30,13 @@
                     <item name="value" xsi:type="string">illustration</item>
                     <item name="label" xsi:type="string">Illustration</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
+        <arguments>
+            <argument name="selectModifiers" xsi:type="array">
+                <item name="isLicensed" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\FilterParametersProvider\IsLicensed</item>
             </argument>
         </arguments>
     </type>

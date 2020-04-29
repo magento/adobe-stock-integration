@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Config data test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SignInTest extends TestCase
 {

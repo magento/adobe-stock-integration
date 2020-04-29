@@ -20,12 +20,12 @@ use Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for the Adobe Stock Asset Category repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryRepositoryTest extends TestCase
 {

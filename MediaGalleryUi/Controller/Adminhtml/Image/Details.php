@@ -14,7 +14,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId;
+use Magento\MediaGalleryUi\Model\GetDetailsByAssetId;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -32,9 +32,9 @@ class Details extends Action implements HttpGetActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var GetImageDetailsByAssetId
+     * @var GetDetailsByAssetId
      */
-    private $getImageDetailsByAssetId;
+    private $getDetailsByAssetId;
 
     /**
      * @var LoggerInterface
@@ -45,18 +45,18 @@ class Details extends Action implements HttpGetActionInterface
      * Details constructor.
      *
      * @param Context $context
-     * @param GetImageDetailsByAssetId $getImageDetailsByAssetId
+     * @param GetDetailsByAssetId $getDetailsByAssetId
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        GetImageDetailsByAssetId $getImageDetailsByAssetId,
+        GetDetailsByAssetId $getDetailsByAssetId,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
         $this->logger = $logger;
-        $this->getImageDetailsByAssetId = $getImageDetailsByAssetId;
+        $this->getDetailsByAssetId = $getDetailsByAssetId;
     }
 
     /**
@@ -66,12 +66,12 @@ class Details extends Action implements HttpGetActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
 
-        if ($imageId === 0) {
+        if ($id === 0) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Image ID is required.'),
+                'message' => __('Asset ID is required.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -80,12 +80,12 @@ class Details extends Action implements HttpGetActionInterface
         }
 
         try {
-            $imageDetails = $this->getImageDetailsByAssetId->execute($imageId);
+            $details = $this->getDetailsByAssetId->execute($id);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'imageDetails' => $imageDetails
+                'imageDetails' => $details
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;

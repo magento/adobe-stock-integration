@@ -6,8 +6,9 @@
 define([
     'jquery',
     'underscore',
-    'uiComponent'
-], function ($, _, Component) {
+    'uiComponent',
+    'Magento_MediaGalleryUi/js/action/getDetails'
+], function ($, _, Component, getDetails) {
     'use strict';
 
     return Component.extend({
@@ -46,51 +47,12 @@ define([
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
-                $.ajax({
-                    type: 'GET',
-                    url: this.imageDetailsUrl,
-                    dataType: 'json',
-                    showLoader: true,
-                    data: {
-                        'id': imageId
-                    },
-                    context: this,
-
-                    /**
-                     * Success handler for deleting image
-                     *
-                     * @param {Object} response
-                     */
-                    success: function (response) {
-                        if (response.success) {
-                            this.images[imageId] = response.imageDetails;
-                            this.image(this.images[imageId]);
-                            this.openImageDetailsModal();
-
-                            return;
-                        }
-
-                        this.addMediaGridMessage('error', response.message);
-                    }.bind(this),
-
-                    /**
-                     * Error handler for deleting image
-                     *
-                     * @param {Object} response
-                     */
-                    error: function (response) {
-                        var message;
-
-                        if (typeof response.responseJSON === 'undefined' ||
-                            typeof response.responseJSON.message === 'undefined'
-                        ) {
-                            message = 'There was an error on attempt to get the image details.';
-                        } else {
-                            message = response.responseJSON.message;
-                        }
-
-                        this.addMediaGridMessage('error', message);
-                    }.bind(this)
+                getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
+                    this.images[imageId] = imageDetails;
+                    this.image(this.images[imageId]);
+                    this.openImageDetailsModal();
+                }.bind(this)).catch(function (message) {
+                    this.addMediaGridMessage('error', message);
                 });
 
                 return;

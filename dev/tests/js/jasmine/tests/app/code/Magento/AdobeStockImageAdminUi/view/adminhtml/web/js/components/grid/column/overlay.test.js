@@ -2,7 +2,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 define([
     'jquery',
     'Magento_AdobeStockImageAdminUi/js/components/grid/column/overlay'
@@ -69,61 +68,6 @@ define([
                 expect(type).toEqual('function');
             });
 
-            it('Check Ajax Success request', function () {
-                var login = {
-                        /**
-                         * Check if user is authorized or not
-                         */
-                        user: function () {
-                            return {
-                                isAuthorized: true
-                            };
-                        }
-                    },
-                    ids = [1,2,3];
-
-                spyOn(overlayObj, 'licensed').and.callFake(function () {
-                    return [];
-                });
-                spyOn(overlayObj, 'login').and.callFake(function () {
-                    return login;
-                });
-                spyOn($, 'ajax').and.callFake(function () {
-                    return overlayObj.licensed([1,2]);
-                });
-
-                overlayObj.updateLicensed(ids);
-                expect(overlayObj.updateLicensed(ids)).toBeUndefined();
-                expect($.ajax).toHaveBeenCalled();
-            });
-
-            it('Check Ajax error request', function () {
-                var login = {
-                        /**
-                         * Check if user is authorized or not
-                         */
-                        user: function () {
-                            return {
-                                isAuthorized: true
-                            };
-                        }
-                    },
-                    ids = [1,2,3];
-
-                spyOn(overlayObj, 'login').and.callFake(function () {
-                    return login;
-                });
-                spyOn(overlayObj, 'getIds').and.callFake(function () {
-                    return ids;
-                });
-                spyOn($, 'ajax').and.callFake(function () {
-                    return 'error';
-                });
-                overlayObj.updateLicensed(ids);
-                expect(overlayObj.updateLicensed(ids)).toBeUndefined();
-                expect($.ajax).toHaveBeenCalled();
-            });
-
             it('If user is not authorized', function () {
                 var login = {
                         /**
@@ -165,9 +109,9 @@ define([
 
             it('Return array if getIds is called', function () {
                 var parameter = [{
-                    id: 1
-                }],
-                returnValue = [1];
+                        id: 1
+                    }],
+                    returnValue = [1];
 
                 expect(overlayObj.getIds(parameter)).toEqual(returnValue);
             });
