@@ -50,6 +50,7 @@ define([
                 source: '${ $.provider }',
                 imageDirectory: '${ $.mediaGalleryName }',
                 mediaGallerySortBy: '${ $.mediaGallerySortBy }',
+                mediaGallerySearchInput: '${ $.mediaGallerySearchInput }',
                 listingPaging: '${ $.listingPaging }'
             },
             imports: {
@@ -127,7 +128,22 @@ define([
          */
         openInMediaGalleryClick: function () {
             this.preview().getAdobeModal().trigger('closeModal');
-            this.selectInMediaGallery(this.preview().displayedRecord().path);
+
+            if (!this.isMediaBrowser()) {
+                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().title)
+            } else {
+                this.selectDisplayedImageForOldMediaGallery(this.preview().displayedRecord().path);
+            }
+        },
+
+        /**
+         * Select image in new media gallery via search input
+         *
+         * @param {String} title
+         */
+        selectImageInNewMediaGalleryBySearch: function (title) {
+            this.imageDirectory().selectStorageRoot();
+            this.mediaGallerySearchInput().apply(title);
         },
 
         /**

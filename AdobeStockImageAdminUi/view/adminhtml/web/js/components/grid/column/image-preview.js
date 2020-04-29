@@ -42,6 +42,7 @@ define([
                     mediaGalleryName: '${ $.mediaGalleryName }',
                     mediaGalleryProvider: '${ $.mediaGalleryProvider }',
                     mediaGallerySortBy: '${ $.mediaGallerySortBy }',
+                    mediaGallerySearchInput: '${ $.mediaGallerySearchInput }',
                     listingPaging: '${ $.listingPaging }'
                 }
             ]
