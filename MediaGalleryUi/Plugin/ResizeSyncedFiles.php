@@ -33,11 +33,11 @@ class ResizeSyncedFiles
      * @param array $files
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function bExecute(SynchronizeFiles $subject, \Closure $closure, array $files): \Closure
+    public function aroundExecute(SynchronizeFiles $subject, \Closure $closure, array $files)
     {
         foreach ($files as $file) {
             $this->storage->resizeFile($file->getPathName());
         }
-        return $closure($subject);
+        return $closure($files);
     }
 }
