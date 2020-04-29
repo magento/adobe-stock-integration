@@ -166,7 +166,7 @@ define([
          * Selects displayed image in media gallery for new gallery
          */
         selectDisplayedImageForNewMediaGallery: function (path) {
-            var imageFolders = path.substring(0, path.indexOf('/')),
+            var imageFolders = path.substring(0, path.lastIndexOf('/')),
                 record = this.getRecordFromMediaGalleryProvider(path),
                 subscription; // eslint-disable-line no-unused-vars
 
