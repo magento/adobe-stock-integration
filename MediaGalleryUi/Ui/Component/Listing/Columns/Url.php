@@ -41,7 +41,6 @@ class Url extends Column
      * @var Storage
      */
     private $storage;
-    
 
     /**
      * @param ContextInterface $context
