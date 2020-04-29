@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
  * Synchronize files in media storage and media assets database records
@@ -33,18 +34,26 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $log;
 
     /**
+     * @var Storage
+     */
+    private $storage;
+    
+    /**
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param LoggerInterface $log
+     * @param Storage $storage
      */
     public function __construct(
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
-        LoggerInterface $log
+        LoggerInterface $log,
+        Storage $storage
     ) {
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
         $this->log = $log;
+        $this->storage = $storage;
     }
 
     /**
@@ -56,6 +65,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         foreach ($files as $file) {
             try {
                 $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
+                $this->storage->resizeFile($file->getPathName());
             } catch (\Exception $exception) {
                 $this->log->critical($exception);
                 $failedFiles[] = $file->getFilename();
