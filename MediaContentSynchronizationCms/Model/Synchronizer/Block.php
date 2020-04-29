@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
@@ -44,6 +46,11 @@ class Block implements SynchronizerInterface
     private $contentIdentityFactory;
 
     /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
+
+    /**
      * @var array
      */
     private $fields;
@@ -51,6 +58,7 @@ class Block implements SynchronizerInterface
     /**
      * @param BlockRepositoryInterface $repository
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $fields
@@ -58,12 +66,14 @@ class Block implements SynchronizerInterface
     public function __construct(
         BlockRepositoryInterface $repository,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
+        DataObjectProcessor $dataObjectProcessor,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $fields = []
     ) {
         $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
@@ -84,7 +94,7 @@ class Block implements SynchronizerInterface
                             self::ENTITY_ID => $item->getId()
                         ]
                     ),
-                    $item->getData($field)
+                    (string) $this->dataObjectProcessor->buildOutputDataArray($item, BlockInterface::class)[$field]
                 );
             }
         }

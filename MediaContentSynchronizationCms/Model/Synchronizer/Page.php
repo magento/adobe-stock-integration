@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
@@ -44,6 +46,11 @@ class Page implements SynchronizerInterface
     private $contentIdentityFactory;
 
     /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
+
+    /**
      * @var array
      */
     private $fields;
@@ -58,12 +65,14 @@ class Page implements SynchronizerInterface
     public function __construct(
         PageRepositoryInterface $repository,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
+        DataObjectProcessor $dataObjectProcessor,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $fields = []
     ) {
         $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
@@ -84,7 +93,7 @@ class Page implements SynchronizerInterface
                             self::ENTITY_ID => $item->getId()
                         ]
                     ),
-                    $item->getData($field)
+                    (string) $this->dataObjectProcessor->buildOutputDataArray($item, PageInterface::class)[$field]
                 );
             }
         }

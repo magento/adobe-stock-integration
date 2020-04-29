@@ -7,37 +7,32 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCatalog\Model\Synchronizer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
+use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
-use Magento\MediaContentSynchronizationCatalog\Model\ResourceModel\GetContents;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Synchronize product content with assets
  */
 class Product implements SynchronizerInterface
 {
+    private const CONTENT_TYPE = 'catalog_product';
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-    private const ENTITY = 'catalog_product';
 
     /**
-     * @var MetadataPool
+     * @var ProductRepositoryInterface
      */
-    private $metadataPool;
+    private $repository;
 
     /**
-     * @var array
+     * @var SearchCriteriaBuilder
      */
-    private $fields;
-
-    /**
-     * @var GetContents
-     */
-    private $getContents;
+    private $searchCriteriaBuilder;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -50,23 +45,36 @@ class Product implements SynchronizerInterface
     private $contentIdentityFactory;
 
     /**
+     * @var GetEntityContentsInterface
+     */
+    private $getEntityContents;
+
+    /**
+     * @var array
+     */
+    private $fields;
+
+    /**
+     * @param ProductRepositoryInterface $repository
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param GetContents $getContents
-     * @param MetadataPool $metadataPool
+     * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $fields
      */
     public function __construct(
+        ProductRepositoryInterface $repository,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        GetContents $getContents,
-        MetadataPool $metadataPool,
+        GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         array $fields = []
     ) {
+        $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
-        $this->getContents = $getContents;
-        $this->metadataPool = $metadataPool;
+        $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
     }
 
@@ -75,32 +83,20 @@ class Product implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->fields as $field) {
-            $contentsData = $this->getContents->execute(self::ENTITY, $field, $this->getEntityIdField());
-
-            foreach ($contentsData as $contentData) {
+        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
+            foreach ($this->fields as $field) {
+                $contentIdentity = $this->contentIdentityFactory->create(
+                    [
+                        self::TYPE => self::CONTENT_TYPE,
+                        self::FIELD => $field,
+                        self::ENTITY_ID => $item->getId()
+                    ]
+                );
                 $this->updateContentAssetLinks->execute(
-                    $this->contentIdentityFactory->create(
-                        [
-                            self::TYPE => $contentData['content_type'],
-                            self::FIELD => $contentData['field'],
-                            self::ENTITY_ID => $contentData['entity_id']
-                        ]
-                    ),
-                    $contentData['content']
+                    $contentIdentity,
+                    implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity))
                 );
             }
         }
-    }
-
-    /**
-     * Retrieve entity id field name
-     *
-     * @return string
-     * @throws \Exception
-     */
-    private function getEntityIdField(): string
-    {
-        return $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
     }
 }
