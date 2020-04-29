@@ -15,6 +15,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Cms\Helper\Wysiwyg\Images;
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
  * Overlay column
@@ -37,11 +38,18 @@ class Url extends Column
     private $images;
 
     /**
+     * @var Storage
+     */
+    private $storage;
+    
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
      * @param UrlInterface $urlInterface
      * @param Images $images
+     * @param Storage $storage
      * @param array $components
      * @param array $data
      */
@@ -51,6 +59,7 @@ class Url extends Column
         StoreManagerInterface $storeManager,
         UrlInterface $urlInterface,
         Images $images,
+        Storage $storage,
         array $components = [],
         array $data = []
     ) {
@@ -58,6 +67,7 @@ class Url extends Column
         $this->storeManager = $storeManager;
         $this->urlInterface = $urlInterface;
         $this->images = $images;
+        $this->storage = $storage;
     }
 
     /**
@@ -106,8 +116,6 @@ class Url extends Column
      */
     private function getUrl(string $path): string
     {
-        /** @var Store $store */
-        $store = $this->storeManager->getStore();
-        return $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $path;
+        return $this->storage->getThumbnailUrl($this->images->getStorageRoot() . $path);
     }
 }

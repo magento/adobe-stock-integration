@@ -20,6 +20,14 @@
             <argument name="resourceModel" xsi:type="string">Magento\MediaGalleryUi\Model\ResourceModel\Grid\Asset</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
+        <arguments>
+            <argument name="resizeParameters" xsi:type="array">
+                <item name="height" xsi:type="number">200</item>
+                <item name="width" xsi:type="number">200</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\MediaGalleryUi\Model\Directories\FolderTree">
         <arguments>
             <argument name="path" xsi:type="string">media</argument>
