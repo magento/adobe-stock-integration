@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
+namespace Magento\MediaContentSynchronizationCms\Test\Integration\Model\Synchronizer;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;

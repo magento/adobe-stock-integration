@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentSynchronizationCatalog\Model\Synchronizer;
+namespace Magento\MediaContentSynchronizationCatalog\Test\Integration\Model\Synchronizer;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
