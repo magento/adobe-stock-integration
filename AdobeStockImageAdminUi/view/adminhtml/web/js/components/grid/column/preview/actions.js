@@ -131,7 +131,7 @@ define([
             this.preview().getAdobeModal().trigger('closeModal');
 
             if (!this.isMediaBrowser()) {
-                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().title)
+                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().title);
             } else {
                 this.selectDisplayedImageForOldMediaGallery(this.preview().displayedRecord().path);
             }
