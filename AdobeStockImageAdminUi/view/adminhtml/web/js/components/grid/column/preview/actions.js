@@ -51,6 +51,7 @@ define([
                 imageDirectory: '${ $.mediaGalleryName }',
                 mediaGallerySortBy: '${ $.mediaGallerySortBy }',
                 mediaGallerySearchInput: '${ $.mediaGallerySearchInput }',
+                mediaGalleryListingFilters: '${ $.mediaGalleryListingFilters }',
                 listingPaging: '${ $.listingPaging }'
             },
             imports: {
@@ -142,7 +143,7 @@ define([
          * @param {String} title
          */
         selectImageInNewMediaGalleryBySearch: function (title) {
-            this.imageDirectory().selectStorageRoot();
+            this.mediaGalleryListingFilters().clear();
             this.mediaGallerySearchInput().apply(title);
         },
 
