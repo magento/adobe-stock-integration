@@ -25,12 +25,13 @@ class ResizeSyncedFiles
         $this->storage = $storage;
     }
 
-
     /**
      * Create thumbnails for synced files.
+     *
      * @param SynchronizeFiles $subject
      * @param \Closure $closure
      * @param array $files
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(SynchronizeFiles $subject, \Closure $closure, array $files): void
     {
