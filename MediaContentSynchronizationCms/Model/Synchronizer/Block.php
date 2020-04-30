@@ -16,7 +16,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 
 /**
- * Synchronize content with assets
+ * Synchronize block content with assets
  */
 class Block implements SynchronizerInterface
 {
@@ -56,6 +56,8 @@ class Block implements SynchronizerInterface
     private $fields;
 
     /**
+     * Synchronize block content with assets
+     *
      * @param BlockRepositoryInterface $repository
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param DataObjectProcessor $dataObjectProcessor
@@ -80,7 +82,7 @@ class Block implements SynchronizerInterface
     }
 
     /**
-     * @inheritdoc
+     * Synchronize assets and contents
      */
     public function execute(): void
     {

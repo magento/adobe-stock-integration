@@ -16,7 +16,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 
 /**
- * Synchronize content with assets
+ * Synchronize page content with assets
  */
 class Page implements SynchronizerInterface
 {
@@ -56,24 +56,27 @@ class Page implements SynchronizerInterface
     private $fields;
 
     /**
+     * Synchronize page content with assets
+     *
      * @param PageRepositoryInterface $repository
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $fields
      */
     public function __construct(
         PageRepositoryInterface $repository,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        DataObjectProcessor $dataObjectProcessor,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        DataObjectProcessor $dataObjectProcessor,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $fields = []
     ) {
         $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
     }

@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
+use Magento\MediaContentSynchronizationCatalog\Model\Synchronizer\Category;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
