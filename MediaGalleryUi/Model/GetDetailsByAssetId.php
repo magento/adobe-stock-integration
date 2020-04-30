@@ -102,9 +102,11 @@ class GetDetailsByAssetId
      */
     private function getContentType(string $contentType): string
     {
-        return strpos($contentType, '/') !== false
+        $result = strpos($contentType, '/') !== false
             ? substr($contentType, strpos($contentType, '/') + 1)
             : $contentType;
+
+        return strtoupper($result);
     }
 
     /**
