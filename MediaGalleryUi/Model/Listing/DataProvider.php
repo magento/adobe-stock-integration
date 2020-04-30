@@ -9,10 +9,12 @@ namespace Magento\MediaGalleryUi\Model\Listing;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
+use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\Framework\App\RequestInterface;
 use Magento\MediaGalleryUi\Model\SelectModifierInterface;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
@@ -20,10 +22,22 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiCo
  */
 class DataProvider extends UiComponentDataProvider
 {
+    private const FULLTEXT_CONDITION_TYPE = 'fulltext';
+
+    /**
+     * @var SearchCriteria
+     */
+    protected $searchCriteria;
+
     /**
      * @var SelectModifierInterface
      */
     private $selectModifier;
+
+    /**
+     * @var Filter|null
+     */
+    private $fulltextFilter;
 
     /**
      * @param string $name
@@ -73,6 +87,8 @@ class DataProvider extends UiComponentDataProvider
         try {
             /** @var SearchResult $searchResult */
             $searchResult = $this->getSearchResult();
+
+            $this->prepareSearchCriteria();
             $this->selectModifier->apply($searchResult->getSelect(), $this->getSearchCriteria());
 
             return $this->searchResultToOutput($searchResult);
@@ -82,6 +98,31 @@ class DataProvider extends UiComponentDataProvider
                 'totalRecords' => 0,
                 'errorMessage' => $exception->getMessage()
             ];
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addFilter(Filter $filter)
+    {
+        if ($filter->getConditionType() === self::FULLTEXT_CONDITION_TYPE) {
+            $this->fulltextFilter = $filter;
+        } else {
+            parent::addFilter($filter);
+        }
+    }
+
+    /**
+     * Add fulltext filter to SearchCriteriaBuilder and reset SearchCriteria
+     *
+     * @return void
+     */
+    private function prepareSearchCriteria(): void
+    {
+        if ($this->fulltextFilter) {
+            $this->searchCriteria = null;
+            parent::addFilter($this->fulltextFilter);
         }
     }
 }

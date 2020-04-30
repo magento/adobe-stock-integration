@@ -30,7 +30,6 @@ class Fulltext implements SelectModifierInterface
         $value = $this->getValueFromFulltextSearch($searchCriteria);
 
         if ($value) {
-            $select->reset('where');
             $select->where($this->getWhereCondition($value, $select->getConnection()));
         }
     }
