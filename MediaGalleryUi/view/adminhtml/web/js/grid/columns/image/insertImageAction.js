@@ -33,29 +33,29 @@ define([
                 throw 'Target element not found for content update';
             }
 
-            if (targetElement.is('textarea')) {
-                $.ajax({
-                    url: config.onInsertUrl,
-                    data: {
-                        filename: record['encoded_id'],
-                        'store_id': config.storeId,
-                        'as_is': 1,
-                        'force_static_path': targetElement.data('force_static_path') ? 1 : 0,
-                        'form_key': FORM_KEY
-                    },
-                    context: this,
-                    showLoader: true
-                }).done($.proxy(function (data) {
+            $.ajax({
+                url: config.onInsertUrl,
+                data: {
+                    filename: record['encoded_id'],
+                    'store_id': config.storeId,
+                    'as_is': targetElement.is('textarea') ? 1 : 0,
+                    'force_static_path': targetElement.data('force_static_path') ? 1 : 0,
+                    'form_key': FORM_KEY
+                },
+                context: this,
+                showLoader: true
+            }).done($.proxy(function (data) {
+                if (targetElement.is('textarea')) {
                     this.insertAtCursor(targetElement.get(0), data);
                     targetElement.focus();
                     $(targetElement).change();
-                }, this));
-            } else {
-                targetElement.val(record['thumbnail_url'])
-                    .data('size', record.size)
-                    .data('mime-type', record['content_type'])
-                    .trigger('change');
-            }
+                } else {
+                    targetElement.val(data)
+                        .data('size', record.size)
+                        .data('mime-type', record['content_type'])
+                        .trigger('change');
+                }
+            }, this));
             window.MediabrowserUtility.closeDialog();
             targetElement.focus();
         },
