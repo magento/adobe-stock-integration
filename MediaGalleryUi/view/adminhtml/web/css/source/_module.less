@@ -146,6 +146,10 @@
                 word-wrap: anywhere;
                 white-space: pre-line;
                 word-wrap: break-word;
+                //To support IE 10+
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    white-space: nowrap;
+                }
             }
 
             .type {
