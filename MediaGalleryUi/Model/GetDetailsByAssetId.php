@@ -90,8 +90,21 @@ class GetDetailsByAssetId
             'size' => $asset->getSize(),
             'tags' => $this->getKeywords($asset),
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
-            'content_type' => $asset->getContentType()
+            'content_type' => $this->getContentType($asset->getContentType()),
         ];
+    }
+
+    /**
+     * Return prepared content type
+     *
+     * @param string $contentType
+     * @return string
+     */
+    private function getContentType(string $contentType): string
+    {
+        return strpos($contentType, '/') !== false
+            ? substr($contentType, strpos($contentType, '/') + 1)
+            : $contentType;
     }
 
     /**
