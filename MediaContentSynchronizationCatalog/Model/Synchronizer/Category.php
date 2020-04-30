@@ -27,7 +27,7 @@ class Category implements SynchronizerInterface
     /**
      * @var CategoryListInterface
      */
-    private $repository;
+    private $categoryList;
 
     /**
      * @var SearchCriteriaBuilder
@@ -55,7 +55,7 @@ class Category implements SynchronizerInterface
     private $fields;
 
     /**
-     * @param CategoryListInterface $repository
+     * @param CategoryListInterface $categoryList
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -63,14 +63,14 @@ class Category implements SynchronizerInterface
      * @param array $fields
      */
     public function __construct(
-        CategoryListInterface $repository,
+        CategoryListInterface $categoryList,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $fields = []
     ) {
-        $this->repository = $repository;
+        $this->categoryList = $categoryList;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -83,7 +83,7 @@ class Category implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
+        foreach ($this->categoryList->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(
                     [
