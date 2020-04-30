@@ -8,33 +8,35 @@ define([
     'use strict';
 
     return function (requestUrl, ids) {
-        return new window.Promise(function (resolve, reject) {
-            $.ajax({
-                type: 'GET',
-                url: requestUrl + '?ids=' + ids.join(','),
-                data: {
-                    'form_key': window.FORM_KEY
-                },
-                dataType: 'json',
+        var deferred = $.Deferred();
 
-                /**
-                 * Resolve with the response result
-                 *
-                 * @param {Object} response
-                 */
-                success: function (response) {
-                    resolve(response.result);
-                },
+        $.ajax({
+            type: 'GET',
+            url: requestUrl + '?ids=' + ids.join(','),
+            data: {
+                'form_key': window.FORM_KEY
+            },
+            dataType: 'json',
 
-                /**
-                 * Reject with the message from response
-                 *
-                 * @param {Object} response
-                 */
-                error: function (response) {
-                    reject(response.message);
-                }
-            });
+            /**
+             * Resolve with the response result
+             *
+             * @param {Object} response
+             */
+            success: function (response) {
+                deferred.resolve(response.result);
+            },
+
+            /**
+             * Reject with the message from response
+             *
+             * @param {Object} response
+             */
+            error: function (response) {
+                deferred.reject(response.message);
+            }
         });
+
+        return deferred.promise();
     };
 });
