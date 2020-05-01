@@ -43,7 +43,7 @@ define([
             var deferred = $.Deferred();
 
             if (this.user().isAuthorized) {
-                return deferred.reject();;
+                return deferred.reject();
             }
             auth(this.loginConfig)
                 .then(function (response) {
