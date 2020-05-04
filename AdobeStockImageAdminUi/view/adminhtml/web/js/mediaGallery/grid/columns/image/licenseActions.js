@@ -104,7 +104,7 @@ define([
                         ).then(function () {
                             this.image().actions().login().getUserQuota();
                             this.imageModel().reloadGrid();
-                        }.bind(this)).catch(function (error) {
+                        }.bind(this)).fail(function (error) {
                             if (error) {
                                 uiAlert({
                                     content: error
@@ -112,12 +112,12 @@ define([
                             }
                         });
                     }.bind(this));
-                }.bind(this)).catch(function (message) {
+                }.bind(this)).fail(function (message) {
                     uiAlert({
                         content: message
                     });
                 });
-            }.bind(this)).catch(function (error) {
+            }.bind(this)).fail(function (error) {
                 uiAlert({
                     content: error
                 });

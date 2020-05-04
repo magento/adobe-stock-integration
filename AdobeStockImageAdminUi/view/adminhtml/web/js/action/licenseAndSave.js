@@ -20,15 +20,16 @@ define([
         quotaMessage,
         directoryPath
     ) {
-        return new window.Promise(function (resolve, reject) {
-            licenseConfirmation(
+        var deferred = $.Deferred(),
+            destinationPath;
+
+        licenseConfirmation(
                 title,
                 quotaMessage,
                 isDownloaded,
                 pathUtility.generateImageName(title, id),
                 pathUtility.getImageExtension(contentType)
             ).then(function (fileName) {
-                var destinationPath;
 
                 if (typeof fileName === 'undefined') {
                     fileName = pathUtility.getImageNameFromPath(path);
@@ -41,13 +42,14 @@ define([
                     id,
                     destinationPath
                 ).then(function () {
-                    resolve(destinationPath);
-                }).catch(function (message) {
-                    reject(message);
+                    deferred.resolve(destinationPath);
+                }).fail(function (message) {
+                    deferred.reject(message);
                 });
-            }).catch(function (error) {
-                reject(error);
+            }).fail(function (error) {
+                deferred.reject(error);
             });
-        });
+
+        return deferred.promise();
     };
 });
