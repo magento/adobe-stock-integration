@@ -40,7 +40,7 @@
         color: @color-media-gallery-buttons-text;
     }
 
-    .masonry-image-grid .no-data-message-container, .masonry-image-grid .error-message-container {
+    .masonry-image-grid .error-message-container {
         left: 50%;
         margin-right: -50%;
         position: sticky;
@@ -252,12 +252,11 @@
         }
 
         .masonry-image-grid {
-            position: relative;
             display: grid;align-items: first baseline;
-            grid-template-columns: repeat(7, 1fr);
-            justify-content: end;
+            grid-template-columns: repeat(auto-fill, minmax(204px, 1fr));
+            justify-items: end;
             margin: 10px 0;
-        }
+            position: relative;
     }
 
     .media-gallery-image-details-modal {
