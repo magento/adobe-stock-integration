@@ -75,6 +75,7 @@
         }
 
         .masonry-image-column {
+            position: static;
             &:first-child .masonry-image-preview .preview-buttons .action-previous,
             &:last-child .masonry-image-preview .preview-buttons .action-next {
                 opacity: .5;
@@ -111,6 +112,9 @@
         }
 
         .masonry-image-preview {
+
+            position: absolute;
+
             .title {
                 font-weight: bold;
             }
@@ -203,10 +207,10 @@
 
             .related-loader {
                 height: 100px;
+                position: absolute;
                 left: 50%;
                 margin-left: -50px;
                 margin-top: 50px;
-                top: 50%;
                 width: 100px;
             }
 
@@ -224,7 +228,6 @@
                     .thumbnail {
                         display: inline-flex;
                         height: 100px;
-                        justify-content: center;
                         margin-right: 10px;
                         max-width: 150px;
                         overflow: hidden;
