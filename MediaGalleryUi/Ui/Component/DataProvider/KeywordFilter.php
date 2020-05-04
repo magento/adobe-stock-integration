@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Ui\Component\DataProvider;
 
 use Magento\Framework\Api\Filter;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -23,6 +24,19 @@ class KeywordFilter implements FilterApplierInterface
     private const TABLE_ASSET_KEYWORD = 'media_gallery_keyword';
 
     /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * @param ResourceConnection $resource
+     */
+    public function __construct(ResourceConnection $resource)
+    {
+        $this->connection = $resource->getConnection();
+    }
+
+    /**
      * Apply filter
      *
      * @param Collection $collection
@@ -31,13 +45,11 @@ class KeywordFilter implements FilterApplierInterface
      */
     public function apply(Collection $collection, Filter $filter)
     {
-        /** @var AdapterInterface $connection */
-        $connection = $collection->getSelect()->getConnection();
         $value = $filter->getValue();
 
         $collection->addFieldToFilter(
             [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
-            [['like' => sprintf('%%%s%%', $value)], ['in' => $this->getSelectByKeyword($value, $connection)]]
+            [['like' => sprintf('%%%s%%', $value)], ['in' => $this->getSelectByKeyword($value)]]
         );
     }
 
@@ -45,13 +57,12 @@ class KeywordFilter implements FilterApplierInterface
      * Return select asset ids by keyword
      *
      * @param string $value
-     * @param AdapterInterface $connection
      * @return Select
      */
-    private function getSelectByKeyword(string $value, AdapterInterface $connection): Select
+    private function getSelectByKeyword(string $value): Select
     {
-        return $connection->select()
-            ->from($connection->getTableName(self::TABLE_ASSET_KEYWORD), ['id'])
+        return $this->connection->select()
+            ->from($this->connection->getTableName(self::TABLE_ASSET_KEYWORD), ['id'])
             ->where('keyword = ?', $value);
     }
 }
