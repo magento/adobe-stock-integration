@@ -13,3 +13,7 @@
 @import MediaGalleryIntegration
 @import MediaGallerySynchronization
 @import MediaGallerySynchronizationApi
+@import MediaContentSynchronization
+@import MediaContentSynchronizationApi
+@import MediaContentSynchronizationCatalog
+@import MediaContentSynchronizationCms
