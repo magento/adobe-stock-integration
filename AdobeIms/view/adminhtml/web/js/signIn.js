@@ -57,20 +57,21 @@ define([
          * @return {window.Promise}
          */
         login: function () {
+            var deferred = $.Deferred();
 
-            return new window.Promise(function (resolve, reject) {
-                if (this.user().isAuthorized) {
-                    return resolve();
-                }
-                login(this.loginConfig)
-                    .then(function (response) {
-                        this.loadUserProfile();
-                        resolve(response);
-                    }.bind(this))
-                    .catch(function (error) {
-                        reject(error);
-                    });
-            }.bind(this));
+            if (this.user().isAuthorized) {
+                deferred.resolve();
+            }
+            login(this.loginConfig)
+                .then(function (response) {
+                    this.loadUserProfile();
+                    deferred.resolve(response);
+                }.bind(this))
+                .fail(function (error) {
+                    deferred.reject(error);
+                });
+
+            return deferred.promise();
         },
 
         /**

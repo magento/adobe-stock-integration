@@ -11,8 +11,8 @@ define([
     'use strict';
 
     return function (proposedfileName, fileExtension) {
-        return new window.Promise(function (resolve, reject) {
-            var data = {
+        var deferred = $.Deferred(),
+            data = {
                 'title': $.mage.__('Save Preview'),
                 'content': $.mage.__('File Name'),
                 'visible': true,
@@ -23,7 +23,7 @@ define([
                      * @param {String} specifiedFileName
                      */
                     confirm: function (specifiedFileName) {
-                        resolve(specifiedFileName);
+                        deferred.resolve(specifiedFileName);
                     }
                 },
                 'buttons': [{
@@ -35,7 +35,7 @@ define([
                      */
                     click: function () {
                         this.closeModal();
-                        reject();
+                        deferred.reject();
                     }
                 }, {
                     text: $.mage.__('Confirm'),
@@ -44,31 +44,32 @@ define([
 
             };
 
-            prompt({
-                title: data.title,
-                content:  data.content,
-                value: proposedfileName,
-                imageExtension: fileExtension,
-                visible: data.visible,
-                promptContentTmpl: adobePromptContentTmpl,
-                modalClass: 'adobe-stock-save-preview-prompt',
-                validation: true,
-                promptField: '[data-role="adobe-stock-image-name-field"]',
-                validationRules: ['required-entry', 'validate-image-name'],
-                attributesForm: {
-                    novalidate: 'novalidate',
-                    action: '',
-                    onkeydown: 'return event.key != \'Enter\';'
-                },
-                attributesField: {
-                    name: 'name',
-                    'data-validate': '{required:true}',
-                    maxlength: '128'
-                },
-                context: this,
-                actions: data.actions,
-                buttons: data.buttons
-            });
+        prompt({
+            title: data.title,
+            content:  data.content,
+            value: proposedfileName,
+            imageExtension: fileExtension,
+            visible: data.visible,
+            promptContentTmpl: adobePromptContentTmpl,
+            modalClass: 'adobe-stock-save-preview-prompt',
+            validation: true,
+            promptField: '[data-role="adobe-stock-image-name-field"]',
+            validationRules: ['required-entry', 'validate-image-name'],
+            attributesForm: {
+                novalidate: 'novalidate',
+                action: '',
+                onkeydown: 'return event.key != \'Enter\';'
+            },
+            attributesField: {
+                name: 'name',
+                'data-validate': '{required:true}',
+                maxlength: '128'
+            },
+            context: this,
+            actions: data.actions,
+            buttons: data.buttons
         });
+
+        return deferred.promise();
     };
 });

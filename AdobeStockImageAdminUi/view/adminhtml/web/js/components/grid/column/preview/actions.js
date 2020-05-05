@@ -183,7 +183,7 @@ define([
          * Selects displayed image in media gallery for new gallery
          */
         selectDisplayedImageForNewMediaGallery: function (path) {
-            var imageFolders = path.substring(0, path.indexOf('/')),
+            var imageFolders = path.substring(0, path.lastIndexOf('/')),
                 record = this.getRecordFromMediaGalleryProvider(path),
                 subscription; // eslint-disable-line no-unused-vars
 
@@ -255,7 +255,7 @@ define([
             ).then(function (destinationPath) {
                 this.updateDownloadedDisplayedRecord(destinationPath);
                 this.updateGridsAndSelectSavedAsset(destinationPath);
-            }.bind(this)).catch(function (error) {
+            }.bind(this)).fail(function (error) {
                 if (error) {
                     this.showErrorMessage(error);
                 }
@@ -441,7 +441,7 @@ define([
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
                 this.updateGridsAndSelectSavedAsset(destinationPath);
-            }.bind(this)).catch(function (error) {
+            }.bind(this)).fail(function (error) {
                 if (error) {
                     this.showErrorMessage(error);
                 }
@@ -460,60 +460,62 @@ define([
          * @return {window.Promise}
          */
         licenseProcess: function (id, title, path, contentType, isLicensed, isDownloaded) {
-            return new window.Promise(function (resolve, reject) {
-                $.ajaxSetup({
-                    async: false
-                });
-                this.login().login()
-                    .then(function () {
-                        if (isLicensed) {
-                            saveLicensedAction(
-                                this.preview().saveLicensedAndDownloadUrl,
+            var deferred = $.Deferred();
+
+            $.ajaxSetup({
+                async: false
+            });
+            this.login().login()
+                .then(function () {
+                    if (isLicensed) {
+                        saveLicensedAction(
+                            this.preview().saveLicensedAndDownloadUrl,
+                            id,
+                            title,
+                            path,
+                            contentType,
+                            this.getDestinationDirectoryPath()
+                        ).then(function (destinationPath) {
+                            deferred.resolve(destinationPath);
+                        }).fail(function (error) {
+                            deferred.reject(error);
+                        });
+                    } else {
+                        confirmQuotaAction(this.preview().confirmationUrl, id).then(function (data) {
+                            if (data.canLicense === false) {
+                                buyCreditsConfirmation(
+                                    this.preview().buyCreditsUrl,
+                                    title,
+                                    data.message
+                                );
+
+                                return;
+                            }
+                            licenseAndSaveAction(
+                                this.preview().licenseAndDownloadUrl,
                                 id,
                                 title,
                                 path,
                                 contentType,
+                                isDownloaded,
+                                data.message,
                                 this.getDestinationDirectoryPath()
                             ).then(function (destinationPath) {
-                                resolve(destinationPath);
-                            }).catch(function (error) {
-                                reject(error);
+                                deferred.resolve(destinationPath);
+                            }).fail(function (error) {
+                                deferred.reject(error);
                             });
-                        } else {
-                            confirmQuotaAction(this.preview().confirmationUrl, id).then(function (data) {
-                                if (data.canLicense === false) {
-                                    buyCreditsConfirmation(
-                                        this.preview().buyCreditsUrl,
-                                        title,
-                                        data.message
-                                    );
-
-                                    return;
-                                }
-                                licenseAndSaveAction(
-                                    this.preview().licenseAndDownloadUrl,
-                                    id,
-                                    title,
-                                    path,
-                                    contentType,
-                                    isDownloaded,
-                                    data.message,
-                                    this.getDestinationDirectoryPath()
-                                ).then(function (destinationPath) {
-                                    resolve(destinationPath);
-                                }).catch(function (error) {
-                                    reject(error);
-                                });
-                            }.bind(this));
-                        }
-                        $.ajaxSetup({
-                            async: true
-                        });
-                    }.bind(this))
-                    .catch(function (error) {
-                        reject(error);
+                        }.bind(this));
+                    }
+                    $.ajaxSetup({
+                        async: true
                     });
-            }.bind(this));
+                }.bind(this))
+                .fail(function (error) {
+                    deferred.reject(error);
+                });
+
+            return deferred.promise();
         },
 
         /**
@@ -541,7 +543,7 @@ define([
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
                 this.updateGridsAndSelectSavedAsset(destinationPath);
-            }.bind(this)).catch(function (error) {
+            }.bind(this)).fail(function (error) {
                 if (error) {
                     this.showErrorMessage(error);
                 }

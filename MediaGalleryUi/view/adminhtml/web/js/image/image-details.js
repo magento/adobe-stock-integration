@@ -51,7 +51,7 @@ define([
                     this.images[imageId] = imageDetails;
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
-                }.bind(this)).catch(function (message) {
+                }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);
                 });
 

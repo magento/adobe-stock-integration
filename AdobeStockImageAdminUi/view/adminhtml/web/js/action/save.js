@@ -8,42 +8,44 @@ define([
     'use strict';
 
     return function (requestUrl, adobeAssetId, destinationPath) {
-        return new window.Promise(function (resolve, reject) {
-            $.ajax({
-                type: 'POST',
-                url: requestUrl,
-                dataType: 'json',
-                showLoader: true,
-                data: {
-                    'media_id': adobeAssetId,
-                    'destination_path': destinationPath
-                },
+        var deferred = $.Deferred();
 
-                /**
-                 * Resolve on success
-                 */
-                success: function () {
-                    resolve();
-                },
+        $.ajax({
+            type: 'POST',
+            url: requestUrl,
+            dataType: 'json',
+            showLoader: true,
+            data: {
+                'media_id': adobeAssetId,
+                'destination_path': destinationPath
+            },
 
-                /**
-                 * Extract the error message and reject
-                 *
-                 * @param {Object} response
-                 */
-                error: function (response) {
-                    var message;
+            /**
+             * Resolve on success
+             */
+            success: function () {
+                deferred.resolve();
+            },
 
-                    if (typeof response.responseJSON === 'undefined' ||
-                        typeof response.responseJSON.message === 'undefined'
-                    ) {
-                        message = 'Could not save the asset!';
-                    } else {
-                        message = response.responseJSON.message;
-                    }
-                    reject(message);
+            /**
+             * Extract the error message and reject
+             *
+             * @param {Object} response
+             */
+            error: function (response) {
+                var message;
+
+                if (typeof response.responseJSON === 'undefined' ||
+                    typeof response.responseJSON.message === 'undefined'
+                ) {
+                    message = 'Could not save the asset!';
+                } else {
+                    message = response.responseJSON.message;
                 }
-            });
+                deferred.reject(message);
+            }
         });
+
+        return deferred.promise();
     };
 });
