@@ -35,10 +35,14 @@
     <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
         <arguments>
             <argument name="contentTypes" xsi:type="array">
-                <item name="catalog_category" xsi:type="string">Category</item>
-                <item name="catalog_product" xsi:type="string">Product</item>
-                <item name="cms_block" xsi:type="string">Block</item>
-                <item name="cms_page" xsi:type="string">Page</item>
+                <item name="catalog_category" xsi:type="string">Categories</item>
+                <item name="catalog_category_single" xsi:type="string">Category</item>
+                <item name="catalog_product" xsi:type="string">Products</item>
+                <item name="catalog_product_single" xsi:type="string">Product</item>
+                <item name="cms_block" xsi:type="string">Blocks</item>
+                <item name="cms_block_single" xsi:type="string">Block</item>
+                <item name="cms_page" xsi:type="string">Pages</item>
+                <item name="cms_page_single" xsi:type="string">Page</item>
             </argument>
         </arguments>
     </type>

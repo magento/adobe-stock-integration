@@ -41,6 +41,7 @@ define([
             this.waitForContainer(function () {
                 this.getJsonTree();
                 this.initEvents();
+                this.checkChipFiltersState();
             }.bind(this));
 
             return this;
@@ -89,6 +90,29 @@ define([
 
                 this.setActiveNodeFilter(path);
             }.bind(this));
+        },
+
+        /**
+         * Verify directory filter on init event, select folder per directory filter state
+         */
+        checkChipFiltersState: function () {
+            if (!_.isUndefined(this.filterChips().filters.path) && this.filterChips().filters.path !== '') {
+                $(this.directoryTreeSelector).on('loaded.jstree', function () {
+                    this.locateNode(this.filterChips().filters.path);
+                }.bind(this));
+            }
+        },
+
+        /**
+         * Locate and higlight node in jstree by path id.
+         *
+         * @param {String} path
+         */
+        locateNode: function (path) {
+            path = path.replace(/\//g, '\\/');
+            $(this.directoryTreeSelector).jstree('open_node', '#' + path);
+            $(this.directoryTreeSelector).jstree('select_node', '#' + path, true);
+
         },
 
         /**

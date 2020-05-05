@@ -34,7 +34,7 @@ class SaveMediaGalleryAssetTest extends TestCase
     /**
      * @var DocumentToMediaGalleryAsset|MockObject
      */
-    private $convertor;
+    private $converter;
 
     /**
      * @var FileSystem|MockObject
@@ -57,7 +57,7 @@ class SaveMediaGalleryAssetTest extends TestCase
     protected function setUp(): void
     {
         $this->saveAssets = $this->createMock(SaveAssetsInterface::class);
-        $this->convertor = $this->createMock(DocumentToMediaGalleryAsset::class);
+        $this->converter = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->mediaDirectory = $this->createMock(Read::class);
 
@@ -65,7 +65,7 @@ class SaveMediaGalleryAssetTest extends TestCase
             SaveMediaGalleryAsset::class,
             [
                 'saveMediaAsset' =>  $this->saveAssets,
-                'documentToMediaGalleryAsset' =>  $this->convertor,
+                'documentToMediaGalleryAsset' =>  $this->converter,
                 'fileSystem' => $this->filesystem
             ]
         );
@@ -106,7 +106,7 @@ class SaveMediaGalleryAssetTest extends TestCase
             'size' => $fileSize,
         ];
         $mediaGalleryAssetMock = $this->createMock(Asset::class);
-        $this->convertor->expects($this->once())
+        $this->converter->expects($this->once())
             ->method('convert')
             ->with($document, $additionalData)
             ->willReturn($mediaGalleryAssetMock);

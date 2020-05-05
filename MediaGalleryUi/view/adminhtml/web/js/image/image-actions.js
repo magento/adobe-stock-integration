@@ -15,6 +15,7 @@ define([
     return Element.extend({
         defaults: {
             modalSelector: '',
+            modalWindowSelector: '',
             template: 'Magento_MediaGalleryUi/image/actions',
             modules: {
                 imageModel: '${ $.imageModelName }'
@@ -28,6 +29,7 @@ define([
          */
         initialize: function () {
             this._super();
+            $(window).on('fileDeleted.enhancedMediaGallery', this.closeViewDetailsModal.bind(this));
 
             return this;
         },
@@ -36,9 +38,10 @@ define([
          * Close the images details modal
          */
         closeModal: function () {
-            var modalElement = $(this.modalSelector);
+            var modalElement = $(this.modalSelector),
+                modalWindow = $(this.modalWindowSelector);
 
-            if (!modalElement.length || _.isUndefined(modalElement.modal)) {
+            if (!modalWindow.hasClass('_show') || !modalElement.length || _.isUndefined(modalElement.modal)) {
                 return;
             }
 
@@ -49,7 +52,6 @@ define([
          * Delete image action
          */
         deleteImageAction: function () {
-            this.closeModal();
             deleteImage.deleteImageAction(this.imageModel().getSelected(), this.imageModel().deleteImageUrl);
         },
 
@@ -64,6 +66,13 @@ define([
                     storeId: this.imageModel().storeId
                 }
             );
+            this.closeModal();
+        },
+
+        /**
+         * Close view details modal after confirm deleting image
+         */
+        closeViewDetailsModal: function () {
             this.closeModal();
         }
     });

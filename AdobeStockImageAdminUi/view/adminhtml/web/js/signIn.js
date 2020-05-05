@@ -1,10 +1,7 @@
-// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// jscs:enable
-
 define([
     'jquery',
     'Magento_AdobeIms/js/signIn',

@@ -1,18 +1,30 @@
-// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// jscs:enable
 define([
     'uiComponent',
     'uiRegistry',
     'jquery',
+    'Magento_AdobeStockImageAdminUi/js/action/save',
+    'Magento_AdobeStockImageAdminUi/js/action/savePreview',
+    'Magento_AdobeStockImageAdminUi/js/action/saveLicensed',
+    'Magento_AdobeStockImageAdminUi/js/action/licenseAndSave',
+    'Magento_AdobeStockImageAdminUi/js/action/confirmQuota',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
-    'Magento_Ui/js/modal/confirm',
-    'Magento_Ui/js/modal/prompt',
-    'text!Magento_AdobeStockImageAdminUi/template/modal/adobe-modal-prompt-content.html'
-], function (Component, uiRegistry, $, mediaGallery, confirmation, prompt, adobePromptContentTmpl) {
+    'Magento_AdobeStockImageAdminUi/js/confirmation/buyCredits'
+], function (
+    Component,
+    uiRegistry,
+    $,
+    saveAction,
+    savePreviewAction,
+    saveLicensedAction,
+    licenseAndSaveAction,
+    confirmQuotaAction,
+    mediaGallery,
+    buyCreditsConfirmation
+) {
     'use strict';
 
     return Component.extend({
@@ -36,7 +48,11 @@ define([
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
                 source: '${ $.provider }',
-                imageDirectory: '${ $.mediaGalleryName }'
+                imageDirectory: '${ $.mediaGalleryName }',
+                mediaGallerySortBy: '${ $.mediaGallerySortBy }',
+                mediaGallerySearchInput: '${ $.mediaGallerySearchInput }',
+                mediaGalleryListingFilters: '${ $.mediaGalleryListingFilters }',
+                listingPaging: '${ $.listingPaging }'
             },
             imports: {
                 imageItems: '${ $.mediaGalleryProvider }:data.items'
@@ -111,27 +127,54 @@ define([
         /**
          * Locate downloaded image in media browser
          */
-        locate: function () {
+        openInMediaGalleryClick: function () {
             this.preview().getAdobeModal().trigger('closeModal');
-            this.selectDisplayedImageInMediaGallery();
+
+            if (!this.isMediaBrowser()) {
+                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().title);
+            } else {
+                this.selectDisplayedImageForOldMediaGallery(this.preview().displayedRecord().path);
+            }
+        },
+
+        /**
+         * Select image in new media gallery via search input
+         *
+         * @param {String} title
+         */
+        selectImageInNewMediaGalleryBySearch: function (title) {
+            this.mediaGalleryListingFilters().clear();
+            this.mediaGallerySearchInput().apply(title);
         },
 
         /**
          * Selects displayed image in media gallery
+         *
+         * @param {String} path
+         * @param {Boolean|Undefined} openNewest
          */
-        selectDisplayedImageInMediaGallery: function () {
+        selectInMediaGallery: function (path, openNewest) {
             if (!this.isMediaBrowser()) {
-                this.selectDisplayedImageForNewMediaGallery();
+                !openNewest || this.openNewestImage();
+                this.selectDisplayedImageForNewMediaGallery(path);
             } else {
-                this.selectDisplayedImageForOldMediaGallery();
+                this.selectDisplayedImageForOldMediaGallery(path);
             }
+        },
+
+        /**
+         * Open recently saved image and go to first page
+         */
+        openNewestImage: function () {
+            this.listingPaging().goFirst();
+            this.mediaGallerySortBy().selectDefaultOption();
         },
 
         /**
          * Selects displayed image in media gallery for old gallery
          */
-        selectDisplayedImageForOldMediaGallery: function () {
-            var image = mediaGallery.locate(this.preview().displayedRecord().path);
+        selectDisplayedImageForOldMediaGallery: function (path) {
+            var image = mediaGallery.locate(path);
 
             image ? image.click() : mediaGallery.notLocated();
         },
@@ -139,24 +182,22 @@ define([
         /**
          * Selects displayed image in media gallery for new gallery
          */
-        selectDisplayedImageForNewMediaGallery: function () {
-            var self = this,
-                imagePath = self.preview().displayedRecord().path,
-                imageFolders = imagePath.substring(0, imagePath.indexOf('/')),
-                record = this.getRecordFromMediaGalleryProvider(imagePath),
-                subscription;
+        selectDisplayedImageForNewMediaGallery: function (path) {
+            var imageFolders = path.substring(0, path.indexOf('/')),
+                record = this.getRecordFromMediaGalleryProvider(path),
+                subscription; // eslint-disable-line no-unused-vars
 
             if (!record) {
                 subscription = this.imageItems.subscribe(function () {
                     subscription.dispose();
-                    record = self.getRecordFromMediaGalleryProvider(imagePath);
+                    record = this.getRecordFromMediaGalleryProvider(path);
 
                     if (!record) {
                         mediaGallery.notLocated();
                     }
 
-                    self.selectRecord(record);
-                });
+                    this.selectRecord(record);
+                }.bind(this));
             }
 
             if (imageFolders) {
@@ -200,138 +241,99 @@ define([
         },
 
         /**
-         * Save preview
+         * Save preview click handler
          */
-        savePreview: function () {
-            this.getPrompt(
-                {
-                    'title': $.mage.__('Save Preview'),
-                    'content': $.mage.__('File Name'),
-                    'visible': true,
-                    'actions': {
-                        confirm: function (fileName) {
-                            $.ajaxSetup({
-                                async: true
-                            });
-                            this.save(this.preview().displayedRecord(), fileName);
-                        }.bind(this)
-                    },
-                    'buttons': [{
-                        text: $.mage.__('Cancel'),
-                        class: 'action-secondary action-dismiss',
+        savePreviewClick: function () {
+            var record = this.preview().displayedRecord();
 
-                        /**
-                         * Close modal on button click
-                         */
-                        click: function () {
-                            this.closeModal();
-                        }
-                    }, {
-                        text: $.mage.__('Confirm'),
-                        class: 'action-primary action-accept'
-                    }]
-
+            savePreviewAction(
+                this.preview().downloadImagePreviewUrl,
+                record.id,
+                record.title,
+                record['content_type'],
+                this.getDestinationDirectoryPath()
+            ).then(function (destinationPath) {
+                this.updateDownloadedDisplayedRecord(destinationPath);
+                this.updateGridsAndSelectSavedAsset(destinationPath);
+            }.bind(this)).catch(function (error) {
+                if (error) {
+                    this.showErrorMessage(error);
                 }
-            );
+            }.bind(this));
         },
 
         /**
-         * Save record as image
+         * Update displayed record after downloading
          *
-         * @param {Object} record
-         * @param {String} fileName
-         * @param {bool} license
-         * @param {bool} isLicensed
+         * @param {String} path
          */
-        save: function (record, fileName, license, isLicensed) {
-            var requestUrl = isLicensed ? this.preview().saveLicensedAndDownloadUrl :
-                    license ? this.preview().licenseAndDownloadUrl : this.preview().downloadImagePreviewUrl,
-                destinationPath = this.getDestinationPath(fileName, record);
+        updateDownloadedDisplayedRecord: function (path) {
+            var record = this.preview().displayedRecord();
 
-            $.ajax({
-                type: 'POST',
-                url: requestUrl,
-                dataType: 'json',
-                showLoader: true,
-                data: {
-                    'media_id': record.id,
-                    'destination_path': destinationPath
-                },
-                context: this,
+            record['is_downloaded'] = 1;
 
-                /**
-                 * Success handler for Adobe Stock preview or licensed image
-                 * download
-                 *
-                 */
-                success: function () {
-                    record['is_downloaded'] = 1;
+            if (record.path === '') {
+                record.path = path;
+            }
 
-                    if (record.path === '') {
-                        record.path = destinationPath;
-                    }
+            this.preview().displayedRecord(record);
+        },
 
-                    if (license || isLicensed) {
-                        record['is_licensed'] = 1;
-                        record['is_licensed_locally'] = 1;
-                        this.login().getUserQuota();
-                    }
-                    this.preview().displayedRecord(record);
-                    this.source().reload({
-                        refresh: true
-                    });
-                    this.preview().getAdobeModal().trigger('closeModal');
-                    $.ajaxSetup({
-                        async: false
-                    });
-                    this.reloadGrid();
-                    $.ajaxSetup({
-                        async: true
-                    });
-                    this.selectDisplayedImageInMediaGallery();
-                },
+        /**
+         * Update displayed record after licensing
+         *
+         * @param {String} path
+         */
+        updateLicensedDisplayedRecord: function (path) {
+            var record = this.preview().displayedRecord();
 
-                /**
-                 * Error handler for Adobe Stock preview or licensed image
-                 * download
-                 *
-                 * @param {Object} response
-                 */
-                error: function (response) {
-                    var message;
+            record['is_downloaded'] = 1;
 
-                    if (typeof response.responseJSON === 'undefined' ||
-                        typeof response.responseJSON.message === 'undefined'
-                    ) {
-                        message = 'There was an error on attempt to save the image!';
-                    } else {
-                        message = response.responseJSON.message;
+            if (record.path === '') {
+                record.path = path;
+            }
 
-                        if (response.responseJSON['is_licensed'] === true) {
-                            record['is_licensed'] = 1;
-                            this.preview().displayedRecord(record);
-                            this.source().reload({
-                                refresh: true
-                            });
-                        }
-                    }
-                    this.messages.push({
-                        code: 'error',
-                        message: message
-                    });
-                    this.messagesCleanup();
-                }
+            record['is_licensed'] = 1;
+            record['is_licensed_locally'] = 1;
+
+            this.preview().displayedRecord(record);
+        },
+
+        /**
+         * Update view
+         */
+        updateGridsAndSelectSavedAsset: function (path) {
+            this.source().reload({
+                refresh: true
             });
+            this.preview().getAdobeModal().trigger('closeModal');
+            $.ajaxSetup({
+                async: false
+            });
+            this.reloadGrid();
+            $.ajaxSetup({
+                async: true
+            });
+            this.selectInMediaGallery(path, true);
         },
 
         /**
          * Get image destination path
          *
          * @param {String} fileName
-         * @param {Object} record
+         * @param {String} contentType
          * @returns {String}
          */
-        getDestinationPath: function (fileName, record) {
+        getDestinationPath: function (fileName, contentType) {
+            return this.getDestinationDirectoryPath() + '/' + fileName + '.' + this.getImageExtension(contentType);
+        },
+
+        /**
+         * Get destination directory path
+         *
+         * @returns {String}
+         */
+        getDestinationDirectoryPath: function () {
             var activeNodePath,
                 activeNode;
 
@@ -343,7 +345,7 @@ define([
                 activeNodePath = this.imageDirectory().activeNode() || '';
             }
 
-            return activeNodePath  + '/' + fileName + '.' + this.getImageExtension(record);
+            return activeNodePath;
         },
 
         /**
@@ -389,27 +391,28 @@ define([
          * Generate meaningful name image file,
          * allow only alphanumerics, dashes, and underscores
          *
-         * @param {Object} record
+         * @param {String} title
+         * @param {Number} id
          * @return string
          */
-        generateImageName: function (record) {
-            var fileName = record.title.substring(0, 32)
+        generateImageName: function (title, id) {
+            var fileName = title.substring(0, 32)
                 .replace(/[^a-zA-Z0-9_]/g, '-')
                 .replace(/-{2,}/g, '-')
                 .toLowerCase();
 
             /* If the filename does not contain latin chars, use ID as a filename */
-            return fileName === '-' ? record.id : fileName;
+            return fileName === '-' ? id : fileName;
         },
 
         /**
          * Get image file extension
          *
-         * @param {Object} record
+         * @param {String} contentType
          * @return string
          */
-        getImageExtension: function (record) {
-            return record['content_type'].match(/[^/]{1,4}$/);
+        getImageExtension: function (contentType) {
+            return contentType.match(/[^/]{1,4}$/);
         },
 
         /**
@@ -422,200 +425,102 @@ define([
         },
 
         /**
-         * License and save image
-         *
-         * @param {Object} record
-         * @param {String} fileName
+         * License click handler
          */
-        licenseAndSave: function (record, fileName) {
-            this.save(record, fileName, true);
-        },
+        licenseClick: function () {
+            var record = this.preview().displayedRecord();
 
-        /**
-         * Shows license confirmation popup with information about current license quota
-         *
-         * @param {Object} record
-         */
-        showLicenseConfirmation: function (record) {
-            $.ajax(
-                {
-                    type: 'GET',
-                    url: this.preview().confirmationUrl,
-                    dataType: 'json',
-                    data: {
-                        'media_id': record.id
-                    },
-                    context: this,
-                    showLoader: true,
-
-                    /**
-                     * On success result
-                     *
-                     * @param {Object} response
-                     */
-                    success: function (response) {
-                        var confirmationContent = $.mage.__('License "' + record.title + '"'),
-                            quotaMessage = response.result.message,
-                            canPurchase = response.result.canLicense,
-                            buyCreditsUrl = this.preview().buyCreditsUrl,
-                            displayFieldName = !this.isDownloaded() ? '<b>' + $.mage.__('File Name') + '</b>' : '',
-                            title = $.mage.__('License Adobe Stock Images?'),
-                            cancelText = $.mage.__('Cancel'),
-                            baseContent = '<p>' + confirmationContent + '</p><p><b>' + quotaMessage + '</b></p><br>';
-
-                        if (canPurchase) {
-                            this.getPrompt(
-                                 {
-                                    'title': title,
-                                    'content': baseContent + displayFieldName,
-                                    'visible': !this.isDownloaded(),
-                                    'actions': {
-                                        /**
-                                         * Confirm action
-                                         */
-                                        confirm: function (fileName) {
-                                            if (typeof fileName === 'undefined') {
-                                                fileName = this.getImageNameFromPath(record.path);
-                                            }
-
-                                            this.licenseAndSave(record, fileName);
-                                        }.bind(this)
-                                    },
-                                    'buttons': [{
-                                        text: cancelText,
-                                        class: 'action-secondary action-dismiss',
-
-                                        /**
-                                         * Close modal
-                                         */
-                                        click: function () {
-                                            this.closeModal();
-                                        }
-                                    }, {
-                                        text: $.mage.__('Confirm'),
-                                        class: 'action-primary action-accept'
-                                    }]
-
-                                }
-                            );
-                        } else {
-                            confirmation({
-                                title: title,
-                                content: baseContent,
-                                buttons: [{
-                                    text: cancelText,
-                                    class: 'action-secondary action-dismiss',
-
-                                    /**
-                                     * Close modal
-                                     */
-                                    click: function () {
-                                        this.closeModal();
-                                    }
-                                },{
-                                    text: $.mage.__('Buy Credits'),
-                                    class: 'action-primary action-accept',
-
-                                    /**
-                                     * Close modal
-                                     */
-                                    click: function () {
-                                        window.open(buyCreditsUrl);
-                                        this.closeModal();
-                                    }
-                                }]
-                            });
-                        }
-                    },
-
-                    /**
-                     * On error
-                     */
-                    error: function (response) {
-                        var defaultMessage = 'Failed to fetch licensing information.',
-                            errorMessage = response.JSON ? response.JSON.meassage : defaultMessage;
-
-                        if (response.status === 403) {
-                            errorMessage = $.mage.__('Your admin role does not have permissions to license an image');
-                        }
-
-                        this.messages.push({
-                            code: 'error',
-                            message: errorMessage
-                        });
-                        this.messagesCleanup();
-                    }
+            this.licenseProcess(
+                record.id,
+                record.title,
+                record.path,
+                record['content_type'],
+                this.isLicensed(),
+                this.isDownloaded()
+            ).then(function (destinationPath) {
+                this.updateLicensedDisplayedRecord(destinationPath);
+                this.login().getUserQuota();
+                this.updateGridsAndSelectSavedAsset(destinationPath);
+            }.bind(this)).catch(function (error) {
+                if (error) {
+                    this.showErrorMessage(error);
                 }
-            );
-        },
-
-        /**
-         * Return configured  prompt with input field.
-         */
-        getPrompt: function (data) {
-
-            prompt({
-                title: data.title,
-                content:  data.content,
-                value: this.generateImageName(this.preview().displayedRecord()),
-                imageExtension: this.getImageExtension(this.preview().displayedRecord()),
-                visible: data.visible,
-                promptContentTmpl: adobePromptContentTmpl,
-                modalClass: 'adobe-stock-save-preview-prompt',
-                validation: true,
-                promptField: '[data-role="adobe-stock-image-name-field"]',
-                validationRules: ['required-entry', 'validate-image-name'],
-                attributesForm: {
-                    novalidate: 'novalidate',
-                    action: '',
-                    onkeydown: 'return event.key != \'Enter\';'
-                },
-                attributesField: {
-                    name: 'name',
-                    'data-validate': '{required:true}',
-                    maxlength: '128'
-                },
-                context: this,
-                actions: data.actions,
-                buttons: data.buttons
-            });
-
+            }.bind(this));
         },
 
         /**
          * Process of license
+         *
+         * @param {Number} id
+         * @param {String} title
+         * @param {String} path
+         * @param {String} contentType
+         * @param {Boolean} isLicensed
+         * @param {Boolean} isDownloaded
+         * @return {window.Promise}
          */
-        licenseProcess: function () {
-            $.ajaxSetup({
-                async: false
-            });
-            this.login().login()
-                .then(function () {
-                    if (this.isLicensed()) {
-                        this.saveLicensed();
-                    } else {
-                        this.showLicenseConfirmation(this.preview().displayedRecord());
-                    }
-                    $.ajaxSetup({
-                        async: true
+        licenseProcess: function (id, title, path, contentType, isLicensed, isDownloaded) {
+            return new window.Promise(function (resolve, reject) {
+                $.ajaxSetup({
+                    async: false
+                });
+                this.login().login()
+                    .then(function () {
+                        if (isLicensed) {
+                            saveLicensedAction(
+                                this.preview().saveLicensedAndDownloadUrl,
+                                id,
+                                title,
+                                path,
+                                contentType,
+                                this.getDestinationDirectoryPath()
+                            ).then(function (destinationPath) {
+                                resolve(destinationPath);
+                            }).catch(function (error) {
+                                reject(error);
+                            });
+                        } else {
+                            confirmQuotaAction(this.preview().confirmationUrl, id).then(function (data) {
+                                if (data.canLicense === false) {
+                                    buyCreditsConfirmation(
+                                        this.preview().buyCreditsUrl,
+                                        title,
+                                        data.message
+                                    );
+
+                                    return;
+                                }
+                                licenseAndSaveAction(
+                                    this.preview().licenseAndDownloadUrl,
+                                    id,
+                                    title,
+                                    path,
+                                    contentType,
+                                    isDownloaded,
+                                    data.message,
+                                    this.getDestinationDirectoryPath()
+                                ).then(function (destinationPath) {
+                                    resolve(destinationPath);
+                                }).catch(function (error) {
+                                    reject(error);
+                                });
+                            }.bind(this));
+                        }
+                        $.ajaxSetup({
+                            async: true
+                        });
+                    }.bind(this))
+                    .catch(function (error) {
+                        reject(error);
                     });
-                }.bind(this))
-                .catch(function (error) {
-                    this.messages.push({
-                        code: 'error',
-                        message: error
-                    });
-                }.bind(this))
-                .finally(function () {
-                    this.messagesCleanup();
-                }.bind(this));
+            }.bind(this));
         },
 
         /**
-         * Save licensed
+         * Save licensed click handler
          */
-        saveLicensed: function () {
-            var imageName = '';
+        saveLicensedClick: function () {
+            var record = this.preview().displayedRecord();
 
             if (!this.login().user().isAuthorized) {
                 return;
@@ -625,44 +530,22 @@ define([
                 return;
             }
 
-            // If there's a copy of the image (preview), get the filename from the copy
-            if (this.preview().displayedRecord().path !== '') {
-                imageName = this.getImageNameFromPath(this.preview().displayedRecord().path);
-                this.save(this.preview().displayedRecord(), imageName, false, true);
-
-                return;
-            }
-
-            // Ask user for the image name otherwise
-            this.getPrompt(
-                {
-                    'title': $.mage.__('Save'),
-                    'content': $.mage.__('File Name'),
-                    'visible': true,
-                    'actions': {
-                        confirm: function (fileName) {
-                            this.save(this.preview().displayedRecord(), fileName, false, true);
-                        }.bind(this)
-                    },
-                    'buttons': [
-                        {
-                            text: $.mage.__('Cancel'),
-                            class: 'action-secondary action-dismiss',
-
-                            /**
-                             * Close modal on button click
-                             */
-                            click: function () {
-                                this.closeModal();
-                            }
-                        },
-                        {
-                            text: $.mage.__('Confirm'),
-                            class: 'action-primary action-accept'
-                        }
-                    ]
+            saveLicensedAction(
+                this.preview().saveLicensedAndDownloadUrl,
+                record.id,
+                record.title,
+                record.path,
+                record['content_type'],
+                this.getDestinationDirectoryPath()
+            ).then(function (destinationPath) {
+                this.updateLicensedDisplayedRecord(destinationPath);
+                this.login().getUserQuota();
+                this.updateGridsAndSelectSavedAsset(destinationPath);
+            }.bind(this)).catch(function (error) {
+                if (error) {
+                    this.showErrorMessage(error);
                 }
-            );
+            }.bind(this));
         },
 
         /**
@@ -685,6 +568,19 @@ define([
                 imageIndex = filePathArray.length - 1;
 
             return filePathArray[imageIndex].substring(0, filePathArray[imageIndex].lastIndexOf('.'));
+        },
+
+        /**
+         * Show error message and schedule cleanup
+         *
+         * @param {String} message
+         */
+        showErrorMessage: function (message) {
+            this.messages.push({
+                code: 'error',
+                messageUnsanitizedHtml: message
+            });
+            this.messagesCleanup();
         },
 
         /**

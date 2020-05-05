@@ -1,14 +1,13 @@
-// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// jscs:enable
 define([
-    'Magento_Ui/js/grid/columns/overlay',
     'jquery',
-    'underscore'
-], function (overlay, $, _) {
+    'underscore',
+    'Magento_Ui/js/grid/columns/overlay',
+    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus'
+], function ($, _, overlay, getLicenseStatus) {
     'use strict';
 
     return overlay.extend({
@@ -75,31 +74,9 @@ define([
                 return;
             }
 
-            $.ajax({
-                type: 'GET',
-                url: this.getImagesUrl + '?ids=' + ids.join(','),
-                data: {
-                    'form_key': window.FORM_KEY
-                },
-                dataType: 'json',
-                context: this,
-
-                /**
-                 * @param {Object} response
-                 * @returns void
-                 */
-                success: function (response) {
-                    this.licensed(response.result);
-                },
-
-                /**
-                 * @param {Object} response
-                 * @returns {String}
-                 */
-                error: function (response) {
-                    return response.message;
-                }
-            });
+            getLicenseStatus(this.getImagesUrl, ids).then(function (licensed) {
+                this.licensed(licensed);
+            }.bind(this));
         },
 
         /**

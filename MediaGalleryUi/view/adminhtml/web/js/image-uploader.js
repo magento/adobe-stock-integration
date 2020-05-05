@@ -27,7 +27,9 @@ define([
             modules: {
                 directories: '${ $.directoriesPath }',
                 actions: '${ $.actionsPath }',
-                mediaGridMessages: '${ $.messagesPath }'
+                mediaGridMessages: '${ $.messagesPath }',
+                sortBy: '${ $.sortByName }',
+                listingPaging: '${ $.listingPagingName }'
             }
         },
 
@@ -97,6 +99,7 @@ define([
                 }.bind(this),
 
                 stop: function () {
+                    this.openNewestImages();
                     this.mediaGridMessages().scheduleCleanup();
                 }.bind(this),
 
@@ -128,6 +131,21 @@ define([
          */
         isSizeExceeded: function (file) {
             return validator('validate-max-size', file.size, this.maxFileSize);
+        },
+
+        /**
+         * Go to recently uploaded images if at least one uploaded successfully
+         */
+        openNewestImages: function () {
+            this.mediaGridMessages().get().each(function (message) {
+                if (message.code === 'success') {
+                    this.actions().deselectImage();
+                    this.sortBy().selectDefaultOption();
+                    this.listingPaging().goFirst();
+
+                    return false;
+                }
+            }.bind(this));
         },
 
         /**

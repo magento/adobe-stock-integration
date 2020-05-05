@@ -40,7 +40,11 @@ define([
                     provider: '${ $.provider }',
                     mediaGallery: '${ $.mediaGalleryComponent }',
                     mediaGalleryName: '${ $.mediaGalleryName }',
-                    mediaGalleryProvider: '${ $.mediaGalleryProvider }'
+                    mediaGalleryProvider: '${ $.mediaGalleryProvider }',
+                    mediaGallerySortBy: '${ $.mediaGallerySortBy }',
+                    mediaGallerySearchInput: '${ $.mediaGallerySearchInput }',
+                    mediaGalleryListingFilters: '${ $.mediaGalleryListingFilters }',
+                    listingPaging: '${ $.listingPaging }'
                 }
             ]
         },

@@ -69,6 +69,11 @@
             </argument>
         </container>
         <filters name="listing_filters" sortOrder="10">
+            <settings>
+                <chipsConfig>
+                    <param name="template" xsi:type="string">Magento_AdobeStockImageAdminUi/grid/filter/chips</param>
+                </chipsConfig>
+            </settings>
             <filterSelect name="content_type_filter" provider="${ $.parentName }" sortOrder="10">
                 <settings>
                     <caption translate="true">All</caption>
@@ -205,6 +210,10 @@
                     <item name="mediaGalleryName" xsi:type="string">media_gallery_listing.media_gallery_listing.media_gallery_directories</item>
                     <item name="mediaGalleryComponent" xsi:type="string">media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url</item>
                     <item name="mediaGalleryProvider" xsi:type="string">media_gallery_listing.media_gallery_listing_data_source</item>
+                    <item name="mediaGallerySortBy" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.sorting</item>
+                    <item name="mediaGallerySearchInput" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.fulltext</item>
+                    <item name="mediaGalleryListingFilters" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.listing_filters</item>
+                    <item name="listingPaging" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.listing_paging</item>
 		</item>
             </argument>
             <settings>

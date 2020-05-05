@@ -78,16 +78,15 @@ class FolderTree
             return $directories;
         }
 
-        foreach ($directory->readRecursively() as $index => $path) {
-            if (!$directory->isDirectory($path) ||
-                $this->isBlacklisted->execute($path)) {
+        foreach ($directory->readRecursively() as $path) {
+            if (!$directory->isDirectory($path) || $this->isBlacklisted->execute($path)) {
                 continue;
             }
 
             $pathArray = explode('/', $path);
             $directories[] = [
                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                'attr' => ['id' => $index],
+                'attr' => ['id' => $path],
                 'metadata' => [
                     'path' => $path
                 ],
