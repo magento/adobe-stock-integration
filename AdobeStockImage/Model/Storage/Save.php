@@ -16,6 +16,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
  * Save images to the file system
@@ -40,18 +41,26 @@ class Save
     private $isPathBlacklisted;
 
     /**
+     * @var Storage
+     */
+    private $storage;
+    
+    /**
      * @param Filesystem $filesystem
      * @param Https $driver
      * @param IsPathBlacklistedInterface $isPathBlacklisted
+     * @param Storage $storage
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        IsPathBlacklistedInterface $isPathBlacklisted
+        IsPathBlacklistedInterface $isPathBlacklisted,
+        Storage $storage
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->isPathBlacklisted = $isPathBlacklisted;
+        $this->storage = $storage;
     }
 
     /**
@@ -81,6 +90,7 @@ class Save
 
         $fileContents = $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl));
         $mediaDirectory->writeFile($destinationPath, $fileContents);
+        $this->storage->resizeFile($mediaDirectory->getAbsolutePath($destinationPath));
     }
 
     /**
