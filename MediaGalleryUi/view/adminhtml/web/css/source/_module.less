@@ -40,8 +40,16 @@
         color: @color-media-gallery-buttons-text;
     }
 
+    .masonry-image-grid .no-data-message-container,
+    .masonry-image-grid .error-message-container {
+        left: 50%;
+        margin-right: -50%;
+        position: sticky;
+        top: 50%;
+    }
+    
     .media-gallery-container {
-
+        
         .admin__action-dropdown-wrap._active .admin__action-dropdown-text::after {
             margin-right: 6px;
         }
@@ -245,7 +253,12 @@
         }
 
         .masonry-image-grid {
+            align-items: first baseline;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 210px);
+            justify-content: end;
             margin: 10px 0;
+            position: relative;
         }
     }
 

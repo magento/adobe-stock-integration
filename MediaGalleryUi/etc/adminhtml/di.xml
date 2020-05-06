@@ -14,7 +14,6 @@
     <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
         <arguments>
             <argument name="selectModifiers" xsi:type="array">
-                <item name="fulltextFilter" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Fulltext</item>
                 <item name="directory" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Directory</item>
             </argument>
         </arguments>
