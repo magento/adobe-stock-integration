@@ -234,7 +234,7 @@
         <column name="path">
             <settings>
                 <visible>false</visible>
-                <sortable>true</sortable>
+                <sortable>false</sortable>
             </settings>
         </column>
         <column name="directory_desc">
@@ -269,7 +269,7 @@
         <column name="title">
             <settings>
                 <visible>false</visible>
-                <sortable>true</sortable>
+                <sortable>false</sortable>
             </settings>
         </column>
         <column name="name_az">
