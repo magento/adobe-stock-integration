@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 use Magento\MediaGalleryUi\Model\SelectModifierInterface;
 
 /**
- * Apply path filter with regex to match path  from beginning
+ * Apply path filter with regex to match path from beginning
  */
 class Directory implements SelectModifierInterface
 {
@@ -27,9 +27,8 @@ class Directory implements SelectModifierInterface
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === self::DIRECTORY_FIELD_TYPE) {
-                    $select->reset('where');
                     $value = str_replace('%', '', $filter->getValue());
-                    $select->where("path REGEXP ? ", '^' . $value . '/[^\/]*$');
+                    $select->where('path REGEXP ? ', '^' . $value . '/[^\/]*$');
                 }
             }
         }
