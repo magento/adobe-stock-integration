@@ -21,7 +21,8 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterApplierInterfa
 class KeywordFilter implements FilterApplierInterface
 {
     private const TABLE_ALIAS = 'main_table';
-    private const TABLE_ASSET_KEYWORD = 'media_gallery_asset_keyword';
+    private const TABLE_KEYWORDS = 'media_gallery_asset_keyword';
+    private const TABLE_ASSET_KEYWORD = 'media_gallery_keyword';
 
     /**
      * @var AdapterInterface
@@ -61,8 +62,17 @@ class KeywordFilter implements FilterApplierInterface
      */
     private function getSelectByKeyword(string $value): Select
     {
-        return $this->connection->select()
-             ->from($this->connection->getTableName(self::TABLE_ASSET_KEYWORD), ['asset_id'])
-             ->where(self::TABLE_ASSET_KEYWORD . '.asset_id = main_table.id');
+        return $this->connection->select()->from(
+            $this->connection->select()->from(
+                ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
+                ['id']
+            )->where('keyword = ?', $value)
+             ->joinInner(
+                 ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
+                 'keywords_table.keyword_id = asset_keywords_table.id',
+                 ['asset_id']
+             ),
+            ['asset_id']
+        );
     }
 }
