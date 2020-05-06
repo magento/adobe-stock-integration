@@ -11,25 +11,28 @@ define([
     'use strict';
 
     return function (requestUrl, id, title, contentType, directoryPath) {
-        return new window.Promise(function (resolve, reject) {
-            saveConfirmation(
-                pathUtility.generateImageName(title, id),
-                pathUtility.getImageExtension(contentType)
-            ).then(function (fileName) {
-                var destinationPath = pathUtility.buildPath(directoryPath, fileName, contentType);
+        var deferred = $.Deferred(),
+            destinationPath;
 
-                saveAction(
-                    requestUrl,
-                    id,
-                    destinationPath
-                ).then(function () {
-                    resolve(destinationPath);
-                }).catch(function (error) {
-                    reject(error);
-                });
-            }).catch(function (error) {
-                reject(error);
+        saveConfirmation(
+            pathUtility.generateImageName(title, id),
+            pathUtility.getImageExtension(contentType)
+        ).then(function (fileName) {
+            destinationPath = pathUtility.buildPath(directoryPath, fileName, contentType);
+
+            saveAction(
+                requestUrl,
+                id,
+                destinationPath
+            ).then(function () {
+                deferred.resolve(destinationPath);
+            }).fail(function (error) {
+                deferred.reject(error);
             });
+        }).fail(function (error) {
+            deferred.reject(error);
         });
+
+        return deferred.promise();
     };
 });

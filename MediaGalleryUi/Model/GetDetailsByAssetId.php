@@ -90,7 +90,7 @@ class GetDetailsByAssetId
             'size' => $asset->getSize(),
             'tags' => $this->getKeywords($asset),
             'source' => $asset->getSource() ? $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) : null,
-            'content_type' => $asset->getContentType()
+            'content_type' => strtoupper(str_replace('image/', '', $asset->getContentType())),
         ];
     }
 
