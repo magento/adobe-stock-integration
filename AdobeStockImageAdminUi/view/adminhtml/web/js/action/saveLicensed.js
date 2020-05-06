@@ -12,42 +12,42 @@ define([
 
     return function (requestUrl, id, title, path, contentType, directoryPath) {
         var imageName = '',
-            destinationPath;
+            destinationPath,
+            deferred = $.Deferred();
 
-        return new window.Promise(function (resolve, reject) {
-            if (path !== '') {
-                imageName = pathUtility.getImageNameFromPath(path);
-                destinationPath = pathUtility.buildPath(directoryPath, imageName, contentType);
-                saveAction(
-                    requestUrl,
-                    id,
-                    destinationPath
-                ).then(function () {
-                    resolve(destinationPath);
-                }).catch(function (message) {
-                    reject(message);
-                });
-
-                return;
-            }
-
-            saveLicensedConfirmation(
-                pathUtility.generateImageName(title, id),
-                pathUtility.getImageExtension(contentType)
-            ).then(function (fileName) {
-                destinationPath = pathUtility.buildPath(directoryPath, fileName, contentType);
-                saveAction(
-                    requestUrl,
-                    id,
-                    destinationPath
-                ).then(function () {
-                    resolve(destinationPath);
-                }).catch(function (message) {
-                    reject(message);
-                });
-            }).catch(function (error) {
-                reject(error);
+        if (path !== '') {
+            imageName = pathUtility.getImageNameFromPath(path);
+            destinationPath = pathUtility.buildPath(directoryPath, imageName, contentType);
+            saveAction(
+                requestUrl,
+                id,
+                destinationPath
+            ).then(function () {
+                deferred.resolve(destinationPath);
+            }).fail(function (message) {
+                deferred.reject(message);
             });
+
+        }
+
+        saveLicensedConfirmation(
+            pathUtility.generateImageName(title, id),
+            pathUtility.getImageExtension(contentType)
+        ).then(function (fileName) {
+            destinationPath = pathUtility.buildPath(directoryPath, fileName, contentType);
+            saveAction(
+                requestUrl,
+                id,
+                destinationPath
+            ).then(function () {
+                deferred.resolve(destinationPath);
+            }).fail(function (message) {
+                deferred.reject(message);
+            });
+        }).fail(function (error) {
+            deferred.reject(error);
         });
+
+        return deferred.promise();
     };
 });
