@@ -58,12 +58,12 @@ class CategoryRepositoryTest extends TestCase
      * Test delete an Adobe Stock category by id.
      *
      * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDeleteById(): void
     {
         $this->categoryRepository->deleteById(self::FIXTURE_ASSET_CATEGORY_ID);
         $this->categoryRepository->getById(self::FIXTURE_ASSET_CATEGORY_ID);
+        $this->expectException(NoSuchEntityException::class);
     }
 
     /**

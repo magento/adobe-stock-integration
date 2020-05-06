@@ -59,12 +59,12 @@ class CreatorRepositoryTest extends TestCase
      * Test delete an Adobe Stock creator by id.
      *
      * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDeleteById(): void
     {
         $this->creatorRepository->deleteById(self::FIXTURE_ASSET_CREATOR_ID);
         $this->creatorRepository->getById(self::FIXTURE_ASSET_CREATOR_ID);
+        $this->expectException(NoSuchEntityException::class);
     }
 
     /**

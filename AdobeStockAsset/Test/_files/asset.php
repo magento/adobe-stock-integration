@@ -42,8 +42,7 @@ $mediaSave = $objectManager->get(SaveAssetsInterface::class);
 $mediaSave->execute([$mediaAsset]);
 /** @var GetAssetsByPathsInterface $mediaGetByPath */
 $mediaGetByPath = $objectManager->get(GetAssetsByPathsInterface::class);
-$savedMeidaAsset = $mediaGetByPath->execute([$mediaAsset->getPath()])[0];
-
+$savedMediaAsset = $mediaGetByPath->execute([$mediaAsset->getPath()])[0];
 
 /** @var CategoryInterfaceFactory $categoryFactory */
 $categoryFactory = $objectManager->get(CategoryInterfaceFactory::class);
@@ -85,7 +84,7 @@ $asset = $assetFactory->create(
             'is_licensed' => 1,
             'category_id' => $categoryId,
             'creator_id' => $creatorId,
-            'media_gallery_id' => $savedMeidaAsset->getId()
+            'media_gallery_id' => $savedMediaAsset->getId()
         ]
     ]
 );

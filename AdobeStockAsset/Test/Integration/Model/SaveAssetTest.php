@@ -93,49 +93,6 @@ class SaveAssetTest extends TestCase
      */
     public function prepareAsset(): AssetInterface
     {
-        /** @var MediaAssetFactory $mediaAssetFactory */
-        $mediaAssetFactory = Bootstrap::getObjectManager()->get(MediaAssetFactory::class);
-        /** @var MediaAsset $mediaAsset */
-        $mediaAsset = $mediaAssetFactory->create(
-            [
-                'data' => [
-                    'path' => self::MEDIA_GALLERY_ASSET_PATH,
-                    'title' => 'Web API test image',
-                    'source' => 'Adobe Stock',
-                    'content_type' => 'image/jpeg',
-                    'width' => 6529,
-                    'height' => 4355,
-                    'size' => 424242
-                ]
-            ]
-        );
-        /** @var SaveAssetsInterface $mediaSave */
-        $mediaSave = Bootstrap::getObjectManager()->get(SaveAssetsInterface::class);
-        $mediaId = $mediaSave->execute($mediaAsset);
-
-        $categoryFactory = Bootstrap::getObjectManager()->get(CategoryInterfaceFactory::class);
-        /** @var CategoryInterface $category */
-        $category = $categoryFactory->create(
-            [
-                'data' => [
-                    'id' => 42,
-                    'name' => 'Test asset category'
-                ]
-            ]
-        );
-
-        /** @var CreatorInterfaceFactory $creatorFactory */
-        $creatorFactory = Bootstrap::getObjectManager()->get(CreatorInterfaceFactory::class);
-        /** @var CreatorInterface $creator */
-        $creator = $creatorFactory->create(
-            [
-                'data' => [
-                    'id' => 42,
-                    'name' => 'Test asset creator'
-                ]
-            ]
-        );
-
         /** @var AssetInterfaceFactory $assetFactory */
         $assetFactory = Bootstrap::getObjectManager()->get(AssetInterfaceFactory::class);
         /** @var AssetInterface $asset */
@@ -159,9 +116,6 @@ class SaveAssetTest extends TestCase
      */
     private function cleanUpEntries(AssetInterface $asset): void
     {
-        $this->categoryRepository->deleteById($asset->getCategoryId());
-        $this->creatorRepository->deleteById($asset->getCategoryId());
         $this->assetRepository->deleteById($asset->getId());
-        $this->deleteMediaAssetByPath->execute(self::MEDIA_GALLERY_ASSET_PATH);
     }
 }
