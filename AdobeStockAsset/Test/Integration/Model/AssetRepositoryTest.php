@@ -60,9 +60,9 @@ class AssetRepositoryTest extends TestCase
      */
     public function testDeleteById(): void
     {
+        $this->expectException(NoSuchEntityException::class);
         $this->assetRepository->deleteById(self::FIXTURE_ASSET_ID);
         $this->assetRepository->getById(self::FIXTURE_ASSET_ID);
-        $this->expectException(NoSuchEntityException::class);
     }
 
     /**

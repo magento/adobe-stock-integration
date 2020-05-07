@@ -61,9 +61,9 @@ class CategoryRepositoryTest extends TestCase
      */
     public function testDeleteById(): void
     {
+        $this->expectException(NoSuchEntityException::class);
         $this->categoryRepository->deleteById(self::FIXTURE_ASSET_CATEGORY_ID);
         $this->categoryRepository->getById(self::FIXTURE_ASSET_CATEGORY_ID);
-        $this->expectException(NoSuchEntityException::class);
     }
 
     /**

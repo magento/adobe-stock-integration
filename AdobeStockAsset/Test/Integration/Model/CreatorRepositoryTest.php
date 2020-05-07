@@ -62,9 +62,9 @@ class CreatorRepositoryTest extends TestCase
      */
     public function testDeleteById(): void
     {
+        $this->expectException(NoSuchEntityException::class);
         $this->creatorRepository->deleteById(self::FIXTURE_ASSET_CREATOR_ID);
         $this->creatorRepository->getById(self::FIXTURE_ASSET_CREATOR_ID);
-        $this->expectException(NoSuchEntityException::class);
     }
 
     /**

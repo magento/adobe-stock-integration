@@ -13,14 +13,8 @@ use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterfaceFactory;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
 use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface as MediaAsset;
-use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory as MediaAssetFactory;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -31,27 +25,10 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveAssetTest extends TestCase
 {
-    private const MEDIA_GALLERY_ASSET_PATH = 'some/path.jpg';
-
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
-    /**
-     * @var CreatorRepositoryInterface
-     */
-    private $creatorRepository;
-
     /**
      * @var AssetRepositoryInterface
      */
     private $assetRepository;
-
-    /**
-     * @var DeleteAssetsByPathsInterface
-     */
-    private $deleteMediaAssetByPath;
 
     /**
      * @var SaveAssetsInterface
@@ -63,15 +40,15 @@ class SaveAssetTest extends TestCase
      */
     public function setUp()
     {
-        $this->categoryRepository = Bootstrap::getObjectManager()->get(CategoryRepositoryInterface::class);
-        $this->creatorRepository = Bootstrap::getObjectManager()->get(CreatorRepositoryInterface::class);
         $this->assetRepository = Bootstrap::getObjectManager()->get(AssetRepositoryInterface::class);
-        $this->deleteMediaAssetByPath = Bootstrap::getObjectManager()->get(DeleteAssetsByPathsInterface::class);
         $this->saveAsset = Bootstrap::getObjectManager()->get(SaveAssetInterface::class);
     }
 
     /**
      * Test save an Adobe Stock asset.
+     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/media_asset.php
+     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
+     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
      */
     public function testExecute(): void
     {
@@ -93,6 +70,18 @@ class SaveAssetTest extends TestCase
      */
     public function prepareAsset(): AssetInterface
     {
+        /** @var GetAssetsByPathsInterface $mediaGetByPath */
+        $mediaGetByPath = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
+        $mediaAssetId = $mediaGetByPath->execute(['some/path.jpg'])[0]->getId();
+
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = Bootstrap::getObjectManager()->get(CategoryRepositoryInterface::class);
+        $category= $categoryRepository->getById(42);
+
+        /** @var CreatorRepositoryInterface $creatorRepository */
+        $creatorRepository = Bootstrap::getObjectManager()->get(CreatorRepositoryInterface::class);
+        $creator = $creatorRepository->getById(42);
+
         /** @var AssetInterfaceFactory $assetFactory */
         $assetFactory = Bootstrap::getObjectManager()->get(AssetInterfaceFactory::class);
         /** @var AssetInterface $asset */
@@ -101,7 +90,7 @@ class SaveAssetTest extends TestCase
                 'data' => [
                     'id' => 1,
                     'is_licensed' => 1,
-                    'media_gallery_id' => $mediaId,
+                    'media_gallery_id' => $mediaAssetId,
                     'category' => $category,
                     'creator' => $creator
                 ]
