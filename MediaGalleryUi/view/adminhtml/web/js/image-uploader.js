@@ -90,6 +90,8 @@ define([
                                       '</b>. file exceeds maximum file size limit.')
                         );
 
+                        this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
+
                         return;
                     }
 
