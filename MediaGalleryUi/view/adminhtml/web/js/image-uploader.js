@@ -87,7 +87,7 @@ define([
                         this.mediaGridMessages().add(
                             'error',
                             $.mage.__('Cannot upload <b>' + data.files[0].name +
-                                      '</b>. file exceeds maximum file size limit.')
+                                      '</b>. File exceeds maximum file size limit.')
                         );
 
                         return;
