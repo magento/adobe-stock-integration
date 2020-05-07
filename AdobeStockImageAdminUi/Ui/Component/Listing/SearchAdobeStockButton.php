@@ -34,7 +34,7 @@ class SearchAdobeStockButton implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if ($this->isAdobeStockIntegrationEnabled->execute()) {
+        if (!$this->isAdobeStockIntegrationEnabled->execute()) {
             return [];
         }
 
