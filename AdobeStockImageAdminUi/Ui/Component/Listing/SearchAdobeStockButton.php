@@ -11,7 +11,7 @@ use Magento\AdobeStockImageAdminUi\Model\IsAdobeStockIntegrationEnabled;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * ADobe Stock Search Button
+ * Adobe Stock Search Button
  */
 class SearchAdobeStockButton implements ButtonProviderInterface
 {
@@ -21,8 +21,6 @@ class SearchAdobeStockButton implements ButtonProviderInterface
     private $isAdobeStockIntegrationEnabled;
 
     /**
-     * Define block template
-     *
      * @param IsAdobeStockIntegrationEnabled $isAdobeStockIntegrationEnabled
      */
     public function __construct(
