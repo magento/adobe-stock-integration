@@ -85,7 +85,7 @@
     </container>
     <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <bookmark name="bookmarks"/>
-        <filterSearch name="fulltext"/>
+        <filterSearch name="fulltext" class="Magento\MediaGalleryUi\Ui\Component\Filters\Type\Search"/>
         <filters name="listing_filters">
             <filterInput name="path" provider="${ $.parentName }" sortOrder="100">
                 <settings>
@@ -234,7 +234,7 @@
         <column name="path">
             <settings>
                 <visible>false</visible>
-                <sortable>true</sortable>
+                <sortable>false</sortable>
             </settings>
         </column>
         <column name="directory_desc">
@@ -269,7 +269,7 @@
         <column name="title">
             <settings>
                 <visible>false</visible>
-                <sortable>true</sortable>
+                <sortable>false</sortable>
             </settings>
         </column>
         <column name="name_az">
