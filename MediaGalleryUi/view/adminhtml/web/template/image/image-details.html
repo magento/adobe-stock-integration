@@ -13,7 +13,7 @@
             <h3 class="image-title" data-bind="text: image().title"></h3>
             <div class="image-type">
                 <span class="source"><img if="image().source" class="adobe-stock-icon" data-bind="attr: { src: image().source }" /></span>
-                <span class="type" data-bind="text: image().content_type"></span>
+                <span class="type" data-ui-id="content-type" data-bind="text: image().content_type"></span>
             </div>
         </div>
         <div class="general-details image-details-section" if="image().details">
