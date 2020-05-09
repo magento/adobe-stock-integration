@@ -8,12 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup">
+    <actionGroup name="AdminEnhancedMediaGalleryImageDeleteActionGroup">
         <annotations>
-            <description>Delete image from the View Details panel</description>
+            <description>Delete image from the Media Gallery</description>
         </annotations>
 
-        <click selector="{{AdminEnhancedMediaGalleryViewDetailsSection.delete}}" stepKey="deleteImage"/>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.openContextMenu}}" stepKey="openContextMenu"/>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.delete}}" stepKey="deleteImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForDeleteModal"/>
         <click selector="{{AdminEnhancedMediaGalleryDeleteModalSection.confirmDelete}}" stepKey="confirmDelete"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
