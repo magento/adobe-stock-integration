@@ -9,6 +9,8 @@ namespace Magento\AdobeStockAdminUi\Test\Unit\Controller\Adminhtml\System\Config
 
 use Magento\AdobeStockAdminUi\Controller\Adminhtml\System\Config\TestConnection;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Filter\StripTags;
@@ -43,6 +45,11 @@ class TestConnectionTest extends TestCase
     private $stripTagsMock;
 
     /**
+     * @var RequestInterface|MockObject
+     */
+    private $request;
+
+    /**
      * @var TestConnection
      */
     private $testConnection;
@@ -53,6 +60,11 @@ class TestConnectionTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $context = $this->createMock(Context::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $context->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->request);
         $this->clientMock = $this->createMock(ClientInterface::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
         $this->stripTagsMock = $this->createMock(StripTags::class);
@@ -61,7 +73,8 @@ class TestConnectionTest extends TestCase
             [
                 'client' => $this->clientMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
-                'tagFilter' => $this->stripTagsMock
+                'tagFilter' => $this->stripTagsMock,
+                'context' => $context
             ]
         );
     }
@@ -71,6 +84,9 @@ class TestConnectionTest extends TestCase
      */
     public function testExecute(): void
     {
+        $this->request->expects($this->once())
+            ->method('getParams')
+            ->willReturn(['api_key' => 'the_api_key']);
         $this->clientMock->expects($this->once())
             ->method('testConnection')
             ->willReturn(true);
@@ -95,6 +111,9 @@ class TestConnectionTest extends TestCase
      */
     public function testExecuteWithError(): void
     {
+        $this->request->expects($this->once())
+            ->method('getParams')
+            ->willReturn(['api_key' => 'the_api_key']);
         $this->clientMock->expects($this->once())
             ->method('testConnection')
             ->willReturn(false);
