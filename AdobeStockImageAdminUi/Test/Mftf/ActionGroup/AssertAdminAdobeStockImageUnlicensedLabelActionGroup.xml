@@ -7,11 +7,12 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminAdobeStockImageSavedActionGroup">
-        <waitForPageLoad stepKey="waitForMaskToDisappear" />
-        <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="imageName" />
-        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
-        <waitForPageLoad stepKey="waitForMaskToDisappear1" />
-        <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$imageName})}}" stepKey="assertSavedImage" />
+    <actionGroup name="AssertAdminAdobeStockImageUnlicensedLabelActionGroup">
+        <seeElement selector="{{AdminEnhancedMediaGalleryImageSection.label}}" stepKey="seeImageLabel" />
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryImageSection.label}}" stepKey="grabImageLabel" />
+        <assertStringContainsString stepKey="assertUnlicensedLabel">
+            <actualResult type="variable">grabImageLabel</actualResult>
+            <expectedResult type="string">{{AdobeStockImageData.unlicensedText}}</expectedResult>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>

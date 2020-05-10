@@ -8,8 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup">
-        <click selector="{{AdminAdobeStockSection.slideOutPanelButton}}" stepKey="openAdobeStockPanel" />
+    <actionGroup name="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup">
+        <click selector="{{AdminAdobeStockSection.searchAdobeStockButton}}" stepKey="openAdobeStockPanel" />
         <waitForPageLoad stepKey="waitForAdobeStockPanelOpen"/>
     </actionGroup>
 </actionGroups>
