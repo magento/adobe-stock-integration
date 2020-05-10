@@ -8,8 +8,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEnhancedMediaGalleryImageDescriptionSection">
-        <element name="title" type="button" selector=".masonry-image-description .name"/>
-        <element name="contentType" type="button" selector=".masonry-image-description .type"/>
-        <element name="dimensions" type="button" selector=".masonry-image-description .dimensions" />
+        <element name="title" type="text" selector=".masonry-image-description .name"/>
+        <element name="contentType" type="text" selector=".masonry-image-description .type"/>
+        <element name="dimensions" type="text" selector=".masonry-image-description .dimensions" />
     </section>
 </sections>

@@ -29,7 +29,7 @@
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
 
-        <actionGroup ref="AdminEnhancedMediaGalleryAssertImageAttributesActionGroup" stepKey="assertImageAttributes">
+        <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="assertImageAttributes">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
     </test>
