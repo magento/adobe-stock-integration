@@ -30,7 +30,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotPreviewedLicensedImageToSave">
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImageToSave">
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
