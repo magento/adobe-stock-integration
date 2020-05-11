@@ -15,13 +15,10 @@
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/3839218"/>
             <description value="Admin should be able to save licensed image and not see unlicensed label"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_ims_signed"/>
+            <group value="adobe_stock_media_gallery_ims_signed"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
-                <argument name="enabled" value="1"/>
-            </actionGroup>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
