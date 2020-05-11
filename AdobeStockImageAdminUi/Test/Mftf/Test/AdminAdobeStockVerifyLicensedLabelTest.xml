@@ -12,7 +12,7 @@
             <features value="AdobeStockImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/708"/>
             <title value="User saves licensed image and verify there is no unlicensed label"/>
-            <testCaseId value="to-be-added"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/3839218"/>
             <description value="Admin should be able to save licensed image and not see unlicensed label"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_ims_signed"/>
