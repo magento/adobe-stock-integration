@@ -14,6 +14,7 @@
         </annotations>
 
         <click selector="{{AdminEnhancedMediaGalleryViewDetailsSection.delete}}" stepKey="deleteImage"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryViewDetailsSection.confirmDelete}}" stepKey="waitForConfirmation"/>
         <click selector="{{AdminEnhancedMediaGalleryViewDetailsSection.confirmDelete}}" stepKey="confirmDelete"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>

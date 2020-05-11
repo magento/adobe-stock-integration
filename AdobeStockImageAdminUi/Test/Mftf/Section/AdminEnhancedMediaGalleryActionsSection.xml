@@ -7,7 +7,7 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdminEnhancedMediaGalleryActions">
-        <element name="SearchAdobeStock" type="button" selector="[data-ui-id='search-adobe-stock-button']"/>
+    <section name="AdminEnhancedMediaGalleryActionsSection">
+        <element name="searchAdobeStock" type="button" selector="[data-ui-id='search-adobe-stock-button']"/>
     </section>
 </sections>
