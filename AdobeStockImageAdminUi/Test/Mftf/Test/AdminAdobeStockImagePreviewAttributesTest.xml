@@ -47,9 +47,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForNextImageToLoad"/>
 
         <!-- Assert that file # attribute changed "-->
-        <assertNotContains stepKey="assertAttributeFileChanged">
+        <assertStringNotContainsString stepKey="assertAttributeFileChanged">
             <actualResult type="string">{$getFileAttributeValue}</actualResult>
             <expectedResult type="string">AdminAdobeStockImagePreviewSection.attribute('File #')</expectedResult>
-        </assertNotContains>
+        </assertStringNotContainsString>
     </test>
 </tests>
