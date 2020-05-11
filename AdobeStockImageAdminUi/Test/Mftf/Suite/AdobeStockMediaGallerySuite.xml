@@ -8,7 +8,7 @@
 
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
-    <suite name="AdobeStockIntegrationSuite">
+    <suite name="AdobeStockMediaGallerySuite">
         <before>
             <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
