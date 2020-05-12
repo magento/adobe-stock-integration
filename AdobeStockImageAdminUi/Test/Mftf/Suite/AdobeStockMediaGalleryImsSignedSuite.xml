@@ -31,6 +31,7 @@
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserNotLogged"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <include>
             <group name="adobe_stock_media_gallery_ims_signed"/>
