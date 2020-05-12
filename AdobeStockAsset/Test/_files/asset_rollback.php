@@ -5,26 +5,14 @@
  */
 declare(strict_types=1);
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'media_asset_rollback.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'creator_rollback.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'category_rollback.php';
+
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 
 $objectManager = Bootstrap::getObjectManager();
-
-/** @var DeleteByPathInterface $deleteByPath */
-$deleteByPath = $objectManager->get(DeleteByPathInterface::class);
-$deleteByPath->execute('some/path.jpg');
-
-/** @var CreatorRepositoryInterface $creatorRepository */
-$creatorRepository = $objectManager->get(CreatorRepositoryInterface::class);
-$creatorRepository->deleteById(42);
-
-/** @var CategoryRepositoryInterface $categoryRepository */
-$categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
-$categoryRepository->deleteById(42);
-
 /** @var AssetRepositoryInterface $assetRepositoryRepository */
 $assetRepositoryRepository = $objectManager->get(AssetRepositoryInterface::class);
 $assetRepositoryRepository->deleteById(1);
