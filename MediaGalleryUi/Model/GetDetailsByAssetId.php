@@ -81,6 +81,7 @@ class GetDetailsByAssetId
     {
         $asset = current($this->getAssetById->execute([$assetId]));
 
+
         return [
             'image_url' => $this->getUrl($asset->getPath()),
             'title' => $asset->getTitle(),

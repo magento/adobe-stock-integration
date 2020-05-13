@@ -27,26 +27,25 @@ define([
             }).fail(function (message) {
                 deferred.reject(message);
             });
-
-        }
-
-        saveLicensedConfirmation(
-            pathUtility.generateImageName(title, id),
-            pathUtility.getImageExtension(contentType)
-        ).then(function (fileName) {
-            destinationPath = pathUtility.buildPath(directoryPath, fileName, contentType);
-            saveAction(
-                requestUrl,
-                id,
-                destinationPath
-            ).then(function () {
-                deferred.resolve(destinationPath);
-            }).fail(function (message) {
-                deferred.reject(message);
+        } else {
+            saveLicensedConfirmation(
+                pathUtility.generateImageName(title, id),
+                pathUtility.getImageExtension(contentType)
+            ).then(function (fileName) {
+                destinationPath = pathUtility.buildPath(directoryPath, fileName, contentType);
+                saveAction(
+                    requestUrl,
+                    id,
+                    destinationPath
+                ).then(function () {
+                    deferred.resolve(destinationPath);
+                }).fail(function (message) {
+                    deferred.reject(message);
+                });
+            }).fail(function (error) {
+                deferred.reject(error);
             });
-        }).fail(function (error) {
-            deferred.reject(error);
-        });
+        }
 
         return deferred.promise();
     };
