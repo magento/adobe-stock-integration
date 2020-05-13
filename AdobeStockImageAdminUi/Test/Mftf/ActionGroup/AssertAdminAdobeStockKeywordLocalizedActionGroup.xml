@@ -15,7 +15,7 @@
             <description>Verify that string is localized by regexp pattern with RU-ru locale</description>
         </annotations>
         <assertRegExp stepKey="checkThatKeywordLocalized">
-            <expectedResult type="string">/^[\p{L}]+$/u</expectedResult>
+            <expectedResult type="string">/[\x{0400}-\x{04FF}]/u</expectedResult>
             <actualResult type="string">stringTobeVerified</actualResult>
         </assertRegExp>
     </actionGroup>
