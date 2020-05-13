@@ -80,7 +80,7 @@ class GetDetailsByAssetId
     public function execute(int $assetId): array
     {
         $asset = current($this->getAssetById->execute([$assetId]));
-        
+
         return [
             'image_url' => $this->getUrl($asset->getPath()),
             'title' => $asset->getTitle(),
