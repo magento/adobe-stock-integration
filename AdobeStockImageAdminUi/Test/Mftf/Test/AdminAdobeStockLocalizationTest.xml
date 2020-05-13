@@ -43,10 +43,11 @@
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <wait time="5" stepKey="waitBeforeExpandSectionLoadFull"/>
-        <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertKeywordLocalized" />
-
-        <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="assertCategoryLocalized">
-            <argument name="attributeName" value="Индустрия"/>
+        <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertKeywordLocalized">
+             <argument name="stringToBeVerified" value="{{AdminAdobeStockImagePreviewSection.firstKeyword}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertCategoryLocalized">
+             <argument name="stringToBeVerified" value="{{imagePreviewCategoryText}}"/>
         </actionGroup>
     </test>
 </tests>
