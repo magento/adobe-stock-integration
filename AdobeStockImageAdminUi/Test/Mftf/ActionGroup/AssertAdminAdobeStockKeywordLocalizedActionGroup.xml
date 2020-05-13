@@ -16,7 +16,7 @@
         </annotations>
         <assertRegExp stepKey="checkThatKeywordLocalized">
             <expectedResult type="string">/[\x{0400}-\x{04FF}]/u</expectedResult>
-            <actualResult type="string">stringTobeVerified</actualResult>
+            <actualResult type="string">{{stringToBeVerified}}</actualResult>
         </assertRegExp>
     </actionGroup>
 </actionGroups>

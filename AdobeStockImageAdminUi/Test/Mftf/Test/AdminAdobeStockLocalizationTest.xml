@@ -43,11 +43,13 @@
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <wait time="5" stepKey="waitBeforeExpandSectionLoadFull"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.firstKeyword}}" stepKey="grabKeyword"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.imagePreviewCategoryText}}" stepKey="grabCategoryText"/>
         <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertKeywordLocalized">
-             <argument name="stringToBeVerified" value="{{AdminAdobeStockImagePreviewSection.firstKeyword}}"/>
+             <argument name="stringToBeVerified" value="{$grabKeyword}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertCategoryLocalized">
-             <argument name="stringToBeVerified" value="{{AdminAdobeStockImagePreviewSection.imagePreviewCategoryText}}"/>
+             <argument name="stringToBeVerified" value="{$grabCategoryText}"/>
         </actionGroup>
     </test>
 </tests>
