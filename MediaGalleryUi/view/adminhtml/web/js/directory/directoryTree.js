@@ -41,7 +41,6 @@ define([
             this.waitForContainer(function () {
                 this.getJsonTree();
                 this.initEvents();
-                this.checkChipFiltersState();
             }.bind(this));
 
             return this;
@@ -85,6 +84,14 @@ define([
         initEvents: function () {
             this.overrideMultiselectBehavior();
 
+            $(this.directoryTreeSelector).on('loaded.jstree', function () {
+                this.checkChipFiltersState();
+            }.bind(this));
+
+            $(window).on('reload.MediaGallery', function () {
+                this.checkChipFiltersState();
+            }.bind(this));
+
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
                 var path = $(data.rslt.obj).data('path');
 
@@ -96,10 +103,17 @@ define([
          * Verify directory filter on init event, select folder per directory filter state
          */
         checkChipFiltersState: function () {
-            if (!_.isUndefined(this.filterChips().filters.path) && this.filterChips().filters.path !== '') {
+            var currentFilterPath = this.filterChips().filters.path,
+                currentTreePath = window.MediabrowserUtility.currentTreePath;
+
+            if (!_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
+                currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category') {
                 $(this.directoryTreeSelector).on('loaded.jstree', function () {
                     this.locateNode(this.filterChips().filters.path);
                 }.bind(this));
+            } else {
+                $(this.directoryTreeSelector).jstree('get_selected').attr('id') === currentTreePath ||
+                    this.locateNode(currentTreePath);
             }
         },
 
