@@ -48,7 +48,7 @@ define([
          */
         authWindow = window.adobeIMSAuthWindow = window.open(
             config.url,
-            '',
+            'authorization_widnow',
             buildWindowParams(
                 config.popupWindowParams || {
                     width: 500,
@@ -76,11 +76,6 @@ define([
             var responseData;
 
             try {
-
-                if (authWindow.document.domain !== document.domain ||
-                    authWindow.document.readyState !== 'complete') {
-                    return;
-                }
 
                 /**
                  * If within 10 seconds the result is not received, then reject the request
