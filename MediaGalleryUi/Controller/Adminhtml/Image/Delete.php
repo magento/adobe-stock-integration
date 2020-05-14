@@ -106,7 +106,7 @@ class Delete extends Action implements HttpPostActionInterface
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully removed the %image', ['image' => $asset->getTitle()]),
+                'message' => __('You have successfully removed the image "%image"', ['image' => $asset->getTitle()]),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
