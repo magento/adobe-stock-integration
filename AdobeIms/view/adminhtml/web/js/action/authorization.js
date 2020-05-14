@@ -121,7 +121,7 @@ define([
         /**
          * Watch a result 1 time per second
          */
-        watcherId = setInterval(startHandle, 100);
+        watcherId = setInterval(startHandle, 1000);
 
         return deferred.promise();
     };
