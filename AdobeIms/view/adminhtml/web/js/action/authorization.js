@@ -62,8 +62,6 @@ define([
          * Stop handle
          */
         function stopHandle() {
-            console.log(watcherId);
-
             // Clear timers
             clearTimeout(stopWatcherId);
             clearInterval(watcherId);
