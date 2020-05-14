@@ -182,7 +182,7 @@
             </filterInput>
         </filters>
     </listingToolbar>
-    <columns name="adobe_stock_images_columns" component="Magento_Ui/js/grid/masonry" template="ui/grid/masonry">
+    <columns name="adobe_stock_images_columns" component="Magento_AdobeStockImageAdminUi/js/components/grid/masonry" template="ui/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="containerId" xsi:type="string">adobe-stock-images-masonry-grid</item>
@@ -214,7 +214,7 @@
                     <item name="mediaGallerySearchInput" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.fulltext</item>
                     <item name="mediaGalleryListingFilters" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.listing_filters</item>
                     <item name="listingPaging" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.listing_paging</item>
-		</item>
+                </item>
             </argument>
             <settings>
                 <label translate="true">Image Preview</label>

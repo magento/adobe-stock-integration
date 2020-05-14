@@ -44,6 +44,7 @@ define([
                 '${ $.provider }:data.items': 'updateActions'
             },
             modules: {
+                masonry: '${ $.parentName }',
                 login: '${ $.loginProvider }',
                 preview: '${ $.parentName }.preview',
                 overlay: '${ $.parentName }.overlay',
@@ -82,6 +83,8 @@ define([
                 updatedDisplayedRecord = this.preview().displayedRecord(),
                 records = this.source().data.items,
                 index;
+
+            this.masonry().updateStylesDynamically();
 
             if (typeof displayedRecord.id === 'undefined') {
                 return;
