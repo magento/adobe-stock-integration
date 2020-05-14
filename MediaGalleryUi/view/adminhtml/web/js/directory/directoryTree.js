@@ -72,6 +72,19 @@ define([
         },
 
         /**
+         * Wait for component to initialize
+         */
+        waitForComponent: function (callback, component) {
+            if (_.isUndefined(component)) {
+                setTimeout(function () {
+                    this.waitForComponent(callback, component);
+                }.bind(this), 100);
+            } else {
+                callback();
+            }
+        },
+
+        /**
          * Remove ability to multiple select on nodes
          */
         overrideMultiselectBehavior: function () {
@@ -162,7 +175,10 @@ define([
          */
         selectFolder: function (path) {
             this.activeNode(path);
-            this.directories().setActive(path);
+            this.waitForComponent(function () {
+                this.directories().setActive(path);
+            }.bind(this), this.directories());
+
             this.applyFilter(path);
         },
 
