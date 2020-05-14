@@ -8,9 +8,6 @@ define([
 ], function ($) {
     'use strict';
 
-    var watcherId,
-        stopWatcherId;
-
     /**
      * Build window params
      * @param {Object} windowParams
@@ -35,7 +32,9 @@ define([
 
     return function (config) {
         var authWindow,
-            deferred = $.Deferred();
+            deferred = $.Deferred(),
+            watcherId,
+            stopWatcherId;
 
         /**
          * Close authorization window if already opened
@@ -78,6 +77,11 @@ define([
 
             try {
 
+                if (authWindow.document.domain !== document.domain ||
+                    authWindow.document.readyState !== 'complete') {
+                    return;
+                }
+
                 /**
                  * If within 10 seconds the result is not received, then reject the request
                  */
@@ -94,15 +98,15 @@ define([
                     return;
                 }
 
+                stopHandle();
+
                 if (responseData[config.callbackParsingParams.codeIndex] ===
                     config.callbackParsingParams.successCode) {
-                    stopHandle();
                     deferred.resolve({
                         isAuthorized: true,
                         lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]
                     });
                 } else {
-                    stopHandle();
                     deferred.reject(responseData[config.callbackParsingParams.messageIndex]);
                 }
             } catch (e) {

@@ -17,6 +17,9 @@
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579363"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_login_logout"/>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1065"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
