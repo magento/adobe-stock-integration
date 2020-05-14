@@ -62,6 +62,8 @@ define([
          * Stop handle
          */
         function stopHandle() {
+            console.log(watcherId);
+
             // Clear timers
             clearTimeout(stopWatcherId);
             clearInterval(watcherId);
@@ -78,11 +80,6 @@ define([
 
             try {
 
-                if (authWindow.document.domain !== document.domain ||
-                    authWindow.document.readyState !== 'complete') {
-                    deferred.reject(new Error('Wrong url address'));
-                }
-
                 /**
                  * If within 10 seconds the result is not received, then reject the request
                  */
@@ -96,18 +93,18 @@ define([
                 );
 
                 if (!responseData) {
-                    deferred.reject(new Error('Empty response'));
+                    return;
                 }
-
-                stopHandle();
 
                 if (responseData[config.callbackParsingParams.codeIndex] ===
                     config.callbackParsingParams.successCode) {
+                    stopHandle();
                     deferred.resolve({
                         isAuthorized: true,
                         lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]
                     });
                 } else {
+                    stopHandle();
                     deferred.reject(responseData[config.callbackParsingParams.messageIndex]);
                 }
             } catch (e) {
@@ -126,7 +123,7 @@ define([
         /**
          * Watch a result 1 time per second
          */
-        watcherId = setInterval(startHandle, 1000);
+        watcherId = setInterval(startHandle, 100);
 
         return deferred.promise();
     };
