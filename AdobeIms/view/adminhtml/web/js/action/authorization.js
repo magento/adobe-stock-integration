@@ -37,8 +37,6 @@ define([
         var authWindow,
             deferred = $.Deferred();
 
-        watcherId = setInterval(startHandle, 1000);
-
         /**
          * Close authorization window if already opened
          */
@@ -124,6 +122,11 @@ define([
                 }
             }
         }
+
+        /**
+         * Watch a result 1 time per second
+         */
+        watcherId = setInterval(startHandle, 1000);
 
         return deferred.promise();
     };
