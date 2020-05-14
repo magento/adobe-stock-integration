@@ -8,6 +8,9 @@ define([
 ], function ($) {
     'use strict';
 
+    var watcherId,
+        stopWatcherId;
+
     /**
      * Build window params
      * @param {Object} windowParams
@@ -32,9 +35,9 @@ define([
 
     return function (config) {
         var authWindow,
-            deferred = $.Deferred(),
-            watcherId,
-            stopWatcherId;
+            deferred = $.Deferred();
+
+        watcherId = setInterval(startHandle, 1000);
 
         /**
          * Close authorization window if already opened
@@ -48,7 +51,7 @@ define([
          */
         authWindow = window.adobeIMSAuthWindow = window.open(
             config.url,
-            '',
+            'authorization_widnow',
             buildWindowParams(
                 config.popupWindowParams || {
                     width: 500,
@@ -79,7 +82,7 @@ define([
 
                 if (authWindow.document.domain !== document.domain ||
                     authWindow.document.readyState !== 'complete') {
-                    return;
+                    deferred.reject(new Error('Wrong url address'));
                 }
 
                 /**
@@ -95,7 +98,7 @@ define([
                 );
 
                 if (!responseData) {
-                    return;
+                    deferred.reject(new Error('Empty response'));
                 }
 
                 stopHandle();
@@ -121,11 +124,6 @@ define([
                 }
             }
         }
-
-        /**
-         * Watch a result 1 time per second
-         */
-        watcherId = setInterval(startHandle, 1000);
 
         return deferred.promise();
     };

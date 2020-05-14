@@ -27,7 +27,6 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
             <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
         </actionGroup>
