@@ -20,6 +20,7 @@ define([
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '.adobe-search-images-modal',
             activeMediaGallerySelector: 'aside.modal-slide.adobe-stock-modal._show',
+            lastOpenedImage: false,
             modules: {
                 keywords: '${ $.name }_keywords',
                 related: '${ $.name }_related',
