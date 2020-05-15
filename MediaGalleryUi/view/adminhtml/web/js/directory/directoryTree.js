@@ -104,7 +104,7 @@ define([
          */
         checkChipFiltersState: function () {
             var currentFilterPath = this.filterChips().filters.path,
-                currentTreePath = window.MediabrowserUtility.currentTreePath;
+                currentTreePath = atob(window.MediabrowserUtility.pathId.replace(/--|,,/, ''));
 
             if (!_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
                 currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category') {

@@ -52,10 +52,7 @@ class WysiwygDefaultConfigOpenDialogUrlTest extends TestCase
         $imageHelper = $this->objectManger->create(Images::class);
         $this->filesBrowserWindowUrl = $url->getUrl(
             'media_gallery/index/index',
-            [
-                'current_tree_path' => $imageHelper->idEncode(Config::IMAGE_DIRECTORY),
-                'tree_path' => Config::IMAGE_DIRECTORY . '&'
-            ]
+            ['current_tree_path' => $imageHelper->idEncode(Config::IMAGE_DIRECTORY)]
         );
     }
 
