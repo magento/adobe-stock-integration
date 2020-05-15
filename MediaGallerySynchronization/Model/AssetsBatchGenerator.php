@@ -76,7 +76,7 @@ class AssetsBatchGenerator
         $i = 0;
         $batch = [];
 
-        /** @var \SplFileInfo $item */
+        /** @var \SplFileInfo $file */
         foreach ($this->getAssetsIterator->execute($this->getMediaDirectory()->getAbsolutePath()) as $file) {
             if (!$this->isApplicable($file->getPathName())) {
                 continue;
