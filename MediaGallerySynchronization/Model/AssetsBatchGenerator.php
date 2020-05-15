@@ -9,6 +9,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Batch generator for filesystem files, get files by providet size of batch
@@ -43,22 +44,30 @@ class AssetsBatchGenerator
     private $assetsPaths;
 
     /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
      * @var ResolveNonExistedAssets
      */
     private $resolveNonExistedAssets;
     
     /**
+     * @param LoggerInterface $log
      * @param ResolveNonExistedAssets $resolveNonExistedAssets
      * @param IsPathBlacklistedInterface $isPathBlacklisted
      * @param Filesystem $filesystem
      * @param GetAssetsIterator $assetsIterator
      */
     public function __construct(
+        LoggerInterface $log,
         ResolveNonExistedAssets $resolveNonExistedAssets,
         IsPathBlacklistedInterface $isPathBlacklisted,
         Filesystem $filesystem,
         GetAssetsIterator $assetsIterator
     ) {
+        $this->log = $log;
         $this->resolveNonExistedAssets = $resolveNonExistedAssets;
         $this->isPathBlacklisted = $isPathBlacklisted;
         $this->getAssetsIterator = $assetsIterator;

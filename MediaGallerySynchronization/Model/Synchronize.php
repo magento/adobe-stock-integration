@@ -71,11 +71,11 @@ class Synchronize implements SynchronizeInterface
                         $this->log->critical($exception);
                         throw new LocalizedException(
                             __(
-                            'Could not synchronize assets: %assets',
-                            [
-                                'assets' => implode(', ', $batch)
-                            ]
-                        )
+                                'Could not synchronize assets: %assets',
+                                [
+                                    'assets' => implode(', ', $batch)
+                                ]
+                            )
                         );
                     }
                 }
