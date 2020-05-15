@@ -1,8 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.g
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/* global Base64 */
 define([
     'jquery',
     'uiComponent',
@@ -104,7 +105,7 @@ define([
          */
         checkChipFiltersState: function () {
             var currentFilterPath = this.filterChips().filters.path,
-                currentTreePath = atob(window.MediabrowserUtility.pathId.replace(/--|,,/, ''));
+                currentTreePath = Base64.decode(window.MediabrowserUtility.pathId.replace(/--|,,/, ''));
 
             if (!_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
                 currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category') {
