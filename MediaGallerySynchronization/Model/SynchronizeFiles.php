@@ -52,25 +52,33 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      */
     public function execute(array $files): void
     {
-        $failedFiles = [];
-        foreach ($files as $file) {
-            try {
-                $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
-            } catch (\Exception $exception) {
-                $this->log->critical($exception);
-                $failedFiles[] = $file->getFilename();
-            }
-        }
-
-        if (!empty($failedFiles)) {
+        try {
+            $this->saveAsset->execute($this->createAsstesFromFiles($files));
+        } catch (\Exception $exception) {
+            $this->log->critical($exception);
             throw new LocalizedException(
                 __(
                     'Could not update media assets for files: %files',
                     [
-                        'files' => implode(', ', $failedFiles)
+                        'files' => implode(', ', $files)
                     ]
                 )
             );
         }
+    }
+
+    /**
+     * Create array with assets based on file info
+     *
+     * @param array $files
+     */
+    private function createAsstesFromFiles(array $files): array
+    {
+        $assets = [];
+        foreach ($files as $file) {
+            $assets[] = $this->createAssetFromFile->execute($file);
+        }
+        
+        return $assets;
     }
 }
