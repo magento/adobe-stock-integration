@@ -2,6 +2,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* global Base64 */
 define([
     'jquery',
     'Magento_Ui/js/modal/confirm'
@@ -9,7 +11,7 @@ define([
     'use strict';
 
     return {
-        jsTreeRootFolderName: 'Storage Root',
+        jsTreeRootFolderId: 'root',
         jsTreeFolderNameMaxLength: 20,
 
         /**
@@ -39,47 +41,25 @@ define([
          * @param {String} path
          */
         selectFolder: function (path) {
-            var i,
-                folderName,
-                openFolderChildrenButton,
-                imageFolder,
+            var imageFolder,
+                pathId,
                 imagePath = path.replace(/^\/+/, ''),
-                imagePathParts = imagePath.split('/'),
-                imageFolderName = this.jsTreeRootFolderName;
+                folderPathParts = imagePath.split('/').slice(0,-1);
 
             $.ajaxSetup({
                 async: false
             });
 
-            if (imagePathParts.length > 1) {
-                imageFolderName = imagePathParts[imagePathParts.length - 2];
-
-                for (i = 0; i < imagePathParts.length - 2; i++) {
-                    folderName = imagePathParts[i];
-
-                    /* folder name is being cut in file browser */
-                    // eslint-disable-next-line max-depth
-                    if (folderName.length > this.jsTreeFolderNameMaxLength) {
-                        folderName = folderName.substring(0, this.jsTreeFolderNameMaxLength) + '...';
-                    }
-
-                    //var folderSelector = ".jstree a:contains('" + folderName + "')";
-                    openFolderChildrenButton = $('.jstree a:contains("' + folderName + '")').prev('.jstree-icon');
-
-                    // eslint-disable-next-line max-depth
-                    if (openFolderChildrenButton.length) {
-                        openFolderChildrenButton.click();
-                    }
-                }
+            if (folderPathParts.length > 1) {
+                this.openFolderTree(folderPathParts);
             }
 
-            //select folder
-            imageFolder = $('.jstree a').filter(function () {
-                return $.trim($(this).text()) === imageFolderName;
-            });
+            pathId = this.getPathId(folderPathParts.join('/'));
+            imageFolder = $('.jstree li[data-id="' + pathId + '"]').children('a');
 
             if (!imageFolder.length) {
-                imageFolder = $('.jstree a:contains("' + this.jsTreeRootFolderName + '")');
+                imageFolder = $('.jstree li[data-id="' + this.jsTreeRootFolderName + '"]')
+                    .children('a');
             }
 
             if (imageFolder.length) {
@@ -109,6 +89,44 @@ define([
                     }
                 }]
             });
+        },
+
+        /**
+         * Open folder Tree
+         *
+         * @param {Array} folderPathParts
+         */
+        openFolderTree: function(folderPathParts) {
+            var i,
+                pathId,
+                openFolderButton,
+                folderPath = '';
+
+            for (i = 0; i < folderPathParts.length -1; i++) {
+                if (folderPath === '') {
+                    folderPath = folderPathParts[i];
+                } else {
+                    folderPath = folderPath+'/'+folderPathParts[i];
+                }
+                pathId = this.getPathId(folderPath);
+                openFolderButton = $('.jstree li[data-id="' + pathId + '"]').children('.jstree-icon');
+                if (openFolderButton.length) {
+                    openFolderButton.click();
+                }
+            }
+        },
+
+        /**
+         * Encode folder path
+         *
+         * {String} path
+         * @returns {String}
+         */
+        getPathId: function (path) {
+            return Base64.encode(path)
+                .replace(/\+/g,':')
+                .replace(/\//g,'_')
+                .replace(/=/g,'-');
         }
     };
 });
