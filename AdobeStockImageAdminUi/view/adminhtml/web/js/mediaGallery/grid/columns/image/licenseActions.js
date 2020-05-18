@@ -5,11 +5,11 @@
 define([
     'jquery',
     'underscore',
-    'Magento_Ui/js/modal/alert',
     'Magento_MediaGalleryUi/js/grid/columns/image/actions',
     'Magento_MediaGalleryUi/js/action/getDetails',
-    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus'
-], function ($, _, uiAlert, Action, getDetails, getLicenseStatus) {
+    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus',
+    'mage/translate'
+], function ($, _, Action, getDetails, getLicenseStatus) {
     'use strict';
 
     return Action.extend({
@@ -104,23 +104,18 @@ define([
                         ).then(function () {
                             this.image().actions().login().getUserQuota();
                             this.imageModel().reloadGrid();
+                            this.imageModel().addMessage('success', $.mage.__('The image has been licensed.'));
                         }.bind(this)).fail(function (error) {
                             if (error) {
-                                uiAlert({
-                                    content: error
-                                });
+                                this.imageModel().addMessage('error', error);
                             }
                         });
                     }.bind(this));
                 }.bind(this)).fail(function (message) {
-                    uiAlert({
-                        content: message
-                    });
+                    this.imageModel().addMessage('error', message);
                 });
             }.bind(this)).fail(function (error) {
-                uiAlert({
-                    content: error
-                });
+                this.imageModel().addMessage('error', error);
             });
         }
     });
