@@ -15,9 +15,6 @@
             <description value="User saves previously licensed image into Magento Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_ims_signed"/>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1151" />
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -25,11 +22,14 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
+            <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForNotPreviewedLicensedImageToSave">
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandLicensedImage"/>
+        <waitForElementVisible selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="waitForSaveButton"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForPromptModal" />
         <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName" />
