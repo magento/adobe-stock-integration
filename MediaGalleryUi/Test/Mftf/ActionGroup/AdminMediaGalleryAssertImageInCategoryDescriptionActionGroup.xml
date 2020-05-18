@@ -10,10 +10,21 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryAssertImageInCategoryDescriptionActionGroup">
         <arguments>
+            <argument name="categoryEntity" defaultValue="SimpleSubCategory"/>
             <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>
         </arguments>
-        <click selector="#togglecategory_form_description" stepKey="clickShowHideBtn"/>
-        <seeElement selector="{{imageName}}" stepKey="seeImageElement"/>
-        <click selector="#togglecategory_form_description" stepKey="clickShowHideBtnToShowWysiwyg"/>
+        <annotations>
+            <description>Navigates to the category page on the storefront and asserts that the image is present in description.</description>
+        </annotations>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="openHomePage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryEntity.name)}}" stepKey="toCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPage"/>
+        <grabTextFrom selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="categoryDescription"/>
+        <assertContains stepKey="assertCategoryDescriptionCOntainsIMage">
+            <expectedResult type="string">{{imageName}}</expectedResult>
+            <actualResult type="variable">$categoryDescription</actualResult>
+        </assertContains>
     </actionGroup>
 </actionGroups>
