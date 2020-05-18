@@ -138,7 +138,7 @@ define([
                         styles: function () {}
                     },
                     returnValue = {
-                        top: '150px'
+                        top: '160px'
                     };
 
                 spyOn(record, 'styles').and.callFake(function () {
