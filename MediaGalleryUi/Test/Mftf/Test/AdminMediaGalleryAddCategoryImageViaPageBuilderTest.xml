@@ -16,14 +16,15 @@
             <description value="User add category image via Page builder"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_media_gallery"/>
-            <group value="pagebuilder"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set cms/pagebuilder/enabled 1" stepKey="enablePageBuilder"/>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
             <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
                 <argument name="category" value="$$category$$"/>
             </actionGroup>
