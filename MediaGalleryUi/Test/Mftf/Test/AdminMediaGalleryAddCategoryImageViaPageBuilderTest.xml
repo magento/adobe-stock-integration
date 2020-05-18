@@ -7,33 +7,37 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryAddCategoryImageTest">
+    <test name="AdminMediaGalleryAddCategoryImageViaPageBuilderTest">
         <annotations>
             <features value="AdminMediaGalleryImagePanel"/>
-            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1073"/>
-            <title value="User add category image via wysiwyg"/>
-            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4484351"/>
-            <description value="User add category image via wysiwyg"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1071"/>
+            <title value="User add category image via Page builder"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4487227"/>
+            <description value="User add category image via Page builder"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_media_gallery"/>
+            <group value="pagebuilder"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </before>
         <after>
-            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
             <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
                 <argument name="category" value="$$category$$"/>
             </actionGroup>
-            <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="AdminCategoriesOpenContentSectionActionGroup" stepKey="expandContentSection"/>
+            <actionGroup ref="AdminClickEditWithPageBuilderActionGroup" stepKey="clickEditWithPageBuilderFromCategoryPage"/>
+            <actionGroup ref="expandPageBuilderPanelMenuSection" stepKey="expandPageBuilderPanelMenuSection">
+                <argument name="contentType" value="PageBuilderImageContentType"/>
+            </actionGroup>
+            <actionGroup ref="dragContentTypeToStage" stepKey="dragImageIntoStage">
+                <argument name="contentType" value="PageBuilderImageContentType"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenMediaGalleryPageBuilderFromCategoryPageActionGroup" stepKey="openPageBuilderFromCategoryPage"/>
             <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
-            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
-            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -41,7 +45,15 @@
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$category$$"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminCategoriesOpenContentSectionActionGroup" stepKey="expandContentSection"/>
+        <actionGroup ref="AdminClickEditWithPageBuilderActionGroup" stepKey="clickEditWithPageBuilderFromCategoryPage"/>
+        <actionGroup ref="expandPageBuilderPanelMenuSection" stepKey="expandPageBuilderPanelMenuSection">
+            <argument name="contentType" value="PageBuilderImageContentType"/>
+        </actionGroup>
+        <actionGroup ref="dragContentTypeToStage" stepKey="dragImageIntoStage">
+            <argument name="contentType" value="PageBuilderImageContentType"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenMediaGalleryPageBuilderFromCategoryPageActionGroup" stepKey="openPageBuilderFromCategoryPage"/>
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
         <actionGroup ref="AdminAdobeStockImagePreviewConditionalCloseActionGroup" stepKey="closePreviewIfOpened"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
@@ -50,7 +62,7 @@
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImageInGrid"/>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImageInGridToVerifyAddSelected"/>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="exitPageBuilderFullScreen" stepKey="saveEditPanelSettings"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField"/>
     </test>
