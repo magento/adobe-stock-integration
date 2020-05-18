@@ -16,9 +16,9 @@
             <description value="Admin User saved licensed image then logout and try license image again"/>
             <stories value="Admin User saved licensed image then logout and try license image again"/>
             <severity value="CRITICAL"/>
-            <group value="adobe_stock_integration_ims_signed"/>
+            <group value="adobe_stock_integration_login_logout"/>
             <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1151" />
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1065"/>
             </skip>
         </annotations>
         <before>
@@ -28,17 +28,17 @@
         </before>
         <after>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
-            <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
-            <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
         </after>
-
+        <actionGroup ref="AdminAdobeStockImsConditionLogoutActionGroup" stepKey="ensureUserNotLogged"/>
+        <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
+        <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
+        <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
+        <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
+         
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForLicensedImage">
             <argument name="query" value="{{AdobeStockLicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
-
-        <waitForElement selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" time="30" stepKey="waitForSaveLicensedButton"/>
         <actionGroup ref="AdminAdobeStockSaveLicensedActionGroup" stepKey="openTheSaveImagePreviewPopup"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AssertAdminImageIsVisibleInMediaGalleryActionGroup" stepKey="checkIfTheSavedImagesIsAvailable"/>
@@ -54,9 +54,10 @@
         <seeElement selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="seeSavePreviewButton"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.licenseAndSave}}" stepKey="clickLicenseAndSaveButton"/>
 
-        <switchToNextTab stepKey="switchToLoginAdobeIms"/>
+        <switchToWindow userInput="authorization_widnow" stepKey="switchToCloseWindow"/>
         <seeElement selector="{{AdminAdobeStockSection.adobeImsPopupUserSignIn}}" stepKey="seeEmailField"/>
         <seeElement selector="{{AdminAdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="seePasswordField"/>
+        <closeTab stepKey="closeAuthorizationWindow"/>
         <switchToPreviousTab stepKey="switchToImageGrid"/>
     </test>
 </tests>

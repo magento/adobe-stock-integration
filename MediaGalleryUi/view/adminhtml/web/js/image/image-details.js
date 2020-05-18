@@ -53,7 +53,7 @@ define([
                     this.openImageDetailsModal();
                 }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);
-                });
+                }.bind(this));
 
                 return;
             }
