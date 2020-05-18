@@ -48,7 +48,7 @@ define([
          */
         authWindow = window.adobeIMSAuthWindow = window.open(
             config.url,
-            '',
+            'authorization_widnow',
             buildWindowParams(
                 config.popupWindowParams || {
                     width: 500,
