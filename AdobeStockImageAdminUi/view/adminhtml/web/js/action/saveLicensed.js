@@ -28,6 +28,7 @@ define([
                 deferred.reject(message);
             });
 
+            return deferred.promise();
         }
 
         saveLicensedConfirmation(
