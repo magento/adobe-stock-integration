@@ -105,15 +105,21 @@ define([
          */
         checkChipFiltersState: function () {
             var currentFilterPath = this.filterChips().filters.path,
-                currentTreePath = Base64.decode(window.MediabrowserUtility.pathId.replace(/--|,,/, ''));
+                isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
+                selectedId =  $(this.directoryTreeSelector).jstree('get_selected').attr('id'),
+                currentTreePath;
+
+            if (!isMediaBrowser) {
+                currentFilterPath === '' || this.locateNode(currentFilterPath);
+
+                return;
+            }
 
             if (this.isFiltersApllied(currentFilterPath)) {
-                $(this.directoryTreeSelector).on('loaded.jstree', function () {
-                    this.locateNode(this.filterChips().filters.path);
-                }.bind(this));
+                selectedId === currentFilterPath || this.locateNode(currentFilterPath);
             } else {
-                $(this.directoryTreeSelector).jstree('get_selected').attr('id') === currentTreePath ||
-                    this.locateNode(currentTreePath);
+                currentTreePath = Base64.decode(window.MediabrowserUtility.pathId.replace(/--|,,/, ''));
+                selectedId === currentTreePath || this.locateNode(currentTreePath);
             }
         },
 
