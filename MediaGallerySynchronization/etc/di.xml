@@ -17,7 +17,7 @@
     </type>
     <type name="Magento\MediaGallerySynchronization\Model\Synchronize">
         <arguments>
-            <argument name="batchSize" xsi:type="number">10</argument>
+            <argument name="batchSize" xsi:type="number">100</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Console\CommandListInterface">

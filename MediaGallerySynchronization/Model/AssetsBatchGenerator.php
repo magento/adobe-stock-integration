@@ -47,28 +47,20 @@ class AssetsBatchGenerator
      * @var LoggerInterface
      */
     private $log;
-
-    /**
-     * @var ResolveNonExistedAssets
-     */
-    private $resolveNonExistedAssets;
     
     /**
      * @param LoggerInterface $log
-     * @param ResolveNonExistedAssets $resolveNonExistedAssets
      * @param IsPathBlacklistedInterface $isPathBlacklisted
      * @param Filesystem $filesystem
      * @param GetAssetsIterator $assetsIterator
      */
     public function __construct(
         LoggerInterface $log,
-        ResolveNonExistedAssets $resolveNonExistedAssets,
         IsPathBlacklistedInterface $isPathBlacklisted,
         Filesystem $filesystem,
         GetAssetsIterator $assetsIterator
     ) {
         $this->log = $log;
-        $this->resolveNonExistedAssets = $resolveNonExistedAssets;
         $this->isPathBlacklisted = $isPathBlacklisted;
         $this->getAssetsIterator = $assetsIterator;
         $this->filesystem = $filesystem;
@@ -90,7 +82,6 @@ class AssetsBatchGenerator
             if (!$this->isApplicable($file->getPathName())) {
                 continue;
             }
-            $this->assetsPaths[] = $this->getRelativePath($file->getPathName(), $file->getFileName());
 
             $batch[] = $file;
             if (++$i == $size) {
@@ -102,8 +93,6 @@ class AssetsBatchGenerator
         if (count($batch) > 0) {
             yield $batch;
         }
-        
-        $this->resolveNonExistedAssets->execute($this->assetsPaths);
     }
 
     /**
@@ -123,20 +112,6 @@ class AssetsBatchGenerator
             $this->log->critical($exception);
             return false;
         }
-    }
-
-    /**
-     * Return asset's relative path
-     *
-     * @param string $assetPath
-     * @param string $fileName
-     * @return string
-     */
-    private function getRelativePath(string $assetPath, string $fileName): string
-    {
-        $relativePath = $this->getMediaDirectory()->getRelativePath($assetPath);
-
-        return $relativePath === $fileName ? '/' . $relativePath : $relativePath;
     }
 
     /**

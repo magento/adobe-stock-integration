@@ -56,14 +56,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
             $this->saveAsset->execute($this->createAsstesFromFiles($files));
         } catch (\Exception $exception) {
             $this->log->critical($exception);
-            throw new LocalizedException(
-                __(
-                    'Could not update media assets for files: %files',
-                    [
-                        'files' => implode(', ', $files)
-                    ]
-                )
-            );
+            throw new LocalizedException(__('Could not update media assets'), $exception);
         }
     }
 
