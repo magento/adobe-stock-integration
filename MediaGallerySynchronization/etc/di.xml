@@ -22,7 +22,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\Value">
-        <plugin name="admin_system_config_adobe_stock_save_plugin" type="Magento\MediaGallerySynchronization\Plugin\MediaGallerySyncTrigger"/>
-    </type>
 </config>
