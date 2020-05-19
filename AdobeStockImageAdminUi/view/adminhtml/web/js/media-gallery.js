@@ -102,7 +102,7 @@ define([
                 openFolderButton,
                 folderPath = '';
 
-            for (i = 0 ; i < folderPathParts.length - 1; i++) {
+            for (i = 0; i < folderPathParts.length - 1; i++) {
                 if (folderPath === '') {
                     folderPath = folderPathParts[i];
                 } else {
