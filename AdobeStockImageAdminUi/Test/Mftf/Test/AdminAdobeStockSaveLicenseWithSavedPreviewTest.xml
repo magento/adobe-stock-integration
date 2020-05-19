@@ -18,9 +18,6 @@
             <description value="User saves previously licensed image with saved preview into Magento Media Gallery"/>
             <severity value="AVERAGE"/>
             <group value="adobe_stock_integration"/>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
