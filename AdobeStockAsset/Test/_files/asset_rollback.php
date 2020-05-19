@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'media_asset_rollback.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'creator_rollback.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'category_rollback.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'media_asset_rollback.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'creator_rollback.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'category_rollback.php';
 
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;

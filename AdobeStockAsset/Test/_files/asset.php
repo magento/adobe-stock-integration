@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'media_asset.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'creator.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'category.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'media_asset.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'creator.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'category.php';
 
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
