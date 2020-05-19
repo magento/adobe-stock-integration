@@ -219,9 +219,16 @@
             </settings>
         </column>
         <column name="path">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
             <settings>
                 <visible>false</visible>
-                <sortable>false</sortable>
+                <sortable>true</sortable>
             </settings>
         </column>
         <column name="directory_desc">
@@ -254,9 +261,16 @@
             </settings>
         </column>
         <column name="title">
+           <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
             <settings>
                 <visible>false</visible>
-                <sortable>false</sortable>
+                <sortable>true</sortable>
             </settings>
         </column>
         <column name="name_az">
@@ -268,7 +282,7 @@
                 </item>
             </argument>
             <settings>
-                <label translate="true">Name A-Z</label>
+                <label translate="true">Name: A to Z</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
@@ -283,7 +297,7 @@
                 </item>
             </argument>
             <settings>
-                <label translate="true">Name Z-A</label>
+                <label translate="true">Name: Z to A</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>

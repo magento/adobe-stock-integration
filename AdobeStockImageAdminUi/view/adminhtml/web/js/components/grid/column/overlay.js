@@ -111,7 +111,7 @@ define([
          * @returns {Object}
          */
         getStyles: function (record) {
-            var height = record.styles().height.replace('px', '') - 50;
+            var height = record.styles().height.replace('px', '') - 40;
 
             return {
                 top: height + 'px'
