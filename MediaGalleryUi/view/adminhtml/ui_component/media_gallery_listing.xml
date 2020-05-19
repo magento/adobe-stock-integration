@@ -295,7 +295,7 @@
                 </item>
             </argument>
             <settings>
-                <label translate="true">Name A-Z</label>
+                <label translate="true">Name: A to Z</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
@@ -310,7 +310,7 @@
                 </item>
             </argument>
             <settings>
-                <label translate="true">Name Z-A</label>
+                <label translate="true">Name: Z to A</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
