@@ -340,7 +340,7 @@ define([
             if (this.isMediaBrowser()) {
                 activeNode = this.getMageMediaBrowserData().activeNode;
 
-                activeNodePath = $('[data-id="' + activeNode.id + '"]').length === 0 ? '' : activeNode.path;
+                activeNodePath = $('[data-id="' + activeNode.id + '"]').length === 0 || activeNode.id === 'root' ? '' : activeNode.path;
             } else {
                 activeNodePath = this.imageDirectory().activeNode() || '';
             }
