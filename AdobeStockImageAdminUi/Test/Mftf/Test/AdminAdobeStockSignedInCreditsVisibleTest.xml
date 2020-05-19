@@ -18,6 +18,9 @@
             <description value="Admin user can view credits and images available when signed in to Adobe Stock"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_ims_signed"/>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170p"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
