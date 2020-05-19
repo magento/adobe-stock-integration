@@ -46,7 +46,10 @@ define([
                     mediaGalleryListingFilters: '${ $.mediaGalleryListingFilters }',
                     listingPaging: '${ $.listingPaging }'
                 }
-            ]
+            ],
+            listens: {
+                '${ $.sortByComponentName }:applied': 'hide'
+            }
         },
 
         /**

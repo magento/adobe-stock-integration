@@ -214,7 +214,8 @@
                     <item name="mediaGallerySearchInput" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.fulltext</item>
                     <item name="mediaGalleryListingFilters" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.listing_filters</item>
                     <item name="listingPaging" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.listing_paging</item>
-		</item>
+                    <item name="sortByComponentName" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.listing_top.sorting</item>
+                </item>
             </argument>
             <settings>
                 <label translate="true">Image Preview</label>
