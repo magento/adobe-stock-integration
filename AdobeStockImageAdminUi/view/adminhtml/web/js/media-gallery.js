@@ -44,7 +44,7 @@ define([
             var imageFolder,
                 pathId,
                 imagePath = path.replace(/^\/+/, ''),
-                folderPathParts = imagePath.split('/').slice(0,-1);
+                folderPathParts = imagePath.split('/').slice(0, -1);
 
             $.ajaxSetup({
                 async: false
@@ -54,7 +54,7 @@ define([
                 this.openFolderTree(folderPathParts);
             }
 
-            pathId = this.getPathId(folderPathParts.join('/'));
+            pathId = this.encodePath(folderPathParts.join('/'));
             imageFolder = $('.jstree li[data-id="' + pathId + '"]').children('a');
 
             if (!imageFolder.length) {
@@ -96,20 +96,21 @@ define([
          *
          * @param {Array} folderPathParts
          */
-        openFolderTree: function(folderPathParts) {
+        openFolderTree: function (folderPathParts) {
             var i,
                 pathId,
                 openFolderButton,
                 folderPath = '';
 
-            for (i = 0; i < folderPathParts.length -1; i++) {
+            for (i = 0 ; i < folderPathParts.length - 1; i++) {
                 if (folderPath === '') {
                     folderPath = folderPathParts[i];
                 } else {
-                    folderPath = folderPath+'/'+folderPathParts[i];
+                    folderPath = folderPath + '/' + folderPathParts[i];
                 }
-                pathId = this.getPathId(folderPath);
+                pathId = this.encodePath(folderPath);
                 openFolderButton = $('.jstree li[data-id="' + pathId + '"]').children('.jstree-icon');
+
                 if (openFolderButton.length) {
                     openFolderButton.click();
                 }
@@ -122,11 +123,11 @@ define([
          * {String} path
          * @returns {String}
          */
-        getPathId: function (path) {
+        encodePath: function (path) {
             return Base64.encode(path)
-                .replace(/\+/g,':')
-                .replace(/\//g,'_')
-                .replace(/=/g,'-');
+                .replace(/\+/g, ':')
+                .replace(/\//g, '_')
+                .replace(/=/g, '-');
         }
     };
 });
