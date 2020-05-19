@@ -19,7 +19,7 @@
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_ims_signed"/>
             <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170p"/>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
             </skip>
         </annotations>
         <before>
