@@ -24,12 +24,6 @@
             <expectedResult type="string">{{image.status}}</expectedResult>
         </assertStringContainsString>
 
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.adobeStockCategory}}" stepKey="grabImageCategory"/>
-        <assertStringContainsString stepKey="verifyImageCategory">
-            <actualResult type="variable">grabImageCategory</actualResult>
-            <expectedResult type="string">{{image.category}}</expectedResult>
-        </assertStringContainsString>
-
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.adobeStockAuthor}}" stepKey="grabImageAuthor"/>
         <assertStringContainsString stepKey="verifyImageAuthor">
             <actualResult type="variable">grabImageAuthor</actualResult>
