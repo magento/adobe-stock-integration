@@ -107,8 +107,7 @@ define([
             var currentFilterPath = this.filterChips().filters.path,
                 currentTreePath = Base64.decode(window.MediabrowserUtility.pathId.replace(/--|,,/, ''));
 
-            if (!_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
-                currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category') {
+            if (this.isFiltersApllied(currentFilterPath)) {
                 $(this.directoryTreeSelector).on('loaded.jstree', function () {
                     this.locateNode(this.filterChips().filters.path);
                 }.bind(this));
@@ -116,6 +115,16 @@ define([
                 $(this.directoryTreeSelector).jstree('get_selected').attr('id') === currentTreePath ||
                     this.locateNode(currentTreePath);
             }
+        },
+
+        /**
+         * Check if need to select directory by filters state
+         *
+         * @param {String} currentFilterPath
+         */
+        isFiltersApllied: function (currentFilterPath) {
+            return !_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
+                currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category';
         },
 
         /**
