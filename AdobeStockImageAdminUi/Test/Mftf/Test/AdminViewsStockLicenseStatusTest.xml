@@ -18,7 +18,7 @@
             <description value="User views stock license status in Media Gallery grid"/>
             <severity value="MAJOR"/>
             <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170p"/>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
             </skip>
             <group value="adobe_stock_integration_ims_signed"/>
         </annotations>
