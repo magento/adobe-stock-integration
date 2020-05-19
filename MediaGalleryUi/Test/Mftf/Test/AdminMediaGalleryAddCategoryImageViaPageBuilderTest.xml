@@ -65,6 +65,6 @@
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
         <actionGroup ref="exitPageBuilderFullScreen" stepKey="saveEditPanelSettings"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
-        <actionGroup ref="AdminMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField"/>
+        <actionGroup ref="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField"/>
     </test>
 </tests>

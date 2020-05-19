@@ -31,7 +31,6 @@
             <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
             <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
             <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
@@ -51,6 +50,6 @@
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
-        <actionGroup ref="AdminMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField"/>
+        <actionGroup ref="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField"/>
     </test>
 </tests>

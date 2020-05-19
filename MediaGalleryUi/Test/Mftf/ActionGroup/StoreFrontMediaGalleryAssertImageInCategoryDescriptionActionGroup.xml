@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertImageInCategoryDescriptionActionGroup">
+    <actionGroup name="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup">
         <arguments>
             <argument name="categoryEntity" defaultValue="SimpleSubCategory"/>
             <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>
@@ -21,10 +21,10 @@
         <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryEntity.name)}}" stepKey="toCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPage"/>
-        <grabTextFrom selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="categoryDescription"/>
-        <assertContains stepKey="assertCategoryDescriptionCOntainsIMage">
-            <expectedResult type="string">{{imageName}}</expectedResult>
-            <actualResult type="variable">$categoryDescription</actualResult>
-        </assertContains>
+        <grabAttributeFrom selector="//div[@class='category-description']//img[1]" userInput="src" stepKey="imageSrc"/>
+        <assertRegExp stepKey="assertEquals" message="pass">
+            <expectedResult type="string">/my-image-(.*?).jpeg/</expectedResult>
+            <actualResult type="variable">imageSrc</actualResult>
+        </assertRegExp>
     </actionGroup>
 </actionGroups>
