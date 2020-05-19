@@ -36,7 +36,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->categoryRepository = Bootstrap::getObjectManager()->get(CategoryRepositoryInterface::class);
     }

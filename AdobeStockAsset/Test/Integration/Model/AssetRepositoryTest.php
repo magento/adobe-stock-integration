@@ -35,7 +35,7 @@ class AssetRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->assetRepository = Bootstrap::getObjectManager()->get(AssetRepositoryInterface::class);
     }

@@ -37,7 +37,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->creatorRepository = Bootstrap::getObjectManager()->get(CreatorRepositoryInterface::class);
     }
