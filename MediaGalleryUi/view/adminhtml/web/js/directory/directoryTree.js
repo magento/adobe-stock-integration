@@ -170,7 +170,7 @@ define([
 
             this.waitForCondition(
                 function () {
-                    return !_.isUndefined(this.directories());
+                    return _.isUndefined(this.directories());
                 }.bind(this),
                 function () {
                     this.directories().setActive(path);
