@@ -211,6 +211,7 @@
                 </item>
             </argument>
             <settings>
+                <label translate="true">Uploaded Date</label>
                 <dataType>date</dataType>
                 <visible>false</visible>
                 <sortable>true</sortable>
