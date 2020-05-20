@@ -17,7 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 interface LoadByIdInterface
 {
     /**
-     * Load an Adobe Stock asset by id
+     * Load asset by the id value
      *
      * @param int $id
      *

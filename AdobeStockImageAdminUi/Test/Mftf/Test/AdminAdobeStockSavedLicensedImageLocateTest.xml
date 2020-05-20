@@ -16,6 +16,9 @@
             <description value="User can locate previously licensed and saved image in Media Gallery"/>
             <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/1051731/scenarios/3579444"/>
             <severity value="CRITICAL"/>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
+            </skip>
             <group value="adobe_stock_integration_ims_signed"/>
         </annotations>
         <before>
