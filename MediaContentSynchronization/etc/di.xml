@@ -14,4 +14,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentSynchronization\Model\BatchGenerator">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">100</argument>
+        </arguments>
+    </type>
 </config>

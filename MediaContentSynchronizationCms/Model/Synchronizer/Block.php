@@ -14,6 +14,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaContentSynchronization\Model\BatchGenerator;
 
 /**
  * Synchronize block content with assets
@@ -56,6 +57,11 @@ class Block implements SynchronizerInterface
     private $fields;
 
     /**
+     * @var BatchGenerator
+     */
+    private $batchGenerator;
+    
+    /**
      * Synchronize block content with assets
      *
      * @param BlockRepositoryInterface $repository
@@ -63,6 +69,7 @@ class Block implements SynchronizerInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param BatchGenerator $batchGenerator
      * @param array $fields
      */
     public function __construct(
@@ -71,6 +78,7 @@ class Block implements SynchronizerInterface
         DataObjectProcessor $dataObjectProcessor,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         SearchCriteriaBuilder $searchCriteriaBuilder,
+        BatchGenerator $batchGenerator,
         array $fields = []
     ) {
         $this->repository = $repository;
@@ -79,6 +87,7 @@ class Block implements SynchronizerInterface
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
+        $this->batchGenerator = $batchGenerator;
     }
 
     /**
@@ -86,9 +95,11 @@ class Block implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
-            foreach ($this->fields as $field) {
-                $this->updateContentAssetLinks->execute(
+        $items = $this->repository->getList($this->searchCriteriaBuilder->create())->getItems();
+        foreach ($this->batchGenerator->getItems($items) as $batch) {
+            foreach ($batch as $item) {
+                foreach ($this->fields as $field) {
+                    $this->updateContentAssetLinks->execute(
                     $this->contentIdentityFactory->create(
                         [
                             self::TYPE => self::CONTENT_TYPE,
@@ -98,6 +109,7 @@ class Block implements SynchronizerInterface
                     ),
                     (string) $this->dataObjectProcessor->buildOutputDataArray($item, BlockInterface::class)[$field]
                 );
+                }
             }
         }
     }

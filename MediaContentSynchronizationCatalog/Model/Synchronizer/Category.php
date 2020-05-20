@@ -13,6 +13,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaContentSynchronization\Model\BatchGenerator;
 
 /**
  * Synchronize category content with assets
@@ -55,11 +56,17 @@ class Category implements SynchronizerInterface
     private $fields;
 
     /**
+     * @var BatchGenerator
+     */
+    private $batchGenerator;
+
+    /**
      * @param CategoryListInterface $categoryList
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param BatchGenerator $batchGenerator
      * @param array $fields
      */
     public function __construct(
@@ -68,6 +75,7 @@ class Category implements SynchronizerInterface
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         SearchCriteriaBuilder $searchCriteriaBuilder,
+        BatchGenerator $batchGenerator,
         array $fields = []
     ) {
         $this->categoryList = $categoryList;
@@ -75,6 +83,7 @@ class Category implements SynchronizerInterface
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->batchGenerator = $batchGenerator;
         $this->fields = $fields;
     }
 
@@ -83,19 +92,22 @@ class Category implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->categoryList->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
-            foreach ($this->fields as $field) {
-                $contentIdentity = $this->contentIdentityFactory->create(
-                    [
-                        self::TYPE => self::CONTENT_TYPE,
-                        self::FIELD => $field,
-                        self::ENTITY_ID => $item->getId()
-                    ]
-                );
-                $this->updateContentAssetLinks->execute(
-                    $contentIdentity,
-                    implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity))
-                );
+        $items = $this->categoryList->getList($this->searchCriteriaBuilder->create())->getItems();
+        foreach ($this->batchGenerator->getItems($items) as $batch) {
+            foreach ($batch as $item) {
+                foreach ($this->fields as $field) {
+                    $contentIdentity = $this->contentIdentityFactory->create(
+                        [
+                            self::TYPE => self::CONTENT_TYPE,
+                            self::FIELD => $field,
+                            self::ENTITY_ID => $item->getId()
+                        ]
+                    );
+                    $this->updateContentAssetLinks->execute(
+                        $contentIdentity,
+                        implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity))
+                    );
+                }
             }
         }
     }
