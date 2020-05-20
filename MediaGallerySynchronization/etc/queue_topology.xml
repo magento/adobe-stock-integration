@@ -8,9 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
     <exchange name="magento-db" type="topic" connection="db">
-        <binding id="MediaIndexerImage" topic="media.indexer.image"
-                 destinationType="queue" destination="media.indexer.image"/>
-        <binding id="MediaIndexerContent" topic="media.indexer.content"
-                 destinationType="queue" destination="media.indexer.content"/>
+        <binding id="MediaGalleryIndexer" topic="media.gallery.indexer"
+                 destinationType="queue" destination="media.gallery.indexer"/>
     </exchange>
 </config>

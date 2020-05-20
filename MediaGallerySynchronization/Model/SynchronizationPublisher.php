@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaIndexer\Indexer;
+namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
- * Run images synchronization asynchronous.
+ * Publish media gallery queue.
  */
-class Image
+class SynchronizationPublisher
 {
     /**
-     * Queue topic name.
+     * Media gallery synchronization queue topic name.
      */
-    private const TOPIC_MEDIA_INDEXER_IMAGE = 'media.indexer.image';
+    private const TOPIC_MEDIA_GALLERY_SYNCHRONIZATION = 'media.gallery.indexer';
 
     /**
      * @var PublisherInterface
@@ -35,10 +35,13 @@ class Image
     }
 
     /**
-     * Publish media files indexer message into queue.
+     * Publish to the message queue what content type should be index.
      */
-    public function execute() : void
+    public function process() : void
     {
-        $this->publisher->publish(self::TOPIC_MEDIA_INDEXER_IMAGE, []);
+        $this->publisher->publish(
+            self::TOPIC_MEDIA_GALLERY_SYNCHRONIZATION,
+            [self::TOPIC_MEDIA_GALLERY_SYNCHRONIZATION]
+        );
     }
 }
