@@ -11,6 +11,7 @@
         <annotations>
             <features value="AdminMediaGalleryImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1046; https://github.com/magento/adobe-stock-integration/issues/1047"/>
+            <stories value="Creating, deleting new folder functionality in Media Gallery"/>
             <title value="Creating, deleting new folder functionality in Media Gallery"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4456547; https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4457075"/>
             <description value="Creating, deleting new folder functionality in Media Gallery"/>
