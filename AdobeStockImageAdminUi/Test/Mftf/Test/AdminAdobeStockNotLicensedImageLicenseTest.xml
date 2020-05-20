@@ -10,7 +10,7 @@
     <test name="AdminAdobeStockNotLicensedImageLicenseTest">
         <annotations>
             <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/783"/>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
             </skip>
             <features value="AdobeStockImagePanel"/>
             <stories value="User licenses an image"/>
