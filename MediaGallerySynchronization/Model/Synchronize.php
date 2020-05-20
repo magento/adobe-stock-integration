@@ -12,7 +12,7 @@ use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool;
 use Psr\Log\LoggerInterface;
-use Magento\MediaGallerySynchronization\Model\AssetsBatchGenerator;
+use Magento\MediaGallerySynchronization\Model\MediaStorageFilesBatchGenerator;
 
 /**
  * Synchronize media storage and media assets database records
@@ -30,7 +30,7 @@ class Synchronize implements SynchronizeInterface
     private $synchronizerPool;
 
     /**
-     * @var AssetsBatchGenerator
+     * @var MediaStorageFilesBatchGenerator
      */
     private $batchGenerator;
 
@@ -43,19 +43,19 @@ class Synchronize implements SynchronizeInterface
      * @var ResolveNonExistedAssets
      */
     private $resolveNonExistedAssets;
-    
+
     /**
      * @param ResolveNonExistedAssets $resolveNonExistedAssets
      * @param LoggerInterface $log
      * @param SynchronizerPool $synchronizerPool
-     * @param AssetsBatchGenerator $batchGenerator
+     * @param MediaStorageFilesBatchGenerator $batchGenerator
      * @param int $batchSize
      */
     public function __construct(
         ResolveNonExistedAssets $resolveNonExistedAssets,
         LoggerInterface $log,
         SynchronizerPool $synchronizerPool,
-        AssetsBatchGenerator $batchGenerator,
+        MediaStorageFilesBatchGenerator $batchGenerator,
         int $batchSize
     ) {
         $this->resolveNonExistedAssets = $resolveNonExistedAssets;
@@ -77,7 +77,7 @@ class Synchronize implements SynchronizeInterface
                 throw new LocalizedException(__('Synchronizer must implement SynchronizeFilesInterface'));
             }
 
-            foreach ($this->batchGenerator->getItems($this->batchSize) as $batch) {
+            foreach ($this->batchGenerator->getFiles($this->batchSize) as $batch) {
                 try {
                     $synchronizer->execute($batch);
                     $this->resolveNonExistedAssets->execute($batch);

@@ -12,9 +12,9 @@ use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Batch generator for filesystem files, get files by providet size of batch
+ * Media storage assets batch generator
  */
-class AssetsBatchGenerator
+class MediaStorageFilesBatchGenerator
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
     
@@ -72,7 +72,7 @@ class AssetsBatchGenerator
      *
      * @param int $size
      */
-    public function getItems(int $size): \Generator
+    public function getFiles(int $size): \Generator
     {
         $i = 0;
         $batch = [];
