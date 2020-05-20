@@ -40,16 +40,16 @@
         color: @color-media-gallery-buttons-text;
     }
 
-    .masonry-image-grid .no-data-message-container,
-    .masonry-image-grid .error-message-container {
-        left: 50%;
-        margin-right: -50%;
-        position: sticky;
-        top: 50%;
-    }
-    
     .media-gallery-container {
-        
+
+        .masonry-image-grid .no-data-message-container,
+        .masonry-image-grid .error-message-container {
+            left: 50%;
+            margin-right: -50%;
+            position: sticky;
+            top: 50%;
+        }
+
         .admin__action-dropdown-wrap._active .admin__action-dropdown-text::after {
             margin-right: 6px;
         }
@@ -126,11 +126,13 @@
 
         .masonry-image-overlay {
             background-color: @color-masonry-overlay;
+            float: right;
             font-size: 11px;
             margin-left: 120px;
             margin-top: 170px;
             padding: .3rem;
             pointer-events: none;
+            position: relative;
         }
 
         .media-gallery-image-details {

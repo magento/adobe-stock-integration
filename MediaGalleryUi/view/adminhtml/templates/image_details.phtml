@@ -74,16 +74,16 @@ use Magento\Framework\Escaper;
                         "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
                         "actionsList": [
                             {
-                                "title": "<?= $escaper->escapeJs(__('Delete Image')); ?>",
-                                "handler": "deleteImageAction",
-                                "name": "delete",
-                                "classes": "action-default scalable delete action-quaternary"
-                            },
-                            {
                                 "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
                                 "classes": "action-default scalable cancel action-quaternary"
+                            },
+                            {
+                                "title": "<?= $escaper->escapeJs(__('Delete Image')); ?>",
+                                "handler": "deleteImageAction",
+                                "name": "delete",
+                                "classes": "action-default scalable delete action-quaternary"
                             },
                             {
                                 "title": "<?= $escaper->escapeJs(__('Add Image')); ?>",
