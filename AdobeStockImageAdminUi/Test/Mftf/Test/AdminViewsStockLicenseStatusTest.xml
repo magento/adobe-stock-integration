@@ -10,9 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminViewsStockLicenseStatusTest">
         <annotations>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1151" />
-            </skip>
             <features value="AdobeStockImagePanel"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/430"/>
             <stories value="[Story #40] User views stock license status in Media Gallery grid"/>
@@ -20,6 +17,9 @@
             <title value="User views stock license status in Media Gallery grid"/>
             <description value="User views stock license status in Media Gallery grid"/>
             <severity value="MAJOR"/>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
+            </skip>
             <group value="adobe_stock_integration_ims_signed"/>
         </annotations>
         <before>
@@ -36,7 +36,6 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         </after>
-
         <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForAddPreviewImage"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">

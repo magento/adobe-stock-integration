@@ -13,6 +13,7 @@
         <element name="save" type="block" selector="//button[@class='action-secondary']//span[text()='Save Preview']"/>
         <element name="openInMediaGallery" type="block" selector="//button[@class='action-secondary']//span[text()='Open in Media Gallery']"/>
         <element name="saveLicensedImage" type="button" selector="//button[@class='action-default primary']//span[text()='Save Licensed']"/>
+        <element name="licenseImage" type="button" selector="//button[@class='action-default primary']//span[text()='License']"/>
         <element name="image" type="block" selector="//div[@class='masonry-image-preview']//img"/>
         <element name="close" type="button" selector="//div[@class='masonry-image-preview']//button[@class='action-close']"/>
         <element name="navigation" type="button" selector="//div[@class='masonry-image-preview']//div[contains(@class, 'action-buttons')]/button[@class='action-{{type}}']" parameterized="true"/>
@@ -20,6 +21,8 @@
         <element name="attributeTitle" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='{{title}}']" parameterized="true"/>
         <element name="viewAllKeywords" type="button" selector="//*[@id='adobe-stock-images-search-modal']//span[text()='View all']"/>
         <element name="keywords" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='keyword']"/>
+        <element name="firstKeyword" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='keyword'][1]"/>
+        <element name="imagePreviewCategoryText" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='Category']/following-sibling::div"/>
         <element name="keywordsTitle" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[text()='Similar Keywords']"/>
         <element name="keyword" type="block" selector="//div[@class='keyword']//span[text()='{{keyword}}']" parameterized="true"/>
         <element name="confirm" selector="//*[@class='action-primary action-accept']" type="button"/>

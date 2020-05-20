@@ -27,14 +27,17 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
+        <executeJS function="return window.name;" stepKey="rootWindow"/>
         <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickSignIn"/>
+        <switchToWindow userInput="{$rootWindow}" stepKey="switchToRoot1"/>
         <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickSignTheSecondTime"/>
+        <switchToWindow userInput="{$rootWindow}" stepKey="switchToRoot2"/>
         <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickSignTheThirdTime"/>
 
-        <switchToNextTab stepKey="switchToAdobeSignInIms"/>
-        <switchToNextTab stepKey="switchToAdobeImsGallery"/>
-
+        <switchToWindow userInput="{$rootWindow}" stepKey="switchToAdobeImsGallery"/>
         <seeElement selector="{{AdminAdobeStockSection.adobeSignIn}}" stepKey="seeSignInButton"/>
         <seeElement selector="{{AdminAdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
+        <switchToWindow userInput="authorization_widnow" stepKey="switchToCloseWindow"/>
+        <closeTab stepKey="closeAuthorizationWindow"/>
     </test>
 </tests>
