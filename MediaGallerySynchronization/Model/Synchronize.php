@@ -73,18 +73,18 @@ class Synchronize implements SynchronizeInterface
         $failed = [];
 
         foreach ($this->synchronizerPool->get() as $name => $synchronizer) {
-            if ($synchronizer instanceof SynchronizeFilesInterface) {
-                foreach ($this->batchGenerator->getItems($this->batchSize) as $batch) {
-                    try {
-                        $synchronizer->execute($batch);
-                        $this->resolveNonExistedAssets->execute($batch);
-                    } catch (\Exception $exception) {
-                        $this->log->critical($exception);
-                        $failed[] = $name;
-                    }
-                }
-            } else {
+            if (!$synchronizer instanceof SynchronizeFilesInterface) {
                 throw new LocalizedException(__('Synchronizer must implement SynchronizeFilesInterface'));
+            }
+
+            foreach ($this->batchGenerator->getItems($this->batchSize) as $batch) {
+                try {
+                    $synchronizer->execute($batch);
+                    $this->resolveNonExistedAssets->execute($batch);
+                } catch (\Exception $exception) {
+                    $this->log->critical($exception);
+                    $failed[] = $name;
+                }
             }
         }
         if (!empty($failed)) {
