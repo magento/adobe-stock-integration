@@ -118,7 +118,7 @@ define([
             if (this.isFiltersApllied(currentFilterPath)) {
                 selectedId === currentFilterPath || this.locateNode(currentFilterPath);
             } else {
-                currentTreePath = Base64.decode(window.MediabrowserUtility.pathId.replace(/--|,,/, ''));
+                currentTreePath = Base64.mageDecode(window.MediabrowserUtility.pathId);
                 selectedId === currentTreePath || this.locateNode(currentTreePath);
             }
         },
