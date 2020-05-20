@@ -11,8 +11,9 @@ use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Service for getting asset by content id
