@@ -96,9 +96,15 @@ define([
          * Verify directory filter on init event, select folder per directory filter state
          */
         checkChipFiltersState: function () {
-            if (!_.isUndefined(this.filterChips().filters.path) && this.filterChips().filters.path !== '') {
+            var currentFilterPath = this.filterChips().filters.path;
+
+            if (!_.isUndefined(currentFilterPath) && currentFilterPath !== '') {
                 $(this.directoryTreeSelector).on('loaded.jstree', function () {
-                    this.locateNode(this.filterChips().filters.path);
+                    if ($('#' + currentFilterPath.replace(/\//g, '\\/')).length === 1) {
+                        this.locateNode(this.filterChips().filters.path);
+                    } else {
+                        this.selectStorageRoot();
+                    }
                 }.bind(this));
             }
         },
