@@ -54,7 +54,7 @@ define([
                 this.openFolderTree(folderPathParts);
             }
 
-            pathId = this.encodePath(folderPathParts.join('/'));
+            pathId = Base64.mageEncode(folderPathParts.join('/'));
             imageFolder = $('.jstree li[data-id="' + pathId + '"]').children('a');
 
             if (!imageFolder.length) {
@@ -108,26 +108,13 @@ define([
                 } else {
                     folderPath = folderPath + '/' + folderPathParts[i];
                 }
-                pathId = this.encodePath(folderPath);
+                pathId = Base64.mageEncode(folderPath);
                 openFolderButton = $('.jstree li[data-id="' + pathId + '"]').children('.jstree-icon');
 
                 if (openFolderButton.length) {
                     openFolderButton.click();
                 }
             }
-        },
-
-        /**
-         * Encode folder path
-         *
-         * {String} path
-         * @returns {String}
-         */
-        encodePath: function (path) {
-            return Base64.encode(path)
-                .replace(/\+/g, ':')
-                .replace(/\//g, '_')
-                .replace(/=/g, '-');
         }
     };
 });
