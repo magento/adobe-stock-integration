@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
-use Magento\Cms\Api\BlockRepositoryInterface;
-use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
@@ -26,6 +24,7 @@ class Block implements SynchronizerInterface
     private const FIELD = 'field';
     private const CMS_BLOCK_TABLE = 'cms_block';
     private const CMS_BLOCK_TABLE_ENTITY_ID = 'block_id';
+
     /**
      * @var SelectByBatchesGenerator
      */
@@ -57,7 +56,7 @@ class Block implements SynchronizerInterface
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param DataObjectProcessor $dataObjectProcessor
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param BlockRepositoryInterface $repository
+     * @param SelectByBatchesGenerator $selectBatches
      * @param array $fields
      */
     public function __construct(
