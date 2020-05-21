@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Media gallery image synchronization queue consumer.
@@ -18,23 +17,16 @@ class Consume
     /**
      * @var SynchronizeInterface
      */
-    private $imagesIndexer;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private $synchronize;
 
     /**
      * SynchronizationConsumer constructor.
      *
-     * @param SynchronizeInterface $imagesIndexer
-     * @param LoggerInterface $logger
+     * @param SynchronizeInterface $synchronize
      */
-    public function __construct(SynchronizeInterface $imagesIndexer, LoggerInterface $logger)
+    public function __construct(SynchronizeInterface $synchronize)
     {
-        $this->imagesIndexer = $imagesIndexer;
-        $this->logger = $logger;
+        $this->synchronize = $synchronize;
     }
 
     /**
@@ -42,10 +34,6 @@ class Consume
      */
     public function execute() : void
     {
-        try {
-            $this->imagesIndexer->execute();
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-        }
+        $this->synchronize->execute();
     }
 }
