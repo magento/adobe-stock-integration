@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Plugin;
 
 use Magento\Framework\App\Config\Value;
-use Magento\MediaGallerySynchronization\Model\SynchronizationPublisher;
+use Magento\MediaGallerySynchronization\Model\Publish;
 
 /**
- * Plugin to synchronize media storage and media assets database recoders when media gallery enabled in configuration
+ * Plugin to synchronize media storage and media assets database records when media gallery enabled in configuration.
  */
 class MediaGallerySyncTrigger
 {
@@ -19,20 +19,22 @@ class MediaGallerySyncTrigger
     private const MEDIA_GALLERY_ENABLED_VALUE = 1;
 
     /**
-     * @var SynchronizationPublisher
+     * @var Publish
      */
-    private $synchronizationPublisher;
+    private $publish;
 
     /**
-     * @param SynchronizationPublisher $synchronizationPublisher
+     * MediaGallerySyncTrigger constructor.
+     *
+     * @param Publish $publish
      */
-    public function __construct(SynchronizationPublisher $synchronizationPublisher)
+    public function __construct(Publish $publish )
     {
-        $this->synchronizationPublisher = $synchronizationPublisher;
+        $this->publish = $publish ;
     }
 
     /**
-     * Update media gallery grid table when configuration is saved and media gallery enabled
+     * Update media gallery grid table when configuration is saved and media gallery enabled.
      *
      * @param Value $config
      * @param Value $result
@@ -45,7 +47,7 @@ class MediaGallerySyncTrigger
             && $result->isValueChanged()
             && (int) $result->getValue() === self::MEDIA_GALLERY_ENABLED_VALUE
         ) {
-            $this->synchronizationPublisher->process();
+            $this->publish->execute();
         }
 
         return $result;

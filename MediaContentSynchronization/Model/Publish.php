@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronization\Model;
+namespace Magento\MediaContentSynchronization\Model;
 
 use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
- * Publish media gallery queue.
+ * Publish media content synchronization queue.
  */
-class SynchronizationPublisher
+class Publish
 {
     /**
-     * Media gallery synchronization queue topic name.
+     * Media content synchronization queue topic name.
      */
-    private const TOPIC_MEDIA_GALLERY_SYNCHRONIZATION = 'media.gallery.indexer';
+    private const TOPIC_MEDIA_CONTENT_SYNCHRONIZATION = 'media.content.synchronization';
 
     /**
      * @var PublisherInterface
@@ -35,13 +35,13 @@ class SynchronizationPublisher
     }
 
     /**
-     * Publish to the message queue what content type should be index.
+     * Publish to the message queue media content synchronization message.
      */
-    public function process() : void
+    public function execute() : void
     {
         $this->publisher->publish(
-            self::TOPIC_MEDIA_GALLERY_SYNCHRONIZATION,
-            [self::TOPIC_MEDIA_GALLERY_SYNCHRONIZATION]
+            self::TOPIC_MEDIA_CONTENT_SYNCHRONIZATION,
+            [self::TOPIC_MEDIA_CONTENT_SYNCHRONIZATION]
         );
     }
 }

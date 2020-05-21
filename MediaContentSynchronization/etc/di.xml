@@ -14,8 +14,8 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGallerySynchronization\Model\SynchronizationConsumer">
+    <type name="Magento\MediaGallerySynchronization\Model\Consume">
         <plugin name="synchronize_media_content"
-                type="Magento\MediaContentSynchronization\Plugin\SynchronizeMediaContent" sortOrder="10"/>
+                type="Magento\MediaContentSynchronization\Plugin\SynchronizeMediaContent"/>
     </type>
 </config>

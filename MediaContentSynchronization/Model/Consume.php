@@ -5,20 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronization\Model;
+namespace Magento\MediaContentSynchronization\Model;
 
-use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
+use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Media gallery image synchronization queue consumer.
+ * Media content synchronization queue consumer.
  */
-class SynchronizationConsumer
+class Consume
 {
     /**
      * @var SynchronizeInterface
      */
-    private $imagesIndexer;
+    private $synchronize;
 
     /**
      * @var LoggerInterface
@@ -28,22 +28,22 @@ class SynchronizationConsumer
     /**
      * SynchronizationConsumer constructor.
      *
-     * @param SynchronizeInterface $imagesIndexer
+     * @param SynchronizeInterface $synchronize
      * @param LoggerInterface $logger
      */
-    public function __construct(SynchronizeInterface $imagesIndexer, LoggerInterface $logger)
+    public function __construct(SynchronizeInterface $synchronize, LoggerInterface $logger)
     {
-        $this->imagesIndexer = $imagesIndexer;
+        $this->synchronize = $synchronize;
         $this->logger = $logger;
     }
 
     /**
      * Run media files synchronization.
      */
-    public function process() : void
+    public function execute() : void
     {
         try {
-            $this->imagesIndexer->execute();
+            $this->synchronize->execute();
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }

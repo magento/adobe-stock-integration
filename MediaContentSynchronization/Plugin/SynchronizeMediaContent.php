@@ -7,55 +7,42 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronization\Plugin;
 
-use Magento\MediaContentSynchronization\Model\Synchronize;
+use Magento\MediaContentSynchronization\Model\Publish;
 use Magento\Framework\Exception\LocalizedException;
-use \Magento\MediaGallerySynchronization\Model\SynchronizationConsumer;
-use Psr\Log\LoggerInterface;
+use Magento\MediaGallerySynchronization\Model\Consume;
 
 /**
- * Run media content synchronization after the media files consumer finish files index.
+ * Run media content synchronization after the media files consumer finish files synchronization.
  */
 class SynchronizeMediaContent
 {
     /**
-     * @var Synchronize
+     * @var Publish
      */
-    private $mediaContentIndexer;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private $publish;
 
     /**
      * SynchronizeMediaContent constructor.
      *
-     * @param Synchronize $mediaContentIndexer
-     * @param LoggerInterface $logger
+     * @param Publish $publish
      */
-    public function __construct(Synchronize $mediaContentIndexer, LoggerInterface $logger)
+    public function __construct(Publish $publish )
     {
-        $this->mediaContentIndexer = $mediaContentIndexer;
-        $this->logger = $logger;
+        $this->publish = $publish;
     }
 
     /**
-     * Run media content synchronization.
+     * Initiate media content synchronization by publish queue.
      *
-     * @param SynchronizationConsumer $subject
+     * @param Consume $subject
      * @param null $result
      *
      * @return void
      * @throws LocalizedException
      */
-    public function afterProcess(SynchronizationConsumer $subject, $result)
+    public function afterExecute(Consume $subject, $result)
     {
-        try {
-            $this->mediaContentIndexer->execute();
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-        }
-
+        $this->publish->execute();
         return $result;
     }
 }
