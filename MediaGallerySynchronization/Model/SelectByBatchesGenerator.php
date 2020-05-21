@@ -25,6 +25,11 @@ class SelectByBatchesGenerator
      * @var int
      */
     private $batchSize;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
     
     /**
      * @param ResourceConnection $resourceConnection
@@ -48,17 +53,21 @@ class SelectByBatchesGenerator
      */
     public function execute(string $tableName, array $columns): \Generator
     {
-        $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName($tableName);
-        $total =  $connection->fetchOne($connection->select()->from($tableName, 'COUNT(*)'));
-        $batches = ceil($total / $this->batchSize);
+        try {
+            $connection = $this->resourceConnection->getConnection();
+            $tableName = $this->resourceConnection->getTableName($tableName);
+            $total =  $connection->fetchOne($connection->select()->from($tableName, 'COUNT(*)'));
+            $batches = ceil($total / $this->batchSize);
 
-        for ($i = 0; $i < $batches; $i++) {
-            $offset = $i * $this->batchSize;
-            $select = $connection->select()
-                ->from($this->resourceConnection->getTableName($tableName), $columns)
-                ->limit($this->batchSize, $offset);
-            yield $connection->fetchCol($select);
+            for ($i = 0; $i < $batches; $i++) {
+                $offset = $i * $this->batchSize;
+                $select = $connection->select()
+                    ->from($this->resourceConnection->getTableName($tableName), $columns)
+                    ->limit($this->batchSize, $offset);
+                yield $connection->fetchCol($select);
+            }
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
         }
     }
 }

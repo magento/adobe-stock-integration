@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCatalog\Model\Synchronizer;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
 
 /**
  * Synchronize product content with assets
@@ -23,16 +22,8 @@ class Product implements SynchronizerInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $repository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private const PRODUCT_TABLE = 'catalog_product_entity';
+    private const PRODUCT_TABLE_ENTITY_ID = 'entity_id';
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -55,27 +46,29 @@ class Product implements SynchronizerInterface
     private $fields;
 
     /**
-     * @param ProductRepositoryInterface $repository
+     * @var SelectByBatchesGenerator
+     */
+    private $selectBatches;
+    
+    /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SelectByBatchesGenerator $selectBatches,
      * @param array $fields
      */
     public function __construct(
-        ProductRepositoryInterface $repository,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SelectByBatchesGenerator $selectBatches,
         array $fields = []
     ) {
-        $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
+        $this->selectBatches = $selectBatches;
     }
 
     /**
@@ -83,19 +76,21 @@ class Product implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
-            foreach ($this->fields as $field) {
-                $contentIdentity = $this->contentIdentityFactory->create(
-                    [
-                        self::TYPE => self::CONTENT_TYPE,
-                        self::FIELD => $field,
-                        self::ENTITY_ID => $item->getId()
-                    ]
-                );
-                $this->updateContentAssetLinks->execute(
-                    $contentIdentity,
-                    implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity))
-                );
+        foreach ($this->selectBatches->execute(self::PRODUCT_TABLE, [self::PRODUCT_TABLE_ENTITY_ID]) as $batch) {
+            foreach ($batch as $itemId) {
+                foreach ($this->fields as $field) {
+                    $contentIdentity = $this->contentIdentityFactory->create(
+                        [
+                            self::TYPE => self::CONTENT_TYPE,
+                            self::FIELD => $field,
+                            self::ENTITY_ID => $itemId
+                        ]
+                    );
+                    $this->updateContentAssetLinks->execute(
+                        $contentIdentity,
+                        implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity))
+                    );
+                }
             }
         }
     }

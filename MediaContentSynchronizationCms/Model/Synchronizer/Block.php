@@ -9,11 +9,11 @@ namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
 
 /**
  * Synchronize block content with assets
@@ -24,16 +24,12 @@ class Block implements SynchronizerInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-
+    private const CMS_BLOCK_TABLE = 'cms_block';
+    private const CMS_BLOCK_TABLE_ENTITY_ID = 'block_id';
     /**
-     * @var BlockRepositoryInterface
+     * @var SelectByBatchesGenerator
      */
-    private $repository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private $selectBatches;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -58,27 +54,25 @@ class Block implements SynchronizerInterface
     /**
      * Synchronize block content with assets
      *
-     * @param BlockRepositoryInterface $repository
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param DataObjectProcessor $dataObjectProcessor
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param BlockRepositoryInterface $repository
      * @param array $fields
      */
     public function __construct(
-        BlockRepositoryInterface $repository,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         DataObjectProcessor $dataObjectProcessor,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SelectByBatchesGenerator $selectBatches,
         array $fields = []
     ) {
         $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
+        $this->selectBatches = $selectBatches;
     }
 
     /**
@@ -86,18 +80,20 @@ class Block implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
-            foreach ($this->fields as $field) {
-                $this->updateContentAssetLinks->execute(
-                    $this->contentIdentityFactory->create(
-                        [
-                            self::TYPE => self::CONTENT_TYPE,
-                            self::FIELD => $field,
-                            self::ENTITY_ID => $item->getId()
-                        ]
-                    ),
-                    (string) $this->dataObjectProcessor->buildOutputDataArray($item, BlockInterface::class)[$field]
-                );
+        foreach ($this->selectBatches->execute(self::CMS_BLOCK_TABLE, [self::CMS_BLOCK_TABLE_ENTITY_ID]) as $batch) {
+            foreach ($batch as $blockId) {
+                foreach ($this->fields as $field) {
+                    $this->updateContentAssetLinks->execute(
+                        $this->contentIdentityFactory->create(
+                            [
+                                self::TYPE => self::CONTENT_TYPE,
+                                self::FIELD => $field,
+                                self::ENTITY_ID => $blockId
+                            ]
+                        ),
+                        (string) $this->dataObjectProcessor->buildOutputDataArray($item, BlockInterface::class)[$field]
+                    );
+                }
             }
         }
     }
