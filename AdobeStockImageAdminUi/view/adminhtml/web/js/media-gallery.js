@@ -54,7 +54,7 @@ define([
                 this.openFolderTree(folderPathParts);
             }
 
-            pathId = Base64.mageEncode(folderPathParts.join('/'));
+            pathId = Base64.idEncode(folderPathParts.join('/'));
             imageFolder = $('.jstree li[data-id="' + pathId + '"]').children('a');
 
             if (!imageFolder.length) {
@@ -108,7 +108,7 @@ define([
                 } else {
                     folderPath = folderPath + '/' + folderPathParts[i];
                 }
-                pathId = Base64.mageEncode(folderPath);
+                pathId = Base64.idEncode(folderPath);
                 openFolderButton = $('.jstree li[data-id="' + pathId + '"]').children('.jstree-icon');
 
                 if (openFolderButton.length) {
