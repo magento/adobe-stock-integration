@@ -34,7 +34,7 @@ class KeywordFilter implements FilterApplierInterface
      */
     public function __construct(ResourceConnection $resource)
     {
-        $this->connection = $resource->getConnection();
+        $this->connection = $resource;
     }
 
     /**
