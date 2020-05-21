@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminAdobeStockSection">
         <element name="slideOutPanelButton" type="button" selector="[data-ui-id=wysiwyg-images-content-search-adobe-stock-button]"/>
+        <element name="searchAdobeStockButton" type="button" selector="#search_adobe_stock"/>
         <element name="unlicensedImageLabel" type="button" selector="//span[text()='Unlicensed']"/>
         <element name="modal" type="block" selector="aside.adobe-stock-modal"/>
         <element name="panelTitle" type="block" selector="[data-role=title]"/>

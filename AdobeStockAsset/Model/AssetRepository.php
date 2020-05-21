@@ -135,8 +135,7 @@ class AssetRepository implements AssetRepositoryInterface
             return $searchResults;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('Could not retrieve assets.');
-            throw new LocalizedException($message, $exception);
+            throw new LocalizedException(__('Could not retrieve assets.'), $exception);
         }
     }
 
@@ -145,7 +144,12 @@ class AssetRepository implements AssetRepositoryInterface
      */
     public function getById(int $id): AssetInterface
     {
-        return $this->loadByIdCommand->execute($id);
+        $asset = $this->loadByIdCommand->execute($id);
+        if (null === $asset->getId()) {
+            throw new NoSuchEntityException(__('Adobe Stock asset with id %id does not exist.', ['id' => $id]));
+        }
+
+        return $asset;
     }
 
     /**
