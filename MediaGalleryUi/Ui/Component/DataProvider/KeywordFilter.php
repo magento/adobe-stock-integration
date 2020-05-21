@@ -62,8 +62,8 @@ class KeywordFilter implements FilterApplierInterface
      */
     private function getSelectByKeyword(string $value): Select
     {
-        return $this->connection->select()->from(
-            $this->connection->select()->from(
+        return $this->connection->getConnection()->select()->from(
+            $this->connection->getConnection()->select()->from(
                 ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
                 ['id']
             )->where('keyword = ?', $value)
