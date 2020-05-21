@@ -80,13 +80,13 @@ class Synchronize implements SynchronizeInterface
             foreach ($this->batchGenerator->getFiles($this->batchSize) as $batch) {
                 try {
                     $synchronizer->execute($batch);
-                    $this->resolveNonExistedAssets->execute($batch);
                 } catch (\Exception $exception) {
                     $this->log->critical($exception);
                     $failed[] = $name;
                 }
             }
         }
+        $this->resolveNonExistedAssets->execute();
         if (!empty($failed)) {
             throw new LocalizedException(
                 __(

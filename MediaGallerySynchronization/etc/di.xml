@@ -20,6 +20,11 @@
             <argument name="batchSize" xsi:type="number">100</argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">100</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
