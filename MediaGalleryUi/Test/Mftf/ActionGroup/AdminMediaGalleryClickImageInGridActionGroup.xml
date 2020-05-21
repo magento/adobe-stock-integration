@@ -15,7 +15,7 @@
         <arguments>
             <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>
         </arguments>
-        <waitForElementVisible selector="{{AdminMediaGalleryHeaderButtonsSection.imageInGrid(imageName)}}" stepKey="waitForImageToBeVisible"/>
-        <click selector="{{AdminMediaGalleryHeaderButtonsSection.imageInGrid(imageName)}}" stepKey="clickOnImage"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="waitForImageToBeVisible"/>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="clickOnImage"/>
     </actionGroup>
 </actionGroups>

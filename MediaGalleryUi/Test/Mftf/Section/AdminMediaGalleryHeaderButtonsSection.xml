@@ -10,6 +10,5 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMediaGalleryHeaderButtonsSection">
         <element name="addSelected" type="button" selector=".media-gallery-add-selected"/>
-        <element name="imageInGrid" type="button" selector="//img[contains(@src, '{{imageName}}')]" parameterized="true"/>
     </section>
 </sections>
