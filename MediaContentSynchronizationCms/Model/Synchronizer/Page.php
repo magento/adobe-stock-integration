@@ -24,6 +24,7 @@ class Page implements SynchronizerInterface
     private const FIELD = 'field';
     private const CMS_PAGE_TABLE = 'cms_page';
     private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
+
     /**
      * @var SelectByBatchesGenerator
      */
@@ -38,11 +39,6 @@ class Page implements SynchronizerInterface
      * @var ContentIdentityInterfaceFactory
      */
     private $contentIdentityFactory;
-
-    /**
-     * @var DataObjectProcessor
-     */
-    private $dataObjectProcessor;
 
     /**
      * @var array

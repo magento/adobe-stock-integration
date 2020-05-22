@@ -41,11 +41,6 @@ class Block implements SynchronizerInterface
     private $contentIdentityFactory;
 
     /**
-     * @var DataObjectProcessor
-     */
-    private $dataObjectProcessor;
-
-    /**
      * @var array
      */
     private $fields;
