@@ -20,6 +20,7 @@
             <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
             <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
             <actionGroup ref="AdminAdobeStockAssertUserLoggedActionGroup" stepKey="assertUserLoggedIn"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </before>
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -29,6 +30,7 @@
             <actionGroup ref="AdminAdobeStockAssertUserNotLoggedActionGroup" stepKey="assertUserNotLogged"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <include>
             <group name="adobe_stock_integration_ims_signed"/>

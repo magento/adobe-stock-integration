@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminAdobeStockKeywordLocalizedActionGroup">
+        <arguments>
+            <argument name="stringToBeVerified" type="string"/>
+        </arguments>
+        <annotations>
+            <description>Verify that string is localized by regexp pattern with RU-ru locale</description>
+        </annotations>
+        <assertRegExp stepKey="checkThatKeywordLocalized">
+            <expectedResult type="string">/[\x{0400}-\x{04FF}]+/u</expectedResult>
+            <actualResult type="string">{{stringToBeVerified}}</actualResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

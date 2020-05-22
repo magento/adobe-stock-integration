@@ -15,11 +15,12 @@
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
                 <argument name="enabled" value="1"/>
             </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </before>
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
-            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </after>
         <include>
             <group name="media_gallery_ui"/>

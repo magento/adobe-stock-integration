@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryAddCategoryImageTest">
+        <annotations>
+            <features value="AdminMediaGalleryImagePanel"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1073"/>
+            <title value="User add category image via wysiwyg"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4484351"/>
+            <description value="User add category image via wysiwyg"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+                <argument name="category" value="$$category$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImageInGrid"/>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImageInGridToVerifyAddSelected"/>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField"/>
+    </test>
+</tests>

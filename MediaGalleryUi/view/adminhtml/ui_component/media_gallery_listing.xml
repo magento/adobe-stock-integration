@@ -94,7 +94,7 @@
                     <label translate="true">Directory</label>
                 </settings>
             </filterInput>
-            <filterRange name="created_at_date"
+            <filterRange name="created_at"
                          class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
                          template="ui/grid/filters/elements/group" sortOrder="30">
@@ -225,16 +225,22 @@
             </argument>
             <settings>
                 <label translate="true">Uploaded Date</label>
-                <filter>dateRange</filter>
                 <dataType>date</dataType>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
         </column>
         <column name="path">
+          <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
             <settings>
                 <visible>false</visible>
-                <sortable>false</sortable>
+                <sortable>true</sortable>
             </settings>
         </column>
         <column name="directory_desc">
@@ -267,9 +273,16 @@
             </settings>
         </column>
         <column name="title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
             <settings>
                 <visible>false</visible>
-                <sortable>false</sortable>
+                <sortable>true</sortable>
             </settings>
         </column>
         <column name="name_az">
@@ -281,7 +294,7 @@
                 </item>
             </argument>
             <settings>
-                <label translate="true">Name A-Z</label>
+                <label translate="true">Name: A to Z</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>
@@ -296,7 +309,7 @@
                 </item>
             </argument>
             <settings>
-                <label translate="true">Name Z-A</label>
+                <label translate="true">Name: Z to A</label>
                 <visible>false</visible>
                 <sortable>true</sortable>
             </settings>

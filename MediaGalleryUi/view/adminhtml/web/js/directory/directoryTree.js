@@ -39,10 +39,16 @@ define([
         initialize: function () {
             this._super().observe(['activeNode']).initView();
 
-            this.waitForContainer(function () {
-                this.getJsonTree();
-                this.initEvents();
-            }.bind(this));
+            this.waitForCondition(
+                function () {
+                    return $(this.directoryTreeSelector).length === 0;
+                }.bind(this),
+                function () {
+                    this.getJsonTree();
+                    this.initEvents();
+                    this.checkChipFiltersState();
+                }.bind(this)
+            );
 
             return this;
         },
@@ -59,12 +65,12 @@ define([
         },
 
         /**
-         * Wait for container to initialize
+         * Wait for condition then call provided callback
          */
-        waitForContainer: function (callback) {
-            if ($(this.directoryTreeSelector).length === 0) {
+        waitForCondition: function (condition, callback) {
+            if (condition()) {
                 setTimeout(function () {
-                    this.waitForContainer(callback);
+                    this.waitForCondition(condition, callback);
                 }.bind(this), 100);
             } else {
                 callback();
@@ -192,7 +198,16 @@ define([
          */
         selectFolder: function (path) {
             this.activeNode(path);
-            this.directories().setActive(path);
+
+            this.waitForCondition(
+                function () {
+                    return _.isUndefined(this.directories());
+                }.bind(this),
+                function () {
+                    this.directories().setActive(path);
+                }.bind(this)
+            );
+
             this.applyFilter(path);
         },
 
