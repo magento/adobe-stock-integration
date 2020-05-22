@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAdobeStockVerifyImageDetailsActionGroup">
+        <annotations>
+            <description>Verifies adobe stock image information on the View Details panel</description>
+        </annotations>
+        <arguments>
+            <argument name="image"/>
+        </arguments>
+
+        <executeJS function="document.querySelector('{{AdminEnhancedMediaGalleryViewDetailsSection.adobeStockSection}}').scrollIntoView()" stepKey="scrollToAdobeStockSection"/>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.adobeStockStatus}}" stepKey="grabImageStatus"/>
+        <assertStringContainsString stepKey="verifyImageStatus">
+            <actualResult type="variable">grabImageStatus</actualResult>
+            <expectedResult type="string">{{image.status}}</expectedResult>
+        </assertStringContainsString>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.adobeStockAuthor}}" stepKey="grabImageAuthor"/>
+        <assertStringContainsString stepKey="verifyImageAuthor">
+            <actualResult type="variable">grabImageAuthor</actualResult>
+            <expectedResult type="string">{{image.author}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

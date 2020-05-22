@@ -10,9 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockLocalizationTest">
         <annotations>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1346" />
-            </skip>
             <features value="AdobeStockImagePanel"/>
             <stories value="[Story #18] User sees stock image attributes localized"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/41"/>
@@ -46,12 +43,13 @@
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <wait time="5" stepKey="waitBeforeExpandSectionLoadFull"/>
-        <!-- The following assertion/requirement on the specific keyword we expect may not be stable as we have no guarantee on the exact keyword to use as the image could be random -->
-        <actionGroup ref="AssertAdminAdobeStockImageKeywordActionGroup" stepKey="assertKeywordLocalized">
-            <argument name="keyword" value="машина"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.firstKeyword}}" stepKey="grabKeyword"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.imagePreviewCategoryText}}" stepKey="grabCategoryText"/>
+        <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertKeywordLocalized">
+             <argument name="stringToBeVerified" value="{$grabKeyword}"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminAdobeStockImagePreviewAttributeVisibleActionGroup" stepKey="assertCategoryLocalized">
-            <argument name="attributeName" value="Индустрия"/>
+        <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertCategoryLocalized">
+             <argument name="stringToBeVerified" value="{$grabCategoryText}"/>
         </actionGroup>
     </test>
 </tests>

@@ -54,10 +54,8 @@ class LoadById implements LoadByIdInterface
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME))
             ->where(self::ADOBE_STOCK_ASSET_CATEGORY_ID . ' = ?', $categoryId);
         $data = $connection->fetchRow($select);
-        /** @var CategoryInterface $category */
-        $category = $this->factory->create(['data' => $data]);
 
-        if (!$category->getId()) {
+        if (!$data) {
             throw new NoSuchEntityException(
                 __(
                     'Adobe Stock asset category with id "%1" does not exist.',
@@ -65,6 +63,9 @@ class LoadById implements LoadByIdInterface
                 )
             );
         }
+
+        /** @var CategoryInterface $category */
+        $category = $this->factory->create(['data' => $data]);
 
         return $category;
     }
