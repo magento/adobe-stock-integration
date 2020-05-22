@@ -6,7 +6,8 @@
         "magento/framework": "*",
         "magento/module-cms": "*",
         "magento/module-media-content-synchronization-api": "*",
-        "magento/module-media-content-api": "*"
+        "magento/module-media-content-api": "*",
+        "magento/module-media-gallery-synchronization": "*"
     },
     "type": "magento2-module",
     "license": [

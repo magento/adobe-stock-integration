@@ -54,7 +54,7 @@ class Category implements SynchronizerInterface
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param SelectByBatchesGenerator $selectBatches,
+     * @param SelectByBatchesGenerator $selectBatches
      * @param array $fields
      */
     public function __construct(

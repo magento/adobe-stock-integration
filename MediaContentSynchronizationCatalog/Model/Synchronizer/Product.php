@@ -54,7 +54,7 @@ class Product implements SynchronizerInterface
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param SelectByBatchesGenerator $selectBatches,
+     * @param SelectByBatchesGenerator $selectBatches
      * @param array $fields
      */
     public function __construct(
@@ -67,8 +67,8 @@ class Product implements SynchronizerInterface
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->fields = $fields;
         $this->selectBatches = $selectBatches;
+        $this->fields = $fields;
     }
 
     /**

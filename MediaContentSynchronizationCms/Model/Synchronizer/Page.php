@@ -12,6 +12,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
+use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * Synchronize page content with assets
@@ -52,7 +53,7 @@ class Page implements SynchronizerInterface
     /**
      * Synchronize page content with assets
      *
-     * @param SelectByBatchesGenerator $selectBatches,
+     * @param SelectByBatchesGenerator $selectBatches
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param DataObjectProcessor $dataObjectProcessor
@@ -88,7 +89,7 @@ class Page implements SynchronizerInterface
                                 self::ENTITY_ID => $rowId
                             ]
                         ),
-                        (string) $this->dataObjectProcessor->buildOutputDataArray($item, PageInterface::class)[$field]
+                        (string) $this->dataObjectProcessor->buildOutputDataArray($rowId, PageInterface::class)[$field]
                     );
                 }
             }

@@ -11,6 +11,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\Cms\Api\Data\BlockInterface;
 use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
 
 /**
@@ -66,7 +67,6 @@ class Block implements SynchronizerInterface
         SelectByBatchesGenerator $selectBatches,
         array $fields = []
     ) {
-        $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -90,7 +90,11 @@ class Block implements SynchronizerInterface
                                 self::ENTITY_ID => $blockId
                             ]
                         ),
-                        (string) $this->dataObjectProcessor->buildOutputDataArray($item, BlockInterface::class)[$field]
+                        (string) $this->dataObjectProcessor->buildOutputDataArray(
+                            $blockId,
+                            BlockInterface::class
+                        )
+                        [$field]
                     );
                 }
             }

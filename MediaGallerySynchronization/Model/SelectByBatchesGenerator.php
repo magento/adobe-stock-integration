@@ -34,6 +34,7 @@ class SelectByBatchesGenerator
     /**
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
+     * @param int $batchSize
      */
     public function __construct(
         ResourceConnection $resourceConnection,
