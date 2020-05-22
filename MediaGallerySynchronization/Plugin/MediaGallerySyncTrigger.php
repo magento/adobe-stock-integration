@@ -28,7 +28,7 @@ class MediaGallerySyncTrigger
      *
      * @param Publish $publish
      */
-    public function __construct(Publish $publish )
+    public function __construct(Publish $publish)
     {
         $this->publish = $publish ;
     }

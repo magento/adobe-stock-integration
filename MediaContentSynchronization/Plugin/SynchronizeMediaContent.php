@@ -26,7 +26,7 @@ class SynchronizeMediaContent
      *
      * @param Publish $publish
      */
-    public function __construct(Publish $publish )
+    public function __construct(Publish $publish)
     {
         $this->publish = $publish;
     }
@@ -35,15 +35,11 @@ class SynchronizeMediaContent
      * Initiate media content synchronization by publish queue.
      *
      * @param Consume $subject
-     * @param null $result
-     *
-     * @return void
-     * @throws LocalizedException
+     * @param $result
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(Consume $subject, $result)
+    public function afterExecute(Consume $subject, $result): void
     {
         $this->publish->execute();
-        return $result;
     }
 }
-
