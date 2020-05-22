@@ -13,7 +13,8 @@
             <argument name="email" type="string" defaultValue="{{AdobeStockLogin.email}}"/>
             <argument name="password" type="string" defaultValue="{{AdobeStockLogin.password}}"/>
         </arguments>
-        <switchToWindow stepKey="switchToWindow"/>
+        <executeJS function="return window.name;" stepKey="rootWindow"/>
+        <switchToWindow userInput="authorization_widnow" stepKey="switchToNewTab"/>
         <fillField selector="{{AdminAdobeStockSection.adobeImsPopupUserEmail}}" userInput="{{email}}" stepKey="fillUserEmail" />
         <click selector="{{AdminAdobeStockSection.adobeImsPopUpUserPassword}}" stepKey="clickPasswordField" />
         <waitForPageLoad stepKey="waitForUserEmailToLoad"/>
