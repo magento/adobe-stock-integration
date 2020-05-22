@@ -46,7 +46,6 @@ define([
                 function () {
                     this.getJsonTree();
                     this.initEvents();
-                    this.checkChipFiltersState();
                 }.bind(this)
             );
 
@@ -116,17 +115,38 @@ define([
                 currentTreePath;
 
             if (!isMediaBrowser) {
-                currentFilterPath === '' || this.locateNode(currentFilterPath);
+                this.isFolderExistsInTree(currentFilterPath) ?
+                    this.locateNode(currentFilterPath) :
+                    this.selectStorageRoot();
 
                 return;
             }
 
             if (this.isFiltersApllied(currentFilterPath)) {
-                selectedId === currentFilterPath || this.locateNode(currentFilterPath);
+                if (this.isFolderExistsInTree(currentFilterPath)) {
+                    selectedId === currentFilterPath  || this.locateNode(currentFilterPath);
+                } else {
+                    this.selectStorageRoot();
+                }
             } else {
                 currentTreePath = Base64.idDecode(window.MediabrowserUtility.pathId);
-                selectedId === currentTreePath || this.locateNode(currentTreePath);
+
+                if (this.isFolderExistsInTree(currentTreePath)) {
+                    selectedId === currentTreePath || this.locateNode(currentTreePath);
+                } else {
+                    this.selectStorageRoot();
+                }
+
             }
+        },
+
+        /**
+         * Verify if directory exists in folder tree
+         *
+         * @param {String} path
+         */
+        isFolderExistsInTree: function (path) {
+            return $('#' + path.replace(/\//g, '\\/')).length === 1;
         },
 
         /**
