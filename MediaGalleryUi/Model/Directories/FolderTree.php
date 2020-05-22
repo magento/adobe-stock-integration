@@ -11,6 +11,8 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Build folder tree structure by path
@@ -56,8 +58,11 @@ class FolderTree
      * @return array
      * @throws ValidatorException
      */
-    public function buildTree(bool $skipRoot = true): array
+    public function buildTree(bool $skipRoot = true, $currentTreePath = null): array
     {
+        if (!empty($currentTreePath)) {
+            $this->createSubDirIfNotExist($this->idDecode($currentTreePath));
+        }
         return $this->buildFolderTree($this->getDirectories(), $skipRoot);
     }
 
@@ -120,6 +125,46 @@ class FolderTree
         return $skipRoot ? $tree['children'] : $tree;
     }
 
+    /**
+     * Create subdirectory if doesn't exist
+     *
+     * @param string $relativePath Path of subdirectory to create
+     * @throws LocalizedException
+     */
+    private function createSubDirIfNotExist(string $relativePath): void
+    {
+        $directory = $this->filesystem->getDirectoryWrite($this->path);
+        
+        if (!$directory->isExist($relativePath)) {
+            try {
+                $directory->create($relativePath);
+            } catch (FileSystemException $e) {
+                $message = __(
+                    'Can\'t create %1 as subdirectory, you might have some permission issue.',
+                    $relativePathPath,
+                );
+                throw new LocalizedException($message);
+            }
+        }
+    }
+    
+    /**
+     * Revert operation to idEncode
+     *
+     * @param string $string
+     * @return string
+     */
+    private function idDecode(string $string): string
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $path = base64_decode(strtr($string, ':_-', '+/='));
+        if (preg_match('/\.\.(\\\|\/)/', $path)) {
+            throw new \InvalidArgumentException('Path is invalid');
+        }
+
+        return $path;
+    }
+    
     /**
      * Find parent directory
      *

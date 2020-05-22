@@ -222,9 +222,16 @@ define([
          * Get json data for jstree
          */
         getJsonTree: function () {
+            var isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
+                currntTreePath = isMediaBrowser ? window.MediabrowserUtility.pathId : null;
+
             $.ajax({
                 url: this.getDirectoryTreeUrl,
-                type: 'GET',
+                type: 'POST',
+                data: {
+                    'current_tree_path': currntTreePath
+                },
+                context: this,
                 dataType: 'json',
 
                 /**
