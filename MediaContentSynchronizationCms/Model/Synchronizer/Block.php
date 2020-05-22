@@ -55,20 +55,17 @@ class Block implements SynchronizerInterface
      * Synchronize block content with assets
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param SelectByBatchesGenerator $selectBatches
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        DataObjectProcessor $dataObjectProcessor,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         SelectByBatchesGenerator $selectBatches,
         array $fields = []
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
         $this->selectBatches = $selectBatches;
@@ -79,22 +76,19 @@ class Block implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->selectBatches->execute(self::CMS_BLOCK_TABLE, [self::CMS_BLOCK_TABLE_ENTITY_ID]) as $batch) {
-            foreach ($batch as $blockId) {
+        $columns =  array_merge([self::CMS_BLOCK_TABLE_ENTITY_ID], array_values($this->fields));
+        foreach ($this->selectBatches->execute(self::CMS_BLOCK_TABLE, $columns) as $batch) {
+            foreach ($batch as $item) {
                 foreach ($this->fields as $field) {
                     $this->updateContentAssetLinks->execute(
                         $this->contentIdentityFactory->create(
                             [
                                 self::TYPE => self::CONTENT_TYPE,
                                 self::FIELD => $field,
-                                self::ENTITY_ID => $blockId
+                                self::ENTITY_ID => $item[self::CMS_BLOCK_TABLE_ENTITY_ID]
                             ]
                         ),
-                        (string) $this->dataObjectProcessor->buildOutputDataArray(
-                            $blockId,
-                            BlockInterface::class
-                        )
-                        [$field]
+                        (string) $item[$field]
                     );
                 }
             }

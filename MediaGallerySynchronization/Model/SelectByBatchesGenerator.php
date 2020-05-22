@@ -65,7 +65,7 @@ class SelectByBatchesGenerator
                 $select = $connection->select()
                     ->from($this->resourceConnection->getTableName($tableName), $columns)
                     ->limit($this->batchSize, $offset);
-                yield $connection->fetchCol($select);
+                yield $connection->fetchAll($select);
             }
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

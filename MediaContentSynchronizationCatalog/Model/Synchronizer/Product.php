@@ -77,13 +77,13 @@ class Product implements SynchronizerInterface
     public function execute(): void
     {
         foreach ($this->selectBatches->execute(self::PRODUCT_TABLE, [self::PRODUCT_TABLE_ENTITY_ID]) as $batch) {
-            foreach ($batch as $itemId) {
+            foreach ($batch as $item) {
                 foreach ($this->fields as $field) {
                     $contentIdentity = $this->contentIdentityFactory->create(
                         [
                             self::TYPE => self::CONTENT_TYPE,
                             self::FIELD => $field,
-                            self::ENTITY_ID => $itemId
+                            self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
                         ]
                     );
                     $this->updateContentAssetLinks->execute(

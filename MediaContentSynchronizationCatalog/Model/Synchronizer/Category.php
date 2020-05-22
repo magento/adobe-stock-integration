@@ -77,13 +77,13 @@ class Category implements SynchronizerInterface
     public function execute(): void
     {
         foreach ($this->selectBatches->execute(self::CATEGORY_TABLE, [self::CATEGORY_IDENTITY_FIELD]) as $batch) {
-            foreach ($batch as $itemId) {
+            foreach ($batch as $item) {
                 foreach ($this->fields as $field) {
                     $contentIdentity = $this->contentIdentityFactory->create(
                         [
                             self::TYPE => self::CONTENT_TYPE,
                             self::FIELD => $field,
-                            self::ENTITY_ID => $itemId
+                            self::ENTITY_ID => $item[self::CATEGORY_IDENTITY_FIELD]
                         ]
                     );
                     $this->updateContentAssetLinks->execute(

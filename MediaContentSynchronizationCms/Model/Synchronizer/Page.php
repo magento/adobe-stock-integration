@@ -13,6 +13,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Synchronize page content with assets
@@ -24,7 +25,7 @@ class Page implements SynchronizerInterface
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
     private const CMS_PAGE_TABLE = 'cms_page';
-    private const CMS_PAGE_TABLE_ENTITY_ID = 'row_id';
+    private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
     /**
      * @var SelectByBatchesGenerator
      */
@@ -56,20 +57,17 @@ class Page implements SynchronizerInterface
      * @param SelectByBatchesGenerator $selectBatches
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param array $fields
      */
     public function __construct(
         SelectByBatchesGenerator $selectBatches,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        DataObjectProcessor $dataObjectProcessor,
         array $fields = []
     ) {
         $this->selectBatches = $selectBatches;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->fields = $fields;
     }
 
@@ -78,18 +76,19 @@ class Page implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->selectBatches->execute(self::CMS_PAGE_TABLE, [self::CMS_PAGE_TABLE_ENTITY_ID]) as $batch) {
-            foreach ($batch as $rowId) {
+        $columns =  array_merge([self::CMS_PAGE_TABLE_ENTITY_ID], array_values($this->fields));
+        foreach ($this->selectBatches->execute(self::CMS_PAGE_TABLE, $columns) as $batch) {
+            foreach ($batch as $item) {
                 foreach ($this->fields as $field) {
                     $this->updateContentAssetLinks->execute(
                         $this->contentIdentityFactory->create(
                             [
                                 self::TYPE => self::CONTENT_TYPE,
                                 self::FIELD => $field,
-                                self::ENTITY_ID => $rowId
+                                self::ENTITY_ID => $item[self::CMS_PAGE_TABLE_ENTITY_ID]
                             ]
                         ),
-                        (string) $this->dataObjectProcessor->buildOutputDataArray($rowId, PageInterface::class)[$field]
+                        (string) $item[$field]
                     );
                 }
             }
