@@ -35,10 +35,9 @@ class SynchronizeMediaContent
      * Initiate media content synchronization by publish queue.
      *
      * @param Consume $subject
-     * @param $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(Consume $subject, $result): void
+    public function afterExecute(Consume $subject): void
     {
         $this->publish->execute();
     }
