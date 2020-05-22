@@ -54,10 +54,8 @@ class LoadById implements LoadByIdInterface
             ->from($this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_CREATOR_TABLE_NAME))
             ->where(self::ADOBE_STOCK_ASSET_CREATOR_ID . ' = ?', $creatorId);
         $data = $connection->fetchRow($select);
-        /** @var CreatorInterface $creator */
-        $creator = $this->factory->create(['data' => $data]);
 
-        if (!$creator->getId()) {
+        if (!$data) {
             throw new NoSuchEntityException(
                 __(
                     'Adobe Stock asset creator with id "%1" does not exist.',
@@ -65,6 +63,9 @@ class LoadById implements LoadByIdInterface
                 )
             );
         }
+
+        /** @var CreatorInterface $creator */
+        $creator = $this->factory->create(['data' => $data]);
 
         return $creator;
     }
