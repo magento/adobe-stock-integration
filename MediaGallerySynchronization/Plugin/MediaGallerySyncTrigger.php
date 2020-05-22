@@ -24,8 +24,6 @@ class MediaGallerySyncTrigger
     private $publish;
 
     /**
-     * MediaGallerySyncTrigger constructor.
-     *
      * @param Publish $publish
      */
     public function __construct(Publish $publish)

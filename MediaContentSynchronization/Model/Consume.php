@@ -20,10 +20,7 @@ class Consume
     private $synchronize;
 
     /**
-     * SynchronizationConsumer constructor.
-     *
      * @param SynchronizeInterface $synchronize
-
      */
     public function __construct(SynchronizeInterface $synchronize)
     {

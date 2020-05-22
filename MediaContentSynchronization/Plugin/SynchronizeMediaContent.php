@@ -22,8 +22,6 @@ class SynchronizeMediaContent
     private $publish;
 
     /**
-     * SynchronizeMediaContent constructor.
-     *
      * @param Publish $publish
      */
     public function __construct(Publish $publish)
@@ -32,7 +30,7 @@ class SynchronizeMediaContent
     }
 
     /**
-     * Initiate media content synchronization by publish queue.
+     * Publish content synchronization request message to the queue.
      *
      * @param Consume $subject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -25,8 +25,6 @@ class Publish
     private $publisher;
 
     /**
-     * Image constructor.
-     *
      * @param PublisherInterface $publisher
      */
     public function __construct(PublisherInterface $publisher)
@@ -35,7 +33,7 @@ class Publish
     }
 
     /**
-     * Publish to the message queue media content synchronization message.
+     * Publish media content synchronization message to the message queue.
      */
     public function execute() : void
     {
