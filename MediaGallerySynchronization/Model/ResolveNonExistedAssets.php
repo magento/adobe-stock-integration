@@ -82,10 +82,13 @@ class ResolveNonExistedAssets
     public function execute(): void
     {
         try {
-            foreach ($this->selectBatches->execute(self::TABLE_MEDIA_GALLERY_ASSET, ['path']) as $batch) {
+            foreach (
+                $this->selectBatches->execute(self::TABLE_MEDIA_GALLERY_ASSET, [self::MEDIA_GALLERY_ASSET_PATH])
+                as $batch
+            ) {
                 foreach ($batch as $item) {
-                    if (!$this->getMediaDirectory()->isExist($item)) {
-                        $this->deleteAssetsByPaths->execute([$item]);
+                    if (!$this->getMediaDirectory()->isExist($item[self::MEDIA_GALLERY_ASSET_PATH])) {
+                        $this->deleteAssetsByPaths->execute([$item[self::MEDIA_GALLERY_ASSET_PATH]]);
                     }
                 }
             }
