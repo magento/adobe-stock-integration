@@ -10,11 +10,12 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SelectByBatchesGeneratorInterface;
 
 /**
- * Select data from DB by provided batch size
+ * Select data from database by provided batch size
  */
-class SelectByBatchesGenerator
+class SelectByBatchesGenerator implements SelectByBatchesGeneratorInterface
 {
     /**
      * @var ResourceConnection

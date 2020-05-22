@@ -10,7 +10,7 @@ namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
-use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
+use Magento\MediaGallerySynchronizationApi\Api\SelectByBatchesGeneratorInterface;
 use Magento\Cms\Api\Data\PageInterface;
 
 /**
@@ -26,7 +26,7 @@ class Page implements SynchronizerInterface
     private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
 
     /**
-     * @var SelectByBatchesGenerator
+     * @var SelectByBatchesGeneratorInterface
      */
     private $selectBatches;
 
@@ -48,13 +48,13 @@ class Page implements SynchronizerInterface
     /**
      * Synchronize page content with assets
      *
-     * @param SelectByBatchesGenerator $selectBatches
+     * @param SelectByBatchesGeneratorInterface $selectBatches
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
-        SelectByBatchesGenerator $selectBatches,
+        SelectByBatchesGeneratorInterface $selectBatches,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields = []

@@ -11,7 +11,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
-use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
+use Magento\MediaGallerySynchronizationApi\Api\SelectByBatchesGeneratorInterface;
 
 /**
  * Synchronize product content with assets
@@ -46,7 +46,7 @@ class Product implements SynchronizerInterface
     private $fields;
 
     /**
-     * @var SelectByBatchesGenerator
+     * @var SelectByBatchesGeneratorInterface
      */
     private $selectBatches;
     
@@ -54,14 +54,14 @@ class Product implements SynchronizerInterface
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param SelectByBatchesGenerator $selectBatches
+     * @param SelectByBatchesGeneratorInterface $selectBatches
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        SelectByBatchesGenerator $selectBatches,
+        SelectByBatchesGeneratorInterface $selectBatches,
         array $fields = []
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
