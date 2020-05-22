@@ -7,13 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
-use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator;
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\DataObject;
 
 /**
  * Synchronize page content with assets
