@@ -12,7 +12,8 @@
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/710"/>
             <title value="Uploading and deleting an image using context menu"/>
-            <testCaseId value="to-be-added"/>
+            <stories value="[Story #52] User accesses Media Gallery from the main navigation"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4753539"/>
             <description value="Uploading and deleting an image using context menu"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
