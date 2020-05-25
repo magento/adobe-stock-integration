@@ -77,7 +77,6 @@ class FetchMediaStorageFileBatches
 
     /**
      * Return files from files system by provided size of batch
-     *
      */
     public function execute(): \Traversable
     {
