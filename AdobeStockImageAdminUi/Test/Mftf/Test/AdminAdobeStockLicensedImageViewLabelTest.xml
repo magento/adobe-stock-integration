@@ -18,7 +18,7 @@
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_login_logout"/>
             <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1065"/>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
             </skip>
         </annotations>
         <before>
