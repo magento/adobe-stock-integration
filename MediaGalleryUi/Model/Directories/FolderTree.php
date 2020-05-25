@@ -64,6 +64,7 @@ class FolderTree
      * Return directory folder structure in array
      *
      * @param bool $skipRoot
+     * @param string|null $currentTreePath
      * @return array
      * @throws ValidatorException
      */
@@ -137,7 +138,7 @@ class FolderTree
     /**
      * Create subdirectory if doesn't exist
      *
-     * @param string $relativePath Path of subdirectory to create
+     * @param string $relativePath
      * @throws LocalizedException
      */
     private function createSubDirIfNotExist(string $relativePath): void
@@ -159,7 +160,7 @@ class FolderTree
     }
     
     /**
-     * Revert operation to idEncode
+     * Decode current path id param, validate if path is valid.
      *
      * @param string $string
      * @return string
