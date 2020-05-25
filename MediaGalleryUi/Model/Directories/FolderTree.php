@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Directory\Read;
 use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Build folder tree structure by path
@@ -35,17 +36,25 @@ class FolderTree
     private $isBlacklisted;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    
+    /**
      * Constructor
      *
+     * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param string $path
      * @param IsPathBlacklistedInterface $isBlacklisted
      */
     public function __construct(
+        LoggerInterface $logger,
         Filesystem $filesystem,
         string $path,
         IsPathBlacklistedInterface $isBlacklisted
     ) {
+        $this->logger = $logger;
         $this->filesystem = $filesystem;
         $this->path = $path;
         $this->isBlacklisted = $isBlacklisted;
@@ -141,8 +150,9 @@ class FolderTree
             } catch (FileSystemException $e) {
                 $message = __(
                     'Can\'t create %1 as subdirectory, you might have some permission issue.',
-                    $relativePathPath,
+                    $relativePathPath
                 );
+                $this->logger->critical($e->getMessage());
                 throw new LocalizedException($message);
             }
         }
@@ -159,6 +169,7 @@ class FolderTree
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $path = base64_decode(strtr($string, ':_-', '+/='));
         if (preg_match('/\.\.(\\\|\/)/', $path)) {
+            $this->logger->critical('current_tree_path, parameter is invalid');
             throw new \InvalidArgumentException('Path is invalid');
         }
 
