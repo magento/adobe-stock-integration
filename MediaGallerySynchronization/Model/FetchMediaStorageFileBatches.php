@@ -12,9 +12,9 @@ use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Media storage assets batch generator
+ * Fetch files from media storage in batches
  */
-class MediaStorageFilesBatchGenerator
+class FetchMediaStorageFileBatches
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
     
@@ -47,32 +47,39 @@ class MediaStorageFilesBatchGenerator
      * @var LoggerInterface
      */
     private $log;
+
+    /**
+     * @var int
+     */
+    private $batchSize;
     
     /**
      * @param LoggerInterface $log
      * @param IsPathBlacklistedInterface $isPathBlacklisted
      * @param Filesystem $filesystem
      * @param GetAssetsIterator $assetsIterator
+     * @param int $batchSize
      */
     public function __construct(
         LoggerInterface $log,
         IsPathBlacklistedInterface $isPathBlacklisted,
         Filesystem $filesystem,
-        GetAssetsIterator $assetsIterator
+        GetAssetsIterator $assetsIterator,
+        int $batchSize
     ) {
         $this->log = $log;
         $this->isPathBlacklisted = $isPathBlacklisted;
         $this->getAssetsIterator = $assetsIterator;
         $this->filesystem = $filesystem;
         $this->assetsPaths = [];
+        $this->batchSize = $batchSize;
     }
 
     /**
      * Return files from files system by provided size of batch
      *
-     * @param int $size
      */
-    public function getFiles(int $size): \Generator
+    public function execute(): \Traversable
     {
         $i = 0;
         $batch = [];
@@ -84,7 +91,7 @@ class MediaStorageFilesBatchGenerator
             }
 
             $batch[] = $file;
-            if (++$i == $size) {
+            if (++$i == $this->batchSize) {
                 yield $batch;
                 $i = 0;
                 $batch = [];

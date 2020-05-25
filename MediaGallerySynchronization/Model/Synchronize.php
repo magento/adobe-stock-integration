@@ -12,7 +12,7 @@ use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool;
 use Psr\Log\LoggerInterface;
-use Magento\MediaGallerySynchronization\Model\MediaStorageFilesBatchGenerator;
+use Magento\MediaGallerySynchronization\Model\FetchMediaStorageFileBatches;
 
 /**
  * Synchronize media storage and media assets database records
@@ -30,14 +30,9 @@ class Synchronize implements SynchronizeInterface
     private $synchronizerPool;
 
     /**
-     * @var MediaStorageFilesBatchGenerator
+     * @var FetchMediaStorageFileBatches
      */
     private $batchGenerator;
-
-    /**
-     * @var int
-     */
-    private $batchSize;
 
     /**
      * @var ResolveNonExistedAssets
@@ -48,21 +43,18 @@ class Synchronize implements SynchronizeInterface
      * @param ResolveNonExistedAssets $resolveNonExistedAssets
      * @param LoggerInterface $log
      * @param SynchronizerPool $synchronizerPool
-     * @param MediaStorageFilesBatchGenerator $batchGenerator
-     * @param int $batchSize
+     * @param FetchMediaStorageFileBatches $batchGenerator
      */
     public function __construct(
         ResolveNonExistedAssets $resolveNonExistedAssets,
         LoggerInterface $log,
         SynchronizerPool $synchronizerPool,
-        MediaStorageFilesBatchGenerator $batchGenerator,
-        int $batchSize
+        FetchMediaStorageFileBatches $batchGenerator
     ) {
         $this->resolveNonExistedAssets = $resolveNonExistedAssets;
         $this->log = $log;
         $this->synchronizerPool = $synchronizerPool;
         $this->batchGenerator = $batchGenerator;
-        $this->batchSize = $batchSize;
     }
 
     /**
@@ -77,7 +69,7 @@ class Synchronize implements SynchronizeInterface
                 throw new LocalizedException(__('Synchronizer must implement SynchronizeFilesInterface'));
             }
 
-            foreach ($this->batchGenerator->getFiles($this->batchSize) as $batch) {
+            foreach ($this->batchGenerator->execute() as $batch) {
                 try {
                     $synchronizer->execute($batch);
                 } catch (\Exception $exception) {

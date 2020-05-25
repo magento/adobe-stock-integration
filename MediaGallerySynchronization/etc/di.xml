@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface" type="Magento\MediaGallerySynchronization\Model\Synchronize"/>
-    <preference for="Magento\MediaGallerySynchronizationApi\Api\SelectByBatchesGeneratorInterface" type="Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator"/>
+    <preference for="Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface" type="Magento\MediaGallerySynchronization\Model\SelectByBatchesGenerator"/>
     <preference for="Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface" type="Magento\MediaGallerySynchronization\Model\SynchronizeFiles"/>
     <type name="Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool">
         <arguments>
@@ -16,7 +16,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGallerySynchronization\Model\Synchronize">
+    <type name="Magento\MediaGallerySynchronization\Model\FetchMediaStorageFileBatches">
         <arguments>
             <argument name="batchSize" xsi:type="number">100</argument>
         </arguments>

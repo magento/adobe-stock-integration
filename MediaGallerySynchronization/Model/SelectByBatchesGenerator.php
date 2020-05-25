@@ -10,12 +10,12 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
-use Magento\MediaGallerySynchronizationApi\Api\SelectByBatchesGeneratorInterface;
+use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 
 /**
  * Select data from database by provided batch size
  */
-class SelectByBatchesGenerator implements SelectByBatchesGeneratorInterface
+class SelectByBatchesGenerator implements FetchBatchesInterface
 {
     /**
      * @var ResourceConnection
@@ -53,7 +53,7 @@ class SelectByBatchesGenerator implements SelectByBatchesGeneratorInterface
      * @param string $tableName
      * @param array $columns
      */
-    public function execute(string $tableName, array $columns): \Generator
+    public function execute(string $tableName, array $columns): \Traversable
     {
         try {
             $connection = $this->resourceConnection->getConnection();

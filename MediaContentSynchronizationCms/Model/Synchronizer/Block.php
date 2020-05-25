@@ -11,7 +11,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\MediaGallerySynchronizationApi\Api\SelectByBatchesGeneratorInterface;
+use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 
 /**
  * Synchronize block content with assets
@@ -26,7 +26,7 @@ class Block implements SynchronizerInterface
     private const CMS_BLOCK_TABLE_ENTITY_ID = 'block_id';
 
     /**
-     * @var SelectByBatchesGeneratorInterface
+     * @var FetchBatchesInterface
      */
     private $selectBatches;
 
@@ -50,13 +50,13 @@ class Block implements SynchronizerInterface
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param SelectByBatchesGeneratorInterface $selectBatches
+     * @param FetchBatchesInterface $selectBatches
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        SelectByBatchesGeneratorInterface $selectBatches,
+        FetchBatchesInterface $selectBatches,
         array $fields = []
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;

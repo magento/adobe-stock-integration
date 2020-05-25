@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaGallerySynchronizationApi\Api\SelectByBatchesGeneratorInterface;
+use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 
 /**
  * Delete assets which not exist physically
@@ -50,7 +50,7 @@ class ResolveNonExistedAssets
     private $mediaDirectory;
 
     /**
-     * @var SelectByBatchesGeneratorInterface
+     * @var FetchBatchesInterface
      */
     private $selectBatches;
     
@@ -59,14 +59,14 @@ class ResolveNonExistedAssets
      * @param ResourceConnection $resourceConnection
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
      * @param LoggerInterface $logger
-     * @param SelectByBatchesGeneratorInterface $selectBatches
+     * @param FetchBatchesInterface $selectBatches
      */
     public function __construct(
         Filesystem $filesystem,
         ResourceConnection $resourceConnection,
         DeleteAssetsByPathsInterface $deleteAssetsByPaths,
         LoggerInterface $logger,
-        SelectByBatchesGeneratorInterface $selectBatches
+        FetchBatchesInterface $selectBatches
     ) {
         $this->filesystem = $filesystem;
         $this->resourceConnection = $resourceConnection;
