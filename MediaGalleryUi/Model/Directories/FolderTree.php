@@ -151,7 +151,7 @@ class FolderTree
             } catch (FileSystemException $e) {
                 $message = __(
                     'Can\'t create %1 as subdirectory, you might have some permission issue.',
-                    $relativePathPath
+                    $relativePath
                 );
                 $this->logger->critical($e->getMessage());
                 throw new LocalizedException($message);
