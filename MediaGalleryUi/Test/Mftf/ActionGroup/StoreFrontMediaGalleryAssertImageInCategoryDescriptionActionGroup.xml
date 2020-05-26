@@ -11,7 +11,7 @@
     <actionGroup name="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup">
         <arguments>
             <argument name="categoryEntity" defaultValue="SimpleSubCategory"/>
-            <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>
+            <argument name="imageName" type="string" defaultValue=""/>
         </arguments>
         <annotations>
             <description>Navigates to the category page on the storefront and asserts that the image is present in description.</description>
