@@ -60,7 +60,9 @@ define([
                         confirm: function (folderName) {
                             var selectedFolder = _.isUndefined(this.selectedFolder()) ||
                                 _.isNull(this.selectedFolder()) ? '/' : this.selectedFolder(),
-                                folderToCreate = selectedFolder !== '/' ? selectedFolder + '/' + folderName : folderName;
+                                folderToCreate = selectedFolder !== '/' ?
+                                selectedFolder + '/' + folderName :
+                                folderName;
 
                             createDirectory(
                                 this.directoryTree().createDirectoryUrl,
