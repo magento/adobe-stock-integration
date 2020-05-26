@@ -9,7 +9,6 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Directories;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\MediaGalleryUi\Model\Directories\FolderTree;
@@ -18,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Returns all available directories
  */
-class GetTree extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class GetTree extends Action implements HttpGetActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;
@@ -60,8 +59,7 @@ class GetTree extends Action implements HttpGetActionInterface, HttpPostActionIn
     public function execute()
     {
         try {
-            $currentTreePath = $this->getRequest()->getParam('current_tree_path');
-            $responseContent[] = $this->folderTree->buildTree(true, $currentTreePath);
+            $responseContent[] = $this->folderTree->buildTree();
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
