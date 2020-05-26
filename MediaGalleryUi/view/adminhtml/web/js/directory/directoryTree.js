@@ -111,32 +111,15 @@ define([
         checkChipFiltersState: function () {
             var currentFilterPath = this.filterChips().filters.path,
                 isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
-                selectedId =  $(this.directoryTreeSelector).jstree('get_selected').attr('id'),
                 currentTreePath;
 
-            if (!isMediaBrowser) {
-                this.isFolderExistsInTree(currentFilterPath) ?
-                    this.locateNode(currentFilterPath) :
-                    this.selectStorageRoot();
+            currentTreePath = (this.isFiltersApplied(currentFilterPath) || !isMediaBrowser) ? currentFilterPath :
+                Base64.idDecode(window.MediabrowserUtility.pathId) ;
 
-                return;
-            }
-
-            if (this.isFiltersApllied(currentFilterPath)) {
-                if (this.isFolderExistsInTree(currentFilterPath)) {
-                    selectedId === currentFilterPath  || this.locateNode(currentFilterPath);
-                } else {
-                    this.selectStorageRoot();
-                }
+            if (this.folderExistsInTree(currentTreePath)) {
+                this.locateNode(currentTreePath);
             } else {
-                currentTreePath = Base64.idDecode(window.MediabrowserUtility.pathId);
-
-                if (this.isFolderExistsInTree(currentTreePath)) {
-                    selectedId === currentTreePath || this.locateNode(currentTreePath);
-                } else {
-                    this.selectStorageRoot();
-                }
-
+                this.selectStorageRoot();
             }
         },
 
@@ -145,7 +128,7 @@ define([
          *
          * @param {String} path
          */
-        isFolderExistsInTree: function (path) {
+        folderExistsInTree: function (path) {
             return $('#' + path.replace(/\//g, '\\/')).length === 1;
         },
 
@@ -154,7 +137,7 @@ define([
          *
          * @param {String} currentFilterPath
          */
-        isFiltersApllied: function (currentFilterPath) {
+        isFiltersApplied: function (currentFilterPath) {
             return !_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
                 currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category';
         },
@@ -165,6 +148,11 @@ define([
          * @param {String} path
          */
         locateNode: function (path) {
+            var selectedId =  $(this.directoryTreeSelector).jstree('get_selected').attr('id');
+
+            if (path === selectedId) {
+                return;
+            }
             path = path.replace(/\//g, '\\/');
             $(this.directoryTreeSelector).jstree('open_node', '#' + path);
             $(this.directoryTreeSelector).jstree('select_node', '#' + path, true);
