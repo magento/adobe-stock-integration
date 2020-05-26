@@ -59,17 +59,16 @@ define([
                          */
                         confirm: function (folderName) {
                             var selectedFolder = _.isUndefined(this.selectedFolder()) ||
-                                _.isNull(this.selectedFolder()) ? '/' : this.selectedFolder();
+                                _.isNull(this.selectedFolder()) ? '/' : this.selectedFolder(),
+                                folderToCreate = selectedFolder !== '/' ? selectedFolder + '/' + folderName : folderName;
 
                             createDirectory(
                                 this.directoryTree().createDirectoryUrl,
-                                [selectedFolder + '/' + folderName]
+                                [folderToCreate]
                             ).then(function () {
                                 this.directoryTree().reloadJsTree();
                                 $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    var node = selectedFolder !== '/' ? selectedFolder + '/' + folderName : folderName;
-
-                                    this.directoryTree().locateNode(node);
+                                    this.directoryTree().locateNode(folderToCreate);
                                 }.bind(this));
 
                             }.bind(this)).fail(function (error) {
