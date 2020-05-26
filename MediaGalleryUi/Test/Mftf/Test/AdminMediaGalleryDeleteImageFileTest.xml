@@ -13,17 +13,16 @@
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1094"/>
             <title value="Deleting new image file functionality in Enhanced Media Gallery"/>
             <stories value="Deleting new image file functionality in Enhanced Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4756652"/>
             <description value="Deleting new image file functionality in Enhanced Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="enableEnhancedMediaGallery"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="disableEnhancedMediaGallery"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -34,6 +33,8 @@
             <argument name="imageName" value="{{ImageUpload.file}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
-        <see userInput='You have successfully removed the image "{{ImageUpload.filename}}"' stepKey="verifyDeleteImage"/>
+        <actionGroup ref="AdminAssertMediaGalleryAssetDeletedActionGroup" stepKey="verifyImageIsDeleted">
+            <argument name="imageName" value="{{ImageUpload.filename}}"/>
+        </actionGroup>
     </test>
 </tests>
