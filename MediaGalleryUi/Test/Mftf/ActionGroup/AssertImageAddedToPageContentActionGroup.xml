@@ -13,7 +13,7 @@
             <description>Validates that the an image was added to the content.</description>
         </annotations>
         <arguments>
-            <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>
+            <argument name="imageName" type="string"/>
         </arguments>
        <grabValueFrom selector="{{CmsNewPagePageContentSection.content}}"  stepKey="grabTextFromContent"/>
         <assertStringContainsString stepKey="assertContentContainsAddedImage">
