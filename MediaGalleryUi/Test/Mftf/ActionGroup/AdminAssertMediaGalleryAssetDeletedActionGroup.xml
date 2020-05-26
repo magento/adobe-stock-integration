@@ -8,7 +8,6 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Assert customer info in customers grid row -->
     <actionGroup name="AdminAssertMediaGalleryAssetDeletedActionGroup">
         <annotations>
             <description>Verify image has been deleted from the Enhanced media gallery.</description>
