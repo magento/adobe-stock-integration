@@ -14,4 +14,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGallerySynchronization\Model\Consume">
+        <plugin name="synchronize_media_content"
+                type="Magento\MediaContentSynchronization\Plugin\SynchronizeMediaContent"/>
+    </type>
 </config>
