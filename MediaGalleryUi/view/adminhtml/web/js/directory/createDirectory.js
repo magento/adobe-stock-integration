@@ -3,9 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery',
-    'underscore'
-], function ($, _) {
+    'jquery'
+], function ($) {
     'use strict';
 
     return function (createFolderUrl, paths) {

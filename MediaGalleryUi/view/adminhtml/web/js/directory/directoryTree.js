@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* global Base64 */
 define([
     'jquery',
     'uiComponent',
