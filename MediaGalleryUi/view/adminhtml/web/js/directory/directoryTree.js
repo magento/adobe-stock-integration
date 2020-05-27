@@ -9,7 +9,7 @@ define([
     'uiComponent',
     'uiLayout',
     'underscore',
-    'Magento_MediaGalleryUi/js/directory/createDirectory',
+    'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'jquery/jstree/jquery.jstree'
 ], function ($, Component, layout, _, createDirectory) {
     'use strict';

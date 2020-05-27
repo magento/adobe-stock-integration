@@ -10,8 +10,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'underscore',
     'Magento_Ui/js/modal/prompt',
-    'Magento_MediaGalleryUi/js/directory/createDirectory',
-    'Magento_MediaGalleryUi/js/directory/deleteDirectory',
+    'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
+    'Magento_MediaGalleryUi/js/directory/actions/deleteDirectory',
     'validation'
 ], function ($, Component, confirm, uiAlert, _, prompt, createDirectory, deleteDirectory) {
     'use strict';
@@ -58,19 +58,13 @@ define([
                          * Confirm action
                          */
                         confirm: function (folderName) {
-                            var selectedFolder = _.isUndefined(this.selectedFolder()) ||
-                                _.isNull(this.selectedFolder()) ? '/' : this.selectedFolder(),
-                                folderToCreate = selectedFolder !== '/' ?
-                                selectedFolder + '/' + folderName :
-                                folderName;
-
                             createDirectory(
                                 this.directoryTree().createDirectoryUrl,
-                                [folderToCreate]
+                                [this.getFolderPath(folderName)]
                             ).then(function () {
                                 this.directoryTree().reloadJsTree();
                                 $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    this.directoryTree().locateNode(folderToCreate);
+                                    this.directoryTree().locateNode(this.getFolderPath(folderName));
                                 }.bind(this));
 
                             }.bind(this)).fail(function (error) {
@@ -96,6 +90,20 @@ define([
                     }]
                 });
             }.bind(this));
+        },
+
+        /**
+         * Return configured path for folder creation.
+         *
+         * @param {String} folderName
+         * @returns {String}
+         */
+        getSelectedFolder: function (folderName) {
+            var selectedFolder = _.isUndefined(this.selectedFolder()) ||
+                                 _.isNull(this.selectedFolder()) ? '/' : this.selectedFolder(),
+               folderToCreate = selectedFolder !== '/' ? selectedFolder + '/' + folderName : folderName;
+
+            return folderToCreate;
         },
 
         /**
