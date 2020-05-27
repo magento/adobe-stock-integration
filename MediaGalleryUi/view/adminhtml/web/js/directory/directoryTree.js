@@ -113,8 +113,8 @@ define([
                 isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
                 currentTreePath;
 
-            currentTreePath = (this.isFiltersApplied(currentFilterPath) || !isMediaBrowser) ? currentFilterPath :
-                Base64.idDecode(window.MediabrowserUtility.pathId) ;
+            currentTreePath = this.isFiltersApplied(currentFilterPath) || !isMediaBrowser ? currentFilterPath :
+                Base64.idDecode(window.MediabrowserUtility.pathId);
 
             if (this.folderExistsInTree(currentTreePath)) {
                 this.locateNode(currentTreePath);
