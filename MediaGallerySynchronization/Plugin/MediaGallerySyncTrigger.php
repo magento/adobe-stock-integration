@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Plugin;
 
-use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\MediaGallerySynchronization\Model\Publish;
 
 /**
- * Plugin to synchronize media storage and media assets database recoders when media gallery enabled in configuration
+ * Plugin to synchronize media storage and media assets database records when media gallery enabled in configuration.
  */
 class MediaGallerySyncTrigger
 {
@@ -19,25 +19,24 @@ class MediaGallerySyncTrigger
     private const MEDIA_GALLERY_ENABLED_VALUE = 1;
 
     /**
-     * @var SynchronizeInterface
+     * @var Publish
      */
-    private $imagesIndexer;
+    private $publish;
 
     /**
-     * @param SynchronizeInterface $imagesIndexer
+     * @param Publish $publish
      */
-    public function __construct(SynchronizeInterface $imagesIndexer)
+    public function __construct(Publish $publish)
     {
-        $this->imagesIndexer = $imagesIndexer;
+        $this->publish = $publish ;
     }
 
     /**
-     * Update media gallery grid table when configuration is saved and media gallery enabled
+     * Update media gallery grid table when configuration is saved and media gallery enabled.
      *
      * @param Value $config
      * @param Value $result
      * @return Value
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(Value $config, Value $result): Value
@@ -46,7 +45,7 @@ class MediaGallerySyncTrigger
             && $result->isValueChanged()
             && (int) $result->getValue() === self::MEDIA_GALLERY_ENABLED_VALUE
         ) {
-            $this->imagesIndexer->execute();
+            $this->publish->execute();
         }
 
         return $result;
