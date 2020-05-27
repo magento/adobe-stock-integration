@@ -68,11 +68,11 @@ define([
                 createDirectory(
                     this.createDirectoryUrl,
                     this.convertPathToPathsArray(Base64.idDecode(currentTreePath))
-                ).then(function () {
-                    deferred.resolve();
-                }).fail(function () {
+                ).always(function () {
                     deferred.resolve();
                 });
+            } else {
+                deferred.resolve();
             }
 
             return deferred.promise();
@@ -85,10 +85,12 @@ define([
          */
         convertPathToPathsArray: function (path) {
             var pathsArray = [],
+                pathString = '',
                 paths = path.split('/');
 
             $.each(paths, function (i, val) {
-                pathsArray.push(i >= 1 ? paths[i - 1] + '/' + val : val);
+                pathString += i >= 1 ? val : val + '/';
+                pathsArray.push(i >= 1 ? pathString : val);
             });
 
             return pathsArray;
