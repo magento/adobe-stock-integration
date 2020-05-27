@@ -196,7 +196,15 @@ define([
             delete filters.path;
             this.filterChips().set('applied', filters);
             this.activeNode(null);
-            this.directories().setInActive();
+            this.waitForCondition(
+              function () {
+                return _.isUndefined(this.directories());
+            }.bind(this),
+                function () {
+                this.directories().setInActive();
+            }.bind(this)
+          );
+
         },
 
         /**
