@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminAdobeStockImageUnlicensedLabelActionGroup">
+        <seeElement selector="{{AdminEnhancedMediaGalleryImageSection.label}}" stepKey="seeImageLabel" />
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryImageSection.label}}" stepKey="grabImageLabel" />
+        <assertStringContainsString stepKey="assertUnlicensedLabel">
+            <actualResult type="variable">grabImageLabel</actualResult>
+            <expectedResult type="string">{{AdobeStockImageData.unlicensedText}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>
