@@ -1,8 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.g
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/* global Base64 */
 define([
     'jquery',
     'uiComponent',
@@ -45,7 +46,6 @@ define([
                 function () {
                     this.getJsonTree();
                     this.initEvents();
-                    this.checkChipFiltersState();
                 }.bind(this)
             );
 
@@ -90,6 +90,14 @@ define([
         initEvents: function () {
             this.overrideMultiselectBehavior();
 
+            $(this.directoryTreeSelector).on('loaded.jstree', function () {
+                this.checkChipFiltersState();
+            }.bind(this));
+
+            $(window).on('reload.MediaGallery', function () {
+                this.checkChipFiltersState();
+            }.bind(this));
+
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
                 var path = $(data.rslt.obj).data('path');
 
@@ -101,11 +109,37 @@ define([
          * Verify directory filter on init event, select folder per directory filter state
          */
         checkChipFiltersState: function () {
-            if (!_.isUndefined(this.filterChips().filters.path) && this.filterChips().filters.path !== '') {
-                $(this.directoryTreeSelector).on('loaded.jstree', function () {
-                    this.locateNode(this.filterChips().filters.path);
-                }.bind(this));
+            var currentFilterPath = this.filterChips().filters.path,
+                isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
+                currentTreePath;
+
+            currentTreePath = this.isFiltersApplied(currentFilterPath) || !isMediaBrowser ? currentFilterPath :
+                Base64.idDecode(window.MediabrowserUtility.pathId);
+
+            if (this.folderExistsInTree(currentTreePath)) {
+                this.locateNode(currentTreePath);
+            } else {
+                this.selectStorageRoot();
             }
+        },
+
+        /**
+         * Verify if directory exists in folder tree
+         *
+         * @param {String} path
+         */
+        folderExistsInTree: function (path) {
+            return $('#' + path.replace(/\//g, '\\/')).length === 1;
+        },
+
+        /**
+         * Check if need to select directory by filters state
+         *
+         * @param {String} currentFilterPath
+         */
+        isFiltersApplied: function (currentFilterPath) {
+            return !_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
+                currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category';
         },
 
         /**
@@ -114,6 +148,11 @@ define([
          * @param {String} path
          */
         locateNode: function (path) {
+            var selectedId =  $(this.directoryTreeSelector).jstree('get_selected').attr('id');
+
+            if (path === selectedId) {
+                return;
+            }
             path = path.replace(/\//g, '\\/');
             $(this.directoryTreeSelector).jstree('open_node', '#' + path);
             $(this.directoryTreeSelector).jstree('select_node', '#' + path, true);
@@ -157,7 +196,15 @@ define([
             delete filters.path;
             this.filterChips().set('applied', filters);
             this.activeNode(null);
-            this.directories().setInActive();
+            this.waitForCondition(
+              function () {
+                return _.isUndefined(this.directories());
+            }.bind(this),
+                function () {
+                this.directories().setInActive();
+            }.bind(this)
+          );
+
         },
 
         /**
