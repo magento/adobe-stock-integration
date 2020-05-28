@@ -28,7 +28,7 @@ class Page implements SynchronizerInterface
     /**
      * @var FetchBatchesInterface
      */
-    private $selectBatches;
+    private $fetchBatches;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -48,18 +48,18 @@ class Page implements SynchronizerInterface
     /**
      * Synchronize page content with assets
      *
-     * @param FetchBatchesInterface $selectBatches
+     * @param FetchBatchesInterface $fetchBatches
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
-        FetchBatchesInterface $selectBatches,
+        FetchBatchesInterface $fetchBatches,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields = []
     ) {
-        $this->selectBatches = $selectBatches;
+        $this->fetchBatches = $fetchBatches;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
@@ -71,7 +71,7 @@ class Page implements SynchronizerInterface
     public function execute(): void
     {
         $columns =  array_merge([self::CMS_PAGE_TABLE_ENTITY_ID], array_values($this->fields));
-        foreach ($this->selectBatches->execute(self::CMS_PAGE_TABLE, $columns) as $batch) {
+        foreach ($this->fetchBatches->execute(self::CMS_PAGE_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
                 $this->synchronizeField($item);
             }

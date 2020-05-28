@@ -43,7 +43,7 @@ class Category implements SynchronizerInterface
     /**
      * @var FetchBatchesInterface
      */
-    private $selectBatches;
+    private $fetchBatches;
 
     /**
      * @var array
@@ -54,21 +54,21 @@ class Category implements SynchronizerInterface
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param FetchBatchesInterface $selectBatches
+     * @param FetchBatchesInterface $fetchBatches
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        FetchBatchesInterface $selectBatches,
+        FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
-        $this->selectBatches = $selectBatches;
+        $this->fetchBatches = $fetchBatches;
     }
 
     /**
@@ -76,7 +76,7 @@ class Category implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->selectBatches->execute(self::CATEGORY_TABLE, [self::CATEGORY_IDENTITY_FIELD]) as $batch) {
+        foreach ($this->fetchBatches->execute(self::CATEGORY_TABLE, [self::CATEGORY_IDENTITY_FIELD]) as $batch) {
             foreach ($batch as $item) {
                 $this->synchronizeField($item);
             }

@@ -48,26 +48,26 @@ class Product implements SynchronizerInterface
     /**
      * @var FetchBatchesInterface
      */
-    private $selectBatches;
+    private $fetchBatches;
     
     /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param FetchBatchesInterface $selectBatches
+     * @param FetchBatchesInterface $fetchBatches
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        FetchBatchesInterface $selectBatches,
+        FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->selectBatches = $selectBatches;
+        $this->fetchBatches = $fetchBatches;
         $this->fields = $fields;
     }
 
@@ -76,7 +76,7 @@ class Product implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->selectBatches->execute(self::PRODUCT_TABLE, [self::PRODUCT_TABLE_ENTITY_ID]) as $batch) {
+        foreach ($this->fetchBatches->execute(self::PRODUCT_TABLE, [self::PRODUCT_TABLE_ENTITY_ID]) as $batch) {
             foreach ($batch as $item) {
                 $this->synchronizeField($item);
             }

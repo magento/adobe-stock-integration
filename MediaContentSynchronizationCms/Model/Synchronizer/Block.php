@@ -28,7 +28,7 @@ class Block implements SynchronizerInterface
     /**
      * @var FetchBatchesInterface
      */
-    private $selectBatches;
+    private $fetchBatches;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -50,19 +50,19 @@ class Block implements SynchronizerInterface
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param FetchBatchesInterface $selectBatches
+     * @param FetchBatchesInterface $fetchBatches
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        FetchBatchesInterface $selectBatches,
+        FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
-        $this->selectBatches = $selectBatches;
+        $this->fetchBatches = $fetchBatches;
     }
 
     /**
@@ -71,7 +71,7 @@ class Block implements SynchronizerInterface
     public function execute(): void
     {
         $columns =  array_merge([self::CMS_BLOCK_TABLE_ENTITY_ID], array_values($this->fields));
-        foreach ($this->selectBatches->execute(self::CMS_BLOCK_TABLE, $columns) as $batch) {
+        foreach ($this->fetchBatches->execute(self::CMS_BLOCK_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
                 $this->synchronizeField($item);
             }
