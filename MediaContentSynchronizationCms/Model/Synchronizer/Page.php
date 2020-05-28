@@ -7,13 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
-use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
+use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * Synchronize page content with assets
@@ -24,16 +22,13 @@ class Page implements SynchronizerInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
+    private const CMS_PAGE_TABLE = 'cms_page';
+    private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
 
     /**
-     * @var PageRepositoryInterface
+     * @var FetchBatchesInterface
      */
-    private $repository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private $selectBatches;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -46,11 +41,6 @@ class Page implements SynchronizerInterface
     private $contentIdentityFactory;
 
     /**
-     * @var DataObjectProcessor
-     */
-    private $dataObjectProcessor;
-
-    /**
      * @var array
      */
     private $fields;
@@ -58,26 +48,20 @@ class Page implements SynchronizerInterface
     /**
      * Synchronize page content with assets
      *
-     * @param PageRepositoryInterface $repository
+     * @param FetchBatchesInterface $selectBatches
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param DataObjectProcessor $dataObjectProcessor
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $fields
      */
     public function __construct(
-        PageRepositoryInterface $repository,
+        FetchBatchesInterface $selectBatches,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        DataObjectProcessor $dataObjectProcessor,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         array $fields = []
     ) {
-        $this->repository = $repository;
+        $this->selectBatches = $selectBatches;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
     }
 
@@ -86,19 +70,32 @@ class Page implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
-            foreach ($this->fields as $field) {
-                $this->updateContentAssetLinks->execute(
-                    $this->contentIdentityFactory->create(
-                        [
-                            self::TYPE => self::CONTENT_TYPE,
-                            self::FIELD => $field,
-                            self::ENTITY_ID => $item->getId()
-                        ]
-                    ),
-                    (string) $this->dataObjectProcessor->buildOutputDataArray($item, PageInterface::class)[$field]
-                );
+        $columns =  array_merge([self::CMS_PAGE_TABLE_ENTITY_ID], array_values($this->fields));
+        foreach ($this->selectBatches->execute(self::CMS_PAGE_TABLE, $columns) as $batch) {
+            foreach ($batch as $item) {
+                $this->synchronizeField($item);
             }
+        }
+    }
+
+    /**
+     * Synchronize page entity fields
+     *
+     * @param array $item
+     */
+    private function synchronizeField(array $item): void
+    {
+        foreach ($this->fields as $field) {
+            $this->updateContentAssetLinks->execute(
+                $this->contentIdentityFactory->create(
+                    [
+                        self::TYPE => self::CONTENT_TYPE,
+                        self::FIELD => $field,
+                        self::ENTITY_ID => $item[self::CMS_PAGE_TABLE_ENTITY_ID]
+                    ]
+                ),
+                (string) $item[$field]
+            );
         }
     }
 }
