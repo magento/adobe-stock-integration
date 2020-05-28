@@ -14,5 +14,6 @@
         <element name="height" type="text" selector="//div[@class='attribute']/span[contains(text(), 'Height')]/following-sibling::div"/>
         <element name="delete" type="button" selector="//div[@class='media-gallery-image-details-modal']//button[contains(@class, 'delete')]"/>
         <element name="confirmDelete" type="button" selector=".action-accept"/>
+        <element name="addImage" type="button" selector=".add-image-action"/>
     </section>
 </sections>
