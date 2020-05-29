@@ -20,7 +20,7 @@ use Magento\Framework\Filesystem\Driver\File;
 class GetChangedFiles
 {
     /**
-     * @var GetAsse
+     * @var GetAssetsByPathsInterface
      */
     private $deleteAssetsByPaths;
 
@@ -43,9 +43,6 @@ class GetChangedFiles
      * @param File $driver
      * @param Filesystem $filesystem
      * @param GetAssetsByPathsInterface $getAssetsByPaths
-     * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
-     * @param LoggerInterface $logger
-     * @param FetchBatchesInterface $selectBatches
      */
     public function __construct(
         File $driver,
