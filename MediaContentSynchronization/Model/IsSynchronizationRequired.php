@@ -7,19 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronization\Model;
 
-use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
-use Magento\MediaContentSynchronizationApi\Model\SynchronizerPool;
-use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Framework\FlagManager;
 use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
 
 /**
- * Synchronize content with assets
+ * Verify is synchronization required for entity
  */
 class IsSynchronizationRequired implements IsSynchronizationRequiredInterface
 {
+    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
+    
     /**
      * @var DateTimeFactory
      */
@@ -46,11 +44,10 @@ class IsSynchronizationRequired implements IsSynchronizationRequiredInterface
      * Check if synchronization can be executed for entity
      *
      * @param string $timeField
-     * @param string $lastExecutionTimeFlagCode
      */
-    public function execute(string $timeField, string $lastExecutionTimeFlagCode): bool
+    public function execute(string $timeField): bool
     {
-        $lastExecutionTime = $this->flagManager->getFlagData($lastExecutionTimeFlagCode);
+        $lastExecutionTime = $this->flagManager->getFlagData(self::LAST_EXECUTION_TIME_CODE);
 
         if (!$lastExecutionTime) {
             return true;

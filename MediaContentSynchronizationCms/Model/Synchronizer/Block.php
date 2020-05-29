@@ -26,7 +26,6 @@ class Block implements SynchronizerInterface
     private const CMS_BLOCK_TABLE = 'cms_block';
     private const CMS_BLOCK_TABLE_ENTITY_ID = 'block_id';
     private const CMS_BLOCK_TABLE_UPDATED_AT_FIELD = 'updated_at';
-    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
     
     /**
      * @var FetchBatchesInterface
@@ -90,10 +89,7 @@ class Block implements SynchronizerInterface
         );
         foreach ($this->fetchBatches->execute(self::CMS_BLOCK_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
-                if (!$this->isSynchronizationRequired->execute(
-                    $item[self::CMS_BLOCK_TABLE_UPDATED_AT_FIELD],
-                    self::LAST_EXECUTION_TIME_CODE
-                )) {
+                if (!$this->isSynchronizationRequired->execute($item[self::CMS_BLOCK_TABLE_UPDATED_AT_FIELD])) {
                     continue;
                 }
 
@@ -101,7 +97,6 @@ class Block implements SynchronizerInterface
             }
         }
     }
-
     
     /**
      * Synchronize block entity fields

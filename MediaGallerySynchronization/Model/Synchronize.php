@@ -13,26 +13,12 @@ use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool;
 use Psr\Log\LoggerInterface;
 use Magento\MediaGallerySynchronization\Model\FetchMediaStorageFileBatches;
-use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
-use Magento\Framework\FlagManager;
 
 /**
  * Synchronize media storage and media assets database records
  */
 class Synchronize implements SynchronizeInterface
 {
-    const LAST_EXECUTION_TIME_CODE = 'media_gallery_last_execution';
-
-    /**
-     * @var FlagManager
-     */
-    private $flagManager;
-
-    /**
-     * @var DateTimeFactory
-     */
-    private $dateFactory;
-    
     /**
      * @var LoggerInterface
      */
@@ -54,23 +40,17 @@ class Synchronize implements SynchronizeInterface
     private $resolveNonExistedAssets;
 
     /**
-     * @param FlagManager $flagManager
-     * @param DateTimeFactory $dateFactory
      * @param ResolveNonExistedAssets $resolveNonExistedAssets
      * @param LoggerInterface $log
      * @param SynchronizerPool $synchronizerPool
      * @param FetchMediaStorageFileBatches $batchGenerator
      */
     public function __construct(
-        FlagManager $flagManager,
-        DateTimeFactory $dateFactory,
         ResolveNonExistedAssets $resolveNonExistedAssets,
         LoggerInterface $log,
         SynchronizerPool $synchronizerPool,
         FetchMediaStorageFileBatches $batchGenerator
     ) {
-        $this->flagManager = $flagManager;
-        $this->dateFactory = $dateFactory;
         $this->resolveNonExistedAssets = $resolveNonExistedAssets;
         $this->log = $log;
         $this->synchronizerPool = $synchronizerPool;
@@ -98,8 +78,7 @@ class Synchronize implements SynchronizeInterface
                 }
             }
         }
-
-        $this->setLastExecutionTime();
+        
         $this->resolveNonExistedAssets->execute();
         if (!empty($failed)) {
             throw new LocalizedException(
@@ -111,14 +90,5 @@ class Synchronize implements SynchronizeInterface
                 )
             );
         }
-    }
-    
-    /**
-     * Set last synchronizer execution time
-     */
-    private function setLastExecutionTime(): void
-    {
-        $currentTime = $this->dateFactory->create()->gmtDate();
-        $this->flagManager->saveFlag(self::LAST_EXECUTION_TIME_CODE, $currentTime);
     }
 }

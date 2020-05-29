@@ -7,13 +7,9 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\Read;
 use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
-use Magento\MediaGallerySynchronization\Model\Synchronize;
 
 /**
  * Fetch files from media storage in batches
@@ -31,11 +27,6 @@ class FetchMediaStorageFileBatches
      * @var Filesystem
      */
     private $filesystem;
-
-    /**
-     * @var Read
-     */
-    private $mediaDirectory;
 
     /**
      * @var IsPathBlacklistedInterface
@@ -56,29 +47,16 @@ class FetchMediaStorageFileBatches
      * @var int
      */
     private $batchSize;
-
-    /**
-     * @var GetAssetsByPathsInterface
-     */
-    private $getAssetsByPaths;
-
-    /**
-     * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
-     */
-    private $isSynchronizationRequired;
     
     /**
-     * @param IsSynchronizationRequiredInterface $isSynchronizationRequired
-     * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param LoggerInterface $log
      * @param IsPathBlacklistedInterface $isPathBlacklisted
      * @param Filesystem $filesystem
      * @param GetAssetsIterator $assetsIterator
+     * @param File $driver
      * @param int $batchSize
      */
     public function __construct(
-        IsSynchronizationRequiredInterface $isSynchronizationRequired,
-        GetAssetsByPathsInterface $getAssetsByPaths,
         LoggerInterface $log,
         IsPathBlacklistedInterface $isPathBlacklisted,
         Filesystem $filesystem,
@@ -86,14 +64,11 @@ class FetchMediaStorageFileBatches
         File $driver,
         int $batchSize
     ) {
-        $this->isSynchronizationRequired = $isSynchronizationRequired;
-        $this->getAssetsByPaths = $getAssetsByPaths;
         $this->log = $log;
         $this->isPathBlacklisted = $isPathBlacklisted;
         $this->getAssetsIterator = $assetsIterator;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->assetsPaths = [];
         $this->batchSize = $batchSize;
     }
 
@@ -104,14 +79,11 @@ class FetchMediaStorageFileBatches
     {
         $i = 0;
         $batch = [];
-
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        
         /** @var \SplFileInfo $file */
-        foreach ($this->getAssetsIterator->execute($this->getMediaDirectory()->getAbsolutePath()) as $file) {
+        foreach ($this->getAssetsIterator->execute($mediaDirectory->getAbsolutePath()) as $file) {
             if (!$this->isApplicable($file->getPathName())) {
-                continue;
-            }
-            $fileUpdatedAtDate = (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s');
-            if (!$this->isSynchronizationRequired->execute($fileUpdatedAtDate, Synchronize::LAST_EXECUTION_TIME_CODE)) {
                 continue;
             }
 
@@ -126,7 +98,7 @@ class FetchMediaStorageFileBatches
             yield $batch;
         }
     }
-
+    
     /**
      * Get correct path for media asset
      *
@@ -136,7 +108,7 @@ class FetchMediaStorageFileBatches
      */
     private function getRelativePath(string $file): string
     {
-        $path = $this->getMediaDirectory()->getRelativePath($file);
+        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($file);
 
         if ($this->driver->getParentDirectory($path) === '.') {
             $path = '/' . $path;
@@ -154,7 +126,7 @@ class FetchMediaStorageFileBatches
     private function isApplicable(string $path): bool
     {
         try {
-            $relativePath = $this->getMediaDirectory()->getRelativePath($path);
+            $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
             return $relativePath
                 && !$this->isPathBlacklisted->execute($relativePath)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
@@ -162,18 +134,5 @@ class FetchMediaStorageFileBatches
             $this->log->critical($exception);
             return false;
         }
-    }
-
-    /**
-     * Retrieve media directory instance with read permissions
-     *
-     * @return Read
-     */
-    private function getMediaDirectory(): Read
-    {
-        if (!$this->mediaDirectory) {
-            $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        }
-        return $this->mediaDirectory;
     }
 }

@@ -6,6 +6,7 @@
         "magento/framework": "*",
         "magento/module-cms": "*",
         "magento/module-media-content-synchronization-api": "*",
+        "magento/module-media-gallery-synchronization-api": "*",
         "magento/module-media-content-api": "*"
     },
     "type": "magento2-module",

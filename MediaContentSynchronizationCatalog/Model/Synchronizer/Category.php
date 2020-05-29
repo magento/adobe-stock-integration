@@ -26,7 +26,6 @@ class Category implements SynchronizerInterface
     private const CATEGORY_TABLE = 'catalog_category_entity';
     private const CATEGORY_IDENTITY_FIELD = 'entity_id';
     private const CATEGORY_UPDATED_AT_FIELD = 'updated_at';
-    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
     
     /**
      * @var UpdateContentAssetLinksInterface
@@ -93,10 +92,7 @@ class Category implements SynchronizerInterface
         ];
         foreach ($this->fetchBatches->execute(self::CATEGORY_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
-                if (!$this->isSynchronizationRequired->execute(
-                    $item[self::CATEGORY_UPDATED_AT_FIELD],
-                    self::LAST_EXECUTION_TIME_CODE
-                )) {
+                if (!$this->isSynchronizationRequired->execute($item[self::CATEGORY_UPDATED_AT_FIELD])) {
                     continue;
                 }
                 $this->synchronizeField($item);

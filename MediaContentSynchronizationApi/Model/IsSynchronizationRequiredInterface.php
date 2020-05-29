@@ -16,7 +16,6 @@ interface IsSynchronizationRequiredInterface
      * Verify if need to execute synchronization for entity
      *
      * @param string $timeField
-     * @param string $lastExecutionTimeFlagCode
      */
-    public function execute(string $timeField, string $lastExecutionTimeFlagCode): bool;
+    public function execute(string $timeField): bool;
 }

@@ -36,7 +36,7 @@ class FetchBatches implements FetchBatchesInterface
     /**
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
-     * @param int $batchSize
+     * @param int $pageSize
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -59,8 +59,9 @@ class FetchBatches implements FetchBatchesInterface
         try {
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName($tableName);
-
-            for ($page = 0; $page < $this->getTotalPages($tableName); $page++) {
+            $totalPages = $this->getTotalPages($tableName);
+            
+            for ($page = 0; $page < $totalPages; $page++) {
                 $offset = $page * $this->pageSize;
                 $select = $connection->select()
                     ->from($this->resourceConnection->getTableName($tableName), $columns)

@@ -20,7 +20,7 @@ use Magento\Framework\FlagManager;
 class Synchronize implements SynchronizeInterface
 {
     private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
-
+    
     /**
      * @var DateTimeFactory
      */

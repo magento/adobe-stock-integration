@@ -26,7 +26,6 @@ class Page implements SynchronizerInterface
     private const CMS_PAGE_TABLE = 'cms_page';
     private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
     private const CMS_PAGE_TABLE_UPDATED_AT_FIELD = 'update_time';
-    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
     
     /**
      * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
@@ -90,10 +89,7 @@ class Page implements SynchronizerInterface
         );
         foreach ($this->fetchBatches->execute(self::CMS_PAGE_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
-                if (!$this->isSynchronizationRequired->execute(
-                    $item[self::CMS_PAGE_TABLE_UPDATED_AT_FIELD],
-                    self::LAST_EXECUTION_TIME_CODE
-                )) {
+                if (!$this->isSynchronizationRequired->execute($item[self::CMS_PAGE_TABLE_UPDATED_AT_FIELD])) {
                     continue;
                 }
 

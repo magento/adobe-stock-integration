@@ -26,7 +26,6 @@ class Product implements SynchronizerInterface
     private const PRODUCT_TABLE = 'catalog_product_entity';
     private const PRODUCT_TABLE_ENTITY_ID = 'entity_id';
     private const PRODUCT_TABLE_UPDATED_AT_FIELD = 'updated_at';
-    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
     
     /**
      * @var UpdateContentAssetLinksInterface
@@ -90,10 +89,7 @@ class Product implements SynchronizerInterface
         $columns = [self::PRODUCT_TABLE_ENTITY_ID, self::PRODUCT_TABLE_UPDATED_AT_FIELD];
         foreach ($this->fetchBatches->execute(self::PRODUCT_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
-                if (!$this->isSynchronizationRequired->execute(
-                    $item[self::PRODUCT_TABLE_UPDATED_AT_FIELD],
-                    self::LAST_EXECUTION_TIME_CODE
-                )) {
+                if (!$this->isSynchronizationRequired->execute($item[self::PRODUCT_TABLE_UPDATED_AT_FIELD])) {
                     continue;
                 }
                 $this->synchronizeField($item);
