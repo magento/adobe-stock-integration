@@ -20,7 +20,7 @@ define([
          * @param {String} deleteUrl
          */
         deleteImageAction: function (record, deleteUrl) {
-            var baseContent = $.mage.__('Are you sure you want to delete "%s" image?'),
+            var baseContent = this.getContentMessage(record.path, record.related_content_count),
                 title = $.mage.__('Delete image'),
                 cancelText = $.mage.__('Cancel'),
                 deleteImageText = $.mage.__('Delete Image'),
@@ -29,7 +29,7 @@ define([
             confirmation({
                 title: title,
                 modalClass: 'media-gallery-delete-image-action',
-                content: baseContent.replace('%s', record.path),
+                content: baseContent,
                 buttons: [
                     {
                         text: cancelText,
@@ -56,6 +56,17 @@ define([
                     }
                 ]
             });
+        },
+
+        /**
+         * Returns content
+         *
+         * @param {string} recordPath
+         * @param {string} recordRelatedContentCount
+         * @return string
+         */
+        getContentMessage: function(recordPath, recordRelatedContentCount) {
+            return $.mage.__('This image is used in '+ recordRelatedContentCount +' page. Are you sure you want to delete "' + recordPath + '" image?');
         },
 
         /**
