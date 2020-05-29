@@ -20,11 +20,6 @@ use Magento\Framework\Filesystem\Driver\File;
 class GetChangedFiles
 {
     /**
-     * @var GetAssetsByPathsInterface
-     */
-    private $deleteAssetsByPaths;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
