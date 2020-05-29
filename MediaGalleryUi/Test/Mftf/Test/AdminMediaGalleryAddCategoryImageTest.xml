@@ -19,10 +19,12 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </before>
         <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
             <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
                 <argument name="category" value="$$category$$"/>
@@ -32,8 +34,6 @@
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
             <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
-            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
