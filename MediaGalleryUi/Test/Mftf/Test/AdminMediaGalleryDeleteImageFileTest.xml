@@ -22,9 +22,6 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         </before>
-        <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-        </after>
 
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
@@ -33,7 +30,7 @@
             <argument name="imageName" value="{{ImageUpload.file}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
-        <actionGroup ref="AdminAssertMediaGalleryAssetDeletedActionGroup" stepKey="verifyImageIsDeleted">
+        <actionGroup ref="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup" stepKey="verifyImageIsDeleted">
             <argument name="imageName" value="{{ImageUpload.filename}}"/>
         </actionGroup>
     </test>
