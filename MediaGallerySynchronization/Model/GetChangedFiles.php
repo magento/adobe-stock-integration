@@ -65,8 +65,18 @@ class GetChangedFiles
         if (empty($assets)) {
             return $files;
         }
+        usort($files, function ($file1, $file2) {
+            $filePath1 = $this->getRelativePath($file1->getPath() . '/' . $file1->getFileName());
+            $filePath2 = $this->getRelativePath($file2->getPath() . '/' . $file2->getFileName());
+            return strcmp($filePath1, $filePath2);
+        });
+        usort($assets, function ($asset1, $asset2) {
+            return strcmp($asset1->getPath(), $asset2->getPath());
+        });
+        
         return array_udiff_assoc($files, $assets, function ($file, $asset) {
-            return (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s') > $asset->getUpdatedAt();
+            $fileModificationDate = (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s');
+            return $fileModificationDate > $asset->getUpdatedAt();
         });
     }
 
