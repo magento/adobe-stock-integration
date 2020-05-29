@@ -12,6 +12,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
+use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
 
 /**
  * Synchronize category content with assets
@@ -24,7 +25,9 @@ class Category implements SynchronizerInterface
     private const FIELD = 'field';
     private const CATEGORY_TABLE = 'catalog_category_entity';
     private const CATEGORY_IDENTITY_FIELD = 'entity_id';
-
+    private const CATEGORY_UPDATED_AT_FIELD = 'updated_at';
+    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
+    
     /**
      * @var UpdateContentAssetLinksInterface
      */
@@ -46,11 +49,17 @@ class Category implements SynchronizerInterface
     private $fetchBatches;
 
     /**
+     * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
+     */
+    private $isSynchronizationRequired;
+
+    /**
      * @var array
      */
     private $fields;
 
     /**
+     * @param IsSynchronizationRequiredInterface $isSynchronizationRequired
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -58,12 +67,14 @@ class Category implements SynchronizerInterface
      * @param array $fields
      */
     public function __construct(
+        IsSynchronizationRequiredInterface $isSynchronizationRequired,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
+        $this->isSynchronizationRequired = $isSynchronizationRequired;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -76,8 +87,18 @@ class Category implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->fetchBatches->execute(self::CATEGORY_TABLE, [self::CATEGORY_IDENTITY_FIELD]) as $batch) {
+        $columns = [
+            self::CATEGORY_IDENTITY_FIELD,
+            self::CATEGORY_UPDATED_AT_FIELD
+        ];
+        foreach ($this->fetchBatches->execute(self::CATEGORY_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
+                if (!$this->isSynchronizationRequired->execute(
+                    $item[self::CATEGORY_UPDATED_AT_FIELD],
+                    self::LAST_EXECUTION_TIME_CODE
+                )) {
+                    continue;
+                }
                 $this->synchronizeField($item);
             }
         }

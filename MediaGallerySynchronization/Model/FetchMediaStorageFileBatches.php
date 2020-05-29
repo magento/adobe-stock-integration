@@ -12,6 +12,8 @@ use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
+use Magento\MediaGallerySynchronization\Model\Synchronize;
 
 /**
  * Fetch files from media storage in batches
@@ -59,8 +61,14 @@ class FetchMediaStorageFileBatches
      * @var GetAssetsByPathsInterface
      */
     private $getAssetsByPaths;
+
+    /**
+     * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
+     */
+    private $isSynchronizationRequired;
     
     /**
+     * @param IsSynchronizationRequiredInterface $isSynchronizationRequired
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param LoggerInterface $log
      * @param IsPathBlacklistedInterface $isPathBlacklisted
@@ -69,6 +77,7 @@ class FetchMediaStorageFileBatches
      * @param int $batchSize
      */
     public function __construct(
+        IsSynchronizationRequiredInterface $isSynchronizationRequired,
         GetAssetsByPathsInterface $getAssetsByPaths,
         LoggerInterface $log,
         IsPathBlacklistedInterface $isPathBlacklisted,
@@ -77,6 +86,7 @@ class FetchMediaStorageFileBatches
         File $driver,
         int $batchSize
     ) {
+        $this->isSynchronizationRequired = $isSynchronizationRequired;
         $this->getAssetsByPaths = $getAssetsByPaths;
         $this->log = $log;
         $this->isPathBlacklisted = $isPathBlacklisted;
@@ -100,7 +110,8 @@ class FetchMediaStorageFileBatches
             if (!$this->isApplicable($file->getPathName())) {
                 continue;
             }
-            if (!$this->isFileChanged($file)) {
+            $fileUpdatedAtDate = (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s');
+            if (!$this->isSynchronizationRequired->execute($fileUpdatedAtDate, Synchronize::LAST_EXECUTION_TIME_CODE)) {
                 continue;
             }
 
@@ -114,22 +125,6 @@ class FetchMediaStorageFileBatches
         if (count($batch) > 0) {
             yield $batch;
         }
-    }
-
-    /**
-     * Verify if file modification date changed
-     *
-     * @param \SplFileInfo $file
-     */
-    private function isFileChanged(\SplFileInfo $file): bool
-    {
-        $path = $this->getRelativePath($file->getPath() . '/' . $file->getFileName());
-        $asset = $this->getAssetsByPaths->execute([$path]);
-
-        if (empty($asset)) {
-            return true;
-        }
-        return (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s') > $asset[0]->getUpdatedAt();
     }
 
     /**

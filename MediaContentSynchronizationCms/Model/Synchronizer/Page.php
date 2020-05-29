@@ -12,6 +12,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
 
 /**
  * Synchronize page content with assets
@@ -24,7 +25,14 @@ class Page implements SynchronizerInterface
     private const FIELD = 'field';
     private const CMS_PAGE_TABLE = 'cms_page';
     private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
-
+    private const CMS_PAGE_TABLE_UPDATED_AT_FIELD = 'update_time';
+    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
+    
+    /**
+     * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
+     */
+    private $isSynchronizationRequired;
+    
     /**
      * @var FetchBatchesInterface
      */
@@ -48,17 +56,20 @@ class Page implements SynchronizerInterface
     /**
      * Synchronize page content with assets
      *
+     * @param IsSynchronizationRequiredInterface $isSynchronizationRequired
      * @param FetchBatchesInterface $fetchBatches
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
+        IsSynchronizationRequiredInterface $isSynchronizationRequired,
         FetchBatchesInterface $fetchBatches,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields = []
     ) {
+        $this->isSynchronizationRequired = $isSynchronizationRequired;
         $this->fetchBatches = $fetchBatches;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -70,9 +81,22 @@ class Page implements SynchronizerInterface
      */
     public function execute(): void
     {
-        $columns =  array_merge([self::CMS_PAGE_TABLE_ENTITY_ID], array_values($this->fields));
+        $columns =  array_merge(
+            [
+                self::CMS_PAGE_TABLE_ENTITY_ID,
+                self::CMS_PAGE_TABLE_UPDATED_AT_FIELD
+            ],
+            array_values($this->fields)
+        );
         foreach ($this->fetchBatches->execute(self::CMS_PAGE_TABLE, $columns) as $batch) {
             foreach ($batch as $item) {
+                if (!$this->isSynchronizationRequired->execute(
+                    $item[self::CMS_PAGE_TABLE_UPDATED_AT_FIELD],
+                    self::LAST_EXECUTION_TIME_CODE
+                )) {
+                    continue;
+                }
+
                 $this->synchronizeField($item);
             }
         }

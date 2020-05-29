@@ -76,19 +76,18 @@ class CreateAssetFromFile
         $path = $file->getPath() . '/' . $file->getFileName();
         
         [$width, $height] = getimagesize($path);
-        $asset = $this->getAsset($path);
-        return $this->assetFactory->create(
+
+        return $this->getAsset($path) ?? $this->assetFactory->create(
             [
-                'id ' => $asset ? $asset->getId() : null,
                 'path' => $this->getRelativePath($path),
-                'title' => $asset ? $asset->getTitle() : $file->getBasename('.' . $file->getExtension()),
+                'title' => $file->getBasename('.' . $file->getExtension()),
                 'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
                 'width' => $width,
                 'height' => $height,
                 'size' => $file->getSize(),
-                'contentType' => $asset ? $asset->getContentType() : 'image/' . $file->getExtension(),
-                'source' => $asset ? $asset->getSource() : 'Local'
+                'contentType' => 'image/' . $file->getExtension(),
+                'source' => 'Local'
             ]
         );
     }
