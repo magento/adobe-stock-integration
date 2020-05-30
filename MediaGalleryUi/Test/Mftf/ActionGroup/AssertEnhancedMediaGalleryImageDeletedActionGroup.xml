@@ -8,14 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryClickImageInGridActionGroup">
+    <actionGroup name="AssertEnhancedMediaGalleryImageDeletedActionGroup">
         <annotations>
-            <description>Select image on enhanced media gallery</description>
+            <description>Assert that an image was delete.</description>
         </annotations>
         <arguments>
             <argument name="imageName" type="string"/>
         </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="waitForImageToBeVisible"/>
-        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="clickOnImage"/>
+
+        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="dontSeeImage"/>
     </actionGroup>
 </actionGroups>
