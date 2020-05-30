@@ -66,7 +66,7 @@ define([
          * @return string
          */
         getContentMessage: function(recordPath, recordRelatedContentCount) {
-            return $.mage.__('This image is used in '+ recordRelatedContentCount +' page. Are you sure you want to delete "' + recordPath + '" image?');
+            return $.mage.__('This image is used in '+ recordRelatedContentCount +' page(s). Are you sure you want to delete "' + recordPath + '" image?');
         },
 
         /**
