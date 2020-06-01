@@ -18,7 +18,7 @@
         
         <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
         <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="saveView"/>
-        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{Test View}}" stepKey="inputViewName"/>
+        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{viewName}}" stepKey="inputViewName"/>
         <pressKey selector="{{AdminGridDefaultViewControls.viewName}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
       </actionGroup>
 </actionGroups>
