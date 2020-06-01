@@ -38,9 +38,6 @@
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
 
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryForPage"/>
-        <dontSeeElement selector="//span[contains(text(), 'Directory:')]" stepKey="folderNotSelected"/>
-        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}, :disabled" stepKey="deleteFolderButtonIsDisabled"/>
-
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}" stepKey="deleteFolderButtonIsNotDisabled"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFolder"/>
