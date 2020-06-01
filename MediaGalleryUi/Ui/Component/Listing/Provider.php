@@ -27,10 +27,12 @@ class Provider extends SearchResult
      * @var GetAssetsKeywordsInterface
      */
     private $getAssetKeywords;
+    
     /**
      * @var GetAssetsByIdsInterface
      */
     private $getAssetsByIds;
+    
     /**
      * @var UsedIn
      */
