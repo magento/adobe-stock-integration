@@ -25,7 +25,7 @@ class Block implements SynchronizerInterface
     private const FIELD = 'field';
     private const CMS_BLOCK_TABLE = 'cms_block';
     private const CMS_BLOCK_TABLE_ENTITY_ID = 'block_id';
-    private const CMS_BLOCK_TABLE_UPDATED_AT_FIELD = 'updated_at';
+    private const CMS_BLOCK_TABLE_UPDATED_AT_FIELD = 'update_time';
     
     /**
      * @var FetchBatchesInterface
