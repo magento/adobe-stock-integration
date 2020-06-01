@@ -20,7 +20,7 @@ define([
          * @param {String} deleteUrl
          */
         deleteImageAction: function (record, deleteUrl) {
-            var baseContent = this.getContentMessage(record['path'], record['related_content']),
+            var baseContent = this.getContentMessage(record.path, record.relatedContent),
                 title = $.mage.__('Delete image'),
                 cancelText = $.mage.__('Cancel'),
                 deleteImageText = $.mage.__('Delete Image'),
@@ -65,8 +65,8 @@ define([
          * @param {Object} recordRelatedContent
          * @return String
          */
-        getContentMessage: function (recordPath, recordRelatedContentCount) {
-            return $.mage.__(this.getRecordRelatedContentHtml(recordRelatedContentCount.value) +
+        getContentMessage: function (recordPath, recordRelatedContent) {
+            return $.mage.__(this.getRecordRelatedContentHtml(recordRelatedContent.value) +
                 '. Are you sure you want to delete "' + recordPath + '" image?');
         },
 

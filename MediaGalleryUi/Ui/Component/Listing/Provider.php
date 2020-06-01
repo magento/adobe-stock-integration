@@ -49,6 +49,7 @@ class Provider extends SearchResult
      * @param null|string $identifierName
      * @param null|string $connectionName
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -101,7 +102,7 @@ class Provider extends SearchResult
                 $data[$key]['preview_url'] = $asset['path'];
                 $data[$key]['keywords'] = isset($keywords[$asset['id']]) ? implode(",", $keywords[$asset['id']]) : '';
                 $data[$key]['source'] = empty($asset['source']) ? 'Local' : $asset['source'];
-                $data[$key]['related_content'] = $this->getRelatedContent($asset['id']);
+                $data[$key]['relatedContent'] = $this->getRelatedContent($asset['id']);
             } catch (Exception $exception) {
                 $this->_logger->error($exception->getMessage());
             }
