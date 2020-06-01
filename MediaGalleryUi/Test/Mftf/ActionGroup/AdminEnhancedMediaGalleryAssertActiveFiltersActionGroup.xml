@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminEnhancedMediaGalleryAssertActiveFiltersActionGroup">
         <annotations>
-            <description>Apply default view to th media gallery grid</description>
+            <description>Assert media gallery grid filters</description>
         </annotations>
         <arguments>
             <argument name="resultValue" type="string"/>
