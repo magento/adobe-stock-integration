@@ -15,7 +15,6 @@
         <arguments>
             <argument name="selectModifiers" xsi:type="array">
                 <item name="directory" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Directory</item>
-                <item name="related_content_count" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\RelatedContentCount</item>
             </argument>
         </arguments>
     </type>

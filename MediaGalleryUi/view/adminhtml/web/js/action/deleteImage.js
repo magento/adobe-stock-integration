@@ -20,7 +20,7 @@ define([
          * @param {String} deleteUrl
          */
         deleteImageAction: function (record, deleteUrl) {
-            var baseContent = this.getContentMessage(record.path, record.related_content_count),
+            var baseContent = this.getContentMessage(record['path'], record['related_content']),
                 title = $.mage.__('Delete image'),
                 cancelText = $.mage.__('Cancel'),
                 deleteImageText = $.mage.__('Delete Image'),
@@ -61,12 +61,36 @@ define([
         /**
          * Returns content
          *
-         * @param {string} recordPath
-         * @param {string} recordRelatedContentCount
-         * @return string
+         * @param {String} recordPath
+         * @param {Object} recordRelatedContent
+         * @return String
          */
-        getContentMessage: function(recordPath, recordRelatedContentCount) {
-            return $.mage.__('This image is used in '+ recordRelatedContentCount +' page(s). Are you sure you want to delete "' + recordPath + '" image?');
+        getContentMessage: function (recordPath, recordRelatedContentCount) {
+            return $.mage.__(this.getRecordRelatedContentHtml(recordRelatedContentCount.value) +
+                '. Are you sure you want to delete "' + recordPath + '" image?');
+        },
+
+        /**
+         * Get information about image use
+         *
+         * @param {Object|String} value
+         * @return {String}
+         */
+        getRecordRelatedContentHtml: function (value) {
+            var usedIn = 'This image is used in ';
+
+            if (_.isObject(value) && !_.isEmpty(value)) {
+                _.each(value, function (numberOfTimeUsed, moduleName) {
+                    usedIn += numberOfTimeUsed + ' ' + moduleName + ' ';
+                });
+
+                return usedIn;
+            } else {
+
+                return 'This image is not used anywhere';
+            }
+
+            return value;
         },
 
         /**
