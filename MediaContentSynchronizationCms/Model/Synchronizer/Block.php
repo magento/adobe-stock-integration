@@ -12,7 +12,6 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
-use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
 
 /**
  * Synchronize block content with assets
@@ -48,27 +47,19 @@ class Block implements SynchronizerInterface
     private $fields;
 
     /**
-     * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
-     */
-    private $isSynchronizationRequired;
-
-    /**
      * Synchronize block content with assets
      *
-     * @param IsSynchronizationRequiredInterface $isSynchronizationRequired
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param FetchBatchesInterface $fetchBatches
      * @param array $fields
      */
     public function __construct(
-        IsSynchronizationRequiredInterface $isSynchronizationRequired,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
-        $this->isSynchronizationRequired = $isSynchronizationRequired;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
@@ -87,12 +78,8 @@ class Block implements SynchronizerInterface
             ],
             array_values($this->fields)
         );
-        foreach ($this->fetchBatches->execute(self::CMS_BLOCK_TABLE, $columns) as $batch) {
+        foreach ($this->fetchBatches->execute(self::CMS_BLOCK_TABLE, $columns, $columns[1]) as $batch) {
             foreach ($batch as $item) {
-                if (!$this->isSynchronizationRequired->execute($item[self::CMS_BLOCK_TABLE_UPDATED_AT_FIELD])) {
-                    continue;
-                }
-
                 $this->synchronizeField($item);
             }
         }

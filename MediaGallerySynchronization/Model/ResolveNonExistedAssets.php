@@ -84,7 +84,7 @@ class ResolveNonExistedAssets
     {
         $columns = [self::MEDIA_GALLERY_ASSET_PATH];
         try {
-            foreach ($this->selectBatches->execute(self::TABLE_MEDIA_GALLERY_ASSET, $columns) as $batch) {
+            foreach ($this->selectBatches->execute(self::TABLE_MEDIA_GALLERY_ASSET, $columns, null) as $batch) {
                 foreach ($batch as $item) {
                     if (!$this->getMediaDirectory()->isExist($item[self::MEDIA_GALLERY_ASSET_PATH])) {
                         $this->deleteAssetsByPaths->execute([$item[self::MEDIA_GALLERY_ASSET_PATH]]);

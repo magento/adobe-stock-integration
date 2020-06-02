@@ -12,7 +12,6 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
 
 /**
  * Synchronize page content with assets
@@ -26,12 +25,7 @@ class Page implements SynchronizerInterface
     private const CMS_PAGE_TABLE = 'cms_page';
     private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
     private const CMS_PAGE_TABLE_UPDATED_AT_FIELD = 'update_time';
-    
-    /**
-     * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
-     */
-    private $isSynchronizationRequired;
-    
+        
     /**
      * @var FetchBatchesInterface
      */
@@ -55,20 +49,17 @@ class Page implements SynchronizerInterface
     /**
      * Synchronize page content with assets
      *
-     * @param IsSynchronizationRequiredInterface $isSynchronizationRequired
      * @param FetchBatchesInterface $fetchBatches
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
-        IsSynchronizationRequiredInterface $isSynchronizationRequired,
         FetchBatchesInterface $fetchBatches,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields = []
     ) {
-        $this->isSynchronizationRequired = $isSynchronizationRequired;
         $this->fetchBatches = $fetchBatches;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -87,12 +78,8 @@ class Page implements SynchronizerInterface
             ],
             array_values($this->fields)
         );
-        foreach ($this->fetchBatches->execute(self::CMS_PAGE_TABLE, $columns) as $batch) {
+        foreach ($this->fetchBatches->execute(self::CMS_PAGE_TABLE, $columns, $columns[1]) as $batch) {
             foreach ($batch as $item) {
-                if (!$this->isSynchronizationRequired->execute($item[self::CMS_PAGE_TABLE_UPDATED_AT_FIELD])) {
-                    continue;
-                }
-
                 $this->synchronizeField($item);
             }
         }

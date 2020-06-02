@@ -12,7 +12,6 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
-use Magento\MediaContentSynchronizationApi\Model\IsSynchronizationRequiredInterface;
 
 /**
  * Synchronize category content with assets
@@ -48,17 +47,11 @@ class Category implements SynchronizerInterface
     private $fetchBatches;
 
     /**
-     * @var IsSynchronizationRequiredInterface $isSynchronizationRequired
-     */
-    private $isSynchronizationRequired;
-
-    /**
      * @var array
      */
     private $fields;
 
     /**
-     * @param IsSynchronizationRequiredInterface $isSynchronizationRequired
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -66,14 +59,12 @@ class Category implements SynchronizerInterface
      * @param array $fields
      */
     public function __construct(
-        IsSynchronizationRequiredInterface $isSynchronizationRequired,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
-        $this->isSynchronizationRequired = $isSynchronizationRequired;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -90,11 +81,8 @@ class Category implements SynchronizerInterface
             self::CATEGORY_IDENTITY_FIELD,
             self::CATEGORY_UPDATED_AT_FIELD
         ];
-        foreach ($this->fetchBatches->execute(self::CATEGORY_TABLE, $columns) as $batch) {
+        foreach ($this->fetchBatches->execute(self::CATEGORY_TABLE, $columns, $columns[1]) as $batch) {
             foreach ($batch as $item) {
-                if (!$this->isSynchronizationRequired->execute($item[self::CATEGORY_UPDATED_AT_FIELD])) {
-                    continue;
-                }
                 $this->synchronizeField($item);
             }
         }

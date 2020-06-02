@@ -12,12 +12,16 @@ use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\FlagManager;
+use Magento\Framework\DB\Select;
 
 /**
  * Select data from database by provided batch size
  */
 class FetchBatches implements FetchBatchesInterface
 {
+    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
+    
     /**
      * @var ResourceConnection
      */
@@ -32,17 +36,25 @@ class FetchBatches implements FetchBatchesInterface
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var FlagManager
+     */
+    private $flagManager;
     
     /**
+     * @param FlagManager $flagManager
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
      * @param int $pageSize
      */
     public function __construct(
+        FlagManager $flagManager,
         ResourceConnection $resourceConnection,
         LoggerInterface $logger,
         int $pageSize
     ) {
+        $this->flagManager = $flagManager;
         $this->resourceConnection = $resourceConnection;
         $this->logger = $logger;
         $this->pageSize = $pageSize;
@@ -53,8 +65,9 @@ class FetchBatches implements FetchBatchesInterface
      *
      * @param string $tableName
      * @param array $columns
+     * @param string|null $dateColumnName
      */
-    public function execute(string $tableName, array $columns): \Traversable
+    public function execute(string $tableName, array $columns, ?string $dateColumnName = null): \Traversable
     {
         try {
             $connection = $this->resourceConnection->getConnection();
@@ -66,6 +79,9 @@ class FetchBatches implements FetchBatchesInterface
                 $select = $connection->select()
                     ->from($this->resourceConnection->getTableName($tableName), $columns)
                     ->limit($this->pageSize, $offset);
+                !empty($dateColumnName) ?
+                    $select = $this->getLastExecutionCondition($select, $dateColumnName) :
+                    $select;
                 yield $connection->fetchAll($select);
             }
         } catch (\Exception $exception) {
@@ -79,6 +95,21 @@ class FetchBatches implements FetchBatchesInterface
                 )
             );
         }
+    }
+
+    /**
+     * Get where condition if last execution time set
+     *
+    * @param Select $select
+    * @param string $dateColumnName
+    */
+    private function getLastExecutionCondition(Select $select, string $dateColumnName): Select
+    {
+        $lastExecutionTime = $this->flagManager->getFlagData(self::LAST_EXECUTION_TIME_CODE);
+        if (!empty($lastExecutionTime)) {
+            return $select->where($dateColumnName .' > ?', $lastExecutionTime);
+        }
+        return $select;
     }
 
     /**

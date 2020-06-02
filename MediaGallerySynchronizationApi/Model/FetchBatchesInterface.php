@@ -19,7 +19,8 @@ interface FetchBatchesInterface
      *
      * @param string $tableName
      * @param array $columns
+     * @param ?string $modificationDateColumn
      * @throws LocalizedException
      */
-    public function execute(string $tableName, array $columns): \Traversable;
+    public function execute(string $tableName, array $columns, ?string $modificationDateColumn): \Traversable;
 }
