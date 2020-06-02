@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup">
         <annotations>
-            <description>Asserts that image not exists in media gallery grid</description>
+            <description>Asserts that image does not exists in media gallery grid</description>
         </annotations>
         <arguments>
             <argument name="image"/>
