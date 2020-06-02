@@ -100,9 +100,9 @@ class FetchBatches implements FetchBatchesInterface
     /**
      * Get where condition if last execution time set
      *
-    * @param Select $select
-    * @param string $dateColumnName
-    */
+     * @param Select $select
+     * @param string $dateColumnName
+     */
     private function getLastExecutionCondition(Select $select, string $dateColumnName): Select
     {
         $lastExecutionTime = $this->flagManager->getFlagData(self::LAST_EXECUTION_TIME_CODE);

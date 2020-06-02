@@ -53,6 +53,8 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $driver;
     
     /**
+     * @param File $driver
+     * @param Filesystem $filesystem
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
@@ -118,7 +120,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     }
 
     /**
-     * Return existing assets from Filesystem
+     * Return existing assets from files
      *
      * @param \SplFileInfo[] $files
      */
