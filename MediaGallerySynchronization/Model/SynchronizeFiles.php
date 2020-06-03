@@ -83,8 +83,9 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     {
         $assets = $this->getExistingAssets($files);
         foreach ($files as $file) {
-            $fileData = $this->extractDataFromFile($file);
-            if (isset($assets[$fileData['path']]) && $fileData['time'] === $assets[$fileData['path']]) {
+            $path = $this->getFilePath($file);
+            $time = $this->getFileModificationTime($file);
+            if (isset($assets[$path]) && $time === $assets[$path]) {
                 continue;
             }
             try {
@@ -108,15 +109,25 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     }
 
     /**
-     * Extract path and modification date from File
+     * Retrieve relative file path
      *
      * @param \SplFileInfo $file
+     * @return string
      */
-    private function extractDataFromFile(\SplFileInfo $file) :array
+    private function getFilePath(\SplFileInfo $file): string
     {
-        $filePath = $this->getRelativePath($file->getPath() . '/' . $file->getFileName());
-        $fileModificationTime = (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s');
-        return ['path' => $filePath, 'time' => $fileModificationTime];
+        return $this->getRelativePath($file->getPath() . '/' . $file->getFileName());
+    }
+
+    /**
+     * Retrieve formatted file modification time
+     *
+     * @param \SplFileInfo $file
+     * @return string
+     */
+    private function getFileModificationTime(\SplFileInfo $file): string
+    {
+        return (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s');
     }
 
     /**
@@ -128,9 +139,9 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     {
         $result = [];
         $paths = array_map(function ($file) {
-            return $this->getRelativePath($file->getPath() . '/' . $file->getFileName());
+            return $this->getFilePath($file);
         }, $files);
-        
+
         $assets = $this->getAssetsByPaths->execute($paths);
 
         foreach ($assets as $asset) {

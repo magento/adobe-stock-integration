@@ -74,9 +74,7 @@ class Synchronize implements SynchronizeInterface
                 $failed[] = $name;
             }
         }
-        
-        $this->setLastExecutionTime();
-        
+
         if (!empty($failed)) {
             throw new LocalizedException(
                 __(
@@ -87,6 +85,8 @@ class Synchronize implements SynchronizeInterface
                 )
             );
         }
+
+        $this->setLastExecutionTime();
     }
 
     /**

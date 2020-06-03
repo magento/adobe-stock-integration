@@ -80,7 +80,7 @@ class Product implements SynchronizerInterface
         $columns = [self::PRODUCT_TABLE_ENTITY_ID, self::PRODUCT_TABLE_UPDATED_AT_FIELD];
         foreach ($this->fetchBatches->execute(self::PRODUCT_TABLE, $columns, $columns[1]) as $batch) {
             foreach ($batch as $item) {
-                $this->synchronizeField($item);
+                $this->synchronizeItem($item);
             }
         }
     }
@@ -90,7 +90,7 @@ class Product implements SynchronizerInterface
      *
      * @param array $item
      */
-    private function synchronizeField(array $item): void
+    private function synchronizeItem(array $item): void
     {
         foreach ($this->fields as $field) {
             $contentIdentity = $this->contentIdentityFactory->create(
