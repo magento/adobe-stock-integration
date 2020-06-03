@@ -25,7 +25,7 @@ class Category implements SynchronizerInterface
     private const CATEGORY_TABLE = 'catalog_category_entity';
     private const CATEGORY_IDENTITY_FIELD = 'entity_id';
     private const CATEGORY_UPDATED_AT_FIELD = 'updated_at';
-    
+
     /**
      * @var UpdateContentAssetLinksInterface
      */

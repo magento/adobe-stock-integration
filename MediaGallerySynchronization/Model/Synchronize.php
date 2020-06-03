@@ -8,11 +8,10 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool;
 use Psr\Log\LoggerInterface;
-use Magento\MediaGallerySynchronization\Model\FetchMediaStorageFileBatches;
 
 /**
  * Synchronize media storage and media assets database records
@@ -78,7 +77,7 @@ class Synchronize implements SynchronizeInterface
                 }
             }
         }
-        
+
         $this->resolveNonExistedAssets->execute();
         if (!empty($failed)) {
             throw new LocalizedException(

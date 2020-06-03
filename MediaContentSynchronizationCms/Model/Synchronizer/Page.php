@@ -11,7 +11,6 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
-use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * Synchronize page content with assets
@@ -25,7 +24,7 @@ class Page implements SynchronizerInterface
     private const CMS_PAGE_TABLE = 'cms_page';
     private const CMS_PAGE_TABLE_ENTITY_ID = 'page_id';
     private const CMS_PAGE_TABLE_UPDATED_AT_FIELD = 'update_time';
-        
+
     /**
      * @var FetchBatchesInterface
      */

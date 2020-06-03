@@ -25,7 +25,7 @@ class Product implements SynchronizerInterface
     private const PRODUCT_TABLE = 'catalog_product_entity';
     private const PRODUCT_TABLE_ENTITY_ID = 'entity_id';
     private const PRODUCT_TABLE_UPDATED_AT_FIELD = 'updated_at';
-    
+
     /**
      * @var UpdateContentAssetLinksInterface
      */

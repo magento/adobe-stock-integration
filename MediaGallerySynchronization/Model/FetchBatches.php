@@ -9,11 +9,11 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
-use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\FlagManager;
-use Magento\Framework\DB\Select;
+use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Select data from database by provided batch size
@@ -21,7 +21,7 @@ use Magento\Framework\DB\Select;
 class FetchBatches implements FetchBatchesInterface
 {
     private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
-    
+
     /**
      * @var ResourceConnection
      */
@@ -41,7 +41,7 @@ class FetchBatches implements FetchBatchesInterface
      * @var FlagManager
      */
     private $flagManager;
-    
+
     /**
      * @param FlagManager $flagManager
      * @param ResourceConnection $resourceConnection
@@ -73,7 +73,7 @@ class FetchBatches implements FetchBatchesInterface
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName($tableName);
             $totalPages = $this->getTotalPages($tableName);
-            
+
             for ($page = 0; $page < $totalPages; $page++) {
                 $offset = $page * $this->pageSize;
                 $select = $connection->select()
@@ -107,7 +107,7 @@ class FetchBatches implements FetchBatchesInterface
     {
         $lastExecutionTime = $this->flagManager->getFlagData(self::LAST_EXECUTION_TIME_CODE);
         if (!empty($lastExecutionTime)) {
-            return $select->where($dateColumnName .' > ?', $lastExecutionTime);
+            return $select->where($dateColumnName . ' > ?', $lastExecutionTime);
         }
         return $select;
     }

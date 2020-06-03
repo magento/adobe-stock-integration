@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronization\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\FlagManager;
+use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaContentSynchronizationApi\Model\SynchronizerPool;
-use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
-use Magento\Framework\FlagManager;
 
 /**
  * Synchronize content with assets
@@ -20,17 +20,17 @@ use Magento\Framework\FlagManager;
 class Synchronize implements SynchronizeInterface
 {
     private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
-    
+
     /**
      * @var DateTimeFactory
      */
     private $dateFactory;
-    
+
     /**
      * @var FlagManager
      */
     private $flagManager;
-    
+
     /**
      * @var LoggerInterface
      */
@@ -74,9 +74,9 @@ class Synchronize implements SynchronizeInterface
                 $failed[] = $name;
             }
         }
-        
+
         $this->setLastExecutionTime();
-        
+
         if (!empty($failed)) {
             throw new LocalizedException(
                 __(

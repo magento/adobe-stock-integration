@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Synchronize files in media storage and media assets database records
@@ -51,7 +51,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      * @var File
      */
     private $driver;
-    
+
     /**
      * @param File $driver
      * @param Filesystem $filesystem
@@ -111,6 +111,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      * Extract path and modification date from File
      *
      * @param \SplFileInfo $file
+     * @return array
      */
     private function extractDataFromFile(\SplFileInfo $file) :array
     {
@@ -123,6 +124,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      * Return existing assets from files
      *
      * @param \SplFileInfo[] $files
+     * @return array
      */
     private function getExistingAssets(array $files): array
     {
@@ -130,7 +132,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         $paths = array_map(function ($file) {
             return $this->getRelativePath($file->getPath() . '/' . $file->getFileName());
         }, $files);
-        
+
         $assets = $this->getAssetsByPaths->execute($paths);
 
         foreach ($assets as $asset) {
@@ -145,7 +147,6 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      *
      * @param string $file
      * @return string
-     * @throws ValidatorException
      */
     private function getRelativePath(string $file): string
     {

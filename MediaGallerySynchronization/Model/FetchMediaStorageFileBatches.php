@@ -5,11 +5,12 @@
  */
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Fetch files from media storage in batches
@@ -17,7 +18,7 @@ use Magento\Framework\Filesystem\Driver\File;
 class FetchMediaStorageFileBatches
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
-    
+
     /**
      * @var GetAssetsIterator
      */
@@ -37,7 +38,7 @@ class FetchMediaStorageFileBatches
      * @var File
      */
     private $driver;
-    
+
     /**
      * @var LoggerInterface
      */
@@ -47,7 +48,7 @@ class FetchMediaStorageFileBatches
      * @var int
      */
     private $batchSize;
-    
+
     /**
      * @param LoggerInterface $log
      * @param IsPathBlacklistedInterface $isPathBlacklisted
@@ -80,7 +81,7 @@ class FetchMediaStorageFileBatches
         $i = 0;
         $batch = [];
         $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        
+
         /** @var \SplFileInfo $file */
         foreach ($this->getAssetsIterator->execute($mediaDirectory->getAbsolutePath()) as $file) {
             if (!$this->isApplicable($file->getPathName())) {
@@ -98,7 +99,7 @@ class FetchMediaStorageFileBatches
             yield $batch;
         }
     }
-    
+
     /**
      * Get correct path for media asset
      *
@@ -116,7 +117,7 @@ class FetchMediaStorageFileBatches
 
         return $path;
     }
-    
+
     /**
      * Can synchronization be applied to asset with provided path
      *

@@ -15,12 +15,12 @@ use Magento\Framework\Exception\LocalizedException;
 interface FetchBatchesInterface
 {
     /**
-     * Fetch the colums from the database table in batches
+     * Fetch the columns from the database table in batches
      *
      * @param string $tableName
      * @param array $columns
-     * @param ?string $modificationDateColumn
-     * @throws LocalizedException
+     * @param string|null $modificationDateColumn
+     * @return \Traversable
      */
     public function execute(string $tableName, array $columns, ?string $modificationDateColumn): \Traversable;
 }

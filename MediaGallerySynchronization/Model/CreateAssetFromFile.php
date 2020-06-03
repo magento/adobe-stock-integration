@@ -35,7 +35,7 @@ class CreateAssetFromFile
      * @var GetAssetsByPathsInterface
      */
     private $getMediaGalleryAssetByPath;
-    
+
     /**
      * @var Read
      */
@@ -74,7 +74,7 @@ class CreateAssetFromFile
     public function execute(\SplFileInfo $file)
     {
         $path = $file->getPath() . '/' . $file->getFileName();
-        
+
         [$width, $height] = getimagesize($path);
 
         $asset = $this->getAsset($path);
@@ -106,7 +106,7 @@ class CreateAssetFromFile
         $asset = $this->getMediaGalleryAssetByPath->execute([$this->getRelativePath($path)]);
         return !empty($asset) ? $asset[0] : null;
     }
-    
+
     /**
      * Get correct path for media asset
      *

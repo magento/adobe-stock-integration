@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Delete assets which not exist physically
@@ -38,7 +38,7 @@ class ResolveNonExistedAssets
      * @var Filesystem
      */
     private $filesystem;
-    
+
     /**
      * @var LoggerInterface
      */
@@ -53,7 +53,7 @@ class ResolveNonExistedAssets
      * @var FetchBatchesInterface
      */
     private $selectBatches;
-    
+
     /**
      * @param Filesystem $filesystem
      * @param ResourceConnection $resourceConnection
