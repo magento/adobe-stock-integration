@@ -20,11 +20,11 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </before>
         <after>
-            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
+            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewContentImageDetails"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteContentImage"/>
