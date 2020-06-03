@@ -26,7 +26,7 @@
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
-        <actionGroup ref="AssertEnhancedMediaGalleryImageDeletedActionGroup" stepKey="assertImageDeleted">
+        <actionGroup ref="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup" stepKey="assertImageDeleted">
             <argument name="imageName" value="{{ImageUpload.fileName}}"/>
         </actionGroup>
     </test>
