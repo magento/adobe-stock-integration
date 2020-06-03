@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEnhancedMediaGalleryFiltersSection">
+        <element name="filtersButton" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-expand']"/>
+        <element name="sourceFilterValue" type="select" parameterized="true" selector="//div[@class='media-gallery-container']//select[@name='source']//option[@value='{{option}}']"/>
+        <element name="applyFilters" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-apply']"/>
+        <element name="activeFilter" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']//span[contains( ., '{{filter}}')]" parameterized="true"/>
+        <element name="activeFilterPlaceholder" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']"/>
+    </section>
+</sections>
