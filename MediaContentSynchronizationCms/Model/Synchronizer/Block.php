@@ -79,7 +79,7 @@ class Block implements SynchronizerInterface
         );
         foreach ($this->fetchBatches->execute(self::CMS_BLOCK_TABLE, $columns, $columns[1]) as $batch) {
             foreach ($batch as $item) {
-                $this->synchronizeField($item);
+                $this->synchronizeItem($item);
             }
         }
     }
@@ -89,7 +89,7 @@ class Block implements SynchronizerInterface
      *
      * @param array $item
      */
-    private function synchronizeField(array $item): void
+    private function synchronizeItem(array $item): void
     {
         foreach ($this->fields as $field) {
             $this->updateContentAssetLinks->execute(
