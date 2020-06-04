@@ -80,7 +80,7 @@ class FetchBatches implements FetchBatchesInterface
                     ->from($this->resourceConnection->getTableName($tableName), $columns)
                     ->limit($this->pageSize, $offset);
                 if (!empty($dateColumnName)) {
-                    $select = $this->getLastExecutionCondition($select, $dateColumnName);
+                    $select = $this->addLastExecutionCondition($select, $dateColumnName);
                 }
                 yield $connection->fetchAll($select);
             }
@@ -104,7 +104,7 @@ class FetchBatches implements FetchBatchesInterface
      * @param string $dateColumnName
      * @return Select
      */
-    private function getLastExecutionCondition(Select $select, string $dateColumnName): Select
+    private function addLastExecutionCondition(Select $select, string $dateColumnName): Select
     {
         $lastExecutionTime = $this->flagManager->getFlagData(self::LAST_EXECUTION_TIME_CODE);
         if (!empty($lastExecutionTime)) {
@@ -117,6 +117,7 @@ class FetchBatches implements FetchBatchesInterface
      * Return number of total pages by page size
      *
      * @param string $tableName
+     * @return float
      */
     private function getTotalPages(string $tableName): float
     {

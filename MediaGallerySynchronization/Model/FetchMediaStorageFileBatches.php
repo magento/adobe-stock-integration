@@ -101,24 +101,6 @@ class FetchMediaStorageFileBatches
     }
 
     /**
-     * Get correct path for media asset
-     *
-     * @param string $file
-     * @return string
-     * @throws ValidatorException
-     */
-    private function getRelativePath(string $file): string
-    {
-        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($file);
-
-        if ($this->driver->getParentDirectory($path) === '.') {
-            $path = '/' . $path;
-        }
-
-        return $path;
-    }
-
-    /**
      * Can synchronization be applied to asset with provided path
      *
      * @param string $path
