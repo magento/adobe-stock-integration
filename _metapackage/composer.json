@@ -21,6 +21,7 @@
         "magento/module-media-content-synchronization": "*",
         "magento/module-media-content-synchronization-api": "*",
         "magento/module-media-content-synchronization-catalog": "*",
-        "magento/module-media-content-synchronization-cms": "*"
+        "magento/module-media-content-synchronization-cms": "*",
+        "magento/module-adobe-stock-stub": "*"
     }
 }
