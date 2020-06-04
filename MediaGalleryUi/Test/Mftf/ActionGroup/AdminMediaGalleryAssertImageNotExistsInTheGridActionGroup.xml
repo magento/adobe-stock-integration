@@ -8,14 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertEnhancedMediaGalleryImageDeletedActionGroup">
+    <actionGroup name="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup">
         <annotations>
-            <description>Assert that an image was delete.</description>
+            <description>Asserts that image does not exists in media gallery grid</description>
         </annotations>
         <arguments>
-            <argument name="imageName" type="string"/>
+            <argument name="image"/>
         </arguments>
+        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(image.file)}}" stepKey="waitForImageToBeVisible"/>
 
-        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="dontSeeImage"/>
     </actionGroup>
 </actionGroups>
