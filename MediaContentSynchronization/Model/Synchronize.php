@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronization\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\FlagManager;
+use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaContentSynchronizationApi\Model\SynchronizerPool;
-use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -17,6 +19,18 @@ use Psr\Log\LoggerInterface;
  */
 class Synchronize implements SynchronizeInterface
 {
+    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
+
+    /**
+     * @var DateTimeFactory
+     */
+    private $dateFactory;
+
+    /**
+     * @var FlagManager
+     */
+    private $flagManager;
+
     /**
      * @var LoggerInterface
      */
@@ -28,13 +42,19 @@ class Synchronize implements SynchronizeInterface
     private $synchronizerPool;
 
     /**
+     * @param DateTimeFactory $dateFactory
+     * @param FlagManager $flagManager
      * @param LoggerInterface $log
      * @param SynchronizerPool $synchronizerPool
      */
     public function __construct(
+        DateTimeFactory $dateFactory,
+        FlagManager $flagManager,
         LoggerInterface $log,
         SynchronizerPool $synchronizerPool
     ) {
+        $this->dateFactory = $dateFactory;
+        $this->flagManager = $flagManager;
         $this->log = $log;
         $this->synchronizerPool = $synchronizerPool;
     }
@@ -65,5 +85,16 @@ class Synchronize implements SynchronizeInterface
                 )
             );
         }
+
+        $this->setLastExecutionTime();
+    }
+
+    /**
+     * Set last synchronizer execution time
+     */
+    private function setLastExecutionTime(): void
+    {
+        $currentTime = $this->dateFactory->create()->gmtDate();
+        $this->flagManager->saveFlag(self::LAST_EXECUTION_TIME_CODE, $currentTime);
     }
 }
