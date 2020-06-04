@@ -12,6 +12,7 @@
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/428"/>
             <title value="View image details in standalone media gallery"/>
+            <stories value="[Story # 38] User views basic image attributes in Media Gallery"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503223"/>
             <description value="User views basic image attributes in Media Gallery"/>
             <severity value="CRITICAL"/>
