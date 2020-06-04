@@ -79,9 +79,9 @@ class FetchBatches implements FetchBatchesInterface
                 $select = $connection->select()
                     ->from($this->resourceConnection->getTableName($tableName), $columns)
                     ->limit($this->pageSize, $offset);
-                !empty($dateColumnName) ?
-                    $select = $this->getLastExecutionCondition($select, $dateColumnName) :
-                    $select;
+                if (!empty($dateColumnName)) {
+                    $select = $this->getLastExecutionCondition($select, $dateColumnName);
+                }
                 yield $connection->fetchAll($select);
             }
         } catch (\Exception $exception) {
@@ -102,6 +102,7 @@ class FetchBatches implements FetchBatchesInterface
      *
      * @param Select $select
      * @param string $dateColumnName
+     * @return Select
      */
     private function getLastExecutionCondition(Select $select, string $dateColumnName): Select
     {
