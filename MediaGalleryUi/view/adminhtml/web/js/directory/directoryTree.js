@@ -9,8 +9,9 @@ define([
     'uiComponent',
     'uiLayout',
     'underscore',
+    'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'jquery/jstree/jquery.jstree'
-], function ($, Component, layout, _) {
+], function ($, Component, layout, _, createDirectory) {
     'use strict';
 
     return Component.extend({
@@ -44,12 +45,54 @@ define([
                     return $(this.directoryTreeSelector).length === 0;
                 }.bind(this),
                 function () {
-                    this.getJsonTree();
-                    this.initEvents();
+                    this.createFolderIfNotExists().then(function () {
+                        this.getJsonTree();
+                        this.initEvents();
+                    }.bind(this));
                 }.bind(this)
             );
 
             return this;
+        },
+
+        /**
+         * Create folder by provided current_tree_path param
+         */
+        createFolderIfNotExists: function () {
+            var isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
+                currentTreePath = isMediaBrowser ? window.MediabrowserUtility.pathId : null,
+                deferred = $.Deferred();
+
+            if (currentTreePath) {
+                createDirectory(
+                    this.createDirectoryUrl,
+                    this.convertPathToPathsArray(Base64.idDecode(currentTreePath))
+                ).always(function () {
+                    deferred.resolve();
+                });
+            } else {
+                deferred.resolve();
+            }
+
+            return deferred.promise();
+        },
+
+        /**
+         * Convert path string to path array e.g 'path1/path2' -> ['path1', 'path1/path2']
+         *
+         * @param {String} path
+         */
+        convertPathToPathsArray: function (path) {
+            var pathsArray = [],
+                pathString = '',
+                paths = path.split('/');
+
+            $.each(paths, function (i, val) {
+                pathString += i >= 1 ? val : val + '/';
+                pathsArray.push(i >= 1 ? pathString : val);
+            });
+
+            return pathsArray;
         },
 
         /**
