@@ -8,14 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertEnhancedMediaGalleryImageDeletedActionGroup">
+    <actionGroup name="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup">
         <annotations>
-            <description>Assert that an image was delete.</description>
+            <description>Assert that an image was deleted from Enhanced Media Gallery.</description>
         </annotations>
         <arguments>
-            <argument name="imageName" type="string"/>
+            <argument name="imageName" type="string" defaultValue="magento"/>
         </arguments>
-
+        <see userInput='You have successfully removed the image "{{imageName}}"' stepKey="verifyDeleteImage"/>
         <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="dontSeeImage"/>
     </actionGroup>
 </actionGroups>
