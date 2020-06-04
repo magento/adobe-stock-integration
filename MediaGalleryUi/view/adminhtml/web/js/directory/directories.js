@@ -200,6 +200,7 @@ define([
                 callback = function () {
                     this.directoryTree().removeNode();
                     this.directoryTree().selectStorageRoot();
+                    $(window).trigger('enhanced_media_gallery_folder_deleted');
                 }.bind(this);
 
             this.sendPostRequest(this.directoryTree().deleteDirectoryUrl, data, errorMessage, callback);
