@@ -60,11 +60,11 @@ define([
                         confirm: function (folderName) {
                             createDirectory(
                                 this.directoryTree().createDirectoryUrl,
-                                [this.getFolderPath(folderName)]
+                                [this.getNewFolderPath(folderName)]
                             ).then(function () {
                                 this.directoryTree().reloadJsTree();
                                 $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    this.directoryTree().locateNode(this.getFolderPath(folderName));
+                                    this.directoryTree().locateNode(this.getNewFolderPath(folderName));
                                 }.bind(this));
 
                             }.bind(this)).fail(function (error) {
@@ -98,7 +98,7 @@ define([
          * @param {String} folderName
          * @returns {String}
          */
-        getSelectedFolder: function (folderName) {
+        getNewFolderPath: function (folderName) {
             var selectedFolder = _.isUndefined(this.selectedFolder()) ||
                                  _.isNull(this.selectedFolder()) ? '/' : this.selectedFolder(),
                folderToCreate = selectedFolder !== '/' ? selectedFolder + '/' + folderName : folderName;
