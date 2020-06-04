@@ -19,7 +19,7 @@ define([
         /**
          * Init component
          *
-         * @return {exports}
+         * @return {Object}
          */
         initialize: function () {
             this._super();
