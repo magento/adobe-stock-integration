@@ -58,7 +58,7 @@ define([
             imageFolder = $('.jstree li[data-id="' + pathId + '"]').children('a');
 
             if (!imageFolder.length) {
-                imageFolder = $('.jstree li[data-id="' + this.jsTreeRootFolderName + '"]')
+                imageFolder = $('.jstree li[data-id="' + this.jsTreeRootFolderId + '"]')
                     .children('a');
             }
 
