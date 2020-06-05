@@ -7,6 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\AdobeStockClient\Model\ConnectionFactory"
-                type="Magento\AdobeStockStub\Model\StubConnectionFactory"/>
+    <type name="Magento\AdobeStockClient\Model\ConnectionFactory">
+        <arguments>
+            <argument name="httpClient" xsi:type="object">Magento\AdobeStockStub\Model\HttpClient</argument>
+        </arguments>
+    </type>
 </config>

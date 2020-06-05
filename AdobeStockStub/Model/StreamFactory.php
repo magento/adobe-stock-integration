@@ -15,18 +15,13 @@ use GuzzleHttp\Psr7\Stream;
  */
 class StreamFactory
 {
-    public function create(): Stream
+    public function create(array $resource): Stream
     {
         $stream = fopen('php://temp', 'r+');
-        /**
-         * Here as an idea we need to prepare the data for the particular request and use it as resource.
-         *
-        if ($resource !== '') {
-            fwrite($stream, $resource);
-            fseek($stream, 0);
-        }
-         *
-         */
+        // I know about abounded function json_encode. Leave it here for POC.
+        fwrite($stream, json_encode($resource));
+        fseek($stream, 0);
+
         return new Stream($stream);
     }
 }

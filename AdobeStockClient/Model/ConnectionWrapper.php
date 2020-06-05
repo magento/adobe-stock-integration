@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
-use AdobeStock\Api\Client\Http\HttpInterface;
 use AdobeStock\Api\Models\SearchParameters;
 use AdobeStock\Api\Request\License as LicenseRequest;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
@@ -59,32 +58,24 @@ class ConnectionWrapper
     private $connectionFactory;
 
     /**
-     * @var HttpInterface
-     */
-    private $httpClient;
-
-    /**
      * @param ClientConfig $clientConfig
      * @param ConnectionFactory $connectionFactory
      * @param ImsConfig $imsConfig
      * @param GetAccessTokenInterface $getAccessToken
      * @param FlushUserTokensInterface $flushUserTokens
-     * @param HttpInterface|null $httpClient
      */
     public function __construct(
         ClientConfig $clientConfig,
         ConnectionFactory $connectionFactory,
         ImsConfig $imsConfig,
         GetAccessTokenInterface $getAccessToken,
-        FlushUserTokensInterface $flushUserTokens,
-        HttpInterface $httpClient = null
+        FlushUserTokensInterface $flushUserTokens
     ) {
         $this->clientConfig = $clientConfig;
         $this->connectionFactory = $connectionFactory;
         $this->imsConfig = $imsConfig;
         $this->getAccessToken = $getAccessToken;
         $this->flushUserTokens = $flushUserTokens;
-        $this->httpClient = $httpClient;
     }
 
     /**
@@ -99,8 +90,7 @@ class ConnectionWrapper
             $this->connection = $this->connectionFactory->create(
                 $apiKey ?? $this->imsConfig->getApiKey(),
                 $this->clientConfig->getProductName(),
-                $this->clientConfig->getTargetEnvironment(),
-                $this->httpClient
+                $this->clientConfig->getTargetEnvironment()
             );
         }
         return $this->connection;

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use AdobeStock\Api\Client\AdobeStock;
-use AdobeStock\Api\Client\Http\HttpInterface;
 use AdobeStock\Api\Request\License as LicenseRequest;
 use AdobeStock\Api\Request\SearchFiles as SearchFilesRequest;
 use AdobeStock\Api\Response\License as LicenseResponse;
@@ -54,11 +53,6 @@ class ConnectionWrapperTest extends TestCase
     private $flushToken;
 
     /**
-     * @var MockObject|HttpInterface $httpInterface
-     */
-    private $httpInterface;
-
-    /**
      * @var ConnectionWrapper
      */
     private $connectionWrapper;
@@ -78,7 +72,6 @@ class ConnectionWrapperTest extends TestCase
         $this->imsConfig = $this->createMock(ImsConfig::class);
         $this->getAccessToken = $this->createMock(GetAccessTokenInterface::class);
         $this->flushToken = $this->createMock(FlushUserTokensInterface::class);
-        $this->httpInterface = $this->createMock(HttpInterface::class);
         $this->adobeStockMock = $this->createMock(AdobeStock::class);
         $this->connectionFactory->expects($this->once())->method('create')->willReturn($this->adobeStockMock);
         $this->configInterface->expects($this->once())->method('getProductName')->willReturn('name');
@@ -89,8 +82,7 @@ class ConnectionWrapperTest extends TestCase
             $this->connectionFactory,
             $this->imsConfig,
             $this->getAccessToken,
-            $this->flushToken,
-            $this->httpInterface
+            $this->flushToken
         );
     }
 

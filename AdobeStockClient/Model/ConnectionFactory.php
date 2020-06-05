@@ -17,20 +17,26 @@ use AdobeStock\Api\Client\Http\HttpInterface;
 class ConnectionFactory
 {
     /**
-     * Create new SDK connection instance
-     *
+     * @var HttpInterface|null
+     */
+    private $httpClient;
+
+    /**
+     * @param HttpInterface|null $httpClient
+     */
+    public function __construct(HttpInterface $httpClient = null)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    /**
      * @param string $apiKey
      * @param string $productName
      * @param string $targetEnvironment
-     * @param HttpInterface|null $httpClient
      * @return AdobeStock
      */
-    public function create(
-        string $apiKey,
-        string $productName,
-        string $targetEnvironment,
-        HttpInterface $httpClient = null
-    ): AdobeStock {
-        return new AdobeStock($apiKey, $productName, $targetEnvironment, $httpClient);
+    public function create(string $apiKey, string $productName, string $targetEnvironment): AdobeStock
+    {
+        return new AdobeStock($apiKey, $productName, $targetEnvironment, $this->httpClient);
     }
 }

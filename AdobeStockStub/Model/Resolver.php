@@ -11,7 +11,7 @@ namespace Magento\AdobeStockStub\Model;
 use GuzzleHttp\Psr7\Stream;
 
 /**
- * Generate stub data Stream/Response instances based on the URl request from the Adobe Stock SDK.
+ * Resolve stub data Stream/Response instances generation based on the URl request from the Adobe Stock SDK.
  */
 class Resolver
 {
@@ -21,11 +21,18 @@ class Resolver
     private $streamFactory;
 
     /**
-     * @param StreamFactory $streamFactory
+     * @var FileGenerator
      */
-    public function __construct(StreamFactory $streamFactory)
+    private $fileGenerator;
+
+    /**
+     * @param StreamFactory $streamFactory
+     * @param FileGenerator $fileGenerator
+     */
+    public function __construct(StreamFactory $streamFactory, FileGenerator $fileGenerator)
     {
         $this->streamFactory = $streamFactory;
+        $this->fileGenerator = $fileGenerator;
     }
 
     /**
@@ -45,6 +52,22 @@ class Resolver
     }
 
     /**
+     * Generate resource for the response stream based on the query.
+     *
+     * @param array $query
+     *
+     * @return array
+     */
+    private function createResource(array $query): array
+    {
+        $files = $this->fileGenerator->generate($query);
+        return [
+            'nb_results' => count($files),
+            'files' => $files
+        ];
+    }
+
+    /**
      * Parse url and based on parameters generate stub data fro the doGet method.
      *
      * @param string $url
@@ -55,8 +78,8 @@ class Resolver
     public function doGet(string $url, array $headers): Stream
     {
         $query = $this->parseUrlQuery($url);
-        //@TODO implement logic for generating the stub data and send it as a string to the stream factory
-        return $this->streamFactory->create();
+        $resource = $this->createResource($query);
+        return $this->streamFactory->create($resource);
     }
 
     /**
@@ -72,6 +95,7 @@ class Resolver
     {
         $query = $this->parseUrlQuery($url);
         //@TODO implement logic for generating the stub data and send it as a string to the stream factory
+
         return $this->streamFactory->create();
     }
 
