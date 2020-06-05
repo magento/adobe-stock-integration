@@ -7,13 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
-use Magento\Cms\Api\BlockRepositoryInterface;
-use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 
 /**
  * Synchronize block content with assets
@@ -24,16 +21,14 @@ class Block implements SynchronizerInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
+    private const CMS_BLOCK_TABLE = 'cms_block';
+    private const CMS_BLOCK_TABLE_ENTITY_ID = 'block_id';
+    private const CMS_BLOCK_TABLE_UPDATED_AT_FIELD = 'update_time';
 
     /**
-     * @var BlockRepositoryInterface
+     * @var FetchBatchesInterface
      */
-    private $repository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private $fetchBatches;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -46,11 +41,6 @@ class Block implements SynchronizerInterface
     private $contentIdentityFactory;
 
     /**
-     * @var DataObjectProcessor
-     */
-    private $dataObjectProcessor;
-
-    /**
      * @var array
      */
     private $fields;
@@ -58,27 +48,21 @@ class Block implements SynchronizerInterface
     /**
      * Synchronize block content with assets
      *
-     * @param BlockRepositoryInterface $repository
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FetchBatchesInterface $fetchBatches
      * @param array $fields
      */
     public function __construct(
-        BlockRepositoryInterface $repository,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        DataObjectProcessor $dataObjectProcessor,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
-        $this->repository = $repository;
         $this->contentIdentityFactory = $contentIdentityFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fields = $fields;
+        $this->fetchBatches = $fetchBatches;
     }
 
     /**
@@ -86,19 +70,38 @@ class Block implements SynchronizerInterface
      */
     public function execute(): void
     {
-        foreach ($this->repository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
-            foreach ($this->fields as $field) {
-                $this->updateContentAssetLinks->execute(
-                    $this->contentIdentityFactory->create(
-                        [
-                            self::TYPE => self::CONTENT_TYPE,
-                            self::FIELD => $field,
-                            self::ENTITY_ID => $item->getId()
-                        ]
-                    ),
-                    (string) $this->dataObjectProcessor->buildOutputDataArray($item, BlockInterface::class)[$field]
-                );
+        $columns =  array_merge(
+            [
+                self::CMS_BLOCK_TABLE_ENTITY_ID,
+                self::CMS_BLOCK_TABLE_UPDATED_AT_FIELD
+            ],
+            array_values($this->fields)
+        );
+        foreach ($this->fetchBatches->execute(self::CMS_BLOCK_TABLE, $columns, $columns[1]) as $batch) {
+            foreach ($batch as $item) {
+                $this->synchronizeItem($item);
             }
+        }
+    }
+
+    /**
+     * Synchronize block entity fields
+     *
+     * @param array $item
+     */
+    private function synchronizeItem(array $item): void
+    {
+        foreach ($this->fields as $field) {
+            $this->updateContentAssetLinks->execute(
+                $this->contentIdentityFactory->create(
+                    [
+                        self::TYPE => self::CONTENT_TYPE,
+                        self::FIELD => $field,
+                        self::ENTITY_ID => $item[self::CMS_BLOCK_TABLE_ENTITY_ID]
+                    ]
+                ),
+                (string) $item[$field]
+            );
         }
     }
 }

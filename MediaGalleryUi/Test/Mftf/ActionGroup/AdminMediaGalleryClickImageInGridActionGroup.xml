@@ -13,7 +13,7 @@
             <description>Select image on enhanced media gallery</description>
         </annotations>
         <arguments>
-            <argument name="imageName" type="string" defaultValue="{{AdobeStockImageData.name}}"/>
+            <argument name="imageName" type="string"/>
         </arguments>
         <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="waitForImageToBeVisible"/>
         <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="clickOnImage"/>

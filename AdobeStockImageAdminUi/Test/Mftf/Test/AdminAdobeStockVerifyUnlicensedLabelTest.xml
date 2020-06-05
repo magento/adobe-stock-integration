@@ -12,6 +12,7 @@
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/460"/>
             <title value="User saves image preview and verify unlicensed label"/>
+            <stories value="[Story #41] User views limited image information from the image grid in Media Gallery"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/3839218"/>
             <description value="Admin should be able to saves image preview and see unlicensed label"/>
             <severity value="CRITICAL"/>

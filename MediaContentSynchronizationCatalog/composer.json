@@ -4,8 +4,8 @@
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/module-catalog": "*",
         "magento/module-media-content-synchronization-api": "*",
+        "magento/module-media-gallery-synchronization-api": "*",
         "magento/module-media-content-api": "*"
     },
     "type": "magento2-module",
