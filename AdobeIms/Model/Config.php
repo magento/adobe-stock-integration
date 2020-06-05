@@ -22,7 +22,6 @@ class Config implements ConfigInterface
     private const XML_PATH_TOKEN_URL = 'adobe_ims/integration/token_url';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
     private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
-    private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_ims/integration/default_profile_image';
     private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_ims/integration/image_url';
     private const OAUTH_CALLBACK_URL = 'adobe_ims/oauth/callback';
 
@@ -126,13 +125,5 @@ class Config implements ConfigInterface
             [$this->getApiKey()],
             $this->scopeConfig->getValue(self::XML_PATH_IMAGE_URL_PATTERN)
         );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDefaultProfileImage(): string
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_DEFAULT_PROFILE_IMAGE);
     }
 }

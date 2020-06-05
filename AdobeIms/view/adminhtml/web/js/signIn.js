@@ -14,7 +14,6 @@ define([
         defaults: {
             profileUrl: 'adobe_ims/user/profile',
             logoutUrl: 'adobe_ims/user/logout',
-            defaultProfileImage: '',
             user: {
                 isAuthorized: false,
                 name: '',
@@ -127,7 +126,7 @@ define([
                         isAuthorized: false,
                         name: '',
                         email: '',
-                        image: this.defaultProfileImage
+                        image: ''
                     });
                 }.bind(this),
 
