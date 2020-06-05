@@ -222,7 +222,9 @@ define([
 
             data[typeId] = recordId;
 
-            this.filterChips().set('applied', data);
+            this.filterChips().clear();
+            this.filterChips().setData(data, true);
+            this.filterChips().apply();
 
             this.scrollToFilter();
         },
