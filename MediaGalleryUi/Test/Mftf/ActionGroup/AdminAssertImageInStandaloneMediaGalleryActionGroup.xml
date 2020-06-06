@@ -12,7 +12,7 @@
             <description>Validates that the provided image is present and correct in the standalone media gallery.</description>
         </annotations>
         <arguments>
-            <argument name="imageName" type="string" defaultValue=""/>
+            <argument name="imageName" type="string"/>
         </arguments>
 
         <seeElement selector="{{AdminEnhancedMediaGalleryActionsSection.imageSrc(imageName)}}"

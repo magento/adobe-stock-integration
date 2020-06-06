@@ -15,7 +15,7 @@
             <title value="User searches for an image using search by keyword from standalone media gallery"/>
             <description value="User searches for an image using search by keyword from standalone media gallery"/>
             <severity value="CRITICAL"/>
-            <group value="media_gallery_ui"/>
+            <group value="adobe_stock_media_gallery"/>
         </annotations>
 
         <before>
@@ -28,6 +28,7 @@
         </after>
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.firstKeyword}}" stepKey="grabKeyword"/>
         <grabAttributeFrom selector="{{AdminAdobeStockImagePreviewSection.image}}" userInput="alt" stepKey="grabImageName"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="clickSavePreviewButton"/>
         <waitForPageLoad stepKey="waitForPromptModal"/>
@@ -37,7 +38,14 @@
         <actionGroup ref="SearchStandaloneMediaGalleryAdminDataGridByKeywordActionGroup" stepKey="searchImage">
             <argument name="keyword" value="$grabImageName"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGrid">
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingImageName">
+            <argument name="imageName" value="$grabImageFileName"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="SearchStandaloneMediaGalleryAdminDataGridByKeywordActionGroup" stepKey="searchImageByKeyword">
+            <argument name="keyword" value="$grabKeyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingKeyword">
             <argument name="imageName" value="$grabImageFileName"/>
         </actionGroup>
     </test>
