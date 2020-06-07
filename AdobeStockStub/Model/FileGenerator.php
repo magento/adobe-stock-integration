@@ -41,8 +41,8 @@ class FileGenerator
                 'creator_name' => $this->getCreatorName($data),
                 'creation_date' => $this->getCreationDate($data),
                 'country_name' => $this->getCountryName($data),
-                'category' => [$this->getCategory($data)],
-                'keywords' => [$this->getKeywords($data)],
+                'category' => $this->getCategory($data),
+                'keywords' => $this->getKeywords($data),
                 'media_type_id' => 1,
                 'content_type' => 'image/jpeg',
                 'details_url' => 'https//adobe.stock.stub/details',
@@ -197,7 +197,11 @@ class FileGenerator
      */
     private function getCategory(array $data): array
     {
-        return isset($data['category']) ? $data['category'] : ['stub'];
+        return [
+                'id' =>  isset($data['id']) ? $data['id'] : 1,
+                'name' => 'Stub category',
+                'link' => null
+        ];
     }
 
     /**
@@ -209,6 +213,6 @@ class FileGenerator
      */
     private function getKeywords(array $data): array
     {
-        return isset($data['words']) ? ['name' => $data['words']] : ['name' => 'stub'];
+        return isset($data['words']) ? [ 0 => ['name' => $data['words']]] : [ 0 => ['name' => 'stub']];
     }
 }
