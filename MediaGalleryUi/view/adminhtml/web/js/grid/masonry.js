@@ -32,7 +32,7 @@ define([
          * Initialize events
          */
         initEvents: function () {
-            $(window).on('enhanced_media_gallery_folder_deleted', this.reloadGrid.bind(this));
+            $(window).on('folderDeleted.enhancedMediaGallery', this.reloadGrid.bind(this));
         },
 
         /**

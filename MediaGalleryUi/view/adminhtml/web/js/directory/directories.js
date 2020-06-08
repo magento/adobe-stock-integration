@@ -152,7 +152,7 @@ define([
                         ).then(function () {
                             this.directoryTree().removeNode();
                             this.directoryTree().selectStorageRoot();
-                            $(window).trigger('enhanced_media_gallery_folder_deleted');
+                            $(window).trigger('folderDeleted.enhancedMediaGallery');
                         }.bind(this)).fail(function (error) {
                             uiAlert({
                                 content: error
