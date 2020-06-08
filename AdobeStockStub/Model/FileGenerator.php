@@ -28,6 +28,7 @@ class FileGenerator
         $files = [];
         $i = 0;
         $data = $query['search_parameters'];
+        $limit = ($data['limit'] === 32) ?? rand(1,999);
         do {
             $files[] = [
                 'id' => $this->getId($data),
@@ -49,7 +50,7 @@ class FileGenerator
                 'premium_level_id' => 0,
             ];
             $i++;
-        } while ($data['limit'] > $i);
+        } while ($limit > $i);
 
         return $files;
     }
