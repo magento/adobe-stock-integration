@@ -175,6 +175,7 @@ define([
             if (!_.isUndefined(path)) {
                 return $('#' + path.replace(/\//g, '\\/')).length === 1;
             }
+
             return false;
         },
 
