@@ -32,7 +32,7 @@ class FetchMediaStorageFileBatches
     /**
      * @var IsPathExcludedInterface
      */
-    private isPathExcluded;
+    private $isPathExcluded;
 
     /**
      * @var File
