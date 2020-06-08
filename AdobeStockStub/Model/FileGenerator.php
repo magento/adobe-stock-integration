@@ -70,7 +70,7 @@ class FileGenerator
             (int)$data['limit'] === 4
             || (int)$data['limit'] === 32
             || (int)$data['limit'] ===64
-        ) ? (int) $data['limit'] : rand(1,999);
+        ) ? (int) $data['limit'] : $data['limit'];
     }
 
     /**
