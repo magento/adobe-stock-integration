@@ -172,7 +172,10 @@ define([
          * @param {String} path
          */
         folderExistsInTree: function (path) {
-            return $('#' + path.replace(/\//g, '\\/')).length === 1;
+            if (!_.isUndefined(path)) {
+                return $('#' + path.replace(/\//g, '\\/')).length === 1;
+            }
+            return false;
         },
 
         /**
