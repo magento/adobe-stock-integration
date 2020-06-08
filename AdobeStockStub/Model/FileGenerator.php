@@ -29,7 +29,7 @@ class FileGenerator
         $i = 0;
         $data = $query['search_parameters'];
         if ($this->shouldGenerateFiles($data)) {
-            $limit = $this->adjustLimit($data);
+            $limit = (int)$data['limit'];
             do {
                 $files[] = [
                     'id' => $this->getId($data),
@@ -55,22 +55,6 @@ class FileGenerator
         }
 
         return $files;
-    }
-
-    /**
-     * Defines what amount of items needs o be generated based on search parameters.
-     *
-     * @param array $data
-     *
-     * @return int
-     */
-    private function adjustLimit(array $data): int
-    {
-        return (
-            (int)$data['limit'] === 4
-            || (int)$data['limit'] === 32
-            || (int)$data['limit'] ===64
-        ) ? (int) $data['limit'] : $data['limit'];
     }
 
     /**
