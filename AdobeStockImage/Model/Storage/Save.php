@@ -15,7 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\MediaGalleryApi\Api\IsPathDeniedInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
@@ -36,30 +36,30 @@ class Save
     private $driver;
 
     /**
-     * @var IsPathExcludedInterface
+     * @var IsPathDeniedInterface
      */
-    private $isPathExcluded;
+    private $isPathDenied;
 
     /**
      * @var Storage
      */
     private $storage;
-    
+
     /**
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param IsPathExcludedInterface $isPathExcluded
+     * @param IsPathDeniedInterface $isPathDenied
      * @param Storage $storage
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        IsPathExcludedInterface $isPathExcluded,
+        IsPathDeniedInterface $isPathDenied,
         Storage $storage
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->isPathExcluded = $isPathExcluded;
+        $this->isPathDenied = $isPathDenied;
         $this->storage = $storage;
     }
 
@@ -76,7 +76,7 @@ class Save
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
-        if ($this->isPathExcluded->execute($destinationPath)) {
+        if ($this->isPathDenied->execute($destinationPath)) {
             throw new LocalizedException(__('Could not save image: destination directory is restricted.'));
         }
 
