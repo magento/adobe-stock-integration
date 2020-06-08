@@ -253,7 +253,7 @@ define([
          * Scrolls user window to the filter bookmarks
          */
         scrollToFilter: function () {
-            $(this.filterBookmarksSelector).get(0).scrollIntoView({
+            $(this.preview().adobeStockModalSelector + ' ' + this.filterBookmarksSelector).get(0).scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
                 inline: 'nearest'
