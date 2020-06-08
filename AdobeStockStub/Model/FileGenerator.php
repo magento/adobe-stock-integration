@@ -28,31 +28,65 @@ class FileGenerator
         $files = [];
         $i = 0;
         $data = $query['search_parameters'];
-        $limit = ((int)$data['limit'] === 4) ? (int) $data['limit'] : rand(1,999);
-        do {
-            $files[] = [
-                'id' => $this->getId($data),
-                'comp_url' => $this->getCompUrl($data),
-                'thumbnail_240_url' => $this->get240Url($data),
-                'width' => $this->getWidth($data),
-                'height' => $this->getHeight($data),
-                'thumbnail_500_url' => $this->get500Url($data),
-                'title' => $this->getTitle($data),
-                'creator_id' => $this->getCreatorId($data),
-                'creator_name' => $this->getCreatorName($data),
-                'creation_date' => $this->getCreationDate($data),
-                'country_name' => $this->getCountryName($data),
-                'category' => $this->getCategory($data),
-                'keywords' => $this->getKeywords($data),
-                'media_type_id' => 1,
-                'content_type' => 'image/jpeg',
-                'details_url' => 'https//adobe.stock.stub/details',
-                'premium_level_id' => 0,
-            ];
-            $i++;
-        } while ($limit > $i);
+        if ($this->shouldGenerateFiles($data)) {
+            $limit = $this->adjustLimit($data);
+            do {
+                $files[] = [
+                    'id' => $this->getId($data),
+                    'comp_url' => $this->getCompUrl($data),
+                    'thumbnail_240_url' => $this->get240Url($data),
+                    'width' => $this->getWidth($data),
+                    'height' => $this->getHeight($data),
+                    'thumbnail_500_url' => $this->get500Url($data),
+                    'title' => $this->getTitle($data),
+                    'creator_id' => $this->getCreatorId($data),
+                    'creator_name' => $this->getCreatorName($data),
+                    'creation_date' => $this->getCreationDate($data),
+                    'country_name' => $this->getCountryName($data),
+                    'category' => $this->getCategory($data),
+                    'keywords' => $this->getKeywords(),
+                    'media_type_id' => 1,
+                    'content_type' => 'image/jpeg',
+                    'details_url' => 'https//adobe.stock.stub/details',
+                    'premium_level_id' => 0,
+                ];
+                $i++;
+            } while ($limit > $i);
+        }
 
         return $files;
+    }
+
+    /**
+     * Defines what amount of items needs o be generated based on search parameters.
+     *
+     * @param array $data
+     *
+     * @return int
+     */
+    private function adjustLimit(array $data): int
+    {
+        return (
+            (int)$data['limit'] === 4
+            || (int)$data['limit'] === 32
+            || (int)$data['limit'] ===64
+        ) ? (int) $data['limit'] : rand(1,999);
+    }
+
+    /**
+     * In some test scenarios we need to return no files.
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
+    private function shouldGenerateFiles(array $data): bool
+    {
+        if (isset($data['filters']) && isset($data['filters']['colors']) && $data['filters']['colors'] === 'none') {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -90,7 +124,7 @@ class FileGenerator
     {
         return isset($data['thumbnail_240_url']) ?
             $data['thumbnail_240_url']
-            : 'https//adobe.stock.stub/240';
+            : 'https//adobe.stock.stub/' . rand(1, 240);
     }
 
     /**
@@ -102,7 +136,7 @@ class FileGenerator
      */
     private function getHeight(array $data): int
     {
-        return isset($data['height']) ? (int)$data['height'] : rand(1, 999);
+        return isset($data['height']) ? (int)$data['height'] : rand(1, 500);
     }
 
     /**
@@ -114,7 +148,7 @@ class FileGenerator
      */
     private function getWidth(array $data): int
     {
-        return isset($data['width']) ? (int)$data['width'] : rand(1, 999);
+        return isset($data['width']) ? (int)$data['width'] : rand(1, 500);
     }
 
     /**
@@ -126,7 +160,9 @@ class FileGenerator
      */
     private function get500Url(array $data): string
     {
-        return isset($data['thumbnail_250_url']) ? $data['thumbnail_250_url'] : 'https//adobe.stock.stub/500';
+        return isset($data['thumbnail_500_url']) ?
+            $data['thumbnail_500_url']
+            : 'https//adobe.stock.stub/' . rand(1, 500);
     }
 
     /**
@@ -206,14 +242,18 @@ class FileGenerator
     }
 
     /**
-     * If keywords is set as a search request parameter use it. Otherwise predefined value.
-     *
-     * @param array $data
+     * Returns predefined keywords values.
      *
      * @return array
      */
-    private function getKeywords(array $data): array
+    private function getKeywords(): array
     {
-        return isset($data['words']) ? [ 0 => ['name' => $data['words']]] : [ 0 => ['name' => 'stub']];
+        return [
+            0 => ['name' => 'stub keyword 1'],
+            1 => ['name' => 'stub keyword 1'],
+            2 => ['name' => 'stub keyword 1'],
+            3 => ['name' => 'stub keyword 1'],
+            4 => ['name' => 'stub keyword 1']
+        ];
     }
 }
