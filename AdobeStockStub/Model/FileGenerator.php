@@ -28,7 +28,7 @@ class FileGenerator
         $files = [];
         $i = 0;
         $data = $query['search_parameters'];
-        $limit = ($data['limit'] === 32) ?? rand(1,999);
+        $limit = ((int)$data['limit'] === 4) ? (int) $data['limit'] : rand(1,999);
         do {
             $files[] = [
                 'id' => $this->getId($data),
