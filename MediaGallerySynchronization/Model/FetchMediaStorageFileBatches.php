@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -30,9 +30,9 @@ class FetchMediaStorageFileBatches
     private $filesystem;
 
     /**
-     * @var IsPathBlacklistedInterface
+     * @var IsPathExcludedInterface
      */
-    private $isPathBlacklisted;
+    private isPathExcluded;
 
     /**
      * @var File
@@ -51,7 +51,7 @@ class FetchMediaStorageFileBatches
 
     /**
      * @param LoggerInterface $log
-     * @param IsPathBlacklistedInterface $isPathBlacklisted
+     * @param IsPathExcludedInterface $isPathExcluded
      * @param Filesystem $filesystem
      * @param GetAssetsIterator $assetsIterator
      * @param File $driver
@@ -59,14 +59,14 @@ class FetchMediaStorageFileBatches
      */
     public function __construct(
         LoggerInterface $log,
-        IsPathBlacklistedInterface $isPathBlacklisted,
+        IsPathExcludedInterface $isPathExcluded,
         Filesystem $filesystem,
         GetAssetsIterator $assetsIterator,
         File $driver,
         int $batchSize
     ) {
         $this->log = $log;
-        $this->isPathBlacklisted = $isPathBlacklisted;
+        $this->isPathExcluded = $isPathExcluded;
         $this->getAssetsIterator = $assetsIterator;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
@@ -111,7 +111,7 @@ class FetchMediaStorageFileBatches
         try {
             $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
             return $relativePath
-                && !$this->isPathBlacklisted->execute($relativePath)
+                && !$this->isPathExcluded->execute($relativePath)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);
