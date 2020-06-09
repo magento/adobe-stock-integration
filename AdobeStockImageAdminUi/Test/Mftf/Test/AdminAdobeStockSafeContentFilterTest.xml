@@ -35,10 +35,6 @@
         <actionGroup ref="AdminAdobeStockExpandFiltersActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminUserApplySafeSearchFilterActionGroup" stepKey="applySafeSearchFilter"/>
         <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
-        <assertNotEquals stepKey="checkThatResultCountChangesAfterFilterApplied">
-            <actualResult type="variable">$countWithoutSafeFilter</actualResult>
-            <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
-        </assertNotEquals>
         <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
             <argument name="resultValue" value="Disabled"/>
         </actionGroup>
