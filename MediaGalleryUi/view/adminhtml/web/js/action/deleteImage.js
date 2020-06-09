@@ -18,10 +18,10 @@ define([
          *
          * @param {Object} record
          * @param {String} deleteUrl
+         * @param {String} confirmationContent
          */
-        deleteImageAction: function (record, deleteUrl) {
-            var baseContent = this.getContentMessage(record.path, record.relatedContent),
-                title = $.mage.__('Delete image'),
+        deleteImageAction: function (record, deleteUrl, confirmationContent) {
+            var title = $.mage.__('Delete image'),
                 cancelText = $.mage.__('Cancel'),
                 deleteImageText = $.mage.__('Delete Image'),
                 deleteImageCallback = this.deleteImage.bind(this);
@@ -29,7 +29,7 @@ define([
             confirmation({
                 title: title,
                 modalClass: 'media-gallery-delete-image-action',
-                content: baseContent,
+                content: confirmationContent,
                 buttons: [
                     {
                         text: cancelText,
@@ -56,41 +56,6 @@ define([
                     }
                 ]
             });
-        },
-
-        /**
-         * Returns content
-         *
-         * @param {String} recordPath
-         * @param {Object} recordRelatedContent
-         * @return String
-         */
-        getContentMessage: function (recordPath, recordRelatedContent) {
-            return $.mage.__(this.getRecordRelatedContentHtml(recordRelatedContent.value) +
-                '. Are you sure you want to delete "' + recordPath + '" image?');
-        },
-
-        /**
-         * Get information about image use
-         *
-         * @param {Object|String} value
-         * @return {String}
-         */
-        getRecordRelatedContentHtml: function (value) {
-            var usedIn = 'This image is used in ';
-
-            if (_.isObject(value) && !_.isEmpty(value)) {
-                _.each(value, function (numberOfTimeUsed, moduleName) {
-                    usedIn += numberOfTimeUsed + ' ' + moduleName + ' ';
-                });
-
-                return usedIn;
-            } else {
-
-                return 'This image is not used anywhere';
-            }
-
-            return value;
         },
 
         /**

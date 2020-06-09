@@ -7,8 +7,9 @@ define([
     'underscore',
     'uiComponent',
     'Magento_MediaGalleryUi/js/action/deleteImage',
+    'Magento_MediaGalleryUi/js/action/getDetails',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Component, deleteImage, image) {
+], function ($, _, Component, deleteImage, getDetails, image) {
     'use strict';
 
     return Component.extend({
@@ -70,7 +71,58 @@ define([
          * @param {Object} record
          */
         deleteImageAction: function (record) {
-            deleteImage.deleteImageAction(record, this.imageModel().deleteImageUrl);
+            var imageDetailsUrl = this.imageModel().imageDetailsurl,
+                deleteImageUrl = this.imageModel().deleteImageUrl,
+                defaultConfirmationContent = $.mage.__('Are you sure you want to delete "' + record.path + '" image?');
+
+            getDetails(imageDetailsUrl, record.id).then(function(imageDetails) {
+                var confirmationContent = this.getConfirmationContentByImageDetails(imageDetails)
+                    .concat(defaultConfirmationContent);
+                deleteImage.deleteImageAction(record, deleteImageUrl, confirmationContent);
+            }.bind(this)).fail(function () {
+                deleteImage.deleteImageAction(record, deleteImageUrl, defaultConfirmationContent);
+            });
+        },
+
+        /**
+         * Returns confirmation content with information about related content
+         *
+         * @param {Object} imageDetails
+         * @return String
+         */
+        getConfirmationContentByImageDetails: function (imageDetails) {
+            var details = imageDetails.details;
+
+            if(_.isObject(details) && !_.isUndefined(details['6'])) {
+                var detailValue = details['6'].value;
+
+                return $.mage.__(this.getRecordRelatedContentHtml(detailValue));
+            }
+
+            return '';
+        },
+
+        /**
+         * Get information about image use
+         *
+         * @param {Object|String} value
+         * @return {String}
+         */
+        getRecordRelatedContentHtml: function (value) {
+            var usedIn = 'This image is used in ';
+
+            if (_.isObject(value) && !_.isEmpty(value)) {
+                _.each(value, function (numberOfTimeUsed, moduleName) {
+                    usedIn += numberOfTimeUsed + ' ' + moduleName + ' ';
+                });
+
+                return usedIn + '. ';
+            } else {
+
+                return 'This image is not used anywhere. ';
+            }
+
+            return value;
         },
 
         /**
