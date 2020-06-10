@@ -64,13 +64,12 @@ class Create extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $path = $this->getRequest()->getParam('path');
-        $name = $this->getRequest()->getParam('name');
+        $paths = $this->getRequest()->getParam('paths');
 
-        if (!$path && !$name) {
+        if (!$paths) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Folder path and name parameter is required.'),
+                'message' => __('Folder paths parameter is required.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -79,7 +78,7 @@ class Create extends Action implements HttpPostActionInterface
         }
 
         try {
-            $this->createDirectoriesByPaths->execute([$path . '/' . $name]);
+            $this->createDirectoriesByPaths->execute($paths);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

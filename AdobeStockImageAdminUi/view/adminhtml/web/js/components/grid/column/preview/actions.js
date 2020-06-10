@@ -6,6 +6,7 @@ define([
     'uiComponent',
     'uiRegistry',
     'jquery',
+    'underscore',
     'Magento_AdobeStockImageAdminUi/js/action/save',
     'Magento_AdobeStockImageAdminUi/js/action/savePreview',
     'Magento_AdobeStockImageAdminUi/js/action/saveLicensed',
@@ -17,6 +18,7 @@ define([
     Component,
     uiRegistry,
     $,
+    _,
     saveAction,
     savePreviewAction,
     saveLicensedAction,
@@ -340,8 +342,7 @@ define([
             if (this.isMediaBrowser()) {
                 activeNode = this.getMageMediaBrowserData().activeNode;
 
-                activeNodePath = $('[data-id="' + activeNode.id + '"]').length === 0 ||
-                    activeNode.id === 'root' ? '' : activeNode.path;
+                activeNodePath = _.isUndefined(activeNode.path) ? '' : activeNode.path;
             } else {
                 activeNodePath = this.imageDirectory().activeNode() || '';
             }

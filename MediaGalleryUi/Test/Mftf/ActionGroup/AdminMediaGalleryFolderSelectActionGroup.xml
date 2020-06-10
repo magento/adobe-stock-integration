@@ -14,5 +14,6 @@
         </arguments>
         <wait time="2" stepKey="waitBeforeClickOnFolder"/>
         <click selector="//div[contains(@class, 'media-directory-container')]//a[contains(text(), '{{name}}')]" stepKey="selectFolder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFolderContents"/>
     </actionGroup>
 </actionGroups>

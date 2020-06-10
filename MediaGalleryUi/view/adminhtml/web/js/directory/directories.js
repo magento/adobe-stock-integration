@@ -10,8 +10,10 @@ define([
     'Magento_Ui/js/modal/alert',
     'underscore',
     'Magento_Ui/js/modal/prompt',
+    'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
+    'Magento_MediaGalleryUi/js/directory/actions/deleteDirectory',
     'validation'
-], function ($, Component, confirm, uiAlert, _, prompt) {
+], function ($, Component, confirm, uiAlert, _, prompt, createDirectory, deleteDirectory) {
     'use strict';
 
     return Component.extend({
@@ -44,7 +46,7 @@ define([
           */
         initEvents: function () {
             $(this.deleteButtonSelector).on('delete_folder', function () {
-                this.getComfirmationPopupDeleteFolder();
+                this.getConfirmationPopupDeleteFolder();
             }.bind(this));
 
             $(this.createFolderButtonSelector).on('create_folder', function () {
@@ -56,7 +58,20 @@ define([
                          * Confirm action
                          */
                         confirm: function (folderName) {
-                            this.createFolder(folderName, this.selectedFolder());
+                            createDirectory(
+                                this.directoryTree().createDirectoryUrl,
+                                [this.getNewFolderPath(folderName)]
+                            ).then(function () {
+                                this.directoryTree().reloadJsTree();
+                                $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
+                                    this.directoryTree().locateNode(this.getNewFolderPath(folderName));
+                                }.bind(this));
+
+                            }.bind(this)).fail(function (error) {
+                                uiAlert({
+                                    content: error
+                                });
+                            });
                         }.bind(this)
                     },
                     buttons: [{
@@ -78,67 +93,17 @@ define([
         },
 
         /**
-         * Send post request by provided params
+         * Return configured path for folder creation.
          *
-         * @param {String} url
-         * @param {Object} data
-         * @param {String} errorMessage
-         * @param {Callback} succesCallback
+         * @param {String} folderName
+         * @returns {String}
          */
-        sendPostRequest: function (url, data, errorMessage, succesCallback) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                dataType: 'json',
-                showLoader: true,
-                data: data,
-                context: this,
-                success: succesCallback,
+        getNewFolderPath: function (folderName) {
+            var selectedFolder = _.isUndefined(this.selectedFolder()) ||
+                                 _.isNull(this.selectedFolder()) ? '/' : this.selectedFolder(),
+               folderToCreate = selectedFolder !== '/' ? selectedFolder + '/' + folderName : folderName;
 
-                /**
-                 * Error handler for Delete folder action
-                 *
-                 * @param {Object} response
-                 */
-                error: function (response) {
-                    var message;
-
-                    if (typeof response.responseJSON === 'undefined' ||
-                        response.responseJSON.success === 'false'
-                    ) {
-                        message = errorMessage;
-                    } else {
-                        message = response.responseJSON.message;
-                    }
-                    uiAlert({
-                        content: message
-                    });
-                }
-            });
-
-        },
-
-        /**
-         * Create folder by provided path
-         *
-         * @param {String} path
-         * @param {String} subPath
-         */
-        createFolder: function (path, subPath) {
-            var folder = _.isUndefined(subPath) ? '/' : subPath,
-                data = {
-                    path: folder,
-                    name: path
-                },
-                errorMessage = 'There was an error on attempt to create folder!',
-                callback = function () {
-                    this.directoryTree().reloadJsTree();
-                    $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                        this.directoryTree().locateNode(folder + '/' + path);
-                    }.bind(this));
-                }.bind(this);
-
-            this.sendPostRequest(this.directoryTree().createDirectoryUrl, data, errorMessage, callback);
+            return folderToCreate;
         },
 
         /**
@@ -169,7 +134,7 @@ define([
         /**
           * Confirmation popup for delete folder action.
           */
-        getComfirmationPopupDeleteFolder: function () {
+        getConfirmationPopupDeleteFolder: function () {
             confirm({
                 title: $.mage.__('Are you sure you want to delete this folder?'),
                 modalClass: 'delete-folder-confirmation-popup',
@@ -181,28 +146,21 @@ define([
                       * Delete folder on button click
                       */
                     confirm: function () {
-                        this.deleteFolder(this.selectedFolder());
+                        deleteDirectory(
+                            this.directoryTree().deleteDirectoryUrl,
+                            this.selectedFolder()
+                        ).then(function () {
+                            this.directoryTree().removeNode();
+                            this.directoryTree().selectStorageRoot();
+                            $(window).trigger('folderDeleted.enhancedMediaGallery');
+                        }.bind(this)).fail(function (error) {
+                            uiAlert({
+                                content: error
+                            });
+                        });
                     }.bind(this)
                 }
             });
-        },
-
-        /**
-          * Delete folder action
-          *
-          * @param {String} path
-          */
-        deleteFolder: function (path) {
-            var  data = {
-                    path: path
-                },
-                errorMessage = 'There was an error on attempt to delete folder!',
-                callback = function () {
-                    this.directoryTree().removeNode();
-                    this.directoryTree().selectStorageRoot();
-                }.bind(this);
-
-            this.sendPostRequest(this.directoryTree().deleteDirectoryUrl, data, errorMessage, callback);
         },
 
         /**
