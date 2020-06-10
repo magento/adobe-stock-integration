@@ -83,7 +83,7 @@ define([
                         this.getConfirmationContentByImageDetails(imageDetails)
                     );
                 }.bind(this)).fail(function () {
-                confirmationContent = confirmationContent.replace('%1', "");
+                confirmationContent = confirmationContent.replace('%1', '');
             }).always(function () {
                 deleteImage.deleteImageAction(record, deleteImageUrl, confirmationContent);
             });
@@ -99,9 +99,7 @@ define([
             var details = imageDetails.details;
 
             if (_.isObject(details) && !_.isUndefined(details['6'])) {
-                var detailValue = details['6'].value;
-
-                return this.getRecordRelatedContentMessage(detailValue);
+                return this.getRecordRelatedContentMessage(details['6'].value);
             }
 
             return '';
@@ -116,14 +114,16 @@ define([
         getRecordRelatedContentMessage: function (value) {
             var usedInMessage = $.mage.__('This image is used in %s.'),
                 usedIn = '';
+
             if (_.isObject(value) && !_.isEmpty(value)) {
                 _.each(value, function (numberOfTimeUsed, moduleName) {
                     usedIn += numberOfTimeUsed + ' ' + moduleName + ', ';
                 });
-                usedIn = usedIn.replace(/,\s*$/, "");
+                usedIn = usedIn.replace(/,\s*$/, '');
 
-                return  usedInMessage.replace('%s', usedIn);
+                return usedInMessage.replace('%s', usedIn);
             }
+
             return '';
         },
 
