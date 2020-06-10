@@ -215,16 +215,4 @@ class ConfigTest extends TestCase
             $this->config->getProfileImageUrl()
         );
     }
-
-    /**
-     * Test for \Magento\AdobeIms\Model\Config::getDefaultProfileImage
-     */
-    public function testGetDefaultProfileImage(): void
-    {
-        $this->scopeConfigMock->method('getValue')
-            ->with(self::XML_PATH_DEFAULT_PROFILE_IMAGE)
-            ->willReturn(self::IMAGE_URL_DEFAULT);
-
-        $this->assertEquals(self::IMAGE_URL_DEFAULT, $this->config->getDefaultProfileImage());
-    }
 }
