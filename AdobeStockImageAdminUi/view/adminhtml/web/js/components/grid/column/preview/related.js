@@ -56,7 +56,7 @@ define([
         disableTabsKeyDownEvent: function () {
             if ($(this.tabsContainerId + ' li[role=tab]').length === 0) {
                 setTimeout(function () {
-                    this.disableTabsKeyDown();
+                    this.disableTabsKeyDownEvent();
                 }.bind(this), 100);
             } else {
                 $(this.tabsContainerId + ' li[role=tab]').unbind('keydown');
