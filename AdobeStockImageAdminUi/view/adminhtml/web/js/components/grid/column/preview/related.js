@@ -53,7 +53,7 @@ define([
         /**
          * Disable keydown event for related content tabs
          */
-        disableTabsKeyDown: function () {
+        disableTabsKeyDownEvent: function () {
             if ($(this.tabsContainerId + ' li[role=tab]').length === 0) {
                 setTimeout(function () {
                     this.disableTabsKeyDown();
