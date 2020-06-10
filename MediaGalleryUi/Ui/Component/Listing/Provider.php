@@ -35,7 +35,6 @@ class Provider extends SearchResult
      * @param null|string $identifierName
      * @param null|string $connectionName
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         EntityFactory $entityFactory,
