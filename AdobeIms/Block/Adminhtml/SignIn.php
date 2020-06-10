@@ -188,7 +188,7 @@ class SignIn extends Template
             'isAuthorized' => false,
             'name' => '',
             'email' => '',
-            'image' => $this->config->getDefaultProfileImage(),
+            'image' => '',
         ];
     }
 }
