@@ -61,6 +61,7 @@ class SaveBaseCategoryImageInformation
      *
      * @param ImageUploader $subject
      * @param string $imagePath
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
     {
