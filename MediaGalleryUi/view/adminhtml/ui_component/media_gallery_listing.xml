@@ -155,7 +155,7 @@
                class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
                template="Magento_MediaGalleryUi/grid/directories/directoryTree"
                component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
-    <columns name="media_gallery_columns" component="Magento_Ui/js/grid/masonry">
+    <columns name="media_gallery_columns" component="Magento_MediaGalleryUi/js/grid/masonry">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="containerId" xsi:type="string">media-gallery-masonry-grid</item>
