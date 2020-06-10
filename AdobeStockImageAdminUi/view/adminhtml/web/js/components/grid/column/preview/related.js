@@ -5,8 +5,7 @@
 define([
     'uiComponent',
     'underscore',
-    'jquery',
-    'mage/backend/tabs'
+    'jquery'
 ], function (Component, _, $) {
     'use strict';
 
@@ -16,6 +15,7 @@ define([
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             filterBookmarksSelector: '.admin__data-grid-action-bookmarks',
             tabImagesLimit: 4,
+            tabsContainerId: '#adobe-stock-tabs',
             serieFilterValue: '',
             modelFilterValue: '',
             selectedTab: null,
@@ -48,6 +48,19 @@ define([
             this.filterChips().updateActive();
 
             return this;
+        },
+
+        /**
+         * Disable keydown event for related content tabs
+         */
+        disableTabsKeyDown: function () {
+            if ($(this.tabsContainerId + ' li[role=tab]').length === 0) {
+                setTimeout(function () {
+                    this.disableTabsKeyDown();
+                }.bind(this), 100);
+            } else {
+                $(this.tabsContainerId + ' li[role=tab]').unbind('keydown');
+            }
         },
 
         /**
