@@ -40,9 +40,9 @@ class SaveBaseCategoryImageInformation
 
     /**
      * @param SplFileInfoFactory $splFileInfoFactory
-     * @param Storage $storage
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
+     * @param Storage $storage
      */
     public function __construct(
         SplFileInfoFactory $splFileInfoFactory,
@@ -57,7 +57,7 @@ class SaveBaseCategoryImageInformation
     }
 
     /**
-     * Save base category image information after movinf from tmp folder.
+     * Saves base category image information after moving from tmp folder.
      *
      * @param ImageUploader $subject
      * @param string $imagePath
