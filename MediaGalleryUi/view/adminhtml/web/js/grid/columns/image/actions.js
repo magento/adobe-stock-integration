@@ -52,7 +52,7 @@ define([
         initEvents: function () {
             $(this.imageModel().addSelectedBtnSelector).click(function () {
                 image.insertImage(
-                   this.imageModel().getSelected(),
+                    this.imageModel().getSelected(),
                     {
                         onInsertUrl: this.imageModel().onInsertUrl,
                         storeId: this.imageModel().storeId
@@ -71,16 +71,21 @@ define([
          * @param {Object} record
          */
         deleteImageAction: function (record) {
-            var imageDetailsUrl = this.imageModel().imageDetailsurl,
+            var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
                 deleteImageUrl = this.imageModel().deleteImageUrl,
-                defaultConfirmationContent = $.mage.__('Are you sure you want to delete "' + record.path + '" image?');
+                confirmationContent = $.mage.__('%1 Are you sure you want to delete "%2" image?')
+                    .replace('%2', record.path);
 
-            getDetails(imageDetailsUrl, record.id).then(function(imageDetails) {
-                var confirmationContent = this.getConfirmationContentByImageDetails(imageDetails)
-                    .concat(defaultConfirmationContent);
+            getDetails(imageDetailsUrl, record.id)
+                .then(function (imageDetails) {
+                    confirmationContent = confirmationContent.replace(
+                        '%1',
+                        this.getConfirmationContentByImageDetails(imageDetails)
+                    );
+                }.bind(this)).fail(function () {
+                confirmationContent = confirmationContent.replace('%1', "");
+            }).always(function () {
                 deleteImage.deleteImageAction(record, deleteImageUrl, confirmationContent);
-            }.bind(this)).fail(function () {
-                deleteImage.deleteImageAction(record, deleteImageUrl, defaultConfirmationContent);
             });
         },
 
@@ -93,10 +98,10 @@ define([
         getConfirmationContentByImageDetails: function (imageDetails) {
             var details = imageDetails.details;
 
-            if(_.isObject(details) && !_.isUndefined(details['6'])) {
+            if (_.isObject(details) && !_.isUndefined(details['6'])) {
                 var detailValue = details['6'].value;
 
-                return $.mage.__(this.getRecordRelatedContentHtml(detailValue));
+                return this.getRecordRelatedContentMessage(detailValue);
             }
 
             return '';
@@ -108,21 +113,18 @@ define([
          * @param {Object|String} value
          * @return {String}
          */
-        getRecordRelatedContentHtml: function (value) {
-            var usedIn = 'This image is used in ';
-
+        getRecordRelatedContentMessage: function (value) {
+            var usedInMessage = $.mage.__('This image is used in %s.'),
+                usedIn = '';
             if (_.isObject(value) && !_.isEmpty(value)) {
                 _.each(value, function (numberOfTimeUsed, moduleName) {
-                    usedIn += numberOfTimeUsed + ' ' + moduleName + ' ';
+                    usedIn += numberOfTimeUsed + ' ' + moduleName + ', ';
                 });
+                usedIn = usedIn.replace(/,\s*$/, "");
 
-                return usedIn + '. ';
-            } else {
-
-                return 'This image is not used anywhere. ';
+                return  usedInMessage.replace('%s', usedIn);
             }
-
-            return value;
+            return '';
         },
 
         /**
