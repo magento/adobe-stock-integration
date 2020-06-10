@@ -137,8 +137,48 @@ define([
             this.related().selectedTab(null);
             this.keywords().hideAllKeywords();
             this.displayedRecord(record);
-            this._super(record);
+            this.showImagePreview(record);
             this.related().loadRelatedImages(record);
+        },
+
+        /**
+         * Show image preview
+         *
+         * @param {Object} record
+         */
+        showImagePreview: function (record) {
+            var img;
+
+            if (record._rowIndex === this.visibleRecord()) {
+                this.hide();
+
+                return;
+            }
+
+            this.hide();
+            this.displayedRecord(record);
+            this.thumbnailComponent().previewRowId(record.rowNumber || null);
+            this.visibleRecord(record._rowIndex);
+
+            img = $(this.previewImageSelector + ' img');
+
+            if (img.length === 0) {
+                this.hide();
+
+                return;
+            }
+
+            if (img.get(0).complete) {
+                this.updateHeight();
+                this.scrollToPreview();
+            } else {
+                img.load(function () {
+                    this.updateHeight();
+                    this.scrollToPreview();
+                }.bind(this));
+            }
+
+            this.lastOpenedImage(record._rowIndex);
         },
 
         /**
