@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStandaloneMediaGallerySearchByKeywordTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <stories value="User searches for an image using search by keyword from standalone media gallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1121"/>
+            <testCaseId value=" https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503803"/>
+            <title value="User searches for an image using search by keyword from standalone media gallery"/>
+            <description value="User searches for an image using search by keyword from standalone media gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryForPage"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
+        </after>
+        <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.firstKeyword}}" stepKey="grabKeyword"/>
+        <grabAttributeFrom selector="{{AdminAdobeStockImagePreviewSection.image}}" userInput="alt" stepKey="grabImageName"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="clickSavePreviewButton"/>
+        <waitForPageLoad stepKey="waitForPromptModal"/>
+        <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
+        <actionGroup ref="SearchStandaloneMediaGalleryAdminDataGridByKeywordActionGroup" stepKey="searchImage">
+            <argument name="keyword" value="$grabImageName"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingImageName">
+            <argument name="imageName" value="$grabImageFileName"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="SearchStandaloneMediaGalleryAdminDataGridByKeywordActionGroup" stepKey="searchImageByKeyword">
+            <argument name="keyword" value="$grabKeyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingKeyword">
+            <argument name="imageName" value="$grabImageFileName"/>
+        </actionGroup>
+    </test>
+</tests>
