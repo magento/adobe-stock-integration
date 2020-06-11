@@ -11,6 +11,9 @@
             <argument name="url" xsi:type="object">Magento\MediaGalleryIntegration\Model\OpenDialogUrlProvider</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\File\Uploader">
+        <plugin name="save_category_image" type="Magento\MediaGalleryIntegration\Plugin\SaveImageInformation"/>
+    </type>
     <type name="Magento\Catalog\Model\ImageUploader">
         <plugin name="save_category_image" type="Magento\MediaGalleryIntegration\Plugin\SaveBaseCategoryImageInformation"/>
     </type>

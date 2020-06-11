@@ -8,38 +8,26 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryIntegration\Plugin;
 
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
-use Magento\Catalog\Model\ImageUploader;
+use Magento\Framework\File\Uploader;
 use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 
 /**
- * Save base category image by SaveAssetsInterface.
+ * Save image information by SaveAssetsInterface.
  */
-class SaveBaseCategoryImageInformation
+class SaveImageInformation
 {
     /**
      * @var SplFileInfoFactory
      */
     private $splFileInfoFactory;
-
+    
     /**
      * @var SaveAssetsInterface
      */
     private $saveAsset;
 
-    /**
-     * @var DeleteAssetsByPathsInterface
-     */
-    private $deleteAssetsByPaths;
-
-    /**
-     * @var GetAssetsByPathsInterface
-     */
-    private $getAssetsByPaths;
-    
     /**
      * @var CreateAssetFromFile
      */
@@ -51,23 +39,17 @@ class SaveBaseCategoryImageInformation
     private $storage;
 
     /**
-     * @param DeleteAssetsByPathsInterface $deleteAssetsByPath
-     * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param Storage $storage
      */
     public function __construct(
-        DeleteAssetsByPathsInterface $deleteAssetsByPath,
-        GetAssetsByPathsInterface $getAssetsByPaths,
         SplFileInfoFactory $splFileInfoFactory,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
         Storage $storage
     ) {
-        $this->deleteAssetsByPaths = $deleteAssetsByPath;
-        $this->getAssetsByPaths = $getAssetsByPaths;
         $this->splFileInfoFactory = $splFileInfoFactory;
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
@@ -77,23 +59,16 @@ class SaveBaseCategoryImageInformation
     /**
      * Saves base category image information after moving from tmp folder.
      *
-     * @param ImageUploader $subject
-     * @param string $imagePath
+     * @param Uploader $subject
+     * @param array $result
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
+    public function afterSave(Uploader $subject, array $result): array
     {
-        $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
-        $file = $this->splFileInfoFactory->create($absolutePath);
-        $tmpPath = $subject->getBaseTmpPath() . '/'. $file->getFileName();
-        $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
-        
-        if (!empty($tmpAssets)) {
-            $this->deleteAssetsByPaths->execute([$tmpAssets[0]->getPath()]);
-        }
-        
+        $file = $this->splFileInfoFactory->create($result['path'] . '/' . $result['file']);
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
-        $this->storage->resizeFile($absolutePath);
+        $this->storage->resizeFile($result['path'] . '/' . $result['file']);
 
-        return $imagePath;
+        return $result;
     }
 }
