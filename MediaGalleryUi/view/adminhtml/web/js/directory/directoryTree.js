@@ -62,16 +62,25 @@ define([
             var isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
                 currentTreePath = isMediaBrowser ? window.MediabrowserUtility.pathId : null,
                 deferred = $.Deferred(),
-                decodedPath;
+                decodedPath,
+                pathArray;
 
             if (currentTreePath) {
                 decodedPath = Base64.idDecode(currentTreePath);
 
                 if (!this.isDirectoryExist(directories[0], decodedPath)) {
+                    pathArray = this.convertPathToPathsArray(decodedPath);
+
+                    $.each(pathArray, function (i, val) {
+                        if (this.isDirectoryExist(directories[0], val)) {
+                            pathArray.splice(i, 1);
+                        }
+                    }.bind(this));
+
                     createDirectory(
                         this.createDirectoryUrl,
-                        this.convertPathToPathsArray(decodedPath)
-                    ).always(function () {
+                        pathArray
+                    ).then(function () {
                         this.reloadJsTree();
                     }.bind(this));
                 }
@@ -85,8 +94,11 @@ define([
 
         /**
          * Verify if directory exists in array
+         *
+         * @param {Array} directories
+         * @param {String} directoryId
          */
-        isDirectoryExist: function (data, id) {
+        isDirectoryExist: function (directories, directoryId) {
             var found = false;
 
             /**
@@ -96,7 +108,9 @@ define([
              * @param {String} id
              */
             function recurse(data, id) {
-                for (var i = 0; i < data.length; i++) {
+                var i;
+
+                for (i = 0; i < data.length; i++) {
                     if (data[i].attr.id === id) {
                         found = data[i];
                         break;
@@ -106,7 +120,7 @@ define([
                 }
             }
 
-            recurse(data, id);
+            recurse(directories, directoryId);
 
             return found;
         },
