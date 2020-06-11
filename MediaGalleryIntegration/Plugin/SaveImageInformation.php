@@ -106,11 +106,11 @@ class SaveImageInformation
     }
 
     /**
-      * Can asset be saved with provided path
-      *
-      * @param string $path
-      * @return bool
-      */
+     * Can asset be saved with provided path
+     *
+     * @param string $path
+     * @return bool
+     */
     private function isApplicable(string $path): bool
     {
         try {
