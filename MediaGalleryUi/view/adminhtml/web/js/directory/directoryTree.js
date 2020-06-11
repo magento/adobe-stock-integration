@@ -71,7 +71,7 @@ define([
                     createDirectory(
                         this.createDirectoryUrl,
                         this.convertPathToPathsArray(decodedPath)
-                    ).then(function () {
+                    ).always(function () {
                         this.reloadJsTree();
                     }.bind(this));
                 }
