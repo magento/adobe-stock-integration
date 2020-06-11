@@ -45,10 +45,8 @@ define([
                     return $(this.directoryTreeSelector).length === 0;
                 }.bind(this),
                 function () {
-                    this.createFolderIfNotExists().then(function () {
-                        this.getJsonTree();
-                        this.initEvents();
-                    }.bind(this));
+                    this.getJsonTree();
+                    this.initEvents();
                 }.bind(this)
             );
 
@@ -57,24 +55,60 @@ define([
 
         /**
          * Create folder by provided current_tree_path param
+         *
+         * @param {Array} directories
          */
-        createFolderIfNotExists: function () {
+        createFolderIfNotExists: function (directories) {
             var isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
                 currentTreePath = isMediaBrowser ? window.MediabrowserUtility.pathId : null,
-                deferred = $.Deferred();
+                deferred = $.Deferred(),
+                decodedPath;
 
             if (currentTreePath) {
-                createDirectory(
-                    this.createDirectoryUrl,
-                    this.convertPathToPathsArray(Base64.idDecode(currentTreePath))
-                ).always(function () {
-                    deferred.resolve();
-                });
+                decodedPath = Base64.idDecode(currentTreePath);
+
+                if (!this.isDirectoryExist(directories[0], decodedPath)) {
+                    createDirectory(
+                        this.createDirectoryUrl,
+                        this.convertPathToPathsArray(decodedPath)
+                    ).then(function () {
+                        this.reloadJsTree();
+                    }.bind(this));
+                }
+                deferred.resolve();
             } else {
                 deferred.resolve();
             }
 
             return deferred.promise();
+        },
+
+        /**
+         * Verify if directory exists in array
+         */
+        isDirectoryExist: function (data, id) {
+            var found = false;
+
+            /**
+             * Recursive search in array
+             *
+             * @param {Array} data
+             * @param {String} id
+             */
+            function recurse(data, id) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].attr.id === id) {
+                        found = data[i];
+                        break;
+                    } else if (data[i].children && data[i].children.length) {
+                        recurse(data[i].children, id);
+                    }
+                }
+            }
+
+            recurse(data, id);
+
+            return found;
         },
 
         /**
@@ -327,8 +361,10 @@ define([
                  * @param {Object} data
                  */
                 success: function (data) {
-                    this.createTree(data);
-                }.bind(this),
+                        this.createFolderIfNotExists(data).then(function () {
+                            this.createTree(data);
+                        }.bind(this));
+                    }.bind(this),
 
                 /**
                  * Error handler for request
