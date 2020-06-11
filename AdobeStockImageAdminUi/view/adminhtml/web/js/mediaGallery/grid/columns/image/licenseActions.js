@@ -7,9 +7,8 @@ define([
     'underscore',
     'Magento_MediaGalleryUi/js/grid/columns/image/actions',
     'Magento_MediaGalleryUi/js/action/getDetails',
-    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus',
     'mage/translate'
-], function ($, _, Action, getDetails, getLicenseStatus) {
+], function ($, _, Action, getDetails) {
     'use strict';
 
     return Action.extend({
@@ -84,38 +83,26 @@ define([
          * @param {Number} imageId
          */
         getImageRecord: function (imageId) {
-            this.image().actions().login().login().then(function () {
-                getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
-                    var id = imageDetails['adobe_stock'][0].value;
+            getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
+                var id = imageDetails['adobe_stock'][0].value;
 
-                    getLicenseStatus(
-                        this.image().actions().overlay().getImagesUrl,
-                        [id]
-                    ).then(function (licensedInfo) {
-                        var isLicensed = licensedInfo[id] || false;
-
-                        this.image().actions().licenseProcess(
-                            id,
-                            imageDetails.title,
-                            imageDetails.path,
-                            imageDetails['content_type'],
-                            isLicensed,
-                            true
-                        ).then(function () {
-                            this.image().actions().login().getUserQuota();
-                            this.imageModel().reloadGrid();
-                            this.imageModel().addMessage('success', $.mage.__('The image has been licensed.'));
-                        }.bind(this)).fail(function (error) {
-                            if (error) {
-                                this.imageModel().addMessage('error', error);
-                            }
-                        });
-                    }.bind(this));
-                }.bind(this)).fail(function (message) {
-                    this.imageModel().addMessage('error', message);
+                this.image().actions().licenseProcess(
+                    id,
+                    imageDetails.title,
+                    imageDetails.path,
+                    imageDetails['content_type'],
+                    true
+                ).then(function () {
+                    this.image().actions().login().getUserQuota();
+                    this.imageModel().reloadGrid();
+                    this.imageModel().addMessage('success', $.mage.__('The image has been licensed.'));
+                }.bind(this)).fail(function (error) {
+                    if (error) {
+                        this.imageModel().addMessage('error', error);
+                    }
                 });
-            }.bind(this)).fail(function (error) {
-                this.imageModel().addMessage('error', error);
+            }.bind(this)).fail(function (message) {
+                this.imageModel().addMessage('error', message);
             });
         }
     });
