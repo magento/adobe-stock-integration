@@ -33,7 +33,7 @@ class Profile extends Action implements HttpGetActionInterface
     /**
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_AdobeIms::profile';
+    public const ADMIN_RESOURCE = 'Magento_AdobeIms::login';
 
     /**
      * @var UserContextInterface
