@@ -14,7 +14,6 @@
                         <resource id="Magento_AdobeIms::actions" title="Actions" translate="title">
                             <resource id="Magento_AdobeIms::login" title="Login" translate="title"/>
                             <resource id="Magento_AdobeIms::logout" title="Logout" translate="title"/>
-                            <resource id="Magento_AdobeIms::profile" title="Get User Profile" translate="title"/>
                         </resource>
                     </resource>
                 </resource>
