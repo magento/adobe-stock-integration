@@ -84,7 +84,7 @@ class SaveBaseCategoryImageInformation
     {
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
         $file = $this->splFileInfoFactory->create($absolutePath);
-        $tmpPath = $subject->getBaseTmpPath() . '/'. $file->getFileName();
+        $tmpPath = $subject->getBaseTmpPath() . '/' . $file->getFileName();
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
         
         if (!empty($tmpAssets)) {
