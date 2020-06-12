@@ -12,7 +12,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
-use Magento\MediaContentCatalog\Model\ResourceModel\GetCustomAnttributesContent;
+use Magento\MediaContentApi\Model\GetCustomAttributesContentInterface;
 
 /**
  * Synchronize product content with assets
@@ -53,12 +53,12 @@ class Product implements SynchronizerInterface
     private $fetchBatches;
 
     /**
-     * @var GetCustomAttributesContent
+     * @var GetCustomAttributesContentInterface
      */
     private $getCustomAttributesContent;
 
     /**
-     * @param GetCustomAttributesContent $getCustomAttributesContent
+     * @param GetCustomAttributesContentInterface $getCustomAttributesContent
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -66,7 +66,7 @@ class Product implements SynchronizerInterface
      * @param array $fields
      */
     public function __construct(
-        GetCustomAnttributesContent $getCustomAttributesContent,
+        GetCustomAttributesContentInterface $getCustomAttributesContent,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
@@ -138,8 +138,7 @@ class Product implements SynchronizerInterface
                 PHP_EOL,
                 $this->getCustomAttributesContents->execute(
                     self::CONTENT_TYPE,
-                    $item[self::PRODUCT_TABLE_ENTITY_ID],
-                    $this->fields
+                    (int) $item[self::PRODUCT_TABLE_ENTITY_ID]
                 )
             )
         );
