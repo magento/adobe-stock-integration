@@ -92,6 +92,8 @@ class Product implements SynchronizerInterface
      */
     private function synchronizeItem(array $item): void
     {
+        $this->synchronizeCustomAttributes($item);
+        
         foreach ($this->fields as $field) {
             $contentIdentity = $this->contentIdentityFactory->create(
                 [
@@ -105,5 +107,26 @@ class Product implements SynchronizerInterface
                 implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity))
             );
         }
+    }
+
+    /**
+     * Synchronize custom product attributes fields.
+     *
+     * @param array $item
+     */
+    private function synchronizeCustomAttributes(array $item)
+    {
+        $fields = $this->getCustomAttributesContents->execute($contentIdentity);
+        $contentIdentity = $this->contentIdentityFactory->create(
+            [
+                    self::TYPE => self::CONTENT_TYPE,
+                    self::FIELD => $field,
+                    self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
+                ]
+        );
+        $this->updateContentAssetLinks->execute(
+            $contentIdentity,
+            implode(PHP_EOL, $this->getCustomAttributesContents->execute($contentIdentity))
+        );
     }
 }
