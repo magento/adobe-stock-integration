@@ -26,7 +26,8 @@ class Product implements SynchronizerInterface
     private const PRODUCT_TABLE = 'catalog_product_entity';
     private const PRODUCT_TABLE_ENTITY_ID = 'entity_id';
     private const PRODUCT_TABLE_UPDATED_AT_FIELD = 'updated_at';
-
+    private const CUSTOM_ATTRIBUTES_FIELD = 'product_custom_attribute';
+    
     /**
      * @var UpdateContentAssetLinksInterface
      */
@@ -128,7 +129,7 @@ class Product implements SynchronizerInterface
         $contentIdentity = $this->contentIdentityFactory->create(
             [
                     self::TYPE => self::CONTENT_TYPE,
-                    self::FIELD => 'product_custom_attribute',
+                    self::FIELD => self::CUSTOM_ATTRIBUTES_FIELD,
                     self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
                 ]
         );
