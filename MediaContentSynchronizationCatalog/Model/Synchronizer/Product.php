@@ -12,7 +12,6 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
-use Magento\MediaContentApi\Model\GetCustomAttributesContentInterface;
 
 /**
  * Synchronize product content with assets
@@ -26,7 +25,8 @@ class Product implements SynchronizerInterface
     private const PRODUCT_TABLE = 'catalog_product_entity';
     private const PRODUCT_TABLE_ENTITY_ID = 'entity_id';
     private const PRODUCT_TABLE_UPDATED_AT_FIELD = 'updated_at';
-    private const CUSTOM_ATTRIBUTES_FIELD = 'product_custom_attribute';
+    private const CUSTOM_ATTRIBUTES_FIELD = 'custom_attributes';
+    private const CUSTOM_ATTRIBUTES_CONTENT_TYPE = 'catalog_product_custom_attributes';
     
     /**
      * @var UpdateContentAssetLinksInterface
@@ -54,12 +54,6 @@ class Product implements SynchronizerInterface
     private $fetchBatches;
 
     /**
-     * @var GetCustomAttributesContentInterface
-     */
-    private $getCustomAttributesContent;
-
-    /**
-     * @param GetCustomAttributesContentInterface $getCustomAttributesContent
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -67,14 +61,12 @@ class Product implements SynchronizerInterface
      * @param array $fields
      */
     public function __construct(
-        GetCustomAttributesContentInterface $getCustomAttributesContent,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
-        $this->getCustomAttributesContent = $getCustomAttributesContent;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -102,12 +94,10 @@ class Product implements SynchronizerInterface
      */
     private function synchronizeItem(array $item): void
     {
-        $this->synchronizeCustomAttributes($item);
-        
         foreach ($this->fields as $field) {
             $contentIdentity = $this->contentIdentityFactory->create(
                 [
-                    self::TYPE => self::CONTENT_TYPE,
+                    self::TYPE =>  $this->getEntityType($field),
                     self::FIELD => $field,
                     self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
                 ]
@@ -120,28 +110,14 @@ class Product implements SynchronizerInterface
     }
 
     /**
-     * Synchronize custom product attributes fields.
+     * Return content_type by field
      *
-     * @param array $item
+     * @param string $field
      */
-    private function synchronizeCustomAttributes(array $item): void
+    private function getEntityType(string $field): string
     {
-        $contentIdentity = $this->contentIdentityFactory->create(
-            [
-                self::TYPE => self::CONTENT_TYPE,
-                self::FIELD => self::CUSTOM_ATTRIBUTES_FIELD,
-                self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
-            ]
-        );
-        $this->updateContentAssetLinks->execute(
-            $contentIdentity,
-            implode(
-                PHP_EOL,
-                $this->getCustomAttributesContent->execute(
-                    self::CONTENT_TYPE,
-                    (int) $item[self::PRODUCT_TABLE_ENTITY_ID]
-                )
-            )
-        );
+        return $field === self::CUSTOM_ATTRIBUTES_FIELD ?
+                      self::CUSTOM_ATTRIBUTES_CONTENT_TYPE :
+                      self::CONTENT_TYPE;
     }
 }

@@ -19,6 +19,7 @@
             <argument name="fields" xsi:type="array">
                 <item name="description" xsi:type="string">description</item>
                 <item name="short_description" xsi:type="string">short_description</item>
+                <item name="custom_attributes" xsi:type="string">custom_attributes</item>
             </argument>
         </arguments>
     </type>
