@@ -12,6 +12,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
+use Magento\MediaContentCatalog\Model\ResourceModel\GetCustomAnttributesContent;
 
 /**
  * Synchronize product content with assets
@@ -52,6 +53,12 @@ class Product implements SynchronizerInterface
     private $fetchBatches;
 
     /**
+     * @var GetCustomAttributesContent
+     */
+    private $getCustomAttributesContent;
+
+    /**
+     * @param GetCustomAttributesContent $getCustomAttributesContent
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getEntityContents
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -59,12 +66,14 @@ class Product implements SynchronizerInterface
      * @param array $fields
      */
     public function __construct(
+        GetCustomAnttributesContent $getCustomAttributesContent,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getEntityContents,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
+        $this->getCustomAttributesContents = $getCustomAttributesContent;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -114,19 +123,25 @@ class Product implements SynchronizerInterface
      *
      * @param array $item
      */
-    private function synchronizeCustomAttributes(array $item)
+    private function synchronizeCustomAttributes(array $item): void
     {
-        $fields = $this->getCustomAttributesContents->execute($contentIdentity);
         $contentIdentity = $this->contentIdentityFactory->create(
             [
                     self::TYPE => self::CONTENT_TYPE,
-                    self::FIELD => $field,
+                    self::FIELD => 'product_custom_attribute',
                     self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
                 ]
         );
         $this->updateContentAssetLinks->execute(
             $contentIdentity,
-            implode(PHP_EOL, $this->getCustomAttributesContents->execute($contentIdentity))
+            implode(
+                PHP_EOL,
+                $this->getCustomAttributesContents->execute(
+                    self::CONTENT_TYPE,
+                    $item[self::PRODUCT_TABLE_ENTITY_ID],
+                    $this->fields
+                )
+            )
         );
     }
 }
