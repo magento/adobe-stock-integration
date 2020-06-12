@@ -74,7 +74,7 @@ class Product implements SynchronizerInterface
         FetchBatchesInterface $fetchBatches,
         array $fields = []
     ) {
-        $this->getCustomAttributesContents = $getCustomAttributesContent;
+        $this->getCustomAttributesContent = $getCustomAttributesContent;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getEntityContents = $getEntityContents;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -137,7 +137,7 @@ class Product implements SynchronizerInterface
             $contentIdentity,
             implode(
                 PHP_EOL,
-                $this->getCustomAttributesContents->execute(
+                $this->getCustomAttributesContent->execute(
                     self::CONTENT_TYPE,
                     (int) $item[self::PRODUCT_TABLE_ENTITY_ID]
                 )
