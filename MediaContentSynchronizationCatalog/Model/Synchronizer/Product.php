@@ -128,10 +128,10 @@ class Product implements SynchronizerInterface
     {
         $contentIdentity = $this->contentIdentityFactory->create(
             [
-                    self::TYPE => self::CONTENT_TYPE,
-                    self::FIELD => self::CUSTOM_ATTRIBUTES_FIELD,
-                    self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
-                ]
+                self::TYPE => self::CONTENT_TYPE,
+                self::FIELD => self::CUSTOM_ATTRIBUTES_FIELD,
+                self::ENTITY_ID => $item[self::PRODUCT_TABLE_ENTITY_ID]
+            ]
         );
         $this->updateContentAssetLinks->execute(
             $contentIdentity,
