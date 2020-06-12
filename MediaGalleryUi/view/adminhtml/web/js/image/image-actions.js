@@ -57,7 +57,11 @@ define([
             var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
                 deleteImageUrl = this.imageModel().deleteImageUrl;
 
-            deleteImageWithDetailConfirmation.deleteImageAction(this.imageModel().getSelected(), imageDetailsUrl, deleteImageUrl);
+            deleteImageWithDetailConfirmation.deleteImageAction(
+                this.imageModel().getSelected(),
+                imageDetailsUrl,
+                deleteImageUrl
+            );
         },
 
         /**

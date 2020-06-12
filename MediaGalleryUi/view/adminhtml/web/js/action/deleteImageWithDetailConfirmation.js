@@ -4,12 +4,37 @@
  */
 define([
     'jquery',
+    'underscore',
     'Magento_MediaGalleryUi/js/action/getDetails',
     'Magento_MediaGalleryUi/js/action/deleteImage'
-], function ($, getDetails, deleteImage) {
+], function ($, _, getDetails, deleteImage) {
     'use strict';
 
     return {
+
+        /**
+         * Get information about image use
+         *
+         * @param {Object} record
+         * @param {String} imageDetailsUrl
+         * @param {String} deleteImageUrl
+         */
+        deleteImageAction: function (record, imageDetailsUrl, deleteImageUrl) {
+            var confirmationContent = $.mage.__('%1 Are you sure you want to delete "%2" image?')
+                .replace('%2', record.path);
+
+            getDetails(imageDetailsUrl, record.id)
+                .then(function (imageDetails) {
+                    confirmationContent = confirmationContent.replace(
+                        '%1',
+                        this.getConfirmationContentByImageDetails(imageDetails)
+                    );
+                }.bind(this)).fail(function () {
+                confirmationContent = confirmationContent.replace('%1', '');
+            }).always(function () {
+                deleteImage.deleteImageAction(record, deleteImageUrl, confirmationContent);
+            });
+        },
 
         /**
          * Returns confirmation content with information about related content
@@ -48,29 +73,5 @@ define([
 
             return '';
         },
-
-        /**
-         * Get information about image use
-         *
-         * @param {Object} record
-         * @param {String} imageDetailsUrl
-         * @param {String} deleteImageUrl
-         */
-        deleteImageAction: function (record, imageDetailsUrl, deleteImageUrl) {
-            var confirmationContent = $.mage.__('%1 Are you sure you want to delete "%2" image?')
-                    .replace('%2', record.path);
-
-            getDetails(imageDetailsUrl, record.id)
-                .then(function (imageDetails) {
-                    confirmationContent = confirmationContent.replace(
-                        '%1',
-                        this.getConfirmationContentByImageDetails(imageDetails)
-                    );
-                }.bind(this)).fail(function () {
-                confirmationContent = confirmationContent.replace('%1', '');
-            }).always(function () {
-                deleteImage.deleteImageAction(record, deleteImageUrl, confirmationContent);
-            });
-        }
-    }
+    };
 });
