@@ -87,7 +87,7 @@ class SaveImageInformation
     }
 
     /**
-     * Saves base category image information after moving from tmp folder.
+     * Saves asset to media gallery after save image.
      *
      * @param Uploader $subject
      * @param array $result
