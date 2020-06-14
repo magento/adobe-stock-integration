@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\MediaGalleryApi\Api\IsPathDeniedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
  * Build folder tree structure by path
@@ -28,7 +28,7 @@ class FolderTree
     private $path;
 
     /**
-     * @var IsPathDeniedInterface
+     * @var IsPathExcludedInterface
      */
     private $isPathDenied;
 
@@ -37,12 +37,12 @@ class FolderTree
      *
      * @param Filesystem $filesystem
      * @param string $path
-     * @param IsPathDeniedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathDenied
      */
     public function __construct(
         Filesystem $filesystem,
         string $path,
-        IsPathDeniedInterface $isPathDenied
+        IsPathExcludedInterface $isPathDenied
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;

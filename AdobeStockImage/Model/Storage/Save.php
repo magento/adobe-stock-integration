@@ -15,7 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryApi\Api\IsPathDeniedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
@@ -36,7 +36,7 @@ class Save
     private $driver;
 
     /**
-     * @var IsPathDeniedInterface
+     * @var IsPathExcludedInterface
      */
     private $isPathDenied;
 
@@ -48,13 +48,13 @@ class Save
     /**
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param IsPathDeniedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathDenied
      * @param Storage $storage
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        IsPathDeniedInterface $isPathDenied,
+        IsPathExcludedInterface $isPathDenied,
         Storage $storage
     ) {
         $this->filesystem = $filesystem;

@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Api\IsPathDeniedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
  * Delete image from a storage
@@ -25,7 +25,7 @@ class DeleteImage
     private $imagesStorage;
 
     /**
-     * @var IsPathDeniedInterface
+     * @var IsPathExcludedInterface
      */
     private $isPathDenied;
 
@@ -39,12 +39,12 @@ class DeleteImage
      *
      * @param Storage $imagesStorage
      * @param Filesystem $filesystem
-     * @param IsPathDeniedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathDenied
      */
     public function __construct(
         Storage $imagesStorage,
         Filesystem $filesystem,
-        IsPathDeniedInterface $isPathDenied
+        IsPathExcludedInterface $isPathDenied
     ) {
         $this->imagesStorage = $imagesStorage;
         $this->filesystem = $filesystem;

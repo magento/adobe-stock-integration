@@ -8,7 +8,7 @@ namespace Magento\MediaGallerySynchronization\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\MediaGalleryApi\Api\IsPathDeniedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -29,7 +29,7 @@ class FetchMediaStorageFileBatches
     private $filesystem;
 
     /**
-     * @var IsPathDeniedInterface
+     * @var IsPathExcludedInterface
      */
     private $isPathDenied;
 
@@ -50,7 +50,7 @@ class FetchMediaStorageFileBatches
 
     /**
      * @param LoggerInterface $log
-     * @param IsPathDeniedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathDenied
      * @param Filesystem $filesystem
      * @param GetAssetsIterator $assetsIterator
      * @param File $driver
@@ -58,7 +58,7 @@ class FetchMediaStorageFileBatches
      */
     public function __construct(
         LoggerInterface $log,
-        IsPathDeniedInterface $isPathDenied,
+        IsPathExcludedInterface $isPathDenied,
         Filesystem $filesystem,
         GetAssetsIterator $assetsIterator,
         File $driver,
