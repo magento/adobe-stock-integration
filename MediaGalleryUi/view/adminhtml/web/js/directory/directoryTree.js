@@ -60,8 +60,8 @@ define([
             this.getJsonTree().then(function (data) {
                 this.createFolderIfNotExists(data).then(function (isFolderCreated) {
                     if (isFolderCreated) {
-                        this.getJsonTree().then(function (data) {
-                            this.createTree(data);
+                        this.getJsonTree().then(function (newData) {
+                            this.createTree(newData);
                         }.bind(this));
                     } else {
                         this.createTree(data);
@@ -101,7 +101,7 @@ define([
                         deferred.resolve({
                             result: true
                         });
-                    }.bind(this));
+                    });
                 } else {
                     deferred.resolve({
                         result: false
@@ -372,16 +372,21 @@ define([
          * Reload jstree and update jstree events
          */
         reloadJsTree: function () {
-            $.ajaxSetup({
-                async: false
-            });
+            var deferred = $.Deferred();
 
-            this.getJsonTree();
-            this.initEvents();
+            this.getJsonTree().then(function (data) {
+                this.createTree(data);
+                this.overrideMultiselectBehavior();
+                $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
+                    var path = $(data.rslt.obj).data('path');
 
-            $.ajaxSetup({
-                async: true
-            });
+                    this.setActiveNodeFilter(path);
+                }.bind(this));
+
+                deferred.resolve();
+            }.bind(this));
+
+            return deferred.promise();
         },
 
         /**
