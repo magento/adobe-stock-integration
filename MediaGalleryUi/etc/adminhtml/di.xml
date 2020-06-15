@@ -6,16 +6,31 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="path" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Directory</item>
+                <item name="fulltext" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Keyword</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\SortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor" />
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\PaginationProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor" />
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor" />
+
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+                <item name="joins" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
         <arguments>
-            <argument name="selectModifier" xsi:type="object">Magento\MediaGalleryUi\Model\SelectModifierComposite</argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
-        <arguments>
-            <argument name="selectModifiers" xsi:type="array">
-                <item name="directory" xsi:type="object">Magento\MediaGalleryUi\Model\FilterParametersProvider\Directory</item>
-            </argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
 </config>
