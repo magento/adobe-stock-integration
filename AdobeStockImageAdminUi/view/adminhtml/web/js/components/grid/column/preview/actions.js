@@ -14,7 +14,7 @@ define([
     'Magento_AdobeStockImageAdminUi/js/action/confirmQuota',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_AdobeStockImageAdminUi/js/confirmation/buyCredits',
-    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus'
+    'Magento_Ui/js/modal/alert'
 ], function (
     Component,
     uiRegistry,
@@ -27,7 +27,7 @@ define([
     confirmQuotaAction,
     mediaGallery,
     buyCreditsConfirmation,
-    getLicenseStatus
+    uiAlert
 ) {
     'use strict';
 
@@ -366,7 +366,7 @@ define([
             }
 
             provider = uiRegistry.get('index = media_gallery_listing_data_source'),
-                dataStorage = provider.storage();
+            dataStorage = provider.storage();
 
             // this.subscriptionOnImageItems();
             dataStorage.clearRequests();
@@ -439,6 +439,7 @@ define([
                 record.title,
                 record.path,
                 record['content_type'],
+                this.isLicensed(),
                 this.isDownloaded()
             ).then(function (destinationPath) {
                 this.updateLicensedDisplayedRecord(destinationPath);
@@ -446,7 +447,9 @@ define([
                 this.updateGridsAndSelectSavedAsset(destinationPath);
             }.bind(this)).fail(function (error) {
                 if (error) {
-                    this.showErrorMessage(error);
+                    uiAlert({
+                        content: error
+                    });
                 }
             }.bind(this));
         },
@@ -458,66 +461,67 @@ define([
          * @param {String} title
          * @param {String} path
          * @param {String} contentType
+         * @param {Boolean} isLicensed
          * @param {Boolean} isDownloaded
          * @return {window.Promise}
          */
-        licenseProcess: function (id, title, path, contentType, isDownloaded) {
+        licenseProcess: function (id, title, path, contentType, isLicensed, isDownloaded) {
             var deferred = $.Deferred();
 
+            $.ajaxSetup({
+                async: false
+            });
             this.login().login()
                 .then(function () {
-                    getLicenseStatus(
-                        this.overlay().getImagesUrl,
-                        [id]
-                    ).then(function (licensedInfo) {
-                        var isLicensed = licensedInfo[id] || false;
+                    if (isLicensed) {
+                        saveLicensedAction(
+                            this.preview().saveLicensedAndDownloadUrl,
+                            id,
+                            title,
+                            path,
+                            contentType,
+                            this.getDestinationDirectoryPath()
+                        ).then(function (destinationPath) {
+                            deferred.resolve(destinationPath);
+                        }).fail(function (error) {
+                            deferred.reject(error);
+                        });
+                    } else {
+                        confirmQuotaAction(this.preview().confirmationUrl, id).then(function (data) {
+                            if (data.canLicense === false) {
+                                buyCreditsConfirmation(
+                                    this.preview().buyCreditsUrl,
+                                    title,
+                                    data.message
+                                );
 
-                        if (isLicensed) {
-                            saveLicensedAction(
-                                this.preview().saveLicensedAndDownloadUrl,
+                                return;
+                            }
+                            licenseAndSaveAction(
+                                this.preview().licenseAndDownloadUrl,
                                 id,
                                 title,
                                 path,
                                 contentType,
+                                isDownloaded,
+                                data.message,
                                 this.getDestinationDirectoryPath()
                             ).then(function (destinationPath) {
                                 deferred.resolve(destinationPath);
                             }).fail(function (error) {
                                 deferred.reject(error);
                             });
-                        } else {
-                            confirmQuotaAction(this.preview().confirmationUrl, id).then(function (data) {
-                                if (data.canLicense === false) {
-                                    buyCreditsConfirmation(
-                                        this.preview().buyCreditsUrl,
-                                        title,
-                                        data.message
-                                    );
-
-                                    return;
-                                }
-                                licenseAndSaveAction(
-                                    this.preview().licenseAndDownloadUrl,
-                                    id,
-                                    title,
-                                    path,
-                                    contentType,
-                                    isDownloaded,
-                                    data.message,
-                                    this.getDestinationDirectoryPath()
-                                ).then(function (destinationPath) {
-                                    deferred.resolve(destinationPath);
-                                }).fail(function (error) {
-                                    deferred.reject(error);
-                                });
-                            }.bind(this));
-                        }
-                    }.bind(this)).fail(function (error) {
-                        deferred.reject(error);
+                        }.bind(this)).fail(function (error) {
+                            deferred.reject(error);
+                        });
+                    }
+                    $.ajaxSetup({
+                        async: true
                     });
-                }.bind(this)).fail(function (error) {
-                deferred.reject(error);
-            });
+                }.bind(this))
+                .fail(function (error) {
+                    deferred.reject(error);
+                });
 
             return deferred.promise();
         },
@@ -549,7 +553,9 @@ define([
                 this.updateGridsAndSelectSavedAsset(destinationPath);
             }.bind(this)).fail(function (error) {
                 if (error) {
-                    this.showErrorMessage(error);
+                    uiAlert({
+                        content: error
+                    });
                 }
             }.bind(this));
         },
@@ -560,7 +566,7 @@ define([
          * @returns {String}
          */
         getLicenseButtonTitle: function () {
-            return this.isDownloaded() ? $.mage.__('License') : $.mage.__('License and Save');
+            return this.isDownloaded() ?  $.mage.__('License') : $.mage.__('License and Save');
         },
 
         /**
