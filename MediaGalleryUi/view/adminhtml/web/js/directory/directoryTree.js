@@ -377,8 +377,8 @@ define([
             this.getJsonTree().then(function (data) {
                 this.createTree(data);
                 this.overrideMultiselectBehavior();
-                $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                    var path = $(data.rslt.obj).data('path');
+                $(this.directoryTreeSelector).on('select_node.jstree', function (element, object) {
+                    var path = $(object.rslt.obj).data('path');
 
                     this.setActiveNodeFilter(path);
                 }.bind(this));
