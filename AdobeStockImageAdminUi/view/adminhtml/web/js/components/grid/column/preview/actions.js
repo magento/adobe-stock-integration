@@ -452,7 +452,7 @@ define([
                         content: error
                     });
                 }
-            }.bind(this));
+            });
         },
 
         /**
@@ -559,7 +559,7 @@ define([
                         content: error
                     });
                 }
-            }.bind(this));
+            });
         },
 
         /**
