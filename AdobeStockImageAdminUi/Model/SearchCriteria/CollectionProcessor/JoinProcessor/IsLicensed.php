@@ -31,13 +31,15 @@ class IsLicensed implements CustomJoinInterface
     /**
      * @inheritDoc
      */
-    public function apply(AbstractDb $collection)
+    public function apply(AbstractDb $collection): bool
     {
         $collection->getSelect()->joinLeft(
             ['asa' => $this->connection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME)],
             'asa.media_gallery_id = main_table.id',
             ['is_licensed']
         );
+
+        return true;
     }
 
 }

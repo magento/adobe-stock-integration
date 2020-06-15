@@ -35,7 +35,7 @@ class Keyword implements CustomFilterInterface
     /**
      * @inheritDoc
      */
-    public function apply(Filter $filter, AbstractDb $collection)
+    public function apply(Filter $filter, AbstractDb $collection): bool
     {
         $value = $filter->getValue();
 
