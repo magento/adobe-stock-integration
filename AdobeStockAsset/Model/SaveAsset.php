@@ -43,7 +43,7 @@ class SaveAsset implements SaveAssetInterface
     /**
      * @var DataObjectProcessor
      */
-    private $objectProcessor;
+    private objectProcessor;
 
     /**
      * @var AssetInterfaceFactory
