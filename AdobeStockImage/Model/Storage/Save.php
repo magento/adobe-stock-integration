@@ -38,7 +38,7 @@ class Save
     /**
      * @var IsPathExcludedInterface
      */
-    private $isPathDenied;
+    private $isPathExcluded;
 
     /**
      * @var Storage
@@ -48,18 +48,18 @@ class Save
     /**
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param IsPathExcludedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathExcluded
      * @param Storage $storage
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        IsPathExcludedInterface $isPathDenied,
+        IsPathExcludedInterface $isPathExcluded,
         Storage $storage
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->isPathDenied = $isPathDenied;
+        $this->isPathExcluded = $isPathExcluded;
         $this->storage = $storage;
     }
 
@@ -76,7 +76,7 @@ class Save
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
-        if ($this->isPathDenied->execute($destinationPath)) {
+        if ($this->isPathExcluded->execute($destinationPath)) {
             throw new LocalizedException(__('Could not save image: destination directory is restricted.'));
         }
 

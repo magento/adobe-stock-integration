@@ -30,23 +30,23 @@ class FolderTree
     /**
      * @var IsPathExcludedInterface
      */
-    private $isPathDenied;
+    private $isPathExcluded;
 
     /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param string $path
-     * @param IsPathExcludedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Filesystem $filesystem,
         string $path,
-        IsPathExcludedInterface $isPathDenied
+        IsPathExcludedInterface $isPathExcluded
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;
-        $this->isPathDenied = $isPathDenied;
+        $this->isPathExcluded = $isPathExcluded;
     }
 
     /**
@@ -79,7 +79,7 @@ class FolderTree
         }
 
         foreach ($directory->readRecursively() as $path) {
-            if (!$directory->isDirectory($path) || $this->isPathDenied->execute($path)) {
+            if (!$directory->isDirectory($path) || $this->isPathExcluded->execute($path)) {
                 continue;
             }
 

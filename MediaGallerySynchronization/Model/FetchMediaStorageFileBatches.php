@@ -31,7 +31,7 @@ class FetchMediaStorageFileBatches
     /**
      * @var IsPathExcludedInterface
      */
-    private $isPathDenied;
+    private $isPathExcluded;
 
     /**
      * @var File
@@ -50,7 +50,7 @@ class FetchMediaStorageFileBatches
 
     /**
      * @param LoggerInterface $log
-     * @param IsPathExcludedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathExcluded
      * @param Filesystem $filesystem
      * @param GetAssetsIterator $assetsIterator
      * @param File $driver
@@ -58,14 +58,14 @@ class FetchMediaStorageFileBatches
      */
     public function __construct(
         LoggerInterface $log,
-        IsPathExcludedInterface $isPathDenied,
+        IsPathExcludedInterface $isPathExcluded,
         Filesystem $filesystem,
         GetAssetsIterator $assetsIterator,
         File $driver,
         int $batchSize
     ) {
         $this->log = $log;
-        $this->isPathDenied = $isPathDenied;
+        $this->isPathExcluded = $isPathExcluded;
         $this->getAssetsIterator = $assetsIterator;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
@@ -110,7 +110,7 @@ class FetchMediaStorageFileBatches
         try {
             $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
             return $relativePath
-                && !$this->isPathDenied->execute($relativePath)
+                && !$this->isPathExcluded->execute($relativePath)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);

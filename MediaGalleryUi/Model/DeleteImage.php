@@ -27,7 +27,7 @@ class DeleteImage
     /**
      * @var IsPathExcludedInterface
      */
-    private $isPathDenied;
+    private $isPathExcluded;
 
     /**
      * @var Filesystem
@@ -39,16 +39,16 @@ class DeleteImage
      *
      * @param Storage $imagesStorage
      * @param Filesystem $filesystem
-     * @param IsPathExcludedInterface $isPathDenied
+     * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Storage $imagesStorage,
         Filesystem $filesystem,
-        IsPathExcludedInterface $isPathDenied
+        IsPathExcludedInterface $isPathExcluded
     ) {
         $this->imagesStorage = $imagesStorage;
         $this->filesystem = $filesystem;
-        $this->isPathDenied = $isPathDenied;
+        $this->isPathExcluded = $isPathExcluded;
     }
 
     /**
@@ -61,7 +61,7 @@ class DeleteImage
      */
     public function execute(AssetInterface $asset): void
     {
-        if ($this->isPathDenied->execute($asset->getPath())) {
+        if ($this->isPathExcluded->execute($asset->getPath())) {
             throw new LocalizedException(__('Could not delete image: destination directory is restricted.'));
         }
 
