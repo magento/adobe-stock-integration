@@ -45,12 +45,29 @@ define([
                     return $(this.directoryTreeSelector).length === 0;
                 }.bind(this),
                 function () {
-                    this.getJsonTree();
+                    this.renderDirectoryTree();
                     this.initEvents();
                 }.bind(this)
             );
 
             return this;
+        },
+
+        /**
+         * Render directory tree component.
+         */
+        renderDirectoryTree: function () {
+            this.getJsonTree().then(function (data) {
+                this.createFolderIfNotExists(data).then(function (isFolderCreated) {
+                    if (isFolderCreated) {
+                        this.getJsonTree().then(function (data) {
+                            this.createTree(data);
+                        }.bind(this));
+                    } else {
+                        this.createTree(data);
+                    }
+                }.bind(this));
+            }.bind(this));
         },
 
         /**
@@ -81,12 +98,19 @@ define([
                         this.createDirectoryUrl,
                         pathArray
                     ).then(function () {
-                        this.reloadJsTree();
+                        deferred.resolve({
+                            result: true
+                        });
                     }.bind(this));
+                } else {
+                    deferred.resolve({
+                        result: false
+                    });
                 }
-                deferred.resolve();
             } else {
-                deferred.resolve();
+                deferred.resolve({
+                    result: false
+                });
             }
 
             return deferred.promise();
@@ -364,6 +388,8 @@ define([
          * Get json data for jstree
          */
         getJsonTree: function () {
+            var deferred = $.Deferred();
+
             $.ajax({
                 url: this.getDirectoryTreeUrl,
                 type: 'GET',
@@ -375,10 +401,8 @@ define([
                  * @param {Object} data
                  */
                 success: function (data) {
-                        this.createFolderIfNotExists(data).then(function () {
-                            this.createTree(data);
-                        }.bind(this));
-                    }.bind(this),
+                    deferred.resolve(data);
+                },
 
                 /**
                  * Error handler for request
@@ -387,9 +411,12 @@ define([
                  * @param {String} textStatus
                  */
                 error: function (jqXHR, textStatus) {
+                    deferred.reject();
                     throw textStatus;
                 }
             });
+
+            return deferred.promise();
         },
 
         /**
