@@ -17,7 +17,8 @@ use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
 class RemoveObsoleteContentAsset
 {
     private const MEDIA_CONTENT_ASSET_TABLE = 'media_content_asset';
-    private const DEFAUL_IDENTITY_FIELD = 'entity_Id';
+    private const DEFAULT_IDENTITY_FIELD = 'entity_id';
+
     /**
      * @var FetchBatchesInterface
      */
@@ -67,7 +68,7 @@ class RemoveObsoleteContentAsset
         $this->fetchBatches = $fetchBatches;
         $this->resourceConnection = $resourceConnection;
         $this->entities = $entities;
-        $this->identityFIelds = $identityFields;
+        $this->identityFields = $identityFields;
         $this->entityTableNames = $entityTableNames;
     }
 
@@ -84,7 +85,7 @@ class RemoveObsoleteContentAsset
                     if ($item['entity_type'] !== $entity) {
                         continue;
                     }
-                    if (!$this->isEntityExist($this->entityTableNames[$entity], (int) $item['entity_id'])) {
+                    if (!$this->isEntityExist($this->entityTableNames[$entity], (int) $item['entity_id'], $entity)) {
                         $assetIds[] = $item['asset_id'];
                     }
                 }
@@ -99,11 +100,11 @@ class RemoveObsoleteContentAsset
      * @param string $entityTableName
      * @param int $entityId
      */
-    private function isEntityExist(string $entityTableName, int $entityId): bool
+    private function isEntityExist(string $entityTableName, int $entityId, string $entity): bool
     {
-        $identityField = isset($this->identityFIelds[$entity]) ?
-                       $this->identityFIelds[$entity] :
-                       self::DEFAUL_IDENTITY_FIELD;
+        $identityField = isset($this->identityFields[$entity]) ?
+                       $this->identityFields[$entity] :
+                       self::DEFAULT_IDENTITY_FIELD;
         $connection = $this->resourceConnection->getConnection();
         $entityTable = $this->resourceConnection->getTableName($entityTableName);
 
