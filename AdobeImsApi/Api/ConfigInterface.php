@@ -65,11 +65,4 @@ interface ConfigInterface
      * @return string
      */
     public function getProfileImageUrl(): string;
-
-    /**
-     * Returns default profile image.
-     *
-     * @return string
-     */
-    public function getDefaultProfileImage(): string;
 }

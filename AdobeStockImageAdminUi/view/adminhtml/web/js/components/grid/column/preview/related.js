@@ -5,8 +5,7 @@
 define([
     'uiComponent',
     'underscore',
-    'jquery',
-    'mage/backend/tabs'
+    'jquery'
 ], function (Component, _, $) {
     'use strict';
 
@@ -16,6 +15,7 @@ define([
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             filterBookmarksSelector: '.admin__data-grid-action-bookmarks',
             tabImagesLimit: 4,
+            tabsContainerId: '#adobe-stock-tabs',
             serieFilterValue: '',
             modelFilterValue: '',
             selectedTab: null,
@@ -48,6 +48,19 @@ define([
             this.filterChips().updateActive();
 
             return this;
+        },
+
+        /**
+         * Disable keydown event for related content tabs
+         */
+        disableTabsKeyDownEvent: function () {
+            if ($(this.tabsContainerId + ' li[role=tab]').length === 0) {
+                setTimeout(function () {
+                    this.disableTabsKeyDownEvent();
+                }.bind(this), 100);
+            } else {
+                $(this.tabsContainerId + ' li[role=tab]').unbind('keydown');
+            }
         },
 
         /**
@@ -253,7 +266,7 @@ define([
          * Scrolls user window to the filter bookmarks
          */
         scrollToFilter: function () {
-            $(this.filterBookmarksSelector).get(0).scrollIntoView({
+            $(this.preview().adobeStockModalSelector + ' ' + this.filterBookmarksSelector).get(0).scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
                 inline: 'nearest'

@@ -7,18 +7,20 @@ define([
     'jquery',
     'underscore',
     'uiElement',
-    'Magento_MediaGalleryUi/js/action/deleteImage',
+    'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Element, deleteImage, addSelected) {
+], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected) {
     'use strict';
 
     return Element.extend({
         defaults: {
             modalSelector: '',
             modalWindowSelector: '',
+            mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             template: 'Magento_MediaGalleryUi/image/actions',
             modules: {
-                imageModel: '${ $.imageModelName }'
+                imageModel: '${ $.imageModelName }',
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
             }
         },
 
@@ -52,7 +54,14 @@ define([
          * Delete image action
          */
         deleteImageAction: function () {
-            deleteImage.deleteImageAction(this.imageModel().getSelected(), this.imageModel().deleteImageUrl);
+            var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
+                deleteImageUrl = this.imageModel().deleteImageUrl;
+
+            deleteImageWithDetailConfirmation.deleteImageAction(
+                this.imageModel().getSelected(),
+                imageDetailsUrl,
+                deleteImageUrl
+            );
         },
 
         /**
