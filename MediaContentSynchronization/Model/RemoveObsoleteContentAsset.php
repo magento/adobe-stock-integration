@@ -53,6 +53,7 @@ class RemoveObsoleteContentAsset
      * @param DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinks
      * @param FetchBatchesInterface $fetchBatches
      * @param ResourceConnection $resourceConnection
+     * @param array $identityFields
      * @param array $entities
      * @param array $entityTableNames
      */
