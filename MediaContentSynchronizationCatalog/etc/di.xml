@@ -14,6 +14,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentSynchronization\Model\RemoveObsoleteContentAsset">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="catalog_product" xsi:type="string">catalog_product</item>
+            </argument>
+             <argument name="entityTableNames" xsi:type="array">
+                <item name="catalog_product" xsi:type="string">catalog_product_entity</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\MediaContentSynchronizationCatalog\Model\Synchronizer\Product">
         <arguments>
             <argument name="fields" xsi:type="array">
