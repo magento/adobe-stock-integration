@@ -81,10 +81,7 @@ class DataProvider extends UiComponentDataProvider
     public function getData(): array
     {
         try {
-            /** @var SearchResult $searchResult */
-            $searchResult = $this->getSearchResult();
-
-            return $this->searchResultToOutput($searchResult);
+            return $this->searchResultToOutput($this->getSearchResult());
         } catch (\Exception $exception) {
             return [
                 'items' => [],

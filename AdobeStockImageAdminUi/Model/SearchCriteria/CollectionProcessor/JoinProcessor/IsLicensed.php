@@ -41,5 +41,4 @@ class IsLicensed implements CustomJoinInterface
 
         return true;
     }
-
 }

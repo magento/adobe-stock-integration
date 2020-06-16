@@ -33,7 +33,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
         <arguments>
             <argument name="customJoins" xsi:type="array">
                 <item name="is_licensed" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\IsLicensed</item>

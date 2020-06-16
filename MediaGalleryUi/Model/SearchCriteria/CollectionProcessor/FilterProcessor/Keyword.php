@@ -56,11 +56,14 @@ class Keyword implements CustomFilterInterface
     private function getSelectByKeyword(string $value): Select
     {
         return $this->connection->getConnection()->select()->from(
-            $this->connection->getConnection()->select()->from(
-                ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
-                ['id']
-            )->where('keyword = ?', $value)
-                ->joinInner(
+            $this->connection->getConnection()->select()
+                ->from(
+                    ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
+                    ['id']
+                )->where(
+                    'keyword = ?',
+                    $value
+                )->joinInner(
                     ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
                     'keywords_table.keyword_id = asset_keywords_table.id',
                     ['asset_id']
