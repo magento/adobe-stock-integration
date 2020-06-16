@@ -17,7 +17,7 @@ use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
 class RemoveObsoleteContentAsset
 {
     private const MEDIA_CONTENT_ASSET_TABLE = 'media_content_asset';
-    
+    private const DEFAUL_IDENTITY_FIELD = 'entity_Id';
     /**
      * @var FetchBatchesInterface
      */
@@ -42,6 +42,11 @@ class RemoveObsoleteContentAsset
      * @var array $entityTableNames
      */
     private $entityTableNames;
+
+    /**
+     * @var array $identityFields
+     */
+    private $identityFields;
     
     /**
      * @param DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinks
@@ -54,6 +59,7 @@ class RemoveObsoleteContentAsset
         DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinks,
         FetchBatchesInterface $fetchBatches,
         ResourceConnection $resourceConnection,
+        array $identityFields = [],
         array $entities = [],
         array $entityTableNames = []
     ) {
@@ -61,6 +67,7 @@ class RemoveObsoleteContentAsset
         $this->fetchBatches = $fetchBatches;
         $this->resourceConnection = $resourceConnection;
         $this->entities = $entities;
+        $this->identityFIelds = $identityFields;
         $this->entityTableNames = $entityTableNames;
     }
 
@@ -94,12 +101,15 @@ class RemoveObsoleteContentAsset
      */
     private function isEntityExist(string $entityTableName, int $entityId): bool
     {
+        $identityField = isset($this->identityFIelds[$entity]) ?
+                       $this->identityFIelds[$entity] :
+                       self::DEFAUL_IDENTITY_FIELD;
         $connection = $this->resourceConnection->getConnection();
         $entityTable = $this->resourceConnection->getTableName($entityTableName);
 
         $select = $connection->select();
-        $select->from($entityTable, ['entity_id']);
-        $select->where('entity_id = ?', $entityId . '%');
+        $select->from($entityTable, [$identityField]);
+        $select->where($identityField . ' = ?', $entityId . '%');
         return !empty($connection->fetchCol($select));
     }
 }

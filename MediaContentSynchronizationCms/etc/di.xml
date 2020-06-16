@@ -14,6 +14,22 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentSynchronization\Model\RemoveObsoleteContentAsset">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="cms_block" xsi:type="string">cms_block</item>
+                <item name="cms_page" xsi:type="string">cms_page</item>
+            </argument>
+             <argument name="entityTableNames" xsi:type="array">
+                 <item name="cms_block" xsi:type="string">cms_block</item>
+                 <item name="cms_page" xsi:type="string">cms_page</item>
+             </argument>
+             <argument name="identityFIelds" xsi:type="array">
+                 <item name="cms_block" xsi:type="string">block_id</item>
+                 <item name="cms_page" xsi:type="string">page_id</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\MediaContentSynchronizationCms\Model\Synchronizer\Block">
         <arguments>
             <argument name="fields" xsi:type="array">
