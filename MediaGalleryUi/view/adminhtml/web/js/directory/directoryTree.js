@@ -45,10 +45,8 @@ define([
                     return $(this.directoryTreeSelector).length === 0;
                 }.bind(this),
                 function () {
-                    this.createFolderIfNotExists().then(function () {
-                        this.getJsonTree();
-                        this.initEvents();
-                    }.bind(this));
+                    this.renderDirectoryTree();
+                    this.initEvents();
                 }.bind(this)
             );
 
@@ -56,25 +54,99 @@ define([
         },
 
         /**
-         * Create folder by provided current_tree_path param
+         * Render directory tree component.
          */
-        createFolderIfNotExists: function () {
+        renderDirectoryTree: function () {
+            this.getJsonTree().then(function (data) {
+                this.createFolderIfNotExists(data).then(function (isFolderCreated) {
+                    if (isFolderCreated) {
+                        this.getJsonTree().then(function (newData) {
+                            this.createTree(newData);
+                        }.bind(this));
+                    } else {
+                        this.createTree(data);
+                    }
+                }.bind(this));
+            }.bind(this));
+        },
+
+        /**
+         * Create folder by provided current_tree_path param
+         *
+         * @param {Array} directories
+         */
+        createFolderIfNotExists: function (directories) {
             var isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
                 currentTreePath = isMediaBrowser ? window.MediabrowserUtility.pathId : null,
-                deferred = $.Deferred();
+                deferred = $.Deferred(),
+                decodedPath,
+                pathArray;
 
             if (currentTreePath) {
-                createDirectory(
-                    this.createDirectoryUrl,
-                    this.convertPathToPathsArray(Base64.idDecode(currentTreePath))
-                ).always(function () {
-                    deferred.resolve();
-                });
+                decodedPath = Base64.idDecode(currentTreePath);
+
+                if (!this.isDirectoryExist(directories[0], decodedPath)) {
+                    pathArray = this.convertPathToPathsArray(decodedPath);
+
+                    $.each(pathArray, function (i, val) {
+                        if (this.isDirectoryExist(directories[0], val)) {
+                            pathArray.splice(i, 1);
+                        }
+                    }.bind(this));
+
+                    createDirectory(
+                        this.createDirectoryUrl,
+                        pathArray
+                    ).then(function () {
+                        deferred.resolve({
+                            result: true
+                        });
+                    });
+                } else {
+                    deferred.resolve({
+                        result: false
+                    });
+                }
             } else {
-                deferred.resolve();
+                deferred.resolve({
+                    result: false
+                });
             }
 
             return deferred.promise();
+        },
+
+        /**
+         * Verify if directory exists in array
+         *
+         * @param {Array} directories
+         * @param {String} directoryId
+         */
+        isDirectoryExist: function (directories, directoryId) {
+            var found = false;
+
+            /**
+             * Recursive search in array
+             *
+             * @param {Array} data
+             * @param {String} id
+             */
+            function recurse(data, id) {
+                var i;
+
+                for (i = 0; i < data.length; i++) {
+                    if (data[i].attr.id === id) {
+                        found = data[i];
+                        break;
+                    } else if (data[i].children && data[i].children.length) {
+                        recurse(data[i].children, id);
+                    }
+                }
+            }
+
+            recurse(directories, directoryId);
+
+            return found;
         },
 
         /**
@@ -300,22 +372,29 @@ define([
          * Reload jstree and update jstree events
          */
         reloadJsTree: function () {
-            $.ajaxSetup({
-                async: false
-            });
+            var deferred = $.Deferred();
 
-            this.getJsonTree();
-            this.initEvents();
+            this.getJsonTree().then(function (data) {
+                this.createTree(data);
+                this.overrideMultiselectBehavior();
+                $(this.directoryTreeSelector).on('select_node.jstree', function (element, object) {
+                    var path = $(object.rslt.obj).data('path');
 
-            $.ajaxSetup({
-                async: true
-            });
+                    this.setActiveNodeFilter(path);
+                }.bind(this));
+
+                deferred.resolve();
+            }.bind(this));
+
+            return deferred.promise();
         },
 
         /**
          * Get json data for jstree
          */
         getJsonTree: function () {
+            var deferred = $.Deferred();
+
             $.ajax({
                 url: this.getDirectoryTreeUrl,
                 type: 'GET',
@@ -327,8 +406,8 @@ define([
                  * @param {Object} data
                  */
                 success: function (data) {
-                    this.createTree(data);
-                }.bind(this),
+                    deferred.resolve(data);
+                },
 
                 /**
                  * Error handler for request
@@ -337,9 +416,12 @@ define([
                  * @param {String} textStatus
                  */
                 error: function (jqXHR, textStatus) {
+                    deferred.reject();
                     throw textStatus;
                 }
             });
+
+            return deferred.promise();
         },
 
         /**
