@@ -100,6 +100,7 @@ class RemoveObsoleteContentAsset
      *
      * @param string $entityTableName
      * @param int $entityId
+     * @param string $entity
      */
     private function isEntityExist(string $entityTableName, int $entityId, string $entity): bool
     {
