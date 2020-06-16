@@ -21,50 +21,18 @@ class Resolver
     private $streamFactory;
 
     /**
-     * @var FileGenerator
+     * @var Handler
      */
-    private $fileGenerator;
+    private $handler;
 
     /**
+     * @param Handler $handler
      * @param StreamFactory $streamFactory
-     * @param FileGenerator $fileGenerator
      */
-    public function __construct(StreamFactory $streamFactory, FileGenerator $fileGenerator)
+    public function __construct(Handler $handler, StreamFactory $streamFactory)
     {
+        $this->handler = $handler;
         $this->streamFactory = $streamFactory;
-        $this->fileGenerator = $fileGenerator;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return array|null
-     */
-    private function parseUrlQuery(string $url): ?array
-    {
-        $query = [];
-        $queryString = parse_url($url, PHP_URL_QUERY);
-        if (null !== $queryString) {
-            parse_str($queryString, $query);
-        }
-
-        return $query;
-    }
-
-    /**
-     * Generate resource for the response stream based on the query.
-     *
-     * @param array $query
-     *
-     * @return array
-     */
-    private function createResource(array $query): array
-    {
-        $files = $this->fileGenerator->generate($query);
-        return [
-            'nb_results' => count($files),
-            'files' => $files
-        ];
     }
 
     /**
@@ -77,8 +45,7 @@ class Resolver
      */
     public function doGet(string $url, array $headers): Stream
     {
-        $query = $this->parseUrlQuery($url);
-        $resource = $this->createResource($query);
+        $resource = $this->handler->generateResponse($url);
         return $this->streamFactory->create($resource);
     }
 
@@ -93,10 +60,8 @@ class Resolver
      */
     public function doPost(string $url, array $headers, array $post_data): Stream
     {
-        $query = $this->parseUrlQuery($url);
-        //@TODO implement logic for generating the stub data and send it as a string to the stream factory
-
-        return $this->streamFactory->create();
+        $resource = $this->handler->generateResponse($url);
+        return $this->streamFactory->create($resource);
     }
 
     /**
@@ -110,8 +75,7 @@ class Resolver
      */
     public function doMultiPart(string $url, array $headers, string $file): Stream
     {
-        $query = $this->parseUrlQuery($url);
-        //@TODO implement logic for generating the stub data and send it as a string to the stream factory
-        return $this->streamFactory->create();
+        $resource = $this->handler->generateResponse($url);
+        return $this->streamFactory->create($resource);
     }
 }
