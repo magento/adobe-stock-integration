@@ -43,7 +43,7 @@ class Handler
             default:
                 $parameters = $searchParameters;
         }
-        $stubData = $this->declareResponseFileStub($parameters);
+        $stubData = $this->declareResponseFileStub($parameters, $requestParameters['locale']);
         $filesLimit = (int) $parameters['limit'];
         $files = $this->fileGenerator->generate($stubData, $filesLimit);
 
@@ -60,13 +60,13 @@ class Handler
      *
      * @return array
      */
-    private function declareResponseFileStub(array $parameters): array
+    private function declareResponseFileStub(array $parameters, string $locale): array
     {
         $stub = [];
         foreach ($parameters as $key => $value) {
             switch ($key) {
                 case $key === 'words':
-                    $stub['keywords'] = [['name' => $value]];
+                    $stub['keywords'] = [['name' => ('ru_RU' === $locale) ? 'Автомобили' : $value]];
                     break;
                 default;
             }
