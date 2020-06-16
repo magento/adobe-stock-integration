@@ -12,7 +12,7 @@ use Magento\Framework\File\Uploader;
 use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -25,15 +25,15 @@ class SaveImageInformation
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
 
     /**
-     * @var IsPathBlacklistedInterface
+     * @var IsPathExcludedInterface
      */
-    private $isPathBlacklisted;
-    
+    private $isPathExcluded;
+
     /**
      * @var SplFileInfoFactory
      */
     private $splFileInfoFactory;
-    
+
     /**
      * @var SaveAssetsInterface
      */
@@ -62,7 +62,7 @@ class SaveImageInformation
     /**
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
-     * @param IsPathBlacklistedInterface $isPathBlacklisted
+     * @param IsPathExcludedInterface $isPathExcluded
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
@@ -71,14 +71,14 @@ class SaveImageInformation
     public function __construct(
         Filesystem $filesystem,
         LoggerInterface $log,
-        IsPathBlacklistedInterface $isPathBlacklisted,
+        IsPathExcludedInterface $isPathExcluded,
         SplFileInfoFactory $splFileInfoFactory,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
         Storage $storage
     ) {
         $this->log = $log;
-        $this->isPathBlacklisted = $isPathBlacklisted;
+        $this->isPathExcluded = $isPathExcluded;
         $this->splFileInfoFactory = $splFileInfoFactory;
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
@@ -116,7 +116,7 @@ class SaveImageInformation
         try {
             $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
             return $relativePath
-                && !$this->isPathBlacklisted->execute($relativePath)
+                && !$this->isPathExcluded->execute($relativePath)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);
