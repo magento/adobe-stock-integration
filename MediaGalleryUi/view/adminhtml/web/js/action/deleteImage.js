@@ -18,10 +18,10 @@ define([
          *
          * @param {Object} record
          * @param {String} deleteUrl
+         * @param {String} confirmationContent
          */
-        deleteImageAction: function (record, deleteUrl) {
-            var baseContent = $.mage.__('Are you sure you want to delete "%s" image?'),
-                title = $.mage.__('Delete image'),
+        deleteImageAction: function (record, deleteUrl, confirmationContent) {
+            var title = $.mage.__('Delete image'),
                 cancelText = $.mage.__('Cancel'),
                 deleteImageText = $.mage.__('Delete Image'),
                 deleteImageCallback = this.deleteImage.bind(this);
@@ -29,7 +29,7 @@ define([
             confirmation({
                 title: title,
                 modalClass: 'media-gallery-delete-image-action',
-                content: baseContent.replace('%s', record.path),
+                content: confirmationContent,
                 buttons: [
                     {
                         text: cancelText,

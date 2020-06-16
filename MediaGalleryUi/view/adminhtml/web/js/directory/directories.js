@@ -62,9 +62,10 @@ define([
                                 this.directoryTree().createDirectoryUrl,
                                 [this.getNewFolderPath(folderName)]
                             ).then(function () {
-                                this.directoryTree().reloadJsTree();
-                                $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    this.directoryTree().locateNode(this.getNewFolderPath(folderName));
+                                this.directoryTree().reloadJsTree().then(function () {
+                                    $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
+                                        this.directoryTree().locateNode(this.getNewFolderPath(folderName));
+                                    }.bind(this));
                                 }.bind(this));
 
                             }.bind(this)).fail(function (error) {
