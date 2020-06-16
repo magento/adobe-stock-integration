@@ -18,9 +18,11 @@
         <arguments>
             <argument name="entities" xsi:type="array">
                 <item name="catalog_product" xsi:type="string">catalog_product</item>
+                <item name="catalog_category" xsi:type="string">catalog_category</item>
             </argument>
              <argument name="entityTableNames" xsi:type="array">
-                <item name="catalog_product" xsi:type="string">catalog_product_entity</item>
+                 <item name="catalog_product" xsi:type="string">catalog_product_entity</item>
+                 <item name="catalog_category" xsi:type="string">catalog_category_entity</item>
             </argument>
         </arguments>
     </type>
