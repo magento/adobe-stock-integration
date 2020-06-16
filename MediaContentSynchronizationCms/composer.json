@@ -8,6 +8,9 @@
         "magento/module-media-gallery-synchronization-api": "*",
         "magento/module-media-content-api": "*"
     },
+    "suggest": {
+         "magento/module-media-content-synchronization": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
