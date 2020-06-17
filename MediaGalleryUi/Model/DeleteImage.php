@@ -10,9 +10,9 @@ namespace Magento\MediaGalleryUi\Model;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
  * Delete image from a storage
@@ -25,9 +25,9 @@ class DeleteImage
     private $imagesStorage;
 
     /**
-     * @var IsPathBlacklistedInterface
+     * @var IsPathExcludedInterface
      */
-    private $isPathBlacklisted;
+    private $isPathExcluded;
 
     /**
      * @var Filesystem
@@ -39,16 +39,16 @@ class DeleteImage
      *
      * @param Storage $imagesStorage
      * @param Filesystem $filesystem
-     * @param IsPathBlacklistedInterface $isPathBlacklisted
+     * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Storage $imagesStorage,
         Filesystem $filesystem,
-        IsPathBlacklistedInterface $isPathBlacklisted
+        IsPathExcludedInterface $isPathExcluded
     ) {
         $this->imagesStorage = $imagesStorage;
         $this->filesystem = $filesystem;
-        $this->isPathBlacklisted = $isPathBlacklisted;
+        $this->isPathExcluded = $isPathExcluded;
     }
 
     /**
@@ -61,7 +61,7 @@ class DeleteImage
      */
     public function execute(AssetInterface $asset): void
     {
-        if ($this->isPathBlacklisted->execute($asset->getPath())) {
+        if ($this->isPathExcluded->execute($asset->getPath())) {
             throw new LocalizedException(__('Could not delete image: destination directory is restricted.'));
         }
 
