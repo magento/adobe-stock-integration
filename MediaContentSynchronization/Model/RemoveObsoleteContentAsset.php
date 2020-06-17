@@ -107,7 +107,7 @@ class RemoveObsoleteContentAsset
             $mediaContentTable = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE);
             $select = $connection->select();
             
-            $select->from(['mca' => $mediaContentTable], ['asset_id', 'entity_id',  'entity_type', 'field']);
+            $select->from(['mca' => $mediaContentTable], ['asset_id', 'entity_id',  'entity_type']);
             $select->joinLeft(
                 ['et' => $entityData->getEntityTable()],
                 'et.' . $entityData->getIdentifierField() . ' =  mca.entity_id ',
