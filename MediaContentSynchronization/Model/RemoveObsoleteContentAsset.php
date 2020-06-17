@@ -26,7 +26,7 @@ class RemoveObsoleteContentAsset
     /**
      * @var GetOutdatedRelations
      */
-    private $getOutdateRelations;
+    private $getOutdatedRelations;
 
     /**
      * @var DeleteContentAssetLinksInterface
@@ -41,11 +41,11 @@ class RemoveObsoleteContentAsset
     public function __construct(
         DeleteContentAssetLinksInterface $deleteContentAssetLinks,
         GetEntitiesInterface $getEntities,
-        GetOutdatedRElations $getOutdateRelations
+        GetOutdatedRelations $getOutdatedRelations
     ) {
         $this->deleteContentAssetLinks = $deleteContentAssetLinks;
         $this->getEntities = $getEntities;
-        $this->getOutdatedRelations = $getOutdateRelations;
+        $this->getOutdatedRelations = $getOutdatedRelations;
     }
 
     /**
