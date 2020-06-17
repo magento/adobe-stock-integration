@@ -16,8 +16,6 @@ use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
  */
 class RemoveObsoleteContentAsset
 {
-    private const MEDIA_CONTENT_ASSET_TABLE = 'media_content_asset';
-
     /**
      * @var GetEntitiesInterface
      */
@@ -32,7 +30,7 @@ class RemoveObsoleteContentAsset
      * @var DeleteContentAssetLinksInterface
      */
     private $deleteContentAssetLinks;
-    
+
     /**
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param GetEntitiesInterface $getEntities
