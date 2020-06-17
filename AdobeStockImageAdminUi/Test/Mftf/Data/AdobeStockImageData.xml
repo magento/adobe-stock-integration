@@ -21,7 +21,7 @@
     <entity name="AdobeStockUnlicensedImage">
         <data key="id">{{_CREDS.magento/adobe_stock_not_licensed_image}}</data>
         <data key="status">Unlicensed</data>
-        <data key="category">People</data>
-        <data key="author">NajmiArif</data>
+        <data key="category">Castles</data>
+        <data key="author">gam16</data>
     </entity>
 </entities>

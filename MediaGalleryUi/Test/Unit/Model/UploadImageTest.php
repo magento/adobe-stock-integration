@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
-use Magento\MediaGalleryUi\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 use Magento\MediaGalleryUi\Model\UploadImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
