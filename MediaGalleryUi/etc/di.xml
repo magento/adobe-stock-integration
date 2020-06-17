@@ -71,23 +71,4 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="mediaGalleryFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
-                <item name="media_gallery_keyword" xsi:type="object">Magento\MediaGalleryUi\Ui\Component\DataProvider\KeywordFilter</item>
-             </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="mediaGalleryReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
-        <arguments>
-            <argument name="filterPool" xsi:type="object">mediaGalleryFilterPool</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\MediaGalleryUi\Model\Listing\DataProvider">
-        <arguments>
-            <argument name="reporting" xsi:type="object">mediaGalleryReporting</argument>
-        </arguments>
-    </type>
 </config>
