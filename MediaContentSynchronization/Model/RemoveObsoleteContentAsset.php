@@ -114,7 +114,7 @@ class RemoveObsoleteContentAsset
                 [$entityData->getIdentifierField(). ' AS entity_identifier']
             );
             $select->where('et.' . $entityData->getIdentifierField() . ' IS NULL');
-            $select->where('mca.entity_type = ?', $entityData->getEavEntityType());
+            $select->where('mca.entity_type = ?', $entityData->getEavEntityType() ?? $entityData->getEntityTable());
             $result =  $connection->fetchAssoc($select);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
