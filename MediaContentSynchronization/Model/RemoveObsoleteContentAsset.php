@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\MediaContentSynchronization\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
 use Magento\MediaContentSynchronizationApi\Model\GetEntitiesInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Remove obsolete content asset from deleted entities
@@ -25,11 +26,6 @@ class RemoveObsoleteContentAsset
     private $resourceConnection;
 
     /**
-     * @var DeleteContentAssetLinksByAssetIdsInterface
-     */
-    private $deleteContentAssetLinksByAssetIds;
-
-    /**
      * @var GetEntitiesInterface
      */
     private $getEntities;
@@ -38,23 +34,28 @@ class RemoveObsoleteContentAsset
      * @var MetadataPool
      */
     private $metadataPool;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
     
     /**
      * @param MetadataPool $metadataPool
-     * @param DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinks
      * @param ResourceConnection $resourceConnection
      * @param GetEntitiesInterface $getEntities
+     * @param LoggerInterface $logger
      */
     public function __construct(
         MetadataPool $metadataPool,
-        DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinks,
         ResourceConnection $resourceConnection,
-        GetEntitiesInterface $getEntities
+        GetEntitiesInterface $getEntities,
+        LoggerInterface $logger
     ) {
         $this->metadataPool = $metadataPool;
-        $this->deleteContentAssetLinksByAssetIds = $deleteContentAssetLinks;
         $this->resourceConnection = $resourceConnection;
         $this->getEntities = $getEntities;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,29 +64,64 @@ class RemoveObsoleteContentAsset
     public function execute(): void
     {
         foreach ($this->getEntities->execute() as $entity) {
-            $this->deleteContentAssetLinksByAssetIds->execute($this->getRemovedAssetIds($entity));
+            $assets = $this->getRemovedAssets($entity);
+            if (!empty($assets)) {
+                $this->deleteObsoleteContentAsset($assets);
+            }
         }
     }
 
     /**
-     * Verify if product by provided id exists
+     * Remove obsolete asset content links by assets id and entity id.
+     *
+     * @param array $assets
+     */
+    private function deleteObsoleteContentAsset(array $assets): void
+    {
+        try {
+            $this->resourceConnection->getConnection()->delete(
+                self::MEDIA_CONTENT_ASSET_TABLE,
+                [
+                    'asset_id IN (?)' => implode(",", array_column($assets, 'asset_id')),
+                    'entity_id IN (?)' => implode(",", array_column($assets, 'entity_id'))
+                ]
+            );
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $message = __('Could not delete media content links');
+            throw new CouldNotDeleteException($message, $exception);
+        }
+    }
+    
+    /**
+     * Returns records from media_content table in wichs entity_id not exist anymore.
      *
      * @param string $entityType
+     * @throws CouldNotDeleteException
      */
-    private function getRemovedAssetIds(string $entityType): array
+    private function getRemovedAssets(string $entityType): array
     {
-        $entityData = $this->metadataPool->getMetadata($entityType);
-        $connection = $this->resourceConnection->getConnection();
-        $mediaContentTable = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE);
-        $select = $connection->select();
-        $select->from($mediaContentTable, ['entity_id', 'asset_id', 'entity_type']);
-        $select->joinLeft(
-            ['et' => $entityData->getEntityTable()],
-            'et.' . $entityData->getIdentifierField() . ' = ' . self::MEDIA_CONTENT_ASSET_TABLE . '.entity_id ',
-            [$entityData->getIdentifierField()]
-        );
-        $select->where('et.entity_id IS NULL');
+        try {
+            $entityData = $this->metadataPool->getMetadata($entityType);
+            $connection = $this->resourceConnection->getConnection();
+            $mediaContentTable = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE);
+            $select = $connection->select();
+            
+            $select->from(['mca' => $mediaContentTable], ['asset_id', 'entity_id',  'entity_type', 'field']);
+            $select->joinLeft(
+                ['et' => $entityData->getEntityTable()],
+                'et.' . $entityData->getIdentifierField() . ' =  mca.entity_id ',
+                [$entityData->getIdentifierField(). ' AS entity_identifier']
+            );
+            $select->where('et.' . $entityData->getIdentifierField() . ' IS NULL');
+            $select->where('mca.entity_type = ?', $entityData->getEavEntityType());
+            $result =  $connection->fetchAssoc($select);
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $message = __('Could not fetch media content links data');
+            throw new CouldNotDeleteException($message, $exception);
+        }
 
-        return $connection->fetchCol($select);
+        return $result;
     }
 }
