@@ -16,6 +16,7 @@ define([
             data: {
                 'form_key': window.FORM_KEY
             },
+            showLoader: true,
             dataType: 'json',
 
             /**
