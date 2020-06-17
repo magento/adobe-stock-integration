@@ -83,7 +83,7 @@ class GetOutdatedRelations
             $connection = $this->resourceConnection->getConnection();
             $mediaContentTable = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE);
             $select = $connection->select();
-            
+
             $select->from(['mca' => $mediaContentTable], ['asset_id', 'entity_id',  'entity_type', 'field']);
             $select->joinLeft(
                 ['et' => $entityData->getEntityTable()],
@@ -95,8 +95,7 @@ class GetOutdatedRelations
             $assets = $connection->fetchAssoc($select);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('Could not fetch media content links data');
-            throw new CouldNotDeleteException($message, $exception);
+            throw new CouldNotDeleteException(__('Could not fetch media content links data'), $exception);
         }
 
         foreach ($assets as $asset) {
