@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronization\Model;
 
-use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
+use Magento\MediaContentSynchronizationApi\Model\GetEntitiesInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Remove obsolete content asset from deleted entities
@@ -17,13 +18,7 @@ use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
 class RemoveObsoleteContentAsset
 {
     private const MEDIA_CONTENT_ASSET_TABLE = 'media_content_asset';
-    private const DEFAULT_IDENTITY_FIELD = 'entity_id';
 
-    /**
-     * @var FetchBatchesInterface
-     */
-    private $fetchBatches;
-    
     /**
      * @var ResourceConnection
      */
@@ -35,42 +30,31 @@ class RemoveObsoleteContentAsset
     private $deleteContentAssetLinksByAssetIds;
 
     /**
-     * @var array
+     * @var GetEntitiesInterface
      */
-    private $entities;
+    private $getEntities;
 
     /**
-     * @var array $entityTableNames
+     * @var MetadataPool
      */
-    private $entityTableNames;
-
-    /**
-     * @var array $identityFields
-     */
-    private $identityFields;
+    private $metadataPool;
     
     /**
+     * @param MetadataPool $metadataPool
      * @param DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinks
-     * @param FetchBatchesInterface $fetchBatches
      * @param ResourceConnection $resourceConnection
-     * @param array $identityFields
-     * @param array $entities
-     * @param array $entityTableNames
+     * @param GetEntitiesInterface $getEntities
      */
     public function __construct(
+        MetadataPool $metadataPool,
         DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinks,
-        FetchBatchesInterface $fetchBatches,
         ResourceConnection $resourceConnection,
-        array $identityFields = [],
-        array $entities = [],
-        array $entityTableNames = []
+        GetEntitiesInterface $getEntities
     ) {
+        $this->metadataPool = $metadataPool;
         $this->deleteContentAssetLinksByAssetIds = $deleteContentAssetLinks;
-        $this->fetchBatches = $fetchBatches;
         $this->resourceConnection = $resourceConnection;
-        $this->entities = $entities;
-        $this->identityFields = $identityFields;
-        $this->entityTableNames = $entityTableNames;
+        $this->getEntities = $getEntities;
     }
 
     /**
@@ -78,41 +62,30 @@ class RemoveObsoleteContentAsset
      */
     public function execute(): void
     {
-        foreach ($this->entities as $entity) {
-            $columns = ['entity_id', 'entity_type', 'asset_id'];
-            foreach ($this->fetchBatches->execute(self::MEDIA_CONTENT_ASSET_TABLE, $columns) as $batch) {
-                $assetIds = [];
-                foreach ($batch as $item) {
-                    if ($item['entity_type'] !== $entity) {
-                        continue;
-                    }
-                    if (!$this->isEntityExist($this->entityTableNames[$entity], (int) $item['entity_id'], $entity)) {
-                        $assetIds[] = $item['asset_id'];
-                    }
-                }
-                $this->deleteContentAssetLinksByAssetIds->execute($assetIds);
-            }
+        foreach ($this->getEntities->execute() as $entity) {
+            $this->deleteContentAssetLinksByAssetIds->execute($this->getRemovedAssetIds($entity));
         }
     }
 
     /**
      * Verify if product by provided id exists
      *
-     * @param string $entityTableName
-     * @param int $entityId
-     * @param string $entity
+     * @param string $entityType
      */
-    private function isEntityExist(string $entityTableName, int $entityId, string $entity): bool
+    private function getRemovedAssetIds(string $entityType): array
     {
-        $identityField = isset($this->identityFields[$entity]) ?
-                       $this->identityFields[$entity] :
-                       self::DEFAULT_IDENTITY_FIELD;
+        $entityData = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnection();
-        $entityTable = $this->resourceConnection->getTableName($entityTableName);
-
+        $mediaContentTable = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE);
         $select = $connection->select();
-        $select->from($entityTable, [$identityField]);
-        $select->where($identityField . ' = ?', $entityId . '%');
-        return !empty($connection->fetchCol($select));
+        $select->from($mediaContentTable, ['entity_id', 'asset_id', 'entity_type']);
+        $select->joinLeft(
+            ['et' => $entityData->getEntityTable()],
+            'et.' . $entityData->getIdentifierField() . ' = ' . self::MEDIA_CONTENT_ASSET_TABLE . '.entity_id ',
+            [$entityData->getIdentifierField()]
+        );
+        $select->where('et.entity_id IS NULL');
+
+        return $connection->fetchCol($select);
     }
 }
