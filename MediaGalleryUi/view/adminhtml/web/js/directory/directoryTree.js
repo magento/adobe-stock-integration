@@ -38,7 +38,7 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().observe(['activeNode']).initView();
+            this._super().observe(['activeNode', 'jsTreeReloaded']).initView();
 
             this.waitForCondition(
                 function () {
@@ -215,10 +215,7 @@ define([
 
             $(window).on('reload.MediaGallery', function () {
                 this.renderDirectoryTree().then(function () {
-                    var path = this.filterChips().get('applied');
-
-                    this.filterChips().clear();
-                    this.filterChips().set('applied', path);
+                    this.jsTreeReloaded(true);
                     this.firejsTreeEvents();
                 }.bind(this));
             }.bind(this));
@@ -232,6 +229,7 @@ define([
                 var path = $(data.rslt.obj).data('path');
 
                 this.setActiveNodeFilter(path);
+                this.jsTreeReloaded(false);
             }.bind(this));
 
             $(this.directoryTreeSelector).on('loaded.jstree', function () {
@@ -315,7 +313,8 @@ define([
          * @param {String} nodePath
          */
         setActiveNodeFilter: function (nodePath) {
-            if (this.activeNode() === nodePath) {
+
+            if (this.activeNode() === nodePath && !this.jsTreeReloaded()) {
                 this.selectStorageRoot();
             } else {
                 this.selectFolder(nodePath);
@@ -396,13 +395,8 @@ define([
 
             this.getJsonTree().then(function (data) {
                 this.createTree(data);
-                this.overrideMultiselectBehavior();
-                $(this.directoryTreeSelector).on('select_node.jstree', function (element, object) {
-                    var path = $(object.rslt.obj).data('path');
-
-                    this.setActiveNodeFilter(path);
-                }.bind(this));
-
+                this.jsTreeReloaded(true);
+                this.initEvents();
                 deferred.resolve();
             }.bind(this));
 
