@@ -214,10 +214,14 @@ define([
             this.overrideMultiselectBehavior();
 
             $(window).on('reload.MediaGallery', function () {
-                this.renderDirectoryTree().then(function () {
-                    this.jsTreeReloaded(true);
-                    this.firejsTreeEvents();
-                }.bind(this));
+                this.getJsonTree().then(function (data) {
+                    if (!this.isDirectoryExist(data[0])) {
+                        this.renderDirectoryTree().then(function () {
+                            this.jsTreeReloaded(true);
+                            this.firejsTreeEvents();
+                        }.bind(this));
+                    }
+                });
             }.bind(this));
         },
 
