@@ -33,11 +33,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\SelectModifierComposite">
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
         <arguments>
-            <argument name="selectModifiers" xsi:type="array">
-                <item name="isLicensed" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\FilterParametersProvider\IsLicensed</item>
+            <argument name="customJoins" xsi:type="array">
+                <item name="is_licensed" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\IsLicensed</item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
 </config>
