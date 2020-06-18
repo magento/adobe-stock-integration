@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
-use Magento\MediaGalleryUi\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 
 /**
  * Uploads an image to storage
