@@ -216,6 +216,7 @@ define([
             $(window).on('reload.MediaGallery', function () {
                 this.renderDirectoryTree().then(function () {
                     var path = this.filterChips().get('applied');
+
                     this.filterChips().clear();
                     this.filterChips().set('applied', path);
                     this.firejsTreeEvents();
