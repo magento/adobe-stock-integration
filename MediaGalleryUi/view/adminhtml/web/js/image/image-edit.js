@@ -15,7 +15,7 @@ define([
         defaults: {
             template: 'Magento_MediaGalleryUi/image/image-edit',
             modalSelector: '',
-            imageDetailsUrl: '/media_gallery/image/editDetails',
+            imageEditDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
             showAllTags: false,
@@ -41,30 +41,30 @@ define([
         },
 
         /**
-         * Show image details by ID
+         * Get image details by ID
          *
          * @param {String} imageId
          */
-        showImageDetailsById: function (imageId) {
-            // if (_.isUndefined(this.images[imageId])) {
-            //     getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
-            //         this.images[imageId] = imageDetails;
-            //         this.image(this.images[imageId]);
-            //         this.openImageDetailsModal();
-            //     }.bind(this)).fail(function (message) {
-            //         this.addMediaGridMessage('error', message);
-            //     }.bind(this));
-            //
-            //     return;
-            // }
-            //
-            // if (this.image() && this.image().id === imageId) {
-            //     this.openImageDetailsModal();
-            //
-            //     return;
-            // }
-            //
-            // this.image(this.images[imageId]);
+        getImageDetailsById: function (imageId) {
+            if (_.isUndefined(this.images[imageId])) {
+                getDetails(this.imageEditDetailsUrl, imageId).then(function (imageDetails) {
+                    this.images[imageId] = imageDetails;
+                    this.image(this.images[imageId]);
+                    this.openImageDetailsModal();
+                }.bind(this)).fail(function (message) {
+                    this.addMediaGridMessage('error', message);
+                }.bind(this));
+
+                return;
+            }
+
+            if (this.image() && this.image().id === imageId) {
+                this.openImageDetailsModal();
+
+                return;
+            }
+
+            this.image(this.images[imageId]);
             this.openImageDetailsModal();
         },
 

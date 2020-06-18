@@ -17,7 +17,7 @@
 	        </block>
             <block name="image.edit.details" class="Magento\Backend\Block\Template" template="Magento_MediaGalleryUi::image_edit_details_standalone.phtml">
                 <arguments>
-                    <argument name="imageEditDetailsUrl" xsi:type="url" path="media_gallery/image/editDetails"/>
+                    <argument name="imageEditDetailsUrl" xsi:type="url" path="media_gallery/image/details"/>
                 </arguments>
             </block>
         </referenceContainer>

@@ -4,6 +4,25 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="image-edit-details">
-    <h2>Hello</h2>
+<div class="edit-image-details" if="image">
+    <form id="image-edit-details-form">
+        <fieldset class="admin__fieldset">
+            <div class="admin__field admin__field-wide">
+                <label for="image-title" class="admin__field-label">
+                    <span>Name</span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" id="image-title" placeholder="Title" class="admin__control-text required-entry" data-bind="value: image().title" />
+                </div>
+            </div>
+            <div class="admin__field admin__field-wide">
+                <label for="image-path" class="admin__field-label">
+                    <span>Filename</span>
+                </label>
+                <div class="admin__field-control">
+                    <span id="image-path" data-bind="text: image().path"></span>
+                </div>
+            </div>
+        </fieldset>
+    </form>
 </div>

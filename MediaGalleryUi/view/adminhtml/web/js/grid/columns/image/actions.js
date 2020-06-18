@@ -98,7 +98,7 @@ define([
             //get record and identifies if it is from standalone media gallery or not
             var recordId = this.imageModel().getId(record);
 
-            this.mediaGalleryEditDetails().showImageDetailsById(recordId);
+            this.mediaGalleryEditDetails().getImageDetailsById(recordId);
         }
     });
 });
