@@ -92,7 +92,7 @@ class GetOutdatedRelations
             );
             $select->where('et.' . $entityData->getIdentifierField() . ' IS NULL');
             $select->where('mca.entity_type = ?', $entityData->getEavEntityType() ?? $entityData->getEntityTable());
-            $assets = $connection->fetchAssoc($select);
+            $assets = $connection->fetchAll($select);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new CouldNotDeleteException(__('Could not fetch media content links data'), $exception);
