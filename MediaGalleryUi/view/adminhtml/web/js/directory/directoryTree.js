@@ -221,7 +221,7 @@ define([
                             this.firejsTreeEvents();
                         }.bind(this));
                     }
-                });
+                }.bind(this));
             }.bind(this));
         },
 
