@@ -14,7 +14,8 @@ define([
     'Magento_AdobeStockImageAdminUi/js/action/confirmQuota',
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_AdobeStockImageAdminUi/js/confirmation/buyCredits',
-    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus'
+    'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus',
+    'Magento_Ui/js/modal/alert'
 ], function (
     Component,
     uiRegistry,
@@ -27,7 +28,8 @@ define([
     confirmQuotaAction,
     mediaGallery,
     buyCreditsConfirmation,
-    getLicenseStatus
+    getLicenseStatus,
+    uiAlert
 ) {
     'use strict';
 
@@ -446,9 +448,11 @@ define([
                 this.updateGridsAndSelectSavedAsset(destinationPath);
             }.bind(this)).fail(function (error) {
                 if (error) {
-                    this.showErrorMessage(error);
+                    uiAlert({
+                        content: error
+                    });
                 }
-            }.bind(this));
+            });
         },
 
         /**
@@ -510,7 +514,9 @@ define([
                                 }).fail(function (error) {
                                     deferred.reject(error);
                                 });
-                            }.bind(this));
+                            }.bind(this)).fail(function (error) {
+                                deferred.reject(error);
+                            });
                         }
                     }.bind(this)).fail(function (error) {
                         deferred.reject(error);
@@ -549,9 +555,11 @@ define([
                 this.updateGridsAndSelectSavedAsset(destinationPath);
             }.bind(this)).fail(function (error) {
                 if (error) {
-                    this.showErrorMessage(error);
+                    uiAlert({
+                        content: error
+                    });
                 }
-            }.bind(this));
+            });
         },
 
         /**
