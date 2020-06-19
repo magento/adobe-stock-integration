@@ -161,6 +161,9 @@
                 <item name="config" xsi:type="array">
                     <item name="massActionComponent" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.media_gallery_massactions</item>
                 </item>
+            <settings>
+                <sortable>false</sortable>
+            </settings>
               </argument>
         </column>
         <column name="thumbnail_url" component="Magento_MediaGalleryUi/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">

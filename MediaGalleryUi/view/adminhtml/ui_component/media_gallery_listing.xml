@@ -115,7 +115,7 @@
                 </settings>
             </filterRange>
         </filters>
-         <massaction name="media_gallery_massaction" component="Magento_MediaGalleryUi/js/grid/massactions"/>
+        <container name="media_gallery_massactions" component="Magento_MediaGalleryUi/js/grid/massactions"/>
         <paging name="listing_paging">
             <settings>
                 <options>
@@ -162,6 +162,16 @@
                 <item name="containerId" xsi:type="string">media-gallery-masonry-grid</item>
             </item>
         </argument>
+         <column name="massaction_checkbox" component="Magento_MediaGalleryUi/js/grid/checkboxes">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="massActionComponent" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.media_gallery_massactions</item>
+                </item>
+            </argument>
+            <settings>
+                <sortable>false</sortable>
+            </settings>
+        </column>
         <column name="source" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
             <settings>
                 <label translate="true">Source</label>
