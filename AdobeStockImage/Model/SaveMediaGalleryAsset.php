@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Process save action of the media gallery asset.
@@ -61,11 +62,13 @@ class SaveMediaGalleryAsset
     {
         try {
             $fileSize = $this->calculateFileSize($destinationPath);
+            $hashedImageContent = $this->hashImageContent($destinationPath);
             $additionalData = [
                 'id' => null,
                 'path' => $destinationPath,
                 'source' => 'Adobe Stock',
                 'size' => $fileSize,
+                'hash' => $hashedImageContent
             ];
 
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
@@ -85,5 +88,20 @@ class SaveMediaGalleryAsset
     {
         $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
         return $mediaDirectory->stat($mediaDirectory->getAbsolutePath($destinationPath))['size'];
+    }
+
+    /**
+     * Hash image content.
+     *
+     * @param string $destinationPath
+     * @return string
+     * @throws FileSystemException
+     */
+    private function hashImageContent(string $destinationPath): string
+    {
+        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
+        $imageContent = $mediaDirectory->readFile($mediaDirectory->getAbsolutePath($destinationPath));
+        $hashedImageContent = sha1($imageContent);
+        return $hashedImageContent;
     }
 }
