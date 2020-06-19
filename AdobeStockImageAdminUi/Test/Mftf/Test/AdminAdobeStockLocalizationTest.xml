@@ -48,5 +48,8 @@
         <actionGroup ref="AssertAdminAdobeStockImageAttributesLocalizedActionGroup" stepKey="assertKeywordLocalized">
              <argument name="stringToBeVerified" value="{$grabKeyword}"/>
         </actionGroup>
+        <actionGroup ref="AssertAdminAdobeStockImageAttributesLocalizedActionGroup" stepKey="assertCategoryLocalized">
+             <argument name="stringToBeVerified" value="{$grabCategoryText}"/>
+        </actionGroup>
     </test>
 </tests>
