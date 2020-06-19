@@ -115,6 +115,7 @@
                 </settings>
             </filterRange>
         </filters>
+         <massaction name="media_gallery_massaction" component="Magento_MediaGalleryUi/js/grid/massactions"/>
         <paging name="listing_paging">
             <settings>
                 <options>

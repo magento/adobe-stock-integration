@@ -85,12 +85,12 @@ class Delete extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('id');
+        $imageIds = $this->getRequest()->getParam('ids');
 
-        if ($imageId === 0) {
+        if (empty($imageIds) || !is_array($imageIds)) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Image ID is required.'),
+                'message' => __('Image Ids is required and must be type of array.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -99,14 +99,15 @@ class Delete extends Action implements HttpPostActionInterface
         }
 
         try {
-            $assets = $this->getAssetsByIds->execute([$imageId]);
-            /** @var AssetInterface $asset */
-            $asset = current($assets);
-            $this->deleteImage->execute($asset);
+            $this->deleteImage->execute($this->getAssetsByIds->execute($imageIds));
             $responseCode = self::HTTP_OK;
+            $prefix = count($imageIds) > 1 ? 'images' : 'image';
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully removed the image "%image"', ['image' => $asset->getTitle()]),
+                'message' => __(
+                    'You have successfully removed the "%image" ' . $prefix,
+                    ['image' => count($imageIds)]
+                ),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;

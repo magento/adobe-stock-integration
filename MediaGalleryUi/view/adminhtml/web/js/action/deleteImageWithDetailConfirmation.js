@@ -32,7 +32,7 @@ define([
                 }.bind(this)).fail(function () {
                 confirmationContent = confirmationContent.replace('%1', '');
             }).always(function () {
-                deleteImage.deleteImageAction(record, deleteImageUrl, confirmationContent);
+                deleteImage([record], deleteImageUrl, confirmationContent);
             });
         },
 

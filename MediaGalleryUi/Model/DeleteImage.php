@@ -56,17 +56,27 @@ class DeleteImage
      *
      * @see \Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage
      *
-     * @param AssetInterface $asset
-     * @throws LocalizedException
+     * @param AssetInterface[] $asset
      */
-    public function execute(AssetInterface $asset): void
+    public function execute(array $assets): void
     {
-        if ($this->isPathExcluded->execute($asset->getPath())) {
-            throw new LocalizedException(__('Could not delete image: destination directory is restricted.'));
-        }
+        $failedAssets = [];
+        foreach ($assets as $asset) {
+            if ($this->isPathExcluded->execute($asset->getPath())) {
+                $failedAssets[] = $asset->getPath();
+            }
 
-        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $absolutePath = $mediaDirectory->getAbsolutePath($asset->getPath());
-        $this->imagesStorage->deleteFile($absolutePath);
+            $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $absolutePath = $mediaDirectory->getAbsolutePath($asset->getPath());
+            $this->imagesStorage->deleteFile($absolutePath);
+        }
+        if (!empty($failedAssets)) {
+            throw new LocalizedException(
+                __(
+                    'Could not delete "%image": destination directory is restricted.',
+                    ['image' => implode(",", $failedAssets)]
+                )
+            );
+        }
     }
 }
