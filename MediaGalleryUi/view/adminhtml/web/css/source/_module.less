@@ -17,6 +17,7 @@
 @color-media-gallery-buttons-background: #e3e3e3;
 @color-media-gallery-buttons-border: #adadad;
 @color-media-gallery-buttons-text: #514943;
+@color-media-gallery-checkbox-background: #eee; 
 
 & when (@media-common = true) {
 
@@ -41,7 +42,16 @@
     }
 
     .mediagallery-massaction-checkbox {
-        position: relative;
+        position: absolute;
+        margin-top: -280px;
+        margin-left: 15px;
+        width: 40px;
+        height: 40px;
+        background-color: @color-media-gallery-checkbox-background;
+        input[type="checkbox"] {
+            margin-left: 10px;
+            margin-top: 11px;
+        }
     }
     .media-gallery-container {
 
