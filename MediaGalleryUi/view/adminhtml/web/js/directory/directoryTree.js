@@ -105,19 +105,13 @@ define([
                         this.createDirectoryUrl,
                         pathArray
                     ).then(function () {
-                        deferred.resolve({
-                            result: true
-                        });
+                        deferred.resolve(true);
                     });
                 } else {
-                    deferred.resolve({
-                        result: false
-                    });
+                    deferred.resolve(false);
                 }
             } else {
-                deferred.resolve({
-                    result: false
-                });
+                deferred.resolve(false);
             }
 
             return deferred.promise();
@@ -215,12 +209,14 @@ define([
 
             $(window).on('reload.MediaGallery', function () {
                 this.getJsonTree().then(function (data) {
-                    if (!this.isDirectoryExist(data[0])) {
-                        this.renderDirectoryTree().then(function () {
-                            this.jsTreeReloaded(true);
-                            this.firejsTreeEvents();
-                        }.bind(this));
-                    }
+                    this.createFolderIfNotExists(data).then(function (isCreated) {
+                        if (isCreated) {
+                            this.renderDirectoryTree().then(function () {
+                                this.jsTreeReloaded(true);
+                                this.firejsTreeEvents();
+                            }.bind(this));
+                        }
+                    }.bind(this));
                 }.bind(this));
             }.bind(this));
         },
