@@ -11,6 +11,7 @@
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery-synchronization": "*",
         "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-gallery-renditions-api": "*",
         "magento/module-media-content-api": "*",
         "magento/module-cms": "*"
     },

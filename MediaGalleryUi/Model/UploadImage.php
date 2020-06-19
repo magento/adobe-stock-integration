@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 
 /**
  * Uploads an image to storage
@@ -40,21 +41,29 @@ class UploadImage
     private $synchronizeFiles;
 
     /**
+     * @var GenerateRenditionsInterface
+     */
+    private $generateRenditions;
+
+    /**
      * @param Storage $imagesStorage
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param Filesystem $filesystem
      * @param SynchronizeFilesInterface $synchronizeFiles
+     * @param GenerateRenditionsInterface $generateRenditions
      */
     public function __construct(
         Storage $imagesStorage,
         SplFileInfoFactory $splFileInfoFactory,
         Filesystem $filesystem,
-        SynchronizeFilesInterface $synchronizeFiles
+        SynchronizeFilesInterface $synchronizeFiles,
+        GenerateRenditionsInterface $generateRenditions
     ) {
         $this->imagesStorage = $imagesStorage;
         $this->splFileInfoFactory = $splFileInfoFactory;
         $this->filesystem = $filesystem;
         $this->synchronizeFiles = $synchronizeFiles;
+        $this->generateRenditions = $generateRenditions;
     }
 
     /**
@@ -72,6 +81,7 @@ class UploadImage
         }
         $absolutePath = $mediaDirectory->getAbsolutePath($targetFolder);
         $uploadResult = $this->imagesStorage->uploadFile($absolutePath, $type);
+        $this->generateRenditions->execute($uploadResult['path'] . '/' . $uploadResult['file']);
         $this->synchronizeFiles->execute(
             [
                 $this->splFileInfoFactory->create(
