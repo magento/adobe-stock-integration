@@ -160,11 +160,11 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="massActionComponent" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.media_gallery_massactions</item>
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
                 </item>
-            <settings>
-                <sortable>false</sortable>
-            </settings>
-              </argument>
+            </argument>
         </column>
         <column name="thumbnail_url" component="Magento_MediaGalleryUi/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
             <argument name="data" xsi:type="array">

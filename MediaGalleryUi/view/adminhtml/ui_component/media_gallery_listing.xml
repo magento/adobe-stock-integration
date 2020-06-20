@@ -167,10 +167,10 @@
                 <item name="config" xsi:type="array">
                     <item name="massActionComponent" xsi:type="string">media_gallery_listing.media_gallery_listing.listing_top.media_gallery_massactions</item>
                 </item>
+                <item name="sort_by" xsi:type="array">
+                   <item name="excluded" xsi:type="boolean">true</item>
+                </item>
             </argument>
-            <settings>
-                <sortable>false</sortable>
-            </settings>
         </column>
         <column name="source" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
             <settings>
