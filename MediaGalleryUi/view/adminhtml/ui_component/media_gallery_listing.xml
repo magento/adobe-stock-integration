@@ -171,6 +171,9 @@
                    <item name="excluded" xsi:type="boolean">true</item>
                 </item>
             </argument>
+            <settings>
+                <bodyTmpl>Magento_MediaGalleryUi/grid/massactions/checkboxes</bodyTmpl>
+            </settings>
         </column>
         <column name="source" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
             <settings>

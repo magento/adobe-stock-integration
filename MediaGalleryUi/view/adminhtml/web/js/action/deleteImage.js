@@ -17,52 +17,20 @@ define([
                cancelText = $.mage.__('Cancel'),
                deleteImageText = $.mage.__('Delete Image');
 
-        confirmation({
-            title: title,
-            modalClass: 'media-gallery-delete-image-action',
-            content: confirmationContent,
-            buttons: [
-                {
-                    text: cancelText,
-                    class: 'action-secondary action-dismiss',
-
-                    /**
-                     * Close modal
-                     */
-                    click: function () {
-                        this.closeModal();
-                        deferred.resolve();
-                    }
-                },
-                {
-                    text: deleteImageText,
-                    class: 'action-primary action-accept',
-
-                    /**
-                     * Delete Image and close modal
-                     */
-                    click: function () {
-                        sendRequest(records, deleteUrl);
-                        this.closeModal();
-                    }
-                }
-            ]
-        });
-
         /**
          * Send deletion request with redords ids
          *
-         * @param {Array} records
-         * @param {String} deleteUrl
+         * @param {Array} images
+         * @param {String} serviceUrl
          */
-        function sendRequest(records, deleteUrl) {
-            var recordIds = $.map(records, function (record) {
-                return record.id;
+        function sendRequest(images, serviceUrl) {
+            var recordIds = $.map(images, function (image) {
+                return image.id;
             });
 
             $.ajax({
                 type: 'POST',
-                url: deleteUrl,
+                url: serviceUrl,
                 dataType: 'json',
                 showLoader: true,
                 data: {
@@ -123,6 +91,38 @@ define([
             });
         }
 
+        confirmation({
+            title: title,
+            modalClass: 'media-gallery-delete-image-action',
+            content: confirmationContent,
+            buttons: [
+                {
+                    text: cancelText,
+                    class: 'action-secondary action-dismiss',
+
+                    /**
+                     * Close modal
+                     */
+                    click: function () {
+                        this.closeModal();
+                        deferred.resolve();
+                    }
+                },
+                {
+                    text: deleteImageText,
+                    class: 'action-primary action-accept',
+
+                    /**
+                     * Delete Image and close modal
+                     */
+                    click: function () {
+                        sendRequest(records, deleteUrl);
+                        this.closeModal();
+                    }
+                }
+            ]
+        });
+
         return deferred.promise();
-    }
+    };
 });

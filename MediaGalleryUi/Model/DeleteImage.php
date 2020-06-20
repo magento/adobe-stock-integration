@@ -56,7 +56,7 @@ class DeleteImage
      *
      * @see \Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage
      *
-     * @param AssetInterface[] $asset
+     * @param AssetInterface[] $assets
      */
     public function execute(array $assets): void
     {

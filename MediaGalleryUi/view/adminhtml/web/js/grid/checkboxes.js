@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global Base64 */
 define([
     'jquery',
     'Magento_Ui/js/grid/columns/column'
@@ -12,23 +11,44 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'Magento_MediaGalleryUi/grid/massactions/checkboxes',
             modules: {
                 massactions: '${ $.massActionComponent }'
             }
         },
 
         /**
-         * Initializes media gallery massaction component.
+         * Initializes media gallery checkbox component.
          *
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().observe([
-                'selectedItems'
-            ]);
+            this._super().observe(['selectedItems']);
+
+            this.selectedItems({});
 
             return this;
+        },
+
+        /**
+         * Checkbox checked, push ids to the selected ids or remove if the same cheked.
+         */
+        selectItem: function (record) {
+            if (this.isMassAction()) {
+                if (this.selectedItems()[record.id])  {
+                    delete this.selectedItems()[record.id];
+                } else {
+                    this.selectedItems()[record.id] = record.id;
+                }
+            }
+
+            return true;
+        },
+
+        /**
+         * Is current record already checked.
+         */
+        isChecked: function (record) {
+            return this.selectedItems()[record.id];
         },
 
         /**

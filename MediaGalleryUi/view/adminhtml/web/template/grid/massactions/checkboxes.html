@@ -5,5 +5,5 @@
  */
 -->
 <div if="isMassAction()" class="mediagallery-massaction-checkbox">
-  <input type="checkbox" id="$row().id" />
+  <input type="checkbox" data-bind="checked: isChecked($row()), click: function () { return selectItem($row()); }" />
 </div>

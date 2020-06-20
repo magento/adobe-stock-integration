@@ -3,13 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-/* global Base64 */
 define([
     'jquery',
-    'uiComponent',
-    'underscore',
-    'Magento_MediaGalleryUi/js/directory/actions/createDirectory'
-], function ($, Component, layout, _, createDirectory) {
+    'uiComponent'
+], function ($, Component) {
     'use strict';
 
     return Component.extend({
@@ -67,7 +64,7 @@ define([
          * Switch massaction per current event.
          */
         switchMode: function () {
-            this.changePageTItle();
+            this.changePageTitle();
             this.switchButtons();
         },
 
@@ -103,7 +100,7 @@ define([
         /**
          * Change page title per active mode.
          */
-        changePageTItle: function () {
+        changePageTitle: function () {
             var title = $('h1:contains(' + this.standAloneTitle + ')'),
                   titleSelector = title.length === 1 ? title : $('h1:contains(' + this.slidePanelTitle + ')');
 

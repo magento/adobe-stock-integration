@@ -165,6 +165,9 @@
                     </item>
                 </item>
             </argument>
+             <settings>
+                    <bodyTmpl>Magento_MediaGalleryUi/grid/massactions/checkboxes</bodyTmpl>
+             </settings>
         </column>
         <column name="thumbnail_url" component="Magento_MediaGalleryUi/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
             <argument name="data" xsi:type="array">
