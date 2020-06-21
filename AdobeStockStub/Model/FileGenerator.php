@@ -57,13 +57,13 @@ class FileGenerator
     public function generate(array $stubData, int $recordsCount): array
     {
         $files = [];
-        $i = 0;
+        $iterator = 0;
         do {
             $files[] = isEmpty($stubData) ?
                 array_merge($this->getStubFile($iterator), $stubData)
                 : $this->getStubFile($iterator);
-            $i++;
-        } while ($recordsCount > $i);
+            $iterator++;
+        } while ($recordsCount > $iterator);
 
         return $files;
     }
