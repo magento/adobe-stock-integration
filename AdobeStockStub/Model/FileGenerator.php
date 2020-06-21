@@ -10,6 +10,7 @@ namespace Magento\AdobeStockStub\Model;
 
 use Magento\Backend\Model\UrlInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use function PHPUnit\Framework\isEmpty;
@@ -25,12 +26,24 @@ class FileGenerator
     private $storeManager;
 
     /**
+     * @var AssetRepository
+     */
+    private $assetRepository;
+
+    /**
+     * @var string[]
+     */
+    private $stubImages;
+
+    /**
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        AssetRepository $assetRepository
     ) {
         $this->storeManager = $storeManager;
+        $this->assetRepository = $assetRepository;
     }
 
     /**
@@ -46,7 +59,9 @@ class FileGenerator
         $files = [];
         $i = 0;
         do {
-            $files[] = isEmpty($stubData) ? array_merge($this->getStubFile(), $stubData) : $this->getStubFile();
+            $files[] = isEmpty($stubData) ?
+                array_merge($this->getStubFile($iterator), $stubData)
+                : $this->getStubFile($iterator);
             $i++;
         } while ($recordsCount > $i);
 
@@ -57,20 +72,27 @@ class FileGenerator
      * Generate base stub media file.
      *
      * @return array
-     * @throws NoSuchEntityException
      */
-    private function getStubFile(): array
+    private function getStubFile(int $iterator): array
     {
-        /** @var Store $store */
-        $store = $this->storeManager->getStore();
-        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+        $this->setStubImages();
+        switch ($iterator) {
+            case $iterator%2:
+                $imageUrl = $this->stubImages[1];
+                break;
+            case $iterator%3:
+                $imageUrl = $this->stubImages[2];
+                break;
+            default:
+                $imageUrl = $this->stubImages[0];
+        }
         return [
             'id' => rand(1, 150),
             'comp_url' => 'https//adobe.stock.stub',
-            'thumbnail_240_url' => $baseUrl. 'images/stub-image.png',
-            'width' => rand(1, 100),
-            'height' => rand(1, 100),
-            'thumbnail_500_url' => $baseUrl. 'images/stub-image.png',
+            'thumbnail_240_url' => $imageUrl,
+            'width' => rand(1, 10),
+            'height' => rand(1, 10),
+            'thumbnail_500_url' => $imageUrl,
             'title' => 'Adobe Stock Stub file',
             'creator_id' => rand(1, 10),
             'creator_name' => 'Adobe Stock file creator name',
@@ -90,8 +112,22 @@ class FileGenerator
             ],
             'media_type_id' => 1,
             'content_type' => 'image/png',
-            'details_url' => $baseUrl. 'images/stub-image.png',
+            'details_url' => $imageUrl,
             'premium_level_id' => 0,
         ];
+    }
+
+    /**
+     * Set stub images.
+     */
+    private function setStubImages()
+    {
+        if (empty($this->stubImages)) {
+            $this->stubImages = [
+              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/1.png'),
+              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/2.png'),
+              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/3.png')
+            ];
+        }
     }
 }

@@ -45,7 +45,7 @@ class Resolver
      */
     public function doGet(string $url, array $headers): Stream
     {
-        $resource = $this->handler->generateResponse($url);
+        $resource = $this->handler->generateResponse($url, $headers);
         return $this->streamFactory->create($resource);
     }
 

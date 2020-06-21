@@ -13,6 +13,8 @@ namespace Magento\AdobeStockStub\Model;
  */
 class Handler
 {
+    private const INCORRECT_API_KEY_USED_FOR_TESTS = 'blahblahblah';
+
     /**
      * @var FileGenerator
      */
@@ -30,27 +32,46 @@ class Handler
      * Parse URL to get request parameters, handle them and create a response array.
      *
      * @param string $url
+     * @param array $headers
      *
      * @return array []
      */
-    public function generateResponse(string $url): array
+    public function generateResponse(string $url, array $headers): array
     {
+        if (!$this->isApiCredentialsValid($headers)) {
+            return [];
+        }
+
         $requestParameters = $this->parseUrl($url);
         $searchParameters = $requestParameters['search_parameters'];
         switch ($searchParameters) {
             case isset($searchParameters['filters']['colors']) && $searchParameters['filters']['colors'] === 'none':
                 return [];
-            default:
-                $parameters = $searchParameters;
+            case isset($searchParameters['media_id']):
+                $searchParameters['limit'] = 1;
+            default;
         }
-        $stubData = $this->declareResponseFileStub($parameters, $requestParameters['locale']);
-        $filesLimit = (int) $parameters['limit'];
+
+        $stubData = $this->declareResponseFileStub($searchParameters, $requestParameters['locale']);
+        $filesLimit = (int) $searchParameters['limit'];
         $files = $this->fileGenerator->generate($stubData, $filesLimit);
 
         return [
             'nb_results' => $filesLimit,
             'files' => $files
         ];
+    }
+
+    /**
+     * Validate is API credentials valid or not by compare the with the predefined.
+     *
+     * @param array $headers
+     *
+     * @return bool
+     */
+    private function isApiCredentialsValid(array $headers): bool
+    {
+        return $headers['headers']['x-api-key'] !== self::INCORRECT_API_KEY_USED_FOR_TESTS;
     }
 
     /**
@@ -67,6 +88,11 @@ class Handler
             switch ($key) {
                 case $key === 'words':
                     $stub['keywords'] = [['name' => ('ru_RU' === $locale) ? 'Автомобили' : $value]];
+                    $stub['category'] = [
+                        'id' => 1,
+                        'name' => 'Автомобили',
+                        'link' => null,
+                    ];
                     break;
                 default;
             }
