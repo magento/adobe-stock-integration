@@ -69,6 +69,7 @@ define([
                 if (this.massActionMode()) {
                     return;
                 }
+                this.imageModel().selected(null);
                 this.massActionMode(true);
                 this.switchMode();
             }.bind(this));
@@ -77,17 +78,24 @@ define([
                 if (!this.massActionMode()) {
                     return;
                 }
+
+                this.checkbox().selectedItems({});
                 this.massActionMode(false);
                 this.switchMode();
             }.bind(this));
         },
 
         /**
-         * Set selected items. from checkbox component.
+         * Set selected items. activete massaction if selected at least one item.
          */
         setItems: function () {
-            if (this.massActionMode()) {
-                this.selectedItems(this.checkbox().selectedItems());
+            this.selectedItems(this.checkbox().selectedItems());
+
+            if (this.getSelectedCount() >= 1 && !this.massActionMode()) {
+                $(window).trigger('massAction.MediaGallery');
+            } else if (this.getSelectedCount() < 1 && this.massActionMode()) {
+                this.massActionMode(false);
+                this.switchMode();
             }
         },
 
@@ -102,9 +110,8 @@ define([
          * Switch massaction per current event.
          */
         switchMode: function () {
-            this.massactionView().switchView().then(function () {
-                this.handleDeleteAction();
-            }.bind(this));
+            this.massactionView().switchView();
+            this.handleDeleteAction();
         },
 
         /**

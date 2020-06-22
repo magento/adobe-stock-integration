@@ -12,9 +12,15 @@ define([
     return Component.extend({
         defaults: {
             imageItemSelector: '.media-gallery-image-block',
+            pageActionsSelector: '.page-actions-buttons',
             gridSelector: '[data-id="media-gallery-masonry-grid"]',
             originDeleteSelector: null,
+            originCancelEvent: null,
+            cancelMassactionButton: '<button id="cancel" type="button" class="cancel">Cancel</button>',
+            isCancelButtonInserted: false,
             deleteButtonSelector: '#delete_selected',
+            assSelectedButtonSelector: '#add_selected',
+            cancelMassactionButtonSelector: '#cancel',
             standAloneTitle: 'Manage Gallery',
             slidePanelTitle: 'Media Gallery',
             defaultTitle: null,
@@ -44,56 +50,77 @@ define([
         },
 
         /**
-         * Initializes media gallery massaction per active view.
+         * Switch massaction view state per active mode.
          */
         switchView: function () {
-            var deferred = $.Deferred();
-
-            this.changePageTitle().then(function () {
-                this.switchButtons().then(function () {
-                    this.handleItemsUpdates();
-                    deferred.resolve();
-                }.bind(this));
-            }.bind(this));
-
-            return deferred.promise();
+            this.changePageTitle();
+            this.switchButtons();
+            this.handleItemsUpdates();
         },
 
         /**
          * Hide or show buttons per active mode.
          */
         switchButtons: function () {
-            var deferred = $.Deferred();
 
             if (this.massActionMode()) {
-                this.originDeleteSelector = $(this.deleteButtonSelector).clone(true, true);
-
-                $.each(this.buttonsIds, function (key, value) {
-                    $(value).addClass('no-display');
-                });
-
-                $(this.imageItemSelector).css('pointer-events', 'none');
-                $(this.deleteButtonSelector).removeClass('no-display media-gallery-actions-buttons');
-                $(this.deleteButtonSelector).addClass('primary');
-
-                $(this.deleteButtonSelector).off('click').on('click', function () {
-                    $(this.deleteButtonSelector).trigger('massDelete');
-                }.bind(this));
-                deferred.resolve();
+                this.activateMassactionButtonView();
             } else {
-                $(this.deleteButtonSelector).replaceWith(this.originDeleteSelector);
-                $(this.imageItemSelector).css('pointer-events', '');
-
-                $.each(this.buttonsIds, function (key, value) {
-                    $(value).removeClass('no-display');
-                });
-
-                $(this.deleteButtonSelector).addClass('no-display media-gallery-actions-buttons');
-                $(this.deleteButtonSelector).removeClass('primary');
-                deferred.resolve();
+                this.revertButtonsToDefaultView();
             }
+        },
 
-            return deferred.promise();
+        /**
+         * Sets buttons to default regular -mode view.
+         */
+        revertButtonsToDefaultView: function () {
+            $(this.deleteButtonSelector).replaceWith(this.originDeleteSelector);
+
+            if (!this.isCancelButtonInserted) {
+                $(this.cancelMassactionButtonSelector).replaceWith(this.originCancelEvent);
+            } else {
+                $(this.cancelMassactionButtonSelector).addClass('no-display');
+            }
+            $(this.imageItemSelector).css('pointer-events', '');
+
+            $.each(this.buttonsIds, function (key, value) {
+                $(value).removeClass('no-display');
+            });
+
+            $(this.assSelectedButtonSelector).addClass('no-display');
+            $(this.deleteButtonSelector).addClass('no-display media-gallery-actions-buttons');
+            $(this.deleteButtonSelector).removeClass('primary');
+        },
+
+        /**
+          * Activate mass action buttons view
+          */
+        activateMassactionButtonView: function () {
+            this.originDeleteSelector = $(this.deleteButtonSelector).clone(true, true);
+            this.originCancelEvent = $(this.cancelMassactionButton).clone(true);
+
+            $.each(this.buttonsIds, function (key, value) {
+                $(value).addClass('no-display');
+            });
+
+            $(this.imageItemSelector).css('pointer-events', 'none');
+            $(this.deleteButtonSelector).removeClass('no-display media-gallery-actions-buttons');
+            $(this.deleteButtonSelector).addClass('primary');
+
+            if (!$(this.cancelMassactionButtonSelector).length) {
+                $(this.pageActionsSelector).append(this.cancelMassactionButton);
+                this.isCancelButtonInserted = true;
+            } else {
+                $(this.cancelMassactionButtonSelector).replaceWith(this.cancelMassactionButton);
+            }
+            $(this.cancelMassactionButtonSelector).on('click', function () {
+                $(window).trigger('terminateMassAction.MediaGallery');
+            });
+
+            $(this.deleteButtonSelector).off('click').on('click', function () {
+                $(this.deleteButtonSelector).trigger('massDelete');
+            }.bind(this));
+
         },
 
         /**

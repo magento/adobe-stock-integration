@@ -10,14 +10,6 @@ define([
     'use strict';
 
     return Column.extend({
-        defaults: {
-            modules: {
-                massactions: '${ $.massActionComponent }'
-            },
-            listens: {
-                '${ $.massActionComponent }:massActionMode': 'setMode'
-            }
-        },
 
         /**
          * Initializes media gallery checkbox component.
@@ -33,28 +25,19 @@ define([
         },
 
         /**
-         * Sets current mode
-         */
-        setMode: function () {
-            this.isMassActionMode(this.massactions().massActionMode());
-        },
-
-        /**
          * Checkbox checked, push ids to the selected ids or remove if the same cheked.
          */
         selectItem: function (record) {
             var items;
 
-            if (this.isMassAction()) {
-                items = this.selectedItems();
+            items = this.selectedItems();
 
-                if (this.selectedItems()[record.id])  {
-                    delete items[record.id];
-                    this.selectedItems(items);
-                } else {
-                    items[record.id] = record.id;
-                    this.selectedItems(items);
-                }
+            if (this.selectedItems()[record.id])  {
+                delete items[record.id];
+                this.selectedItems(items);
+            } else {
+                items[record.id] = record.id;
+                this.selectedItems(items);
             }
 
             return true;
@@ -65,13 +48,6 @@ define([
          */
         isChecked: function (record) {
             return this.selectedItems()[record.id];
-        },
-
-        /**
-         * Is massaction mod active.
-         */
-        isMassAction: function () {
-            return this.isMassActionMode();
         }
     });
 });
