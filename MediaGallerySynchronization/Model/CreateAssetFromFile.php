@@ -15,6 +15,8 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Create media asset object based on the file information
@@ -69,6 +71,8 @@ class CreateAssetFromFile
      *
      * @param \SplFileInfo $file
      * @return AssetInterface
+     * @throws FileSystemException
+     * @throws LocalizedException
      * @throws ValidatorException
      */
     public function execute(\SplFileInfo $file)
@@ -76,6 +80,8 @@ class CreateAssetFromFile
         $path = $file->getPath() . '/' . $file->getFileName();
 
         [$width, $height] = getimagesize($path);
+
+        $hash = $this->getHashImageContent($path);
 
         $asset = $this->getAsset($path);
         return $this->assetFactory->create(
@@ -87,6 +93,7 @@ class CreateAssetFromFile
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
                 'width' => $width,
                 'height' => $height,
+                'hash' => $hash,
                 'size' => $file->getSize(),
                 'contentType' => $asset ? $asset->getContentType() : 'image/' . $file->getExtension(),
                 'source' => $asset ? $asset->getSource() : 'Local'
@@ -98,8 +105,9 @@ class CreateAssetFromFile
      * Returns asset if asset already exist by provided path
      *
      * @param string $path
-     * @return null|AssetInterface
+     * @return AssetInterface|null
      * @throws ValidatorException
+     * @throws LocalizedException
      */
     private function getAsset(string $path): ?AssetInterface
     {
@@ -136,5 +144,21 @@ class CreateAssetFromFile
             $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
+    }
+
+    /**
+     * Get hash image content.
+     *
+     * @param string $path
+     * @return string
+     * @throws FileSystemException
+     * @throws ValidatorException
+     */
+    private function getHashImageContent(string $path): string
+    {
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $imageContent = $mediaDirectory->readFile($this->getRelativePath($path));
+        $hashedImageContent = sha1($imageContent);
+        return $hashedImageContent;
     }
 }
