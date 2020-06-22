@@ -84,12 +84,12 @@ class SaveMediaGalleryAssetTest extends TestCase
         $document = $this->createMock(Document::class);
         $destinationPath = 'path';
 
-        $this->filesystem->expects($this->once())
+        $this->filesystem->expects($this->atLeastOnce())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->mediaDirectory->expects($this->once())
+        $this->mediaDirectory->expects($this->atLeastOnce())
             ->method('getAbsolutePath')
             ->with($destinationPath)
             ->willReturn('root/pub/media/catalog/test-image.jpeg');
@@ -99,11 +99,18 @@ class SaveMediaGalleryAssetTest extends TestCase
             ->method('stat')
             ->willReturn(['size' => $fileSize]);
 
+        $hash = 'hash';
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('readFile')
+            ->willReturn($hash);
+
         $additionalData = [
             'id' => null,
             'path' => $destinationPath,
             'source' => 'Adobe Stock',
             'size' => $fileSize,
+            'hash' => sha1($hash)
         ];
         $mediaGalleryAssetMock = $this->createMock(Asset::class);
         $this->converter->expects($this->once())
