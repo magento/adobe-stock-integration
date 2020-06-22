@@ -53,7 +53,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * Get target environment test.
+     * Get rendition image width test.
      */
     public function testGetWidth(): void
     {
@@ -64,7 +64,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * Get product name test.
+     * Get rendition image height test.
      */
     public function testGetHeight(): void
     {
