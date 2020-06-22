@@ -45,21 +45,64 @@ class Handler
         $requestParameters = $this->parseUrl($url);
         $searchParameters = $requestParameters['search_parameters'];
         switch ($searchParameters) {
-            case isset($searchParameters['filters']['colors']) && $searchParameters['filters']['colors'] === 'none':
+            case $this->userChoseAndApplyNonValidFilter($searchParameters):
                 return [];
-            case isset($searchParameters['media_id']):
+                break;
+            case $this->searchForUnlicensedImage($searchParameters):
                 $searchParameters['limit'] = 1;
+                break;
+            case $this->searchForSecondSymbols($searchParameters):
+                return [];
+                break;
             default;
         }
 
         $stubData = $this->declareResponseFileStub($searchParameters, $requestParameters['locale']);
         $filesLimit = (int) $searchParameters['limit'];
-        $files = $this->fileGenerator->generate($stubData, $filesLimit);
+        $sortOrder = isset($searchParameters['order']) ? $searchParameters['order'] : '';
+        $files = $this->fileGenerator->generate($stubData, $filesLimit, $sortOrder);
 
         return [
             'nb_results' => $filesLimit,
             'files' => $files
         ];
+    }
+
+    /**
+     * Search by not exists color test.
+     *
+     * @param array $searchParameters
+     *
+     * @return bool
+     */
+    private function userChoseAndApplyNonValidFilter(array $searchParameters): bool
+    {
+        return isset($searchParameters['filters']['colors']) && $searchParameters['filters']['colors'] === 'none';
+    }
+
+    /**
+     * Search by the image id test.
+     *
+     * @param array $searchParameters
+     *
+     * @return bool
+     */
+    private function searchForUnlicensedImage(array $searchParameters): bool
+    {
+        return isset($searchParameters['media_id']);
+    }
+
+    /**
+     * Search for images by using second symbols test.
+     *
+     * @param array $searchParameters
+     *
+     * @return bool
+     */
+    private function searchForSecondSymbols( array $searchParameters): bool
+    {
+        return isset($searchParameters['words']) && $searchParameters['words']
+        === '} { ] [ ) ( ~ ! @ # $ % ^ &amp; ` | \ : &quot; ; \' &lt; &gt; ? , . ⁄ -+';
     }
 
     /**

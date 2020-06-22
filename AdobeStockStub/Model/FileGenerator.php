@@ -51,10 +51,11 @@ class FileGenerator
      *
      * @param array $stubData
      * @param int $recordsCount
+     * @param string $sortOrder
      *
      * @return array
      */
-    public function generate(array $stubData, int $recordsCount): array
+    public function generate(array $stubData, int $recordsCount, string $sortOrder = ''): array
     {
         $files = [];
         $iterator = 0;
@@ -64,6 +65,13 @@ class FileGenerator
                 : $this->getStubFile($iterator);
             $iterator++;
         } while ($recordsCount > $iterator);
+
+        if ($sortOrder) {
+            switch($sortOrder) {
+                case $sortOrder === 'creation':
+                    asort($files);
+            }
+        }
 
         return $files;
     }
