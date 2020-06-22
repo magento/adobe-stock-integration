@@ -11,7 +11,7 @@ define([
 ], function ($, _, urlBuilder, messages, confirmation) {
     'use strict';
 
-    return function (recordIds, deleteUrl, confirmationContent) {
+    return function (ids, deleteUrl, confirmationContent) {
         var deferred = $.Deferred(),
                title = $.mage.__('Delete image'),
                cancelText = $.mage.__('Cancel'),
@@ -114,7 +114,7 @@ define([
                      * Delete Image and close modal
                      */
                     click: function () {
-                        sendRequest(recordIds, deleteUrl);
+                        sendRequest(ids, deleteUrl);
                         this.closeModal();
                     }
                 }
