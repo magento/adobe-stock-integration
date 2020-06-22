@@ -12,4 +12,39 @@
             <argument name="httpClient" xsi:type="object">Magento\AdobeStockStub\Model\HttpClient</argument>
         </arguments>
     </type>
+    <type name="Magento\AdobeStockStub\Model\FileGenerator">
+        <arguments>
+            <argument name="fileAttributeGenerators" xsi:type="array">
+                <item name="id" xsi:type="object">Magento\AdobeStockStub\Model\Generator\Id</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\AdobeStockStub\Model\Handler">
+        <arguments>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="nonExistedColor" xsi:type="array">
+                    <item name="validator" xsi:type="object">Magento\AdobeStockStub\Model\RequestValidator\NonExitedColor</item>
+                    <item name="modifier" xsi:type="object">Magento\AdobeStockStub\Model\Modifier\EmptyData</item>
+                </item>
+                <item name="nonExistedKeyword" xsi:type="array">
+                    <item name="validator" xsi:type="object">Magento\AdobeStockStub\Model\RequestValidator\NonExistedKeyword</item>
+                    <item name="modifier" xsi:type="object">Magento\AdobeStockStub\Model\Modifier\EmptyData</item>
+                </item>
+                <item name="searchForSecondSymbols" xsi:type="array">
+                    <item name="validator" xsi:type="object">Magento\AdobeStockStub\Model\RequestValidator\SearchForSecondSymbols</item>
+                    <item name="modifier" xsi:type="object">Magento\AdobeStockStub\Model\Modifier\EmptyData</item>
+                </item>
+                <item name="searchForLocalizedImageAttributes" xsi:type="array">
+                    <item name="validator" xsi:type="object">Magento\AdobeStockStub\Model\RequestValidator\SearchForLocalizedImageAttributes</item>
+                    <item name="modifier" xsi:type="object">Magento\AdobeStockStub\Model\Modifier\LocalizeImageAttributes</item>
+                </item>
+            </argument>
+            <argument name="headerValidators" xsi:type="array">
+                <item name="isApiCredentialsInvalid" xsi:type="array">
+                    <item name="validator" xsi:type="object">Magento\AdobeStockStub\Model\HeaderValidator\IsApiCredentialsInvalid</item>
+                    <item name="modifier" xsi:type="object">Magento\AdobeStockStub\Model\Modifier\EmptyData</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

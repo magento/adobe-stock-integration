@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model;
 
+use Magento\AdobeStockStub\Model\HeaderValidator\HeaderValidatorInterface;
+use Magento\AdobeStockStub\Model\RequestValidator\RequestValidatorInterface;
+
 /**
  * Handle request parameters to instruct response generator.
  */
@@ -21,11 +24,28 @@ class Handler
     private $fileGenerator;
 
     /**
-     * @param FileGenerator $fileGenerator
+     * @var array
      */
-    public function __construct(FileGenerator $fileGenerator)
-    {
+    private $requestValidators;
+
+    /**
+     * @var array
+     */
+    private $headerValidators;
+
+    /**
+     * @param FileGenerator $fileGenerator
+     * @param array $requestValidators
+     * @param array $headerValidators
+     */
+    public function __construct(
+        FileGenerator $fileGenerator,
+        array $requestValidators,
+        array $headerValidators
+    ) {
         $this->fileGenerator = $fileGenerator;
+        $this->requestValidators = $requestValidators;
+        $this->headerValidators = $headerValidators;
     }
 
     /**
@@ -38,34 +58,30 @@ class Handler
      */
     public function generateResponse(string $url, array $headers): array
     {
-        if (!$this->isApiCredentialsValid($headers)) {
-            return [];
+        $modifiers = [];
+        foreach ($this->requestValidators as $requestValidator) {
+            if (
+                $requestValidator['validator'] instanceof RequestValidatorInterface
+                && $requestValidator['validator']->validate($url)
+            ) {
+                $modifiers[] = $requestValidator['modifier'];
+            }
         }
 
-        $requestParameters = $this->parseUrl($url);
-        $searchParameters = $requestParameters['search_parameters'];
-        switch ($searchParameters) {
-            case $this->userChoseAndApplyNonValidFilter($searchParameters):
-                return [];
-                break;
-            case $this->searchForUnlicensedImage($searchParameters):
-                $searchParameters['limit'] = 1;
-                break;
-            case $this->searchForSecondSymbols($searchParameters):
-                return [];
-                break;
-            default;
+        foreach ($this->headerValidators as $headerValidator) {
+            if (
+                $headerValidator['validator'] instanceof HeaderValidatorInterface
+                && $headerValidator['validator']->validate($headers)
+            ) {
+                $modifiers[] = $headerValidator['modifier'];
+            }
         }
 
-        $stubData = $this->declareResponseFileStub($searchParameters, $requestParameters['locale']);
-        $filesLimit = (int) $searchParameters['limit'];
-        $sortOrder = isset($searchParameters['order']) ? $searchParameters['order'] : '';
-        $files = $this->fileGenerator->generate($stubData, $filesLimit, $sortOrder);
+        //@TODO get limit from the request URL for filesAmount
+        $files = $this->fileGenerator->generate($modifiers, 3);
 
-        return [
-            'nb_results' => $filesLimit,
-            'files' => $files
-        ];
+        //@TODO implement response factory for files
+        return [];
     }
 
     /**
@@ -142,23 +158,5 @@ class Handler
         }
 
         return $stub;
-    }
-
-    /**
-     * Parse request URL to get filter parameters.
-     *
-     * @param string $url
-     *
-     * @return array|null
-     */
-    private function parseUrl(string $url): ?array
-    {
-        $query = [];
-        $queryString = parse_url($url, PHP_URL_QUERY);
-        if (null !== $queryString) {
-            parse_str($queryString, $query);
-        }
-
-        return $query;
     }
 }
