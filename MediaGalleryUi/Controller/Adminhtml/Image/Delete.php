@@ -102,12 +102,14 @@ class Delete extends Action implements HttpPostActionInterface
             $assets = $this->getAssetsByIds->execute($imageIds);
             $this->deleteImage->execute($assets);
             $responseCode = self::HTTP_OK;
-            $message = count($imageIds) > 1 ? 'assets have been' : ' asset "%assetName" has been';
+            $message = count($imageIds) > 1 ? 'assets have been' : ' asset ' . $asset->getTitle() . ' has been';
             $responseContent = [
                 'success' => true,
                 'message' => __(
-                    'The ' .  $message . ' successfully deleted',
-                    ['assetName' => current($assets)->getTitle()]
+                    'The %message successfully deleted',
+                    [
+                        'message' => $message
+                    ]
                 ),
             ];
         } catch (LocalizedException $exception) {

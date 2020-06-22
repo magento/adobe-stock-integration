@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<div if="isMassAction()" class="mediagallery-massaction-items-count">
+<div data-bind="visible: massActionMode()" class="mediagallery-massaction-items-count">
   <div class="selected_count_text">(<!--ko text: getSelectedCount()--><!--/ko--> Selected) </div>
 </div>

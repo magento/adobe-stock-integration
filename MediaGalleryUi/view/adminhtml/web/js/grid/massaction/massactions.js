@@ -18,18 +18,16 @@ define([
                 checkbox: '${ $.checkboxComponentName }',
                 imageModel: '${ $.imageModelName }'
             },
-            imports: {
-                selectedItems: '${ $.checkboxComponentName }:selectedItems'
-            },
-            listens: {
-                selectedItems: 'setItems'
-            },
             viewConfig: [
                 {
                     component: 'Magento_MediaGalleryUi/js/grid/massaction/massactionView',
-                    name: '${ $.name }_view'
+                    name: '${ $.name }_view',
+                    provider: '${ $.provider }'
                 }
             ],
+            listens: {
+                '${ $.checkboxComponentName }:selectedItems': 'setItems'
+            },
             exports: {
                 massActionMode: '${ $.name }_view:massActionMode'
             }
@@ -45,9 +43,9 @@ define([
                 'selectedItems',
                 'massActionMode'
             ]);
+            this.selectedItems({});
             this.initView();
             this.initEvents();
-            this.selectedItems({});
 
             return this;
         },
@@ -61,13 +59,6 @@ define([
             Layout(this.viewConfig);
 
             return this;
-        },
-
-        /**
-         * Is massaction mode active.
-         */
-        isMassAction: function () {
-            return this.massActionMode() || false;
         },
 
         /**
@@ -95,7 +86,7 @@ define([
          * Set selected items. from checkbox component.
          */
         setItems: function () {
-            if (this.isMassAction()) {
+            if (this.massActionMode()) {
                 this.selectedItems(this.checkbox().selectedItems());
             }
         },

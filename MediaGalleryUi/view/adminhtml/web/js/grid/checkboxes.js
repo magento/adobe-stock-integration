@@ -13,6 +13,9 @@ define([
         defaults: {
             modules: {
                 massactions: '${ $.massActionComponent }'
+            },
+            listens: {
+                '${ $.massActionComponent }:massActionMode': 'setMode'
             }
         },
 
@@ -22,7 +25,7 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().observe(['selectedItems']);
+            this._super().observe(['selectedItems', 'isMassActionMode']);
 
             this.selectedItems({});
 
@@ -30,16 +33,28 @@ define([
         },
 
         /**
+         * Sets current mode
+         */
+        setMode: function () {
+            this.isMassActionMode(this.massactions().massActionMode());
+        },
+
+        /**
          * Checkbox checked, push ids to the selected ids or remove if the same cheked.
          */
         selectItem: function (record) {
+            var items;
+
             if (this.isMassAction()) {
+                items = this.selectedItems();
+
                 if (this.selectedItems()[record.id])  {
-                    delete this.selectedItems()[record.id];
+                    delete items[record.id];
+                    this.selectedItems(items);
                 } else {
-                    this.selectedItems()[record.id] = record.id;
+                    items[record.id] = record.id;
+                    this.selectedItems(items);
                 }
-                this.massactions().selectedItems(this.selectedItems());
             }
 
             return true;
@@ -56,7 +71,7 @@ define([
          * Is massaction mod active.
          */
         isMassAction: function () {
-            return this.massactions().isMassAction();
+            return this.isMassActionMode();
         }
     });
 });
