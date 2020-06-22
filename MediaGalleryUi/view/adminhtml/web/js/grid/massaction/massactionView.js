@@ -16,7 +16,7 @@ define([
             standAloneTitle: 'Manage Gallery',
             slidePanelTitle: 'Media Gallery',
             defaultTitle: null,
-            bittonsIds: [
+            buttonsIds: [
                 '#delete_folder',
                 '#create_folder',
                 '#upload_image',

@@ -64,7 +64,7 @@ define([
         },
 
         /**
-         * Is massaction mod active.
+         * Is massaction mode active.
          */
         isMassAction: function () {
             return this.massActionMode() || false;
