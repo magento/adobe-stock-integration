@@ -24,7 +24,8 @@ define([
                 '#create_folder',
                 '#upload_image',
                 '#search_adobe_stock',
-                '.three-dots'
+                '.three-dots',
+                '#add_selected'
             ],
             massactionModeTitle: 'Select Images to Delete'
         },
