@@ -102,7 +102,6 @@
                 </settings>
             </filterRange>
         </filters>
-        <container name="media_gallery_massactions" component="Magento_MediaGalleryUi/js/grid/massactions"/>
         <paging name="listing_paging">
             <settings>
                 <options>
@@ -138,6 +137,11 @@
                 </item>
             </argument>
         </container>
+        <container name="media_gallery_massactions"
+                   displayArea="sorting"
+                   sortOrder="10"
+                   component="Magento_MediaGalleryUi/js/grid/massactions"
+                   template="Magento_MediaGalleryUi/grid/massactions/count" />
     </listingToolbar>
     <container name="media_gallery_directories"
                class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"

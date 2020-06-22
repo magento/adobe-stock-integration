@@ -28,6 +28,7 @@ define([
                 'massActionMode'
             ]);
             this.initEvents();
+            this.selectedItems({});
 
             return this;
         },
@@ -61,6 +62,13 @@ define([
         },
 
         /**
+          * Retirn total selected items.
+          */
+        getSelectedCount: function () {
+            return Object.keys(this.selectedItems()).length;
+        },
+
+        /**
          * Switch massaction per current event.
          */
         switchMode: function () {
@@ -76,7 +84,8 @@ define([
                 '#delete_folder',
                 '#create_folder',
                 '#upload_image',
-                '#search_adobe_stock'
+                '#search_adobe_stock',
+                '.three-dots'
             ],
                 deleteButtonSelector = '#delete_selected';
 

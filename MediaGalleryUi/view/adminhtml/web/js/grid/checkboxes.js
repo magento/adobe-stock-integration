@@ -39,6 +39,7 @@ define([
                 } else {
                     this.selectedItems()[record.id] = record.id;
                 }
+                this.massactions().selectedItems(this.selectedItems());
             }
 
             return true;
