@@ -140,8 +140,15 @@
         <container name="media_gallery_massactions"
                    displayArea="sorting"
                    sortOrder="10"
-                   component="Magento_MediaGalleryUi/js/grid/massactions"
-                   template="Magento_MediaGalleryUi/grid/massactions/count" />
+                   component="Magento_MediaGalleryUi/js/grid/massaction/massactions"
+                   template="Magento_MediaGalleryUi/grid/massactions/count" >
+              <argument name="data" xsi:type="array">
+                  <item name="config" xsi:type="array">
+                      <item name="checkboxComponentName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.massaction_checkbox</item>
+                       <item name="imageModelName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url</item>
+                  </item>
+            </argument>
+        </container>
     </listingToolbar>
     <container name="media_gallery_directories"
                class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"

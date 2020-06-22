@@ -11,7 +11,7 @@ define([
 ], function ($, _, urlBuilder, messages, confirmation) {
     'use strict';
 
-    return function (records, deleteUrl, confirmationContent) {
+    return function (recordIds, deleteUrl, confirmationContent) {
         var deferred = $.Deferred(),
                title = $.mage.__('Delete image'),
                cancelText = $.mage.__('Cancel'),
@@ -20,13 +20,10 @@ define([
         /**
          * Send deletion request with redords ids
          *
-         * @param {Array} images
+         * @param {Array} recordIds
          * @param {String} serviceUrl
          */
-        function sendRequest(images, serviceUrl) {
-            var recordIds = $.map(images, function (image) {
-                return image.id;
-            });
+        function sendRequest(recordIds, serviceUrl) {
 
             $.ajax({
                 type: 'POST',
@@ -34,6 +31,7 @@ define([
                 dataType: 'json',
                 showLoader: true,
                 data: {
+                    'form_key': window.FORM_KEY,
                     'ids': recordIds
                 },
                 context: this,
@@ -116,7 +114,7 @@ define([
                      * Delete Image and close modal
                      */
                     click: function () {
-                        sendRequest(records, deleteUrl);
+                        sendRequest(recordIds, deleteUrl);
                         this.closeModal();
                     }
                 }
