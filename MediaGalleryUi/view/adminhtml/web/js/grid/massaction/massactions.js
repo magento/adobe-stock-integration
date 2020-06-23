@@ -51,10 +51,10 @@ define([
         },
 
         /**
-        * Initialize child components
-        *
-        * @returns {Object}
-        */
+         * Initialize child components
+         *
+         * @returns {Object}
+         */
         initView: function () {
             Layout(this.viewConfig);
 
@@ -100,8 +100,8 @@ define([
         },
 
         /**
-          * Return total selected items.
-          */
+         * Return total selected items.
+         */
         getSelectedCount: function () {
             return Object.keys(this.selectedItems()).length;
         },

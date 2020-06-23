@@ -104,7 +104,7 @@ class Delete extends Action implements HttpPostActionInterface
             $responseCode = self::HTTP_OK;
             $message = count($imageIds) > 1 ?
                      'assets have been' :
-                     ' asset ' . current($assets)->getTitle() . ' has been';
+                     ' asset "' . current($assets)->getTitle() . '" has been';
             $responseContent = [
                 'success' => true,
                 'message' => __(

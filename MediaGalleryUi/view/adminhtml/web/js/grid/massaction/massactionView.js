@@ -124,7 +124,7 @@ define([
         },
 
         /**
-         * Keep buttons hidden on massaction mod state when grid updated.
+         * Keep buttons hidden on massaction mode state when grid updated.
          */
         handleItemsUpdates: function () {
             document.querySelectorAll(this.gridSelector)[0].addEventListener('DOMSubtreeModified', function () {
