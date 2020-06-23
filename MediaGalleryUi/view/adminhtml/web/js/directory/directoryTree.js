@@ -19,6 +19,7 @@ define([
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
+            jsTreeReloaded: null,
             modules: {
                 directories: '${ $.name }_directories',
                 filterChips: '${ $.filterChipsProvider }'
@@ -75,6 +76,15 @@ define([
             }.bind(this));
 
             return deferred.promise();
+        },
+
+        /**
+         * Set jstree reloaded
+         *
+         * @param {Boolean} value
+         */
+        setJsTreeReloaded: function (value) {
+            this.jsTreeReloaded = value;
         },
 
         /**
@@ -212,9 +222,11 @@ define([
                     this.createFolderIfNotExists(data).then(function (isCreated) {
                         if (isCreated) {
                             this.renderDirectoryTree().then(function () {
-                                this.jsTreeReloaded(true);
+                                this.setJsTreeReloaded(true);
                                 this.firejsTreeEvents();
                             }.bind(this));
+                        } else {
+                            this.checkChipFiltersState();
                         }
                     }.bind(this));
                 }.bind(this));
@@ -229,7 +241,7 @@ define([
                 var path = $(data.rslt.obj).data('path');
 
                 this.setActiveNodeFilter(path);
-                this.jsTreeReloaded(false);
+                this.setJsTreeReloaded(false);
             }.bind(this));
 
             $(this.directoryTreeSelector).on('loaded.jstree', function () {
@@ -314,7 +326,7 @@ define([
          */
         setActiveNodeFilter: function (nodePath) {
 
-            if (this.activeNode() === nodePath && !this.jsTreeReloaded()) {
+            if (this.activeNode() === nodePath && !this.jsTreeReloaded) {
                 this.selectStorageRoot();
             } else {
                 this.selectFolder(nodePath);
@@ -395,7 +407,7 @@ define([
 
             this.getJsonTree().then(function (data) {
                 this.createTree(data);
-                this.jsTreeReloaded(true);
+                this.setJsTreeReloaded(true);
                 this.initEvents();
                 deferred.resolve();
             }.bind(this));
