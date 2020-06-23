@@ -5,5 +5,5 @@
  */
 -->
 <div class="mediagallery-massaction-checkbox">
-  <input type="checkbox" data-bind="checked: isChecked($row()), click: function () { return selectItem($row()); }" />
+  <input type="checkbox" data-bind="attr: { 'data-ui-id': $row().title }, checked: isChecked($row()), click: function () { return selectItem($row()); }" />
 </div>
