@@ -7,7 +7,7 @@
 <div class="edit-image-details" if="image">
     <form id="image-edit-details-form">
         <fieldset class="admin__fieldset">
-            <div class="admin__field admin__field-wide">
+            <div class="admin__field _required">
                 <label for="image-title" class="admin__field-label">
                     <span>Name</span>
                 </label>
@@ -15,12 +15,23 @@
                     <input type="text" id="image-title" placeholder="Title" class="admin__control-text required-entry" data-bind="value: image().title" />
                 </div>
             </div>
-            <div class="admin__field admin__field-wide">
+            <div class="admin__field">
                 <label for="image-path" class="admin__field-label">
                     <span>Filename</span>
                 </label>
-                <div class="admin__field-control">
+                <div class="admin__field-control path-display">
                     <span id="image-path" data-bind="text: image().path"></span>
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="image-description" class="admin__field-label">
+                    <span>Description</span>
+                </label>
+                <div class="admin__field-control">
+                    <textarea id="image-description"
+                              class="admin__control-textarea"
+                              rows="7" cols="80"
+                              data-bind="value: image().description"></textarea>
                 </div>
             </div>
         </fieldset>

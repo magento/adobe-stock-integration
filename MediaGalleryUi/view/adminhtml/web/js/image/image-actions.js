@@ -65,7 +65,7 @@ define([
         },
 
         /**
-         * Delete image action
+         * Save image action
          */
         saveImageAction: function () {
             // save action here

@@ -14,8 +14,10 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGallery\Model\ResourceModel\SaveAssets;
+use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
+use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
 class SaveDetails extends Action implements HttpPostActionInterface
@@ -35,6 +37,16 @@ class SaveDetails extends Action implements HttpPostActionInterface
     private $saveAssets;
 
     /**
+     * @var SaveAssetsKeywordsInterface
+     */
+    private $saveAssetKeywords;
+
+    /**
+     * @var AssetKeywordsInterfaceFactory
+     */
+    private $assetKeywordsFactory;
+
+    /**
      * @var GetAssetsByIdsInterface
      */
     private $getAssetsByIds;
@@ -49,18 +61,24 @@ class SaveDetails extends Action implements HttpPostActionInterface
      *
      * @param Context $context
      * @param SaveAssets $saveAssets
+     * @param SaveAssetsKeywordsInterface $saveAssetKeywords
+     * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
      * @param GetAssetsByIdsInterface $getAssetsByIds
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         SaveAssets $saveAssets,
+        SaveAssetsKeywordsInterface $saveAssetKeywords,
+        AssetKeywordsInterfaceFactory $assetKeywordsFactory,
         GetAssetsByIdsInterface $getAssetsByIds,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
         $this->saveAssets = $saveAssets;
+        $this->saveAssetKeywords = $saveAssetKeywords;
+        $this->assetKeywordsFactory = $assetKeywordsFactory;
         $this->getAssetsByIds = $getAssetsByIds;
         $this->logger = $logger;
     }
@@ -73,6 +91,9 @@ class SaveDetails extends Action implements HttpPostActionInterface
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $imageId = (int) $this->getRequest()->getParam('id');
+        $imageTitle = $this->getRequest()->getParam('title');
+        $imageDescription = $this->getRequest()->getParam('description');
+        $imageKeywords = (array) $this->getRequest()->getParam('keywords');
 
         if ($imageId === 0) {
             $responseContent = [
@@ -86,9 +107,17 @@ class SaveDetails extends Action implements HttpPostActionInterface
         }
 
         try {
-            $assets = $this->getAssetsByIds->execute([$imageId]);
-            $asset = current($assets);
+            $asset = current($this->getAssetsByIds->execute([$imageId]));
+            $asset->setTitle($imageTitle);
+            $asset->setDescription($imageDescription);
             $this->saveAssets->execute($asset);
+
+            $assetKeywords = $this->assetKeywordsFactory->create([
+                'assetId' => $imageId,
+                'keywords' => $imageKeywords
+            ]);
+            $this->saveAssetKeywords->execute([$assetKeywords]);
+
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
