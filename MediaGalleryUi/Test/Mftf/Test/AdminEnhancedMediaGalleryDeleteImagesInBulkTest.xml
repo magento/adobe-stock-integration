@@ -28,15 +28,19 @@
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
             <argument name="image" value="ImageUpload_1"/>
         </actionGroup>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToVerifyMode"/>
         <actionGroup ref="AdminEnhancedMediaGalleryAssertMassActionModeDetailsActionGroup" stepKey="assertMassActionModeAvailable">
             <argument name="imageName" value="{{ImageUpload.fileName}}"/>
         </actionGroup>
-         <actionGroup ref="AdminEnhancedMediaGallerySelectIMageForMAssActionActionGroup" stepKey="selectFirstImageToDelete">
+        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
             <argument name="imageName" value="{{ImageUpload.fileName}}"/>
          </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGallerySelectIMageForMAssActionActionGroup" stepKey="selectSecondImageToDelete">
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
             <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteImagesInBulkActionGroup" stepKey="deleteImagesAndAssertResult"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertImagesDeletedInBulkActionGroup" stepKey="assertImagesDeleted"/>
     </test>
 </tests>

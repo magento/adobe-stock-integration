@@ -11,7 +11,6 @@ define([
 
     return Component.extend({
         defaults: {
-            imageItemSelector: '.media-gallery-image-block',
             pageActionsSelector: '.page-actions-buttons',
             gridSelector: '[data-id="media-gallery-masonry-grid"]',
             originDeleteSelector: null,
@@ -19,7 +18,7 @@ define([
             cancelMassactionButton: '<button id="cancel" type="button" class="cancel">Cancel</button>',
             isCancelButtonInserted: false,
             deleteButtonSelector: '#delete_selected',
-            assSelectedButtonSelector: '#add_selected',
+            addSelectedButtonSelector: '#add_selected',
             cancelMassactionButtonSelector: '#cancel',
             standAloneTitle: 'Manage Gallery',
             slidePanelTitle: 'Media Gallery',
@@ -31,7 +30,8 @@ define([
                 '#upload_image',
                 '#search_adobe_stock',
                 '.three-dots',
-                '#add_selected'
+                '#add_selected',
+                '#delete_massaction'
             ],
             massactionModeTitle: 'Select Images to Delete'
         },
@@ -55,7 +55,6 @@ define([
         switchView: function () {
             this.changePageTitle();
             this.switchButtons();
-            this.handleItemsUpdates();
         },
 
         /**
@@ -81,13 +80,12 @@ define([
             } else {
                 $(this.cancelMassactionButtonSelector).addClass('no-display');
             }
-            $(this.imageItemSelector).css('pointer-events', '');
 
             $.each(this.buttonsIds, function (key, value) {
                 $(value).removeClass('no-display');
             });
 
-            $(this.assSelectedButtonSelector).addClass('no-display');
+            $(this.addSelectedButtonSelector).addClass('no-display');
             $(this.deleteButtonSelector).addClass('no-display media-gallery-actions-buttons');
             $(this.deleteButtonSelector).removeClass('primary');
         },
@@ -103,7 +101,6 @@ define([
                 $(value).addClass('no-display');
             });
 
-            $(this.imageItemSelector).css('pointer-events', 'none');
             $(this.deleteButtonSelector).removeClass('no-display media-gallery-actions-buttons');
             $(this.deleteButtonSelector).addClass('primary');
 
@@ -120,19 +117,6 @@ define([
             $(this.deleteButtonSelector).off('click').on('click', function () {
                 $(this.deleteButtonSelector).trigger('massDelete');
             }.bind(this));
-
-        },
-
-        /**
-         * Keep buttons hidden on massaction mode state when grid updated.
-         */
-        handleItemsUpdates: function () {
-            document.querySelectorAll(this.gridSelector)[0].addEventListener('DOMSubtreeModified', function () {
-                if (this.massActionMode()) {
-                    $(this.imageItemSelector).css('pointer-events', 'none');
-                    $(this.contextButtonSelector).addClass('no-display');
-                }
-            }.bind(this), false);
 
         },
 

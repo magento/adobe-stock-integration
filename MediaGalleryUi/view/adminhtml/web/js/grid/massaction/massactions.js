@@ -7,15 +7,15 @@ define([
     'jquery',
     'uiComponent',
     'Magento_MediaGalleryUi/js/action/deleteImages',
-    'uiLayout'
-], function ($, Component, DeleteImages, Layout) {
+    'uiLayout',
+    'underscore'
+], function ($, Component, DeleteImages, Layout, _) {
     'use strict';
 
     return Component.extend({
         defaults: {
             modules: {
                 massactionView: '${ $.name }_view',
-                checkbox: '${ $.checkboxComponentName }',
                 imageModel: '${ $.imageModelName }'
             },
             viewConfig: [
@@ -25,9 +25,6 @@ define([
                     provider: '${ $.provider }'
                 }
             ],
-            listens: {
-                '${ $.checkboxComponentName }:selectedItems': 'setItems'
-            },
             exports: {
                 massActionMode: '${ $.name }_view:massActionMode'
             }
@@ -40,10 +37,8 @@ define([
          */
         initialize: function () {
             this._super().observe([
-                'selectedItems',
                 'massActionMode'
             ]);
-            this.selectedItems({});
             this.initView();
             this.initEvents();
 
@@ -79,31 +74,20 @@ define([
                     return;
                 }
 
-                this.checkbox().selectedItems({});
                 this.massActionMode(false);
                 this.switchMode();
             }.bind(this));
         },
 
         /**
-         * Set selected items. activete massaction if selected at least one item.
-         */
-        setItems: function () {
-            this.selectedItems(this.checkbox().selectedItems());
-
-            if (this.getSelectedCount() >= 1 && !this.massActionMode()) {
-                $(window).trigger('massAction.MediaGallery');
-            } else if (this.getSelectedCount() < 1 && this.massActionMode()) {
-                this.massActionMode(false);
-                this.switchMode();
-            }
-        },
-
-        /**
          * Return total selected items.
          */
         getSelectedCount: function () {
-            return Object.keys(this.selectedItems()).length;
+            if (this.massActionMode() && !_.isNull(this.imageModel().selected())) {
+                return Object.keys(this.imageModel().selected()).length;
+            }
+
+            return 0;
         },
 
         /**
@@ -121,11 +105,11 @@ define([
             if (this.massActionMode()) {
                 $(this.massactionView().deleteButtonSelector).on('massDelete', function () {
                     DeleteImages(
-                        this.selectedItems(),
+                        this.imageModel().selected(),
                         this.imageModel().deleteImageUrl,
                         $.mage.__('Are you sure you want to delete "%2" images?').replace('%2', this.getSelectedCount())
                     ).then(function () {
-                        this.checkbox().selectedItems({});
+                        this.imageModel().selected({});
                         this.massActionMode(false);
                         this.switchMode();
                     }.bind(this));

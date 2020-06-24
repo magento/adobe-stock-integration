@@ -20,6 +20,5 @@
         <waitForLoadingMaskToDisappear stepKey="waitForDeleteModal"/>
         <click selector="{{AdminEnhancedMediaGalleryDeleteModalSection.confirmDelete}}" stepKey="confirmDelete"/>
         <waitForLoadingMaskToDisappear stepKey="waitForDeletingProcces"/>
-        <see userInput='The assets have been successfully deleted' stepKey="verifyDeleteImages"/>
     </actionGroup>
 </actionGroups>

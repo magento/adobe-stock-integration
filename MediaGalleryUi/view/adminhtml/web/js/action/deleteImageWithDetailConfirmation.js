@@ -7,7 +7,7 @@ define([
     'underscore',
     'Magento_MediaGalleryUi/js/action/getDetails',
     'Magento_MediaGalleryUi/js/action/deleteImages'
-], function ($, _, getDetails, DeleteImages) {
+], function ($, _, getDetails, deleteImages) {
     'use strict';
 
     return {
@@ -32,7 +32,7 @@ define([
                 }.bind(this)).fail(function () {
                 confirmationContent = confirmationContent.replace('%1', '');
             }).always(function () {
-                DeleteImages([record.id], deleteImageUrl, confirmationContent);
+                deleteImages([record.id], deleteImageUrl, confirmationContent);
             });
         },
 

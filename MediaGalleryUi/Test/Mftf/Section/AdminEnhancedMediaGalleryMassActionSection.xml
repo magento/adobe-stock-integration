@@ -12,5 +12,6 @@
         <element name="totalSelected" type="text" selector=".mediagallery-massaction-items-count > .selected_count_text"/>
         <element name="cancelMassActionMode" type="button" selector="#cancel"/>
         <element name="deleteSelected" type="button" selector="#delete_selected"/>
+        <element name="massActionButton" type="button" selector="#delete_massaction"/>
     </section>
 </sections>
