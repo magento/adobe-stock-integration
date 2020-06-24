@@ -7,9 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Test\Integration\Model\Writer;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\FileFactory;
 use Magento\MediaGalleryMetadata\Model\Reader\File as FileReader;
 use Magento\MediaGalleryMetadata\Model\Writer\File as FileWriter;
-use Magento\MediaGalleryMetadata\Model\FileFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -18,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FileTest extends TestCase
 {
+    private const NEW_FILE_NAME = 'new-image-file.jpeg';
+
     /**
      * @var FileReader
      */
@@ -34,6 +40,16 @@ class FileTest extends TestCase
     private $fileFactory;
 
     /**
+     * @var WriteInterface
+     */
+    private $varDirectory;
+
+    /**
+     * @var DriverInterface
+     */
+    private $driver;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -41,6 +57,9 @@ class FileTest extends TestCase
         $this->reader = Bootstrap::getObjectManager()->get(FileReader::class);
         $this->writer = Bootstrap::getObjectManager()->get(FileWriter::class);
         $this->fileFactory = Bootstrap::getObjectManager()->get(FileFactory::class);
+        $this->varDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
+            ->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
     }
 
     /**
@@ -48,20 +67,18 @@ class FileTest extends TestCase
      */
     public function testExecute(): void
     {
-        $originalPath = realpath(__DIR__ . '/../../../_files/macos-preview.jpeg');
+        $path = $this->getNewFilePath();
 
-        $path = dirname($originalPath) . '/' . 'new-image-file.jpeg';
+        $this->assertFalse($this->varDirectory->isExist($path));
 
-        $this->assertFalse(file_exists($path));
-
-        $originalFile = $this->reader->execute($originalPath);
+        $originalFile = $this->reader->execute($this->getOriginalFilePath());
         $this->writer->execute($this->fileFactory->create([
             'path' => $path,
             'compressedImage' => $originalFile->getCompressedImage(),
             'segments' => $originalFile->getSegments()
         ]));
 
-        $this->assertTrue(file_exists($path));
+        $this->assertTrue($this->varDirectory->isExist($path));
 
         $file = $this->reader->execute($path);
 
@@ -92,5 +109,29 @@ class FileTest extends TestCase
         $this->assertTrue($exifSegmentFound);
         $this->assertTrue($xmpSegmentFound);
         $this->assertTrue($iptcSegmentFound);
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    protected function tearDown(): void
+    {
+        $this->varDirectory->delete(self::NEW_FILE_NAME);
+    }
+
+    /**
+     * @return string
+     */
+    private function getNewFilePath(): string
+    {
+        return $this->varDirectory->getAbsolutePath(self::NEW_FILE_NAME);
+    }
+
+    /**
+     * @return string
+     */
+    private function getOriginalFilePath(): string
+    {
+        return realpath(__DIR__ . '/../../../_files/macos-preview.jpeg');
     }
 }

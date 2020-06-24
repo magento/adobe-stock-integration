@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface" type="Magento\MediaGalleryMetadata\Model\Metadata"/>
+    <preference for="Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface" type="Magento\MediaGalleryMetadata\Model\AddMetadata"/>
+    <preference for="Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface" type="Magento\MediaGalleryMetadata\Model\ExtractMetadata"/>
+    <preference for="Magento\MediaGalleryMetadataApi\Model\FileInterface" type="Magento\MediaGalleryMetadata\Model\File"/>
+    <preference for="Magento\MediaGalleryMetadataApi\Model\SegmentInterface" type="Magento\MediaGalleryMetadata\Model\Segment"/>
+    <type name="Magento\MediaGalleryMetadataApi\Model\ReaderPool">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Reader\Xmp</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryMetadataApi\Model\WriterComposite">
+        <arguments>
+            <argument name="writers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Writer\Xmp</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

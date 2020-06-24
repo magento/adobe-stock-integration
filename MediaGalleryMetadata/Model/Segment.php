@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model;
 
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
+use Magento\MediaGalleryMetadataApi\Model\SegmentExtensionInterface;
+
 /**
  * Segment
  */
-class Segment
+class Segment implements SegmentInterface
 {
     /**
      * @var array
@@ -28,15 +31,26 @@ class Segment
     private $data;
 
     /**
+     * @var SegmentExtensionInterface
+     */
+    private $extensionAttributes;
+
+    /**
      * @param string $name
      * @param int $dataStart
      * @param string $data
+     * @param SegmentExtensionInterface|null $extensionAttributes
      */
-    public function __construct(string $name, int $dataStart, string $data)
-    {
+    public function __construct(
+        string $name,
+        int $dataStart,
+        string $data,
+        ?SegmentExtensionInterface $extensionAttributes
+    ) {
         $this->name = $name;
         $this->dataStart = $dataStart;
         $this->data = $data;
+        $this->extensionAttributes = $extensionAttributes;
     }
 
     /**
@@ -61,5 +75,21 @@ class Segment
     public function getData(): string
     {
         return $this->data;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes(): ?SegmentExtensionInterface
+    {
+        return $this->extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(?SegmentExtensionInterface $extensionAttributes): void
+    {
+        $this->extensionAttributes = $extensionAttributes;
     }
 }
