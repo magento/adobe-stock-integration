@@ -11,19 +11,22 @@ namespace Magento\AdobeStockStub\Model\Modifier;
 use Magento\Framework\DataObject;
 
 /**
- * Validate request URL or request headers and if applicable modify response file.
+ * Modify File if the search request contains second symbols.
  */
-interface ModifierInterface
+class SearchForSecondSymbols implements ModifierInterface
 {
     /**
-     * Modify response file.
+     * Modify file data if request uses second symbols.
      *
      * @param array $files
-     *
      * @param string $url
      * @param array $headers
      *
      * @return array
      */
-    public function modify(array $files, string $url, array $headers): array;
+    public function modify(array $files, string $url, array $headers): array
+    {
+        //@TODO implement regexp for the second symbol search
+        return $files;
+    }
 }

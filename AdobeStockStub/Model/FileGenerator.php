@@ -8,68 +8,123 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model;
 
-use Magento\AdobeStockStub\Model\Generator\GeneratorInterface;
-use Magento\AdobeStockStub\Model\Modifier\ModifierInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Generate a stub Adobe Stock API Asset file object based on the stub parameters.
+ * Generate a stub Adobe Stock API Asset file.
  */
 class FileGenerator
 {
     /**
-     * @var FileFactory
+     * @var StoreManagerInterface
      */
-    private $fileFactory;
+    private $storeManager;
 
     /**
-     * @var array
+     * @var AssetRepository
      */
-    private $fileAttributeGenerators;
+    private $assetRepository;
 
     /**
-     * @param FileFactory $fileFactory
-     * @param array $fileAttributeGenerators
+     * @var string[]
+     */
+    private $stubImages;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param AssetRepository $assetRepository
      */
     public function __construct(
-        FileFactory $fileFactory,
-        array $fileAttributeGenerators
+        StoreManagerInterface $storeManager,
+        AssetRepository $assetRepository
     ) {
-        $this->fileFactory = $fileFactory;
-        $this->fileAttributeGenerators = $fileAttributeGenerators;
+        $this->storeManager = $storeManager;
+        $this->assetRepository = $assetRepository;
     }
 
     /**
-     * Generate Files based on the File attribute generator and modifiers.
+     * Generate stub asset Files.
      *
-     * @param array $modifiers
      * @param int $filesAmount
      *
      * @return array
      */
-    public function generate(array $modifiers, int $filesAmount): array
+    public function generate(int $filesAmount): array
     {
         $files = [];
         $iterator = 0;
         do {
-            /** @var DataObject $file */
-            $file = $this->fileFactory->generate([]);
-            foreach ($this->fileAttributeGenerators as $attributeGenerator) {
-                if ($attributeGenerator instanceof GeneratorInterface) {
-                    $file = $attributeGenerator->generate($file);
-                }
-            }
+            $file = $this->constructStubFileData($iterator);
             $files[] = $file;
             $iterator++;
         } while ($filesAmount > $iterator);
 
-        foreach ($files as $file) {
-            /** @var ModifierInterface $modifier */
-            foreach ($modifiers as $modifier) {
-                $modifier->modifyValue($file);
-            }
-        }
-
         return $files;
+    }
+
+    /**
+     * Prepare the etalon File data for the Response.
+     *
+     * @param int $iterator
+     *
+     * @return array
+     */
+    private function constructStubFileData(int $iterator): array
+    {
+        $this->setStubImages();
+        switch ($iterator) {
+            case $iterator%2:
+                $imageUrl = $this->stubImages[1];
+                break;
+            case $iterator%3:
+                $imageUrl = $this->stubImages[2];
+                break;
+            default:
+                $imageUrl = $this->stubImages[0];
+        }
+        return [
+            'id' => rand(1, 150),
+            'comp_url' => 'https//adobe.stock.stub',
+            'thumbnail_240_url' => $imageUrl,
+            'width' => rand(1, 10),
+            'height' => rand(1, 10),
+            'thumbnail_500_url' => $imageUrl,
+            'title' => 'Adobe Stock Stub file',
+            'creator_id' => rand(1, 10),
+            'creator_name' => 'Adobe Stock file creator name',
+            'creation_date' => '2020-03-11 12:50:05.542333',
+            'country_name' => 'Adobe Stock Stub file country name',
+            'category' => [
+                'id' => 1,
+                'name' => 'Stub category',
+                'link' => null,
+            ],
+            'keywords' => [
+                0 => ['name' => 'stub keyword 1'],
+                1 => ['name' => 'stub keyword 2'],
+                2 => ['name' => 'stub keyword 3'],
+                3 => ['name' => 'stub keyword 4'],
+                4 => ['name' => 'stub keyword 5'],
+            ],
+            'media_type_id' => 1,
+            'content_type' => 'image/png',
+            'details_url' => $imageUrl,
+            'premium_level_id' => 0,
+        ];
+    }
+
+    /**
+     * Set stub images.
+     */
+    private function setStubImages()
+    {
+        if (empty($this->stubImages)) {
+            $this->stubImages = [
+              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/1.png'),
+              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/2.png'),
+              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/3.png')
+            ];
+        }
     }
 }

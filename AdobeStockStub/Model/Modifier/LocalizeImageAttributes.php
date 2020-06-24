@@ -11,19 +11,42 @@ namespace Magento\AdobeStockStub\Model\Modifier;
 use Magento\Framework\DataObject;
 
 /**
- * Localize image attributes
+ * Modify File if the search is on localized image values.
  */
-class LocalizeImageAttributes
+class LocalizeImageAttributes implements ModifierInterface
 {
     /**
-     * Localized File DataObject attribute value.
+     * Modify File is localized request.
      *
-     * @param DataObject $file
+     * @param array $files
+     * @param string $url
+     * @param array $headers
      *
-     * @return DataObject
+     * @return array
      */
-    public function modifyValue(DataObject $file): DataObject
+    public function modify(array $files, string $url, array $headers): array
     {
-        return $file->setData('title', 'Автомобили');
+        return (preg_match('(\[words\]=Автомобили)', $url)) ?
+            $this->translateFilesAttributes($files)
+            : $files;
+    }
+
+    /**
+     * Iterate Files and translate to the ru-ru keywords and categories.
+     *
+     * @param array $files
+     *
+     * @return array
+     */
+    public function translateFilesAttributes(array $files): array
+    {
+        foreach ($files as &$file) {
+            $file['category'] = 'Автомобили';
+            foreach ($file['keywords'] as &$keyword) {
+                $keyword = 'Автомобиль';
+            }
+        }
+
+        return $files;
     }
 }

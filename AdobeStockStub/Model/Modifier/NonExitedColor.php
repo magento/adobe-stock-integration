@@ -11,19 +11,23 @@ namespace Magento\AdobeStockStub\Model\Modifier;
 use Magento\Framework\DataObject;
 
 /**
- * Validate request URL or request headers and if applicable modify response file.
+ * Modify File if the search request is on non existed color.
  */
-interface ModifierInterface
+class NonExitedColor implements ModifierInterface
 {
     /**
-     * Modify response file.
+     * Modify file data if request is for the non existed color.
      *
      * @param array $files
-     *
      * @param string $url
      * @param array $headers
      *
      * @return array
      */
-    public function modify(array $files, string $url, array $headers): array;
+    public function modify(array $files, string $url, array $headers): array
+    {
+        return (preg_match('(\[colors\]=none)', $url)) ?
+            []
+            : $files;
+    }
 }
