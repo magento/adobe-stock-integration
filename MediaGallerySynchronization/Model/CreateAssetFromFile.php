@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -49,21 +49,29 @@ class CreateAssetFromFile
     private $assetFactory;
 
     /**
+     * @var GetContentHashInterface
+     */
+    private $getContentHash;
+
+    /**
      * @param Filesystem $filesystem
      * @param AssetInterfaceFactory $assetFactory
      * @param File $driver
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
+     * @param GetContentHashInterface $getContentHash
      */
     public function __construct(
         Filesystem $filesystem,
         AssetInterfaceFactory $assetFactory,
         File $driver,
-        GetAssetsByPathsInterface $getMediaGalleryAssetByPath
+        GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
+        GetContentHashInterface $getContentHash
     ) {
         $this->filesystem = $filesystem;
         $this->assetFactory = $assetFactory;
         $this->driver = $driver;
         $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
+        $this->getContentHash = $getContentHash;
     }
 
     /**
@@ -71,7 +79,6 @@ class CreateAssetFromFile
      *
      * @param \SplFileInfo $file
      * @return AssetInterface
-     * @throws FileSystemException
      * @throws LocalizedException
      * @throws ValidatorException
      */
@@ -134,6 +141,19 @@ class CreateAssetFromFile
     }
 
     /**
+     * Get hash image content.
+     *
+     * @param string $path
+     * @return string
+     * @throws ValidatorException
+     */
+    private function getHashImageContent(string $path): string
+    {
+        $hashedImageContent = $this->getContentHash->execute($this->getMediaDirectory()->getAbsolutePath($path));
+        return $hashedImageContent;
+    }
+
+    /**
      * Retrieve media directory instance with read permissions
      *
      * @return Read
@@ -144,21 +164,5 @@ class CreateAssetFromFile
             $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
-    }
-
-    /**
-     * Get hash image content.
-     *
-     * @param string $path
-     * @return string
-     * @throws FileSystemException
-     * @throws ValidatorException
-     */
-    private function getHashImageContent(string $path): string
-    {
-        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $imageContent = $mediaDirectory->readFile($this->getRelativePath($path));
-        $hashedImageContent = sha1($imageContent);
-        return $hashedImageContent;
     }
 }
