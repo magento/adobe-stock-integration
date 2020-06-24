@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Writer;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\File as FileDataObject;
-use Magento\MediaGalleryMetadata\Model\FileFactory;
-use Magento\MediaGalleryMetadata\Model\SegmentFactory;
+use Magento\MediaGalleryMetadata\Model\Segment;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
@@ -23,14 +24,9 @@ class File
     private const MARKER_IMAGE_END = "\xD9";
 
     /**
-     * @var SegmentFactory
+     * @var DriverInterface
      */
-    private $segmentFactory;
-
-    /**
-     * @var FileFactory
-     */
-    private $fileFactory;
+    private $driver;
 
     /**
      * @var SegmentNames
@@ -38,20 +34,22 @@ class File
     private $segmentNames;
 
     /**
-     * @param FileFactory $fileFactory
-     * @param SegmentFactory $segmentFactory
+     * File constructor.
+     * @param DriverInterface $driver
      * @param SegmentNames $segmentNames
      */
-    public function __construct(FileFactory $fileFactory, SegmentFactory $segmentFactory, SegmentNames $segmentNames)
-    {
-        $this->fileFactory = $fileFactory;
-        $this->segmentFactory = $segmentFactory;
+    public function __construct(
+        DriverInterface $driver,
+        SegmentNames $segmentNames
+    ) {
+        $this->driver = $driver;
         $this->segmentNames = $segmentNames;
     }
 
     /**
      * @param FileDataObject $file
      * @throws LocalizedException
+     * @throws FileSystemException
      */
     public function execute(FileDataObject $file): void
     {
@@ -61,19 +59,28 @@ class File
             }
         }
 
-        $fileHandler = @fopen($file->getPath(), 'wb');
-        if (!$fileHandler) {
-            throw new LocalizedException(__('Could not open file.'));
-        }
+        $resource = $this->driver->fileOpen($file->getPath(), 'wb');
 
-        fwrite($fileHandler, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_FILE_START);
-        foreach ($file->getSegments() as $segment) {
-            fwrite($fileHandler, self::MARKER_IMAGE_PREFIX . $this->segmentNames->getSegmentType($segment->getName()));
-            fwrite($fileHandler, pack("n", strlen($segment->getData()) + 2));
-            fwrite($fileHandler, $segment->getData());
+        $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_FILE_START);
+        $this->writeSegments($resource, $file->getSegments());
+        $this->driver->fileWrite($resource, $file->getCompressedImage());
+        $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_END);
+        $this->driver->fileClose($resource);
+    }
+
+    /**
+     * @param resource $resource
+     * @param Segment[] $segments
+     */
+    private function writeSegments($resource, array $segments): void
+    {
+        foreach ($segments as $segment) {
+            $this->driver->fileWrite(
+                $resource,
+                self::MARKER_IMAGE_PREFIX . chr($this->segmentNames->getSegmentType($segment->getName()))
+            );
+            $this->driver->fileWrite($resource, pack("n", strlen($segment->getData()) + 2));
+            $this->driver->fileWrite($resource, $segment->getData());
         }
-        fwrite($fileHandler, $file->getCompressedImage());
-        fwrite($fileHandler, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_END);
-        fclose($fileHandler);
     }
 }

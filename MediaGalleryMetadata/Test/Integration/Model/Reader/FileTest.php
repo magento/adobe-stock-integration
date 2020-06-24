@@ -39,7 +39,7 @@ class FileTest extends TestCase
 
         $this->assertEquals($path, $file->getPath());
         $this->assertNotEmpty($file->getCompressedImage());
-        $this->assertNotEmpty($file->getSegments());
+        $this->assertCount(14, $file->getSegments());
 
         $exifSegmentFound = false;
         $xmpSegmentFound = false;

@@ -66,7 +66,8 @@ class FileTest extends TestCase
         $file = $this->reader->execute($path);
 
         $this->assertEquals($path, $file->getPath());
-        $this->assertNotEmpty($file->getCompressedImage());
+        $this->assertEquals($originalFile->getSegments(), $file->getSegments());
+        $this->assertEquals($originalFile->getCompressedImage(), $file->getCompressedImage());
         $this->assertNotEmpty($file->getSegments());
 
         $exifSegmentFound = false;
