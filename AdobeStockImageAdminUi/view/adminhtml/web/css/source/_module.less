@@ -13,6 +13,16 @@
 
 & when (@media-common = true) {
     .adobe-stock-images-search-modal-content {
+        .color-rectangle {
+            border: solid 1px;
+            border-color: @color-dots-background-color;
+            display: inline-block;
+            height: 12px;
+            position: inherit;
+            top: 2px;
+            width: 12px;
+        }
+
         .masonry-image {
             &-grid {
                 display: inline-block;
@@ -20,8 +30,18 @@
                 width: 100%;
             }
 
+            &-column {
+                overflow: visible;
+                position: static;
+            }
+
             &-overlay {
-                right: 0;
+                float: right;
+                margin-bottom: -30px;
+                padding-left: 5%;
+                padding-right: 5%;
+                position: relative;
+                width: auto;
             }
 
             &-preview {
@@ -60,6 +80,7 @@
         }
 
         .masonry-image-column {
+            position: static;
             &:first-child .masonry-image-preview .preview-buttons .action-previous,
             &:last-child .masonry-image-preview .preview-buttons .action-next {
                 opacity: .5;
@@ -96,6 +117,9 @@
         }
 
         .masonry-image-preview {
+
+            position: absolute;
+
             .title {
                 font-weight: bold;
             }
@@ -191,7 +215,7 @@
                 left: 50%;
                 margin-left: -50px;
                 margin-top: 50px;
-                top: 50%;
+                position: absolute;
                 width: 100px;
             }
 
@@ -209,7 +233,6 @@
                     .thumbnail {
                         display: inline-flex;
                         height: 100px;
-                        justify-content: center;
                         margin-right: 10px;
                         max-width: 150px;
                         overflow: hidden;
@@ -218,8 +241,9 @@
                         width: 100%;
 
                         img {
+                            margin: 0 auto;
                             max-width: initial;
-                            position: absolute;
+                            position: relative;
                             width: auto;
                         }
                     }

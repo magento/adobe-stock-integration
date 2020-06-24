@@ -9,7 +9,7 @@
     <type name="Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content">
         <plugin name="add_search_button" type="Magento\AdobeStockImageAdminUi\Plugin\AddSearchButton"/>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\GetImageDetailsByAssetId">
+    <type name="Magento\MediaGalleryUi\Model\GetDetailsByAssetId">
         <plugin name="add_adobe_stock_image_details_plugin" type="Magento\AdobeStockImageAdminUi\Plugin\AddAdobeStockImageDetailsPlugin"/>
     </type>
     <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
@@ -33,4 +33,11 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
+        <arguments>
+            <argument name="customJoins" xsi:type="array">
+                <item name="is_licensed" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\IsLicensed</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

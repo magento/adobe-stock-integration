@@ -13,7 +13,7 @@
                     destination: '#adobe-stock-tabs-content',
                     shadowTabs: [],
                 }
-            }">
+            }" afterRender="disableTabsKeyDownEvent()">
         <ul class="tabs-horiz">
             <li if="showSeriesTab($row())">
                 <a id="series_tab" attr="'href': '#series_content_' + $row().id">

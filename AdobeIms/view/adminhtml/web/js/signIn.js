@@ -14,8 +14,6 @@ define([
         defaults: {
             profileUrl: 'adobe_ims/user/profile',
             logoutUrl: 'adobe_ims/user/logout',
-            defaultProfileImage:
-                'https://a5.behance.net/27000444e0c8b62c56deff3fc491e1a92d07f0cb/img/profile/no-image-276.png',
             user: {
                 isAuthorized: false,
                 name: '',
@@ -57,20 +55,21 @@ define([
          * @return {window.Promise}
          */
         login: function () {
+            var deferred = $.Deferred();
 
-            return new window.Promise(function (resolve, reject) {
-                if (this.user().isAuthorized) {
-                    return resolve();
-                }
-                login(this.loginConfig)
-                    .then(function (response) {
-                        this.loadUserProfile();
-                        resolve(response);
-                    }.bind(this))
-                    .catch(function (error) {
-                        reject(error);
-                    });
-            }.bind(this));
+            if (this.user().isAuthorized) {
+                deferred.resolve();
+            }
+            login(this.loginConfig)
+                .then(function (response) {
+                    this.loadUserProfile();
+                    deferred.resolve(response);
+                }.bind(this))
+                .fail(function (error) {
+                    deferred.reject(error);
+                });
+
+            return deferred.promise();
         },
 
         /**
@@ -127,7 +126,7 @@ define([
                         isAuthorized: false,
                         name: '',
                         email: '',
-                        image: this.defaultProfileImage
+                        image: ''
                     });
                 }.bind(this),
 

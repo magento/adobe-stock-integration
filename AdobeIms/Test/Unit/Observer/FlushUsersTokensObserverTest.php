@@ -7,18 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Observer;
 
+use Magento\AdobeIms\Model\FlushUserTokens;
 use Magento\AdobeIms\Observer\FlushUsersTokensObserver;
 use Magento\Authorization\Model\Role;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Flush users tokens observer tests
  */
-class FlushUsersTokensObserverTest extends \PHPUnit\Framework\TestCase
+class FlushUsersTokensObserverTest extends TestCase
 {
-    /** @var \Magento\AdobeIms\Model\FlushUserTokens|MockObject */
+    /** @var FlushUserTokens|MockObject */
     protected $flushUserTokens;
 
     /** @var FlushUsersTokensObserver */
@@ -26,8 +29,8 @@ class FlushUsersTokensObserverTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->flushUserTokens = $this->createMock(\Magento\AdobeIms\Model\FlushUserTokens::class);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->flushUserTokens = $this->createMock(FlushUserTokens::class);
+        $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
             FlushUsersTokensObserver::class,
             [

@@ -1,10 +1,7 @@
-// jscs:disable
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// jscs:enable
-
 define([
     'jquery',
     'Magento_AdobeIms/js/signIn',
@@ -40,29 +37,31 @@ define([
         /**
          * Login to Adobe
          *
-         * @return {window.Promise}
+         * @return {*}
          */
         login: function () {
-            return new window.Promise(function (resolve, reject) {
-                if (this.user().isAuthorized) {
-                    return resolve();
-                }
-                auth(this.loginConfig)
-                    .then(function (response) {
-                        this.loadUserProfile();
-                        resolve(response);
-                    }.bind(this))
-                    .catch(function (error) {
-                        reject(error);
-                    });
-            }.bind(this));
+            var deferred = $.Deferred();
+
+            if (this.user().isAuthorized) {
+                return deferred.resolve();
+            }
+            auth(this.loginConfig)
+                .then(function (response) {
+                    this.loadUserProfile();
+                    deferred.resolve(response);
+                }.bind(this))
+                .fail(function (error) {
+                    deferred.reject(error);
+                });
+
+            return deferred.promise();
         },
 
         /**
          * Login action with popup on error..
          */
         loginClick: function () {
-            this.login().catch(function (error) {
+            this.login().fail(function (error) {
                 this.showLoginErrorPopup(error);
             }.bind(this));
         },

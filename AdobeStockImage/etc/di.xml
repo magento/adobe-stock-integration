@@ -46,7 +46,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Provider">
-        <plugin name="add_license_data_to_media_asset" type="Magento\AdobeStockImage\Model\Plugin\AddLicenseDataToAsset"/>
-    </type>
 </config>

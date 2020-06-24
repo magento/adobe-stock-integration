@@ -42,6 +42,23 @@
 
     .media-gallery-container {
 
+        .masonry-image-grid .no-data-message-container,
+        .masonry-image-grid .error-message-container {
+            left: 50%;
+            margin-right: -50%;
+            position: sticky;
+            top: 50%;
+        }
+
+        .admin__action-dropdown-wrap._active .admin__action-dropdown-text::after {
+            margin-right: 6px;
+        }
+
+        .admin__data-grid-action-bookmarks .admin__action-dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+
         .page-main-actions {
             .page-actions {
                 .media-gallery-add-selected {
@@ -59,6 +76,7 @@
             background: @color-folders-background;
             border-color: @color-folders-border;
             border-radius: 6px;
+            padding-top: 6px;
         }
 
         .jstree-default .jstree-leaf a .jstree-icon {
@@ -77,7 +95,9 @@
         }
 
         .jstree a > ins {
+            float: left;
             height: 22px;
+            margin-top: -3px;
             width: 20px;
         }
 
@@ -93,7 +113,7 @@
             height: 30px;
             margin: 1px;
             padding-left: 6px;
-            padding-top: 4px;
+            padding-top: 6px;
             width: 100%;
         }
 
@@ -101,15 +121,18 @@
             background: @color-folders-background-selected;
             border: .14em solid @color-folders-border;
             border-radius: 6px;
+            padding-top: 6px;
         }
 
         .masonry-image-overlay {
             background-color: @color-masonry-overlay;
-            bottom: 100px;
+            float: right;
             font-size: 11px;
+            margin-left: 120px;
+            margin-top: 170px;
             padding: .3rem;
             pointer-events: none;
-            right: 0;
+            position: relative;
         }
 
         .media-gallery-image-details {
@@ -128,13 +151,20 @@
                 line-height: 18px;
                 max-height: 50px;
                 overflow: hidden;
+                padding-bottom: 2px;
                 text-overflow: ellipsis;
+                white-space: pre-line;
                 word-wrap: anywhere;
+                word-wrap: break-word;
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    white-space: nowrap;
+                }
             }
 
             .type {
                 display: inline-block;
                 font-size: 12px;
+                padding-bottom: 5px;
             }
 
             .dimensions {
@@ -231,7 +261,12 @@
         }
 
         .masonry-image-grid {
+            align-items: first baseline;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 210px);
+            justify-content: end;
             margin: 10px 0;
+            position: relative;
         }
     }
 

@@ -4,10 +4,11 @@
  */
 define([
     'jquery',
+    'underscore',
     'Magento_MediaGalleryUi/js/grid/columns/image/actions',
-    'Magento_Ui/js/modal/alert',
-    'underscore'
-], function ($, Action, uiAlert, _) {
+    'Magento_MediaGalleryUi/js/action/getDetails',
+    'mage/translate'
+], function ($, _, Action, getDetails) {
     'use strict';
 
     return Action.extend({
@@ -82,50 +83,26 @@ define([
          * @param {Number} imageId
          */
         getImageRecord: function (imageId) {
-            $.ajax({
-                type: 'GET',
-                url: this.imageDetailsUrl,
-                dataType: 'json',
-                showLoader: true,
-                data: {
-                    'id': imageId
-                },
-                context: this,
+            getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
+                var id = imageDetails['adobe_stock'][0].value;
 
-                /**
-                 * Success handler for deleting image
-                 *
-                 * @param {Object} response
-                 */
-                success: function (response) {
-                    response.imageDetails.id =  response.imageDetails['adobe_stock'][0].value;
-                    response.imageDetails.category =  response.imageDetails['adobe_stock'][3].value;
-                    this.image().displayedRecord(response.imageDetails);
-                    this.image().actions().licenseProcess();
+                this.image().actions().licenseProcess(
+                    id,
+                    imageDetails.title,
+                    imageDetails.path,
+                    imageDetails['content_type'],
+                    true
+                ).then(function () {
+                    this.image().actions().login().getUserQuota();
                     this.imageModel().reloadGrid();
-
-                }.bind(this),
-
-                /**
-                 * Error handler for deleting image
-                 *
-                 * @param {Object} response
-                 */
-                error: function (response) {
-                    var message;
-
-                    if (typeof response.responseJSON === 'undefined' ||
-                        typeof response.responseJSON.message === 'undefined'
-                    ) {
-                        message = $.mage.__('There was an error on attempt to get the image details.');
-                    } else {
-                        message = response.responseJSON.message;
+                    this.imageModel().addMessage('success', $.mage.__('The image has been licensed.'));
+                }.bind(this)).fail(function (error) {
+                    if (error) {
+                        this.imageModel().addMessage('error', error);
                     }
-                    uiAlert({
-                        content: message
-                    });
-
-                }
+                });
+            }.bind(this)).fail(function (message) {
+                this.imageModel().addMessage('error', message);
             });
         }
     });

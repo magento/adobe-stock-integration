@@ -10,7 +10,7 @@
     <test name="AdminAdobeStockNotLicensedImageLicenseTest">
         <annotations>
             <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/783"/>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
             </skip>
             <features value="AdobeStockImagePanel"/>
             <stories value="User licenses an image"/>
@@ -25,6 +25,7 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
+             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         </after>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
             <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>

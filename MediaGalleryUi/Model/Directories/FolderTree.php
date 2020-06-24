@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
  * Build folder tree structure by path
@@ -28,25 +28,25 @@ class FolderTree
     private $path;
 
     /**
-     * @var IsPathBlacklistedInterface
+     * @var IsPathExcludedInterface
      */
-    private $isBlacklisted;
+    private $isPathExcluded;
 
     /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param string $path
-     * @param IsPathBlacklistedInterface $isBlacklisted
+     * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Filesystem $filesystem,
         string $path,
-        IsPathBlacklistedInterface $isBlacklisted
+        IsPathExcludedInterface $isPathExcluded
     ) {
         $this->filesystem = $filesystem;
         $this->path = $path;
-        $this->isBlacklisted = $isBlacklisted;
+        $this->isPathExcluded = $isPathExcluded;
     }
 
     /**
@@ -78,16 +78,15 @@ class FolderTree
             return $directories;
         }
 
-        foreach ($directory->readRecursively() as $index => $path) {
-            if (!$directory->isDirectory($path) ||
-                $this->isBlacklisted->execute($path)) {
+        foreach ($directory->readRecursively() as $path) {
+            if (!$directory->isDirectory($path) || $this->isPathExcluded->execute($path)) {
                 continue;
             }
 
             $pathArray = explode('/', $path);
             $directories[] = [
                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                'attr' => ['id' => $index],
+                'attr' => ['id' => $path],
                 'metadata' => [
                     'path' => $path
                 ],

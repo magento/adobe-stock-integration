@@ -9,27 +9,27 @@
         <div class="messages">
             <div attr="class: 'message message-'+code">
                 <div data-ui-id="messages-message-error">
-                    <span data-bind="html: message"></span>
+                    <span data-bind="html: messageUnsanitizedHtml"></span>
                 </div>
             </div>
         </div>
     <!-- /ko -->
 </ul>
-<button class="action-secondary" type="button" data-bind="visible: !isDownloaded() && !isLicensed(), click: function(){ savePreview() }">
+<button class="action-secondary" type="button" data-bind="visible: !isDownloaded() && !isLicensed(), click: function(){ savePreviewClick() }">
     <span translate="'Save Preview'"/>
 </button>
 <button class="action-secondary"
         type="button"
-        data-bind="visible: isDownloaded(), click: function(){ locate() }">
+        data-bind="visible: isDownloaded(), click: function(){ openInMediaGalleryClick() }">
     <span translate="'Open in Media Gallery'"/>
 </button>
 <button class="action-default primary"
         type="button"
         attr="title: getLicenseButtonTitle()"
-        data-bind="visible: !isLicensedLocally() && !isLicensed(), click: function () { licenseProcess(); }">
+        data-bind="visible: !isLicensedLocally() && !isLicensed(), click: function () { licenseClick(); }">
     <span data-bind="text: getLicenseButtonTitle()"></span>
 </button>
-<button class="action-default primary" type="button" data-bind="visible: isLicensed(), click: function () { saveLicensed(); }">
+<button class="action-default primary" type="button" data-bind="visible: isLicensed(), click: function () { saveLicensedClick(); }">
     <span translate="'Save Licensed'"></span>
 </button>
 

@@ -10,11 +10,18 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="AdobeStockImageData">
         <data key="name" unique="suffix">my-image-</data>
+        <data key="unlicensedText">Unlicensed</data>
     </entity>
     <entity name="AdobeStockLicensedImage">
         <data key="id">{{_CREDS.magento/adobe_stock_licensed_image}}</data>
+        <data key="status">Licensed</data>
+        <data key="category">Food</data>
+        <data key="author">photopixel</data>
     </entity>
     <entity name="AdobeStockUnlicensedImage">
         <data key="id">{{_CREDS.magento/adobe_stock_not_licensed_image}}</data>
+        <data key="status">Unlicensed</data>
+        <data key="category">Castles</data>
+        <data key="author">gam16</data>
     </entity>
 </entities>

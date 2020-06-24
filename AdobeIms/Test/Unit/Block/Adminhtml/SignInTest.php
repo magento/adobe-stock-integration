@@ -24,13 +24,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Config data test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SignInTest extends TestCase
 {
     private const PROFILE_URL = 'https://url.test/';
     private const LOGOUT_URL = 'https://url.test/';
     private const AUTH_URL = '';
-    private const DEFAULT_PROFILE_IMAGE = 'default_image.png';
     private const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
     private const RESPONSE_CODE_INDEX = 1;
     private const RESPONSE_MESSAGE_INDEX = 2;
@@ -71,8 +71,6 @@ class SignInTest extends TestCase
         $configMock->expects($this->once())
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);
-        $configMock->method('getDefaultProfileImage')
-            ->willReturn(self::DEFAULT_PROFILE_IMAGE);
 
         $urlBuilderMock = $this->createMock(UrlInterface::class);
         $urlBuilderMock->method('getUrl')
@@ -215,7 +213,7 @@ class SignInTest extends TestCase
             'isAuthorized' => false,
             'name' => '',
             'email' => '',
-            'image' => self::DEFAULT_PROFILE_IMAGE,
+            'image' => '',
         ];
     }
 

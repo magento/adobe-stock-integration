@@ -7,17 +7,20 @@ define([
     'jquery',
     'underscore',
     'uiElement',
-    'Magento_MediaGalleryUi/js/action/deleteImage',
+    'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Element, deleteImage, addSelected) {
+], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected) {
     'use strict';
 
     return Element.extend({
         defaults: {
             modalSelector: '',
+            modalWindowSelector: '',
+            mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             template: 'Magento_MediaGalleryUi/image/actions',
             modules: {
-                imageModel: '${ $.imageModelName }'
+                imageModel: '${ $.imageModelName }',
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
             }
         },
 
@@ -28,6 +31,7 @@ define([
          */
         initialize: function () {
             this._super();
+            $(window).on('fileDeleted.enhancedMediaGallery', this.closeViewDetailsModal.bind(this));
 
             return this;
         },
@@ -36,9 +40,10 @@ define([
          * Close the images details modal
          */
         closeModal: function () {
-            var modalElement = $(this.modalSelector);
+            var modalElement = $(this.modalSelector),
+                modalWindow = $(this.modalWindowSelector);
 
-            if (!modalElement.length || _.isUndefined(modalElement.modal)) {
+            if (!modalWindow.hasClass('_show') || !modalElement.length || _.isUndefined(modalElement.modal)) {
                 return;
             }
 
@@ -49,8 +54,14 @@ define([
          * Delete image action
          */
         deleteImageAction: function () {
-            this.closeModal();
-            deleteImage.deleteImageAction(this.imageModel().getSelected(), this.imageModel().deleteImageUrl);
+            var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
+                deleteImageUrl = this.imageModel().deleteImageUrl;
+
+            deleteImageWithDetailConfirmation.deleteImageAction(
+                this.imageModel().getSelected(),
+                imageDetailsUrl,
+                deleteImageUrl
+            );
         },
 
         /**
@@ -64,6 +75,13 @@ define([
                     storeId: this.imageModel().storeId
                 }
             );
+            this.closeModal();
+        },
+
+        /**
+         * Close view details modal after confirm deleting image
+         */
+        closeViewDetailsModal: function () {
             this.closeModal();
         }
     });

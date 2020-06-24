@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryViewAdobeStockDetailsTest">
+        <annotations>
+            <features value="AdobeStockMediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/428"/>
+            <title value="View adobe stock image details"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4653671"/>
+            <description value="User views adobe stock image attributes in Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+        </after>
+
+        <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminAdobeStockVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
+            <argument name="image" value="AdobeStockUnlicensedImage"/>
+        </actionGroup>
+    </test>
+</tests>

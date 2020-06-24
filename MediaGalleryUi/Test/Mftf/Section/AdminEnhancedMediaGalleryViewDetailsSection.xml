@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEnhancedMediaGalleryViewDetailsSection">
+        <element name="title" type="text" selector=".image-title"/>
+        <element name="contentType" type="text" selector="[data-ui-id='content-type']"/>
+        <element name="type" type="text" selector="//div[@class='attribute']/span[contains(text(), 'Type')]/following-sibling::div"/>
+        <element name="height" type="text" selector="//div[@class='attribute']/span[contains(text(), 'Height')]/following-sibling::div"/>
+        <element name="delete" type="button" selector="//div[@class='media-gallery-image-details-modal']//button[contains(@class, 'delete')]"/>
+        <element name="confirmDelete" type="button" selector=".action-accept"/>
+        <element name="addImage" type="button" selector=".add-image-action"/>
+    </section>
+</sections>
