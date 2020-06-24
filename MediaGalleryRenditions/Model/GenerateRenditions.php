@@ -8,20 +8,16 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryRenditions\Model;
 
 use Magento\Framework\Image\AdapterFactory;
-use Magento\MediaGalleryRenditionsApi\Api\ConfigInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
+use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
+use Magento\MediaGalleryRenditionsApi\Model\ConfigInterface;
 
 class GenerateRenditions implements GenerateRenditionsInterface
 {
     /**
      * @var AdapterFactory
      */
-    private $_imageFactory;
-
-    /**
-     * @var RenditionsImageManagement
-     */
-    private $renditionsImageManagement;
+    private $imageFactory;
 
     /**
      * @var ConfigInterface
@@ -29,19 +25,24 @@ class GenerateRenditions implements GenerateRenditionsInterface
     private $config;
 
     /**
+     * @var GetRenditionPathInterface
+     */
+    private $getRenditionPath;
+
+    /**
      * GenerateRenditions constructor.
      * @param AdapterFactory $imageFactory
-     * @param RenditionsImageManagement $renditionsImageManagement
+     * @param GetRenditionPathInterface $getRenditionPath
      * @param ConfigInterface $config
      */
     public function __construct(
         AdapterFactory $imageFactory,
-        RenditionsImageManagement $renditionsImageManagement,
+        GetRenditionPathInterface $getRenditionPath,
         ConfigInterface $config
     ) {
-        $this->_imageFactory = $imageFactory;
-        $this->renditionsImageManagement = $renditionsImageManagement;
+        $this->imageFactory = $imageFactory;
         $this->config = $config;
+        $this->getRenditionPath = $getRenditionPath;
     }
 
     /**
@@ -51,8 +52,8 @@ class GenerateRenditions implements GenerateRenditionsInterface
     {
         $isResizeable = $this->isResizeable($path);
         if ($isResizeable) {
-            $renditionImagePath = $this->renditionsImageManagement->execute($path);
-            $image = $this->_imageFactory->create();
+            $renditionImagePath = $this->getRenditionPath->execute($path);
+            $image = $this->imageFactory->create();
             $image->open($path);
             $image->keepAspectRatio(true);
             $image->resize($this->getResizedWidth(), $this->getResizedHeight());

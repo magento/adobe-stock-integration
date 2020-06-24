@@ -14,13 +14,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 
-class RenditionsImageManagement
+class GetRenditionPath implements GetRenditionPathInterface
 {
     /**
      * @var Filesystem\Directory\WriteInterface
      */
-    private $_directory;
+    private $directory;
 
     /**
      * @var File|mixed|null
@@ -45,7 +46,7 @@ class RenditionsImageManagement
         File $ioFile = null,
         DriverInterface $file = null
     ) {
-        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->ioFile = $ioFile ?: ObjectManager::getInstance()->get(File::class);
         $this->file = $file ?: ObjectManager::getInstance()->get(Filesystem\Driver\File::class);
     }
@@ -60,16 +61,16 @@ class RenditionsImageManagement
      */
     public function execute(string $path) :string
     {
-        $realPath = $this->_directory->getRelativePath($path);
-        if (!$this->_directory->isFile($realPath) || !$this->_directory->isExist($realPath)) {
+        $realPath = $this->directory->getRelativePath($path);
+        if (!$this->directory->isFile($realPath) || !$this->directory->isExist($realPath)) {
             throw new LocalizedException(__('Directory or File %1 does not exist in media directory.', $realPath));
         }
         $renditionImageDirectoryPath = $this->getRenditionsImageDirectory($path);
-        $renditionImageDirectory = $this->_directory->getRelativePath($renditionImageDirectoryPath);
-        if (!$this->_directory->isExist($renditionImageDirectory)) {
-            $this->_directory->create($renditionImageDirectory);
+        $renditionImageDirectory = $this->directory->getRelativePath($renditionImageDirectoryPath);
+        if (!$this->directory->isExist($renditionImageDirectory)) {
+            $this->directory->create($renditionImageDirectory);
         }
-        if (!$this->_directory->isExist($renditionImageDirectory)) {
+        if (!$this->directory->isExist($renditionImageDirectory)) {
             throw new LocalizedException(__(
                 'Directory %1 does not exist in media directory.',
                 $renditionImageDirectory
@@ -105,7 +106,7 @@ class RenditionsImageManagement
      */
     private function getRenditionsRoot() :string
     {
-        return $this->_directory->getAbsolutePath() . self::RENDITIONS_DIRECTORY_NAME;
+        return $this->directory->getAbsolutePath() . self::RENDITIONS_DIRECTORY_NAME;
     }
 
     /**
@@ -117,14 +118,14 @@ class RenditionsImageManagement
      */
     private function getRenditionsPath($filePath, $checkFile = false)
     {
-        $mediaRootDir = $this->_directory->getAbsolutePath('');
+        $mediaRootDir = $this->directory->getAbsolutePath('');
         if (strpos($filePath, (string) $mediaRootDir) === 0) {
             $relativeFilePath = substr($filePath, strlen($mediaRootDir));
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $renditionPath = $relativeFilePath === basename($filePath)
                 ? $this->getRenditionsRoot() . DIRECTORY_SEPARATOR . $relativeFilePath
                 : $this->getRenditionsRoot() . $relativeFilePath;
-            if (!$checkFile || $this->_directory->isExist($this->_directory->getRelativePath($renditionPath))) {
+            if (!$checkFile || $this->directory->isExist($this->directory->getRelativePath($renditionPath))) {
                 return $renditionPath;
             }
         }

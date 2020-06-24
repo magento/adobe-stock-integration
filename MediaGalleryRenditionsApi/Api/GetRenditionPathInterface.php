@@ -9,13 +9,14 @@ namespace Magento\MediaGalleryRenditionsApi\Api;
 
 use Magento\Framework\Exception\LocalizedException;
 
-interface GenerateRenditionsInterface
+interface GetRenditionPathInterface
 {
     /**
-     * Generate Renditions image
+     * Get Renditions image path
      *
      * @param string $path
+     * @return string
      * @throws LocalizedException
      */
-    public function execute(string $path): void;
+    public function execute(string $path): string;
 }

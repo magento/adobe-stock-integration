@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryRenditionsApi\Api;
+namespace Magento\MediaGalleryRenditionsApi\Model;
 
 /**
  * Class responsible for providing API access to Media Gallery Renditions system configuration

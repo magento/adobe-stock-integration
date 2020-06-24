@@ -58,7 +58,7 @@ class SaveImageInformation
      * @var Filesystem
      */
     private $filesystem;
-    
+
     /**
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
@@ -92,6 +92,7 @@ class SaveImageInformation
      * @param Uploader $subject
      * @param array $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return array
      */
     public function afterSave(Uploader $subject, array $result): array
     {

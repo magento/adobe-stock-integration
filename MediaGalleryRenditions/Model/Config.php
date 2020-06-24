@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryRenditions\Model;
 
-use Magento\MediaGalleryRenditionsApi\Api\ConfigInterface;
+use Magento\MediaGalleryRenditionsApi\Model\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**

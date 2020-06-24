@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\MediaGalleryRenditionsApi\Api\ConfigInterface" type="Magento\MediaGalleryRenditions\Model\Config"/>
+    <preference for="Magento\MediaGalleryRenditionsApi\Model\ConfigInterface" type="Magento\MediaGalleryRenditions\Model\Config"/>
     <preference for="Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface" type="Magento\MediaGalleryRenditions\Model\GenerateRenditions"/>
+    <preference for="Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface" type="Magento\MediaGalleryRenditions\Model\GetRenditionPath"/>
 </config>
