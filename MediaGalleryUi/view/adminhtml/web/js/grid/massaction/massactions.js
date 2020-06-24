@@ -21,8 +21,7 @@ define([
             viewConfig: [
                 {
                     component: 'Magento_MediaGalleryUi/js/grid/massaction/massactionView',
-                    name: '${ $.name }_view',
-                    provider: '${ $.provider }'
+                    name: '${ $.name }_view'
                 }
             ],
             exports: {

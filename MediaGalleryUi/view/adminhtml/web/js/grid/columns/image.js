@@ -180,10 +180,10 @@ define([
         select: function (record) {
             if (this.massaction().massActionMode()) {
                 return this.checkboxClick(record);
-            } else {
-                this.isSelected(record) ? this.selected(null) : this.selected(record);
-                this.toggleAddSelectedButton();
             }
+
+            this.isSelected(record) ? this.selected(null) : this.selected(record);
+            this.toggleAddSelectedButton();
 
             return true;
         },
