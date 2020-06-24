@@ -39,7 +39,7 @@ define([
          * @returns {Sticky} Chainable.
          */
         initialize: function () {
-            this._super().observe(['activeNode', 'jsTreeReloaded']).initView();
+            this._super().observe(['activeNode']).initView();
 
             this.waitForCondition(
                 function () {
