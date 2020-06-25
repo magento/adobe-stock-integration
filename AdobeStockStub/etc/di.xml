@@ -30,6 +30,15 @@
                 <item name="SearchSpecificAssetToValidateKeywords" xsi:type="object">
                     Magento\AdobeStockStub\Model\Modifier\SearchSpecificAssetToValidateKeywords
                 </item>
+                <item name="SearchBySpecifiedMediaId" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchBySpecifiedMediaId
+                </item>
+                <item name="SearchBySpecifiedModelId" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchBySpecifiedModelId
+                </item>
+                <item name="SearchBySpecifiedSerieId" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchBySpecifiedSerieId
+                </item>
             </argument>
         </arguments>
     </type>

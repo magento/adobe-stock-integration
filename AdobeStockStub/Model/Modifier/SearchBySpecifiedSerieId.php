@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Magento\AdobeStockStub\Model\Modifier;
 
 /**
- * Modify File if the search contains specified media id.
+ * Modify File if the search contains specified serie id.
  */
-class SearchBySpecifiedMediaId implements ModifierInterface
+class SearchBySpecifiedSerieId implements ModifierInterface
 {
     /**
-     * Modify file data if request for the specific media id.
+     * Modify file data if request for the specific serie id.
      *
      * @param array $files
      * @param string $url
@@ -24,7 +24,7 @@ class SearchBySpecifiedMediaId implements ModifierInterface
      */
     public function modify(array $files, string $url, array $headers): array
     {
-        return (preg_match('/(\[media_id\]=)\d+/', $url)) ?
+        return (preg_match('/(\[serie_id\]=)\d+/', $url)) ?
             $this->changeSearchResult($files)
             : $files;
     }
@@ -38,7 +38,7 @@ class SearchBySpecifiedMediaId implements ModifierInterface
      */
     private function changeSearchResult(array $files): array
     {
-        $files['nb_results'] = 1000;
+        $files['nb_results'] = 1002;
 
         return $files;
     }
