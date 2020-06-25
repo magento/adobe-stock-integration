@@ -94,6 +94,11 @@ define([
             this.mediaGalleryImageDetails().showImageDetailsById(recordId);
         },
 
+        /**
+         * Edit image details
+         *
+         * @param {Object} record
+         */
         editImageDetails: function (record) {
             var recordId = this.imageModel().getId(record);
 
