@@ -23,6 +23,7 @@ define([
             acceptFileTypes: '',
             allowedExtensions: '',
             maxFileSize: '',
+            maxFileNameLength: 90,
             loader: false,
             modules: {
                 directories: '${ $.directoriesPath }',
@@ -93,6 +94,16 @@ define([
                         this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
 
                         return;
+                    } else if (!this.isFileNameLengthExceeded(data.files[0]).passed) {
+                        this.mediaGridMessages().add(
+                           'error',
+                           $.mage.__('Cannot upload <b>' + data.files[0].name +
+                                     '</b>. Filenaem is too long, must be 90 chracters or less.')
+                        );
+
+                        this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
+
+                        return;
                     }
 
                     this.showLoader();
@@ -133,6 +144,17 @@ define([
          */
         isSizeExceeded: function (file) {
             return validator('validate-max-size', file.size, this.maxFileSize);
+        },
+
+        /**
+         * Checks if namelength of provided file exceeds
+         * defined in configuration size limits.
+         *
+         * @param {Object} file - File to be checked.
+         * @returns {Boolean}
+         */
+        isFileNameLengthExceeded: function (file) {
+            return validator('max_text_length', file.name, this.maxFileNameLength);
         },
 
         /**
