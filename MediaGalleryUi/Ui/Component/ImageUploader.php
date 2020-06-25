@@ -20,7 +20,6 @@ class ImageUploader extends Container
     private const ACCEPT_FILE_TYPES = '/(\.|\/)(gif|jpe?g|png)$/i';
     private const ALLOWED_EXTENSIONS = 'jpg jpeg png gif';
 
-
     /**
      * @var UrlInterface
      */
