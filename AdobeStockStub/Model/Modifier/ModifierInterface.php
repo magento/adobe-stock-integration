@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model\Modifier;
 
-use Magento\Framework\DataObject;
-
 /**
  * Validate request URL or request headers and if applicable modify response file.
  */

@@ -27,6 +27,9 @@
                 <item name="SearchForSecondSymbols" xsi:type="object">
                     Magento\AdobeStockStub\Model\Modifier\SearchForSecondSymbols
                 </item>
+                <item name="SearchSpecificAssetToValidateKeywords" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchSpecificAssetToValidateKeywords
+                </item>
             </argument>
         </arguments>
     </type>

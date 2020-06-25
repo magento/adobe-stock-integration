@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model\Modifier;
 
-use Magento\Framework\DataObject;
-
 /**
  * Modify File if the search request is on non existed color.
  */

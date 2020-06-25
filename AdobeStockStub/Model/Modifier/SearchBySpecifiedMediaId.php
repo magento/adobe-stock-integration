@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model\Modifier;
 
-use Magento\Framework\DataObject;
-
 /**
  * Modify File if the search contains specified media id.
  */
@@ -27,7 +25,7 @@ class SearchBySpecifiedMediaId implements ModifierInterface
     public function modify(array $files, string $url, array $headers): array
     {
         return (preg_match('(\[media_id\]=[0-9]', $url)) ?
-            array_slice($files, 1)
+            reset($files)
             : $files;
     }
 }

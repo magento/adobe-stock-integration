@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model\Modifier;
 
-use Magento\Framework\DataObject;
-
 /**
  * Validate is Adobe Stock API credentials invalid and modify is yes.
  */
