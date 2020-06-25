@@ -28,7 +28,10 @@ class IsApiCredentialsInvalid implements ModifierInterface
     {
         return ($headers['headers']['x-api-key'] !== self::INCORRECT_API_KEY_USED_FOR_TESTS) ?
             $files
-            : [];
+            : [
+                'nb_results' => 0,
+                'files' => []
+            ];
     }
 
 }

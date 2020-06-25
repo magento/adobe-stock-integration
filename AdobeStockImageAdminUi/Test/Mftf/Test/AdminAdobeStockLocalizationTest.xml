@@ -45,10 +45,10 @@
         <wait time="5" stepKey="waitBeforeExpandSectionLoadFull"/>
         <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.firstKeyword}}" stepKey="grabKeyword"/>
         <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.imagePreviewCategoryText}}" stepKey="grabCategoryText"/>
-        <actionGroup ref="AssertAdminAdobeStockImageAttributesLocalizedActionGroup" stepKey="assertKeywordLocalized">
+        <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertKeywordLocalized">
              <argument name="stringToBeVerified" value="{$grabKeyword}"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminAdobeStockImageAttributesLocalizedActionGroup" stepKey="assertCategoryLocalized">
+        <actionGroup ref="AssertAdminAdobeStockKeywordLocalizedActionGroup" stepKey="assertCategoryLocalized">
              <argument name="stringToBeVerified" value="{$grabCategoryText}"/>
         </actionGroup>
     </test>

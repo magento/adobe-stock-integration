@@ -58,10 +58,7 @@ class Handler
                 }
             }
 
-        return [
-            'nb_results' => count($files),
-            'files' => $files
-        ];
+        return $files;
     }
 
     /**

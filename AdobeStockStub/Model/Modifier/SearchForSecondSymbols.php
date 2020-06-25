@@ -26,7 +26,10 @@ class SearchForSecondSymbols implements ModifierInterface
     public function modify(array $files, string $url, array $headers): array
     {
         return $this->isSecondSymbolRequest($url) ?
-            []
+            [
+                'nb_results' => 0,
+                'files' => []
+            ]
             : $files;
     }
 

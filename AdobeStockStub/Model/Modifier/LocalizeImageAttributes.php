@@ -39,7 +39,7 @@ class LocalizeImageAttributes implements ModifierInterface
      */
     public function translateFilesAttributes(array $files): array
     {
-        foreach ($files as &$file) {
+        foreach ($files['files'] as &$file) {
             $file['category'] = [
                 'id' => 1,
                 'name' => 'Автомобили',

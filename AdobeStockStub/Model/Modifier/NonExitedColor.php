@@ -25,7 +25,10 @@ class NonExitedColor implements ModifierInterface
     public function modify(array $files, string $url, array $headers): array
     {
         return (preg_match('(\[colors\]=none)', $url)) ?
-            []
+            [
+                'nb_results' => 0,
+                'files' => []
+            ]
             : $files;
     }
 }

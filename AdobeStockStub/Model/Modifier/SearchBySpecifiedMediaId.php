@@ -25,7 +25,10 @@ class SearchBySpecifiedMediaId implements ModifierInterface
     public function modify(array $files, string $url, array $headers): array
     {
         return (preg_match('(\[media_id\]=[0-9]', $url)) ?
-            reset($files)
+            [
+                'nb_results' => 0,
+                'files' => reset($files)
+            ]
             : $files;
     }
 }

@@ -39,9 +39,12 @@ class SearchSpecificAssetToValidateKeywords implements ModifierInterface
      */
     private function setSpecifiedAssetParametersForTest(array $files): array
     {
-        $asset = reset($files);
+        $asset = reset($files['files']);
         $asset['keywords'][0] = ['name' => 'accessory'];
 
-        return [$asset];
+        return [
+            'nb_results',
+            'files' => $asset
+        ];
     }
 }

@@ -60,7 +60,10 @@ class FileGenerator
             $iterator++;
         } while ($filesAmount > $iterator);
 
-        return $files;
+        return [
+            'nb_results' => count($files),
+            'files' => $files
+        ];
     }
 
     /**
