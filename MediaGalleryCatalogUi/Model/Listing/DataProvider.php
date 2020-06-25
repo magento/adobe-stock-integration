@@ -138,10 +138,13 @@ class DataProvider extends UiComponentDataProvider
             $category = $this->categoryRepository->get(
                 $categoryData[$collection->getEntity()->getIdFieldName()]
             );
+            if ($category->getId() == 1) {
+                continue;
+            }
             $items[] = $this->addAttributes(
                 [
                     'name'  => $category->getName(),
-                    'entity_id' => $category->getId(),
+                    'entity_id' => $category->getEntityId(),
                     'image' => $category->getImage(),
                     'path' => $category->getPath(),
                     'display_mode' => $category->getDisplayMode(),
