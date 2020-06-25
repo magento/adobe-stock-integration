@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockImageVerifyLicenseActionOnMediaGallery">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #39] User license the preview image in Media Gallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1519"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/3586886"/>
+            <title value="Admin should be able to see license action on enhanced media gallery"/>
+            <description value="Admin should be able to see license action on enhanced media gallery"/>
+            <severity value="BLOCKER"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AssertAdminAdobeStockImageUnlicensedLabelActionGroup" stepKey="assertUnlicensedLabel"/>
+        <actionGroup ref="AssertAdminAdobeStockImageAssertLicenseButtonMediaGalleryActionGroup" stepKey="assertLicenseButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
+        
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockImageAssertLicenseButtonNotAvailableInMediaGalleryActionGroup" stepKey="assertLicenseButtonNotAvailable"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+    </test>
+</tests>

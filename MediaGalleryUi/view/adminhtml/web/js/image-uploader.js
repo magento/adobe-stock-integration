@@ -159,7 +159,7 @@ define([
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__('Cannot upload <b>' + file.name + '</b>. This file format is not supported')
+                    $.mage.__('Cannot upload <b>' + file.name + '</b>. This file format is not supported.')
                 );
             }.bind(this));
 
