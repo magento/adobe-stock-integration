@@ -98,7 +98,7 @@ define([
                         this.mediaGridMessages().add(
                            'error',
                            $.mage.__('Cannot upload <b>' + data.files[0].name +
-                                     '</b>. Filenaem is too long, must be 90 chracters or less.')
+                                     '</b>. Filename is too long, must be 90 chracters or less.')
                         );
 
                         this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
@@ -147,7 +147,7 @@ define([
         },
 
         /**
-         * Checks if namelength of provided file exceeds
+         * Checks if name length of provided file exceeds
          * defined in configuration size limits.
          *
          * @param {Object} file - File to be checked.
