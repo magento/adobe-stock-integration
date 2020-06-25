@@ -21,9 +21,10 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\DataObject;
+use Magento\Catalog\Api\CategoryListInterface;
 
 /**
- * DataProvider of customer addresses for customer address grid.
+ * DataProvider of category grid.
  */
 class DataProvider extends UiComponentDataProvider
 {
@@ -34,24 +35,9 @@ class DataProvider extends UiComponentDataProvider
     private $searchResultFactory;
 
     /**
-     * @var CollectionProcessorInterface
+     * @var CategoryListInterface
      */
-    private $collectionProcessor;
-    
-    /**
-     * @var CollectionFactory
-     */
-    private $categoryCollectionFactory;
-
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
-    /**
-     * @var JoinProcessorInterface
-     */
-    private $extensionAttributesJoinProcessor;
+    private $categoryList;
 
     /**
      * @var AttributeValueFactory
@@ -59,7 +45,6 @@ class DataProvider extends UiComponentDataProvider
     private $attributeValueFactory;
 
     /**
-     * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -67,7 +52,9 @@ class DataProvider extends UiComponentDataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
-     * @param CategoryListInterface $categoryRepository
+     * @param SearchResultFactory $searchResultFactory
+     * @param CategoryListInterface $categoryList
+     * @param AttributeValueFactory $attributeValueFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -81,10 +68,7 @@ class DataProvider extends UiComponentDataProvider
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         SearchResultFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $categoryCollectionFactory,
-        CategoryRepositoryInterface $categoryRepository,
-        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        CategoryListInterface $categoryList,
         AttributeValueFactory $attributeValueFactory,
         array $meta = [],
         array $data = []
@@ -100,10 +84,7 @@ class DataProvider extends UiComponentDataProvider
             $meta,
             $data
         );
-        $this->categoryRepository = $categoryRepository;
-        $this->collectionProcessor = $collectionProcessor;
-        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->categoryList = $categoryList;
         $this->searchResultFactory = $searchResultFactory;
         $this->attributeValueFactory = $attributeValueFactory;
     }
@@ -128,16 +109,9 @@ class DataProvider extends UiComponentDataProvider
      */
     public function getSearchResult(): SearchResultInterface
     {
-        /** @var Collection $collection */
-        $collection = $this->categoryCollectionFactory->create();
-        $this->extensionAttributesJoinProcessor->process($collection);
-        $this->collectionProcessor->process($this->getSearchCriteria(), $collection);
-
+        $collection = $this->categoryList->getList($this->getSearchCriteria());
         $items = [];
-        foreach ($collection->getData() as $categoryData) {
-            $category = $this->categoryRepository->get(
-                $categoryData[$collection->getEntity()->getIdFieldName()]
-            );
+        foreach ($collection->getItems() as $category) {
             if ($category->getId() == 1) {
                 continue;
             }
@@ -158,14 +132,13 @@ class DataProvider extends UiComponentDataProvider
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($this->getSearchCriteria());
         $searchResult->setItems($items);
-        $searchResult->setTotalCount($collection->getSize());
+        $searchResult->setTotalCount(count($items));
         return $searchResult;
     }
 
     /**
-     * Add attributes to document
+     * Add attributes to grid result
      *
-     * @param Document $document
      * @param array $attributes [code => value]
      */
     private function addAttributes(array $attributes)

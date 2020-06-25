@@ -30,9 +30,10 @@ class Thumbnail extends Column
     private $imageHelper;
 
     /**
-     * @param  StoreManagerInterface $storeManager,
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Image $image
      * @param array $components
      * @param array $data
      */
@@ -74,12 +75,12 @@ class Thumbnail extends Column
     }
 
     /**
-    * Get URL for the provided media asset path
-    *
-    * @param string $path
-    * @return string
-    * @throws LocalizedException
-    */
+     * Get URL for the provided media asset path
+     *
+     * @param string $path
+     * @return string
+     * @throws LocalizedException
+     */
     private function getUrl(string $path): string
     {
         /** @var Store $store */
