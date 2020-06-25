@@ -15,10 +15,6 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\DataObject;
 use Magento\Catalog\Api\CategoryListInterface;
@@ -133,6 +129,7 @@ class DataProvider extends UiComponentDataProvider
         $searchResult->setSearchCriteria($this->getSearchCriteria());
         $searchResult->setItems($items);
         $searchResult->setTotalCount(count($items));
+
         return $searchResult;
     }
 
