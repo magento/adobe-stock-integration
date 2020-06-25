@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use  Magento\Catalog\Helper\Image;
+use Magento\Catalog\Helper\Image;
 use Magento\Framework\DataObject;
 
 /**
