@@ -19,6 +19,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\DataObject;
 
 /**
  * DataProvider of customer addresses for customer address grid.
@@ -52,6 +54,11 @@ class DataProvider extends UiComponentDataProvider
     private $extensionAttributesJoinProcessor;
 
     /**
+     * @var AttributeValueFactory
+     */
+    private $attributeValueFactory;
+
+    /**
      * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
@@ -78,6 +85,7 @@ class DataProvider extends UiComponentDataProvider
         CollectionFactory $categoryCollectionFactory,
         CategoryRepositoryInterface $categoryRepository,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
+        AttributeValueFactory $attributeValueFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -97,6 +105,7 @@ class DataProvider extends UiComponentDataProvider
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->searchResultFactory = $searchResultFactory;
+        $this->attributeValueFactory = $attributeValueFactory;
     }
 
     /**
@@ -126,8 +135,20 @@ class DataProvider extends UiComponentDataProvider
 
         $items = [];
         foreach ($collection->getData() as $categoryData) {
-            $items[] = $this->categoryRepository->get(
+            $category = $this->categoryRepository->get(
                 $categoryData[$collection->getEntity()->getIdFieldName()]
+            );
+            $items[] = $this->addAttributes(
+                [
+                    'name'  => $category->getName(),
+                    'entity_id' => $category->getId(),
+                    'image' => $category->getImage(),
+                    'path' => $category->getPath(),
+                    'display_mode' => $category->getDisplayMode(),
+                    'products' => $category->getProductCount(),
+                    'include_in_menu' => $category->getIncludeInMenu(),
+                    'enabled' => $category->getIsActive()
+                ]
             );
         }
 
@@ -136,5 +157,28 @@ class DataProvider extends UiComponentDataProvider
         $searchResult->setItems($items);
         $searchResult->setTotalCount($collection->getSize());
         return $searchResult;
+    }
+
+    /**
+     * Add attributes to document
+     *
+     * @param Document $document
+     * @param array $attributes [code => value]
+     */
+    private function addAttributes(array $attributes)
+    {
+        $category =  new DataObject([]);
+        $customAttributes = $category->getCustomAttributes();
+
+        foreach ($attributes as $code => $value) {
+            $attribute = $this->attributeValueFactory->create();
+            $attribute->setAttributeCode($code);
+            $attribute->setValue($value);
+            $customAttributes[$code] = $attribute;
+        }
+
+        $category->setCustomAttributes($customAttributes);
+
+        return $category;
     }
 }

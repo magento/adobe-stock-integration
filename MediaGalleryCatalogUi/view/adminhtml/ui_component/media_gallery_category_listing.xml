@@ -47,6 +47,15 @@
     <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <bookmark name="bookmarks"/>
         <filterSearch name="fulltext" />
+        <filters name="listing_filters">
+            <filterInput name="name" provider="${ $.parentName }">
+                <settings>
+                    <visible>false</visible>
+                    <dataScope>name</dataScope>
+                    <label translate="true">Name</label>
+                </settings>
+            </filterInput>
+         </filters>
         <paging name="listing_paging">
             <settings>
                 <options>
@@ -70,9 +79,13 @@
     <columns name="media_gallery_category_columns">
         <column name="entity_id">
             <settings>
-                <filter>textRange</filter>
                 <label translate="true">ID</label>
-               <resizeDefaultWidth>25</resizeDefaultWidth>
+            </settings>
+        </column>
+        <column name="image" component="Magento_Ui/js/grid/columns/thumbnail" class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\Thumbnail">
+            <settings>
+                <sortable>false</sortable>
+                <label translate="true">Image</label>
             </settings>
         </column>
         <column name="name">
@@ -84,6 +97,42 @@
         <column name="path">
             <settings>
                 <label translate="true">Path</label>
+            </settings>
+        </column>
+        <column name="display_mode">
+            <settings>
+                <label translate="true">Display Mode</label>
+            </settings>
+        </column>
+        <column name="products">
+            <settings>
+                <label translate="true">Products</label>
+            </settings>
+        </column>
+        <column name="include_in_menu">
+           <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+            </argument>
+            <settings>
+                <filter>select</filter>
+                <label translate="true">In Menu</label>
+            </settings>
+        </column>
+        <column name="enabled">
+           <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+            </argument>
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Enabled</label>
             </settings>
         </column>
     </columns>
