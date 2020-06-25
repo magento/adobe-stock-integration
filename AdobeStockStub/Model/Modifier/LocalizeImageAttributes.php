@@ -25,8 +25,7 @@ class LocalizeImageAttributes implements ModifierInterface
      */
     public function modify(array $files, string $url, array $headers): array
     {
-        $word = $this->parseUrl($url);
-        return ($word === 'Автомобили') ?
+        return $this->isLocalisedRequest($url) ?
             $this->translateFilesAttributes($files)
             : $files;
     }
@@ -55,21 +54,23 @@ class LocalizeImageAttributes implements ModifierInterface
     }
 
     /**
-     * Parse request URL to get words filter value.
+     * Parse request URL to get localised word filter value.
      *
      * @param string $url
      *
-     * @return string
+     * @return bool
      */
-    private function parseUrl(string $url): string
+    private function isLocalisedRequest(string $url): bool
     {
-        $word = '';
+        $localisedRequest = false;
         $queryString = parse_url($url, PHP_URL_QUERY);
         if (null !== $queryString) {
             parse_str($queryString, $query);
-            $word = isset($query['search_parameters']['words']) ? $query['search_parameters']['words'] : $word;
+            $localisedRequest = isset($query['search_parameters']['words'])
+                ? $query['search_parameters']['words'] === 'Автомобили'
+                : false;
         }
 
-        return $word;
+        return $localisedRequest;
     }
 }

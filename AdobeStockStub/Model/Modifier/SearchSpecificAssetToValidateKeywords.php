@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model\Modifier;
 
-/**Volumes/Projects/apache/magento2/setup/src/Magento/Setup/Module.php
+/**
  * Modify File if the search request contains specified image id to validate keywords appearance.
  */
 class SearchSpecificAssetToValidateKeywords implements ModifierInterface

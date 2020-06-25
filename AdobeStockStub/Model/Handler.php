@@ -74,7 +74,7 @@ class Handler
     private function getLimit(string $url): int
     {
         $matches = [];
-        preg_match_all("/(?<=\[limit\]=).[0-9]/", $url, $matches);
+        preg_match_all("/(?<=\[limit\]=)\d+/", $url, $matches);
         return !empty($matches) ?
             (int)$matches[0][0]
             : 0;
