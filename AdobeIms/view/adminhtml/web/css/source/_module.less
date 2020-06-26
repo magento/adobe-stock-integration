@@ -3,6 +3,13 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
+@color-sign-in-button-hover-active:  #007bdb;
+
+
 & when (@media-common = true) {
     .adobe-login-container {
         .adobe-sign-in-button {
@@ -16,16 +23,16 @@
             z-index: 99;
             &:hover:active {
                 background: transparent;
-                color: #007bdb;
+                color: @color-sign-in-button-hover-active;
             }
 
         }
 
         .adobe-user-information {
             float: right;
-            width: auto;
             margin-right: 30px;
             margin-top: -54px;
+            width: auto;
 
             .adobe-profile-image-small {
                 background-repeat: repeat-x;
