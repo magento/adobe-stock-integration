@@ -24,7 +24,7 @@ class SearchBySpecifiedMediaId implements ModifierInterface
      */
     public function modify(array $files, array $url, array $headers): array
     {
-        return isset($url['filters']['media_id']) ?
+        return isset($url['search_parameters']['media_id']) ?
             $this->changeSearchResult($files)
             : $files;
     }
@@ -38,7 +38,10 @@ class SearchBySpecifiedMediaId implements ModifierInterface
      */
     private function changeSearchResult(array $files): array
     {
-        $files['nb_results'] = 1000;
+        $files = [
+            'nb_results' => 1000,
+            'files' => [reset($files['files'])]
+        ];
 
         return $files;
     }

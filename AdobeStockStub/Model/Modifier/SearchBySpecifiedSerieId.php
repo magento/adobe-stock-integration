@@ -24,7 +24,7 @@ class SearchBySpecifiedSerieId implements ModifierInterface
      */
     public function modify(array $files, array $url, array $headers): array
     {
-        return isset($url['filters']['serie_id']) ?
+        return isset($url['search_parameters']['serie_id']) ?
             $this->changeSearchResult($files)
             : $files;
     }

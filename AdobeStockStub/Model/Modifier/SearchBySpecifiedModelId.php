@@ -24,7 +24,7 @@ class SearchBySpecifiedModelId implements ModifierInterface
      */
     public function modify(array $files, array $url, array $headers): array
     {
-        return isset($url['filters']['model_id']) ?
+        return isset($url['search_parameters']['model_id']) ?
             $this->changeSearchResult($files)
             : $files;
     }
