@@ -16,7 +16,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\DataObject;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Catalog\Api\CategoryListInterface;
 
 /**
@@ -24,7 +25,6 @@ use Magento\Catalog\Api\CategoryListInterface;
  */
 class DataProvider extends UiComponentDataProvider
 {
-
     /**
      * @var SearchResultFactory
      */
@@ -39,6 +39,11 @@ class DataProvider extends UiComponentDataProvider
      * @var AttributeValueFactory
      */
     private $attributeValueFactory;
+
+    /**
+    * @var DocumentFactory
+    */
+    private $documentFactory;
 
     /**
      * @param string $name
@@ -66,6 +71,7 @@ class DataProvider extends UiComponentDataProvider
         SearchResultFactory $searchResultFactory,
         CategoryListInterface $categoryList,
         AttributeValueFactory $attributeValueFactory,
+        DocumentFactory $documentFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -83,6 +89,7 @@ class DataProvider extends UiComponentDataProvider
         $this->categoryList = $categoryList;
         $this->searchResultFactory = $searchResultFactory;
         $this->attributeValueFactory = $attributeValueFactory;
+        $this->documentFactory = $documentFactory;
     }
 
     /**
@@ -100,6 +107,7 @@ class DataProvider extends UiComponentDataProvider
             ];
         }
     }
+    
     /**
      * @inheritDoc
      */
@@ -111,7 +119,7 @@ class DataProvider extends UiComponentDataProvider
             if ($category->getId() == 1) {
                 continue;
             }
-            $items[] = $this->addAttributes(
+            $items[] = $this->createDocument(
                 [
                     'name'  => $category->getName(),
                     'entity_id' => $category->getEntityId(),
@@ -138,10 +146,10 @@ class DataProvider extends UiComponentDataProvider
      *
      * @param array $attributes [code => value]
      */
-    private function addAttributes(array $attributes)
+    private function createDocument(array $attributes): Document
     {
-        $category =  new DataObject([]);
-        $customAttributes = $category->getCustomAttributes();
+        $item = $this->documentFactory->create();
+        $customAttributes = [];
 
         foreach ($attributes as $code => $value) {
             $attribute = $this->attributeValueFactory->create();
@@ -150,8 +158,8 @@ class DataProvider extends UiComponentDataProvider
             $customAttributes[$code] = $attribute;
         }
 
-        $category->setCustomAttributes($customAttributes);
+        $item->setCustomAttributes($customAttributes);
 
-        return $category;
+        return $item;
     }
 }

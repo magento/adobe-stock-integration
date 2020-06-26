@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryCatalogUi\Controller\Adminhtml\Index;
+namespace Magento\MediaGalleryCatalogUi\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
