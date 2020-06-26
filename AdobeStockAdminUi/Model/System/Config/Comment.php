@@ -39,10 +39,9 @@ class Comment implements CommentInterface
     /**
      * Added Redirect URL and Redirect url pattern in comment text
      *
-     * @param  string $elementValue
      * @return string
      */
-    public function getCommentText($elementValue): string
+    public function getCommentText(): string
     {
         $message = __(
             'Configure an Adobe Stock account on the %io_link site to retrieve a Private key (Client secret).',
