@@ -18,12 +18,12 @@ class SearchForSecondSymbols implements ModifierInterface
      *
      * @see [Story #2] User searches Adobe Stock images by keywords
      * @param array $files
-     * @param string $url
+     * @param array $url
      * @param array $headers
      *
      * @return array
      */
-    public function modify(array $files, string $url, array $headers): array
+    public function modify(array $files, array $url, array $headers): array
     {
         return $this->isSecondSymbolRequest($url) ?
             [
@@ -36,22 +36,13 @@ class SearchForSecondSymbols implements ModifierInterface
     /**
      * Parse request URL to get second symbols search request value.
      *
-     * @param string $url
+     * @param array $url
      *
      * @return bool
      */
-    private function isSecondSymbolRequest(string $url): bool
+    private function isSecondSymbolRequest(array $url): bool
     {
-        $secondSymbolsRequest = false;
-        $queryString = parse_url($url, PHP_URL_QUERY);
-        if (null !== $queryString) {
-            parse_str($queryString, $query);
-            $secondSymbolsRequest = isset($query['search_parameters']['words'])
-                ? $query['search_parameters']['words']
-                === '} { ] [ ) ( ~ ! @ # $ % ^ & ` |  :  ; \' < > ? , . ⁄ -+'
-                : false;
-        }
-
-        return $secondSymbolsRequest;
+        return isset($url['search_parameters']['words']) && $url['search_parameters']['words']
+            === '} { ] [ ) ( ~ ! @ # $ % ^ & ` |  :  ; \' < > ? , . ⁄ -+';
     }
 }

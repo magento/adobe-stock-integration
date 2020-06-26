@@ -22,13 +22,13 @@ class IsApiCredentialsInvalid implements ModifierInterface
      * @see [Story #6] User configures Adobe Stock integration
      *
      * @param array $files
-     * @param string $url
+     * @param array $url
      * @param array $headers
      *
      * @return array
      * @throws \Exception
      */
-    public function modify(array $files, string $url, array $headers): array
+    public function modify(array $files, array $url, array $headers): array
     {
         if (
             $headers['headers']['x-api-key'] === self::INCORRECT_API_KEY_USED_FOR_TESTS

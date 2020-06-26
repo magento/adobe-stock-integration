@@ -17,14 +17,14 @@ class SearchBySpecifiedSerieId implements ModifierInterface
      * Modify file data if request for the specific serie id.
      *
      * @param array $files
-     * @param string $url
+     * @param array $url
      * @param array $headers
      *
      * @return array
      */
-    public function modify(array $files, string $url, array $headers): array
+    public function modify(array $files, array $url, array $headers): array
     {
-        return (preg_match('/(\[serie_id\]=)\d+/', $url)) ?
+        return isset($url['filters']['serie_id']) ?
             $this->changeSearchResult($files)
             : $files;
     }

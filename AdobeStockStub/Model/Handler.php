@@ -47,8 +47,8 @@ class Handler
      */
     public function generateResponse(string $url, array $headers): array
     {
-        $url = urldecode($url);
-        $files = $this->fileGenerator->generate($this->getLimit($url));
+        $url = $this->parseUrl($url);
+        $files = $this->fileGenerator->generate((int)$url['search_parameters']['limit']);
             foreach ($this->modifiers as $modifier) {
                 if ($modifier instanceof ModifierInterface) {
                     $files = $modifier->modify($files, $url, $headers);
@@ -62,18 +62,20 @@ class Handler
     }
 
     /**
-     * Get the limit from the request URL.
+     * Parse URL. Need it in array for consistence and comfortable complex search search.
      *
      * @param string $url
      *
-     * @return int
+     * @return array|null
      */
-    private function getLimit(string $url): int
+    private function parseUrl(string $url): ?array
     {
-        $matches = [];
-        preg_match_all("/(?<=\[limit\]=)\d+/", $url, $matches);
-        return !empty($matches) ?
-            (int)$matches[0][0]
-            : 0;
+        $query = [];
+        $queryString = parse_url(urldecode($url), PHP_URL_QUERY);
+        if (null !== $queryString) {
+            parse_str($queryString, $query);
+        }
+
+        return $query;
     }
 }

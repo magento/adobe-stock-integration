@@ -18,14 +18,14 @@ class SearchSpecificAssetToValidateKeywords implements ModifierInterface
      *
      * @see [#Story 33] User searches for an image by its keyword tag
      * @param array $files
-     * @param string $url
+     * @param array $url
      * @param array $headers
      *
      * @return array
      */
-    public function modify(array $files, string $url, array $headers): array
+    public function modify(array $files, array $url, array $headers): array
     {
-        return (preg_match('(\[words\]=273672939)', $url)) ?
+        return (isset($url['filters']['words']) && $url['filters']['words'] === '273672939') ?
             $this->setSpecifiedAssetParametersForTest($files)
             : $files;
     }
