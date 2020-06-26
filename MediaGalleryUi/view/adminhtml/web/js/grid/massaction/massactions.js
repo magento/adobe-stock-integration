@@ -8,8 +8,9 @@ define([
     'uiComponent',
     'Magento_MediaGalleryUi/js/action/deleteImages',
     'uiLayout',
-    'underscore'
-], function ($, Component, DeleteImages, Layout, _) {
+    'underscore',
+    'Magento_Ui/js/modal/alert'
+], function ($, Component, DeleteImages, Layout, _, uiAlert) {
     'use strict';
 
     return Component.extend({
@@ -103,15 +104,22 @@ define([
         handleDeleteAction: function () {
             if (this.massActionMode()) {
                 $(this.massactionView().deleteButtonSelector).on('massDelete', function () {
-                    DeleteImages(
-                        this.imageModel().selected(),
-                        this.imageModel().deleteImageUrl,
-                        $.mage.__('Are you sure you want to delete "%2" images?').replace('%2', this.getSelectedCount())
-                    ).then(function () {
-                        this.imageModel().selected({});
-                        this.massActionMode(false);
-                        this.switchMode();
-                    }.bind(this));
+                    if (this.getSelectedCount() < 1) {
+                        uiAlert({
+                            content: $.mage.__('You need to select atleast one image')
+                        });
+
+                    } else {
+                        DeleteImages(
+                            this.imageModel().selected(),
+                            this.imageModel().deleteImageUrl,
+                            $.mage.__('Are you sure you want to delete "%2" images?').replace('%2', this.getSelectedCount())
+                        ).then(function () {
+                            this.imageModel().selected({});
+                            this.massActionMode(false);
+                            this.switchMode();
+                        }.bind(this));
+                    }
                 }.bind(this));
             }
         }
