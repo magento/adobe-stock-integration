@@ -106,14 +106,16 @@ define([
                 $(this.massactionView().deleteButtonSelector).on('massDelete', function () {
                     if (this.getSelectedCount() < 1) {
                         uiAlert({
-                            content: $.mage.__('You need to select atleast one image')
+                            content: $.mage.__('You need to select at least one image')
                         });
 
                     } else {
                         DeleteImages(
                             this.imageModel().selected(),
                             this.imageModel().deleteImageUrl,
-                            $.mage.__('Are you sure you want to delete "%2" images?').replace('%2', this.getSelectedCount())
+                            $.mage.__(
+                                'Are you sure you want to delete "%2" images?'
+                            ).replace('%2', this.getSelectedCount())
                         ).then(function () {
                             this.imageModel().selected({});
                             this.massActionMode(false);
