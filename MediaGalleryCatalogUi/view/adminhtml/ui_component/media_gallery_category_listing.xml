@@ -95,8 +95,8 @@
             </settings>
         </column>
         <column name="path" class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\Path">
-            <filter>text</filter>
             <settings>
+                <filter>text</filter>
                 <label translate="true">Path</label>
             </settings>
         </column>

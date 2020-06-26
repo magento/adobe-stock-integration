@@ -1,6 +1,6 @@
 # Magento_MediaGalleryCatalogUi module
 
-The Magento_MediaGalleryCatalogUi module that implement ctaegory grid for media gallery.
+The Magento_MediaGalleryCatalogUi module that implement category grid for media gallery.
 
 ## Extensibility
 
