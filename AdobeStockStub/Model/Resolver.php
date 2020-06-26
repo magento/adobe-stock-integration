@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockStub\Model;
 
+use AdobeStock\Api\Exception\StockApi as StockApiException;
 use GuzzleHttp\Psr7\Stream;
 
 /**
@@ -42,11 +43,16 @@ class Resolver
      * @param array $headers
      *
      * @return Stream
+     * @throws StockApiException
      */
     public function doGet(string $url, array $headers): Stream
     {
-        $resource = $this->handler->generateResponse($url, $headers);
-        return $this->streamFactory->create($resource);
+        try {
+            $resource = $this->handler->generateResponse($url, $headers);
+            return $this->streamFactory->create($resource);
+        } catch (\Exception $exception) {
+            throw StockApiException::withMessage($exception->getMessage());
+        }
     }
 
     /**
@@ -60,7 +66,7 @@ class Resolver
      */
     public function doPost(string $url, array $headers, array $post_data): Stream
     {
-        $resource = $this->handler->generateResponse($url);
+        $resource = $this->handler->generateResponse($url, $headers);
         return $this->streamFactory->create($resource);
     }
 
@@ -75,7 +81,7 @@ class Resolver
      */
     public function doMultiPart(string $url, array $headers, string $file): Stream
     {
-        $resource = $this->handler->generateResponse($url);
+        $resource = $this->handler->generateResponse($url, $headers);
         return $this->streamFactory->create($resource);
     }
 }

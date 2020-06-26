@@ -13,29 +13,30 @@ namespace Magento\AdobeStockStub\Model\Modifier;
  */
 class IsApiCredentialsInvalid implements ModifierInterface
 {
-    private const INCORRECT_API_KEY_USED_FOR_TESTS = [
-        'blahblahblah',
-        'wrong-api-key',
-    ];
-
+    private const INCORRECT_API_KEY_USED_FOR_TESTS = 'blahblahblah';
+    private const INCORRECT_API_KEY_USED_FOR_TESTS_THROWING_EXCEPTION = 'wrong-api-key';
 
     /**
      * Validate is invalid API credentials condition in the request URL.
      *
      * @see [Story #6] User configures Adobe Stock integration
+     *
      * @param array $files
      * @param string $url
      * @param array $headers
      *
      * @return array
+     * @throws \Exception
      */
     public function modify(array $files, string $url, array $headers): array
     {
-        return (in_array($headers['headers']['x-api-key'], self::INCORRECT_API_KEY_USED_FOR_TESTS)) ?
-            [
-                'nb_results' => 0,
-                'files' => []
-            ]
-            : $files;
+        if (
+            $headers['headers']['x-api-key'] === self::INCORRECT_API_KEY_USED_FOR_TESTS
+            || $headers['headers']['x-api-key'] === self::INCORRECT_API_KEY_USED_FOR_TESTS_THROWING_EXCEPTION
+        ) {
+            throw new \Exception();
+        }
+
+        return $files;
     }
 }

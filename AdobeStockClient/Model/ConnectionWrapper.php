@@ -126,7 +126,7 @@ class ConnectionWrapper
             $message . ': %error_message',
             ['error_message' => $exception->getMessage()]
         );
-        return new IntegrationException($phrase, $exception, $exception->getCode());
+        return new AuthenticationException($phrase, $exception, $exception->getCode());
     }
 
     /**
