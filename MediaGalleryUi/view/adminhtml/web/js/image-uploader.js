@@ -85,23 +85,13 @@ define([
 
                 add: function (e, data) {
                     if (!this.isSizeExceeded(data.files[0]).passed) {
-                        this.mediaGridMessages().add(
-                            'error',
-                            $.mage.__('Cannot upload <b>' + data.files[0].name +
-                                      '</b>. File exceeds maximum file size limit.')
-                        );
-
-                        this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
+                        this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
+                                      '". File exceeds maximum file size limit.');
 
                         return;
                     } else if (!this.isFileNameLengthExceeded(data.files[0]).passed) {
-                        this.mediaGridMessages().add(
-                           'error',
-                           $.mage.__('Cannot upload <b>' + data.files[0].name +
-                                     '</b>. Filename is too long, must be 90 chracters or less.')
-                        );
-
-                        this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
+                        this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
+                                                       '". Filename is too long, must be 90 chracters or less.');
 
                         return;
                     }
@@ -133,6 +123,20 @@ define([
                     this.actions().reloadGrid();
                 }.bind(this)
             });
+        },
+
+        /**
+         * Add error message after validation error.
+         *
+         * @param {String} message
+         */
+        addValidationErrorMessage: function (message) {
+            this.mediaGridMessages().add(
+                'error',
+                $.mage.__(message)
+            );
+
+            this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
         },
 
         /**
