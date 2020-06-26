@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\AdobeStockClient\Model\ConnectionFactory">
+        <arguments>
+            <argument name="httpClient" xsi:type="object">Magento\AdobeStockStub\Model\HttpClient</argument>
+        </arguments>
+    </type>
+    <type name="Magento\AdobeStockStub\Model\Handler">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="IsApiCredentialsInvalid" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\IsApiCredentialsInvalid
+                </item>
+                <item name="LocalizeImageAttributes" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\LocalizeImageAttributes
+                </item>
+                <item name="NonExitedColor" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\NonExitedColor
+                </item>
+                <item name="SearchForSecondSymbols" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchForSecondSymbols
+                </item>
+                <item name="SearchSpecificAssetToValidateKeywords" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchSpecificAssetToValidateKeywords
+                </item>
+                <item name="SearchBySpecifiedMediaId" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchBySpecifiedMediaId
+                </item>
+                <item name="SearchBySpecifiedModelId" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchBySpecifiedModelId
+                </item>
+                <item name="SearchBySpecifiedSerieId" xsi:type="object">
+                    Magento\AdobeStockStub\Model\Modifier\SearchBySpecifiedSerieId
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -37,7 +37,7 @@
         <seeElement selector="{{AdminAdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButtonPresnt"/>
         <seeElement selector="{{AdminAdobeStockImagePreviewSection.keywordsTitle}}" stepKey="seeAttributeTitle"/>
         <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCount">
-            <argument name="keywordsNumber" value="5"/>
+            <argument name="keywordsNumber" value="[1,5]"/>
         </actionGroup>
         <executeJS function="return document.querySelector('.keywords').childElementCount;" stepKey="expandedKeywordsCount"/>
         <!-- Click view all keywords -->
@@ -55,7 +55,7 @@
         <click selector="{{AdminAdobeStockImagePreviewSection.navigation('previous')}}" stepKey="navigateToPreviousImage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPreviousImageToLoad"/>
         <actionGroup ref="AssertAdminNumberOfKeywordsInAdobeStockImagePreviewActionGroup" stepKey="verifyKeywordsCountAfterHide">
-            <argument name="keywordsNumber" value="5"/>
+            <argument name="keywordsNumber" value="[1,5]"/>
         </actionGroup>
         <seeElement selector="{{AdminAdobeStockImagePreviewSection.viewAllKeywords}}" stepKey="VerifyViewAllButton"/>
     </test>

@@ -18,7 +18,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Exception\IntegrationException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -61,8 +60,6 @@ class ClientTest extends TestCase
 
     /**
      * Test with found images.
-     *
-     * @throws IntegrationException
      */
     public function testSearch(): void
     {
