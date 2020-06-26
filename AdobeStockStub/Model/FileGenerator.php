@@ -27,7 +27,7 @@ class FileGenerator
     private $assetRepository;
 
     /**
-     * @var string[]
+     * @var string[][]
      */
     private $stubImages;
 
@@ -62,7 +62,7 @@ class FileGenerator
 
         return [
             'nb_results' => count($files),
-            'files' => $files
+            'files' => $files,
         ];
     }
 
@@ -77,23 +77,24 @@ class FileGenerator
     {
         $this->setStubImages();
         switch ($iterator) {
-            case $iterator%2:
-                $imageUrl = $this->stubImages[1];
+            case $iterator % 2:
+                $stubImage = $this->stubImages[1];
                 break;
-            case $iterator%3:
-                $imageUrl = $this->stubImages[2];
+            case $iterator % 3:
+                $stubImage = $this->stubImages[2];
                 break;
             default:
-                $imageUrl = $this->stubImages[0];
+                $stubImage = $this->stubImages[0];
         }
+
         return [
             'id' => rand(1, 150),
             'comp_url' => 'https//adobe.stock.stub',
-            'thumbnail_240_url' => $imageUrl,
+            'thumbnail_240_url' => $stubImage['url'],
             'width' => rand(1, 10),
             'height' => rand(1, 10),
-            'thumbnail_500_url' => $imageUrl,
-            'title' => 'Adobe Stock Stub file',
+            'thumbnail_500_url' => $stubImage['url'],
+            'title' => $stubImage['title'],
             'creator_id' => rand(1, 10),
             'creator_name' => 'Adobe Stock file creator name',
             'creation_date' => '2020-03-11 12:50:05.542333',
@@ -112,7 +113,7 @@ class FileGenerator
             ],
             'media_type_id' => 1,
             'content_type' => 'image/png',
-            'details_url' => $imageUrl,
+            'details_url' => $stubImage['url'],
             'premium_level_id' => 0,
         ];
     }
@@ -124,9 +125,18 @@ class FileGenerator
     {
         if (empty($this->stubImages)) {
             $this->stubImages = [
-              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/1.png'),
-              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/2.png'),
-              $this->assetRepository->getUrl('Magento_AdobeStockStub::images/3.png')
+                [
+                    'title' => 'Adobe Stock Stub file 1',
+                    'url' => $this->assetRepository->getUrl('Magento_AdobeStockStub::images/1.png'),
+                ],
+                [
+                    'title' => 'Adobe Stock Stub file 2',
+                    'url' => $this->assetRepository->getUrl('Magento_AdobeStockStub::images/2.png'),
+                ],
+                [
+                    'title' => 'Adobe Stock Stub file 3',
+                    'url' => $this->assetRepository->getUrl('Magento_AdobeStockStub::images/3.png'),
+                ],
             ];
         }
     }

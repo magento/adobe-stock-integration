@@ -13,7 +13,6 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
@@ -47,13 +46,13 @@ class Save
 
     /**
      * @param Filesystem $filesystem
-     * @param Https $driver
+     * @param DriverInterface $driver
      * @param IsPathExcludedInterface $isPathExcluded
      * @param Storage $storage
      */
     public function __construct(
         Filesystem $filesystem,
-        Https $driver,
+        DriverInterface $driver,
         IsPathExcludedInterface $isPathExcluded,
         Storage $storage
     ) {

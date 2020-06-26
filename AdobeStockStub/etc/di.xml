@@ -12,6 +12,12 @@
             <argument name="httpClient" xsi:type="object">Magento\AdobeStockStub\Model\HttpClient</argument>
         </arguments>
     </type>
+    <type name="Magento\AdobeStockImage\Model\Storage\Save">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+        <plugin name="change_url_to_file_path" type="Magento\AdobeStockStub\Plugin\ChangeUrlToFilePath"/>
+    </type>
     <type name="Magento\AdobeStockStub\Model\Handler">
         <arguments>
             <argument name="modifiers" xsi:type="array">

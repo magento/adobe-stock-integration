@@ -25,7 +25,7 @@ class SearchSpecificAssetToValidateKeywords implements ModifierInterface
      */
     public function modify(array $files, array $url, array $headers): array
     {
-        return (isset($url['filters']['words']) && $url['filters']['words'] === '273672939') ?
+        return (isset($url['search_parameters']['media_id']) && $url['search_parameters']['media_id'] === '273672939') ?
             $this->setSpecifiedAssetParametersForTest($files)
             : $files;
     }
