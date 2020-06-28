@@ -104,7 +104,7 @@ return [
                 4 => ['name' => 'stub keyword 5'],
             ],
             'media_type_id' => 1,
-            'content_type' => 'image/png',
+            'content_type' => 'image/jpeg',
             'details_url' => $stubImage['url'],
             'premium_level_id' => 0,
         ];
