@@ -9,8 +9,8 @@ define([
 
     return function (saveImageDetailsUrl, formElement) {
         var deferred = $.Deferred(),
-            message;
-        var formData = formElement.serialize();
+            message,
+            formData = formElement.serialize();
 
         $.ajax({
             type: 'POST',

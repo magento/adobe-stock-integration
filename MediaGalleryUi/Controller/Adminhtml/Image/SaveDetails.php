@@ -11,8 +11,6 @@ use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -88,23 +86,6 @@ class SaveDetails extends Action implements HttpPostActionInterface
     /**
      * @inheritDoc
      */
-    public function createCsrfValidationException(
-        RequestInterface $request
-    ): ?InvalidRequestException {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function execute()
     {
         /** @var Json $resultJson */
@@ -131,11 +112,11 @@ class SaveDetails extends Action implements HttpPostActionInterface
             $asset->setTitle($title);
             $asset->setDescription($description);
             $this->saveAssets->execute([$asset]);
-            $assetKeywords = $this->assetKeywordsFactory->create([
-                'assetId' => $imageId,
-                'keywords' => $imageKeywords
-            ]);
-            $this->saveAssetKeywords->execute([$assetKeywords]);
+//            $assetKeywords = $this->assetKeywordsFactory->create([
+//                'assetId' => $imageId,
+//                'keywords' => $imageKeywords
+//            ]);
+//            $this->saveAssetKeywords->execute([$assetKeywords]);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

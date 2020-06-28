@@ -73,6 +73,7 @@ define([
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
                 modalElement = $(this.modalSelector);
+
             saveDetails(saveDetailsUrl, modalElement.find('#image-edit-details-form'));
             this.closeModal();
         },
