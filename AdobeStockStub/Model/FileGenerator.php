@@ -52,16 +52,19 @@ class FileGenerator
      */
     public function generate(int $filesAmount): array
     {
+        $this->setStubImages();
         $files = [];
         $iterator = 0;
+        $imageCounter = 0;
         do {
-            $file = $this->constructStubFileData($iterator);
+            $file = $this->constructStubFileData($imageCounter);
             $files[] = $file;
+            $imageCounter = $imageCounter === 4 ? 0 : $imageCounter + 1;
             $iterator++;
         } while ($filesAmount > $iterator);
 
-        return [
-            'nb_results' => count($files),
+return [
+            'nb_results' => rand(32, 256),
             'files' => $files,
         ];
     }
@@ -69,24 +72,13 @@ class FileGenerator
     /**
      * Prepare the etalon File data for the Response.
      *
-     * @param int $iterator
+     * @param int $imageCounter
      *
      * @return array
      */
-    private function constructStubFileData(int $iterator): array
+    private function constructStubFileData(int $imageCounter): array
     {
-        $this->setStubImages();
-        switch ($iterator) {
-            case $iterator % 2:
-                $stubImage = $this->stubImages[1];
-                break;
-            case $iterator % 3:
-                $stubImage = $this->stubImages[2];
-                break;
-            default:
-                $stubImage = $this->stubImages[0];
-        }
-
+        $stubImage = $this->stubImages[$imageCounter];
         return [
             'id' => rand(1, 150),
             'comp_url' => 'https//adobe.stock.stub',
@@ -96,7 +88,7 @@ class FileGenerator
             'thumbnail_500_url' => $stubImage['url'],
             'title' => $stubImage['title'],
             'creator_id' => rand(1, 10),
-            'creator_name' => 'Adobe Stock file creator name',
+            'creator_name' => 'gam16',
             'creation_date' => '2020-03-11 12:50:05.542333',
             'country_name' => 'Adobe Stock Stub file country name',
             'category' => [
@@ -123,20 +115,10 @@ class FileGenerator
      */
     private function setStubImages()
     {
-        if (empty($this->stubImages)) {
-            $this->stubImages = [
-                [
-                    'title' => 'Adobe Stock Stub file 1',
-                    'url' => $this->assetRepository->getUrl('Magento_AdobeStockStub::images/1.png'),
-                ],
-                [
-                    'title' => 'Adobe Stock Stub file 2',
-                    'url' => $this->assetRepository->getUrl('Magento_AdobeStockStub::images/2.png'),
-                ],
-                [
-                    'title' => 'Adobe Stock Stub file 3',
-                    'url' => $this->assetRepository->getUrl('Magento_AdobeStockStub::images/3.png'),
-                ],
+        for ($i = 1; $i < 6; $i++) {
+            $this->stubImages[] = [
+                'title' => 'Adobe Stock Stub file '. $i,
+                'url' => $this->assetRepository->getUrl('Magento_AdobeStockStub::images/'. $i .'.jpeg'),
             ];
         }
     }
