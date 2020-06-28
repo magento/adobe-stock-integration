@@ -8,8 +8,9 @@ define([
     'underscore',
     'uiElement',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
-    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected) {
+    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
+    'Magento_MediaGalleryUi/js/action/saveDetails'
+], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected, saveDetails) {
     'use strict';
 
     return Element.extend({
@@ -17,10 +18,12 @@ define([
             modalSelector: '',
             modalWindowSelector: '',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
+            mediaGalleryEditDetailsName: 'mediaGalleryEditDetails',
             template: 'Magento_MediaGalleryUi/image/actions',
             modules: {
                 imageModel: '${ $.imageModelName }',
-                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }',
+                mediaGalleryEditDetails: '${ $.mediaGalleryEditDetailsName }'
             }
         },
 
@@ -65,10 +68,13 @@ define([
         },
 
         /**
-         * Save image action
+         * Save image details action
          */
-        saveImageAction: function () {
-            // save action here
+        saveImageDetailsAction: function () {
+            var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
+                modalElement = $(this.modalSelector);
+            saveDetails(saveDetailsUrl, modalElement.find('#image-edit-details-form'));
+            this.closeModal();
         },
 
         /**

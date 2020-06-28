@@ -43,6 +43,7 @@ use Magento\Backend\Block\Template;
                     "mediaGalleryEditDetails": {
                         "component": "Magento_MediaGalleryUi/js/image/image-edit",
                         "imageEditDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageEditDetailsUrl')); ?>",
+                        "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-edit-image-details-modal",
                         "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
                     }
@@ -77,7 +78,7 @@ use Magento\Backend\Block\Template;
                             },
                             {
                                 "title": "<?= $escaper->escapeJs(__('Save')); ?>",
-                                "handler": "saveImageAction",
+                                "handler": "saveImageDetailsAction",
                                 "name": "save",
                                 "classes": "action-default scalable save action-quaternary"
                             }

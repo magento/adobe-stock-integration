@@ -11,6 +11,8 @@ use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -86,16 +88,34 @@ class SaveDetails extends Action implements HttpPostActionInterface
     /**
      * @inheritDoc
      */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function execute()
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $imageId = (int) $this->getRequest()->getParam('id');
-        $imageTitle = $this->getRequest()->getParam('title');
-        $imageDescription = $this->getRequest()->getParam('description');
+        $title = $this->getRequest()->getParam('title');
+        $description = $this->getRequest()->getParam('description');
         $imageKeywords = (array) $this->getRequest()->getParam('keywords');
 
         if ($imageId === 0) {
+            $this->logger->debug("IF");
             $responseContent = [
                 'success' => false,
                 'message' => __('Image ID is required.'),
@@ -108,10 +128,9 @@ class SaveDetails extends Action implements HttpPostActionInterface
 
         try {
             $asset = current($this->getAssetsByIds->execute([$imageId]));
-            $asset->setTitle($imageTitle);
-            $asset->setDescription($imageDescription);
-            $this->saveAssets->execute($asset);
-
+            $asset->setTitle($title);
+            $asset->setDescription($description);
+            $this->saveAssets->execute([$asset]);
             $assetKeywords = $this->assetKeywordsFactory->create([
                 'assetId' => $imageId,
                 'keywords' => $imageKeywords

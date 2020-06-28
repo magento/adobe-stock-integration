@@ -16,6 +16,7 @@ define([
             template: 'Magento_MediaGalleryUi/image/image-edit',
             modalSelector: '',
             imageEditDetailsUrl: '/media_gallery/image/details',
+            saveDetailsUrl: '/media_gallery/image/saveDetails',
             images: [],
             tagListLimit: 7,
             showAllTags: false,
@@ -50,7 +51,7 @@ define([
                 getDetails(this.imageEditDetailsUrl, imageId).then(function (imageDetails) {
                     this.images[imageId] = imageDetails;
                     this.image(this.images[imageId]);
-                    this.openImageDetailsModal();
+                    this.openEditImageDetailsModal();
                 }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);
                 }.bind(this));
@@ -59,19 +60,19 @@ define([
             }
 
             if (this.image() && this.image().id === imageId) {
-                this.openImageDetailsModal();
+                this.openEditImageDetailsModal();
 
                 return;
             }
 
             this.image(this.images[imageId]);
-            this.openImageDetailsModal();
+            this.openEditImageDetailsModal();
         },
 
         /**
-         * Open image details popup
+         * Open edit image details popup
          */
-        openImageDetailsModal: function () {
+        openEditImageDetailsModal: function () {
             var modalElement = $(this.modalSelector);
 
             if (!modalElement.length || _.isUndefined(modalElement.modal)) {
@@ -103,24 +104,6 @@ define([
         addMediaGridMessage: function (code, message) {
             this.mediaGridMessages().add(code, message);
             this.mediaGridMessages().scheduleCleanup();
-        },
-
-        /**
-         * Get tag text
-         *
-         * @param {String} tagText
-         * @param {Number} tagIndex
-         * @return {String}
-         */
-        getTagText: function (tagText, tagIndex) {
-            return tagText + (this.image().tags.length - 1 === tagIndex ? '' : ',');
-        },
-
-        /**
-         * Show all image tags
-         */
-        showMoreImageTags: function () {
-            this.showAllTags(true);
         },
 
         /**
