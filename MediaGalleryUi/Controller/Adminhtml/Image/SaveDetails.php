@@ -112,11 +112,11 @@ class SaveDetails extends Action implements HttpPostActionInterface
             $asset->setTitle($title);
             $asset->setDescription($description);
             $this->saveAssets->execute([$asset]);
-//            $assetKeywords = $this->assetKeywordsFactory->create([
-//                'assetId' => $imageId,
-//                'keywords' => $imageKeywords
-//            ]);
-//            $this->saveAssetKeywords->execute([$assetKeywords]);
+            $assetKeywords = $this->assetKeywordsFactory->create([
+                'assetId' => $imageId,
+                'keywords' => $imageKeywords
+            ]);
+            $this->saveAssetKeywords->execute([$assetKeywords]);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
