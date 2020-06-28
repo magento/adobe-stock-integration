@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Layout;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Layout;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Option\ArrayInterface;

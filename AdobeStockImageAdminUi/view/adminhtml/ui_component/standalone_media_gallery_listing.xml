@@ -30,14 +30,6 @@
                     <dataScope>source</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="entity_type" provider="${ $.parentName }" sortOrder="70"  component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
-                <settings>
-                    <caption translate="true">All</caption>
-                    <options class="Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Columns\Layout\Options"/>
-                    <label translate="true">Layout</label>
-                    <dataScope>entity_type</dataScope>
-                </settings>
-            </filterSelect>
         </filters>
     </listingToolbar>
     <columns name="media_gallery_columns">

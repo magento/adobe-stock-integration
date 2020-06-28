@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeStockImageAdminUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor;
+namespace Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor\CustomJoinInterface;
 use Magento\Framework\App\ResourceConnection;

@@ -37,14 +37,6 @@
         <arguments>
             <argument name="customJoins" xsi:type="array">
                 <item name="is_licensed" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\IsLicensed</item>
-                <item name="entity_type" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\EntityType</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
-        <arguments>
-            <argument name="customFilters" xsi:type="array">
-                <item name="entity_type" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\EntityType</item>
             </argument>
         </arguments>
     </virtualType>
