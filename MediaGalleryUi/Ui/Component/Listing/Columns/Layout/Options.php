@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Layout;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Option\ArrayInterface;
