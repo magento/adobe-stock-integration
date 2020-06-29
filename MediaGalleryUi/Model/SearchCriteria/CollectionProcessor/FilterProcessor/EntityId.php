@@ -15,7 +15,7 @@ class EntityId implements CustomFilterInterface
     /**
      * @inheritDoc
      */
-    public function apply(Filter $filter, AbstractDb $collection)
+    public function apply(Filter $filter, AbstractDb $collection): bool
     {
         $collection->getSelect()->where('entity_id IN (?) ', $filter->getValue());
         return true;
