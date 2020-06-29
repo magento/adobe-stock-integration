@@ -14,7 +14,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGallery\Model\ResourceModel\SaveAssets;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
@@ -32,7 +32,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var SaveAssets
+     * @var SaveAssetsInterface
      */
     private $saveAssets;
 
@@ -60,7 +60,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
      * SaveDetails constructor.
      *
      * @param Context $context
-     * @param SaveAssets $saveAssets
+     * @param SaveAssetsInterface $saveAssets
      * @param SaveAssetsKeywordsInterface $saveAssetKeywords
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
      * @param GetAssetsByIdsInterface $getAssetsByIds
@@ -68,7 +68,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
      */
     public function __construct(
         Context $context,
-        SaveAssets $saveAssets,
+        SaveAssetsInterface $saveAssets,
         SaveAssetsKeywordsInterface $saveAssetKeywords,
         AssetKeywordsInterfaceFactory $assetKeywordsFactory,
         GetAssetsByIdsInterface $getAssetsByIds,
