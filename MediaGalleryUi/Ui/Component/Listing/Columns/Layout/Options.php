@@ -13,7 +13,7 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Image source filter options
  */
-class Options implements ArrayInterface
+class EntityType implements ArrayInterface
 {
     /**
      * @inheritdoc
