@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Reader;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryMetadata\Model\Reader\File as FileReader;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
-use Magento\MediaGalleryMetadata\Model\Reader\File as FileReader;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
@@ -20,6 +19,8 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
  */
 class Xmp implements MetadataReaderInterface
 {
+    private const XMP_SEGMENT_NAME = 'APP1';
+    private const XMP_SEGMENT_START = "http://ns.adobe.com/xap/1.0/\x00";
     private const XMP_DATA_START_POSITION = 29;
     private const XMP_XPATH_SELECTOR_TITLE = '//dc:title/rdf:Alt/rdf:li';
     private const XMP_XPATH_SELECTOR_DESCRIPTION = '//dc:description/rdf:Alt/rdf:li';
@@ -37,6 +38,7 @@ class Xmp implements MetadataReaderInterface
 
     /**
      * @param MetadataInterfaceFactory $metadataFactory
+     * @param File $reader
      */
     public function __construct(MetadataInterfaceFactory $metadataFactory, FileReader $reader)
     {
@@ -106,16 +108,20 @@ class Xmp implements MetadataReaderInterface
     }
 
     /**
+     * Does segment contain XMP data
+     *
      * @param SegmentInterface $segment
      * @return bool
      */
     private function isXmpSegment(SegmentInterface $segment): bool
     {
-        return $segment->getName() === 'APP1'
-            && strncmp($segment->getData(), "http://ns.adobe.com/xap/1.0/\x00", self::XMP_DATA_START_POSITION) == 0;
+        return $segment->getName() === self::XMP_SEGMENT_NAME
+            && strncmp($segment->getData(), self::XMP_SEGMENT_START, self::XMP_DATA_START_POSITION) == 0;
     }
 
     /**
+     * Get XMP xml
+     *
      * @param SegmentInterface $segment
      * @return string
      */

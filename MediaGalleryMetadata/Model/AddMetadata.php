@@ -12,7 +12,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriterComposite;
 
 /**
- * Extract metadata from the asset
+ * Add metadata to the asset by path
  */
 class AddMetadata implements AddMetadataInterface
 {
@@ -30,8 +30,7 @@ class AddMetadata implements AddMetadataInterface
     }
 
     /**
-     * @param string $path
-     * @return MetadataInterface
+     * @inheritdoc
      */
     public function execute(string $path, MetadataInterface $data): void
     {

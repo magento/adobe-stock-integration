@@ -10,10 +10,10 @@ namespace Magento\MediaGalleryMetadata\Model\Reader;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryMetadata\Model\File as FileDataObject;
-use Magento\MediaGalleryMetadata\Model\FileFactory;
-use Magento\MediaGalleryMetadata\Model\Segment;
-use Magento\MediaGalleryMetadata\Model\SegmentFactory;
+use Magento\MediaGalleryMetadataApi\Model\FileInterface;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
@@ -35,12 +35,12 @@ class File
     private $driver;
 
     /**
-     * @var SegmentFactory
+     * @var SegmentInterfaceFactory
      */
     private $segmentFactory;
 
     /**
-     * @var FileFactory
+     * @var FileInterfaceFactory
      */
     private $fileFactory;
 
@@ -51,14 +51,14 @@ class File
 
     /**
      * @param DriverInterface $driver
-     * @param FileFactory $fileFactory
-     * @param SegmentFactory $segmentFactory
+     * @param FileInterfaceFactory $fileFactory
+     * @param SegmentInterfaceFactory $segmentFactory
      * @param SegmentNames $segmentNames
      */
     public function __construct(
         DriverInterface $driver,
-        FileFactory $fileFactory,
-        SegmentFactory $segmentFactory,
+        FileInterfaceFactory $fileFactory,
+        SegmentInterfaceFactory $segmentFactory,
         SegmentNames $segmentNames
     ) {
         $this->driver = $driver;
@@ -69,11 +69,11 @@ class File
 
     /**
      * @param string $path
-     * @return FileDataObject
+     * @return FileInterface
      * @throws FileSystemException
      * @throws LocalizedException
      */
-    public function execute(string $path): FileDataObject
+    public function execute(string $path): FileInterface
     {
         $resource = $this->driver->fileOpen($path, 'rb');
 
@@ -127,10 +127,10 @@ class File
     /**
      * @param resource $resource
      * @param int $segmentType
-     * @return Segment
+     * @return SegmentInterface
      * @throws FileSystemException
      */
-    private function readSegment($resource, int $segmentType): Segment
+    private function readSegment($resource, int $segmentType): SegmentInterface
     {
         $segmentSize = unpack('nsize', $this->read($resource, 2))['size'] - 2;
         return $this->segmentFactory->create([

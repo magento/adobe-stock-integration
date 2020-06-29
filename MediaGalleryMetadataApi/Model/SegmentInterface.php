@@ -11,7 +11,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentExtensionInterface;
 
 /**
- * Segment interface
+ * Segment internal data transfer object
  */
 interface SegmentInterface extends ExtensibleDataInterface
 {

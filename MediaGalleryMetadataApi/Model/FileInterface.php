@@ -11,7 +11,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileExtensionInterface;
 
 /**
- * File interface
+ * File internal data transfer object
  */
 interface FileInterface extends ExtensibleDataInterface
 {

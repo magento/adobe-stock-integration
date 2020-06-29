@@ -10,8 +10,8 @@ namespace Magento\MediaGalleryMetadata\Model\Writer;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryMetadata\Model\File as FileDataObject;
-use Magento\MediaGalleryMetadata\Model\Segment;
+use Magento\MediaGalleryMetadataApi\Model\FileInterface;
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
@@ -34,7 +34,6 @@ class File
     private $segmentNames;
 
     /**
-     * File constructor.
      * @param DriverInterface $driver
      * @param SegmentNames $segmentNames
      */
@@ -47,11 +46,11 @@ class File
     }
 
     /**
-     * @param FileDataObject $file
+     * @param FileInterface $file
      * @throws LocalizedException
      * @throws FileSystemException
      */
-    public function execute(FileDataObject $file): void
+    public function execute(FileInterface $file): void
     {
         foreach ($file->getSegments() as $segment) {
             if (strlen($segment->getData()) > 0xfffd) {
@@ -70,7 +69,7 @@ class File
 
     /**
      * @param resource $resource
-     * @param Segment[] $segments
+     * @param SegmentInterface[] $segments
      */
     private function writeSegments($resource, array $segments): void
     {

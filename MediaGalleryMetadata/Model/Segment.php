@@ -11,7 +11,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentExtensionInterface;
 
 /**
- * Segment
+ * Segment internal data transfer object
  */
 class Segment implements SegmentInterface
 {
@@ -54,7 +54,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getName(): string
     {
@@ -62,7 +62,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getDataStart(): int
     {
@@ -70,7 +70,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getData(): string
     {

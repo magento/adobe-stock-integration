@@ -12,7 +12,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataExtensionInterface;
 
 /**
- * Asset metadata
+ * Media asset metadata data transfer object
  */
 interface MetadataInterface extends ExtensibleDataInterface
 {

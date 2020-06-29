@@ -11,7 +11,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileExtensionInterface;
 
 /**
- * File
+ * File internal data transfer object
  */
 class File implements FileInterface
 {
@@ -54,7 +54,7 @@ class File implements FileInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getCompressedImage(): string
     {
@@ -62,7 +62,7 @@ class File implements FileInterface
     }
 
     /**
-     * @return Segment[]
+     * @inheritdoc
      */
     public function getSegments(): array
     {
@@ -70,7 +70,7 @@ class File implements FileInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getPath(): string
     {

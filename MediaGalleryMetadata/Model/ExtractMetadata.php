@@ -13,7 +13,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
- * Extract metadata from the asset
+ * Extract metadata from the asset by path
  */
 class ExtractMetadata implements ExtractMetadataInterface
 {
@@ -38,8 +38,7 @@ class ExtractMetadata implements ExtractMetadataInterface
     }
 
     /**
-     * @param string $path
-     * @return MetadataInterface
+     * @inheritdoc
      */
     public function execute(string $path): MetadataInterface
     {
@@ -51,7 +50,7 @@ class ExtractMetadata implements ExtractMetadataInterface
             $title = $data->getTitle() ?? $title;
             $description = $data->getDescription() ?? $description;
             $keywords = array_unique(array_merge($keywords, $data->getKeywords()));
-            if (!empty($data) && !empty($description) && !empty($keywords)) {
+            if (!empty($title) && !empty($description) && !empty($keywords)) {
                 break;
             }
         }

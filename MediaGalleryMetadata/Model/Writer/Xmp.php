@@ -21,6 +21,8 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
  */
 class Xmp implements MetadataWriterInterface
 {
+    private const XMP_SEGMENT_NAME = 'APP1';
+    private const XMP_SEGMENT_START = "http://ns.adobe.com/xap/1.0/\x00";
     private const XMP_DATA_START_POSITION = 29;
     private const XMP_XPATH_SELECTOR_TITLE = '//dc:title/rdf:Alt/rdf:li';
     private const XMP_XPATH_SELECTOR_DESCRIPTION = '//dc:description/rdf:Alt/rdf:li';
@@ -49,7 +51,7 @@ class Xmp implements MetadataWriterInterface
 
     /**
      * @param FileReader $reader
-     * @param File $writer
+     * @param FileWriter $writer
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      */
@@ -146,11 +148,11 @@ class Xmp implements MetadataWriterInterface
      */
     private function updateKeywords(\SimpleXMLElement $xml, array $keywords): void
     {
-        foreach ($xml->xpath(self::XMP_XPATH_SELECTOR_KEYWORDS_EACH) as &$keywordElement) {
+        foreach ($xml->xpath(self::XMP_XPATH_SELECTOR_KEYWORDS_EACH) as $keywordElement) {
             unset($keywordElement[0]);
         }
 
-        foreach ($xml->xpath(self::XMP_XPATH_SELECTOR_KEYWORDS) as &$element) {
+        foreach ($xml->xpath(self::XMP_XPATH_SELECTOR_KEYWORDS) as $element) {
             foreach ($keywords as $keyword) {
                 $element->addChild('rdf:li', $keyword);
             }
@@ -166,7 +168,7 @@ class Xmp implements MetadataWriterInterface
      */
     private function setValueByXpath(\SimpleXMLElement $xml, string $xpath, string $value): void
     {
-        foreach ($xml->xpath($xpath) as &$element) {
+        foreach ($xml->xpath($xpath) as $element) {
             $element[0] = $value;
         }
     }
@@ -179,7 +181,7 @@ class Xmp implements MetadataWriterInterface
      */
     private function isXmpSegment(SegmentInterface $segment): bool
     {
-        return $segment->getName() === 'APP1'
-            && strncmp($segment->getData(), "http://ns.adobe.com/xap/1.0/\x00", self::XMP_DATA_START_POSITION) == 0;
+        return $segment->getName() === self::XMP_SEGMENT_NAME
+            && strncmp($segment->getData(), self::XMP_SEGMENT_START, self::XMP_DATA_START_POSITION) == 0;
     }
 }

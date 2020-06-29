@@ -11,7 +11,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataExtensionInterface;
 
 /**
- * Metadata
+ * Media asset metadata data transfer object
  */
 class Metadata implements MetadataInterface
 {
@@ -54,7 +54,7 @@ class Metadata implements MetadataInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getTitle(): string
     {
@@ -62,7 +62,7 @@ class Metadata implements MetadataInterface
     }
 
     /**
-     * @return string[]
+     * @inheritdoc
      */
     public function getKeywords(): array
     {
@@ -70,7 +70,7 @@ class Metadata implements MetadataInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getDescription(): string
     {
