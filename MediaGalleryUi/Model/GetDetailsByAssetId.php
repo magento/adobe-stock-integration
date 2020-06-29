@@ -85,6 +85,7 @@ class GetDetailsByAssetId
             'image_url' => $this->getUrl($asset->getPath()),
             'title' => $asset->getTitle(),
             'path' => $asset->getPath(),
+            'description' => $asset->getDescription(),
             'id' => $assetId,
             'details' => $this->detailsProviderPool->execute($asset),
             'size' => $asset->getSize(),
