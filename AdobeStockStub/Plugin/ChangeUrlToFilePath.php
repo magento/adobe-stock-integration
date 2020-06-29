@@ -54,9 +54,13 @@ class ChangeUrlToFilePath
         string $destinationPath
     ) {
         $directoryPath = $this->directoryList->getPath(DirectoryList::STATIC_VIEW);
-        $savedImage = substr($imageUrl, -6);
-        $image = $this->assetRepository->createAsset('Magento_AdobeStockStub::images/' . $savedImage);
-        $imagePath = $directoryPath.'/'.$image->getPath();
+        $match = [];
+        $image = substr($imageUrl, -6);
+        $imagePath = $imageUrl;
+        if ($image) {
+            $image = $this->assetRepository->createAsset('Magento_AdobeStockStub::images/' . $match[0]);
+            $imagePath = $directoryPath.'/'.$image->getPath();
+        }
 
         return [$imagePath, $destinationPath];
     }
