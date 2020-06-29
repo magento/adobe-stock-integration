@@ -47,8 +47,6 @@ class EntityId implements CustomJoinInterface
             []
         );
 
-        //print_r($collection->getSelect()->__toString()); die;
-
         return true;
     }
 }

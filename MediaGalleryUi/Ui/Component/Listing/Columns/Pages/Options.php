@@ -42,9 +42,7 @@ class Options implements OptionSourceInterface
     {
         $searchCriteria = $this->_searchCriteriaBuilder->create();
         $pages = [];
-
         try {
-
             $result = $this->_pageRepository->getList($searchCriteria);
             /** @var \Magento\Cms\Api\Data\PageInterface $page */
             foreach ($result->getItems() as $page) {
@@ -53,7 +51,7 @@ class Options implements OptionSourceInterface
                     'label' => $page->getTitle()
                 ];
             }
-        } catch (LocalizedException $e) {
+        } catch (LocalizedException $exception) {
 
         }
 
