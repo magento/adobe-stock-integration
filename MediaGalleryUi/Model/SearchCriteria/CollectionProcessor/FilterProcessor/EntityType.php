@@ -15,7 +15,7 @@ class EntityType implements CustomFilterInterface
     /**
      * @inheritDoc
      */
-    public function apply(Filter $filter, AbstractDb $collection)
+    public function apply(Filter $filter, AbstractDb $collection): bool
     {
         $collection->getSelect()->where('entity_type IN (?) ', $filter->getValue());
         return true;
