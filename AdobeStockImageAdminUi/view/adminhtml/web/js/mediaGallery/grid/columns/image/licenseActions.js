@@ -98,11 +98,13 @@ define([
                     this.imageModel().addMessage('success', $.mage.__('The image has been licensed.'));
                 }.bind(this)).fail(function (error) {
                     if (error) {
-                        this.imageModel().addMessage('error', error);
+                        console.log(error.message);
                     }
                 });
             }.bind(this)).fail(function (message) {
-                this.imageModel().addMessage('error', message);
+                if (message) {
+                    console.log(message);
+                }
             });
         }
     });
