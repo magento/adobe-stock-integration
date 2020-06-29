@@ -45,7 +45,7 @@ class Segment implements SegmentInterface
         string $name,
         int $dataStart,
         string $data,
-        ?SegmentExtensionInterface $extensionAttributes
+        ?SegmentExtensionInterface $extensionAttributes = null
     ) {
         $this->name = $name;
         $this->dataStart = $dataStart;

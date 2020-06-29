@@ -45,7 +45,7 @@ class Metadata implements MetadataInterface
         string $title,
         string $description,
         array $keywords,
-        ?MetadataExtensionInterface $extensionAttributes
+        ?MetadataExtensionInterface $extensionAttributes = null
     ) {
         $this->title = $title;
         $this->description = $description;

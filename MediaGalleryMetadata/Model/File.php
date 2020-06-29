@@ -45,7 +45,7 @@ class File implements FileInterface
         string $path,
         string $compressedImage,
         array $segments,
-        ?FileExtensionInterface $extensionAttributes
+        ?FileExtensionInterface $extensionAttributes = null
     ) {
         $this->path = $path;
         $this->compressedImage = $compressedImage;

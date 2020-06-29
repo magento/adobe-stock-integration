@@ -30,7 +30,7 @@ class WriterComposite
     /**
      * @return MetadataWriterInterface[]
      */
-    public function execute(string $path, MetadataInterface $data): array
+    public function execute(string $path, MetadataInterface $data): void
     {
         foreach ($this->writers as $writer) {
             $writer->execute($path, $data);
