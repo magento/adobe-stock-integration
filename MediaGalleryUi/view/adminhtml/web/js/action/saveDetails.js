@@ -17,16 +17,7 @@ define([
             url: saveImageDetailsUrl,
             dataType: 'json',
             showLoader: true,
-            data: formData.concat(
-                [{
-                    name: 'isAjax',
-                    value: true
-                },
-                {
-                    name: 'form_key',
-                    value: window.FORM_KEY
-                }]
-            ),
+            data: formData,
 
             /**
              * Resolve with image details if success, reject with response message otherwise

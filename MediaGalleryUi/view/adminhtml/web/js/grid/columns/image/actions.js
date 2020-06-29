@@ -102,7 +102,7 @@ define([
         editImageDetails: function (record) {
             var recordId = this.imageModel().getId(record);
 
-            this.mediaGalleryEditDetails().getImageDetailsById(recordId);
+            this.mediaGalleryEditDetails().showEditDetailsPanel(recordId);
         }
     });
 });

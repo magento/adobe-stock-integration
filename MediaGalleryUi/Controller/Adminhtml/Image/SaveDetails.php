@@ -96,7 +96,6 @@ class SaveDetails extends Action implements HttpPostActionInterface
         $imageKeywords = (array) $this->getRequest()->getParam('keywords');
 
         if ($imageId === 0) {
-            $this->logger->debug("IF");
             $responseContent = [
                 'success' => false,
                 'message' => __('Image ID is required.'),

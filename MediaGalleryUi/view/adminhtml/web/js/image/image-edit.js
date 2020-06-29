@@ -18,8 +18,6 @@ define([
             imageEditDetailsUrl: '/media_gallery/image/details',
             saveDetailsUrl: '/media_gallery/image/saveDetails',
             images: [],
-            tagListLimit: 7,
-            showAllTags: false,
             image: null,
             modules: {
                 mediaGridMessages: '${ $.mediaGridMessages }'
@@ -34,8 +32,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'image',
-                    'showAllTags'
+                    'image'
                 ]);
 
             return this;
@@ -46,7 +43,7 @@ define([
          *
          * @param {String} imageId
          */
-        getImageDetailsById: function (imageId) {
+        showEditDetailsPanel: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
                 getDetails(this.imageEditDetailsUrl, imageId).then(function (imageDetails) {
                     this.images[imageId] = imageDetails;
@@ -78,7 +75,6 @@ define([
             if (!modalElement.length || _.isUndefined(modalElement.modal)) {
                 return;
             }
-            this.showAllTags(false);
             modalElement.modal('openModal');
         },
 
@@ -104,26 +100,6 @@ define([
         addMediaGridMessage: function (code, message) {
             this.mediaGridMessages().add(code, message);
             this.mediaGridMessages().scheduleCleanup();
-        },
-
-        /**
-         * Get image details value
-         *
-         * @param {Object|String} value
-         * @return {String}
-         */
-        getValueUnsanitizedHtml: function (value) {
-            var usedIn = '';
-
-            if (_.isObject(value)) {
-                _.each(value, function (numberOfTimeUsed, moduleName) {
-                    usedIn += numberOfTimeUsed + ' ' + moduleName + '</br>';
-                });
-
-                return usedIn;
-            }
-
-            return value;
         }
     });
 });

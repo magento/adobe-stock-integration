@@ -7,13 +7,14 @@
 <div class="edit-image-details" if="image">
     <form id="image-edit-details-form" method="post" enctype="multipart/form-data">
         <fieldset class="admin__fieldset">
-            <input type="hidden" data-bind="value: image().id" id="id" name="id"/>
+            <input type="hidden" data-bind="value: image().id" data-ui-id="id" name="id"/>
             <div class="admin__field _required">
                 <label for="title" class="admin__field-label">
                     <span>Name</span>
                 </label>
                 <div class="admin__field-control">
-                    <input type="text" id="title" name="title" placeholder="Title" class="admin__control-text required-entry" data-bind="value: image().title" />
+                    <input type="text" id="title" data-ui-id="title" name="title" placeholder="Title"
+                           class="admin__control-text required-entry" data-bind="value: image().title" />
                 </div>
             </div>
             <div class="admin__field">
@@ -21,7 +22,7 @@
                     <span>Filename</span>
                 </label>
                 <div class="admin__field-control path-display">
-                    <span id="path" data-bind="text: image().path"></span>
+                    <span data-ui-id="path" id="path" data-bind="text: image().path"></span>
                 </div>
             </div>
             <div class="admin__field">
@@ -30,6 +31,7 @@
                 </label>
                 <div class="admin__field-control">
                     <textarea id="description"
+                              data-ui-id="description"
                               name="description"
                               class="admin__control-textarea"
                               rows="7" cols="80"
