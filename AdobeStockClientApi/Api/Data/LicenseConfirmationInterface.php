@@ -39,7 +39,7 @@ interface LicenseConfirmationInterface
      *
      * @return bool
      */
-    public function getCanLicense(): bool;
+    public function isCanLicense(): bool;
 
     /**
      * Get extension attributes
