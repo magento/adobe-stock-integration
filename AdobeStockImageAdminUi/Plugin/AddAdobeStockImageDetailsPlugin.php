@@ -87,7 +87,7 @@ class AddAdobeStockImageDetailsPlugin
      *
      * @param GetDetailsByAssetId $getImageDetailsByAssetId
      * @param array $imageDetails
-     * @param array $assetId
+     * @param array $assetIds
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
