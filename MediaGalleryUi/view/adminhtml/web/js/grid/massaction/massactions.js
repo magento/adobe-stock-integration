@@ -117,7 +117,7 @@ define([
                             this.mediaGalleryImageDetails().imageDetailsUrl,
                             this.imageModel().deleteImageUrl
                         ).then(function (response) {
-                            if (response.status == 'canceled') {
+                            if (response.status === 'canceled') {
                                 return;
                             }
                             this.imageModel().selected({});
