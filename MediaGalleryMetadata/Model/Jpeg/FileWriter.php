@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Writer;
+namespace Magento\MediaGalleryMetadata\Model\Jpeg;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -17,7 +17,7 @@ use Magento\MediaGalleryMetadata\Model\SegmentNames;
 /**
  * File segments reader
  */
-class File
+class FileWriter
 {
     private const MARKER_IMAGE_FILE_START = "\xD8";
     private const MARKER_IMAGE_PREFIX = "\xFF";

@@ -17,8 +17,8 @@ interface MetadataWriterInterface
     /**
      * Add metadata to the file
      *
-     * @param string $path
+     * @param FileInterface $file
      * @param MetadataInterface $data
      */
-    public function execute(string $path, MetadataInterface $data): void;
+    public function execute(FileInterface $file, MetadataInterface $data): FileInterface;
 }

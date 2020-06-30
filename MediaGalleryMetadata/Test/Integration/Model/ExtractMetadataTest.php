@@ -63,12 +63,21 @@ class ExtractMetadataTest extends TestCase
     {
         return [
             [
-                'macos-preview.jpeg',
+                'macos-photos.jpeg',
                 'Title of the magento image',
                 'Description of the magento image',
                 [
                     'magento',
-                    'mediagallermetadata'
+                    'mediagallerymetadata'
+                ]
+            ],
+            [
+                'macos-preview.png',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
                 ]
             ]
         ];

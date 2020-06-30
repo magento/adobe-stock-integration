@@ -109,7 +109,7 @@ class AddMetadataTest extends TestCase
     {
         return [
             [
-                'macos-preview.jpeg',
+                'macos-photos.jpeg',
                 'Updated Title',
                 'Updated Description',
                 [

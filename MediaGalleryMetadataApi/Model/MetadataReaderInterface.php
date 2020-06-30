@@ -17,8 +17,8 @@ interface MetadataReaderInterface
     /**
      * Read metadata from the file
      *
-     * @param string $path
+     * @param FileInterface $file
      * @return MetadataInterface
      */
-    public function execute(string $path): MetadataInterface;
+    public function execute(FileInterface $file): MetadataInterface;
 }

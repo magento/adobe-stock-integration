@@ -5,13 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Reader;
+namespace Magento\MediaGalleryMetadata\Model\Jpeg;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
@@ -19,7 +20,7 @@ use Magento\MediaGalleryMetadata\Model\SegmentNames;
 /**
  * File segments reader
  */
-class File
+class FileReader implements FileReaderInterface
 {
     private const MARKER_IMAGE_FILE_START = "\xD8";
     private const MARKER_PREFIX = "\xFF";
@@ -68,10 +69,23 @@ class File
     }
 
     /**
-     * @param string $path
-     * @return FileInterface
-     * @throws FileSystemException
-     * @throws LocalizedException
+     * @inheritdoc
+     */
+    public function isApplicable(string $path): bool
+    {
+        $resource = $this->driver->fileOpen($path, 'rb');
+        try {
+            $marker = $this->readMarker($resource);
+        } catch (LocalizedException $exception) {
+            return false;
+        }
+        $this->driver->fileClose($resource);
+
+        return $marker == self::MARKER_IMAGE_FILE_START;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function execute(string $path): FileInterface
     {
@@ -81,7 +95,7 @@ class File
 
         if ($marker != self::MARKER_IMAGE_FILE_START) {
             $this->driver->fileClose($resource);
-            throw new LocalizedException(__('Not an image'));
+            throw new LocalizedException(__('Not a JPEG image'));
         }
 
         $segments = [];

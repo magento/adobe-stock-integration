@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadataApi\Model;
 
+use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
@@ -15,12 +16,12 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 class WriterComposite
 {
     /**
-     * @var MetadataWriterInterface[]
+     * @var AddMetadataInterface[]
      */
     private $writers;
 
     /**
-     * @param MetadataWriterInterface[] $writers
+     * @param AddMetadataInterface[] $writers
      */
     public function __construct(array $writers)
     {
@@ -28,7 +29,7 @@ class WriterComposite
     }
 
     /**
-     * @return MetadataWriterInterface[]
+     * @return AddMetadataInterface[]
      */
     public function execute(string $path, MetadataInterface $data): void
     {

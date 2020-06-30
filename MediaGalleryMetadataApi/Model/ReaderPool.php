@@ -7,18 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadataApi\Model;
 
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+
 /**
  * Metadata reader pool
  */
 class ReaderPool
 {
     /**
-     * @var MetadataReaderInterface[]
+     * @var ExtractMetadataInterface[]
      */
     private $readers;
 
     /**
-     * @param MetadataReaderInterface[] $readers
+     * @param ExtractMetadataInterface[] $readers
      */
     public function __construct(array $readers)
     {
@@ -26,7 +28,7 @@ class ReaderPool
     }
 
     /**
-     * @return MetadataReaderInterface[]
+     * @return ExtractMetadataInterface[]
      */
     public function get(): array
     {
