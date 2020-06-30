@@ -104,7 +104,9 @@ define([
                      */
                     click: function () {
                         this.closeModal();
-                        deferred.resolve();
+                        deferred.resolve({
+                            status: 'canceled'
+                        });
                     }
                 },
                 {

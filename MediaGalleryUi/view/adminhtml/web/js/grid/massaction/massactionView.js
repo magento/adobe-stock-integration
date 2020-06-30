@@ -15,7 +15,7 @@ define([
             gridSelector: '[data-id="media-gallery-masonry-grid"]',
             originDeleteSelector: null,
             originCancelEvent: null,
-            cancelMassactionButton: '<button id="cancel" type="button" class="cancel">Cancel</button>',
+            cancelMassactionButton: '<button id="cancel_massaction" type="button" class="cancel">Cancel</button>',
             isCancelButtonInserted: false,
             deleteButtonSelector: '#delete_massaction',
             addSelectedButtonSelector: '#add_selected',
@@ -75,9 +75,10 @@ define([
             $(this.deleteButtonSelector).replaceWith(this.originDeleteSelector);
 
             if (!this.isCancelButtonInserted) {
-                $(this.cancelMassactionButtonSelector).replaceWith(this.originCancelEvent);
+                $('#cancel_massaction').replaceWith(this.originCancelEvent);
             } else {
                 $(this.cancelMassactionButtonSelector).addClass('no-display');
+                $('#cancel_massaction').remove();
             }
 
             $.each(this.buttonsIds, function (key, value) {
@@ -95,7 +96,7 @@ define([
           */
         activateMassactionButtonView: function () {
             this.originDeleteSelector = $(this.deleteButtonSelector).clone(true, true);
-            this.originCancelEvent = $(this.cancelMassactionButton).clone(true);
+            this.originCancelEvent = $('#cancel').clone(true);
 
             $.each(this.buttonsIds, function (key, value) {
                 $(value).addClass('no-display');
@@ -112,7 +113,7 @@ define([
             } else {
                 $(this.cancelMassactionButtonSelector).replaceWith(this.cancelMassactionButton);
             }
-            $(this.cancelMassactionButtonSelector).on('click', function () {
+            $('#cancel_massaction').on('click', function () {
                 $(window).trigger('terminateMassAction.MediaGallery');
             });
 

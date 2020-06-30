@@ -116,11 +116,14 @@ define([
                             this.imageModel().selected(),
                             this.mediaGalleryImageDetails().imageDetailsUrl,
                             this.imageModel().deleteImageUrl
-                        ).then(function () {
+                        ).then(function (response) {
+                            if (response.status == 'canceled') {
+                                return;
+                            }
                             this.imageModel().selected({});
                             this.massActionMode(false);
                             this.switchMode();
-                        });
+                        }.bind(this));
                     }
                 }.bind(this));
             }

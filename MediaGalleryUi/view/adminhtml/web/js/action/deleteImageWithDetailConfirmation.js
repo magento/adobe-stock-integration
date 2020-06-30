@@ -36,8 +36,8 @@ define([
                     }.bind(this)).fail(function () {
                 confirmationContent = confirmationContent.replace('%1', '');
             }).always(function () {
-                deleteImages(recordsIds, deleteImageUrl, confirmationContent).then(function () {
-                    deferred.resolve();
+                deleteImages(recordsIds, deleteImageUrl, confirmationContent).then(function (status) {
+                    deferred.resolve(status);
                 }).fail(function (message) {
                     deferred.reject(message);
                 });
@@ -66,6 +66,9 @@ define([
                 }
             });
 
+            if (_.isEmpty(usedIn)) {
+                return '';
+            }
             $.each(usedIn, function (entityName, count) {
                 message +=  count + ' ' +  this.getEntityNameWithPrefix(entityName, count) +  ', ';
             }.bind(this));
