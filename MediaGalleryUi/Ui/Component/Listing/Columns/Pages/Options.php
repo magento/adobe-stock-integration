@@ -19,20 +19,25 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Options implements OptionSourceInterface
 {
-    protected $_pageRepository;
+    private $PageRepository;
 
-    protected $_searchCriteriaBuilder;
+    private $SearchCriteriaBuilder;
 
-    protected $_filterBuilder;
+    private $FilterBuilder;
 
+    /**
+     * @param PageRepositoryInterface $pageRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     */
     public function __construct(
         PageRepositoryInterface $pageRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder
     ) {
-        $this->_pageRepository = $pageRepository;
-        $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->_filterBuilder = $filterBuilder;
+        $this->PageRepository = $pageRepository;
+        $this->SearchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->FilterBuilder = $filterBuilder;
     }
 
     /**
@@ -40,10 +45,10 @@ class Options implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $searchCriteria = $this->_searchCriteriaBuilder->create();
+        $searchCriteria = $this->SearchCriteriaBuilder->create();
         $pages = [];
         try {
-            $result = $this->_pageRepository->getList($searchCriteria);
+            $result = $this->PageRepository->getList($searchCriteria);
             /** @var \Magento\Cms\Api\Data\PageInterface $page */
             foreach ($result->getItems() as $page) {
                 $pages[] = [
