@@ -10,7 +10,7 @@
     <section name="AdminEnhancedMediaGalleryViewDetailsSection">
         <element name="title" type="text" selector=".image-title"/>
         <element name="contentType" type="text" selector="[data-ui-id='content-type']"/>
-        <element name="description" type="text" selector="//div[@id='media-gallery-image-details']//p"/>
+        <element name="description" type="text" selector=".image-details p"/>
         <element name="type" type="text" selector="//div[@class='attribute']/span[contains(text(), 'Type')]/following-sibling::div"/>
         <element name="height" type="text" selector="//div[@class='attribute']/span[contains(text(), 'Height')]/following-sibling::div"/>
         <element name="delete" type="button" selector="//div[@class='media-gallery-image-details-modal']//button[contains(@class, 'delete')]"/>
