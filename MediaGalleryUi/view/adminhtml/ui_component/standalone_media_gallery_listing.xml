@@ -102,12 +102,6 @@
                 </settings>
             </filterRange>
             <filterSelect name="page_id" provider="${ $.parentName }" sortOrder="70" component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
-                <!--settings>
-                    <caption translate="true">All</caption>
-                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Pages\Options"/>
-                    <label translate="true">Pages</label>
-                    <dataScope>page_id</dataScope>
-                </settings-->
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="filterOptions" xsi:type="boolean">true</item>
@@ -116,7 +110,7 @@
                 </argument>
                 <settings>
                     <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Pages\Options"/>
-                    <caption translate="true">– Please Select a Category –</caption>
+                    <caption translate="true">– Please Select a Page –</caption>
                     <label translate="true">Pages</label>
                     <dataScope>page_id</dataScope>
                     <imports>
