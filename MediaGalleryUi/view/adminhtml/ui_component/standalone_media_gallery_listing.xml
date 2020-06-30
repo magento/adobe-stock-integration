@@ -104,7 +104,7 @@
             <filterSelect name="entity_type" provider="${ $.parentName }" sortOrder="70"  component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
                 <settings>
                     <caption translate="true">All</caption>
-                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Layout\Options"/>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\EntityType"/>
                     <label translate="true">Layout</label>
                     <dataScope>entity_type</dataScope>
                 </settings>

@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Layout;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Image source filter options
  */
-class Options implements OptionSourceInterface
+class EntityType implements OptionSourceInterface
 {
     protected $_options;
 

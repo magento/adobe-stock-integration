@@ -47,7 +47,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Layout\Options">
+    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\EntityType">
         <arguments>
             <argument name="options" xsi:type="array">
                 <item name="cms_page" xsi:type="array">
