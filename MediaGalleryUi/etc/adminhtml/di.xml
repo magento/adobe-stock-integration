@@ -47,4 +47,26 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Layout\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="cms_page" xsi:type="array">
+                    <item name="value" xsi:type="string">cms_page</item>
+                    <item name="label" xsi:type="string" translate="true">Page</item>
+                </item>
+                <item name="catalog_category" xsi:type="array">
+                    <item name="value" xsi:type="string">catalog_category</item>
+                    <item name="label" xsi:type="string" translate="true">Categories</item>
+                </item>
+                <item name="cms_block" xsi:type="array">
+                    <item name="value" xsi:type="string">cms_block</item>
+                    <item name="label" xsi:type="string" translate="true">Blocks</item>
+                </item>
+                <item name="catalog_product" xsi:type="array">
+                    <item name="value" xsi:type="string">catalog_product</item>
+                    <item name="label" xsi:type="string" translate="true">Products</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

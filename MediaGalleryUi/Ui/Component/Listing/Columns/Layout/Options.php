@@ -5,38 +5,27 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Layout;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Image source filter options
  */
-class EntityType implements ArrayInterface
+class Options implements OptionSourceInterface
 {
+    protected $_options;
+
+    public function __construct($options = [])
+    {
+        $this->_options = $options;
+    }
+
     /**
      * @inheritdoc
      */
     public function toOptionArray(): array
     {
-        return [
-            [
-                'value' => 'cms_page',
-                'label' =>  __('Pages'),
-            ],
-            [
-                'value' => 'catalog_category',
-                'label' =>  __('Categories'),
-            ],
-            [
-                'value' => 'cms_block',
-                'label' =>  __('Blocks'),
-            ],
-            [
-                'value' => 'catalog_product',
-                'label' =>  __('Products'),
-            ],
-        ];
+        return $this->_options;
     }
 }
