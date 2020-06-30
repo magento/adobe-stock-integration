@@ -17,7 +17,7 @@ define([
             originCancelEvent: null,
             cancelMassactionButton: '<button id="cancel" type="button" class="cancel">Cancel</button>',
             isCancelButtonInserted: false,
-            deleteButtonSelector: '#delete_selected',
+            deleteButtonSelector: '#delete_massaction',
             addSelectedButtonSelector: '#add_selected',
             cancelMassactionButtonSelector: '#cancel',
             standAloneTitle: 'Manage Gallery',
@@ -30,10 +30,9 @@ define([
                 '#upload_image',
                 '#search_adobe_stock',
                 '.three-dots',
-                '#add_selected',
-                '#delete_massaction'
+                '#add_selected'
             ],
-            massactionModeTitle: 'Select Images to Delete'
+            massactionModeTitle: $.mage.__('Select Images to Delete')
         },
 
         /**
@@ -86,7 +85,7 @@ define([
             });
 
             $(this.addSelectedButtonSelector).addClass('no-display');
-            $(this.deleteButtonSelector).addClass('no-display media-gallery-actions-buttons');
+            $(this.deleteButtonSelector).addClass('media-gallery-actions-buttons');
             $(this.deleteButtonSelector).removeClass('primary');
         },
 
@@ -101,7 +100,7 @@ define([
                 $(value).addClass('no-display');
             });
 
-            $(this.deleteButtonSelector).removeClass('no-display media-gallery-actions-buttons');
+            $(this.deleteButtonSelector).removeClass('media-gallery-actions-buttons').text($.mage.__('Delete Selected'));
             $(this.deleteButtonSelector).addClass('primary');
 
             if (!$(this.cancelMassactionButtonSelector).length) {

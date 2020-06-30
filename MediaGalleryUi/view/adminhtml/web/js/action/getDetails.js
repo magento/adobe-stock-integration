@@ -7,7 +7,7 @@ define([
 ], function ($) {
     'use strict';
 
-    return function (imageDetailsUrl, imageId) {
+    return function (imageDetailsUrl, imageIds) {
         var deferred = $.Deferred(),
             message;
 
@@ -17,7 +17,7 @@ define([
             dataType: 'json',
             showLoader: true,
             data: {
-                'id': imageId
+                'ids': imageIds
             },
             context: this,
 

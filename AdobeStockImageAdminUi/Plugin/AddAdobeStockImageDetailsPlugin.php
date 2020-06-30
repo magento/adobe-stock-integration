@@ -94,15 +94,16 @@ class AddAdobeStockImageDetailsPlugin
     public function afterExecute(
         GetDetailsByAssetId $getImageDetailsByAssetId,
         array $imageDetails,
-        int $assetId
+        array $assetIds
     ): array {
         try {
             $mediaGalleryIdFilter = $this->filterBuilder->setField(self::MEDIA_GALLERY_ID)
-                ->setValue($assetId)
-                ->create();
+                 ->setValue(implode(",", $assetIds))
+                 ->setConditionType('in')
+                 ->create();
+            
             $searchCriteria = $this->searchCriteriaBuilder
                 ->addFilter($mediaGalleryIdFilter)
-                ->setPageSize(1)
                 ->create();
 
             /** @var AssetSearchResultsInterface $result */
@@ -110,14 +111,13 @@ class AddAdobeStockImageDetailsPlugin
             $adobeStockInfo = [];
             if ($result->getTotalCount() > 0) {
                 $item = $result->getItems();
-                /** @var AssetInterface $asset */
-                $asset = reset($item);
-                $adobeStockInfo = $this->loadAssetsInfo($asset);
+
+                foreach ($item as $asset) {
+                    $imageDetails[$asset->getMediaGalleryId()]['adobe_stock'] = $this->loadAssetsInfo($asset);
+                }
             }
-            $imageDetails['adobe_stock'] = $adobeStockInfo;
         } catch (Exception $exception) {
             $this->logger->critical($exception);
-            $imageDetails['adobe_stock'] = [];
         }
 
         return $imageDetails;

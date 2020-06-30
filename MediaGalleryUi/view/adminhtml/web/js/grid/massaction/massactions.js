@@ -6,7 +6,7 @@
 define([
     'jquery',
     'uiComponent',
-    'Magento_MediaGalleryUi/js/action/deleteImages',
+    'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'uiLayout',
     'underscore',
     'Magento_Ui/js/modal/alert'
@@ -15,9 +15,11 @@ define([
 
     return Component.extend({
         defaults: {
+            mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             modules: {
                 massactionView: '${ $.name }_view',
-                imageModel: '${ $.imageModelName }'
+                imageModel: '${ $.imageModelName }',
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
             },
             viewConfig: [
                 {
@@ -110,17 +112,15 @@ define([
                         });
 
                     } else {
-                        DeleteImages(
+                        DeleteImages.deleteImageAction(
                             this.imageModel().selected(),
-                            this.imageModel().deleteImageUrl,
-                            $.mage.__(
-                                'Are you sure you want to delete "%2" images?'
-                            ).replace('%2', this.getSelectedCount())
+                            this.mediaGalleryImageDetails().imageDetailsUrl,
+                            this.imageModel().deleteImageUrl
                         ).then(function () {
                             this.imageModel().selected({});
                             this.massActionMode(false);
                             this.switchMode();
-                        }.bind(this));
+                        });
                     }
                 }.bind(this));
             }

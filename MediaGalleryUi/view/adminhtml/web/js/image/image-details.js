@@ -47,8 +47,8 @@ define([
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
-                getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
-                    this.images[imageId] = imageDetails;
+                getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
+                    this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
                 }.bind(this)).fail(function (message) {

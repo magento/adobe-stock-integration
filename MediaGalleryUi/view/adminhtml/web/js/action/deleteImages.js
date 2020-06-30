@@ -85,6 +85,7 @@ define([
                         message: message,
                         code: 'error'
                     });
+                    deferred.reject(message);
                 }
             });
         }
