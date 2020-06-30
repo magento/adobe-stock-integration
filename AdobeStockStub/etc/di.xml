@@ -42,4 +42,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\AdobeStockImage\Model\Storage\Save">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\Http</argument>
+        </arguments>
+    </type>
 </config>

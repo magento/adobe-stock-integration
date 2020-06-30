@@ -30,8 +30,7 @@ class IsApiCredentialsInvalid implements ModifierInterface
      */
     public function modify(array $files, array $url, array $headers): array
     {
-        if (
-            $headers['headers']['x-api-key'] === self::INCORRECT_API_KEY_USED_FOR_TESTS
+        if ($headers['headers']['x-api-key'] === self::INCORRECT_API_KEY_USED_FOR_TESTS
             || $headers['headers']['x-api-key'] === self::INCORRECT_API_KEY_USED_FOR_TESTS_THROWING_EXCEPTION
         ) {
             throw new \Exception();

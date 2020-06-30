@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockStub\Model;
 
 use Magento\AdobeStockStub\Model\Modifier\ModifierInterface;
+
 /**
  * Handle request parameters to instruct response generator.
  */
@@ -49,14 +50,15 @@ class Handler
     {
         $url = $this->parseUrl($url);
         $files = $this->fileGenerator->generate((int)$url['search_parameters']['limit']);
-            foreach ($this->modifiers as $modifier) {
-                if ($modifier instanceof ModifierInterface) {
-                    $files = $modifier->modify($files, $url, $headers);
-                    if (empty($files)) {
-                        break;
-                    }
-                }
+        foreach ($this->modifiers as $modifier) {
+            if (!$modifier instanceof ModifierInterface) {
+                continue;
             }
+            $files = $modifier->modify($files, $url, $headers);
+            if (empty($files)) {
+                break;
+            }
+        }
 
         return $files;
     }
