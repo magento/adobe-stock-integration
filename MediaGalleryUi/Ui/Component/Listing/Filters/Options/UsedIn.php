@@ -10,12 +10,20 @@ namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Image source filter options
+ * Used in filter options
  */
-class EntityType implements OptionSourceInterface
+class UsedIn implements OptionSourceInterface
 {
+    /**
+     * @var array
+     */
     protected $_options;
 
+    /**
+     * UsedIn constructor.
+     *
+     * @param array $options
+     */
     public function __construct($options = [])
     {
         $this->_options = $options;

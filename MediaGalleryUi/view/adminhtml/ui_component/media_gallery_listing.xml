@@ -117,8 +117,8 @@
             <filterSelect name="entity_type" provider="${ $.parentName }" sortOrder="70"  component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
                 <settings>
                     <caption translate="true">All</caption>
-                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\EntityType"/>
-                    <label translate="true">Layout</label>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\UsedIn"/>
+                    <label translate="true">Show Images Used In</label>
                     <dataScope>entity_type</dataScope>
                 </settings>
             </filterSelect>
