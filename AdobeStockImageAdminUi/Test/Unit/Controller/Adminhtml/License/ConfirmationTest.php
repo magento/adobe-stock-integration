@@ -105,7 +105,7 @@ class ConfirmationTest extends TestCase
         /** @var LicenseConfirmationInterface|MockObject $confirmation */
         $confirmation = $this->createMock(LicenseConfirmationInterface::class);
         $confirmation->expects($this->once())->method('getMessage')->willReturn('message');
-        $confirmation->expects($this->once())->method('getCanLicense')->willReturn(true);
+        $confirmation->expects($this->once())->method('isCanLicense')->willReturn(true);
 
         $data = [
             'success' => true,
