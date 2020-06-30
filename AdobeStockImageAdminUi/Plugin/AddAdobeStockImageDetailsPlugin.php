@@ -87,7 +87,7 @@ class AddAdobeStockImageDetailsPlugin
      *
      * @param GetDetailsByAssetId $getImageDetailsByAssetId
      * @param array $imageDetails
-     * @param int $assetId
+     * @param array $assetId
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -108,7 +108,6 @@ class AddAdobeStockImageDetailsPlugin
 
             /** @var AssetSearchResultsInterface $result */
             $result = $this->assetRepository->getList($searchCriteria);
-            $adobeStockInfo = [];
             if ($result->getTotalCount() > 0) {
                 $item = $result->getItems();
 

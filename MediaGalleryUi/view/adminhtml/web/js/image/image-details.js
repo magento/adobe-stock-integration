@@ -18,6 +18,7 @@ define([
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
+            categoryContentType: 'Category',
             showAllTags: false,
             image: null,
             modules: {
@@ -134,14 +135,38 @@ define([
             var usedIn = '';
 
             if (_.isObject(value)) {
-                _.each(value, function (numberOfTimeUsed, moduleName) {
-                    usedIn += numberOfTimeUsed + ' ' + moduleName + '</br>';
-                });
+                $.each(value, function (moduleName, count) {
+                    usedIn += count + ' ' +
+                        this.getEntityNameWithPrefix(moduleName, count) +
+                        '</br>';
+                }.bind(this));
 
                 return usedIn;
             }
 
             return value;
+        },
+
+        /**
+        * Return entity name based on used in count
+        *
+        * @param {String} entityName
+        * @param {String} count
+        */
+        getEntityNameWithPrefix: function (entityName, count) {
+            var name;
+
+            if (count > 1) {
+                if (entityName === this.categoryContentType) {
+                    name = entityName.slice(0, -1) + 'ies';
+                } else {
+                    name = entityName + 's';
+                }
+
+                return name;
+            }
+
+            return entityName;
         }
     });
 });

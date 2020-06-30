@@ -72,7 +72,7 @@ class GetDetailsByAssetId
     /**
      * Get image details by assets Ids
      *
-     * @param array $assetId
+     * @param array $assetIds
      * @throws LocalizedException
      * @throws Exception
      * @return array

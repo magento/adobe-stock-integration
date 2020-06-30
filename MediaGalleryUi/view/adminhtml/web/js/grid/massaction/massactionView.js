@@ -85,8 +85,9 @@ define([
             });
 
             $(this.addSelectedButtonSelector).addClass('no-display');
-            $(this.deleteButtonSelector).addClass('media-gallery-actions-buttons');
-            $(this.deleteButtonSelector).removeClass('primary');
+            $(this.deleteButtonSelector)
+                .addClass('media-gallery-actions-buttons')
+                .removeClass('primary');
         },
 
         /**
@@ -100,8 +101,10 @@ define([
                 $(value).addClass('no-display');
             });
 
-            $(this.deleteButtonSelector).removeClass('media-gallery-actions-buttons').text($.mage.__('Delete Selected'));
-            $(this.deleteButtonSelector).addClass('primary');
+            $(this.deleteButtonSelector)
+                .removeClass('media-gallery-actions-buttons')
+                .text($.mage.__('Delete Selected'))
+                .addClass('primary');
 
             if (!$(this.cancelMassactionButtonSelector).length) {
                 $(this.pageActionsSelector).append(this.cancelMassactionButton);

@@ -12,6 +12,8 @@ define([
 
     return {
 
+        categoryContentType: 'Category',
+
         /**
          * Get information about image use
          *
@@ -59,17 +61,41 @@ define([
             $.each(imageDetails, function (key, image) {
                 if (_.isObject(image.details[6]) && !_.isEmpty(image.details[6].value)) {
                     $.each(image.details[6].value, function (entityName, count) {
-                        usedIn[entityName] = usedIn[entityName] + count || count;
+                        usedIn[entityName] =  usedIn[entityName] + count || count;
                     });
                 }
             });
+
             $.each(usedIn, function (entityName, count) {
-                message +=  count + ' ' + entityName + ', ';
-            });
+                message +=  count + ' ' +  this.getEntityNameWithPrefix(entityName, count) +  ', ';
+            }.bind(this));
+
             message = message.replace(/,\s*$/, '');
             message = usedInMessage.replace('%s', message).replace('%p', prefix);
 
             return message;
+        },
+
+        /**
+         * Return entity name based on used in count
+         *
+         * @param {String} entityName
+         * @param {String} count
+         */
+        getEntityNameWithPrefix: function (entityName, count) {
+            var name;
+
+            if (count > 1) {
+                if (entityName === this.categoryContentType) {
+                    name = entityName.slice(0, -1) + 'ies';
+                } else {
+                    name = entityName + 's';
+                }
+
+                return name;
+            }
+
+            return entityName;
         }
     };
 });
