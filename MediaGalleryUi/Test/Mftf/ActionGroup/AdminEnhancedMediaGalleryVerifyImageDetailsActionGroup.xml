@@ -33,5 +33,11 @@
             <actualResult type="variable">grabType</actualResult>
             <expectedResult type="string">Image</expectedResult>
         </assertStringContainsString>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.description}}" stepKey="grabDescription"/>
+        <assertStringContainsString stepKey="verifyDescription">
+            <actualResult type="variable">grabDescription</actualResult>
+            <expectedResult type="string">Test Description</expectedResult>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>

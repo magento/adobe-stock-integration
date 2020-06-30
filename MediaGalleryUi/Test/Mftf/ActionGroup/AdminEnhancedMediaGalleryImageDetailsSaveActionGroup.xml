@@ -13,7 +13,7 @@
             <description>Save image details from the View Details panel</description>
         </annotations>
         <arguments>
-            <argument name="title" type="string" defaultValue="Test Title"/>
+            <argument name="title" type="string" defaultValue="magento"/>
             <argument name="description" type="string" defaultValue="Test Description"/>
         </arguments>
 
