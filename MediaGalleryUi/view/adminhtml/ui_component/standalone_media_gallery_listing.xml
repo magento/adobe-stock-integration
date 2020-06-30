@@ -101,6 +101,23 @@
                     <dataScope>updated_at</dataScope>
                 </settings>
             </filterRange>
+            <filterSelect name="block_id" provider="${ $.parentName }" sortOrder="70" component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Blocks\Options"/>
+                    <caption translate="true">– Please Select a Block –</caption>
+                    <label translate="true">Block</label>
+                    <dataScope>block_id</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
         </filters>
         <paging name="listing_paging">
             <settings>
