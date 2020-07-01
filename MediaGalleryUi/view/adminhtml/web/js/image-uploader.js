@@ -86,8 +86,8 @@ define([
                     if (!this.isSizeExceeded(data.files[0]).passed) {
                         this.mediaGridMessages().add(
                             'error',
-                            $.mage.__('Cannot upload <b>' + data.files[0].name +
-                                      '</b>. File exceeds maximum file size limit.')
+                            $.mage.__('Cannot upload "' + data.files[0].name +
+                                      '". File exceeds maximum file size limit.')
                         );
 
                         this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
@@ -159,7 +159,7 @@ define([
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__('Cannot upload <b>' + file.name + '</b>. This file format is not supported')
+                    $.mage.__('Cannot upload "' + file.name + '". This file format is not supported.')
                 );
             }.bind(this));
 
