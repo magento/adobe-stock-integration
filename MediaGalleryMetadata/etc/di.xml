@@ -37,6 +37,7 @@
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpReader</item>
+                <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcReader</item>
             </argument>
         </arguments>
     </type>

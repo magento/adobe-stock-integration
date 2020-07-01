@@ -79,6 +79,15 @@ class ExtractMetadataTest extends TestCase
                     'magento',
                     'mediagallerymetadata'
                 ]
+            ],
+            [
+                'iptc_only.jpeg',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
+                ]
             ]
         ];
     }
