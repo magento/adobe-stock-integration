@@ -32,7 +32,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsWithDescriptionActionGroup" stepKey="verifyImageDetails">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
     </test>
