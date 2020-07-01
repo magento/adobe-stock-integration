@@ -11,12 +11,19 @@
             <argument name="customFilters" xsi:type="array">
                 <item name="path" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Directory</item>
                 <item name="fulltext" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Keyword</item>
+                <item name="entity_type" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\EntityType</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\SortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor" />
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\PaginationProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor" />
-    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor" />
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
+        <arguments>
+            <argument name="customJoins" xsi:type="array">
+                <item name="entity_type" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\EntityType</item>
+            </argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
@@ -33,20 +40,6 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
-        <arguments>
-            <argument name="customJoins" xsi:type="array">
-                <item name="entity_type" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\EntityType</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
-        <arguments>
-            <argument name="customFilters" xsi:type="array">
-                <item name="entity_type" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\EntityType</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\UsedIn">
         <arguments>
             <argument name="options" xsi:type="array">
