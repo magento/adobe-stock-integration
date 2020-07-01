@@ -67,11 +67,11 @@ define([
          */
         isVisible: function (record, name) {
             if (name === this.licenseAction.name) {
-                if (_.isNull(record['is_licensed'])) {
+                if (_.isUndefined(record.overlay) || record.overlay === '') {
                     return false;
                 }
 
-                return !parseInt(record['is_licensed'], 16);
+                return true;
             }
 
             return true;
