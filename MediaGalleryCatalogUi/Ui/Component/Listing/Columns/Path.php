@@ -24,8 +24,7 @@ class Path extends Column
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param StoreManagerInterface $storeManager
-     * @param Image $image
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param array $components
      * @param array $data
      */

@@ -41,8 +41,8 @@ class DataProvider extends UiComponentDataProvider
     private $attributeValueFactory;
 
     /**
-    * @var DocumentFactory
-    */
+     * @var DocumentFactory
+     */
     private $documentFactory;
 
     /**
@@ -56,6 +56,7 @@ class DataProvider extends UiComponentDataProvider
      * @param SearchResultFactory $searchResultFactory
      * @param CategoryListInterface $categoryList
      * @param AttributeValueFactory $attributeValueFactory
+     * @param DocumentFactory $documentFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
