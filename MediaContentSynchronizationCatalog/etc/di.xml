@@ -14,6 +14,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentSynchronizationApi\Model\GetEntitiesInterface">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="catalog_product" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</item>
+                <item name="catalog_category" xsi:type="string">Magento\Catalog\Api\Data\CategoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\MediaContentSynchronizationCatalog\Model\Synchronizer\Product">
         <arguments>
             <argument name="fields" xsi:type="array">
