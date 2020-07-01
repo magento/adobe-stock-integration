@@ -17,7 +17,7 @@ class UsedIn implements OptionSourceInterface
     /**
      * @var array
      */
-    protected $_options;
+    private $_options;
 
     /**
      * UsedIn constructor.
