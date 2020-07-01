@@ -79,6 +79,15 @@ class ExtractMetadataTest extends TestCase
                     'magento',
                     'mediagallerymetadata'
                 ]
+            ],
+            [
+                'exiftool.gif',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
+                ]
             ]
         ];
     }

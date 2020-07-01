@@ -16,6 +16,7 @@
             <argument name="readers" xsi:type="array">
                 <item name="jpeg" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\ExtractMetadata</item>
                 <item name="png" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\ExtractMetadata</item>
+                <item name="gif" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\ExtractMetadata</item>
             </argument>
         </arguments>
     </type>
@@ -23,6 +24,7 @@
         <arguments>
             <argument name="writers" xsi:type="array">
                 <item name="jpeg" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\AddMetadata</item>
+                <item name="png" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\AddMetadata</item>
             </argument>
         </arguments>
     </type>
@@ -30,6 +32,13 @@
         <arguments>
             <argument name="writers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpWriter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryMetadata\Model\Png\AddMetadata">
+        <arguments>
+            <argument name="writers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpWriter</item>
             </argument>
         </arguments>
     </type>
@@ -44,6 +53,13 @@
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpReader</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryMetadata\Model\Gif\ExtractMetadata">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpReader</item>
             </argument>
         </arguments>
     </type>
