@@ -40,7 +40,7 @@ class AddXmpMetadata
         $this->updateKeywords($xml, $metadata->getKeywords());
 
         $data = $xml->asXML();
-        return $data;
+        return str_replace("<?xml version=\"1.0\"?>\n", '', $data);
     }
 
     /**

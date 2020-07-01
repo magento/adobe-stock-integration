@@ -89,8 +89,8 @@ class ExtractMetadataTest extends TestCase
                     'mediagallerymetadata'
                 ]
             ],
-              [
-                'iptc_only.png',
+            [
+                'exiftool.gif',
                 'Title of the magento image',
                 'Description of the magento image',
                 [

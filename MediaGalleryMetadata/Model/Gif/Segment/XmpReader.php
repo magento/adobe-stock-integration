@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
+namespace Magento\MediaGalleryMetadata\Model\Gif\Segment;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadata\Model\GetXmpMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
@@ -19,7 +20,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
  */
 class XmpReader implements MetadataReaderInterface
 {
-    private const XMP_SEGMENT_NAME = 'iTXt';
+    private const XMP_SEGMENT_NAME = 'XMP DataXMP';
 
     /**
      * @var MetadataInterfaceFactory
@@ -65,8 +66,7 @@ class XmpReader implements MetadataReaderInterface
      */
     private function isXmpSegment(SegmentInterface $segment): bool
     {
-        return $segment->getName() === self::XMP_SEGMENT_NAME
-            && strpos($segment->getData(), '<x:xmpmeta') !== -1;
+        return $segment->getName() === self::XMP_SEGMENT_NAME;
     }
 
     /**
@@ -77,6 +77,13 @@ class XmpReader implements MetadataReaderInterface
      */
     private function getXmpData(SegmentInterface $segment): string
     {
-        return substr($segment->getData(), strpos($segment->getData(), '<x:xmpmeta'));
+        $xmp = substr($segment->getData(), 13);
+
+        if (substr($xmp, -257, 3) !== "\x01\xFF\xFE" || substr($xmp, -4) !== "\x03\x02\x01\x00") {
+            throw new LocalizedException(__('XMP data is corrupted'));
+        }
+
+        $xmp = substr($xmp, 0, -257);
+        return $xmp;
     }
 }

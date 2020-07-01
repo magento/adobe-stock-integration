@@ -14,7 +14,6 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
  * File segments reader
@@ -39,26 +38,18 @@ class FileReader implements FileReaderInterface
     private $fileFactory;
 
     /**
-     * @var SegmentNames
-     */
-    private $segmentNames;
-
-    /**
      * @param DriverInterface $driver
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
-     * @param SegmentNames $segmentNames
      */
     public function __construct(
         DriverInterface $driver,
         FileInterfaceFactory $fileFactory,
-        SegmentInterfaceFactory $segmentFactory,
-        SegmentNames $segmentNames
+        SegmentInterfaceFactory $segmentFactory
     ) {
         $this->driver = $driver;
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
-        $this->segmentNames = $segmentNames;
     }
 
     /**
@@ -92,12 +83,18 @@ class FileReader implements FileReaderInterface
         do {
             $header = $this->readHeader($resource);
             $segmentHeader = unpack('Nsize/a4type', $header);
+            $dataStart = $this->driver->fileTell($resource);
+            $data = $this->read($resource, $segmentHeader['size']);
             $segments[] = $this->segmentFactory->create([
                 'name' => $segmentHeader['type'],
-                'dataStart' => $this->driver->fileTell($resource),
-                'data' => $this->read($resource, $segmentHeader['size'])
+                'dataStart' => $dataStart,
+                'data' => $data
             ]);
-            $this->driver->fileSeek($resource, 4, SEEK_CUR);
+            $cyclicRedundancyCheck = $this->read($resource, 4);
+
+            if (pack('N', crc32($segmentHeader['type'] . $data)) != $cyclicRedundancyCheck) {
+                throw new LocalizedException(__('The image is corrupted'));
+            }
         } while (
             $header
             && $segmentHeader['type'] != self::PNG_MARKER_IMAGE_END
