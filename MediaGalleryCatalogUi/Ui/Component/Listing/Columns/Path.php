@@ -61,6 +61,8 @@ class Path extends Column
 
     /**
      * Replace category path ids with category names
+     *
+     * @param string $pathWithIds
      */
     private function getCategoryPathWithNames(string $pathWithIds): string
     {
