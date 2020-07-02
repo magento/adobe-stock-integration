@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryMetadata\Model;
 
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * Add metadata to the IPTC data
@@ -21,13 +22,14 @@ class AddIptcMetadata
 
 
     /**
-     * Parse metadata
+     * Write metadata
      *
-     * @param string $file
+     * @param FileInterface $file
      * @param MetadataInterface $metadata
+     * @param  SegmentInterface $segment
      * @return string
      */
-    public function execute(FileInterface $file, MetadataInterface $metadata, $segment): string
+    public function execute(FileInterface $file, MetadataInterface $metadata, SegmentInterface $segment): string
     {
         if (is_callable('iptcembed')) {
             $iptcData = @iptcparse($segment->getData());

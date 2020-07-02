@@ -82,8 +82,11 @@ class IPTCWriter implements MetadataWriterInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata, FileInterface $file): SegmentInterface
-    {
+    public function updateSegment(
+        SegmentInterface $segment,
+        MetadataInterface $metadata,
+        FileInterface $file
+    ): SegmentInterface {
         $data = $segment->getData();
         $start = substr($data, 0, self::IPTC_DATA_START_POSITION);
         return $this->segmentFactory->create([
