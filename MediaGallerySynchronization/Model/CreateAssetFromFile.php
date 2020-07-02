@@ -17,6 +17,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Create media asset object based on the file information
@@ -88,8 +89,6 @@ class CreateAssetFromFile
 
         [$width, $height] = getimagesize($path);
 
-        $hash = $this->getHashImageContent($path);
-
         $asset = $this->getAsset($path);
         return $this->assetFactory->create(
             [
@@ -100,7 +99,7 @@ class CreateAssetFromFile
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
                 'width' => $width,
                 'height' => $height,
-                'hash' => $hash,
+                'hash' => $this->getHashImageContent($path),
                 'size' => $file->getSize(),
                 'contentType' => $asset ? $asset->getContentType() : 'image/' . $file->getExtension(),
                 'source' => $asset ? $asset->getSource() : 'Local'
@@ -141,15 +140,16 @@ class CreateAssetFromFile
     }
 
     /**
-     * Get hash image content.
-     *
      * @param string $path
      * @return string
      * @throws ValidatorException
+     * @throws FileSystemException
      */
     private function getHashImageContent(string $path): string
     {
-        $hashedImageContent = $this->getContentHash->execute($this->getMediaDirectory()->getAbsolutePath($path));
+        $mediaDirectory = $this->getMediaDirectory();
+        $imageDirectory = $mediaDirectory->readFile($mediaDirectory->getRelativePath($path));
+        $hashedImageContent = $this->getContentHash->execute($imageDirectory);
         return $hashedImageContent;
     }
 

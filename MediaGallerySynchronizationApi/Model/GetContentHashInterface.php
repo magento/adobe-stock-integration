@@ -15,8 +15,8 @@ interface GetContentHashInterface
     /**
      * Get hashed value of image content.
      *
-     * @param string $filepath
+     * @param string $content
      * @return string
      */
-    public function execute(string $filepath): string;
+    public function execute(string $content): string;
 }
