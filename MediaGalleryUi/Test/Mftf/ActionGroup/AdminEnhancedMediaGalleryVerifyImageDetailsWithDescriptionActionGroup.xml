@@ -16,25 +16,25 @@
             <argument name="image"/>
         </arguments>
 
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsWithDescriptionSection.title}}" stepKey="grabImageTitle"/>
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.title}}" stepKey="grabImageTitle"/>
         <assertStringContainsString stepKey="verifyImageTitle">
             <actualResult type="variable">grabImageTitle</actualResult>
             <expectedResult type="string">{{image.fileName}}</expectedResult>
         </assertStringContainsString>
 
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsWithDescriptionSection.contentType}}" stepKey="grabContentType"/>
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.contentType}}" stepKey="grabContentType"/>
         <assertStringContainsStringIgnoringCase stepKey="verifyContentType">
             <actualResult type="variable">grabContentType</actualResult>
             <expectedResult type="string">{{image.extension}}</expectedResult>
         </assertStringContainsStringIgnoringCase>
 
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsWithDescriptionSection.type}}" stepKey="grabType"/>
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.type}}" stepKey="grabType"/>
         <assertStringContainsString stepKey="verifyType">
             <actualResult type="variable">grabType</actualResult>
             <expectedResult type="string">Image</expectedResult>
         </assertStringContainsString>
 
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsWithDescriptionSection.description}}" stepKey="grabDescription"/>
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.description}}" stepKey="grabDescription"/>
         <assertStringContainsString stepKey="verifyDescription">
             <actualResult type="variable">grabDescription</actualResult>
             <expectedResult type="string">Test Description</expectedResult>

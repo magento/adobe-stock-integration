@@ -15,6 +15,7 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
@@ -47,6 +48,11 @@ class SaveDetails extends Action implements HttpPostActionInterface
     private $assetKeywordsFactory;
 
     /**
+     * @var AssetInterfaceFactory
+     */
+    private $assetFactory;
+
+    /**
      * @var GetAssetsByIdsInterface
      */
     private $getAssetsByIds;
@@ -62,6 +68,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
      * @param Context $context
      * @param SaveAssetsInterface $saveAssets
      * @param SaveAssetsKeywordsInterface $saveAssetKeywords
+     * @param AssetInterfaceFactory $assetFactory
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
      * @param GetAssetsByIdsInterface $getAssetsByIds
      * @param LoggerInterface $logger
@@ -70,6 +77,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
         Context $context,
         SaveAssetsInterface $saveAssets,
         SaveAssetsKeywordsInterface $saveAssetKeywords,
+        AssetInterfaceFactory $assetFactory,
         AssetKeywordsInterfaceFactory $assetKeywordsFactory,
         GetAssetsByIdsInterface $getAssetsByIds,
         LoggerInterface $logger
@@ -78,6 +86,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
 
         $this->saveAssets = $saveAssets;
         $this->saveAssetKeywords = $saveAssetKeywords;
+        $this->assetFactory = $assetFactory;
         $this->assetKeywordsFactory = $assetKeywordsFactory;
         $this->getAssetsByIds = $getAssetsByIds;
         $this->logger = $logger;
@@ -108,9 +117,24 @@ class SaveDetails extends Action implements HttpPostActionInterface
 
         try {
             $asset = current($this->getAssetsByIds->execute([$imageId]));
-            $asset->setTitle($title);
-            $asset->setDescription($description);
-            $this->saveAssets->execute([$asset]);
+            $updatedAsset = $this->assetFactory->create(
+                [
+                    'path' => $asset->getPath(),
+                    'contentType' => $asset->getContentType(),
+                    'width' => $asset->getWidth(),
+                    'height' => $asset->getHeight(),
+                    'size' => $asset->getSize(),
+                    'id' => $asset->getId(),
+                    'title' => $title,
+                    'description' => $description,
+                    'source' => $asset->getSource(),
+                    'hash' => $asset->getHash(),
+                    'created_at' => $asset->getCreatedAt(),
+                    'updated_at' => $asset->getUpdatedAt()
+                ]
+            );
+            $this->saveAssets->execute([$updatedAsset]);
+
             $assetKeywords = $this->assetKeywordsFactory->create([
                 'assetId' => $imageId,
                 'keywords' => $imageKeywords
@@ -120,7 +144,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully saved the image "%image"', ['image' => $asset->getTitle()]),
+                'message' => __('You have successfully saved the image "%image"', ['image' => $title]),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
