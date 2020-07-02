@@ -34,6 +34,7 @@
             <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\FileWriter</argument>
             <argument name="writers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpWriter</item>
+                <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcWriter</item>
             </argument>
         </arguments>
     </virtualType>
