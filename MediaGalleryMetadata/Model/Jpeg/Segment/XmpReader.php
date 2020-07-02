@@ -49,7 +49,7 @@ class XmpReader implements MetadataReaderInterface
     public function execute(FileInterface $file): MetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
-            if ($this->isXmpSegment($segment)) {
+            if ($this->isSegmentXmp($segment)) {
                 return $this->getXmpMetadata->execute($this->getXmpData($segment));
             }
         }
@@ -66,7 +66,7 @@ class XmpReader implements MetadataReaderInterface
      * @param SegmentInterface $segment
      * @return bool
      */
-    private function isXmpSegment(SegmentInterface $segment): bool
+    private function isSegmentXmp(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::XMP_SEGMENT_NAME
             && strncmp($segment->getData(), self::XMP_SEGMENT_START, self::XMP_DATA_START_POSITION) == 0;

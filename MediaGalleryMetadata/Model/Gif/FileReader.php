@@ -290,6 +290,8 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Read the block stored in multiple sections
+     *
      * @param resource $resource
      * @return string
      * @throws FileSystemException

@@ -82,7 +82,6 @@ class AddMetadata implements AddMetadataInterface
                 )
             );
         }
-
     }
 
     /**
