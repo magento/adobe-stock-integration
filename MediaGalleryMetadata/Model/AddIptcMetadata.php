@@ -27,9 +27,9 @@ class AddIptcMetadata
      * @param MetadataInterface $metadata
      * @return string
      */
-    public function execute(FileInterface $file, MetadataInterface $metadata): string
+    public function execute(FileInterface $file, MetadataInterface $metadata, $segment): string
     {
-        if (is_callable('iptcembed') && is_callable('iptcparse')) {
+        if (is_callable('iptcembed')) {
             $iptcData = @iptcparse($segment->getData());
             if (!empty($metadata->getTitle())) {
                 $iptcData[self::IPTC_TITLE_SEGMENT][0] = $metadata->getTitle();
@@ -40,14 +40,17 @@ class AddIptcMetadata
             }
 
             if (!empty($metadata->getKeywords())) {
-                $iptcData[self::IPTC_KEYWORDS_SEGMENT][0] = $metadata->getKeywords();
+                foreach ($metadata->getKeywords() as $key => $keyword) {
+                    $iptcData[self::IPTC_KEYWORDS_SEGMENT][$key] = $keyword;
+                }
             }
 
             $newData = '';
 
-            foreach ($iptcData as $tag => $val) {
-                $tag = substr($tag, 2);
-                $newData .= $this->iptcMaketag(2, $tag, $string);
+            foreach ($iptcData as $tag => $values) {
+                foreach ($values as $value) {
+                    $newData .= $this->iptcMaketag(2, substr($tag, 2), $value);
+                }
             }
             $content = @iptcembed($newData, $file->getPath());
 
@@ -62,10 +65,10 @@ class AddIptcMetadata
      * @param string $tag
      * @param string $val
      */
-    private function iptcMaketag($rec, $data, $val)
+    private function iptcMaketag($rec, $data, $value)
     {
         $length = strlen($value);
-        $retval = chr(0x1C) . chr($rec) . chr($data);
+        $retval = chr(0x1C) . chr($rec) . chr((int)$data);
 
         if ($length < 0x8000) {
             $retval .= chr($length >> 8) .  chr($length & 0xFF);

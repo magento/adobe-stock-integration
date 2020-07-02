@@ -51,7 +51,7 @@ class IPTCWriter implements MetadataWriterInterface
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
-        $this->addXmpMetadata = $addXmpMetadata;
+        $this->addIptcMetadata = $addIptcMetadata;
     }
 
     /**
@@ -66,7 +66,7 @@ class IPTCWriter implements MetadataWriterInterface
         $segments = $file->getSegments();
         foreach ($segments as $key => $segment) {
             if ($this->isIptcSegment($segment)) {
-                $segments[$key] = $this->updateSegment($segment, $metadata);
+                $segments[$key] = $this->updateSegment($segment, $metadata, $file);
             }
         }
         return $this->fileFactory->create([
@@ -82,14 +82,13 @@ class IPTCWriter implements MetadataWriterInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
+    public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata, FileInterface $file): SegmentInterface
     {
         $data = $segment->getData();
         $start = substr($data, 0, self::IPTC_DATA_START_POSITION);
-        $iptcData = substr($data, self::IPTC_DATA_START_POSITION);
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
-            'data' => $start . $this->addIptcMetadata->execute($iptcData, $metadata)
+            'data' => $start . $this->addIptcMetadata->execute($file, $metadata, $segment)
         ]);
     }
 
@@ -99,7 +98,7 @@ class IPTCWriter implements MetadataWriterInterface
      * @param SegmentInterface $segment
      * @return bool
      */
-    private function isXmpSegment(SegmentInterface $segment): bool
+    private function isIptcSegment(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::IPTC_SEGMENT_NAME
             && strncmp($segment->getData(), self::IPTC_SEGMENT_START, self::IPTC_DATA_START_POSITION) == 0;
