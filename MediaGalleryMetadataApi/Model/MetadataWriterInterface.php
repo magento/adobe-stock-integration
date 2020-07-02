@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryMetadataApi\Model;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
- * Metadata writer interface
+ * Metadata writer
  */
 interface MetadataWriterInterface
 {

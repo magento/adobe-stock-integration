@@ -41,6 +41,7 @@ class XmpWriter implements MetadataWriterInterface
     /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
+     * @param AddXmpMetadata $addXmpMetadata
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
@@ -69,7 +70,6 @@ class XmpWriter implements MetadataWriterInterface
         }
         return $this->fileFactory->create([
             'path' => $file->getPath(),
-            'compressedImage' => $file->getCompressedImage(),
             'segments' => $segments
         ]);
     }
@@ -78,13 +78,13 @@ class XmpWriter implements MetadataWriterInterface
      * Add metadata to the segment
      *
      * @param SegmentInterface $segment
+     * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
     public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
     {
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
-            'dataStart' => $segment->getDataStart(),
             'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($this->getXmpData($segment), $metadata)
         ]);
     }

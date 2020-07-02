@@ -9,7 +9,7 @@ namespace Magento\MediaGalleryMetadata\Model;
 
 use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
-use Magento\MediaGalleryMetadataApi\Model\WriterComposite;
+use Magento\MediaGalleryMetadataApi\Model\AddMetadataComposite;
 
 /**
  * Add metadata to the asset by path
@@ -17,16 +17,16 @@ use Magento\MediaGalleryMetadataApi\Model\WriterComposite;
 class AddMetadata implements AddMetadataInterface
 {
     /**
-     * @var WriterComposite
+     * @var AddMetadataComposite
      */
-    private $writerComposite;
+    private $addMetadataComposite;
 
     /**
-     * @param WriterComposite $writerComposite
+     * @param AddMetadataComposite $addMetadataComposite
      */
-    public function __construct(WriterComposite $writerComposite)
+    public function __construct(AddMetadataComposite $addMetadataComposite)
     {
-        $this->writerComposite = $writerComposite;
+        $this->addMetadataComposite = $addMetadataComposite;
     }
 
     /**
@@ -34,6 +34,6 @@ class AddMetadata implements AddMetadataInterface
      */
     public function execute(string $path, MetadataInterface $data): void
     {
-        $this->writerComposite->execute($path, $data);
+        $this->addMetadataComposite->execute($path, $data);
     }
 }

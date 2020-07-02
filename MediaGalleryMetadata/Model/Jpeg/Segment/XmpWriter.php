@@ -16,7 +16,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 
 /**
- * XMP Writer
+ * Jpeg XMP Writer
  */
 class XmpWriter implements MetadataWriterInterface
 {
@@ -42,6 +42,7 @@ class XmpWriter implements MetadataWriterInterface
     /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
+     * @param AddXmpMetadata $addXmpMetadata
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
@@ -70,7 +71,6 @@ class XmpWriter implements MetadataWriterInterface
         }
         return $this->fileFactory->create([
             'path' => $file->getPath(),
-            'compressedImage' => $file->getCompressedImage(),
             'segments' => $segments
         ]);
     }
@@ -79,6 +79,7 @@ class XmpWriter implements MetadataWriterInterface
      * Add metadata to the segment
      *
      * @param SegmentInterface $segment
+     * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
     public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
@@ -88,7 +89,6 @@ class XmpWriter implements MetadataWriterInterface
         $xmpData = substr($data, self::XMP_DATA_START_POSITION);
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
-            'dataStart' => $segment->getDataStart(),
             'data' => $start . $this->addXmpMetadata->execute($xmpData, $metadata)
         ]);
     }

@@ -12,7 +12,7 @@ use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 /**
  * Metadata reader pool
  */
-class ReaderPool
+class ExtractMetadataPool
 {
     /**
      * @var ExtractMetadataInterface[]
@@ -28,11 +28,12 @@ class ReaderPool
     }
 
     /**
+     * Retrieve readers from the pool
+     *
      * @return ExtractMetadataInterface[]
      */
     public function get(): array
     {
         return $this->readers;
     }
-
 }

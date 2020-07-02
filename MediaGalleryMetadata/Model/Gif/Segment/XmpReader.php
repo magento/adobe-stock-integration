@@ -16,11 +16,17 @@ use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
- * XMP Reader
+ * XMP Reader for gif file format
  */
 class XmpReader implements MetadataReaderInterface
 {
     private const XMP_SEGMENT_NAME = 'XMP DataXMP';
+    /**
+     * see XMP Specification Part 3, 1.1.2 GIF
+     */
+    private const MAGIC_TRAILER_LENGTH = 257;
+    private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
+    private const MAGIC_TRAILER_END = "\x03\x02\x01\x00";
 
     /**
      * @var MetadataInterfaceFactory
@@ -34,6 +40,7 @@ class XmpReader implements MetadataReaderInterface
 
     /**
      * @param MetadataInterfaceFactory $metadataFactory
+     * @param GetXmpMetadata $getXmpMetadata
      */
     public function __construct(MetadataInterfaceFactory $metadataFactory, GetXmpMetadata $getXmpMetadata)
     {
@@ -47,7 +54,7 @@ class XmpReader implements MetadataReaderInterface
     public function execute(FileInterface $file): MetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
-            if ($this->isXmpSegment($segment)) {
+            if ($this->isXmp($segment)) {
                 return $this->getXmpMetadata->execute($this->getXmpData($segment));
             }
         }
@@ -64,7 +71,7 @@ class XmpReader implements MetadataReaderInterface
      * @param SegmentInterface $segment
      * @return bool
      */
-    private function isXmpSegment(SegmentInterface $segment): bool
+    private function isXmp(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::XMP_SEGMENT_NAME;
     }
@@ -79,11 +86,13 @@ class XmpReader implements MetadataReaderInterface
     {
         $xmp = substr($segment->getData(), 13);
 
-        if (substr($xmp, -257, 3) !== "\x01\xFF\xFE" || substr($xmp, -4) !== "\x03\x02\x01\x00") {
+        if (substr($xmp, -self::MAGIC_TRAILER_LENGTH, 3) !== self::MAGIC_TRAILER_START
+            || substr($xmp, -4) !== self::MAGIC_TRAILER_END
+        ) {
             throw new LocalizedException(__('XMP data is corrupted'));
         }
 
-        $xmp = substr($xmp, 0, -257);
+        $xmp = substr($xmp, 0, -self::MAGIC_TRAILER_LENGTH);
         return $xmp;
     }
 }

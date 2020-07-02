@@ -21,11 +21,6 @@ class File implements FileInterface
     private $path;
 
     /**
-     * @var string
-     */
-    private $compressedImage;
-
-    /**
      * @var array
      */
     private $segments;
@@ -37,28 +32,17 @@ class File implements FileInterface
 
     /**
      * @param string $path
-     * @param string $compressedImage
      * @param array $segments
      * @param FileExtensionInterface|null $extensionAttributes
      */
     public function __construct(
         string $path,
-        string $compressedImage,
         array $segments,
         ?FileExtensionInterface $extensionAttributes = null
     ) {
         $this->path = $path;
-        $this->compressedImage = $compressedImage;
         $this->segments = $segments;
         $this->extensionAttributes = $extensionAttributes;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompressedImage(): string
-    {
-        return $this->compressedImage;
     }
 
     /**

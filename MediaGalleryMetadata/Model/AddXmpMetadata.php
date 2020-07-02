@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryMetadata\Model;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
- * XMP Writer
+ * Add metadata to the XMP data
  */
 class AddXmpMetadata
 {
@@ -24,7 +24,8 @@ class AddXmpMetadata
      * Parse metadata
      *
      * @param string $data
-     * @return MetadataInterface
+     * @param MetadataInterface $metadata
+     * @return string
      */
     public function execute(string $data, MetadataInterface $metadata): string
     {

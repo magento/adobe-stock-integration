@@ -21,11 +21,6 @@ class Segment implements SegmentInterface
     private $name;
 
     /**
-     * @var int
-     */
-    private $dataStart;
-
-    /**
      * @var string
      */
     private $data;
@@ -37,18 +32,15 @@ class Segment implements SegmentInterface
 
     /**
      * @param string $name
-     * @param int $dataStart
      * @param string $data
      * @param SegmentExtensionInterface|null $extensionAttributes
      */
     public function __construct(
         string $name,
-        int $dataStart,
         string $data,
         ?SegmentExtensionInterface $extensionAttributes = null
     ) {
         $this->name = $name;
-        $this->dataStart = $dataStart;
         $this->data = $data;
         $this->extensionAttributes = $extensionAttributes;
     }
@@ -59,14 +51,6 @@ class Segment implements SegmentInterface
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDataStart(): int
-    {
-        return $this->dataStart;
     }
 
     /**

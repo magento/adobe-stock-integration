@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadataApi\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
  * Metadata writer pool
  */
-class WriterComposite
+class AddMetadataComposite
 {
     /**
      * @var AddMetadataInterface[]
@@ -29,7 +30,10 @@ class WriterComposite
     }
 
     /**
+     * Write metadata to the path
+     *
      * @return AddMetadataInterface[]
+     * @throws LocalizedException
      */
     public function execute(string $path, MetadataInterface $data): void
     {

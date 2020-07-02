@@ -22,6 +22,7 @@ class FileReader implements FileReaderInterface
 {
     private const PNG_FILE_START = "\x89PNG\x0d\x0a\x1a\x0a";
     private const PNG_MARKER_IMAGE_END = 'IEND';
+
     /**
      * @var DriverInterface
      */
@@ -82,12 +83,11 @@ class FileReader implements FileReaderInterface
 
         do {
             $header = $this->readHeader($resource);
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             $segmentHeader = unpack('Nsize/a4type', $header);
-            $dataStart = $this->driver->fileTell($resource);
             $data = $this->read($resource, $segmentHeader['size']);
             $segments[] = $this->segmentFactory->create([
                 'name' => $segmentHeader['type'],
-                'dataStart' => $dataStart,
                 'data' => $data
             ]);
             $cyclicRedundancyCheck = $this->read($resource, 4);
@@ -95,8 +95,7 @@ class FileReader implements FileReaderInterface
             if (pack('N', crc32($segmentHeader['type'] . $data)) != $cyclicRedundancyCheck) {
                 throw new LocalizedException(__('The image is corrupted'));
             }
-        } while (
-            $header
+        } while ($header
             && $segmentHeader['type'] != self::PNG_MARKER_IMAGE_END
             && !$this->driver->endOfFile($resource)
         );
@@ -105,12 +104,13 @@ class FileReader implements FileReaderInterface
 
         return $this->fileFactory->create([
             'path' => $path,
-            'compressedImage' => '',
             'segments' => $segments
         ]);
     }
 
     /**
+     * Read 8 bytes
+     *
      * @param resource $resource
      * @return string
      * @throws FileSystemException
@@ -121,6 +121,8 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Read wrapper
+     *
      * @param resource $resource
      * @param int $length
      * @return string

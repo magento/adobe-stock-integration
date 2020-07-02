@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model;
 
-use Magento\MediaGalleryMetadataApi\Model\ReaderPool;
+use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataPool;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
@@ -18,9 +18,9 @@ use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 class ExtractMetadata implements ExtractMetadataInterface
 {
     /**
-     * @var ReaderPool
+     * @var ExtractMetadataPool
      */
-    private $readerPool;
+    private $extractorsPool;
 
     /**
      * @var MetadataInterfaceFactory
@@ -28,12 +28,12 @@ class ExtractMetadata implements ExtractMetadataInterface
     private $metadataFactory;
 
     /**
-     * @param ReaderPool $readerPool
+     * @param ExtractMetadataPool $extractorsPool
      * @param MetadataInterfaceFactory $metadataFactory
      */
-    public function __construct(ReaderPool $readerPool, MetadataInterfaceFactory $metadataFactory)
+    public function __construct(ExtractMetadataPool $extractorsPool, MetadataInterfaceFactory $metadataFactory)
     {
-        $this->readerPool = $readerPool;
+        $this->extractorsPool = $extractorsPool;
         $this->metadataFactory = $metadataFactory;
     }
 
@@ -45,11 +45,12 @@ class ExtractMetadata implements ExtractMetadataInterface
         $title = '';
         $description = '';
         $keywords = [];
-        foreach ($this->readerPool->get() as $reader) {
-            $data = $reader->execute($path);
+        foreach ($this->extractorsPool->get() as $extractor) {
+            $data = $extractor->execute($path);
             $title = $data->getTitle() ?? $title;
             $description = $data->getDescription() ?? $description;
-            $keywords = array_unique(array_merge($keywords, $data->getKeywords()));
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $keywords = array_merge($keywords, $data->getKeywords());
             if (!empty($title) && !empty($description) && !empty($keywords)) {
                 break;
             }
@@ -57,8 +58,7 @@ class ExtractMetadata implements ExtractMetadataInterface
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => $keywords
+            'keywords' => array_unique($keywords)
         ]);
     }
-
 }

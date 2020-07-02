@@ -11,13 +11,14 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
+use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
  * File segments reader
  */
-class FileWriter
+class FileWriter implements FileWriterInterface
 {
     private const PNG_FILE_START = "\x89PNG\x0d\x0a\x1a\x0a";
 
@@ -44,6 +45,8 @@ class FileWriter
     }
 
     /**
+     * Write PNG file to filesystem
+     *
      * @param FileInterface $file
      * @throws LocalizedException
      * @throws FileSystemException
@@ -58,6 +61,8 @@ class FileWriter
     }
 
     /**
+     * Write PNG segments
+     *
      * @param resource $resource
      * @param SegmentInterface[] $segments
      */

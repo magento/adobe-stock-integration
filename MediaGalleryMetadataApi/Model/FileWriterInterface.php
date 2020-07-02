@@ -9,20 +9,19 @@ namespace Magento\MediaGalleryMetadataApi\Model;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
- * Metadata reader
+ * File writer
  */
-interface MetadataReaderInterface
+interface FileWriterInterface
 {
+
     /**
-     * Read metadata from the file
+     * Write file to filesystem
      *
      * @param FileInterface $file
-     * @return MetadataInterface
      * @throws LocalizedException
      * @throws FileSystemException
      */
-    public function execute(FileInterface $file): MetadataInterface;
+    public function execute(FileInterface $file): void;
 }

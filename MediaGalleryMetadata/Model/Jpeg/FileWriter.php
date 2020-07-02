@@ -11,13 +11,14 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
+use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
  * File segments reader
  */
-class FileWriter
+class FileWriter implements FileWriterInterface
 {
     private const MARKER_IMAGE_FILE_START = "\xD8";
     private const MARKER_IMAGE_PREFIX = "\xFF";
@@ -46,6 +47,8 @@ class FileWriter
     }
 
     /**
+     * Write file object to the filesystem
+     * 
      * @param FileInterface $file
      * @throws LocalizedException
      * @throws FileSystemException
@@ -62,23 +65,27 @@ class FileWriter
 
         $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_FILE_START);
         $this->writeSegments($resource, $file->getSegments());
-        $this->driver->fileWrite($resource, $file->getCompressedImage());
         $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_END);
         $this->driver->fileClose($resource);
     }
 
     /**
+     * Write jpeg segment
+     *
      * @param resource $resource
      * @param SegmentInterface[] $segments
      */
     private function writeSegments($resource, array $segments): void
     {
         foreach ($segments as $segment) {
-            $this->driver->fileWrite(
-                $resource,
-                self::MARKER_IMAGE_PREFIX . chr($this->segmentNames->getSegmentType($segment->getName()))
-            );
-            $this->driver->fileWrite($resource, pack("n", strlen($segment->getData()) + 2));
+            if ($segment->getName() !== 'CompressedImage') {
+                $this->driver->fileWrite(
+                    $resource,
+                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    self::MARKER_IMAGE_PREFIX . chr($this->segmentNames->getSegmentType($segment->getName()))
+                );
+                $this->driver->fileWrite($resource, pack("n", strlen($segment->getData()) + 2));
+            }
             $this->driver->fileWrite($resource, $segment->getData());
         }
     }
