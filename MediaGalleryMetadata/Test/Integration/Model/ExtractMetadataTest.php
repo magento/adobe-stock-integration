@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * ExtractMetadata test
+ * Test for ExtractMetadata
  */
 class ExtractMetadataTest extends TestCase
 {

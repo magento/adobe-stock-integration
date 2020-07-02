@@ -11,7 +11,7 @@
     <preference for="Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface" type="Magento\MediaGalleryMetadata\Model\ExtractMetadata"/>
     <preference for="Magento\MediaGalleryMetadataApi\Model\FileInterface" type="Magento\MediaGalleryMetadata\Model\File"/>
     <preference for="Magento\MediaGalleryMetadataApi\Model\SegmentInterface" type="Magento\MediaGalleryMetadata\Model\Segment"/>
-    <type name="Magento\MediaGalleryMetadataApi\Model\ReaderPool">
+    <type name="Magento\MediaGalleryMetadataApi\Model\ExtractMetadataPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="jpeg" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\ExtractMetadata</item>
@@ -20,7 +20,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryMetadataApi\Model\WriterComposite">
+    <type name="Magento\MediaGalleryMetadataApi\Model\AddMetadataComposite">
         <arguments>
             <argument name="writers" xsi:type="array">
                 <item name="jpeg" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\AddMetadata</item>
@@ -28,40 +28,47 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryMetadata\Model\Jpeg\AddMetadata">
+    <virtualType name="Magento\MediaGalleryMetadata\Model\Jpeg\AddMetadata" type="Magento\MediaGalleryMetadata\Model\File\AddMetadata">
         <arguments>
+            <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\FileReader</argument>
+            <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\FileWriter</argument>
             <argument name="writers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpWriter</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\MediaGalleryMetadata\Model\Png\AddMetadata">
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryMetadata\Model\Png\AddMetadata" type="Magento\MediaGalleryMetadata\Model\File\AddMetadata">
         <arguments>
+            <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileReader</argument>
+            <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileWriter</argument>
             <argument name="writers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpWriter</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\MediaGalleryMetadata\Model\Jpeg\ExtractMetadata">
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryMetadata\Model\Gif\ExtractMetadata" type="Magento\MediaGalleryMetadata\Model\File\ExtractMetadata">
         <arguments>
+            <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileReader</argument>
+            <argument name="readers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpReader</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryMetadata\Model\Png\ExtractMetadata" type="Magento\MediaGalleryMetadata\Model\File\ExtractMetadata">
+        <arguments>
+            <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileReader</argument>
+            <argument name="readers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpReader</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryMetadata\Model\Jpeg\ExtractMetadata" type="Magento\MediaGalleryMetadata\Model\File\ExtractMetadata">
+        <arguments>
+            <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\FileReader</argument>
             <argument name="readers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpReader</item>
                 <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcReader</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\MediaGalleryMetadata\Model\Png\ExtractMetadata">
-        <arguments>
-            <argument name="readers" xsi:type="array">
-                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpReader</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaGalleryMetadata\Model\Gif\ExtractMetadata">
-        <arguments>
-            <argument name="readers" xsi:type="array">
-                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpReader</item>
-            </argument>
-        </arguments>
-    </type>
+    </virtualType>
 </config>

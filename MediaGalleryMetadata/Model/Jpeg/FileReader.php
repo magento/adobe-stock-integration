@@ -18,7 +18,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
- * File segments reader
+ * Jpeg file reader
  */
 class FileReader implements FileReaderInterface
 {
@@ -109,18 +109,22 @@ class FileReader implements FileReaderInterface
             throw new LocalizedException(__('File is corrupted'));
         }
 
-        $compressedImage = $this->readCompressedImage($resource);
+        $segments[] = $this->segmentFactory->create([
+            'name' => 'CompressedImage',
+            'data' => $this->readCompressedImage($resource)
+        ]);
 
         $this->driver->fileClose($resource);
 
         return $this->fileFactory->create([
             'path' => $path,
-            'compressedImage' => $compressedImage,
             'segments' => $segments
         ]);
     }
 
     /**
+     * Read compressed image
+     *
      * @param resource $resource
      * @return string
      * @throws FileSystemException
@@ -139,6 +143,8 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Read jpeg segment
+     *
      * @param resource $resource
      * @param int $segmentType
      * @return SegmentInterface
@@ -146,15 +152,17 @@ class FileReader implements FileReaderInterface
      */
     private function readSegment($resource, int $segmentType): SegmentInterface
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $segmentSize = unpack('nsize', $this->read($resource, 2))['size'] - 2;
         return $this->segmentFactory->create([
             'name' => $this->segmentNames->getSegmentName($segmentType),
-            'dataStart' => $this->driver->fileTell($resource),
             'data' => $this->read($resource, $segmentSize)
         ]);
     }
 
     /**
+     * Read jpeg marker
+     *
      * @param resource $resource
      * @return string
      * @throws FileSystemException
@@ -172,6 +180,8 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Read wrapper
+     *
      * @param resource $resource
      * @param int $length
      * @return string

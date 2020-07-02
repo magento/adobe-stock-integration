@@ -23,13 +23,6 @@ interface SegmentInterface extends ExtensibleDataInterface
     public function getName(): string;
 
     /**
-     * Get segment data start position in the file
-     *
-     * @return int
-     */
-    public function getDataStart(): int;
-
-    /**
      * Get segment data
      *
      * @return string

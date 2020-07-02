@@ -47,7 +47,7 @@ class LicenseConfirmation extends AbstractExtensibleModel implements LicenseConf
     /**
      * @inheritdoc
      */
-    public function getCanLicense(): bool
+    public function isCanLicense(): bool
     {
         return $this->getData(self::CAN_LICENSE);
     }

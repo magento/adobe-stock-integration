@@ -30,13 +30,6 @@ interface FileInterface extends ExtensibleDataInterface
     public function getSegments(): array;
 
     /**
-     * Get compressed image
-     *
-     * @return string
-     */
-    public function getCompressedImage(): string;
-
-    /**
      * Get extension attributes
      *
      * @return \Magento\MediaGalleryMetadataApi\Model\FileExtensionInterface|null

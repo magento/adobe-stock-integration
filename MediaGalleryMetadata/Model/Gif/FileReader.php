@@ -95,7 +95,6 @@ class FileReader implements FileReaderInterface
 
         $headerSegment = $this->segmentFactory->create([
             'name' => 'header',
-            'dataStart' => 0,
             'data' => $header . $version
         ]);
 
@@ -108,7 +107,6 @@ class FileReader implements FileReaderInterface
 
         $generalSegment = $this->segmentFactory->create([
             'name' => 'header2',
-            'dataStart' => 0,
             'data' => $width . $height . $bitPerPixelBinary . $backgroundAndAspectRatio . $globalColorTable
         ]);
 
@@ -118,13 +116,14 @@ class FileReader implements FileReaderInterface
 
         return $this->fileFactory->create([
             'path' => $path,
-            'compressedImage' => '',
             'segments' => $segments
         ]);
     }
 
     /**
-     * @param $resource
+     * Read gif segments
+     *
+     * @param resource $resource
      * @return SegmentInterface[]
      * @throws FileSystemException
      */
@@ -145,14 +144,13 @@ class FileReader implements FileReaderInterface
             if ($separator == $gifFrameSeparator) {
                 $segments[] = $this->segmentFactory->create([
                     'name' => 'frame',
-                    'dataStart' => 0,
                     'data' => $this->readFrame($resource)
                 ]);
                 continue;
             }
 
             if ($separator != $gifExtensionSeparator) {
-                throw new \Exception('The image is corrupted');
+                throw new LocalizedException(__('The file is corrupted'));
             }
 
             $segments[] = $this->getExtensionSegment($resource);
@@ -163,19 +161,21 @@ class FileReader implements FileReaderInterface
     }
 
     /**
-     * @param $resource
+     * Read extension segment
+     *
+     * @param resource $resource
      * @return SegmentInterface
      * @throws FileSystemException
      */
     private function getExtensionSegment($resource): SegmentInterface
     {
         $extensionCodeBinary = $this->read($resource, 1);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $extensionCode = unpack('C', $extensionCodeBinary)[1];
 
         if ($extensionCode == 0xF9) {
             return $this->segmentFactory->create([
                 'name' => 'Graphics Control Extension',
-                'dataStart' => 0,
                 'data' => $extensionCodeBinary . $this->readBlock($resource)
             ]);
         }
@@ -183,7 +183,6 @@ class FileReader implements FileReaderInterface
         if ($extensionCode == 0xFE) {
             return $this->segmentFactory->create([
                 'name' => 'comment',
-                'dataStart' => 0,
                 'data' => $extensionCodeBinary . $this->readBlock($resource)
             ]);
         }
@@ -191,23 +190,22 @@ class FileReader implements FileReaderInterface
         if ($extensionCode != 0xFF) {
             return $this->segmentFactory->create([
                 'name' => 'unknown',
-                'dataStart' => 0,
                 'data' => $extensionCodeBinary . $this->readBlock($resource)
             ]);
         }
 
         $blockLengthBinary = $this->read($resource, 1);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $blockLength = unpack('C', $blockLengthBinary)[1];
         $name = $this->read($resource, $blockLength);
 
         if ($blockLength != 11) {
-            throw new \Exception('The file is corrupted');
+            throw new LocalizedException(__('The file is corrupted'));
         }
 
         if ($name == 'XMP DataXMP') {
             return $this->segmentFactory->create([
                 'name' => $name,
-                'dataStart' => 0,
                 'data' => $extensionCodeBinary . $blockLengthBinary
                     . $name . $this->readBlockWithSubblocks($resource)
             ]);
@@ -215,17 +213,18 @@ class FileReader implements FileReaderInterface
 
         return $this->segmentFactory->create([
             'name' => $name,
-            'dataStart' => 0,
             'data' => $extensionCodeBinary . $blockLengthBinary . $name . $this->readBlock($resource)
         ]);
     }
 
     /**
+     * Read gif frame
+     *
      * @param resource $resource
      * @return string
      * @throws FileSystemException
      */
-    private function readFrame($resource)
+    private function readFrame($resource): string
     {
         $boundingBox = $this->read($resource, 8);
         $bitPerPixelBinary = $this->read($resource, 1);
@@ -236,11 +235,14 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Retrieve bits per pixel value
+     *
      * @param string $data
      * @return int
      */
     private function getBitPerPixel(string $data): int
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $bitPerPixel = unpack('C', $data)[1];
         $bpp = ($bitPerPixel & 7) + 1;
         $bitPerPixel >>= 7;
@@ -249,6 +251,8 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Read global color table
+     *
      * @param resource $resource
      * @param int $bitPerPixel
      * @return string
@@ -267,6 +271,8 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Read wrapper
+     *
      * @param resource $resource
      * @param int $length
      * @return string
@@ -306,6 +312,8 @@ class FileReader implements FileReaderInterface
     }
 
     /**
+     * Read gif block
+     *
      * @param resource $resource
      * @return string
      * @throws FileSystemException]

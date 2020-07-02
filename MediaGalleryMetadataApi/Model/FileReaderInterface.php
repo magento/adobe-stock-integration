@@ -13,12 +13,16 @@ namespace Magento\MediaGalleryMetadataApi\Model;
 interface FileReaderInterface
 {
     /**
+     * Create file object from the file
+     *
      * @param string $path
      * @return FileInterface
      */
     public function execute(string $path): FileInterface;
 
     /**
+     * Is the current file reader applicable to a given path
+     *
      * @param string $path
      * @return bool
      */

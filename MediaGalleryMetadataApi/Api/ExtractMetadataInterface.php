@@ -21,7 +21,6 @@ interface ExtractMetadataInterface
      *
      * @param string $path
      * @return MetadataInterface
-     * @throws LocalizedException
      */
     public function execute(string $path): MetadataInterface;
 }

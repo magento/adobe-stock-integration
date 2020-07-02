@@ -15,7 +15,7 @@ use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
- * XMP Reader
+ * PNG XMP Reader
  */
 class XmpReader implements MetadataReaderInterface
 {
@@ -33,6 +33,7 @@ class XmpReader implements MetadataReaderInterface
 
     /**
      * @param MetadataInterfaceFactory $metadataFactory
+     * @param GetXmpMetadata $getXmpMetadata
      */
     public function __construct(MetadataInterfaceFactory $metadataFactory, GetXmpMetadata $getXmpMetadata)
     {
@@ -41,7 +42,10 @@ class XmpReader implements MetadataReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * Read metadata from the file
+     *
+     * @param FileInterface $file
+     * @return MetadataInterface
      */
     public function execute(FileInterface $file): MetadataInterface
     {
