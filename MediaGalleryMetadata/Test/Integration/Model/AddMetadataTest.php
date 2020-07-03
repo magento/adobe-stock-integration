@@ -102,7 +102,6 @@ class AddMetadataTest extends TestCase
 
     /**
      * Data provider for testExecute
-     * TODO: test adding metadata to the image that does not have metadata
      *
      * @return array[]
      */
@@ -135,7 +134,17 @@ class AddMetadataTest extends TestCase
                     'magento2',
                     'community'
                 ]
+            ],
+            [
+                'empty_xmp_image.jpeg',
+                'Title of the magento image',
+                'Description of the magento image 2',
+                [
+                    'magento2',
+                    'community'
+                ]
             ]
+
         ];
     }
 }

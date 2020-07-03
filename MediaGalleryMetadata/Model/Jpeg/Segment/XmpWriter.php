@@ -14,6 +14,8 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Module\Dir;
 
 /**
  * Jpeg XMP Writer
@@ -40,18 +42,26 @@ class XmpWriter implements MetadataWriterInterface
     private $addXmpMetadata;
 
     /**
+     * @var Reader
+     */
+    private $moduleReader;
+
+    /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param AddXmpMetadata $addXmpMetadata
+     * @param Reader $moduleReader
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        AddXmpMetadata $addXmpMetadata
+        AddXmpMetadata $addXmpMetadata,
+        Reader $moduleReader
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->addXmpMetadata = $addXmpMetadata;
+        $this->moduleReader = $moduleReader;
     }
 
     /**
@@ -64,17 +74,42 @@ class XmpWriter implements MetadataWriterInterface
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
         $segments = $file->getSegments();
+        $xmpSegment = [];
         foreach ($segments as $key => $segment) {
             if ($this->isSegmentXmp($segment)) {
-                $segments[$key] = $this->updateSegment($segment, $metadata);
+                $xmpSegment[$key] = $segment;
             }
         }
+        if (!empty($xmpSegment)) {
+            foreach ($xmpSegment as $key => $segment) {
+                $segments[$key] = $this->updateSegment($segment, $metadata);
+            }
+        } else {
+            $segments[] = $this->writeSegment($metadata);
+        }
+
         return $this->fileFactory->create([
             'path' => $file->getPath(),
             'segments' => $segments
         ]);
     }
 
+    /**
+     * Write new segment  metadata
+     *
+     * @param MetadataInterface $metadata
+     * @return SegmentInterface
+     */
+    public function writeSegment(MetadataInterface $metadata): SegmentInterface
+    {
+        $xmpTemplate = $this->moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_MediaGalleryMetadata');
+        $xmpData = file_get_contents($xmpTemplate . '/default.xmp');
+        return $this->segmentFactory->create([
+            'name' => self::XMP_SEGMENT_NAME,
+            'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($xmpData, $metadata)
+        ]);
+    }
+    
     /**
      * Add metadata to the segment
      *
