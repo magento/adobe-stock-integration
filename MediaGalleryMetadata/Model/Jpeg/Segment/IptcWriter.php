@@ -80,6 +80,7 @@ class IptcWriter implements MetadataWriterInterface
      *
      * @param SegmentInterface $segment
      * @param MetadataInterface $metadata
+     * @param FileInterface $file
      * @return SegmentInterface
      */
     public function updateSegment(

@@ -47,7 +47,7 @@ class GetIptcMetadata
         $keywords = [];
         
         if (is_callable('iptcparse')) {
-            $iptcData = @iptcparse($segment->getData());
+            $iptcData = iptcparse($segment->getData());
 
             if (!empty($iptcData[self::IPTC_TITLE])) {
                 $title = trim($iptcData[self::IPTC_TITLE][0]);

@@ -20,19 +20,18 @@ class AddIptcMetadata
     private const IPTC_DESCRIPTION_SEGMENT = '2#120';
     private const IPTC_KEYWORDS_SEGMENT = '2#025';
 
-
     /**
      * Write metadata
      *
      * @param FileInterface $file
      * @param MetadataInterface $metadata
-     * @param  SegmentInterface $segment
+     * @param SegmentInterface $segment
      * @return string
      */
     public function execute(FileInterface $file, MetadataInterface $metadata, SegmentInterface $segment): string
     {
         if (is_callable('iptcembed')) {
-            $iptcData = @iptcparse($segment->getData());
+            $iptcData = iptcparse($segment->getData());
             if (!empty($metadata->getTitle())) {
                 $iptcData[self::IPTC_TITLE_SEGMENT][0] = $metadata->getTitle();
             }
@@ -54,7 +53,7 @@ class AddIptcMetadata
                     $newData .= $this->iptcMaketag(2, substr($tag, 2), $value);
                 }
             }
-            $content = @iptcembed($newData, $file->getPath());
+            $content = iptcembed($newData, $file->getPath());
 
             return $content;
         }
@@ -65,12 +64,13 @@ class AddIptcMetadata
      *
      * @param int $rec
      * @param string $tag
-     * @param string $val
+     * @param string $value
      */
-    private function iptcMaketag($rec, $data, $value)
+    private function iptcMaketag($rec, $tag, $value)
     {
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
         $length = strlen($value);
-        $retval = chr(0x1C) . chr($rec) . chr((int)$data);
+        $retval = chr(0x1C) . chr($rec) . chr((int)$tag);
 
         if ($length < 0x8000) {
             $retval .= chr($length >> 8) .  chr($length & 0xFF);
@@ -82,7 +82,7 @@ class AddIptcMetadata
                    chr(($length >> 8) & 0xFF) .
                    chr($length & 0xFF);
         }
-
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
         return $retval . $value;
     }
 }

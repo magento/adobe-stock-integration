@@ -15,7 +15,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\GetIptcMetadata;
 
 /**
- * IPTC Reader
+ * IPTC Reader to read IPTC data for jpeg image
  */
 class IptcReader implements MetadataReaderInterface
 {
@@ -34,6 +34,7 @@ class IptcReader implements MetadataReaderInterface
     private $getIptcData;
     
     /**
+     * @param GetIptcMetadata $getIptcData
      * @param MetadataInterfaceFactory $metadataFactory
      */
     public function __construct(
