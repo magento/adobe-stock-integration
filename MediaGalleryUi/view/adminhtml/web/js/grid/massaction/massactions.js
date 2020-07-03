@@ -100,7 +100,7 @@ define([
         },
 
         /**
-         * If images record less then one disable delete images button
+         * If images records less than one, disable "delete images" button
          */
         checkButtonVisibility: function () {
             if (this.imageItems.length < 1) {
