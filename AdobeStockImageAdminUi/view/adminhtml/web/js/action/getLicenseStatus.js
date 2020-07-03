@@ -16,6 +16,7 @@ define([
             data: {
                 'form_key': window.FORM_KEY
             },
+            showLoader: true,
             dataType: 'json',
 
             /**
@@ -33,7 +34,13 @@ define([
              * @param {Object} response
              */
             error: function (response) {
-                deferred.reject(response.message);
+                var message = response.message;
+
+                if (response.status === 403) {
+                    message = $.mage.__('Your admin role does not have permissions to license an image');
+                }
+
+                deferred.reject(message);
             }
         });
 

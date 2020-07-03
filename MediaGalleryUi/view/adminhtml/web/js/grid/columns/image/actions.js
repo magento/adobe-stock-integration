@@ -6,9 +6,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
-    'Magento_MediaGalleryUi/js/action/deleteImage',
+    'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Component, deleteImage, image) {
+], function ($, _, Component, deleteImageWithDetailConfirmation, image) {
     'use strict';
 
     return Component.extend({
@@ -51,7 +51,7 @@ define([
         initEvents: function () {
             $(this.imageModel().addSelectedBtnSelector).click(function () {
                 image.insertImage(
-                   this.imageModel().getSelected(),
+                    this.imageModel().getSelected(),
                     {
                         onInsertUrl: this.imageModel().onInsertUrl,
                         storeId: this.imageModel().storeId
@@ -70,7 +70,10 @@ define([
          * @param {Object} record
          */
         deleteImageAction: function (record) {
-            deleteImage.deleteImageAction(record, this.imageModel().deleteImageUrl);
+            var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
+                deleteImageUrl = this.imageModel().deleteImageUrl;
+
+            deleteImageWithDetailConfirmation.deleteImageAction([record.id], imageDetailsUrl, deleteImageUrl);
         },
 
         /**
