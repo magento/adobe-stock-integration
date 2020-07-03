@@ -46,7 +46,13 @@
     </container>
     <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <bookmark name="bookmarks"/>
-        <filterSearch name="fulltext" />
+        <filterSearch name="name" >
+             <argument name="data" xsi:type="array">
+                  <item name="config" xsi:type="array">
+                      <item name="placeholder" xsi:type="string">Search by category name</item>
+                  </item>
+            </argument>
+        </filterSearch>
         <filters name="listing_filters">
             <filterInput name="name" provider="${ $.parentName }">
                 <settings>
@@ -79,6 +85,7 @@
     <columns name="media_gallery_category_columns">
         <column name="entity_id">
             <settings>
+                <filter>text</filter>
                 <label translate="true">ID</label>
             </settings>
         </column>
@@ -90,18 +97,17 @@
         </column>
         <column name="name">
             <settings>
-                <filter>text</filter>
                 <label translate="true">Name</label>
             </settings>
         </column>
         <column name="path" class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\Path">
             <settings>
-                <filter>text</filter>
                 <label translate="true">Path</label>
             </settings>
         </column>
         <column name="display_mode">
             <settings>
+                <filter>text</filter>
                 <label translate="true">Display Mode</label>
             </settings>
         </column>
@@ -129,8 +135,10 @@
                 <label translate="true">In Menu</label>
             </settings>
         </column>
-        <column name="enabled" component="Magento_Ui/js/grid/columns/select" >
+        <column name="is_active" component="Magento_Ui/js/grid/columns/select" >
             <settings>
+                <dataType>select</dataType>
+                <filter>select</filter>
                 <options>
                     <option name="Yes" xsi:type="array">
                         <item name="value" xsi:type="number">1</item>
@@ -141,8 +149,6 @@
                         <item name="label" xsi:type="string">No</item>
                     </option>
                 </options>
-                <dataType>select</dataType>
-                <filter>select</filter>
                 <label translate="true">Enabled</label>
             </settings>
         </column>

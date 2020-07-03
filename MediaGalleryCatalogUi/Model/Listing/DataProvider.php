@@ -129,7 +129,7 @@ class DataProvider extends UiComponentDataProvider
                     'display_mode' => $category->getDisplayMode(),
                     'products' => $category->getProductCount(),
                     'include_in_menu' => $category->getIncludeInMenu(),
-                    'enabled' => $category->getIsActive()
+                    'is_active' => $category->getIsActive()
                 ]
             );
         }
