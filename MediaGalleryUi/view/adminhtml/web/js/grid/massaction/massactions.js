@@ -15,6 +15,7 @@ define([
 
     return Component.extend({
         defaults: {
+            deleteImagesSelector: '#delete_massaction',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             modules: {
                 massactionView: '${ $.name }_view',
@@ -27,6 +28,12 @@ define([
                     name: '${ $.name }_view'
                 }
             ],
+            imports: {
+                imageItems: '${ $.mediaGalleryProvider }:data.items'
+            },
+            listens: {
+                imageItems: 'checkButtonVisibility'
+            },
             exports: {
                 massActionMode: '${ $.name }_view:massActionMode'
             }
@@ -90,6 +97,17 @@ define([
             }
 
             return 0;
+        },
+
+        /**
+         * If images record less then one disable delete images button
+         */
+        checkButtonVisibility: function () {
+            if (this.imageItems.length < 1) {
+                $(this.deleteImagesSelector).addClass('disabled');
+            } else {
+                $(this.deleteImagesSelector).removeClass('disabled');
+            }
         },
 
         /**
