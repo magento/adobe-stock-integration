@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminEnhancedMediaGalleryVerifyImageDetailsWithDescriptionActionGroup">
+    <actionGroup name="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup">
         <annotations>
             <description>Verifies image information on the View Details panel including the description</description>
         </annotations>
@@ -19,7 +19,7 @@
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.title}}" stepKey="grabImageTitle"/>
         <assertStringContainsString stepKey="verifyImageTitle">
             <actualResult type="variable">grabImageTitle</actualResult>
-            <expectedResult type="string">{{image.fileName}}</expectedResult>
+            <expectedResult type="string">{{image.title}}</expectedResult>
         </assertStringContainsString>
 
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.contentType}}" stepKey="grabContentType"/>
@@ -37,7 +37,7 @@
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.description}}" stepKey="grabDescription"/>
         <assertStringContainsString stepKey="verifyDescription">
             <actualResult type="variable">grabDescription</actualResult>
-            <expectedResult type="string">Test Description</expectedResult>
+            <expectedResult type="string">{{image.description}}</expectedResult>
         </assertStringContainsString>
     </actionGroup>
 </actionGroups>

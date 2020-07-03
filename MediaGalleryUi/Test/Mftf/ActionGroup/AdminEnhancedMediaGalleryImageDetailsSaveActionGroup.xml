@@ -13,8 +13,8 @@
             <description>Save image details from the View Details panel</description>
         </annotations>
         <arguments>
-            <argument name="title" type="string" defaultValue="magento"/>
-            <argument name="description" type="string" defaultValue="Test Description"/>
+            <argument name="title" type="string" defaultValue="{{UpdatedImageDetails.title}}"/>
+            <argument name="description" type="string" defaultValue="{{UpdatedImageDetails.description}}"/>
         </arguments>
 
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.title}}" userInput="{{title}}" stepKey="setTitle" />

@@ -7,11 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminStandaloneMediaGalleryEditSaveImageDetailsTest">
+    <test name="AdminMediaGalleryEditImageDetailsTest">
         <annotations>
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/724"/>
-            <title value="User edits image meta data in standalone media gallery"/>
+            <title value="User edits image meta data in media gallery"/>
             <stories value="[Story # 38] User views basic image attributes in Media Gallery"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/3961351"/>
             <description value="User edits image meta data in Standalone Media Gallery"/>
@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
@@ -32,7 +32,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsWithDescriptionActionGroup" stepKey="verifyImageDetails">
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDetails">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
     </test>
