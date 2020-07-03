@@ -13,9 +13,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Cus
 use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
- * Class EntityId
  * Used to filter the collection based on the filter selection.
- * @package Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor
  */
 class EntityId implements CustomFilterInterface
 {

@@ -12,11 +12,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
- * Class EntityType
  * Used to join table of the collection based on the filter selection.
- * @package Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor
  */
-class EntityId implements CustomJoinInterface
+class Page implements CustomJoinInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
 

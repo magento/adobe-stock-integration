@@ -13,7 +13,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-
 /**
  * Image source filter options
  */

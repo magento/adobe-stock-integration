@@ -36,7 +36,7 @@
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
         <arguments>
             <argument name="customJoins" xsi:type="array">
-                <item name="page_id" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\EntityId</item>
+                <item name="page_id" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\Page</item>
             </argument>
         </arguments>
     </virtualType>
