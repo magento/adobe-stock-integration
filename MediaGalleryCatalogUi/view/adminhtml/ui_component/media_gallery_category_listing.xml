@@ -50,6 +50,7 @@
              <argument name="data" xsi:type="array">
                   <item name="config" xsi:type="array">
                       <item name="placeholder" xsi:type="string">Search by category name</item>
+                      <item name="label" xsi:type="string">Name</item>
                   </item>
             </argument>
         </filterSearch>
