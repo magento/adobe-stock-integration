@@ -18,7 +18,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 /**
  * Jpeg IPTC Writer
  */
-class IPTCWriter implements MetadataWriterInterface
+class IptcWriter implements MetadataWriterInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
     private const IPTC_SEGMENT_START = 'Photoshop 3.0';
