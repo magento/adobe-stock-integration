@@ -32,7 +32,8 @@ class AddMetadataComposite
     /**
      * Write metadata to the path
      *
-     * @return AddMetadataInterface[]
+     * @param string $path
+     * @param MetadataInterface $data
      * @throws LocalizedException
      */
     public function execute(string $path, MetadataInterface $data): void

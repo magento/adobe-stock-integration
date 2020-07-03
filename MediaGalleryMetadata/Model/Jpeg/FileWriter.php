@@ -48,7 +48,7 @@ class FileWriter implements FileWriterInterface
 
     /**
      * Write file object to the filesystem
-     * 
+     *
      * @param FileInterface $file
      * @throws LocalizedException
      * @throws FileSystemException

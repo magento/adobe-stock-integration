@@ -65,7 +65,7 @@ class XmpWriter implements MetadataWriterInterface
     {
         $segments = $file->getSegments();
         foreach ($segments as $key => $segment) {
-            if ($this->isXmpSegment($segment)) {
+            if ($this->isSegmentXmp($segment)) {
                 $segments[$key] = $this->updateSegment($segment, $metadata);
             }
         }
@@ -99,7 +99,7 @@ class XmpWriter implements MetadataWriterInterface
      * @param SegmentInterface $segment
      * @return bool
      */
-    private function isXmpSegment(SegmentInterface $segment): bool
+    private function isSegmentXmp(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::XMP_SEGMENT_NAME
             && strncmp($segment->getData(), self::XMP_SEGMENT_START, self::XMP_DATA_START_POSITION) == 0;
