@@ -10,7 +10,9 @@ namespace Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinPr
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor\CustomJoinInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
-
+/**
+ * Used to joint table of the collection based on the filter selection.
+ */
 class BlockId implements CustomJoinInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';

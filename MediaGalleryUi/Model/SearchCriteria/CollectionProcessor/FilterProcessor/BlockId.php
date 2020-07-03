@@ -9,7 +9,9 @@ namespace Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\Filter
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
-
+/**
+ * Used to filter the collection based on the filter selection.
+ */
 class BlockId implements CustomFilterInterface
 {
     /**
