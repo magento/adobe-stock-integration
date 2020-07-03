@@ -17,13 +17,6 @@
     </virtualType>
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\SortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor" />
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\PaginationProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor" />
-    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
-        <arguments>
-            <argument name="customJoins" xsi:type="array">
-                <item name="entity_type" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\EntityType</item>
-            </argument>
-        </arguments>
-    </virtualType>
 
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
@@ -31,7 +24,6 @@
                 <item name="filters" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
                 <item name="sorting" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
                 <item name="pagination" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
-                <item name="joins" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor</item>
             </argument>
         </arguments>
     </virtualType>

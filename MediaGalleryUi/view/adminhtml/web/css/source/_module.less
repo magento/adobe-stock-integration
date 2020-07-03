@@ -20,7 +20,7 @@
 
 & when (@media-common = true) {
 
-    .media-gallery-delete-image-action,
+    .media-gallery-delete-image-action,action-close
     .delete-folder-confirmation-popup {
 
         .modal-content {
@@ -366,6 +366,15 @@
     .masonry-results-number {
         display: inline-block;
         margin-right: 1.4rem;
+    }
+    .action-select {
+        .action-close {
+            padding: 0px;
+
+            &:before {
+                font-size: 1rem;
+            }
+        }
     }
 }
 
