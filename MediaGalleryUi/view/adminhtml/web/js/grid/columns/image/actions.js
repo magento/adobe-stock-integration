@@ -80,7 +80,7 @@ define([
             var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
                 deleteImageUrl = this.imageModel().deleteImageUrl;
 
-            deleteImageWithDetailConfirmation.deleteImageAction(record, imageDetailsUrl, deleteImageUrl);
+            deleteImageWithDetailConfirmation.deleteImageAction([record.id], imageDetailsUrl, deleteImageUrl);
         },
 
         /**

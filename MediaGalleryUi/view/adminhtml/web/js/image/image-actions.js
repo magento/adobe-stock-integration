@@ -61,7 +61,7 @@ define([
                 deleteImageUrl = this.imageModel().deleteImageUrl;
 
             deleteImageWithDetailConfirmation.deleteImageAction(
-                this.imageModel().getSelected(),
+                [this.imageModel().getSelected().id],
                 imageDetailsUrl,
                 deleteImageUrl
             );
