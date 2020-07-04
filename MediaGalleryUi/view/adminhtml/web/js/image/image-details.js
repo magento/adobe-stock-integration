@@ -18,6 +18,7 @@ define([
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
+            categoryContentType: 'Category',
             showAllTags: false,
             image: null,
             modules: {
@@ -47,8 +48,8 @@ define([
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
-                getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
-                    this.images[imageId] = imageDetails;
+                getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
+                    this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
                 }.bind(this)).fail(function (message) {
@@ -134,14 +135,38 @@ define([
             var usedIn = '';
 
             if (_.isObject(value)) {
-                _.each(value, function (numberOfTimeUsed, moduleName) {
-                    usedIn += numberOfTimeUsed + ' ' + moduleName + '</br>';
-                });
+                $.each(value, function (moduleName, count) {
+                    usedIn += count + ' ' +
+                        this.getEntityNameWithPrefix(moduleName, count) +
+                        '</br>';
+                }.bind(this));
 
                 return usedIn;
             }
 
             return value;
+        },
+
+        /**
+        * Return entity name based on used in count
+        *
+        * @param {String} entityName
+        * @param {String} count
+        */
+        getEntityNameWithPrefix: function (entityName, count) {
+            var name;
+
+            if (count > 1) {
+                if (entityName === this.categoryContentType) {
+                    name = entityName.slice(0, -1) + 'ies';
+                } else {
+                    name = entityName + 's';
+                }
+
+                return name;
+            }
+
+            return entityName;
         }
     });
 });

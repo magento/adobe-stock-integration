@@ -8,14 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup">
+    <actionGroup name="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup">
         <annotations>
-            <description>Assert that an image was deleted from Enhanced Media Gallery.</description>
+            <description>Select images in grid by clicking on mass action checkbox</description>
         </annotations>
         <arguments>
             <argument name="imageName" type="string" defaultValue="magento"/>
         </arguments>
-        <see userInput='The asset "{{imageName}}" has been successfully deleted' stepKey="verifyDeleteImage"/>
-        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(imageName)}}" stepKey="dontSeeImage"/>
+
+        <click selector="{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckbox(imageName)}}" stepKey="selectImageInGridToDelte"/>
     </actionGroup>
 </actionGroups>
