@@ -8,14 +8,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryMetadata\Model\Jpeg\Segment;
 
 use Magento\MediaGalleryMetadata\Model\AddXmpMetadata;
+use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\Module\Dir;
 
 /**
  * Jpeg XMP Writer
@@ -42,26 +41,26 @@ class XmpWriter implements MetadataWriterInterface
     private $addXmpMetadata;
 
     /**
-     * @var Reader
+     * @var XmpTemplate
      */
-    private $moduleReader;
+    private $xmpTemplate;
 
     /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param AddXmpMetadata $addXmpMetadata
-     * @param Reader $moduleReader
+     * @param XmpTemplate $xmpTemplate
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
         AddXmpMetadata $addXmpMetadata,
-        Reader $moduleReader
+        XmpTemplate $xmpTemplate
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->addXmpMetadata = $addXmpMetadata;
-        $this->moduleReader = $moduleReader;
+        $this->xmpTemplate = $xmpTemplate;
     }
 
     /**
@@ -102,8 +101,7 @@ class XmpWriter implements MetadataWriterInterface
      */
     public function writeSegment(MetadataInterface $metadata): SegmentInterface
     {
-        $xmpTemplate = $this->moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_MediaGalleryMetadata');
-        $xmpData = file_get_contents($xmpTemplate . '/default.xmp');
+        $xmpData = $this->xmpTemplate->get();
         return $this->segmentFactory->create([
             'name' => self::XMP_SEGMENT_NAME,
             'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($xmpData, $metadata)
