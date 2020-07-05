@@ -73,18 +73,22 @@ class XmpWriter implements MetadataWriterInterface
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
         $segments = $file->getSegments();
-        $xmpSegment = [];
+        $xmpSegments = [];
         foreach ($segments as $key => $segment) {
             if ($this->isSegmentXmp($segment)) {
-                $xmpSegment[$key] = $segment;
+                $xmpSegments[$key] = $segment;
             }
         }
-        if (!empty($xmpSegment)) {
-            foreach ($xmpSegment as $key => $segment) {
-                $segments[$key] = $this->updateSegment($segment, $metadata);
-            }
-        } else {
-            $segments[] = $this->writeSegment($metadata);
+
+        if (empty($xmpSegments)) {
+            return $this->fileFactory->create([
+                'path' => $file->getPath(),
+                'segments' => $this->insertXmpSegment($segments, $this->createXmpSegment($metadata))
+            ]);
+        }
+
+        foreach ($xmpSegments as $key => $segment) {
+            $segments[$key] = $this->updateSegment($segment, $metadata);
         }
 
         return $this->fileFactory->create([
@@ -94,12 +98,24 @@ class XmpWriter implements MetadataWriterInterface
     }
 
     /**
+     * Insert XMP segment to image segments (at position 1)
+     *
+     * @param SegmentInterface[] $segments
+     * @param SegmentInterface $xmpSegment
+     * @return SegmentInterface[]
+     */
+    private function insertXmpSegment(array $segments, SegmentInterface $xmpSegment): array
+    {
+        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
+    }
+
+    /**
      * Write new segment  metadata
      *
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function writeSegment(MetadataInterface $metadata): SegmentInterface
+    public function createXmpSegment(MetadataInterface $metadata): SegmentInterface
     {
         $xmpData = $this->xmpTemplate->get();
         return $this->segmentFactory->create([
