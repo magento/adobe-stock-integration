@@ -19,6 +19,8 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Catalog\Api\CategoryListInterface;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * DataProvider of category grid.
@@ -46,6 +48,12 @@ class DataProvider extends UiComponentDataProvider
     private $documentFactory;
 
     /**
+     * @var FilterGroupBuilder
+     */
+    private $filterGroupBuilder;
+
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -57,6 +65,7 @@ class DataProvider extends UiComponentDataProvider
      * @param CategoryListInterface $categoryList
      * @param AttributeValueFactory $attributeValueFactory
      * @param DocumentFactory $documentFactory
+     * @param FilterGroupBuilder $filterGroupBuilder
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -73,6 +82,7 @@ class DataProvider extends UiComponentDataProvider
         CategoryListInterface $categoryList,
         AttributeValueFactory $attributeValueFactory,
         DocumentFactory $documentFactory,
+        FilterGroupBuilder $filterGroupBuilder,
         array $meta = [],
         array $data = []
     ) {
@@ -91,6 +101,7 @@ class DataProvider extends UiComponentDataProvider
         $this->searchResultFactory = $searchResultFactory;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->documentFactory = $documentFactory;
+        $this->filterGroupBuilder = $filterGroupBuilder;
     }
 
     /**
@@ -115,12 +126,10 @@ class DataProvider extends UiComponentDataProvider
     public function getSearchResult(): SearchResultInterface
     {
         $searchCriteria = $this->getSearchCriteria();
+        $searchCriteria = $this->skipRootCategory($searchCriteria);
         $collection = $this->categoryList->getList($searchCriteria);
         $items = [];
-        foreach ($collection->getItems() as $category) {
-            if ($category->getId() == 1) {
-                continue;
-            }
+        foreach ($collection->getItems() as  $category) {
             $items[] = $this->createDocument(
                 [
                     'entity_id' => $category->getEntityId(),
@@ -143,6 +152,26 @@ class DataProvider extends UiComponentDataProvider
         return $searchResult;
     }
 
+    /**
+     * Skip empty root category in collection
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchCriteriaInterface
+     */
+    private function skipRootCategory(SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
+    {
+        $filterGroups = $searchCriteria->getFilterGroups();
+
+        $filters[] = $this->filterBuilder
+                   ->setField('entity_id')
+                   ->setConditionType('neq')
+                   ->setValue(1)
+                   ->create();
+        $filterGroups[] = $this->filterGroupBuilder->setFilters($filters)->create();
+        $searchCriteria->setFilterGroups($filterGroups);
+        return $searchCriteria;
+    }
+    
     /**
      * Add attributes to grid result
      *
