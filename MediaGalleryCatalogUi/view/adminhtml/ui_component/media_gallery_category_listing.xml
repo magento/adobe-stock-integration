@@ -47,12 +47,10 @@
     <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <bookmark name="bookmarks"/>
         <filterSearch name="name" >
-             <argument name="data" xsi:type="array">
-                  <item name="config" xsi:type="array">
-                      <item name="placeholder" xsi:type="string">Search by category name</item>
-                      <item name="label" xsi:type="string">Name</item>
-                  </item>
-            </argument>
+            <settings>
+                <placeholder>Search by category name</placeholder>
+                <label>Name</label>
+            </settings>
         </filterSearch>
         <filters name="listing_filters">
             <filterInput name="name" provider="${ $.parentName }">
