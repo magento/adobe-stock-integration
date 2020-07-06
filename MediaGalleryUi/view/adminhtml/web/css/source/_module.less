@@ -20,7 +20,7 @@
 
 & when (@media-common = true) {
 
-    .media-gallery-delete-image-action,action-close
+    .media-gallery-delete-image-action,
     .delete-folder-confirmation-popup {
 
         .modal-content {
@@ -267,6 +267,15 @@
             margin: 10px 0;
             position: relative;
         }
+
+        .admin__data-grid-filters .admin__form-field {
+            .action-close {
+                padding: 0;
+                &:before {
+                    font-size: 6px;
+                }
+            }
+        }
     }
 
     .media-gallery-image-details-modal {
@@ -366,15 +375,6 @@
     .masonry-results-number {
         display: inline-block;
         margin-right: 1.4rem;
-    }
-    .action-select {
-        .action-close {
-            padding: 0px;
-
-            &:before {
-                font-size: 1rem;
-            }
-        }
     }
 }
 
