@@ -114,7 +114,8 @@ class DataProvider extends UiComponentDataProvider
      */
     public function getSearchResult(): SearchResultInterface
     {
-        $collection = $this->categoryList->getList($this->getSearchCriteria());
+        $searchCriteria = $this->getSearchCriteria();
+        $collection = $this->categoryList->getList($searchCriteria);
         $items = [];
         foreach ($collection->getItems() as $category) {
             if ($category->getId() == 1) {
@@ -122,8 +123,8 @@ class DataProvider extends UiComponentDataProvider
             }
             $items[] = $this->createDocument(
                 [
-                    'name'  => $category->getName(),
                     'entity_id' => $category->getEntityId(),
+                    'name'  => $category->getName(),
                     'image' => $category->getImage(),
                     'path' => $category->getPath(),
                     'display_mode' => $category->getDisplayMode(),
@@ -133,12 +134,12 @@ class DataProvider extends UiComponentDataProvider
                 ]
             );
         }
-
+        
         $searchResult = $this->searchResultFactory->create();
-        $searchResult->setSearchCriteria($this->getSearchCriteria());
+        $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($items);
-        $searchResult->setTotalCount(count($items));
-
+        $searchResult->setTotalCount($collection->getTotalCount());
+        
         return $searchResult;
     }
 
