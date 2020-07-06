@@ -40,13 +40,13 @@ class Page implements CustomJoinInterface
     {
         $collection->getSelect()->joinLeft(
             ['mca' => $this->connection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME)],
-            'mca.asset_id = main_table.id',
-            ['entity_type']
+            'mca.asset_id = main_table.id AND mca.entity_type = "cms_page"',
+            []
         );
 
         $collection->getSelect()->joinLeft(
             ['cms_page' => $this->connection->getTableName(self::CMS_PAGE_TABLE_NAME)],
-            'cms_page.page_id = mca.entity_id AND mca.entity_type = "cms_page"',
+            'cms_page.page_id = mca.entity_id',
             []
         );
 

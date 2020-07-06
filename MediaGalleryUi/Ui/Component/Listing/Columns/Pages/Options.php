@@ -11,7 +11,6 @@ use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Image source filter options
@@ -46,7 +45,6 @@ class Options implements OptionSourceInterface
     {
         $searchCriteria = $this->SearchCriteriaBuilder->create();
         $pages = [];
-        try {
             $result = $this->PageRepository->getList($searchCriteria);
             /** @var \Magento\Cms\Api\Data\PageInterface $page */
             foreach ($result->getItems() as $page) {
@@ -55,10 +53,6 @@ class Options implements OptionSourceInterface
                     'label' => $page->getTitle()
                 ];
             }
-        } catch (LocalizedException $exception) {
-
-        }
-
         return $pages;
     }
 }
