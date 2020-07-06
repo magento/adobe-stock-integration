@@ -24,6 +24,7 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * DataProvider of category grid.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends UiComponentDataProvider
 {
@@ -51,7 +52,6 @@ class DataProvider extends UiComponentDataProvider
      * @var FilterGroupBuilder
      */
     private $filterGroupBuilder;
-
 
     /**
      * @param string $name
@@ -129,7 +129,8 @@ class DataProvider extends UiComponentDataProvider
         $searchCriteria = $this->skipRootCategory($searchCriteria);
         $collection = $this->categoryList->getList($searchCriteria);
         $items = [];
-        foreach ($collection->getItems() as  $category) {
+        
+        foreach ($collection->getItems() as $category) {
             $items[] = $this->createDocument(
                 [
                     'entity_id' => $category->getEntityId(),
