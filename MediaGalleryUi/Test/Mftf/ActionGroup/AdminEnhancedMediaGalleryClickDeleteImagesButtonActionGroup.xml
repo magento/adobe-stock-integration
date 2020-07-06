@@ -8,17 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminEnhancedMediaGalleryImageDeleteImagesInBulkActionGroup">
+    <actionGroup name="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup">
         <annotations>
-            <description>Delete images in bulk using mass action mode.</description>
+            <description>Click delete images button.</description>
         </annotations>
-        <arguments>
-            <argument name="imageName" type="string" defaultValue="magento"/>
-        </arguments>
 
         <click selector="{{AdminEnhancedMediaGalleryMassActionSection.deleteSelected}}" stepKey="clickDeleteImages"/>
         <waitForLoadingMaskToDisappear stepKey="waitForDeleteModal"/>
-        <click selector="{{AdminEnhancedMediaGalleryDeleteModalSection.confirmDelete}}" stepKey="confirmDelete"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForDeletingProcces"/>
     </actionGroup>
 </actionGroups>
