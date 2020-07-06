@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Blocks;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -13,9 +13,9 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Exception\LocalizedException;
 /**
- * Image source filter options
+ * Used in blocks options
  */
-class Options implements OptionSourceInterface
+class Blocks implements OptionSourceInterface
 {
     protected $_blockRepository;
 
@@ -32,7 +32,6 @@ class Options implements OptionSourceInterface
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_filterBuilder = $filterBuilder;
     }
-
     /**
      * @inheritdoc
      */
@@ -40,9 +39,6 @@ class Options implements OptionSourceInterface
     {
         $searchCriteria = $this->_searchCriteriaBuilder->create();
         $blocks = [];
-
-        try {
-
             $result = $this->_blockRepository->getList($searchCriteria);
             foreach ($result->getItems() as $page) {
                 $blocks[] = [
@@ -50,10 +46,6 @@ class Options implements OptionSourceInterface
                     'label' => $page->getTitle()
                 ];
             }
-        } catch (LocalizedException $exception) {
-
-        }
-
         return $blocks;
     }
 }

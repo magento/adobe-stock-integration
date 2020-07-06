@@ -109,9 +109,9 @@
                     </item>
                 </argument>
                 <settings>
-                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Blocks\Options"/>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\Blocks"/>
                     <caption translate="true">– Please Select a Block –</caption>
-                    <label translate="true">Block</label>
+                    <label translate="true">Filter by blocks</label>
                     <dataScope>block_id</dataScope>
                     <imports>
                         <link name="visible">componentType = column, index = ${ $.index }:visible</link>
