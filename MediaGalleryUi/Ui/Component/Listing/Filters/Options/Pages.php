@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Pages;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options;
 
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -14,7 +14,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 /**
  * Image source filter options
  */
-class Options implements OptionSourceInterface
+class Pages implements OptionSourceInterface
 {
     private $PageRepository;
 

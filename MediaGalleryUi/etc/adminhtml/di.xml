@@ -33,13 +33,6 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
-        <arguments>
-            <argument name="customJoins" xsi:type="array">
-                <item name="page_id" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\JoinProcessor\Page</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
         <arguments>
             <argument name="customFilters" xsi:type="array">
