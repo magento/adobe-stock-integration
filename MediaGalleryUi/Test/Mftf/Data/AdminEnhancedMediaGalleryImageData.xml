@@ -12,7 +12,7 @@
         <data key="title">renamed title</data>
         <data key="description">test description</data>
         <data key="file">magento.jpg</data>
-        <data key="fileName">magento</data>
+        <data key="fileName">renamed title</data>
         <data key="extension">jpg</data>
     </entity>
 </entities>

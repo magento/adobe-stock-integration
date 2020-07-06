@@ -10,34 +10,16 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup">
         <annotations>
-            <description>Verifies image information on the View Details panel including the description</description>
+            <description>Verifies image description on the View Details panel</description>
         </annotations>
         <arguments>
-            <argument name="image"/>
+            <argument name="description"/>
         </arguments>
-
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.title}}" stepKey="grabImageTitle"/>
-        <assertStringContainsString stepKey="verifyImageTitle">
-            <actualResult type="variable">grabImageTitle</actualResult>
-            <expectedResult type="string">{{image.title}}</expectedResult>
-        </assertStringContainsString>
-
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.contentType}}" stepKey="grabContentType"/>
-        <assertStringContainsStringIgnoringCase stepKey="verifyContentType">
-            <actualResult type="variable">grabContentType</actualResult>
-            <expectedResult type="string">{{image.extension}}</expectedResult>
-        </assertStringContainsStringIgnoringCase>
-
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.type}}" stepKey="grabType"/>
-        <assertStringContainsString stepKey="verifyType">
-            <actualResult type="variable">grabType</actualResult>
-            <expectedResult type="string">Image</expectedResult>
-        </assertStringContainsString>
 
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.description}}" stepKey="grabDescription"/>
         <assertStringContainsString stepKey="verifyDescription">
             <actualResult type="variable">grabDescription</actualResult>
-            <expectedResult type="string">{{image.description}}</expectedResult>
+            <expectedResult type="string">{{description}}</expectedResult>
         </assertStringContainsString>
     </actionGroup>
 </actionGroups>
