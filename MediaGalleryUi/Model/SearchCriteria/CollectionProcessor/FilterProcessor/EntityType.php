@@ -4,23 +4,28 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor;
+
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
+
 /**
  * Custom filter to filter collection by entity type
  */
 class EntityType implements CustomFilterInterface
 {
     private const TABLE_ALIAS = 'main_table';
-    private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
+    private const TABLE_MEDIA_CONTENT_ASSET = 'media_content_asset';
+
     /**
      * @var ResourceConnection
      */
     private $connection;
+
     /**
      * @param ResourceConnection $resource
      */
@@ -28,6 +33,7 @@ class EntityType implements CustomFilterInterface
     {
         $this->connection = $resource;
     }
+
     /**
      * @inheritDoc
      */
@@ -42,6 +48,7 @@ class EntityType implements CustomFilterInterface
         }
         return true;
     }
+
     /**
      * Return select asset ids by entity type
      *
@@ -51,7 +58,7 @@ class EntityType implements CustomFilterInterface
     private function getSelectByEntityType(array $value): Select
     {
         return $this->connection->getConnection()->select()->from(
-            ['asset_content_table' => $this->connection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME)],
+            ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
             ['asset_id']
         )->where(
             'entity_type IN (?)',
