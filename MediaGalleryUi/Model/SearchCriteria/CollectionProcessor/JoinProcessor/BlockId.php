@@ -39,13 +39,13 @@ class BlockId implements CustomJoinInterface
     {
         $collection->getSelect()->joinLeft(
             ['mca' => $this->connection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME)],
-            'mca.asset_id = main_table.id',
-            ['entity_type']
+            'mca.asset_id = main_table.id AND mca.entity_type = "cms_block"',
+            []
         );
 
         $collection->getSelect()->joinLeft(
             ['cms_block' => $this->connection->getTableName(self::CMS_BLOCK_TABLE_NAME)],
-            'cms_block.block_id = mca.entity_id AND mca.entity_type = "cms_block"',
+            'cms_block.block_id = mca.entity_id',
             []
         );
 
