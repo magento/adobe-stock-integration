@@ -3,7 +3,8 @@
     "description": "Magento module responsible for images metadata processing",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*"
+        "magento/framework": "*",
+        "magento/module-media-gallery-metadata-api": "*"
     },
     "type": "magento2-module",
     "license": [
