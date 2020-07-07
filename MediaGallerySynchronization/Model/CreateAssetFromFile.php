@@ -21,6 +21,7 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Create media asset object based on the file information
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateAssetFromFile
 {
@@ -140,6 +141,8 @@ class CreateAssetFromFile
     }
 
     /**
+     * Get hash image content.
+     *
      * @param string $path
      * @return string
      * @throws ValidatorException
