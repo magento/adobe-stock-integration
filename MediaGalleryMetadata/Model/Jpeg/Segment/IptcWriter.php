@@ -21,8 +21,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 class IptcWriter implements MetadataWriterInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
-    private const IPTC_SEGMENT_START = 'Photoshop 3.0';
-    private const IPTC_DATA_START_POSITION = 0;
+    private const IPTC_SEGMENT_START = 'Photoshop 3.0\0x00';
 
     /**
      * @var SegmentInterfaceFactory
@@ -64,35 +63,23 @@ class IptcWriter implements MetadataWriterInterface
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
         $segments = $file->getSegments();
+        $iptcSegments = [];
         foreach ($segments as $key => $segment) {
             if ($this->isIptcSegment($segment)) {
-                $segments[$key] = $this->updateSegment($segment, $metadata, $file);
+                $iptcSegments[$key] = $segment;
             }
         }
-        return $this->fileFactory->create([
+
+        if (empty($iptcSegments)) {
+            return  $this->addIptcMetadata->execute($file, $metadata, null);
+        }
+
+        foreach ($iptcSegments as $segment) {
+            $file =  $this->addIptcMetadata->execute($file, $metadata, $segment);
+        }
+        return $file ?? $this->fileFactory->create([
             'path' => $file->getPath(),
             'segments' => $segments
-        ]);
-    }
-
-    /**
-     * Add metadata to the segment
-     *
-     * @param SegmentInterface $segment
-     * @param MetadataInterface $metadata
-     * @param FileInterface $file
-     * @return SegmentInterface
-     */
-    public function updateSegment(
-        SegmentInterface $segment,
-        MetadataInterface $metadata,
-        FileInterface $file
-    ): SegmentInterface {
-        $data = $segment->getData();
-        $start = substr($data, 0, self::IPTC_DATA_START_POSITION);
-        return $this->segmentFactory->create([
-            'name' => $segment->getName(),
-            'data' => $start . $this->addIptcMetadata->execute($file, $metadata, $segment)
         ]);
     }
 
