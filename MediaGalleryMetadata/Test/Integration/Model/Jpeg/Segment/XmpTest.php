@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Test\Integration\Model;
+namespace Magento\MediaGalleryMetadata\Test\Integration\Model\Jpeg\Segment;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
