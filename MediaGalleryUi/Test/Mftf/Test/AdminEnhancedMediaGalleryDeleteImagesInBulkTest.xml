@@ -40,7 +40,9 @@
         <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
             <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteImagesInBulkActionGroup" stepKey="deleteImagesAndAssertResult"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>       
+
         <actionGroup ref="AdminEnhancedMediaGalleryAssertImagesDeletedInBulkActionGroup" stepKey="assertImagesDeleted"/>
     </test>
 </tests>
