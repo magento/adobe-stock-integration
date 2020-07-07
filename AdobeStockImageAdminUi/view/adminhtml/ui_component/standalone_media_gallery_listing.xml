@@ -46,7 +46,7 @@
                     <item name="imageDetailsurl" xsi:type="url" path="media_gallery/image/details"/>
                     <item name="imageComponent" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.adobe_stock_images_columns.preview</item>
                 </item>
-	    </argument>
-	</column>
+            </argument>
+        </column>
     </columns>
 </listing>
