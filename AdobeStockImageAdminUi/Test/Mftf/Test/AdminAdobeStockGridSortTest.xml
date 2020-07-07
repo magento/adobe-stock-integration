@@ -28,6 +28,10 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForCarsToDropDefaultFilter">
+            <argument name="query" value="cars"/>
+        </actionGroup>
+
         <actionGroup ref="AdminAdobeStockClickSortActionGroup" stepKey="sortByCreation">
             <argument name="sortName" value="creation"/>
         </actionGroup>
