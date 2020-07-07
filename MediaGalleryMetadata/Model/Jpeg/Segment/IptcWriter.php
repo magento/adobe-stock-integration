@@ -22,7 +22,8 @@ class IptcWriter implements MetadataWriterInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
     private const IPTC_SEGMENT_START = 'Photoshop 3.0\0x00';
-
+    private const IPTC_DATA_START_POSITION = 0;
+    
     /**
      * @var SegmentInterfaceFactory
      */

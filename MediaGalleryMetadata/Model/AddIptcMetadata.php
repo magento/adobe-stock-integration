@@ -21,7 +21,6 @@ class AddIptcMetadata
     private const IPTC_TITLE_SEGMENT = '2#005';
     private const IPTC_DESCRIPTION_SEGMENT = '2#120';
     private const IPTC_KEYWORDS_SEGMENT = '2#025';
-    private const IPTC_FIRST_TAG = '2#000';
 
     /**
      * @var DriverInterface
