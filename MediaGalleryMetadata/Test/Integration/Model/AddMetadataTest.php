@@ -144,7 +144,6 @@ class AddMetadataTest extends TestCase
                     'community'
                 ]
             ]
-
         ];
     }
 }

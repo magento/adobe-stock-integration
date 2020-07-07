@@ -123,7 +123,7 @@ class XmpWriter implements MetadataWriterInterface
             'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($xmpData, $metadata)
         ]);
     }
-    
+
     /**
      * Add metadata to the segment
      *
