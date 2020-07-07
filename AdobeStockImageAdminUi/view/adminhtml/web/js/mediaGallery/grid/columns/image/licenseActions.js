@@ -83,8 +83,8 @@ define([
          * @param {Number} imageId
          */
         getImageRecord: function (imageId) {
-            getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
-                var id = imageDetails['adobe_stock'][0].value;
+            getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
+                var id = imageDetails[imageId]['adobe_stock'][0].value;
 
                 this.image().actions().licenseProcess(
                     id,
