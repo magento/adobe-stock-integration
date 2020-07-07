@@ -11,6 +11,7 @@
         <element name="openContextMenu" type="button" selector=".three-dots"/>
         <element name="viewDetails" type="button" selector="[data-ui-id='action-image-details']"/>
         <element name="delete" type="button" selector="[data-ui-id='action-delete']"/>
+        <element name="edit" type="button" selector="[data-ui-id='action-edit']"/>
         <element name="imageInGrid" type="button" selector="//img[@class='media-gallery-image-column'][contains(@src, '{{imageName}}')]" parameterized="true"/>
     </section>
 </sections>
