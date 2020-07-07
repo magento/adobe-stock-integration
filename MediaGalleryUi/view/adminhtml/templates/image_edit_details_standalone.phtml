@@ -3,14 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 use Magento\Backend\Block\Template;
-
 // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
 /** @var Template $block */
 /** @var \Magento\Framework\Escaper $escaper */
 ?>
-
 <div class="media-gallery-edit-image-details-modal"
      data-bind="mageInit: {
         'Magento_Ui/js/modal/modal': {
@@ -33,11 +30,34 @@ use Magento\Backend\Block\Template;
     <div id="media-gallery-image-edit-details-messages" data-bind="scope: 'mediaGalleryEditDetailsMessages'">
         <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
-    <div id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    </div>
-</div>
+    <form id="image-edit-details-form" method="post" enctype="multipart/form-data">
+        <fieldset class="admin__fieldset" id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
 
+            <div class="admin__field field" id="media-gallery-image-edit-details-keywords">
+                <label for="multiselect" class="admin__field-label">
+                    <span>Keywords</span>
+                </label>
+                <div class="admin__field-control control">
+                    <select name="multiselect-field" id="multiselect" multiple="multiple">
+                        <option value="1">Keyword 1</option>
+                        <option value="2">Keyword 2</option>
+                        <option value="3">Keyword 3</option>
+                    </select>
+                    <script>
+                        require([
+                            'jquery',
+                            'mage/multiselect',
+                            'mage/backend/editablemultiselect'
+                        ], function ($) {
+                            $('#multiselect').multiselect2();
+                        });
+                    </script>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
 <script type="text/x-magento-init">
     {
         "#media-gallery-image-edit-details": {
