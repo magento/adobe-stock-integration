@@ -17,6 +17,7 @@
 @color-media-gallery-buttons-background: #e3e3e3;
 @color-media-gallery-buttons-border: #adadad;
 @color-media-gallery-buttons-text: #514943;
+@color-media-gallery-checkbox-background: #eee; 
 
 & when (@media-common = true) {
 
@@ -40,6 +41,27 @@
         color: @color-media-gallery-buttons-text;
     }
 
+    .mediagallery-massaction-checkbox {
+        background-color: @color-media-gallery-checkbox-background;
+        border-radius: 4px;
+        height: 40px;
+        input[type='checkbox'] {
+            margin-left: 10px;
+            margin-top: 11px;
+        }
+        margin-left: 15px;
+        margin-top: 10px;
+        position: absolute;
+        width: 40px;
+        z-index: 10;
+    }
+
+    .mediagallery-massaction-items-count {
+        display: inline-block;
+        margin-left: -15px;
+        padding-right: 20px;
+    }
+    
     .media-gallery-container {
 
         .masonry-image-grid .no-data-message-container,
@@ -278,7 +300,17 @@
         }
     }
 
-    .media-gallery-image-details-modal {
+    .media-gallery-image-details-modal,
+    .media-gallery-edit-image-details-modal {
+
+        .edit-image-details {
+            padding: 50px;
+        }
+
+        .path-display {
+            margin-top: 8px;
+        }
+
         .page-action-buttons {
             float: right;
         }
