@@ -17,16 +17,14 @@ class UsedIn implements OptionSourceInterface
     /**
      * @var array
      */
-    private $_options;
+    private $options;
 
     /**
-     * UsedIn constructor.
-     *
      * @param array $options
      */
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
-        $this->_options = $options;
+        $this->options = $options;
     }
 
     /**
@@ -34,6 +32,6 @@ class UsedIn implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        return $this->_options;
+        return $this->options;
     }
 }
