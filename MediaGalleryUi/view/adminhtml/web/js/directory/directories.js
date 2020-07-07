@@ -46,7 +46,7 @@ define([
           */
         initEvents: function () {
             $(this.deleteButtonSelector).on('delete_folder', function () {
-                this.getComfirmationPopupDeleteFolder();
+                this.getConfirmationPopupDeleteFolder();
             }.bind(this));
 
             $(this.createFolderButtonSelector).on('create_folder', function () {
@@ -62,9 +62,10 @@ define([
                                 this.directoryTree().createDirectoryUrl,
                                 [this.getNewFolderPath(folderName)]
                             ).then(function () {
-                                this.directoryTree().reloadJsTree();
-                                $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    this.directoryTree().locateNode(this.getNewFolderPath(folderName));
+                                this.directoryTree().reloadJsTree().then(function () {
+                                    $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
+                                        this.directoryTree().locateNode(this.getNewFolderPath(folderName));
+                                    }.bind(this));
                                 }.bind(this));
 
                             }.bind(this)).fail(function (error) {
@@ -134,7 +135,7 @@ define([
         /**
           * Confirmation popup for delete folder action.
           */
-        getComfirmationPopupDeleteFolder: function () {
+        getConfirmationPopupDeleteFolder: function () {
             confirm({
                 title: $.mage.__('Are you sure you want to delete this folder?'),
                 modalClass: 'delete-folder-confirmation-popup',
@@ -152,6 +153,7 @@ define([
                         ).then(function () {
                             this.directoryTree().removeNode();
                             this.directoryTree().selectStorageRoot();
+                            $(window).trigger('folderDeleted.enhancedMediaGallery');
                         }.bind(this)).fail(function (error) {
                             uiAlert({
                                 content: error

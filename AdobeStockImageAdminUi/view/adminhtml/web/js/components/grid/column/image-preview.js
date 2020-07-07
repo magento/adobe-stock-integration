@@ -83,6 +83,7 @@ define([
         initialize: function () {
             this._super().initView();
             $(window).on('fileDeleted.enhancedMediaGallery', this.reloadAdobeGrid.bind(this));
+            $(window).on('folderDeleted.enhancedMediaGallery', this.reloadAdobeGrid.bind(this));
 
             return this;
         },

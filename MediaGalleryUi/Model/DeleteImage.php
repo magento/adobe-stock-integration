@@ -10,9 +10,9 @@ namespace Magento\MediaGalleryUi\Model;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
  * Delete image from a storage
@@ -25,9 +25,9 @@ class DeleteImage
     private $imagesStorage;
 
     /**
-     * @var IsPathBlacklistedInterface
+     * @var IsPathExcludedInterface
      */
-    private $isPathBlacklisted;
+    private $isPathExcluded;
 
     /**
      * @var Filesystem
@@ -39,16 +39,16 @@ class DeleteImage
      *
      * @param Storage $imagesStorage
      * @param Filesystem $filesystem
-     * @param IsPathBlacklistedInterface $isPathBlacklisted
+     * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Storage $imagesStorage,
         Filesystem $filesystem,
-        IsPathBlacklistedInterface $isPathBlacklisted
+        IsPathExcludedInterface $isPathExcluded
     ) {
         $this->imagesStorage = $imagesStorage;
         $this->filesystem = $filesystem;
-        $this->isPathBlacklisted = $isPathBlacklisted;
+        $this->isPathExcluded = $isPathExcluded;
     }
 
     /**
@@ -56,17 +56,27 @@ class DeleteImage
      *
      * @see \Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage
      *
-     * @param AssetInterface $asset
-     * @throws LocalizedException
+     * @param AssetInterface[] $assets
      */
-    public function execute(AssetInterface $asset): void
+    public function execute(array $assets): void
     {
-        if ($this->isPathBlacklisted->execute($asset->getPath())) {
-            throw new LocalizedException(__('Could not delete image: destination directory is restricted.'));
-        }
+        $failedAssets = [];
+        foreach ($assets as $asset) {
+            if ($this->isPathExcluded->execute($asset->getPath())) {
+                $failedAssets[] = $asset->getPath();
+            }
 
-        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $absolutePath = $mediaDirectory->getAbsolutePath($asset->getPath());
-        $this->imagesStorage->deleteFile($absolutePath);
+            $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $absolutePath = $mediaDirectory->getAbsolutePath($asset->getPath());
+            $this->imagesStorage->deleteFile($absolutePath);
+        }
+        if (!empty($failedAssets)) {
+            throw new LocalizedException(
+                __(
+                    'Could not delete "%image": destination directory is restricted.',
+                    ['image' => implode(",", $failedAssets)]
+                )
+            );
+        }
     }
 }

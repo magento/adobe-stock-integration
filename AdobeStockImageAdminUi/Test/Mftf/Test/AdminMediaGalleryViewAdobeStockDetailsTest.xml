@@ -11,6 +11,7 @@
         <annotations>
             <features value="AdobeStockMediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/428"/>
+            <stories value="View adobe stock image details"/>
             <title value="View adobe stock image details"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4653671"/>
             <description value="User views adobe stock image attributes in Media Gallery"/>
@@ -26,6 +27,9 @@
         </after>
 
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
