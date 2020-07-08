@@ -9,7 +9,8 @@ define([
     'uiElement',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
-    'Magento_MediaGalleryUi/js/action/saveDetails'
+    'Magento_MediaGalleryUi/js/action/saveDetails',
+    'mage/validation'
 ], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected, saveDetails) {
     'use strict';
 
@@ -73,15 +74,16 @@ define([
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
                 modalElement = $(this.modalSelector);
-
-            saveDetails(
-                saveDetailsUrl,
-                modalElement.find('#image-edit-details-form')
-            ).then(function () {
-                this.closeModal();
-                this.imageModel().reloadGrid();
-            }.bind(this));
-
+            modalElement.find('#image-edit-details-form').validation();
+            if (modalElement.find('#image-edit-details-form').validation('isValid')) {
+                saveDetails(
+                    saveDetailsUrl,
+                    modalElement.find('#image-edit-details-form')
+                ).then(function () {
+                    this.closeModal();
+                    this.imageModel().reloadGrid();
+                }.bind(this));
+            }
         },
 
         /**
