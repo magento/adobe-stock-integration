@@ -49,6 +49,7 @@ class IptcWriter implements MetadataWriterInterface
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param AddIptcMetadata $addIptcMetadata
+     * @param FileReader $fileReader
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,

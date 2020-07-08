@@ -80,13 +80,25 @@ class AddIptcMetadata
             }
 
             $content = iptcembed($newData, $file->getPath());
-            $resource = $this->driver->fileOpen($file->getPath(), 'wb');
             
-            $this->driver->fileWrite($resource, $content);
-            $this->driver->fileClose($resource);
+            $this->writeFile($content);
             
             return $this->fileReader->execute($file->getPath());
         }
+    }
+
+    /**
+     * Write iptc data to the image directly to the file.
+     *
+     * @param string $filePath
+     * @param string $content
+     */
+    private function writeFile(string $filePath, string $content): void
+    {
+        $resource = $this->driver->fileOpen($file->getPath(), 'wb');
+            
+        $this->driver->fileWrite($resource, $content);
+        $this->driver->fileClose($resource);
     }
 
     /**
