@@ -81,7 +81,7 @@ class AddIptcMetadata
 
             $content = iptcembed($newData, $file->getPath());
             
-            $this->writeFile($content);
+            $this->writeFile($file->getPath(), $content);
             
             return $this->fileReader->execute($file->getPath());
         }
@@ -95,7 +95,7 @@ class AddIptcMetadata
      */
     private function writeFile(string $filePath, string $content): void
     {
-        $resource = $this->driver->fileOpen($file->getPath(), 'wb');
+        $resource = $this->driver->fileOpen($filePath, 'wb');
             
         $this->driver->fileWrite($resource, $content);
         $this->driver->fileClose($resource);
