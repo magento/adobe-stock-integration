@@ -112,8 +112,6 @@ class SaveMediaGalleryAssetTest extends TestCase
             ->method('readFile')
             ->willReturn($hash);
 
-
-
         $additionalData = [
             'id' => null,
             'path' => $destinationPath,
