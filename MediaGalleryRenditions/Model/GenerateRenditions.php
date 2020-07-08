@@ -11,6 +11,7 @@ use Magento\Framework\Image\AdapterFactory;
 use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Magento\MediaGalleryRenditionsApi\Model\ConfigInterface;
+use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 
 class GenerateRenditions implements GenerateRenditionsInterface
 {
@@ -30,29 +31,42 @@ class GenerateRenditions implements GenerateRenditionsInterface
     private $getRenditionPath;
 
     /**
+     * @var CreateAssetFromFile
+     */
+    private $createAssetFromFile;
+
+    /**
      * GenerateRenditions constructor.
      * @param AdapterFactory $imageFactory
      * @param GetRenditionPathInterface $getRenditionPath
+     * @param CreateAssetFromFile $createAssetFromFile
      * @param ConfigInterface $config
      */
     public function __construct(
         AdapterFactory $imageFactory,
         GetRenditionPathInterface $getRenditionPath,
+        CreateAssetFromFile $createAssetFromFile,
         ConfigInterface $config
     ) {
         $this->imageFactory = $imageFactory;
         $this->config = $config;
         $this->getRenditionPath = $getRenditionPath;
+        $this->createAssetFromFile = $createAssetFromFile;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(string $path): void
+    public function execute(array $files): void
     {
-        $isResizeable = $this->isResizeable($path);
-        if ($isResizeable) {
-            $renditionImagePath = $this->getRenditionPath->execute($path);
+        foreach ($files as $file) {
+            $path = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFileName();
+            $asset = $this->createAssetFromFile->execute($file);
+            if (!$this->isResizeable($asset->getHeight(), $asset->getWidth())) {
+                continue;
+            }
+            $renditionDirectoryPath = $this->getRenditionPath->execute($asset);
+            $renditionImagePath = $renditionDirectoryPath . DIRECTORY_SEPARATOR . $file->getFileName();
             $image = $this->imageFactory->create();
             $image->open($path);
             $image->keepAspectRatio(true);
@@ -64,12 +78,12 @@ class GenerateRenditions implements GenerateRenditionsInterface
     /**
      * Check if image needs to resize or not
      *
-     * @param string $path
+     * @param int $height
+     * @param int $width
      * @return bool
      */
-    private function isResizeable(string $path) :bool
+    private function isResizeable(int $height, int $width) :bool
     {
-        [$width, $height] = getimagesize($path);
         return $width > $this->getResizedWidth() || $height > $this->getResizedHeight();
     }
 

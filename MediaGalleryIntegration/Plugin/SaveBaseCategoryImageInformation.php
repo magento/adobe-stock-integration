@@ -14,6 +14,7 @@ use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 
 /**
  * Save base category image by SaveAssetsInterface.
@@ -49,6 +50,10 @@ class SaveBaseCategoryImageInformation
      * @var Storage
      */
     private $storage;
+    /**
+     * @var GenerateRenditionsInterface
+     */
+    private $generateRenditions;
 
     /**
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPath
@@ -56,6 +61,7 @@ class SaveBaseCategoryImageInformation
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
+     * @param GenerateRenditionsInterface $generateRenditions
      * @param Storage $storage
      */
     public function __construct(
@@ -64,6 +70,7 @@ class SaveBaseCategoryImageInformation
         SplFileInfoFactory $splFileInfoFactory,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
+        GenerateRenditionsInterface $generateRenditions,
         Storage $storage
     ) {
         $this->deleteAssetsByPaths = $deleteAssetsByPath;
@@ -72,6 +79,7 @@ class SaveBaseCategoryImageInformation
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
         $this->storage = $storage;
+        $this->generateRenditions = $generateRenditions;
     }
 
     /**
@@ -93,7 +101,7 @@ class SaveBaseCategoryImageInformation
 
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
         $this->storage->resizeFile($absolutePath);
-
+        $this->generateRenditions->execute([$file]);
         return $imagePath;
     }
 }

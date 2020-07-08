@@ -14,8 +14,8 @@ interface GenerateRenditionsInterface
     /**
      * Generate Renditions image
      *
-     * @param string $path
+     * @param array $paths
      * @throws LocalizedException
      */
-    public function execute(string $path): void;
+    public function execute(array $paths): void;
 }

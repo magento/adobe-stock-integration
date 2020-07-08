@@ -16,6 +16,7 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -58,6 +59,10 @@ class SaveImageInformation
      * @var Filesystem
      */
     private $filesystem;
+    /**
+     * @var GenerateRenditionsInterface
+     */
+    private $generateRenditions;
 
     /**
      * @param Filesystem $filesystem
@@ -66,6 +71,7 @@ class SaveImageInformation
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
+     * @param GenerateRenditionsInterface $generateRenditions
      * @param Storage $storage
      */
     public function __construct(
@@ -75,6 +81,7 @@ class SaveImageInformation
         SplFileInfoFactory $splFileInfoFactory,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
+        GenerateRenditionsInterface $generateRenditions,
         Storage $storage
     ) {
         $this->log = $log;
@@ -84,6 +91,7 @@ class SaveImageInformation
         $this->saveAsset = $saveAsset;
         $this->storage = $storage;
         $this->filesystem = $filesystem;
+        $this->generateRenditions = $generateRenditions;
     }
 
     /**
@@ -91,18 +99,20 @@ class SaveImageInformation
      *
      * @param Uploader $subject
      * @param array $result
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\ValidatorException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(Uploader $subject, array $result): array
     {
-        $file = $this->splFileInfoFactory->create($result['path'] . '/' . $result['file']);
+        $file = $this->splFileInfoFactory->create($result['path'] . DIRECTORY_SEPARATOR . $result['file']);
         if (!$this->isApplicable($file->getPathName())) {
             return $result;
         }
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
-        $this->storage->resizeFile($result['path'] . '/' . $result['file']);
-
+        $this->storage->resizeFile($result['path'] . DIRECTORY_SEPARATOR . $result['file']);
+        $this->generateRenditions->execute([$file]);
         return $result;
     }
 

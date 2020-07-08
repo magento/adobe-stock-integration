@@ -9,13 +9,13 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Psr\Log\LoggerInterface;
+use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 
 /**
  * Synchronize files in media storage and media assets database records
@@ -53,12 +53,18 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $driver;
 
     /**
+     * @var GenerateRenditionsInterface
+     */
+    private $generateRenditions;
+
+    /**
      * @param File $driver
      * @param Filesystem $filesystem
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param LoggerInterface $log
+     * @param GenerateRenditionsInterface $generateRenditions
      */
     public function __construct(
         File $driver,
@@ -66,7 +72,8 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         GetAssetsByPathsInterface $getAssetsByPaths,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
-        LoggerInterface $log
+        LoggerInterface $log,
+        GenerateRenditionsInterface $generateRenditions
     ) {
         $this->driver = $driver;
         $this->filesystem = $filesystem;
@@ -74,6 +81,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
         $this->log = $log;
+        $this->generateRenditions = $generateRenditions;
     }
 
     /**
@@ -82,6 +90,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     public function execute(array $files): void
     {
         $assets = $this->getExistingAssets($files);
+        $this->generateRenditions->execute($files);
         foreach ($files as $file) {
             $path = $this->getFilePath($file);
             $time = $this->getFileModificationTime($file);
