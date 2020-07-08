@@ -88,9 +88,9 @@ define([
 
                 this.image().actions().licenseProcess(
                     id,
-                    imageDetails.title,
-                    imageDetails.path,
-                    imageDetails['content_type'],
+                    imageDetails[imageId].title,
+                    imageDetails[imageId].path,
+                    imageDetails[imageId]['content_type'],
                     true
                 ).then(function () {
                     this.image().actions().login().getUserQuota();
