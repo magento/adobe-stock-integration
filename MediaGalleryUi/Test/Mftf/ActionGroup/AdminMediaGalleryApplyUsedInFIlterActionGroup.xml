@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryApplyUsedInFIlterActionGroup">
         <annotations>
-            <description>Applys used in filter to the emdia gallery grid</description>
+            <description>Apples used in filter to the media gallery grid</description>
         </annotations>
         <arguments>
             <argument name="entityType" type="string"/>
