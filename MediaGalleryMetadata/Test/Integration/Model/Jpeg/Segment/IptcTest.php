@@ -89,7 +89,7 @@ class IptcTest extends TestCase
             $path,
             $modifiableFilePath
         );
-        $modifiableFilePath = $this->fileReader->execute($path);
+        $modifiableFilePath = $this->fileReader->execute($modifiableFilePath);
         $originalMetadata = $this->iptcReader->execute($modifiableFilePath);
         
         $this->assertEmpty($originalMetadata->getTitle());

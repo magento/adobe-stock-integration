@@ -14,6 +14,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
 
 /**
  * Jpeg IPTC Writer
@@ -40,6 +41,11 @@ class IptcWriter implements MetadataWriterInterface
     private $addIptcMetadata;
 
     /**
+     * @var FileReader
+     */
+    private $fileReader;
+
+    /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param AddIptcMetadata $addIptcMetadata
@@ -47,11 +53,13 @@ class IptcWriter implements MetadataWriterInterface
     public function __construct(
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        AddIptcMetadata $addIptcMetadata
+        AddIptcMetadata $addIptcMetadata,
+        FileReader $fileReader
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->addIptcMetadata = $addIptcMetadata;
+        $this->fileReader = $fileReader;
     }
 
     /**
@@ -71,17 +79,11 @@ class IptcWriter implements MetadataWriterInterface
             }
         }
 
-        if (empty($iptcSegments)) {
-            return  $this->addIptcMetadata->execute($file, $metadata, null);
-        }
-
         foreach ($iptcSegments as $segment) {
-            $file =  $this->addIptcMetadata->execute($file, $metadata, $segment);
+            return  $this->addIptcMetadata->execute($file, $metadata, $segment);
         }
-        return $file ?? $this->fileFactory->create([
-            'path' => $file->getPath(),
-            'segments' => $segments
-        ]);
+        
+        return  $this->fileReader->execute($file->getPath());
     }
 
     /**

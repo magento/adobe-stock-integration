@@ -49,10 +49,10 @@ class AddIptcMetadata
      *
      * @param FileInterface $file
      * @param MetadataInterface $metadata
-     * @param null|SegmentInterface $segment
+     * @param SegmentInterface $segment
      * @return string
      */
-    public function execute(FileInterface $file, MetadataInterface $metadata, ?SegmentInterface $segment): FileInterface
+    public function execute(FileInterface $file, MetadataInterface $metadata, SegmentInterface $segment): FileInterface
     {
         if (is_callable('iptcembed') && is_callable('iptcparse')) {
             $iptcData =  $segment ? iptcparse($segment->getData()) : [];
