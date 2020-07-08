@@ -25,6 +25,7 @@
         "magento/module-media-content-synchronization-catalog": "*",
         "magento/module-media-content-synchronization-cms": "*",
         "magento/module-media-gallery-metadata": "*",
-        "magento/module-media-gallery-metadata-api": "*"
+        "magento/module-media-gallery-metadata-api": "*",
+        "magento/module-media-gallery-catalog-ui": "*"
     }
 }

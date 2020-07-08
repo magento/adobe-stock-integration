@@ -16,6 +16,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{AdminConfigSystemSection.enhancedMediaGalleryFieldset}}" stepKey="scrollToEnhancedMediaGalleryFieldset"/>
         <conditionalClick stepKey="expandEnhancedMediaGalleryTab" selector="{{AdminConfigSystemSection.enhancedMediaGalleryFieldset}}" dependentSelector="{{AdminConfigSystemSection.enhancedMediaGalleryEnabledField}}" visible="false" />
+        <waitForElementVisible selector="{{AdminConfigSystemSection.enhancedMediaGalleryFieldset}}" stepKey="waitForFieldset" />
         <selectOption userInput="{{enabled}}" selector="{{AdminConfigSystemSection.enhancedMediaGalleryEnabledField}}" stepKey="enableOrDisableMediaGallery"/>
         <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveConfiguration"/>
         <waitForPageLoad stepKey="waitForConfigurationToSave"/>
