@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use Magento\Framework\Exception\FileSystemException;
 
 /**
@@ -31,6 +32,11 @@ class SaveMediaGalleryAsset
     private $documentToMediaGalleryAsset;
 
     /**
+     * @var GetContentHashInterface
+     */
+    private $getContentHash;
+
+    /**
      * @var Filesystem
      */
     private $fileSystem;
@@ -38,15 +44,18 @@ class SaveMediaGalleryAsset
     /**
      * @param SaveAssetsInterface $saveMediaAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
+     * @param GetContentHashInterface $getContentHash
      * @param Filesystem $fileSystem
      */
     public function __construct(
         SaveAssetsInterface $saveMediaAsset,
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
+        GetContentHashInterface $getContentHash,
         Filesystem $fileSystem
     ) {
         $this->saveMediaAsset = $saveMediaAsset;
         $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
+        $this->getContentHash = $getContentHash;
         $this->fileSystem = $fileSystem;
     }
 
@@ -62,13 +71,12 @@ class SaveMediaGalleryAsset
     {
         try {
             $fileSize = $this->calculateFileSize($destinationPath);
-            $hashedImageContent = $this->hashImageContent($destinationPath);
             $additionalData = [
                 'id' => null,
                 'path' => $destinationPath,
                 'source' => 'Adobe Stock',
                 'size' => $fileSize,
-                'hash' => $hashedImageContent
+                'hash' => $this->hashImageContent($destinationPath)
             ];
 
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
@@ -101,7 +109,7 @@ class SaveMediaGalleryAsset
     {
         $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
         $imageContent = $mediaDirectory->readFile($mediaDirectory->getAbsolutePath($destinationPath));
-        $hashedImageContent = sha1($imageContent);
+        $hashedImageContent = $this->getContentHash->execute($imageContent);
         return $hashedImageContent;
     }
 }
