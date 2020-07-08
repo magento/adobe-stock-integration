@@ -95,7 +95,8 @@ class AddMetadata implements AddMetadataInterface
     private function writeMetadata(FileInterface $file, MetadataInterface $metadata): void
     {
         foreach ($this->writers as $writer) {
-            $this->fileWriter->execute($writer->execute($file, $metadata));
+            $file = $writer->execute($file, $metadata);
         }
+        $this->fileWriter->execute($file);
     }
 }

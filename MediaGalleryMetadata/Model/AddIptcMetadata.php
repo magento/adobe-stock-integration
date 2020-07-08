@@ -12,6 +12,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 
 /**
  * Add metadata to the IPTC data
@@ -33,13 +34,21 @@ class AddIptcMetadata
     private $fileReader;
 
     /**
+     * @var FileInterfaceFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @param FileInterfaceFactory $fileFactory
      * @param DriverInterface $driver
      * @param FileReader $fileReader
      */
     public function __construct(
+        FileInterfaceFactory $fileFactory,
         DriverInterface $driver,
         FileReader $fileReader
     ) {
+        $this->fileFactory = $fileFactory;
         $this->driver = $driver;
         $this->fileReader = $fileReader;
     }
@@ -49,9 +58,9 @@ class AddIptcMetadata
      *
      * @param FileInterface $file
      * @param MetadataInterface $metadata
-     * @param SegmentInterface $segment
+     * @param null|SegmentInterface $segment
      */
-    public function execute(FileInterface $file, MetadataInterface $metadata, SegmentInterface $segment): FileInterface
+    public function execute(FileInterface $file, MetadataInterface $metadata, ?SegmentInterface $segment): FileInterface
     {
         if (is_callable('iptcembed') && is_callable('iptcparse')) {
             $iptcData =  $segment ? iptcparse($segment->getData()) : [];
@@ -78,10 +87,34 @@ class AddIptcMetadata
 
             $this->writeFile($file->getPath(), iptcembed($newData, $file->getPath()));
             
-            return $this->fileReader->execute($file->getPath());
+            $fileWithIptc = $this->fileReader->execute($file->getPath());
+            
+            return $this->fileFactory->create([
+                'path' => $fileWithIptc->getPath(),
+                'segments' => $this->getSegmentsWithIptc($fileWithIptc, $file)
+        ]);
         }
     }
 
+    /**
+     * Return iptc segment from file.
+     *
+     * @param FileInterface $fileWithIptc
+     * @param FileInterface $originFile
+     */
+    private function getSegmentsWithIptc(FileInterface $fileWithIptc, $originFile): array
+    {
+        $segments = $fileWithIptc->getSegments();
+        $originFIleSegments =  $originFile->getSegments();
+        foreach ($segments as $key => $segment) {
+            if ($segment->getName() === 'APP13') {
+                $originFIleSegments[$key] = $segments[$key];
+                return $originFIleSegments;
+            }
+        }
+        return $originFIleSegments;
+    }
+    
     /**
      * Write keywords field to the iptc segment.
      *

@@ -83,8 +83,7 @@ class IptcWriter implements MetadataWriterInterface
         foreach ($iptcSegments as $segment) {
             return  $this->addIptcMetadata->execute($file, $metadata, $segment);
         }
-        
-        return  $this->fileReader->execute($file->getPath());
+        return  $this->addIptcMetadata->execute($file, $metadata, null);
     }
 
     /**
