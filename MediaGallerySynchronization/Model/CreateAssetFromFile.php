@@ -15,9 +15,13 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Create media asset object based on the file information
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateAssetFromFile
 {
@@ -47,21 +51,29 @@ class CreateAssetFromFile
     private $assetFactory;
 
     /**
+     * @var GetContentHashInterface
+     */
+    private $getContentHash;
+
+    /**
      * @param Filesystem $filesystem
      * @param AssetInterfaceFactory $assetFactory
      * @param File $driver
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
+     * @param GetContentHashInterface $getContentHash
      */
     public function __construct(
         Filesystem $filesystem,
         AssetInterfaceFactory $assetFactory,
         File $driver,
-        GetAssetsByPathsInterface $getMediaGalleryAssetByPath
+        GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
+        GetContentHashInterface $getContentHash
     ) {
         $this->filesystem = $filesystem;
         $this->assetFactory = $assetFactory;
         $this->driver = $driver;
         $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
+        $this->getContentHash = $getContentHash;
     }
 
     /**
@@ -69,6 +81,7 @@ class CreateAssetFromFile
      *
      * @param \SplFileInfo $file
      * @return AssetInterface
+     * @throws LocalizedException
      * @throws ValidatorException
      */
     public function execute(\SplFileInfo $file)
@@ -87,6 +100,7 @@ class CreateAssetFromFile
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
                 'width' => $width,
                 'height' => $height,
+                'hash' => $this->getHashImageContent($path),
                 'size' => $file->getSize(),
                 'contentType' => $asset ? $asset->getContentType() : 'image/' . $file->getExtension(),
                 'source' => $asset ? $asset->getSource() : 'Local'
@@ -98,8 +112,9 @@ class CreateAssetFromFile
      * Returns asset if asset already exist by provided path
      *
      * @param string $path
-     * @return null|AssetInterface
+     * @return AssetInterface|null
      * @throws ValidatorException
+     * @throws LocalizedException
      */
     private function getAsset(string $path): ?AssetInterface
     {
@@ -123,6 +138,22 @@ class CreateAssetFromFile
         }
 
         return $path;
+    }
+
+    /**
+     * Get hash image content.
+     *
+     * @param string $path
+     * @return string
+     * @throws ValidatorException
+     * @throws FileSystemException
+     */
+    private function getHashImageContent(string $path): string
+    {
+        $mediaDirectory = $this->getMediaDirectory();
+        $imageDirectory = $mediaDirectory->readFile($mediaDirectory->getRelativePath($path));
+        $hashedImageContent = $this->getContentHash->execute($imageDirectory);
+        return $hashedImageContent;
     }
 
     /**
