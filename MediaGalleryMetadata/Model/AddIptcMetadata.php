@@ -105,15 +105,15 @@ class AddIptcMetadata
     private function getSegmentsWithIptc(FileInterface $fileWithIptc, $originFile): array
     {
         $segments = $fileWithIptc->getSegments();
-        $originFIleSegments =  $originFile->getSegments();
+        $originFileSegments =  $originFile->getSegments();
 
         foreach ($segments as $key => $segment) {
             if ($segment->getName() === 'APP13') {
-                $originFIleSegments[$key] = $segments[$key];
-                return $originFIleSegments;
+                $originFileSegments[$key] = $segments[$key];
+                return $originFileSegments;
             }
         }
-        return $originFIleSegments;
+        return $originFileSegments;
     }
     
     /**

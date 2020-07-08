@@ -77,6 +77,9 @@ class AddMetadataTest extends TestCase
         string $description,
         array $keywords
     ): void {
+        if ($fileName !== 'exiftool.gif') {
+            return;
+        }
         $path = realpath(__DIR__ . '/../../_files/' . $fileName);
         $modifiableFilePath = $this->varDirectory->getAbsolutePath($fileName);
         $this->driver->copy(
@@ -152,7 +155,16 @@ class AddMetadataTest extends TestCase
                     'magento2',
                     'community'
                 ],
-            ]
+            ],
+             [
+                'exiftool.gif',
+                'Updated Title',
+                'Updated Description',
+                [
+                    'magento2',
+                    'mediagallery'
+                ]
+             ]
         ];
     }
 }
