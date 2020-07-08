@@ -143,8 +143,16 @@ class AddMetadataTest extends TestCase
                     'magento2',
                     'community'
                 ],
+            ],
+            [
+                'empty_xmp_image.png',
+                'Title of the magento image',
+                'Description of the magento image 2',
+                [
+                    'magento2',
+                    'community'
+                ],
             ]
-
         ];
     }
 }

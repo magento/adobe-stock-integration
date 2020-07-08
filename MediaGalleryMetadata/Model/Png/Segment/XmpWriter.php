@@ -14,9 +14,10 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 
 /**
- * XMP Reader
+ * XMP Writer
  */
 class XmpWriter implements MetadataWriterInterface
 {
@@ -39,18 +40,26 @@ class XmpWriter implements MetadataWriterInterface
     private $addXmpMetadata;
 
     /**
+     * @var XmpTemplate
+     */
+    private $xmpTemplate;
+
+    /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param AddXmpMetadata $addXmpMetadata
+     * @param XmpTemplate $xmpTemplate
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        AddXmpMetadata $addXmpMetadata
+        AddXmpMetadata $addXmpMetadata,
+        XmpTemplate $xmpTemplate
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->addXmpMetadata = $addXmpMetadata;
+        $this->xmpTemplate = $xmpTemplate;
     }
 
     /**
@@ -63,14 +72,54 @@ class XmpWriter implements MetadataWriterInterface
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
         $segments = $file->getSegments();
+        $xmpSegments = [];
         foreach ($segments as $key => $segment) {
             if ($this->isXmpSegment($segment)) {
-                $segments[$key] = $this->updateSegment($segment, $metadata);
+                $xmpSegments[$key] = $segment;
             }
         }
+
+        if (empty($xmpSegments)) {
+            return $this->fileFactory->create([
+                'path' => $file->getPath(),
+                'segments' => $this->insertXmpSegment($segments, $this->createXmpSegment($metadata))
+            ]);
+        }
+
+        foreach ($xmpSegments as $key => $segment) {
+            $segments[$key] = $this->updateSegment($segment, $metadata);
+        }
+
         return $this->fileFactory->create([
             'path' => $file->getPath(),
             'segments' => $segments
+        ]);
+    }
+
+    /**
+     * Insert XMP segment to image segments (at position 1)
+     *
+     * @param SegmentInterface[] $segments
+     * @param SegmentInterface $xmpSegment
+     * @return SegmentInterface[]
+     */
+    private function insertXmpSegment(array $segments, SegmentInterface $xmpSegment): array
+    {
+        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
+    }
+
+    /**
+     * Write new segment  metadata
+     *
+     * @param MetadataInterface $metadata
+     * @return SegmentInterface
+     */
+    public function createXmpSegment(MetadataInterface $metadata): SegmentInterface
+    {
+        $xmpData = $this->xmpTemplate->get();
+        return $this->segmentFactory->create([
+            'name' => self::XMP_SEGMENT_NAME,
+            'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($xmpData, $metadata)
         ]);
     }
 

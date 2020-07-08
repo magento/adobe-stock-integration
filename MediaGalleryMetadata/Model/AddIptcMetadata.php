@@ -106,6 +106,7 @@ class AddIptcMetadata
     {
         $segments = $fileWithIptc->getSegments();
         $originFIleSegments =  $originFile->getSegments();
+
         foreach ($segments as $key => $segment) {
             if ($segment->getName() === 'APP13') {
                 $originFIleSegments[$key] = $segments[$key];
