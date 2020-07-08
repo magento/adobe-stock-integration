@@ -50,7 +50,6 @@ class AddIptcMetadata
      * @param FileInterface $file
      * @param MetadataInterface $metadata
      * @param SegmentInterface $segment
-     * @return string
      */
     public function execute(FileInterface $file, MetadataInterface $metadata, SegmentInterface $segment): FileInterface
     {
@@ -66,9 +65,7 @@ class AddIptcMetadata
             }
 
             if (!empty($metadata->getKeywords())) {
-                foreach ($metadata->getKeywords() as $key => $keyword) {
-                    $iptcData[self::IPTC_KEYWORDS_SEGMENT][$key] = $keyword;
-                }
+                $iptcData = $this->writeKeywords($metadata->getKeywords(), $iptcData);
             }
 
             $newData = '';
@@ -79,14 +76,26 @@ class AddIptcMetadata
                 }
             }
 
-            $content = iptcembed($newData, $file->getPath());
-            
-            $this->writeFile($file->getPath(), $content);
+            $this->writeFile($file->getPath(), iptcembed($newData, $file->getPath()));
             
             return $this->fileReader->execute($file->getPath());
         }
     }
 
+    /**
+     * Write keywords field to the iptc segment.
+     *
+     * @param array $keywords
+     * @param array $iptcData
+     */
+    private function writeKeywords(array $keywords, array $iptcData): array
+    {
+        foreach ($keywords as $key => $keyword) {
+            $iptcData[self::IPTC_KEYWORDS_SEGMENT][$key] = $keyword;
+        }
+        return $iptcData;
+    }
+    
     /**
      * Write iptc data to the image directly to the file.
      *
