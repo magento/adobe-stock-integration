@@ -7,8 +7,10 @@
         "magento/module-cms": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
+        "magento/module-media-gallery-api": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-media-content-api": "*"
     },
     "type": "magento2-module",
     "license": [
