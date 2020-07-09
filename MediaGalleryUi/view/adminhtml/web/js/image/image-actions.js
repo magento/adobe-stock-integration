@@ -74,6 +74,7 @@ define([
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
                 modalElement = $(this.modalSelector);
+
             modalElement.find('#image-edit-details-form').validation();
 
             if (modalElement.find('#image-edit-details-form').validation('isValid')) {
