@@ -60,7 +60,7 @@
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwygToFilterIMage"/>
 
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AdminMediaGalleryApplyUsedInFIlterActionGroup" stepKey="applyUsedInCategoryFilter">
+        <actionGroup ref="AdminMediaGalleryApplyUsedInFilterActionGroup" stepKey="applyUsedInCategoryFilter">
             <argument name="entityType" value="Categories"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
