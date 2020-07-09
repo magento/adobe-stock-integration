@@ -55,7 +55,8 @@ class MediaGalleryAsset
             'height' => $assetData['height'],
             'size' => $assetData['size'],
             'contentType' => $assetData['content_type'],
-            'source' => $assetData['source']
+            'source' => $assetData['source'],
+            'hash' => $assetData['hash']
         ]);
     }
 }
