@@ -44,7 +44,7 @@
             </item>
         </argument>
     </container>
-    <listingToolbar name="listing_top">
+    <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
         <bookmark name="bookmarks"/>
         <filterSearch name="name" >
             <settings>
@@ -52,6 +52,29 @@
                 <label>Name</label>
             </settings>
         </filterSearch>
+        <filters name="listing_filters">
+            <filterSelect
+                name="asset"
+                provider="${ $.parentName }"
+                sortOrder="10"
+                class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Filter\Asset"
+                component="Magento_MediaGalleryCatalogUi/js/form/element/ui-select"
+                template="Magento_MediaGalleryCatalogUi/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="searchOptions" xsi:type="boolean">true</item>
+                        <item name="searchUrl" xsi:type="url" path="media_gallery_catalog/category/getassetsoptions" />
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <caption translate="true">– Please Select assets –</caption>
+                    <label translate="true">Asset</label>
+                    <dataScope>asset</dataScope>
+                    </settings>
+            </filterSelect>
+         </filters>
         <paging name="listing_paging">
             <settings>
                 <options>
@@ -71,80 +94,11 @@
                 <pageSize>32</pageSize>
             </settings>
         </paging>
-        <filters name="listing_filters" sortOrder="20">
-            <filterInput
-                name="asset"
-                provider="${ $.parentName }"
-                sortOrder="50"
-                class="\Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Filter\Asset">
-                <argument name="data" xsi:type="array">
-                </argument>
-                <settings>
-                     <dataScope>asset</dataScope>
-                    <label translate="true">Asset</label>
-                </settings>
-            </filterInput>
-            <filterInput
-                name="entity_id"
-                sortOrder="30">
-                <argument name="data" xsi:type="array">
-                </argument>
-                <settings>
-                     <dataScope>entity_id</dataScope>
-                    <label translate="true">ID</label>
-                </settings>
-            </filterInput>
-             <filterInput
-                name="display_mode"
-                sortOrder="40">
-                <argument name="data" xsi:type="array">
-                </argument>
-                <settings>
-                     <dataScope>display_mode</dataScope>
-                    <label translate="true">Display Mode</label>
-                </settings>
-             </filterInput>
-             <filterInput
-		    name="include_in_menu"
-		    provider="${ $.parentName }"
-		    sortOrder="20"
-		    component="Magento_Ui/js/form/element/single-checkbox">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Categories that are Included in menu</item>
-                        <item name="valueMap" xsi:type="array">
-                            <item name="true" xsi:type="string">1</item>
-                        </item>
-                    </item>
-                </argument>
-                <settings>
-                    <dataScope>include_in_menu</dataScope>
-                    <label translate="true">In Menu</label>
-                </settings>
-             </filterInput>
-             <filterInput
-		    name="is_active"
-		    provider="${ $.parentName }"
-		    sortOrder="10"
-		    component="Magento_Ui/js/form/element/single-checkbox">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Categories that are enabled</item>
-                        <item name="valueMap" xsi:type="array">
-                            <item name="true" xsi:type="string">1</item>
-                        </item>
-                    </item>
-                </argument>
-                <settings>
-                    <dataScope>is_active</dataScope>
-                    <label translate="true">Enabled</label>
-                </settings>
-            </filterInput>
-        </filters>
     </listingToolbar>
     <columns name="media_gallery_category_columns">
         <column name="entity_id">
             <settings>
+                <filter>text</filter>
                 <label translate="true">ID</label>
             </settings>
         </column>
@@ -166,6 +120,7 @@
         </column>
         <column name="display_mode">
             <settings>
+                <filter>text</filter>
                 <label translate="true">Display Mode</label>
             </settings>
         </column>
@@ -178,7 +133,6 @@
            <argument name="data" xsi:type="array">
             </argument>
             <settings>
-                <dataType>select</dataType>
                  <options>
                     <option name="Yes" xsi:type="array">
                         <item name="value" xsi:type="number">1</item>
@@ -189,12 +143,15 @@
                         <item name="label" xsi:type="string">No</item>
                     </option>
                 </options>
+                <dataType>select</dataType>
+                <filter>select</filter>
                 <label translate="true">In Menu</label>
             </settings>
         </column>
         <column name="is_active" component="Magento_Ui/js/grid/columns/select" >
             <settings>
                 <dataType>select</dataType>
+                <filter>select</filter>
                 <options>
                     <option name="Yes" xsi:type="array">
                         <item name="value" xsi:type="number">1</item>

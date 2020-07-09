@@ -8,37 +8,37 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Filter;
 
-use Magento\Ui\Component\Filters\Type\Input;
+use Magento\Ui\Component\Filters\Type\Select;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Asset  filter
  */
-class Asset extends Input
+class Asset extends Select
 {
     private const CTAEGORY_ENTITY_TYPE = 'catalog_category';
 
-    /**
-     * @var GetAssetsByPathsInterface
-     */
-    private $getAssetsByPaths;
-    
     /**
      * @var GetContentByAssetIdsInterface
      */
     private $getContentIdentities;
 
     /**
+     * @var OptionSourceInterface
+     */
+    protected $optionsProvider;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
-     * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param GetContentByAssetIdsInterface $getContentIdentities
      * @param array $components
      * @param array $data
@@ -48,30 +48,39 @@ class Asset extends Input
         UiComponentFactory $uiComponentFactory,
         FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
-        GetAssetsByPathsInterface $getAssetsByPaths,
+        OptionSourceInterface $optionsProvider = null,
         GetContentByAssetIdsInterface $getContentIdentities,
         array $components = [],
         array $data = []
     ) {
         $this->uiComponentFactory = $uiComponentFactory;
         $this->filterBuilder = $filterBuilder;
-        parent::__construct($context, $uiComponentFactory, $filterBuilder, $filterModifier, $components, $data);
-        $this->getAssetsByPaths = $getAssetsByPaths;
+        $this->optionsProvider = $optionsProvider;
+        parent::__construct(
+            $context,
+            $uiComponentFactory,
+            $filterBuilder,
+            $filterModifier,
+            $optionsProvider,
+            $components,
+            $data
+        );
         $this->getContentIdentities = $getContentIdentities;
     }
+
     
     /**
      * Apply filter
      *
      * @return void
      */
-    protected function applyFilter(): void
+    protected function applyFilter()
     {
         if (isset($this->filterData[$this->getName()])) {
-            $path = $this->filterData[$this->getName()];
+            $ids = $this->filterData[$this->getName()];
             $filter = $this->filterBuilder->setConditionType('in')
                     ->setField('entity_id')
-                    ->setValue($this->getCategoryIdsByAsset($path))
+                    ->setValue($this->getCategoryIdsByAsset($ids))
                     ->create();
 
             $this->getContext()->getDataProvider()->addFilter($filter);
@@ -81,15 +90,13 @@ class Asset extends Input
     /**
      * Return category ids by asset path.
      *
-     * @param string $path
+     * @param string $ids
      */
-    private function getCategoryIdsByAsset(string $path): string
+    private function getCategoryIdsByAsset(array $ids): string
     {
-        $asset = $this->getAssetsByPaths->execute([$path]);
-        if (!empty($asset)) {
+        if (!empty($ids)) {
             $categoryIds = [];
-            $assetId = current($asset)->getId();
-            $data = $this->getContentIdentities->execute([$assetId]);
+            $data = $this->getContentIdentities->execute($ids);
             foreach ($data as $identity) {
                 if ($identity->getEntityType() === self::CTAEGORY_ENTITY_TYPE) {
                     $categoryIds[] = $identity->getEntityId();
