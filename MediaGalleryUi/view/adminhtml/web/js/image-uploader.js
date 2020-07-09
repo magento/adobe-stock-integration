@@ -23,6 +23,7 @@ define([
             acceptFileTypes: '',
             allowedExtensions: '',
             maxFileSize: '',
+            maxFileNameLength: 90,
             loader: false,
             modules: {
                 directories: '${ $.directoriesPath }',
@@ -84,13 +85,13 @@ define([
 
                 add: function (e, data) {
                     if (!this.isSizeExceeded(data.files[0]).passed) {
-                        this.mediaGridMessages().add(
-                            'error',
-                            $.mage.__('Cannot upload <b>' + data.files[0].name +
-                                      '</b>. File exceeds maximum file size limit.')
-                        );
+                        this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
+                                      '". File exceeds maximum file size limit.');
 
-                        this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
+                        return;
+                    } else if (!this.isFileNameLengthExceeded(data.files[0]).passed) {
+                        this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
+                                                       '". Filename is too long, must be 90 chracters or less.');
 
                         return;
                     }
@@ -125,6 +126,20 @@ define([
         },
 
         /**
+         * Add error message after validation error.
+         *
+         * @param {String} message
+         */
+        addValidationErrorMessage: function (message) {
+            this.mediaGridMessages().add(
+                'error',
+                $.mage.__(message)
+            );
+
+            this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
+        },
+
+        /**
          * Checks if size of provided file exceeds
          * defined in configuration size limits.
          *
@@ -133,6 +148,17 @@ define([
          */
         isSizeExceeded: function (file) {
             return validator('validate-max-size', file.size, this.maxFileSize);
+        },
+
+        /**
+         * Checks if name length of provided file exceeds
+         * defined in configuration size limits.
+         *
+         * @param {Object} file - File to be checked.
+         * @returns {Boolean}
+         */
+        isFileNameLengthExceeded: function (file) {
+            return validator('max_text_length', file.name, this.maxFileNameLength);
         },
 
         /**
@@ -159,7 +185,7 @@ define([
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__('Cannot upload <b>' + file.name + '</b>. This file format is not supported')
+                    $.mage.__('Cannot upload "' + file.name + '". This file format is not supported.')
                 );
             }.bind(this));
 
