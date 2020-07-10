@@ -95,7 +95,7 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
 
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
-        $this->searchCriteriaBuilder = $searchCriteria;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
         $this->searchAssets = $searchAssets;
         $this->images = $images;

@@ -8,12 +8,12 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <listingToolbar name="listing_top">
         <filters name="listing_filters">
-              <filterSelect
+             <filterSelect
                 name="asset"
-                identityColumn="entity_id"  
                 provider="${ $.parentName }"
                 sortOrder="10"
-                entityType="catalog_category"
+                identityColumn="block_id"
+                entityType="cms_block"
                 class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
                 component="Magento_MediaGalleryUi/js/form/element/ui-select"
                 template="Magento_MediaGalleryUi/grid/filters/elements/ui-select">

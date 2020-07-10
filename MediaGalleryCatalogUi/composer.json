@@ -8,7 +8,7 @@
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

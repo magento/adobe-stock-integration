@@ -79,7 +79,7 @@ class Asset extends Select
         if (isset($this->filterData[$this->getName()])) {
             $ids = $this->filterData[$this->getName()];
             $filter = $this->filterBuilder->setConditionType('in')
-                    ->setField('entity_id')
+                    ->setField($this->_data['identityColumn'])
                     ->setValue($this->getCategoryIdsByAsset($ids))
                     ->create();
 
