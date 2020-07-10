@@ -4,9 +4,8 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/ui-select',
-    'jquery'
-], function (uiSelect, $) {
+    'Magento_Ui/js/form/element/ui-select'
+], function (uiSelect) {
     'use strict';
 
     return uiSelect.extend({

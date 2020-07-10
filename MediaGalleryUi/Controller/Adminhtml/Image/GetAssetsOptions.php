@@ -83,7 +83,7 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
      */
     public function __construct(
         FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteria,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterGroupBuilder $filterGroupBuilder,
         SearchAssetsInterface $searchAssets,
         Context $context,

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <filters name="listing_filters">
+              <filterSelect
+                name="asset"
+                provider="${ $.parentName }"
+                sortOrder="10"
+                entityType="catalog_category"
+                class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
+                component="Magento_MediaGalleryUi/js/form/element/ui-select"
+                template="Magento_MediaGalleryUi/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="searchOptions" xsi:type="boolean">true</item>
+                        <item name="searchUrl" xsi:type="url" path="media_gallery/image/getassetsoptions" />
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <caption translate="true">– Please Select assets –</caption>
+                    <label translate="true">Asset</label>
+                    <dataScope>asset</dataScope>
+                    </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+</listing>
