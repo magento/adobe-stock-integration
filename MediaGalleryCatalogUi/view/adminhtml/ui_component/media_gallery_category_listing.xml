@@ -56,13 +56,14 @@
                 name="asset"
                 provider="${ $.parentName }"
                 sortOrder="10"
-                identityColumn="entity_id"
-                entityType="catalog_category"
                 class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
                 component="Magento_MediaGalleryUi/js/form/element/ui-select"
                 template="Magento_MediaGalleryUi/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="entityType" xsi:type="string">catalog_category</item>
+                        <item name="identityColumn" xsi:type="string">entity_id</item>
+                        <item name="chipsEnabled" xsi:type="boolean">true</item>
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
                         <item name="searchUrl" xsi:type="url" path="media_gallery/image/getassetsoptions" />

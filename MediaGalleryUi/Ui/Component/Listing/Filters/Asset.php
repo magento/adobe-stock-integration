@@ -79,7 +79,7 @@ class Asset extends Select
         if (isset($this->filterData[$this->getName()])) {
             $ids = $this->filterData[$this->getName()];
             $filter = $this->filterBuilder->setConditionType('in')
-                    ->setField($this->_data['identityColumn'])
+                    ->setField($this->_data['config']['identityColumn'])
                     ->setValue($this->getCategoryIdsByAsset($ids))
                     ->create();
 
@@ -98,7 +98,7 @@ class Asset extends Select
             $categoryIds = [];
             $data = $this->getContentIdentities->execute($ids);
             foreach ($data as $identity) {
-                if ($identity->getEntityType() === $this->_data['entityType']) {
+                if ($identity->getEntityType() === $this->_data['config']['entityType']) {
                     $categoryIds[] = $identity->getEntityId();
                 }
             }
