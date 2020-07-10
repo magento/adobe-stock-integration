@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters">
+            <filterSelect
+                    name="product_id"
+                    provider="${ $.parentName }"
+                    sortOrder="50"
+                    component="Magento_Catalog/js/components/product-ui-select"
+                    template="ui/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="searchOptions" xsi:type="boolean">true</item>
+                        <item name="chipsEnabled" xsi:type="boolean">true</item>
+                        <item name="closeBtn" xsi:type="boolean">true</item>
+                        <item name="filterPlaceholder" xsi:type="string" translate="true">Product Name or SKU</item>
+                        <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find products</item>
+                        <item name="missingValuePlaceholder" xsi:type="string" translate="true">Product with ID: %s doesn\'t exist</item>
+                        <item name="isDisplayMissingValuePlaceholder" xsi:type="boolean">true</item>
+                        <item name="isDisplayEmptyPlaceholder" xsi:type="boolean">true</item>
+                        <item name="isRemoveSelectedIcon" xsi:type="boolean">true</item>
+                        <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                        <item name="searchUrl" xsi:type="url" path="catalog/product/search"/>
+                        <item name="validationUrl" xsi:type="url" path="catalog/product/getSelected"/>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Used in Products</label>
+                    <dataScope>product_id</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+</listing>
