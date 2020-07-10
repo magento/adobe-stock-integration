@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,11 +53,17 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $saveMediaAsset;
 
     /**
+     * @var GetContentHashInterface|MockObject
+     */
+    private $getContentHash;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->saveAssets = $this->createMock(SaveAssetsInterface::class);
+        $this->getContentHash = $this->createMock(GetContentHashInterface::class);
         $this->converter = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->mediaDirectory = $this->createMock(Read::class);
@@ -84,12 +91,12 @@ class SaveMediaGalleryAssetTest extends TestCase
         $document = $this->createMock(Document::class);
         $destinationPath = 'path';
 
-        $this->filesystem->expects($this->once())
+        $this->filesystem->expects($this->atLeastOnce())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->mediaDirectory->expects($this->once())
+        $this->mediaDirectory->expects($this->atLeastOnce())
             ->method('getAbsolutePath')
             ->with($destinationPath)
             ->willReturn('root/pub/media/catalog/test-image.jpeg');
@@ -99,11 +106,18 @@ class SaveMediaGalleryAssetTest extends TestCase
             ->method('stat')
             ->willReturn(['size' => $fileSize]);
 
+        $hash = 'hash';
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('readFile')
+            ->willReturn($hash);
+
         $additionalData = [
             'id' => null,
             'path' => $destinationPath,
             'source' => 'Adobe Stock',
             'size' => $fileSize,
+            'hash' => $this->getContentHash->execute($hash)
         ];
         $mediaGalleryAssetMock = $this->createMock(Asset::class);
         $this->converter->expects($this->once())
