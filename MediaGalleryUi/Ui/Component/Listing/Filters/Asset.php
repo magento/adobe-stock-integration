@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Filter;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters;
 
 use Magento\Ui\Component\Filters\Type\Select;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
@@ -98,7 +98,7 @@ class Asset extends Select
             $categoryIds = [];
             $data = $this->getContentIdentities->execute($ids);
             foreach ($data as $identity) {
-                if ($identity->getEntityType() === $this->data['entityType']) {
+                if ($identity->getEntityType() === $this->_data['entityType']) {
                     $categoryIds[] = $identity->getEntityId();
                 }
             }
