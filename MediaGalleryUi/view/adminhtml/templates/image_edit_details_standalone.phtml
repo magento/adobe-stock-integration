@@ -35,25 +35,22 @@ use Magento\Backend\Block\Template;
             <!-- ko template: getTemplate() --><!-- /ko -->
 
             <div class="admin__field field" id="media-gallery-image-edit-details-keywords">
-                <label for="multiselect" class="admin__field-label">
-                    <span>Keywords</span>
-                </label>
-                <div class="admin__field-control control">
-                    <select name="multiselect-field" id="multiselect" multiple="multiple">
-                        <option value="1">Keyword 1</option>
-                        <option value="2">Keyword 2</option>
-                        <option value="3">Keyword 3</option>
-                    </select>
-                    <script>
-                        require([
-                            'jquery',
-                            'mage/multiselect',
-                            'mage/backend/editablemultiselect'
-                        ], function ($) {
-                            $('#multiselect').multiselect2();
-                        });
-                    </script>
-                </div>
+                <!-- ko if: image -->
+                    <!-- ko if: image().tags -->
+                        <label for="multiselect" class="admin__field-label">
+                            <span>Keywords</span>
+                        </label>
+                        <div class="admin__field-control control">
+                            <select name="multiselect-field" id="multiselect" multiple="multiple" data-bind="
+                                options: image().tags,
+                                optionsValue: 'id',
+                                optionsText: 'keyword',
+                                selectedOptions: image().selectedKeywords">
+                            </select>
+                        </div>
+                    <!-- /ko -->
+                <!-- /ko -->
+
             </div>
         </fieldset>
     </form>
@@ -68,7 +65,8 @@ use Magento\Backend\Block\Template;
                         "imageEditDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageEditDetailsUrl')); ?>",
                         "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-edit-image-details-modal",
-                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
+                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages",
+                        "keywordSelector": "#multiselect"
                     }
                 }
             }

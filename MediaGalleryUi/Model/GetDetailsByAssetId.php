@@ -83,6 +83,8 @@ class GetDetailsByAssetId
 
         $details = [];
         foreach ($assets as $asset) {
+            $keywords = $this->getKeywords($asset);
+            $selectedKeywords = array_column($keywords, 'id');
             $details[$asset->getId()] = [
                 'image_url' => $this->getUrl($asset->getPath()),
                 'title' => $asset->getTitle(),
@@ -91,11 +93,12 @@ class GetDetailsByAssetId
                 'id' => $asset->getId(),
                 'details' => $this->detailsProviderPool->execute($asset),
                 'size' => $asset->getSize(),
-                'tags' => $this->getKeywords($asset),
+                'tags' => $keywords,
                 'source' => $asset->getSource() ?
                 $this->sourceIconProvider->getSourceIconUrl($asset->getSource()) :
                 null,
                 'content_type' => strtoupper(str_replace('image/', '', $asset->getContentType())),
+                'selectedKeywords' => $selectedKeywords
             ];
         }
         return $details;
@@ -119,7 +122,7 @@ class GetDetailsByAssetId
 
         return array_map(
             function (KeywordInterface $keyword) {
-                return $keyword->getKeyword();
+                return ['id' => $keyword->getId(), 'keyword' => $keyword->getKeyword()];
             },
             $keywords
         );

@@ -36,7 +36,7 @@
             <div class="tags-list" data-bind="css: {'show-all-tags': showAllTags}">
                 <each args="data: image().tags, as: '$tag'">
                     <span class="tag-item"
-                          data-bind="text: $parent.getTagText($tag, $index()),
+                          data-bind="text: $parent.getTagText($tag.keyword, $index()),
                                      css: {'show-more-item': ($index() + 1) > $parent.tagListLimit}"></span>
                 </each>
             </div>

@@ -33,9 +33,30 @@ use Magento\Backend\Block\Template;
     <div id="media-gallery-image-edit-details-messages" data-bind="scope: 'mediaGalleryEditDetailsMessages'">
         <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
-    <div id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    </div>
+    <form id="image-edit-details-form" method="post" enctype="multipart/form-data">
+        <fieldset class="admin__fieldset" id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+
+            <div class="admin__field field" id="media-gallery-image-edit-details-keywords">
+                <!-- ko if: image -->
+                <!-- ko if: image().tags -->
+                <label for="multiselect" class="admin__field-label">
+                    <span>Keywords</span>
+                </label>
+                <div class="admin__field-control control">
+                    <select name="multiselect-field" id="multiselect" multiple="multiple" data-bind="
+                                options: image().tags,
+                                optionsValue: 'id',
+                                optionsText: 'keyword',
+                                selectedOptions: image().selectedKeywords">
+                    </select>
+                </div>
+                <!-- /ko -->
+                <!-- /ko -->
+
+            </div>
+        </fieldset>
+    </form>
 </div>
 
 <script type="text/x-magento-init">
@@ -48,7 +69,8 @@ use Magento\Backend\Block\Template;
                         "imageEditDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageEditDetailsUrl')); ?>",
                         "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-edit-image-details-modal",
-                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
+                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages",
+                        "keywordSelector": "#multiselect"
                     }
                 }
             }

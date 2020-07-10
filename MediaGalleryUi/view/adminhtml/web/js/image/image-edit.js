@@ -7,7 +7,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
-    'Magento_MediaGalleryUi/js/action/getDetails'
+    'Magento_MediaGalleryUi/js/action/getDetails',
+    'mage/multiselect',
+    'mage/backend/editablemultiselect'
 ], function ($, _, Component, getDetails) {
     'use strict';
 
@@ -49,6 +51,7 @@ define([
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openEditImageDetailsModal();
+                    $(this.keywordSelector).multiselect2();
                 }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);
                 }.bind(this));
