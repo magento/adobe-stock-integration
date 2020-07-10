@@ -45,7 +45,6 @@
         </argument>
     </container>
     <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
-        <bookmark name="bookmarks"/>
         <filterSearch name="name" >
             <settings>
                 <placeholder>Search by category name</placeholder>

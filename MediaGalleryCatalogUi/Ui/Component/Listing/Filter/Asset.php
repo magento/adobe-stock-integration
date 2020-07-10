@@ -39,6 +39,7 @@ class Asset extends Select
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
+     * @param OptionSourceInterface $optionsProvider
      * @param GetContentByAssetIdsInterface $getContentIdentities
      * @param array $components
      * @param array $data
@@ -67,7 +68,6 @@ class Asset extends Select
         );
         $this->getContentIdentities = $getContentIdentities;
     }
-
     
     /**
      * Apply filter

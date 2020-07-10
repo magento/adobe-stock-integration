@@ -55,9 +55,8 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
     private $storage;
 
     /**
-    * @param GetAssetsByIdsInterface $getAssetById
+     * @param GetAssetsByIdsInterface $getAssetById
      * @param Context $context
-     * @param GetDetailsByAssetId $getDetailsByAssetId
      * @param LoggerInterface $logger
      * @param Images $images
      * @param Storage $storage
@@ -108,6 +107,7 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
                         'label' => $asset->getTitle(),
                         'path' => $this->storage->getThumbnailUrl($this->images->getStorageRoot() . $asset->getPath())
                     ];
+                    $responseContent['total'] = count($responseContent['options']);
                 }
             }
 
