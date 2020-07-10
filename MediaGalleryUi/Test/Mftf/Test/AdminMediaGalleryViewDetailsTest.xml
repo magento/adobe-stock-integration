@@ -33,5 +33,8 @@
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageFilenameActionGroup" stepKey="verifyFilename">
+            <argument name="filename" value="{{ImageUpload.file}}"/>
+        </actionGroup>
     </test>
 </tests>
