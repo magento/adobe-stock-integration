@@ -14,9 +14,10 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
+use Magento\MediaGalleryApi\Api\SearchAssetsInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
@@ -35,9 +36,14 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var GetAssetsByIdsInterface
+     * @var SearchAssetsInterface
      */
-    private $getAssetsById;
+    private $searchAssets;
+
+    /**
+     * @param SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var LoggerInterface
@@ -50,19 +56,28 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
     private $images;
 
     /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * @var Storage
      */
     private $storage;
 
     /**
-     * @param GetAssetsByIdsInterface $getAssetById
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SearchAssetsInterface $searchAssets
      * @param Context $context
      * @param LoggerInterface $logger
      * @param Images $images
      * @param Storage $storage
      */
     public function __construct(
-        GetAssetsByIdsInterface $getAssetById,
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteria,
+        SearchAssetsInterface $searchAssets,
         Context $context,
         LoggerInterface $logger,
         Images $images,
@@ -70,8 +85,10 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
     ) {
         parent::__construct($context);
 
+        $this->filterBuilder = $filterBuilder;
+        $this->searchCriteriaBuilder = $searchCriteria;
         $this->logger = $logger;
-        $this->getAssetsById = $getAssetById;
+        $this->searchAssets = $searchAssets;
         $this->images = $images;
         $this->storage = $storage;
     }
@@ -83,13 +100,13 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $ids = $this->getRequest()->getParam('searchKey');
+        $searchKey = $this->getRequest()->getParam('searchKey');
         $responseContent = [];
 
         if (!$ids) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Assets Id is required'),
+                'message' => __('Search key is required'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -98,7 +115,15 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
         }
 
         try {
-            $assets = $this->getAssetsById->execute(is_array($ids) ? $ids : [$ids]);
+            $mediaIdFilter = $this->filterBuilder->setField('title')
+                ->setConditionType('fulltext')
+                ->setValue($searchKey)
+                ->create();
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilter($mediaIdFilter)
+                ->create();
+
+            $assets = $this->searchAssets->execute($searchCriteria);
 
             if (!empty($assets)) {
                 foreach ($assets as $asset) {
