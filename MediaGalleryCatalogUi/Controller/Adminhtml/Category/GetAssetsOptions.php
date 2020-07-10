@@ -20,6 +20,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
  * Controller getting the asset options for multiselect filter
@@ -66,8 +67,14 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
     private $storage;
 
     /**
+     * @var FilterGroupBuilder
+     */
+    private $filterGroupBuilder;
+
+    /**
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterGroupBuilder $filterGroupBuilder
      * @param SearchAssetsInterface $searchAssets
      * @param Context $context
      * @param LoggerInterface $logger
@@ -77,6 +84,7 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
     public function __construct(
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteria,
+        FilterGroupBuilder $filterGroupBuilder,
         SearchAssetsInterface $searchAssets,
         Context $context,
         LoggerInterface $logger,
@@ -86,6 +94,7 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
         parent::__construct($context);
 
         $this->filterBuilder = $filterBuilder;
+        $this->filterGroupBuilder = $filterGroupBuilder;
         $this->searchCriteriaBuilder = $searchCriteria;
         $this->logger = $logger;
         $this->searchAssets = $searchAssets;
@@ -101,9 +110,10 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $searchKey = $this->getRequest()->getParam('searchKey');
+        $limit = $this->getRequest()->getParam('limit');
         $responseContent = [];
 
-        if (!$ids) {
+        if (!$searchKey) {
             $responseContent = [
                 'success' => false,
                 'message' => __('Search key is required'),
@@ -115,12 +125,13 @@ class GetAssetsOptions extends Action implements HttpGetActionInterface
         }
 
         try {
-            $mediaIdFilter = $this->filterBuilder->setField('title')
+            $titleFilter = $this->filterBuilder->setField('title')
                 ->setConditionType('fulltext')
                 ->setValue($searchKey)
                 ->create();
             $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter($mediaIdFilter)
+                ->setFilterGroups([$this->filterGroupBuilder->setFilters([$titleFilter])->create()])
+                ->setPageSize($limit)
                 ->create();
 
             $assets = $this->searchAssets->execute($searchCriteria);
