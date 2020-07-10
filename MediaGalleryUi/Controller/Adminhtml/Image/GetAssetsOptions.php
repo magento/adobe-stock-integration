@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryCatalogUi\Controller\Adminhtml\Category;
+namespace Magento\MediaGalleryUi\Controller\Adminhtml\Image;
 
 use Exception;
 use Magento\Backend\App\Action;

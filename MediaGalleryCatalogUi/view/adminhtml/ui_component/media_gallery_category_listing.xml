@@ -56,14 +56,15 @@
                 name="asset"
                 provider="${ $.parentName }"
                 sortOrder="10"
-                class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Filter\Asset"
-                component="Magento_MediaGalleryCatalogUi/js/form/element/ui-select"
-                template="Magento_MediaGalleryCatalogUi/grid/filters/elements/ui-select">
+                entityType="catalog_category"
+                class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
+                component="Magento_MediaGalleryUi/js/form/element/ui-select"
+                template="Magento_MediaGalleryUi/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
-                        <item name="searchUrl" xsi:type="url" path="media_gallery_catalog/category/getassetsoptions" />
+                        <item name="searchUrl" xsi:type="url" path="media_gallery/image/getassetsoptions" />
                         <item name="levelsVisibility" xsi:type="number">1</item>
                     </item>
                 </argument>

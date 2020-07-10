@@ -98,7 +98,7 @@ class Asset extends Select
             $categoryIds = [];
             $data = $this->getContentIdentities->execute($ids);
             foreach ($data as $identity) {
-                if ($identity->getEntityType() === self::CTAEGORY_ENTITY_TYPE) {
+                if ($identity->getEntityType() === $this->data['entityType']) {
                     $categoryIds[] = $identity->getEntityId();
                 }
             }
