@@ -12,7 +12,7 @@
             <filterSelect
                     name="product_id"
                     provider="${ $.parentName }"
-                    sortOrder="50"
+                    sortOrder="100"
                     component="Magento_Catalog/js/components/product-ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
@@ -36,6 +36,51 @@
                 <settings>
                     <label translate="true">Used in Products</label>
                     <dataScope>product_id</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect
+                    name="category_id"
+                    provider="${ $.parentName }"
+                    sortOrder="110"
+                    component="Magento_Catalog/js/components/product-ui-select"
+                    template="ui/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="chipsEnabled" xsi:type="boolean">true</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="searchOptions" xsi:type="boolean">true</item>
+                        <item name="searchUrl" xsi:type="url" path="media_gallery_catalog/category/search" />
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <caption translate="true">– Please Select Categories –</caption>
+                    <label translate="true">Used in Categories</label>
+                    <dataScope>category_id</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect
+                    name="category_id"
+                    provider="${ $.parentName }"
+                    sortOrder="110"
+                    component="Magento_Catalog/js/components/new-category"
+                    template="ui/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="chipsEnabled" xsi:type="boolean">true</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="searchOptions" xsi:type="boolean">false</item>
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <options class="Magento\Catalog\Ui\Component\Product\Form\Categories\Options"/>
+                    <caption translate="true">– Please Select Categories –</caption>
+                    <label translate="true">Used in Categories</label>
+                    <dataScope>category_id</dataScope>
+                    <listens>
+                        <link name="${ $.namespace }.${ $.namespace }:responseData">setParsed</link>
+                    </listens>
                 </settings>
             </filterSelect>
         </filters>
