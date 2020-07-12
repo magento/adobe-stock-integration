@@ -113,11 +113,6 @@ define([
                 if (authWindow.closed) {
                     clearTimeout(stopWatcherId);
                     clearInterval(watcherId);
-
-                    // eslint-disable-next-line max-depth
-                    if (window.adobeIMSAuthWindow && window.adobeIMSAuthWindow.closed) {
-                        deferred.reject(new Error('Authentication window was closed.'));
-                    }
                 }
             }
         }
