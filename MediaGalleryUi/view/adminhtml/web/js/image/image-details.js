@@ -47,7 +47,10 @@ define([
          * @param {String} imageId
          */
         showImageDetailsById: function (imageId) {
-            if (_.isUndefined(this.images[imageId]) || this.images[imageId]) {
+            var localStorageKey = this.storageConfig.namespace,
+                newImageDetails = JSON.parse(localStorage.getItem(localStorageKey));
+
+            if (_.isUndefined(this.images[imageId])) {
                 getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
@@ -65,7 +68,12 @@ define([
                 return;
             }
 
-            this.image(this.images[imageId]);
+            if (newImageDetails) {
+                this.image(newImageDetails)
+            } else {
+                this.image(this.images[imageId]);
+            }
+
             this.openImageDetailsModal();
         },
 

@@ -73,7 +73,10 @@ define([
          */
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
-                modalElement = $(this.modalSelector);
+                modalElement = $(this.modalSelector),
+                localStorageKey = this.mediaGalleryImageDetails().storageConfig.namespace,
+                imageId = this.imageModel().getSelected().id,
+                newImageDetails = this.mediaGalleryEditDetails().images[imageId];
 
             modalElement.find('#image-edit-details-form').validation();
 
@@ -84,6 +87,7 @@ define([
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();
+                    localStorage.setItem(localStorageKey, JSON.stringify(newImageDetails));
                 }.bind(this));
             }
         },
