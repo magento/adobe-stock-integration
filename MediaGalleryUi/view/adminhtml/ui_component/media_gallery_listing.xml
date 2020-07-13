@@ -127,7 +127,7 @@
 		    provider="${ $.parentName }"
 		    sortOrder="90"
                     template="Magento_MediaGalleryUi/grid/filter/checkbox"
-		    component="Magento_Ui/js/form/element/single-checkbox">
+                    component="Magento_Ui/js/form/element/single-checkbox">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="description" xsi:type="string" translate="true">Show duplicates</item>
