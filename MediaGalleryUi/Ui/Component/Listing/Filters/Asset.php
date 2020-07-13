@@ -22,7 +22,6 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 class Asset extends Select
 {
-    private const CTAEGORY_ENTITY_TYPE = 'catalog_category';
 
     /**
      * @var GetContentByAssetIdsInterface
@@ -74,7 +73,7 @@ class Asset extends Select
             $ids = $this->filterData[$this->getName()];
             $filter = $this->filterBuilder->setConditionType('in')
                     ->setField($this->_data['config']['identityColumn'])
-                    ->setValue($this->getCategoryIdsByAsset($ids))
+                    ->setValue($this->getEntityIdsByAsset($ids))
                     ->create();
 
             $this->getContext()->getDataProvider()->addFilter($filter);
@@ -82,11 +81,11 @@ class Asset extends Select
     }
 
     /**
-     * Return category ids by assets ids.
+     * Return entity ids by assets ids.
      *
      * @param string $ids
      */
-    private function getCategoryIdsByAsset(array $ids): string
+    private function getEntityIdsByAsset(array $ids): string
     {
         if (!empty($ids)) {
             $categoryIds = [];
