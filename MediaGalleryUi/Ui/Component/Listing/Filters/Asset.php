@@ -30,11 +30,6 @@ class Asset extends Select
     private $getContentIdentities;
 
     /**
-     * @var OptionSourceInterface
-     */
-    private $optionsProvider;
-
-    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
@@ -56,7 +51,6 @@ class Asset extends Select
     ) {
         $this->uiComponentFactory = $uiComponentFactory;
         $this->filterBuilder = $filterBuilder;
-        $this->optionsProvider = $optionsProvider;
         parent::__construct(
             $context,
             $uiComponentFactory,
