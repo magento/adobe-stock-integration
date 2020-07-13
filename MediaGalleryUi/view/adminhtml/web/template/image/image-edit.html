@@ -5,7 +5,7 @@
  */
 -->
 <div class="edit-image-details" if="image">
-    <form id="image-edit-details-form" method="post" enctype="multipart/form-data">
+    <form data-bind="mageInit:{'validation':{}}" id="image-edit-details-form" method="post" enctype="multipart/form-data">
         <fieldset class="admin__fieldset">
             <input type="hidden" data-bind="value: image().id" data-ui-id="id" name="id"/>
             <div class="admin__field _required">
@@ -33,7 +33,7 @@
                     <textarea id="description"
                               data-ui-id="description"
                               name="description"
-                              class="admin__control-textarea"
+                              class="admin__control-textarea minimum-length-0 maximum-length-500"
                               rows="7" cols="80"
                               data-bind="value: image().description"></textarea>
                 </div>
