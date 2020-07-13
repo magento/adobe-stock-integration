@@ -13,7 +13,7 @@
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1292"/>
             <title value="User sees entities where asset is used in"/>
             <stories value="Story 58: User sees entities where asset is used in"/>
-            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4930844"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951024"/>
             <description value="User sees entities where asset is used in"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
