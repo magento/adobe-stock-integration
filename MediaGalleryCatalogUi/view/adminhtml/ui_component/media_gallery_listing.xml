@@ -19,7 +19,6 @@
                     <item name="config" xsi:type="array">
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
-                        <item name="closeBtn" xsi:type="boolean">false</item>
                         <item name="filterPlaceholder" xsi:type="string" translate="true">Product Name or SKU</item>
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find products</item>
                         <item name="missingValuePlaceholder" xsi:type="string" translate="true">Product with ID: %s doesn\'t exist</item>
@@ -46,7 +45,6 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="filterOptions" xsi:type="boolean">true</item>
-                        <item name="closeBtn" xsi:type="boolean">false</item>
                         <item name="levelsVisibility" xsi:type="number">1</item>
                         <item name="filterPlaceholder" xsi:type="string" translate="true">Category Name</item>
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find categories</item>

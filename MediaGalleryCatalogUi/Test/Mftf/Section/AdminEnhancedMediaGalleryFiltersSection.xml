@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEnhancedMediaGalleryFiltersSection">
+        <element name="usedInFilter" type="select" selector="//div[label/span[contains(text(), '{{filterName}}')]]//div[@class='action-select admin__action-multiselect']" parameterized="true" timeout="30"/>
+        <element name="usedInFilterInput" type="input" selector="//div[label/span[contains(text(), '{{filterName}}')]]//input[@data-role='advanced-select-text']" parameterized="true" timeout="30"/>
+        <element name="usedInFilterOption" type="text" selector="//div[label/span[contains(text(), '{{filterName}}')]]//label[@class='admin__action-multiselect-label']/span[text()='{{optionName}}']" parameterized="true" timeout="30"/>
+        <element name="usedInFilterDone" type="button" selector="//div[label/span[contains(text(), '{{filterName}}')]]//button[@data-action='close-advanced-select']" parameterized="true"/>
+    </section>
+</sections>

@@ -17,7 +17,6 @@
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="closeBtn" xsi:type="boolean">false</item>
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
                         <item name="searchUrl" xsi:type="url" path="media_gallery_cms/page/search" />
@@ -40,7 +39,6 @@
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="closeBtn" xsi:type="boolean">false</item>
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
                         <item name="searchUrl" xsi:type="url" path="media_gallery_cms/block/search" />
