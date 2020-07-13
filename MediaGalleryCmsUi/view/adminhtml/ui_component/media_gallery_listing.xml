@@ -17,16 +17,17 @@
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="chipsEnabled" xsi:type="boolean">true</item>
+                        <item name="closeBtn" xsi:type="boolean">false</item>
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
                         <item name="searchUrl" xsi:type="url" path="media_gallery_cms/page/search" />
                         <item name="levelsVisibility" xsi:type="number">1</item>
                         <item name="showPath" xsi:type="boolean">false</item>
+                        <item name="filterPlaceholder" xsi:type="string" translate="true">Page Title</item>
+                        <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find pages</item>
                     </item>
                 </argument>
                 <settings>
-                    <caption translate="true">– Please Select Pages –</caption>
                     <label translate="true">Used in Pages</label>
                     <dataScope>page_id</dataScope>
                 </settings>
@@ -39,16 +40,17 @@
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="chipsEnabled" xsi:type="boolean">true</item>
+                        <item name="closeBtn" xsi:type="boolean">false</item>
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
                         <item name="searchUrl" xsi:type="url" path="media_gallery_cms/block/search" />
                         <item name="levelsVisibility" xsi:type="number">1</item>
                         <item name="showPath" xsi:type="boolean">false</item>
+                        <item name="filterPlaceholder" xsi:type="string" translate="true">Block Title</item>
+                        <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find blocks</item>
                     </item>
                 </argument>
                 <settings>
-                    <caption translate="true">– Please Select Blocks –</caption>
                     <label translate="true">Used in Blocks</label>
                     <dataScope>block_id</dataScope>
                 </settings>
