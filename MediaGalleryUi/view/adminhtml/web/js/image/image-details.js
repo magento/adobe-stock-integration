@@ -172,7 +172,7 @@ define([
         /**
          * Remove image details
          *
-         * @param id
+         * @param {String} id
          */
         removeCached: function (id) {
             delete this.images[id];
