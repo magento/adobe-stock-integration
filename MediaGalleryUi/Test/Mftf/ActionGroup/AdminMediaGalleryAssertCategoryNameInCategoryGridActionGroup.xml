@@ -16,7 +16,6 @@
             <argument name="categoryName" type="string"/>
         </arguments>
 
-
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name('1', categoryName)}}" stepKey="assertNameColumn"/>
      </actionGroup>
 </actionGroups>

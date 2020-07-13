@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Controller\Adminhtml\Image;
+namespace Magento\MediaGalleryUi\Controller\Adminhtml\Asset;
 
 use Exception;
 use Magento\Backend\App\Action;
@@ -25,7 +25,7 @@ use Magento\Framework\Api\Search\FilterGroupBuilder;
 /**
  * Controller getting the asset options for multiselect filter
  */
-class GetAssetsOptions extends Action implements HttpGetActionInterface
+class Search extends Action implements HttpGetActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;

@@ -192,7 +192,7 @@
                         <span data-bind="text: option.label"></span>
                         <img if="$parent.getPath(option)"
                                 class="admin__action-multiselect-item-path"
-                                data-bind="attr: { src: $parent.getPath(option) }"/>
+                                data-bind="attr: { src: option.path }"/>
                     </label>
                 </div>
                 <!-- ko if: $data.optgroup -->
