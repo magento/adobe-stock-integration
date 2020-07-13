@@ -13,6 +13,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Process save action of the media gallery asset.
@@ -30,6 +32,11 @@ class SaveMediaGalleryAsset
     private $documentToMediaGalleryAsset;
 
     /**
+     * @var GetContentHashInterface
+     */
+    private $getContentHash;
+
+    /**
      * @var Filesystem
      */
     private $fileSystem;
@@ -37,15 +44,18 @@ class SaveMediaGalleryAsset
     /**
      * @param SaveAssetsInterface $saveMediaAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
+     * @param GetContentHashInterface $getContentHash
      * @param Filesystem $fileSystem
      */
     public function __construct(
         SaveAssetsInterface $saveMediaAsset,
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
+        GetContentHashInterface $getContentHash,
         Filesystem $fileSystem
     ) {
         $this->saveMediaAsset = $saveMediaAsset;
         $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
+        $this->getContentHash = $getContentHash;
         $this->fileSystem = $fileSystem;
     }
 
@@ -66,6 +76,7 @@ class SaveMediaGalleryAsset
                 'path' => $destinationPath,
                 'source' => 'Adobe Stock',
                 'size' => $fileSize,
+                'hash' => $this->hashImageContent($destinationPath)
             ];
 
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
@@ -85,5 +96,20 @@ class SaveMediaGalleryAsset
     {
         $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
         return $mediaDirectory->stat($mediaDirectory->getAbsolutePath($destinationPath))['size'];
+    }
+
+    /**
+     * Hash image content.
+     *
+     * @param string $destinationPath
+     * @return string
+     * @throws FileSystemException
+     */
+    private function hashImageContent(string $destinationPath): string
+    {
+        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
+        $imageContent = $mediaDirectory->readFile($mediaDirectory->getAbsolutePath($destinationPath));
+        $hashedImageContent = $this->getContentHash->execute($imageContent);
+        return $hashedImageContent;
     }
 }
