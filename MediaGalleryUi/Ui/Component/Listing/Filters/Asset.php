@@ -32,7 +32,7 @@ class Asset extends Select
     /**
      * @var OptionSourceInterface
      */
-    protected $optionsProvider;
+    private $optionsProvider;
 
     /**
      * @param ContextInterface $context
