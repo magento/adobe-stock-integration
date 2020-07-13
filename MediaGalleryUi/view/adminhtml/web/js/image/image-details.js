@@ -47,9 +47,6 @@ define([
          * @param {String} imageId
          */
         showImageDetailsById: function (imageId) {
-            var localStorageKey = this.storageConfig.namespace,
-                newImageDetails = JSON.parse(localStorage.getItem(localStorageKey));
-
             if (_.isUndefined(this.images[imageId])) {
                 getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
                     this.images[imageId] = imageDetails[imageId];
@@ -68,12 +65,7 @@ define([
                 return;
             }
 
-            if (newImageDetails) {
-                this.image(newImageDetails)
-            } else {
-                this.image(this.images[imageId]);
-            }
-
+            this.image(this.images[imageId]);
             this.openImageDetailsModal();
         },
 
@@ -175,6 +167,15 @@ define([
             }
 
             return entityName;
+        },
+
+        /**
+         * Remove image details
+         *
+         * @param id
+         */
+        removeCached: function (id) {
+            delete this.images[id];
         }
     });
 });
