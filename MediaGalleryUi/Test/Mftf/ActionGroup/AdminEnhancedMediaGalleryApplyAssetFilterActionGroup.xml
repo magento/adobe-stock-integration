@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryApplyAssetFilterActionGroup">
+        <annotations>
+            <description>Applies asset in filter to the category grid</description>
+        </annotations>
+        <arguments>
+            <argument name="imageName" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.assetFilterSelectDropdown}}" stepKey="openUsedInfilter"/>
+        <fillField selector="{{AdminEnhancedMediaGalleryFiltersSection.assetFilterSearchInput}}" userInput="{{imageName}}" stepKey="setImageName" />
+        <wait time="10" stepKey="waitForImagesLoaded"/>
+        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.assetFilterImage(imageName)}}" stepKey="selectImage"/>
+        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.uiSelectDoneButton}}" stepKey="clickDone"/>
+     </actionGroup>
+</actionGroups>

@@ -9,12 +9,17 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEnhancedMediaGalleryFiltersSection">
         <element name="filtersButton" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-expand']"/>
+        <element name="categoryGridFiltersButton" type="button" selector="//div[@class='media-gallery-category-container']//button[@data-action='grid-filter-expand']"/>
         <element name="sourceFilterValue" type="select" parameterized="true" selector="//div[@class='media-gallery-container']//select[@name='source']//option[@value='{{option}}']"/>
         <element name="applyFilters" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-apply']"/>
+        <element name="categoryGridApplyFilters" type="button" selector="//div[@class='media-gallery-category-container']//button[@data-action='grid-filter-apply']"/>
         <element name="activeFilter" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']//span[contains( ., '{{filter}}')]" parameterized="true"/>
         <element name="activeFilterPlaceholder" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']"/>
         <element name="usedInSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Show Images Used In']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
         <element name="usedInEntityType" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{entityType}}']" parameterized="true"/>
-        <element name="usedInDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
+        <element name="assetFilterSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Asset']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
+        <element name="assetFilterSearchInput" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Asset']/parent::*/parent::div/div//input[@class='admin__control-text admin__action-multiselect-search']"/>
+         <element name="assetFilterImage" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{imageTitle}}']" parameterized="true"/>
+        <element name="uiSelectDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
     </section>
 </sections>

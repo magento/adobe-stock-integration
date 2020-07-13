@@ -24,6 +24,11 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+               <argument name="category" value="$$category$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
                 <argument name="name" value="wysiwyg"/>
@@ -37,6 +42,7 @@
             </actionGroup>
             <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
             <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImage"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>            
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
         </after>
 
@@ -59,14 +65,15 @@
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryGridPage"/>
         
-        <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryApplyAssetFilterGroup" stepKey="applyFilters">
-            <argument name="imageName" value="{{ImageUpload.name}}"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryApplyAssetFilterActionGroup" stepKey="applyAssetFilter">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
         
         <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
-            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
     </test>
 </tests>
