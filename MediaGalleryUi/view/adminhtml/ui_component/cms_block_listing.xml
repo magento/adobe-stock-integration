@@ -9,7 +9,7 @@
     <listingToolbar name="listing_top">
         <filters name="listing_filters">
              <filterSelect
-                name="asset"
+                name="asset_id"
                 provider="${ $.parentName }"
                 sortOrder="10"
                 class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
@@ -19,7 +19,7 @@
                     <item name="config" xsi:type="array">
                         <item name="entityType" xsi:type="string">cms_block</item>
                         <item name="identityColumn" xsi:type="string">block_id</item>
- <item name="filterPlaceholder" xsi:type="string" translate="true">Asset Title</item>
+                        <item name="filterPlaceholder" xsi:type="string" translate="true">Asset Title</item>
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find assets</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
                         <item name="filterOptions" xsi:type="boolean">true</item>
@@ -30,7 +30,7 @@
                 <settings>
                     <caption translate="true">– Please Select assets –</caption>
                     <label translate="true">Asset</label>
-                    <dataScope>asset</dataScope>
+                    <dataScope>asset_id</dataScope>
                     </settings>
             </filterSelect>
         </filters>

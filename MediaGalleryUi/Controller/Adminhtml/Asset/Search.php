@@ -111,6 +111,7 @@ class Search extends Action implements HttpGetActionInterface
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $searchKey = $this->getRequest()->getParam('searchKey');
         $limit = $this->getRequest()->getParam('limit');
+        $pageNum = $this->getRequest()->getParam('page');
         $responseContent = [];
 
         if (!$searchKey) {
@@ -132,6 +133,7 @@ class Search extends Action implements HttpGetActionInterface
             $searchCriteria = $this->searchCriteriaBuilder
                 ->setFilterGroups([$this->filterGroupBuilder->setFilters([$titleFilter])->create()])
                 ->setPageSize($limit)
+                ->setCurrentPage($pageNum)
                 ->create();
 
             $assets = $this->searchAssets->execute($searchCriteria);

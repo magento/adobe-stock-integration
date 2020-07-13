@@ -19,7 +19,7 @@
         <element name="usedInEntityType" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{entityType}}']" parameterized="true"/>
         <element name="assetFilterSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Asset']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
         <element name="assetFilterSearchInput" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Asset']/parent::*/parent::div/div//input[@class='admin__control-text admin__action-multiselect-search']"/>
-         <element name="assetFilterImage" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{imageTitle}}']" parameterized="true"/>
+        <element name="assetFilterImage" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{imageTitle}}']" parameterized="true"/>
         <element name="uiSelectDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
     </section>
 </sections>

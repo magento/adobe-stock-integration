@@ -9,7 +9,7 @@
  <listingToolbar name="listing_top">
      <filters name="listing_filters">
              <filterSelect
-                name="asset"
+                name="asset_id"
                 provider="${ $.parentName }"
                 sortOrder="10"
                 class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
@@ -30,7 +30,7 @@
                 <settings>
                     <caption translate="true">– Please Select assets –</caption>
                     <label translate="true">Asset</label>
-                    <dataScope>asset</dataScope>
+                    <dataScope>asset_id</dataScope>
                     </settings>
             </filterSelect>
         </filters>

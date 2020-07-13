@@ -82,7 +82,7 @@ class Asset extends Select
     }
 
     /**
-     * Return category ids by asset path.
+     * Return category ids by assets ids.
      *
      * @param string $ids
      */
