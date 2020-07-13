@@ -54,6 +54,16 @@ define([
         },
 
         /**
+         * Closes the image details and opens the image edit panel
+         */
+        editImageAction: function () {
+            var record = this.imageModel().getSelected().id;
+
+            this.closeModal();
+            this.mediaGalleryEditDetails().showEditDetailsPanel(record);
+        },
+
+        /**
          * Delete image action
          */
         deleteImageAction: function () {
