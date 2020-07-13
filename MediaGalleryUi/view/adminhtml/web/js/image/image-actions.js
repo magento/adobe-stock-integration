@@ -73,14 +73,13 @@ define([
          */
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
-                modalElement = $(this.modalSelector);
+                modalElement = $(this.modalSelector),
+                dataForm = modalElement.find('#image-edit-details-form');
 
-            modalElement.find('#image-edit-details-form').validation();
-
-            if (modalElement.find('#image-edit-details-form').validation('isValid')) {
+            if (dataForm.validation('isValid')) {
                 saveDetails(
                     saveDetailsUrl,
-                    modalElement.find('#image-edit-details-form')
+                    dataForm
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();
