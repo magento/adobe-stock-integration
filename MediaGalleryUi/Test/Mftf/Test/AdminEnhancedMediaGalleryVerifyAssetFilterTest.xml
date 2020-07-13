@@ -35,7 +35,7 @@
            </actionGroup>
            <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
            <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
-                <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+                <argument name="imageName" value="{{ImageUpload3.fileName}}"/>
            </actionGroup>
            <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
                 <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
@@ -52,13 +52,13 @@
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstIMage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
             <argument name="image" value="ImageUpload_1"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
-            <argument name="imageName" value="{{ImageUpload.file}}"/>
+            <argument name="imageName" value="{{ImageUpload3.file}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
@@ -67,7 +67,7 @@
         
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyAssetFilterActionGroup" stepKey="applyAssetFilter">
-            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+            <argument name="imageName" value="{{ImageUpload3.fileName}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
         

@@ -22,7 +22,6 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 class Asset extends Select
 {
-
     /**
      * @var GetContentByAssetIdsInterface
      */
