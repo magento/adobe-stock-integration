@@ -40,7 +40,7 @@ class Duplicated implements CustomFilterInterface
         $value = $filter->getValue();
         if ($value) {
             $collection->getSelect()
-                ->where('main_table.hash IN ('. $this->getDubplicatedSqlPart() . ' HAVING count(*) > 1)');
+                ->where('main_table.hash IN ('. $this->getDuplicatedSqlPart() . ' HAVING count(*) > 1)');
         }
         return true;
     }
@@ -48,7 +48,7 @@ class Duplicated implements CustomFilterInterface
     /**
      * Return sql part of duplicated values.
      */
-    private function getDubplicatedSqlPart(): Select
+    private function getDuplicatedSqlPart(): Select
     {
         return $this->connection->getConnection()
                        ->select()
