@@ -77,8 +77,6 @@ define([
                 dataForm = modalElement.find('#image-edit-details-form'),
                 imageId = this.imageModel().getSelected().id;
 
-            modalElement.find('#image-edit-details-form').validation();
-
             if (dataForm.validation('isValid')) {
                 saveDetails(
                     saveDetailsUrl,

@@ -13,8 +13,9 @@
                     <span data-bind="i18n: 'Title'"></span>
                 </label>
                 <div class="admin__field-control">
-                    <input type="text" data-validate="{required:true}" id="title" data-ui-id="title" name="title" placeholder="Title"
-                           class="admin__control-text" data-bind="value: image().title" />
+                    <input type="text" id="title" data-ui-id="title" name="title" placeholder="Title"
+                           class="admin__control-text required-entry minimum-length-1 maximum-length-120" data-bind="value: image().title"
+                           data-validate="{'required':true,'validate-alphanum-with-spaces':true, 'validate-length':true}"/>
                 </div>
             </div>
             <div class="admin__field">
@@ -35,7 +36,8 @@
                               name="description"
                               class="admin__control-textarea minimum-length-0 maximum-length-500"
                               rows="7" cols="80"
-                              data-bind="value: image().description"></textarea>
+                              data-bind="value: image().description"
+                              data-validate="{'validate-alphanum-with-spaces':true, 'validate-length':true}"></textarea>
                 </div>
             </div>
         </fieldset>
