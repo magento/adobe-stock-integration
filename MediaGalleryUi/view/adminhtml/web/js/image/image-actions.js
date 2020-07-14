@@ -9,7 +9,8 @@ define([
     'uiElement',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
-    'Magento_MediaGalleryUi/js/action/saveDetails'
+    'Magento_MediaGalleryUi/js/action/saveDetails',
+    'mage/validation'
 ], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected, saveDetails) {
     'use strict';
 
@@ -83,20 +84,23 @@ define([
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
                 modalElement = $(this.modalSelector),
                 imageId = this.imageModel().getSelected().id,
-                imageDetails = this.mediaGalleryImageDetails();
+                imageDetails = this.mediaGalleryImageDetails(),
+                dataForm = modalElement.find('#image-edit-details-form');
 
-            saveDetails(
-                saveDetailsUrl,
-                modalElement.find('#image-edit-details-form')
-            ).then(function () {
-                this.closeModal();
-                this.imageModel().reloadGrid();
-                imageDetails.removeCached(imageId);
+            if (dataForm.validation('isValid')) {
+                saveDetails(
+                    saveDetailsUrl,
+                    dataForm
+                ).then(function () {
+                    this.closeModal();
+                    this.imageModel().reloadGrid();
+                    imageDetails.removeCached(imageId);
 
-                if ($(imageDetails.modalWindowSelector).hasClass('_show')) {
-                    imageDetails.showImageDetailsById(imageId);
-                }
-            }.bind(this));
+                    if ($(imageDetails.modalWindowSelector).hasClass('_show')) {
+                        imageDetails.showImageDetailsById(imageId);
+                    }
+                }.bind(this));
+            }
         },
 
         /**
