@@ -59,7 +59,6 @@ define([
         editImageAction: function () {
             var record = this.imageModel().getSelected().id;
 
-            this.closeModal();
             this.mediaGalleryEditDetails().showEditDetailsPanel(record);
         },
 
@@ -82,7 +81,9 @@ define([
          */
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
-                modalElement = $(this.modalSelector);
+                modalElement = $(this.modalSelector),
+                imageId = this.imageModel().getSelected().id,
+                imageDetails = this.mediaGalleryImageDetails();
 
             saveDetails(
                 saveDetailsUrl,
@@ -90,8 +91,12 @@ define([
             ).then(function () {
                 this.closeModal();
                 this.imageModel().reloadGrid();
-            }.bind(this));
+                imageDetails.removeCached(imageId);
 
+                if ($(imageDetails.modalWindowSelector).hasClass('_show')) {
+                    imageDetails.showImageDetailsById(imageId);
+                }
+            }.bind(this));
         },
 
         /**

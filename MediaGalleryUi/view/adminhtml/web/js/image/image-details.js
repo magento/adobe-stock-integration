@@ -15,6 +15,7 @@ define([
         defaults: {
             template: 'Magento_MediaGalleryUi/image/image-details',
             modalSelector: '',
+            modalWindowSelector: '',
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
@@ -167,6 +168,15 @@ define([
             }
 
             return entityName;
+        },
+
+        /**
+         * Remove image details
+         *
+         * @param id
+         */
+        removeCached: function (id) {
+            delete this.images[id];
         }
     });
 });

@@ -74,6 +74,12 @@ use Magento\Framework\Escaper;
                         "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
                         "actionsList": [
                             {
+                                "title": "<?= $escaper->escapeJs(__('Edit Image')); ?>",
+                                "handler": "editImageAction",
+                                "name": "edit",
+                                "classes": "action-default scalable edit action-quaternary"
+                            },
+                            {
                                 "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
