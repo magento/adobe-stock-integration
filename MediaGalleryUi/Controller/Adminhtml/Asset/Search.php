@@ -133,9 +133,8 @@ class Search extends Action implements HttpGetActionInterface
             $searchCriteria = $this->searchCriteriaBuilder
                 ->setFilterGroups([$this->filterGroupBuilder->setFilters([$titleFilter])->create()])
                 ->setPageSize($limit)
+                ->setCurrentPage($pageNum < 2 ? 0 : $pageNum)
                 ->create();
-
-            $pageNum < 2 ?: $searchCriteria->setCurrentPage($pageNum);
 
             $assets = $this->searchAssets->execute($searchCriteria);
 
