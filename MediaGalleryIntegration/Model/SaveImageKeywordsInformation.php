@@ -25,6 +25,11 @@ class SaveImageKeywordsInformation
     private $keywordFactory;
 
     /**
+     * @var AssetKeywordsInterfaceFactory
+     */
+    private $assetKeywordsFactory;
+    
+    /**
      * @var ExtractMetadataInterface
      */
     private $extractMetadata;
@@ -32,7 +37,7 @@ class SaveImageKeywordsInformation
     /**
      * @var SaveKeywords
      */
-    private $saveKeywords;
+    private $saveAssetKeywords;
 
     /**
      * @var GetAssetsByPathsInterface
@@ -47,8 +52,8 @@ class SaveImageKeywordsInformation
     /**
      * @param KeywordInterfaceFactory $keywordFactory
      * @param ExtractMetadataInterface $extractMetadata
-     * @param SaveAssetsKeywordsInterface $saveAssetKeywords,
-     * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory,
+     * @param SaveAssetsKeywordsInterface $saveAssetKeywords
+     * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      * @param CreateAssetFromFile $createAssetFromFile
      */

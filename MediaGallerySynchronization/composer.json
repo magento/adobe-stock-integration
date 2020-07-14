@@ -6,7 +6,8 @@
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery-synchronization-api": "*",
-        "magento/framework-message-queue": "*"
+        "magento/framework-message-queue": "*",
+        "magento/module-media-gallery-metadata-api": "*"
     },
     "type": "magento2-module",
     "license": [
