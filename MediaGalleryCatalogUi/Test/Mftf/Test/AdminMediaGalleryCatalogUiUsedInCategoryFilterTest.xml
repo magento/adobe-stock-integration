@@ -38,7 +38,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="applyUsedInCategoryFilter">
             <argument name="filterName" value="Used in Categories"/>
-            <argument name="categoryName" value="$$category.name$$"/>
+            <argument name="optionName" value="$$category.name$$"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
