@@ -100,6 +100,25 @@ define([
         addMediaGridMessage: function (code, message) {
             this.mediaGridMessages().add(code, message);
             this.mediaGridMessages().scheduleCleanup();
+        },
+
+        /**
+         * Handle Enter key event to save image details
+         *
+         * @param {Object} data
+         * @param {jQuery.Event} event
+         */
+        handleEnterKey: function (data, event) {
+            var modalElement = $(this.modalSelector),
+                result = true;
+
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                result = false;
+                modalElement.find('.page-action-buttons button.save').click();
+            }
+
+            return result;
         }
     });
 });
