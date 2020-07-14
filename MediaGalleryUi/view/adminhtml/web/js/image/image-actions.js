@@ -9,7 +9,8 @@ define([
     'uiElement',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
-    'Magento_MediaGalleryUi/js/action/saveDetails'
+    'Magento_MediaGalleryUi/js/action/saveDetails',
+    'mage/validation'
 ], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected, saveDetails) {
     'use strict';
 
