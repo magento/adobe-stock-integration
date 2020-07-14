@@ -59,6 +59,7 @@ class SaveImageInformation
      * @var Filesystem
      */
     private $filesystem;
+
     /**
      * @var GenerateRenditionsInterface
      */
