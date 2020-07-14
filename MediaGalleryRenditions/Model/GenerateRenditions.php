@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryRenditions\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Image\AdapterFactory;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Magento\MediaGalleryRenditionsApi\Model\ConfigInterface;
@@ -34,39 +37,47 @@ class GenerateRenditions implements GenerateRenditionsInterface
      * @var CreateAssetFromFile
      */
     private $createAssetFromFile;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * GenerateRenditions constructor.
      * @param AdapterFactory $imageFactory
      * @param GetRenditionPathInterface $getRenditionPath
      * @param CreateAssetFromFile $createAssetFromFile
+     * @param Filesystem $filesystem
      * @param ConfigInterface $config
      */
     public function __construct(
         AdapterFactory $imageFactory,
         GetRenditionPathInterface $getRenditionPath,
         CreateAssetFromFile $createAssetFromFile,
+        Filesystem $filesystem,
         ConfigInterface $config
     ) {
         $this->imageFactory = $imageFactory;
         $this->config = $config;
         $this->getRenditionPath = $getRenditionPath;
         $this->createAssetFromFile = $createAssetFromFile;
+        $this->filesystem = $filesystem;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(array $files): void
+    public function execute(array $assets): void
     {
-        foreach ($files as $file) {
-            $path = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFileName();
-            $asset = $this->createAssetFromFile->execute($file);
+        /* @var $asset AssetInterface */
+        foreach ($assets as $asset) {
+            $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $path = $mediaDirectory->getAbsolutePath($asset->getPath());
             if (!$this->isResizeable($asset->getHeight(), $asset->getWidth())) {
                 continue;
             }
             $renditionDirectoryPath = $this->getRenditionPath->execute($asset);
-            $renditionImagePath = $renditionDirectoryPath . DIRECTORY_SEPARATOR . $file->getFileName();
+            $renditionImagePath = $renditionDirectoryPath . $asset->getPath();
             $image = $this->imageFactory->create();
             $image->open($path);
             $image->keepAspectRatio(true);
@@ -82,7 +93,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
      * @param int $width
      * @return bool
      */
-    private function isResizeable(int $height, int $width) :bool
+    private function isResizeable(int $height, int $width): bool
     {
         return $width > $this->getResizedWidth() || $height > $this->getResizedHeight();
     }
@@ -92,7 +103,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
      *
      * @return int
      */
-    private function getResizedWidth() :int
+    private function getResizedWidth(): int
     {
         return $this->config->getWidth();
     }

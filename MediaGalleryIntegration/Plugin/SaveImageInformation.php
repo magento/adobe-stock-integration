@@ -110,9 +110,10 @@ class SaveImageInformation
         if (!$this->isApplicable($file->getPathName())) {
             return $result;
         }
-        $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
+        $createAsset = $this->createAssetFromFile->execute($file);
+        $this->saveAsset->execute([$createAsset]);
         $this->storage->resizeFile($result['path'] . DIRECTORY_SEPARATOR . $result['file']);
-        $this->generateRenditions->execute([$file]);
+        $this->generateRenditions->execute([$createAsset]);
         return $result;
     }
 

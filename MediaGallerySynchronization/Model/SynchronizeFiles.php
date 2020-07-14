@@ -90,15 +90,16 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     public function execute(array $files): void
     {
         $assets = $this->getExistingAssets($files);
-        $this->generateRenditions->execute($files);
         foreach ($files as $file) {
+            $createAsset = $this->createAssetFromFile->execute($file);
             $path = $this->getFilePath($file);
             $time = $this->getFileModificationTime($file);
+            $this->generateRenditions->execute([$createAsset]);
             if (isset($assets[$path]) && $time === $assets[$path]) {
                 continue;
             }
             try {
-                $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
+                $this->saveAsset->execute([$createAsset]);
             } catch (\Exception $exception) {
                 $this->log->critical($exception);
                 $failedFiles[] = $file->getFilename();

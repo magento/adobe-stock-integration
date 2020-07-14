@@ -99,9 +99,10 @@ class SaveBaseCategoryImageInformation
             $this->deleteAssetsByPaths->execute([$tmpAssets[0]->getPath()]);
         }
 
-        $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
+        $createAsset = $this->createAssetFromFile->execute($file);
+        $this->saveAsset->execute([$createAsset]);
         $this->storage->resizeFile($absolutePath);
-        $this->generateRenditions->execute([$file]);
+        $this->generateRenditions->execute([$createAsset]);
         return $imagePath;
     }
 }
