@@ -66,7 +66,7 @@ class Asset extends Select
      *
      * @return void
      */
-    protected function applyFilter()
+    public function applyFilter()
     {
         if (isset($this->filterData[$this->getName()])) {
             $ids = $this->filterData[$this->getName()];
