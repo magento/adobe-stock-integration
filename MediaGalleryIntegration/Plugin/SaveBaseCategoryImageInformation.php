@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ImageUploader;
 use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGalleryIntegration\Model\SaveImageKeywordsInformation;
 
 /**
  * Save base category image by SaveAssetsInterface.
@@ -51,12 +52,18 @@ class SaveBaseCategoryImageInformation
     private $storage;
 
     /**
+     * @var SaveImageKeywordsInformation
+     */
+    private $saveKeywordsInformation;
+
+    /**
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPath
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param Storage $storage
+     * @param SaveImageKeywordsInformation $saveKeywordsInformation
      */
     public function __construct(
         DeleteAssetsByPathsInterface $deleteAssetsByPath,
@@ -64,7 +71,8 @@ class SaveBaseCategoryImageInformation
         SplFileInfoFactory $splFileInfoFactory,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
-        Storage $storage
+        Storage $storage,
+        SaveImageKeywordsInformation $saveKeywordsInformation
     ) {
         $this->deleteAssetsByPaths = $deleteAssetsByPath;
         $this->getAssetsByPaths = $getAssetsByPaths;
@@ -72,6 +80,7 @@ class SaveBaseCategoryImageInformation
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
         $this->storage = $storage;
+        $this->saveKeywordsInformation = $saveKeywordsInformation;
     }
 
     /**
@@ -93,6 +102,7 @@ class SaveBaseCategoryImageInformation
         
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
         $this->storage->resizeFile($absolutePath);
+        $this->saveKeywordsInformation->execute($file);
 
         return $imagePath;
     }

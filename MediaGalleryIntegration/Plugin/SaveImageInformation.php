@@ -16,6 +16,7 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaGalleryIntegration\Model\SaveImageKeywordsInformation;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -58,7 +59,12 @@ class SaveImageInformation
      * @var Filesystem
      */
     private $filesystem;
-    
+
+    /**
+     * @var SaveImageKeywordsInformation
+     */
+    private $saveKeywordsInformation;
+
     /**
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
@@ -67,6 +73,7 @@ class SaveImageInformation
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param Storage $storage
+     * @param SaveImageKeywordsInformation $saveKeywordsInformation
      */
     public function __construct(
         Filesystem $filesystem,
@@ -75,7 +82,8 @@ class SaveImageInformation
         SplFileInfoFactory $splFileInfoFactory,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
-        Storage $storage
+        Storage $storage,
+        SaveImageKeywordsInformation $saveKeywordsInformation
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
@@ -84,6 +92,7 @@ class SaveImageInformation
         $this->saveAsset = $saveAsset;
         $this->storage = $storage;
         $this->filesystem = $filesystem;
+        $this->saveKeywordsInformation = $saveKeywordsInformation;
     }
 
     /**
@@ -99,12 +108,14 @@ class SaveImageInformation
         if (!$this->isApplicable($file->getPathName())) {
             return $result;
         }
+        
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
         $this->storage->resizeFile($result['path'] . '/' . $result['file']);
+        $this->saveKeywordsInformation->execute($file);
 
         return $result;
     }
-
+    
     /**
      * Can asset be saved with provided path
      *
