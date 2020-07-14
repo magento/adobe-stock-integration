@@ -29,7 +29,6 @@ class Search extends Action implements HttpGetActionInterface
 {
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;
-    private const HTTP_BAD_REQUEST = 400;
 
     /**
      * @see _isAllowed()
@@ -115,14 +114,10 @@ class Search extends Action implements HttpGetActionInterface
         $responseContent = [];
 
         if (!$searchKey) {
-            $responseContent = [
-                'success' => false,
-                'message' => __('Search key is required'),
-            ];
-            $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
-            $resultJson->setData($responseContent);
-
-            return $resultJson;
+            return $resultJson->setData([
+                'options' => [],
+                'total' => 0
+            ]);
         }
 
         try {
