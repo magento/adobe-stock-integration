@@ -7,39 +7,32 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryCatalogUiUsedInProductFilterTest">
+    <test name="AdminMediaGalleryCmsUiUsedInPagesFilterTest">
         <annotations>
-            <features value="AdminMediaGalleryUsedInProductsFilter"/>
+            <features value="AdminMediaGalleryUsedInPagesFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
-            <title value="Used in products filter"/>
+            <title value="Used in pages filter"/>
             <stories value="Story 58: User sees entities where asset is used in" />
-            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951848"/>
-            <description value="User filters assets used in products"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4934276"/>
+            <description value="User filters assets used in pages"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <createData entity="SimpleSubCategory" stepKey="category"/>
-            <createData entity="SimpleProduct" stepKey="product">
-                <requiredEntity createDataKey="category"/>
-            </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCmsPage" stepKey="page" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteAsset"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <deleteData createDataKey="product" stepKey="deleteProduct"/>
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="page" stepKey="deletePage"/>
         </after>
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
-            <argument name="product" value="$$product$$"/>
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$page$$"/>
         </actionGroup>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
-            <argument name="product" value="$$product$$"/>
-        </actionGroup>
-        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
-        <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
-        <click selector="{{CatalogWYSIWYGSection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
@@ -50,12 +43,14 @@
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
-        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
-            <argument name="filterName" value="Used in Products"/>
-            <argument name="optionName" value="$$product.name$$"/>
+            <argument name="filterName" value="Used in Pages"/>
+            <argument name="optionName" value="$$page.title$$"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">

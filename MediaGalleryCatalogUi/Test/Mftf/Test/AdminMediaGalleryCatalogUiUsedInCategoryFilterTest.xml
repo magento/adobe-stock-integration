@@ -9,12 +9,12 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMediaGalleryCatalogUiUsedInCategoryFilterTest">
         <annotations>
-            <features value="AdminMediaGalleryCategoryGrid"/>
+            <features value="AdminMediaGalleryUsedInCategoryFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
             <title value="Used in categories filter"/>
             <stories value="Story 58: User sees entities where asset is used in" />
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951846"/>
-            <description value="User sees category entities where asset is used in"/>
+            <description value="User filters assets used in categories"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
@@ -36,7 +36,7 @@
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="applyUsedInCategoryFilter">
+        <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Used in Categories"/>
             <argument name="optionName" value="$$category.name$$"/>
         </actionGroup>
