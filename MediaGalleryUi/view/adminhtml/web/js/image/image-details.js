@@ -15,7 +15,6 @@ define([
         defaults: {
             template: 'Magento_MediaGalleryUi/image/image-details',
             modalSelector: '',
-            modalWindowSelector: '',
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,

@@ -55,7 +55,7 @@ define([
         },
 
         /**
-         * Closes the image details and opens the image edit panel
+         * Opens the image edit panel
          */
         editImageAction: function () {
             var record = this.imageModel().getSelected().id;
@@ -83,21 +83,24 @@ define([
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
                 modalElement = $(this.modalSelector),
+                dataForm = modalElement.find('#image-edit-details-form'),
                 imageId = this.imageModel().getSelected().id,
                 imageDetails = this.mediaGalleryImageDetails();
 
-            saveDetails(
-                saveDetailsUrl,
-                modalElement.find('#image-edit-details-form')
-            ).then(function () {
-                this.closeModal();
-                this.imageModel().reloadGrid();
-                imageDetails.removeCached(imageId);
+            if (dataForm.validation('isValid')) {
+                saveDetails(
+                    saveDetailsUrl,
+                    modalElement.find('#image-edit-details-form')
+                ).then(function () {
+                    this.closeModal();
+                    this.imageModel().reloadGrid();
+                    imageDetails.removeCached(imageId);
 
-                if ($(imageDetails.modalWindowSelector).hasClass('_show')) {
-                    imageDetails.showImageDetailsById(imageId);
-                }
-            }.bind(this));
+                    if ($(imageDetails.modalWindowSelector).hasClass('_show')) {
+                        imageDetails.showImageDetailsById(imageId);
+                    }
+                }.bind(this));
+            }
         },
 
         /**
