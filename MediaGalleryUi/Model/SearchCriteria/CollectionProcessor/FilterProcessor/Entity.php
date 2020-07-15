@@ -33,6 +33,7 @@ class Entity implements CustomFilterInterface
 
     /**
      * @param ResourceConnection $resource
+     * @param string $entityType
      */
     public function __construct(ResourceConnection $resource, string $entityType)
     {
