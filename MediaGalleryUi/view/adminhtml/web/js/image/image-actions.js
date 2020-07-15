@@ -90,13 +90,13 @@ define([
             if (dataForm.validation('isValid')) {
                 saveDetails(
                     saveDetailsUrl,
-                    modalElement.find('#image-edit-details-form')
+                    dataForm
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();
                     imageDetails.removeCached(imageId);
 
-                    if ($(imageDetails.modalWindowSelector).hasClass('_show')) {
+                    if (imageDetails.isActive()) {
                         imageDetails.showImageDetailsById(imageId);
                     }
                 }.bind(this));
