@@ -4,42 +4,36 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="edit-image-details" if="image">
-    <form data-bind="mageInit:{'validation':{}}" id="image-edit-details-form" method="post" enctype="multipart/form-data">
-        <fieldset class="admin__fieldset">
-            <input type="hidden" data-bind="value: image().id" data-ui-id="id" name="id"/>
-            <div class="admin__field _required">
-                <label for="title" class="admin__field-label">
-                    <span data-bind="i18n: 'Title'"></span>
-                </label>
-                <div class="admin__field-control">
-                    <input type="text" id="title" data-ui-id="title" name="title" placeholder="Title"
-                           class="admin__control-text required-entry minimum-length-1 maximum-length-120" data-bind="value: image().title"
-                           data-validate="{'required':true,'validate-alphanum-with-spaces':true, 'validate-length':true}"/>
-                </div>
-            </div>
-            <div class="admin__field">
-                <label for="path" class="admin__field-label">
-                    <span data-bind="i18n: 'Filename'"></span>
-                </label>
-                <div class="admin__field-control path-display">
-                    <span data-ui-id="path" id="path" data-bind="text: image().path"></span>
-                </div>
-            </div>
-            <div class="admin__field">
-                <label for="description" class="admin__field-label">
-                    <span data-bind="i18n: 'Description'"></span>
-                </label>
-                <div class="admin__field-control">
-                    <textarea id="description"
-                              data-ui-id="description"
-                              name="description"
-                              class="admin__control-textarea minimum-length-0 maximum-length-500"
-                              rows="7" cols="80"
-                              data-bind="value: image().description"
-                              data-validate="{'validate-alphanum-with-spaces':true, 'validate-length':true}"></textarea>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+<div class="edit-image-details admin__fieldset" if="image">
+    <input type="hidden" data-bind="value: image().id" data-ui-id="id" name="id"/>
+    <div class="admin__field _required">
+        <label for="title" class="admin__field-label">
+            <span>Name</span>
+        </label>
+        <div class="admin__field-control">
+            <input type="text" id="title" data-ui-id="title" name="title" placeholder="Title"
+                   class="admin__control-text required-entry" data-bind="value: image().title" />
+        </div>
+    </div>
+    <div class="admin__field">
+        <label for="path" class="admin__field-label">
+            <span>Filename</span>
+        </label>
+        <div class="admin__field-control path-display">
+            <span data-ui-id="path" id="path" data-bind="text: image().path"></span>
+        </div>
+    </div>
+    <div class="admin__field">
+        <label for="description" class="admin__field-label">
+            <span>Description</span>
+        </label>
+        <div class="admin__field-control">
+        <textarea id="description"
+                  data-ui-id="description"
+                  name="description"
+                  class="admin__control-textarea"
+                  rows="7" cols="80"
+                  data-bind="value: image().description"></textarea>
+        </div>
+    </div>
 </div>
