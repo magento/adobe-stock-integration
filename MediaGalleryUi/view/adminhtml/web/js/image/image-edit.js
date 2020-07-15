@@ -8,8 +8,7 @@ define([
     'underscore',
     'uiComponent',
     'Magento_MediaGalleryUi/js/action/getDetails',
-    'mage/multiselect',
-    'mage/backend/editablemultiselect'
+    'Magento_MediaGalleryUi/js/editablemultiselect'
 ], function ($, _, Component, getDetails) {
     'use strict';
 
@@ -24,6 +23,16 @@ define([
             modules: {
                 mediaGridMessages: '${ $.mediaGridMessages }'
             }
+        },
+
+        _init: function () {
+            var selectField = $('#' + this.select_config['target_select_id']);
+            if (selectField.hasClass('mselect-hidden')) {
+                selectField.next('section.mselect-list').remove();
+                selectField.removeClass('mselect-hidden');
+            }
+            var jsObjectName = new EditableMultiselect(this.select_config);
+            jsObjectName.init();
         },
 
         /**
@@ -51,7 +60,6 @@ define([
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openEditImageDetailsModal();
-                    $(this.keywordSelector).multiselect2();
                 }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);
                 }.bind(this));
@@ -79,6 +87,7 @@ define([
                 return;
             }
             modalElement.modal('openModal');
+            this._init();
         },
 
         /**

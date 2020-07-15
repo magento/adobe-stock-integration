@@ -84,7 +84,7 @@ class GetDetailsByAssetId
         $details = [];
         foreach ($assets as $asset) {
             $keywords = $this->getKeywords($asset);
-            $selectedKeywords = array_column($keywords, 'id');
+            $selectedKeywords = array_column($keywords, 'keyword');
             $details[$asset->getId()] = [
                 'image_url' => $this->getUrl($asset->getPath()),
                 'title' => $asset->getTitle(),
@@ -122,7 +122,7 @@ class GetDetailsByAssetId
 
         return array_map(
             function (KeywordInterface $keyword) {
-                return ['id' => $keyword->getId(), 'keyword' => $keyword->getKeyword()];
+                return ['keyword' => $keyword->getKeyword()];
             },
             $keywords
         );

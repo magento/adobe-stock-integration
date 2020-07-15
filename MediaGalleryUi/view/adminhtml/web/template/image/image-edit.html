@@ -40,6 +40,19 @@
                               data-validate="{'validate-alphanum-with-spaces':true, 'validate-length':true}"></textarea>
                 </div>
             </div>
+            <div class="admin__field" id="media-gallery-image-edit-details-keywords" if="image().tags.length">
+                <label for="multiselect" class="admin__field-label">
+                    <span>Keywords</span>
+                </label>
+                <div class="admin__field-control control">
+                    <select name="keywords[]" id="multiselect" multiple="multiple" data-bind="
+                                options: image().tags,
+                                optionsValue: 'keyword',
+                                optionsText: 'keyword',
+                                selectedOptions: image().selectedKeywords">
+                    </select>
+                </div>
+            </div>
         </fieldset>
     </form>
 </div>

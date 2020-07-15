@@ -16,6 +16,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
@@ -58,6 +59,11 @@ class SaveDetails extends Action implements HttpPostActionInterface
     private $getAssetsByIds;
 
     /**
+     * @var KeywordInterfaceFactory
+     */
+    private $keywordFactory;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -71,6 +77,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
      * @param AssetInterfaceFactory $assetFactory
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
      * @param GetAssetsByIdsInterface $getAssetsByIds
+     * @param KeywordInterfaceFactory $keywordFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -80,6 +87,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
         AssetInterfaceFactory $assetFactory,
         AssetKeywordsInterfaceFactory $assetKeywordsFactory,
         GetAssetsByIdsInterface $getAssetsByIds,
+        KeywordInterfaceFactory $keywordFactory,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
@@ -89,6 +97,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
         $this->assetFactory = $assetFactory;
         $this->assetKeywordsFactory = $assetKeywordsFactory;
         $this->getAssetsByIds = $getAssetsByIds;
+        $this->keywordFactory = $keywordFactory;
         $this->logger = $logger;
     }
 
@@ -135,16 +144,17 @@ class SaveDetails extends Action implements HttpPostActionInterface
             );
             $this->saveAssets->execute([$updatedAsset]);
 
+            $arrayKeywords = $this->formatKeywords($imageKeywords);
             $assetKeywords = $this->assetKeywordsFactory->create([
                 'assetId' => $imageId,
-                'keywords' => $imageKeywords
+                'keywords' => $arrayKeywords
             ]);
             $this->saveAssetKeywords->execute([$assetKeywords]);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully saved the image "%image"', ['image' => $title]),
+                'message' => __('You have successfully saved the image "%image"', ['image' => $title ? $title : $asset->getTitle()]),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
@@ -165,5 +175,18 @@ class SaveDetails extends Action implements HttpPostActionInterface
         $resultJson->setData($responseContent);
 
         return $resultJson;
+    }
+
+    private function formatKeywords(array $keywords): array
+    {
+        $arrayKeywords = [];
+        foreach ($keywords as $keyword) {
+            $arrayKeywords[] = $this->keywordFactory->create(
+                [
+                    'keyword' => $keyword
+                ]
+            );
+        }
+        return $arrayKeywords;
     }
 }
