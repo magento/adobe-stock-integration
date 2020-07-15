@@ -74,7 +74,8 @@ define([
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
                 modalElement = $(this.modalSelector),
-                dataForm = modalElement.find('#image-edit-details-form');
+                dataForm = modalElement.find('#image-edit-details-form'),
+                imageId = this.imageModel().getSelected().id;
 
             if (dataForm.validation('isValid')) {
                 saveDetails(
@@ -83,6 +84,7 @@ define([
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();
+                    this.mediaGalleryImageDetails().removeCached(imageId);
                 }.bind(this));
             }
         },
