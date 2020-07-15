@@ -33,5 +33,11 @@
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
             <argument name="description" value="Description of the magento image"/>
         </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyImageKeywords">
+            <argument name="keywords" value="magento, mediagallerymetadata"/>
+       </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageTitleActionGroup" stepKey="verifyImageTitle">
+            <argument name="title" value="Title of the magento image"/>
+        </actionGroup>
     </test>
 </tests>
