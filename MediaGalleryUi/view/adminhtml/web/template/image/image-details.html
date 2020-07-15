@@ -16,6 +16,10 @@
                 <span class="type" data-ui-id="content-type" data-bind="text: image().content_type"></span>
             </div>
         </div>
+        <div class="filename image-details-section">
+            <h3 data-bind="i18n: 'Filename'"></h3>
+            <p data-bind="text: image().path"></p>
+        </div>
         <div class="general-details image-details-section" if="image().details">
             <h3 data-bind="i18n: 'Details'"></h3>
             <div class="attributes">
