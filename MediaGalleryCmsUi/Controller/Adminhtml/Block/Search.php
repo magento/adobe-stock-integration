@@ -9,8 +9,8 @@ namespace Magento\MediaGalleryCmsUi\Controller\Adminhtml\Block;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
+use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -33,22 +33,30 @@ class Search extends Action implements HttpGetActionInterface
     private $resultJsonFactory;
 
     /**
-     * @var CollectionFactory
+     * @var BlockRepositoryInterface
      */
-    private $collectionFactory;
+    private $blockRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @param JsonFactory $resultFactory
-     * @param CollectionFactory $collectionFactory
+     * @param BlockRepositoryInterface $blockRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Context $context
      */
     public function __construct(
         JsonFactory $resultFactory,
-        CollectionFactory $collectionFactory,
+        BlockRepositoryInterface $blockRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         Context $context
     ) {
         $this->resultJsonFactory = $resultFactory;
-        $this->collectionFactory = $collectionFactory;
+        $this->blockRepository = $blockRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         parent::__construct($context);
     }
 
@@ -60,28 +68,30 @@ class Search extends Action implements HttpGetActionInterface
     public function execute() : ResultInterface
     {
         $searchKey = $this->getRequest()->getParam('searchKey');
-        $pageNum = (int) $this->getRequest()->getParam('page');
+        $currentPage = (int) $this->getRequest()->getParam('page');
         $limit = (int) $this->getRequest()->getParam('limit');
 
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter(BlockInterface::TITLE, ['like' => '%' . $searchKey . '%']);
-        $collection->setCurPage($pageNum);
-        $collection->setPageSize($limit);
-        $totalValues = $collection->getSize();
+        $searchResult = $this->blockRepository->getList(
+            $this->searchCriteriaBuilder->addFilter('title', '%' . $searchKey . '%', 'like')
+                ->setCurrentPage($currentPage)
+                ->setPageSize($limit)
+                ->create()
+        );
+
         $options = [];
-        /** @var BlockInterface $model */
-        foreach ($collection as $model) {
-            $id = $model->getId();
+        foreach ($searchResult->getItems() as $block) {
+            $id = $block->getId();
             $options[$id] = [
                 'value' => $id,
-                'label' => $model->getTitle(),
-                'is_active' => $model->isActive(),
+                'label' => $block->getTitle(),
+                'is_active' => $block->isActive(),
                 'optgroup' => false
             ];
         }
+
         return $this->resultJsonFactory->create()->setData([
             'options' => $options,
-            'total' => empty($options) ? 0 : $totalValues
+            'total' => $searchResult->getTotalCount()
         ]);
     }
 }

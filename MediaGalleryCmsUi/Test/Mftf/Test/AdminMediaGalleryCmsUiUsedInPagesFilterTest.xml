@@ -19,7 +19,6 @@
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <createData entity="_defaultCmsPage" stepKey="page" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
@@ -27,16 +26,13 @@
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteAsset"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <deleteData createDataKey="page" stepKey="deletePage"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
         </after>
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$page$$"/>
         </actionGroup>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
-        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
-        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
@@ -44,10 +40,7 @@
             <argument name="imageName" value="{{ImageUpload.file}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="savePage"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
