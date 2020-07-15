@@ -7,8 +7,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
+    'Magento_Ui/js/lib/key-codes',
     'Magento_MediaGalleryUi/js/action/getDetails'
-], function ($, _, Component, getDetails) {
+], function ($, _, Component, keyCodes, getDetails) {
     'use strict';
 
     return Component.extend({
@@ -107,18 +108,18 @@ define([
          *
          * @param {Object} data
          * @param {jQuery.Event} event
+         * @returns {boolean}
          */
         handleEnterKey: function (data, event) {
             var modalElement = $(this.modalSelector),
-                result = true;
+                key = keyCodes[event.keyCode];
 
-            if (event.keyCode === 13) {
+            if (key === 'enterKey') {
                 event.preventDefault();
-                result = false;
                 modalElement.find('.page-action-buttons button.save').click();
             }
 
-            return result;
+            return true;
         }
     });
 });
