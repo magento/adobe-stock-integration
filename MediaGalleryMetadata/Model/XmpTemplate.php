@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryMetadata\Model;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Module\Dir;
-use Magento\Framework\Filesystem\Driver\File as DriverInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * XMP template provider

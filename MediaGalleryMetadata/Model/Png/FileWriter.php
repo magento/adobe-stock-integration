@@ -9,7 +9,7 @@ namespace Magento\MediaGalleryMetadata\Model\Png;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\Driver\File as DriverInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
