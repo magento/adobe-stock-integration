@@ -71,7 +71,6 @@ class SaveMediaGalleryAssetTest extends TestCase
      */
     private $attributeValueFactory;
 
-
     /**
      * @inheritdoc
      */
@@ -84,7 +83,6 @@ class SaveMediaGalleryAssetTest extends TestCase
         $this->mediaDirectory = $this->createMock(Read::class);
         $this->extractMetadata = $this->createMock(ExtractMetadataInterface::class);
         $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
-
 
         $this->saveMediaAsset = (new ObjectManager($this))->getObject(
             SaveMediaGalleryAsset::class,

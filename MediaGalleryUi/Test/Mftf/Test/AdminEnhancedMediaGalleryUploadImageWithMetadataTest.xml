@@ -27,11 +27,11 @@
         </after>
 
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
-            <argument name="image" value="ImageUploadWithMetadata"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
-         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
-            <argument name="description" value="ImageUploadWithMetadata.description"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
+            <argument name="description" value="Description of the magento image"/>
         </actionGroup>
     </test>
 </tests>
