@@ -73,17 +73,18 @@ define([
          */
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
-                modalElement = $(this.modalSelector);
+                modalElement = $(this.modalSelector),
+                dataForm = modalElement.find('#image-edit-details-form'),
+                imageId = this.imageModel().getSelected().id;
 
-            modalElement.find('#image-edit-details-form').validation();
-
-            if (modalElement.find('#image-edit-details-form').validation('isValid')) {
+            if (dataForm.validation('isValid')) {
                 saveDetails(
                     saveDetailsUrl,
-                    modalElement.find('#image-edit-details-form')
+                    dataForm
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();
+                    this.mediaGalleryImageDetails().removeCached(imageId);
                 }.bind(this));
             }
         },
