@@ -130,7 +130,13 @@ class CreateAssetFromFile
      */
     private function getAssetTitle(\SplFileInfo $file, ?AssetInterface $asset, MetadataInterface $metadata): string
     {
-        return $asset ? $asset->getTitle() : $metadata->getTitle() ?? $file->getBasename('.' . $file->getExtension());
+        $title = $file->getBasename('.' . $file->getExtension());
+        if ($asset) {
+            $title = $asset->getTitle();
+        } elseif ($metadata->getTitle() !== "") {
+            $title = $metadata->getTitle();
+        }
+        return $title;
     }
 
     /**

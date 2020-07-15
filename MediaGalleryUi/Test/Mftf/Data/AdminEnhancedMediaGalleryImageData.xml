@@ -15,4 +15,13 @@
         <data key="fileName">renamed title</data>
         <data key="extension">jpg</data>
     </entity>
+    <entity name="ImageUploadWithMetadata" type="uploadImage">
+        <data key="title" unique="suffix">Title of the magento image</data>
+        <data key="description">Description of the magento image</data>
+        <data key="file_type">Upload File</data>
+        <data key="file">macos-preview.png</data>
+        <data key="fileName">macos-preview</data>
+        <data key="value">macos-preview.png</data>
+        <data key="keywords">magento, mediagallerymetadata</data>
+    </entity>
 </entities>
