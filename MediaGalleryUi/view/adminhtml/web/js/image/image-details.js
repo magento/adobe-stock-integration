@@ -167,6 +167,15 @@ define([
             }
 
             return entityName;
+        },
+
+        /**
+         * Remove image details
+         *
+         * @param {String} id
+         */
+        removeCached: function (id) {
+            delete this.images[id];
         }
     });
 });
