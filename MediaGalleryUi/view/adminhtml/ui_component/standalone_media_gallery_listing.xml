@@ -109,6 +109,25 @@
                     <dataScope>entity_type</dataScope>
                 </settings>
             </filterSelect>
+            <filterInput
+		    name="duplicated"
+		    provider="${ $.parentName }"
+		    sortOrder="90"
+                    template="Magento_MediaGalleryUi/grid/filter/checkbox"
+                    component="Magento_Ui/js/form/element/single-checkbox">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">Show duplicates</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <dataScope>duplicated</dataScope>
+                    <label translate="true">Show duplicates</label>
+                </settings>
+            </filterInput>
         </filters>
         <paging name="listing_paging">
             <settings>
