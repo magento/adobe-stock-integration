@@ -17,10 +17,12 @@ define([
             modalSelector: '',
             imageEditDetailsUrl: '/media_gallery/image/details',
             saveDetailsUrl: '/media_gallery/image/saveDetails',
+            mediaGalleryEditKeywordsDetailsName: 'mediaGalleryEditKeywordsDetails',
             images: [],
             image: null,
             modules: {
-                mediaGridMessages: '${ $.mediaGridMessages }'
+                mediaGridMessages: '${ $.mediaGridMessages }',
+                mediaGalleryEditKeywordsDetails: '${ $.mediaGalleryEditKeywordsDetailsName }'
             }
         },
 
@@ -48,6 +50,7 @@ define([
                 getDetails(this.imageEditDetailsUrl, [imageId]).then(function (imageDetails) {
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
+                    this.mediaGalleryEditKeywordsDetails().getKeywordsOp(this.image().tags);
                     this.openEditImageDetailsModal();
                 }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);

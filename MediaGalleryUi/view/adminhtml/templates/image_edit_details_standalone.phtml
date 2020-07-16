@@ -33,9 +33,14 @@ use Magento\Backend\Block\Template;
     <div id="media-gallery-image-edit-details-messages" data-bind="scope: 'mediaGalleryEditDetailsMessages'">
         <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
-    <div id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    </div>
+    <form data-bind="mageInit:{'validation':{}}" id="image-edit-details-form" method="post" enctype="multipart/form-data">
+        <div id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <div id="media-gallery-image-edit-keywords-details" data-bind="scope: 'mediaGalleryEditKeywordsDetails'">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </div>
+        </div>
+    </form>
 </div>
 
 <script type="text/x-magento-init">
@@ -49,6 +54,16 @@ use Magento\Backend\Block\Template;
                         "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-edit-image-details-modal",
                         "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
+                    }
+                }
+            }
+        },
+        "#media-gallery-image-edit-keywords-details": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "mediaGalleryEditKeywordsDetails": {
+                        "component": "Magento_MediaGalleryUi/js/image/edit/keyword-ui-select",
+                        "label": "<?= $escaper->escapeJs(__('Keywords')); ?>"
                     }
                 }
             }

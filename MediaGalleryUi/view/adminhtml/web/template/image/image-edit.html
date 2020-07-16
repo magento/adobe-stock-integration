@@ -5,7 +5,6 @@
  */
 -->
 <div class="edit-image-details" if="image">
-    <form data-bind="mageInit:{'validation':{}}" id="image-edit-details-form" method="post" enctype="multipart/form-data">
         <fieldset class="admin__fieldset">
             <input type="hidden" data-bind="value: image().id" data-ui-id="id" name="id"/>
             <div class="admin__field _required">
@@ -41,5 +40,4 @@
                 </div>
             </div>
         </fieldset>
-    </form>
 </div>
