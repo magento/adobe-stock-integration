@@ -19,6 +19,7 @@ define([
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
+            jsTreeReloaded: null,
             modules: {
                 directories: '${ $.name }_directories',
                 filterChips: '${ $.filterChipsProvider }'
@@ -45,8 +46,9 @@ define([
                     return $(this.directoryTreeSelector).length === 0;
                 }.bind(this),
                 function () {
-                    this.renderDirectoryTree();
-                    this.initEvents();
+                    this.renderDirectoryTree().then(function () {
+                        this.initEvents();
+                    }.bind(this));
                 }.bind(this)
             );
 
@@ -57,17 +59,32 @@ define([
          * Render directory tree component.
          */
         renderDirectoryTree: function () {
+            var deferred = $.Deferred();
+
             this.getJsonTree().then(function (data) {
                 this.createFolderIfNotExists(data).then(function (isFolderCreated) {
                     if (isFolderCreated) {
                         this.getJsonTree().then(function (newData) {
                             this.createTree(newData);
+                            deferred.resolve();
                         }.bind(this));
                     } else {
                         this.createTree(data);
+                        deferred.resolve();
                     }
                 }.bind(this));
             }.bind(this));
+
+            return deferred.promise();
+        },
+
+        /**
+         * Set jstree reloaded
+         *
+         * @param {Boolean} value
+         */
+        setJsTreeReloaded: function (value) {
+            this.jsTreeReloaded = value;
         },
 
         /**
@@ -98,19 +115,13 @@ define([
                         this.createDirectoryUrl,
                         pathArray
                     ).then(function () {
-                        deferred.resolve({
-                            result: true
-                        });
+                        deferred.resolve(true);
                     });
                 } else {
-                    deferred.resolve({
-                        result: false
-                    });
+                    deferred.resolve(false);
                 }
             } else {
-                deferred.resolve({
-                    result: false
-                });
+                deferred.resolve(false);
             }
 
             return deferred.promise();
@@ -203,21 +214,40 @@ define([
          *  Handle jstree events
          */
         initEvents: function () {
+            this.firejsTreeEvents();
             this.overrideMultiselectBehavior();
+
+            $(window).on('reload.MediaGallery', function () {
+                this.getJsonTree().then(function (data) {
+                    this.createFolderIfNotExists(data).then(function (isCreated) {
+                        if (isCreated) {
+                            this.renderDirectoryTree().then(function () {
+                                this.setJsTreeReloaded(true);
+                                this.firejsTreeEvents();
+                            }.bind(this));
+                        } else {
+                            this.checkChipFiltersState();
+                        }
+                    }.bind(this));
+                }.bind(this));
+            }.bind(this));
+        },
+
+        /**
+         * Fire event for jstree component
+         */
+        firejsTreeEvents: function () {
+            $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
+                var path = $(data.rslt.obj).data('path');
+
+                this.setActiveNodeFilter(path);
+                this.setJsTreeReloaded(false);
+            }.bind(this));
 
             $(this.directoryTreeSelector).on('loaded.jstree', function () {
                 this.checkChipFiltersState();
             }.bind(this));
 
-            $(window).on('reload.MediaGallery', function () {
-                this.checkChipFiltersState();
-            }.bind(this));
-
-            $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                var path = $(data.rslt.obj).data('path');
-
-                this.setActiveNodeFilter(path);
-            }.bind(this));
         },
 
         /**
@@ -295,7 +325,8 @@ define([
          * @param {String} nodePath
          */
         setActiveNodeFilter: function (nodePath) {
-            if (this.activeNode() === nodePath) {
+
+            if (this.activeNode() === nodePath && !this.jsTreeReloaded) {
                 this.selectStorageRoot();
             } else {
                 this.selectFolder(nodePath);
@@ -376,13 +407,8 @@ define([
 
             this.getJsonTree().then(function (data) {
                 this.createTree(data);
-                this.overrideMultiselectBehavior();
-                $(this.directoryTreeSelector).on('select_node.jstree', function (element, object) {
-                    var path = $(object.rslt.obj).data('path');
-
-                    this.setActiveNodeFilter(path);
-                }.bind(this));
-
+                this.setJsTreeReloaded(true);
+                this.initEvents();
                 deferred.resolve();
             }.bind(this));
 

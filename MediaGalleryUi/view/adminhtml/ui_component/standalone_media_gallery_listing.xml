@@ -101,6 +101,14 @@
                     <dataScope>updated_at</dataScope>
                 </settings>
             </filterRange>
+            <filterSelect name="entity_type" provider="${ $.parentName }" sortOrder="70"  component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\UsedIn"/>
+                    <label translate="true">Show Images Used In</label>
+                    <dataScope>entity_type</dataScope>
+                </settings>
+            </filterSelect>
         </filters>
         <paging name="listing_paging">
             <settings>
@@ -145,7 +153,8 @@
               <argument name="data" xsi:type="array">
                   <item name="config" xsi:type="array">
                       <item name="checkboxComponentName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.massaction_checkbox</item>
-                       <item name="imageModelName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url</item>
+                      <item name="imageModelName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url</item>
+                      <item name="mediaGalleryProvider" xsi:type="string">standalone_media_gallery_listing.media_gallery_listing_data_source</item>
                   </item>
             </argument>
         </container>

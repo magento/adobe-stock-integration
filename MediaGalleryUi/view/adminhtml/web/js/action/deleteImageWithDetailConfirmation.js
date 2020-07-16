@@ -53,10 +53,12 @@ define([
          * @return {String}
          */
         getRecordRelatedContentMessage: function (imageDetails) {
-            var usedInMessage = $.mage.__('This image%p is used in %s.'),
+            var usedInMessage = $.mage.__('%n image%p %v used in %s.'),
                 usedIn = {},
                 message = '',
-                prefix = Object.keys(imageDetails).length  > 1 ? 's' : '';
+                pronoun,
+                s,
+                linkingVerb;
 
             $.each(imageDetails, function (key, image) {
                 if (_.isObject(image.details[6]) && !_.isEmpty(image.details[6].value)) {
@@ -73,8 +75,19 @@ define([
                 message +=  count + ' ' +  this.getEntityNameWithPrefix(entityName, count) +  ', ';
             }.bind(this));
 
+            if (Object.keys(imageDetails).length  > 1) {
+                pronoun = 'These';
+                s = 's';
+                linkingVerb = 'are';
+            } else {
+                pronoun = 'This';
+                s = '';
+                linkingVerb = 'is';
+            }
+
             message = message.replace(/,\s*$/, '');
-            message = usedInMessage.replace('%s', message).replace('%p', prefix);
+            message = usedInMessage.replace('%s', message).replace('%n', pronoun).replace('%p', s)
+                .replace('%v', linkingVerb);
 
             return message;
         },
