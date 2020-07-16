@@ -20,6 +20,7 @@ class EntityType implements CustomFilterInterface
 {
     private const TABLE_ALIAS = 'main_table';
     private const TABLE_MEDIA_CONTENT_ASSET = 'media_content_asset';
+    private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
     private const NOT_USED = 'not_used';
 
     /**
@@ -42,34 +43,26 @@ class EntityType implements CustomFilterInterface
     {
         $value = $filter->getValue();
         if (is_array($value)) {
+            $conditions = [];
+            $entityTypes = $value;
+            
             if (in_array(self::NOT_USED, $value)) {
-                $collection->addFieldToFilter(
-                    self::TABLE_ALIAS . '.id',
-                    ['nin' => $this->getSelectNotUsed()]
-                );
-                return true;
+                unset($entityTypes[array_search(self::NOT_USED, $entityTypes)]);
+                $conditions[] = ['in' => $this->getNotUsedEntityIds()];
             }
+
+            if (!empty($entityTypes)) {
+                $conditions[] = ['in' => $this->getSelectByEntityType($entityTypes)];
+            }
+            
             $collection->addFieldToFilter(
                 self::TABLE_ALIAS . '.id',
-                ['in' => $this->getSelectByEntityType($value)]
+                $conditions
             );
         }
         return true;
     }
 
-    /**
-     * Return select asset ids by entity type
-     *
-     * @return Select
-     */
-    private function getSelectNotUsed(): Select
-    {
-        return $this->connection->getConnection()->select()->from(
-            ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
-            ['asset_id']
-        );
-    }
-    
     /**
      * Return select asset ids by entity type
      *
@@ -85,5 +78,24 @@ class EntityType implements CustomFilterInterface
             'entity_type IN (?)',
             $value
         );
+    }
+    
+    /**
+     * Return select asset ids that not exists in asset_content_table
+     */
+    private function getNotUsedEntityIds(): Select
+    {
+        $select = $this->connection->getConnection()->select();
+        $select->from(
+            ['mga' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
+            ['id']
+        )->where(
+            'mga.id  not in ?',
+            $this->connection->getConnection()->select()->from(
+                ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
+                ['asset_id']
+            )
+        );
+        return $select;
     }
 }
