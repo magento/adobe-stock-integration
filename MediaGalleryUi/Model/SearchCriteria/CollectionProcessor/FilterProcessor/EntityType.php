@@ -44,15 +44,14 @@ class EntityType implements CustomFilterInterface
         $value = $filter->getValue();
         if (is_array($value)) {
             $conditions = [];
-            $entityTypes = $value;
             
             if (in_array(self::NOT_USED, $value)) {
-                unset($entityTypes[array_search(self::NOT_USED, $entityTypes)]);
+                unset($value[array_search(self::NOT_USED, $value)]);
                 $conditions[] = ['in' => $this->getNotUsedEntityIds()];
             }
 
-            if (!empty($entityTypes)) {
-                $conditions[] = ['in' => $this->getSelectByEntityType($entityTypes)];
+            if (!empty($value)) {
+                $conditions[] = ['in' => $this->getSelectByEntityType($value)];
             }
             
             $collection->addFieldToFilter(
