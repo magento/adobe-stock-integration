@@ -11,69 +11,28 @@ define([
 ], function ($, _, urlBuilder, messages, confirmation) {
     'use strict';
 
-    return {
+    return function (ids, deleteUrl, confirmationContent) {
+        var deferred = $.Deferred(),
+               title = $.mage.__('Delete image'),
+               cancelText = $.mage.__('Cancel'),
+               deleteImageText = $.mage.__('Delete Image');
 
         /**
-         * Delete image action
+         * Send deletion request with redords ids
          *
-         * @param {Object} record
-         * @param {String} deleteUrl
-         * @param {String} confirmationContent
+         * @param {Array} recordIds
+         * @param {String} serviceUrl
          */
-        deleteImageAction: function (record, deleteUrl, confirmationContent) {
-            var title = $.mage.__('Delete image'),
-                cancelText = $.mage.__('Cancel'),
-                deleteImageText = $.mage.__('Delete Image'),
-                deleteImageCallback = this.deleteImage.bind(this);
-
-            confirmation({
-                title: title,
-                modalClass: 'media-gallery-delete-image-action',
-                content: confirmationContent,
-                buttons: [
-                    {
-                        text: cancelText,
-                        class: 'action-secondary action-dismiss',
-
-                        /**
-                         * Close modal
-                         */
-                        click: function () {
-                            this.closeModal();
-                        }
-                    },
-                    {
-                        text: deleteImageText,
-                        class: 'action-primary action-accept',
-
-                        /**
-                         * Delete Image and close modal
-                         */
-                        click: function () {
-                            deleteImageCallback(record, deleteUrl);
-                            this.closeModal();
-                        }
-                    }
-                ]
-            });
-        },
-
-        /**
-         * Delete image
-         *
-         * @param {Object} record
-         * @param {String} deleteUrl
-         */
-        deleteImage: function (record, deleteUrl) {
-            var recordId = record.id;
+        function sendRequest(recordIds, serviceUrl) {
 
             $.ajax({
                 type: 'POST',
-                url: deleteUrl,
+                url: serviceUrl,
                 dataType: 'json',
                 showLoader: true,
                 data: {
-                    'id': recordId
+                    'form_key': window.FORM_KEY,
+                    'ids': recordIds
                 },
                 context: this,
 
@@ -86,22 +45,23 @@ define([
                     var message = !_.isUndefined(response.message) ? response.message : null;
 
                     if (!response.success) {
-                        message = message || $.mage.__('There was an error on attempt to delete the image.');
+                        message = message || $.mage.__('There was an error on attempt to delete the images.');
                         $(window).trigger('fileDeleted.enhancedMediaGallery', {
                             reload: false,
                             message: message,
                             code: 'error'
                         });
 
-                        return;
+                        deferred.reject(message);
                     }
 
-                    message = message || $.mage.__('You have successfully removed the image.');
+                    message = message || $.mage.__('You have successfully removed the images.');
                     $(window).trigger('fileDeleted.enhancedMediaGallery', {
                         reload: true,
                         message: message,
                         code: 'success'
                     });
+                    deferred.resolve(message);
                 },
 
                 /**
@@ -125,8 +85,45 @@ define([
                         message: message,
                         code: 'error'
                     });
+                    deferred.reject(message);
                 }
             });
         }
+
+        confirmation({
+            title: title,
+            modalClass: 'media-gallery-delete-image-action',
+            content: confirmationContent,
+            buttons: [
+                {
+                    text: cancelText,
+                    class: 'action-secondary action-dismiss',
+
+                    /**
+                     * Close modal
+                     */
+                    click: function () {
+                        this.closeModal();
+                        deferred.resolve({
+                            status: 'canceled'
+                        });
+                    }
+                },
+                {
+                    text: deleteImageText,
+                    class: 'action-primary action-accept',
+
+                    /**
+                     * Delete Image and close modal
+                     */
+                    click: function () {
+                        sendRequest(ids, deleteUrl);
+                        this.closeModal();
+                    }
+                }
+            ]
+        });
+
+        return deferred.promise();
     };
 });

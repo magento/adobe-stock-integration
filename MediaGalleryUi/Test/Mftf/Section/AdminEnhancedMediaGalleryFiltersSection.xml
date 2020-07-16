@@ -13,5 +13,10 @@
         <element name="applyFilters" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-apply']"/>
         <element name="activeFilter" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']//span[contains( ., '{{filter}}')]" parameterized="true"/>
         <element name="activeFilterPlaceholder" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']"/>
+        <element name="usedInSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Show Images Used In']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
+        <element name="usedInEntityType" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{entityType}}']" parameterized="true"/>
+        <element name="usedInDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
+         <element name="duplicatedFilterCheckbox" type="button" selector="//input[@name='duplicated']"/>
+
     </section>
 </sections>
