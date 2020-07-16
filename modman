@@ -19,6 +19,7 @@
 @import MediaContentSynchronizationApi
 @import MediaContentSynchronizationCatalog
 @import MediaContentSynchronizationCms
+@import MediaGalleryContentUi
 @import MediaGalleryMetadata
 @import MediaGalleryMetadataApi
 @import MediaGAlleryCatalogUi
