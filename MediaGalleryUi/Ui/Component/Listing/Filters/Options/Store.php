@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\MediaGalleryContentUi\Ui\Component\Listing\Filters\Options;
+declare(strict_types=1);
+
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options;
 
 use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
