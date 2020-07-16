@@ -94,6 +94,5 @@ class EntityType implements CustomFilterInterface
                 ['asset_id']
             )
         );
-        return $select;
     }
 }
