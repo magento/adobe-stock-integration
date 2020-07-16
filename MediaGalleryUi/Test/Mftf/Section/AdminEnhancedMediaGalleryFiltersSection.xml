@@ -17,9 +17,10 @@
         <element name="activeFilterPlaceholder" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']"/>
         <element name="usedInSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Show Images Used In']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
         <element name="usedInEntityType" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{entityType}}']" parameterized="true"/>
-        <element name="assetFilterSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Asset']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
-        <element name="assetFilterSearchInput" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Asset']/parent::*/parent::div/div//input[@class='admin__control-text admin__action-multiselect-search']"/>
-        <element name="assetFilterImage" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{imageTitle}}']" parameterized="true"/>
+        <element name="searchOptionsFilter" type="select" selector="//div[label/span[contains(text(), '{{filterName}}')]]//div[@class='action-select admin__action-multiselect']" parameterized="true" timeout="30"/>
+        <element name="searchOptionsFilterInput" type="input" selector="//div[label/span[contains(text(), '{{filterName}}')]]//input[@data-role='advanced-select-text']" parameterized="true" timeout="30"/>
+        <element name="searchOptionsFilterOption" type="text" selector="//div[label/span[contains(text(), '{{filterName}}')]]//label[@class='admin__action-multiselect-label']/span[text()='{{optionName}}']" parameterized="true" timeout="30"/>
+        <element name="searchOptionsFilterDone" type="button" selector="//div[label/span[contains(text(), '{{filterName}}')]]//button[@data-action='close-advanced-select']" parameterized="true"/>
         <element name="uiSelectDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
         <element name="duplicatedFilterCheckbox" type="button" selector="//input[@name='duplicated']"/>
     </section>

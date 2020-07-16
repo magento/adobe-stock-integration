@@ -66,8 +66,9 @@
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryGridPage"/>
         
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryApplyAssetFilterActionGroup" stepKey="applyAssetFilter">
-            <argument name="imageName" value="{{ImageUpload3.fileName}}"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
+            <argument name="filterName" value="Asset"/>
+            <argument name="optionName" value="{{ImageUpload3.fileName}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
         
