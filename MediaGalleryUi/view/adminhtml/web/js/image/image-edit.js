@@ -108,7 +108,7 @@ define([
          *
          * @param {Object} data
          * @param {jQuery.Event} event
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         handleEnterKey: function (data, event) {
             var modalElement = $(this.modalSelector),
