@@ -20,6 +20,7 @@ class EntityType implements CustomFilterInterface
 {
     private const TABLE_ALIAS = 'main_table';
     private const TABLE_MEDIA_CONTENT_ASSET = 'media_content_asset';
+    private const NOT_USED = 'not_used';
 
     /**
      * @var ResourceConnection
@@ -41,6 +42,13 @@ class EntityType implements CustomFilterInterface
     {
         $value = $filter->getValue();
         if (is_array($value)) {
+            if (in_array(self::NOT_USED, $value)) {
+                $collection->addFieldToFilter(
+                    self::TABLE_ALIAS . '.id',
+                    ['nin' => $this->getSelectNotUsed()]
+                );
+                return true;
+            }
             $collection->addFieldToFilter(
                 self::TABLE_ALIAS . '.id',
                 ['in' => $this->getSelectByEntityType($value)]
@@ -49,6 +57,19 @@ class EntityType implements CustomFilterInterface
         return true;
     }
 
+    /**
+     * Return select asset ids by entity type
+     *
+     * @return Select
+     */
+    private function getSelectNotUsed(): Select
+    {
+        return $this->connection->getConnection()->select()->from(
+            ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
+            ['asset_id']
+        );
+    }
+    
     /**
      * Return select asset ids by entity type
      *
