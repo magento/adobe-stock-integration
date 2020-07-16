@@ -21,5 +21,6 @@
         <element name="assetFilterSearchInput" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Asset']/parent::*/parent::div/div//input[@class='admin__control-text admin__action-multiselect-search']"/>
         <element name="assetFilterImage" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{imageTitle}}']" parameterized="true"/>
         <element name="uiSelectDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
+        <element name="duplicatedFilterCheckbox" type="button" selector="//input[@name='duplicated']"/>
     </section>
 </sections>
