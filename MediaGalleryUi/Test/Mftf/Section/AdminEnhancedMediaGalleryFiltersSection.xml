@@ -20,5 +20,6 @@
         <element name="searchOptionsFilterInput" type="input" selector="//div[label/span[contains(text(), '{{filterName}}')]]//input[@data-role='advanced-select-text']" parameterized="true" timeout="30"/>
         <element name="searchOptionsFilterOption" type="text" selector="//div[label/span[contains(text(), '{{filterName}}')]]//label[@class='admin__action-multiselect-label']/span[text()='{{optionName}}']" parameterized="true" timeout="30"/>
         <element name="searchOptionsFilterDone" type="button" selector="//div[label/span[contains(text(), '{{filterName}}')]]//button[@data-action='close-advanced-select']" parameterized="true"/>
+        <element name="duplicatedFilterCheckbox" type="button" selector="//input[@name='duplicated']"/>
     </section>
 </sections>
