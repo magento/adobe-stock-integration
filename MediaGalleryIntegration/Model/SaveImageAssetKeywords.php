@@ -10,8 +10,6 @@ namespace Magento\MediaGalleryIntegration\Model;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 
 /**
