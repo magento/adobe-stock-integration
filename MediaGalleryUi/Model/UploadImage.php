@@ -52,7 +52,7 @@ class UploadImage
         if (!$mediaDirectory->isDirectory($targetFolder)) {
             throw new LocalizedException(__('Directory %1 does not exist in media directory.', $targetFolder));
         }
-        $absolutePath = $mediaDirectory->getAbsolutePath($targetFolder);
-        $uploadResult = $this->imagesStorage->uploadFile($absolutePath, $type);
+
+        $this->imagesStorage->uploadFile($mediaDirectory->getAbsolutePath($targetFolder), $type);
     }
 }
