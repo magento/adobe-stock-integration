@@ -70,7 +70,8 @@
         </actionGroup>
 
         <!-- verify that user can access to adobe stock image -->
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithAccess"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithAccess"/>
         <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
@@ -93,7 +94,8 @@
         </actionGroup>
 
         <!-- verify that user can't access to adobe stock image -->
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutAccess"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageWithoutAccess"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutAccess"/>
         <dontSeeElement selector="{{AdminAdobeStockSection.slideOutPanelButton}}" stepKey="dontSeeAdobeStockSearchButton" />
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromCreatedUser"/>
     </test>
