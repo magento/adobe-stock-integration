@@ -107,7 +107,6 @@ class ImportImageFileKeywords implements ImportFileInterface
         
         $this->saveAssetKeywords->execute([$assetKeywords]);
     }
-
     
     /**
      * Get correct path for media asset

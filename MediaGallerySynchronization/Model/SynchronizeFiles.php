@@ -46,7 +46,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     /**
      * @var SplFileInfoFactory
      */
-    private $fileInfoFactory;
+    private $splFileInfoFactory;
 
     /**
      * @var ImportFileComposite
@@ -111,7 +111,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     /**
      * Retrieve formatted file modification time
      *
-     * @param string $file
+     * @param string $filePath
      * @return string
      */
     private function getFileModificationTime(string $filePath): string
@@ -123,7 +123,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     /**
      * Return existing assets from files
      *
-     * @param string[] $files
+     * @param string[] $filesPaths
      * @return array
      * @throws LocalizedException
      */
