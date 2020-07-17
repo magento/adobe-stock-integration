@@ -4,11 +4,11 @@
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/module-media-content-synchronization-api": "*",
+        "magento/module-media-content-synchronization-api": "1.0.*",
         "magento/framework-message-queue": "*"
     },
     "suggest": {
-        "magento/module-media-gallery-synchronization": "*"
+        "magento/module-media-gallery-synchronization": "1.0.*"
     },
     "type": "magento2-module",
     "license": [
@@ -22,5 +22,6 @@
         "psr-4": {
             "Magento\\MediaContentSynchronization\\": ""
         }
-    }
+    },
+    "version": "1.0.0"
 }

@@ -4,10 +4,10 @@
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/module-media-gallery-ui-api": "*",
+        "magento/module-media-gallery-ui-api": "1.0.*",
         "magento/module-cms": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery-synchronization": "*"
+        "magento/module-media-gallery-synchronization": "1.0.*"
     },
     "suggest": {
         "magento/module-catalog": "*"
@@ -24,5 +24,6 @@
         "psr-4": {
             "Magento\\MediaGalleryIntegration\\": ""
         }
-    }
+    },
+    "version": "1.0.0"
 }

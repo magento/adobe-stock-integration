@@ -5,7 +5,7 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-gallery-synchronization-api": "1.0.*",
         "magento/framework-message-queue": "*"
     },
     "type": "magento2-module",
@@ -20,5 +20,6 @@
         "psr-4": {
             "Magento\\MediaGallerySynchronization\\": ""
         }
-    }
+    },
+    "version": "1.0.0"
 }

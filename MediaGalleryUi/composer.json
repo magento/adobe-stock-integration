@@ -7,10 +7,10 @@
         "magento/module-backend": "*",
         "magento/module-ui": "*",
         "magento/module-store": "*",
-        "magento/module-media-gallery-ui-api": "*",
+        "magento/module-media-gallery-ui-api": "1.0.*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery-synchronization": "*",
-        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-gallery-synchronization": "1.0.*",
+        "magento/module-media-gallery-synchronization-api": "1.0.*",
         "magento/module-media-content-api": "*",
         "magento/module-cms": "*"
     },
@@ -26,5 +26,6 @@
         "psr-4": {
             "Magento\\MediaGalleryUi\\": ""
         }
-    }
+    },
+    "version": "1.0.0"
 }
