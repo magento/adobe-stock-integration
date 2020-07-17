@@ -22,7 +22,8 @@ class ImportFileComposite
      */
     public function __construct(array $importers)
     {
-        $this->importers = ksort($importers);
+        ksort($importers);
+        $this->importers =$importers;
     }
 
     /**
