@@ -12,6 +12,7 @@ use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 
 /**
  * Save base category image by SaveAssetsInterface.
@@ -27,7 +28,12 @@ class SaveBaseCategoryImageInformation
      * @var GetAssetsByPathsInterface
      */
     private $getAssetsByPaths;
-    
+
+    /**
+     * @var SplFileInfoFactory
+     */
+    private $splFileInfoFactory;
+
     /**
      * @var Storage
      */
@@ -43,17 +49,20 @@ class SaveBaseCategoryImageInformation
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param Storage $storage
      * @param SynchronizeFilesInterface $synchronizeFiles
+     * @param SplFileInfoFactory $splFileInfoFactory
      */
     public function __construct(
         DeleteAssetsByPathsInterface $deleteAssetsByPath,
         GetAssetsByPathsInterface $getAssetsByPaths,
         Storage $storage,
-        SynchronizeFilesInterface $synchronizeFiles
+        SynchronizeFilesInterface $synchronizeFiles,
+        SplFileInfoFactory $splFileInfoFactory
     ) {
         $this->deleteAssetsByPaths = $deleteAssetsByPath;
         $this->getAssetsByPaths = $getAssetsByPaths;
         $this->storage = $storage;
         $this->synchronizeFiles = $synchronizeFiles;
+        $this->splFileInfoFactory = $splFileInfoFactory;
     }
 
     /**
