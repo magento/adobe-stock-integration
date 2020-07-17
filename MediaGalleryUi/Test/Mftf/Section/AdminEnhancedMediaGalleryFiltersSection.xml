@@ -16,8 +16,8 @@
         <element name="usedInSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Show Images Used In']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
         <element name="usedInEntityType" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{entityType}}']" parameterized="true"/>
         <element name="usedInDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
-        <element name="selectFilterInput" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select" parameterized="true"/>
-        <element name="selectFilterInputOption" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select/option[@data-title='{{optionLabel}}']" parameterized="true"/>
+        <element name="selectFilter" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select" parameterized="true"/>
+        <element name="selectFilterOption" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select/option[@data-title='{{optionLabel}}']" parameterized="true"/>
         <element name="duplicatedFilterCheckbox" type="button" selector="//input[@name='duplicated']"/>
     </section>
 </sections>

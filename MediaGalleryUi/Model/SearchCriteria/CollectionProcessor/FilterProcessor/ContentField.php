@@ -17,8 +17,6 @@ use Magento\MediaContentApi\Api\GetAssetIdsByContentFieldInterface;
  */
 class ContentField implements CustomFilterInterface
 {
-    private const TABLE_ALIAS = 'main_table';
-
     /**
      * @var GetAssetIdsByContentFieldInterface
      */
@@ -41,7 +39,7 @@ class ContentField implements CustomFilterInterface
     public function apply(Filter $filter, AbstractDb $collection): bool
     {
         $collection->addFieldToFilter(
-            self::TABLE_ALIAS . '.id',
+            'main_table.id',
             ['in' => $this->getAssetIdsByContentStatus->execute($filter->getField(), $filter->getValue())]
         );
 

@@ -7,14 +7,14 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryEnabledContentFilterTest">
+    <test name="AdminMediaGalleryStoreViewCategoryFilterTest">
         <annotations>
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1464"/>
-            <title value="User filter asset by enabled content"/>
+            <title value="User filter asset by category store view"/>
             <stories value="Story 57: User filters images by the area they used in"/>
             <testCaseId value="to-be-added"/>
-            <description value="User filter asset by enabled content"/>
+            <description value="User filter asset by category store view"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
@@ -25,8 +25,8 @@
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
@@ -46,8 +46,8 @@
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminMediaGalleryApplySelectFilterActionGroup" stepKey="selectFilterOption">
-            <argument name="filterLabel" value="Content Status"/>
-            <argument name="optionLabel" value="Enabled"/>
+            <argument name="filterLabel" value="Store View"/>
+            <argument name="optionLabel" value="Main Website/Main Website Store/Default Store View"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">

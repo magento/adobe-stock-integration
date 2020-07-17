@@ -30,7 +30,7 @@
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenMediaGalleryForExistingPageNoEditorActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
@@ -44,8 +44,8 @@
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminMediaGalleryApplySelectFilterActionGroup" stepKey="selectFilterOption">
-            <argument name="selectLabel" value="Store View"/>
-            <argument name="selectOption" value="Main Website/Main Website Store/Default Store View"/>
+            <argument name="filterLabel" value="Store View"/>
+            <argument name="optionLabel" value="Main Website/Main Website Store/Default Store View"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">

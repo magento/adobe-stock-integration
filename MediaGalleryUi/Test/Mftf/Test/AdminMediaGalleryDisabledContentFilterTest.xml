@@ -48,8 +48,8 @@
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminMediaGalleryApplySelectFilterActionGroup" stepKey="selectFilterOption">
-            <argument name="selectLabel" value="Content Status"/>
-            <argument name="selectOption" value="Disabled"/>
+            <argument name="filterLabel" value="Content Status"/>
+            <argument name="optionLabel" value="Disabled"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">

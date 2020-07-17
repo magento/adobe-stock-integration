@@ -13,11 +13,11 @@
             <description>Applies select filter to the media gallery grid</description>
         </annotations>
         <arguments>
-            <argument name="selectLabel" type="string"/>
-            <argument name="selectOption" type="string"/>
+            <argument name="filterLabel" type="string"/>
+            <argument name="optionLabel" type="string"/>
         </arguments>
 
-        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.selectFilterInput(selectLabel)}}" stepKey="openSelectFilter"/>
-        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.selectFilterInputOption(selectLabel, selectOption)}}" stepKey="selectFilterOption"/>
+        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.selectFilter(filterLabel)}}" stepKey="openSelectFilter"/>
+        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.selectFilterOption(filterLabel, optionLabel)}}" stepKey="selectFilterOption"/>
      </actionGroup>
 </actionGroups>
