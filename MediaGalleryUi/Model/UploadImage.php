@@ -11,7 +11,6 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 
 /**
  * Uploads an image to storage
@@ -29,22 +28,14 @@ class UploadImage
     private $filesystem;
 
     /**
-     * @var SplFileInfoFactory
-     */
-    private $splFileInfoFactory;
-
-    /**
      * @param Storage $imagesStorage
-     * @param SplFileInfoFactory $splFileInfoFactory
      * @param Filesystem $filesystem
      */
     public function __construct(
         Storage $imagesStorage,
-        SplFileInfoFactory $splFileInfoFactory,
         Filesystem $filesystem
     ) {
         $this->imagesStorage = $imagesStorage;
-        $this->splFileInfoFactory = $splFileInfoFactory;
         $this->filesystem = $filesystem;
     }
 
