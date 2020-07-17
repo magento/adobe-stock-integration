@@ -26,10 +26,12 @@ define([
         getKeywordsOp: function () {
             var imageTags = this.image.tags,
                 option = [];
+
             imageTags.forEach(function (tag) {
-                option['label'] = tag.value;
-                option['value'] = tag.value;
-                option.push(option);
+                option.push({
+                    label: tag,
+                    value: tag
+                });
             });
 
             this.options(option);
