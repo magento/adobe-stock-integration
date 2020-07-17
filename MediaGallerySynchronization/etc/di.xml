@@ -14,8 +14,7 @@
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="0" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportMediaAsset</item>
-                <item name="1" xsi:type="object">Magento\MediaGallerySynchronization\Model\ResizeImportedFile</item>
-                <item name="2" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportImageFileKeywords</item>
+                <item name="1" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportImageFileKeywords</item>
             </argument>
         </arguments>
     </type>
