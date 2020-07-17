@@ -12,8 +12,8 @@
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1581"/>
             <title value="Editing an image from standalone view details panel"/>
-            <stories value="[Issue #1581] Add Edit button to standalone Image Details page"/>
-            <testCaseId value=""/>
+            <stories value="[Story #44] User edits image meta data in Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/3961351"/>
             <description value="Editing an image from standalone view details panel"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
