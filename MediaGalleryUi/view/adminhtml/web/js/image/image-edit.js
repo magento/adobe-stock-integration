@@ -7,8 +7,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
+    'uiLayout',
     'Magento_MediaGalleryUi/js/action/getDetails'
-], function ($, _, Component, getDetails) {
+], function ($, _, Component, layout, getDetails) {
     'use strict';
 
     return Component.extend({
@@ -17,13 +18,43 @@ define([
             modalSelector: '',
             imageEditDetailsUrl: '/media_gallery/image/details',
             saveDetailsUrl: '/media_gallery/image/saveDetails',
-            mediaGalleryEditKeywordsDetailsName: 'mediaGalleryEditKeywordsDetails',
             images: [],
             image: null,
             modules: {
                 mediaGridMessages: '${ $.mediaGridMessages }',
-                mediaGalleryEditKeywordsDetails: '${ $.mediaGalleryEditKeywordsDetailsName }'
+                select: '${ $.name }_select'
+            },
+            viewConfig: [
+                {
+                    component: 'Magento_MediaGalleryUi/js/image/edit/keyword-ui-select',
+                    name: '${ $.name }_select'
+                }
+            ],
+            exports: {
+                image: '${ $.name }_select:image'
             }
+        },
+
+        /**
+         * Initialize the component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super().initView();
+
+            return this;
+        },
+
+        /**
+         * Initialize child components
+         *
+         * @returns {Object}
+         */
+        initView: function () {
+            layout(this.viewConfig);
+
+            return this;
         },
 
         /**
@@ -50,8 +81,8 @@ define([
                 getDetails(this.imageEditDetailsUrl, [imageId]).then(function (imageDetails) {
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
-                    this.mediaGalleryEditKeywordsDetails().getKeywordsOp(this.image().tags);
                     this.openEditImageDetailsModal();
+                    this.getKeywordsOp();
                 }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);
                 }.bind(this));
@@ -92,6 +123,10 @@ define([
             }
 
             modalElement.modal('closeModal');
+        },
+
+        getKeywordsOp: function() {
+            this.select().getKeywordsOp();
         },
 
         /**

@@ -13,29 +13,26 @@ define([
     return Select.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/image/edit/keyword-ui-select',
-            options: []
+            label: 'Keywords',
+            image: {}
         },
 
         /** @inheritdoc */
         initialize: function () {
-            this._super()
-                .observe([
-                'options'
-                ]);
+            this._super();
             return this;
         },
 
-        getKeywordsOp: function (keywords) {
-            var i,
-                keyword,
+        getKeywordsOp: function () {
+            var imageTags = this.image.tags,
                 option = [];
+            imageTags.forEach(function (tag) {
+                option['label'] = tag.value;
+                option['value'] = tag.value;
+                option.push(option);
+            });
 
-            for (i = 0; i < keywords.length; i++) {
-                keyword = keywords[i];
-                option['label'] = keyword;
-                option['value'] = keyword;
-                this.options.push(option);
-            }
+            this.options(option);
         },
 
         addLastElement: function (data) {
