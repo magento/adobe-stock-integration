@@ -13,7 +13,7 @@
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1464"/>
             <title value="User filter asset by category store view"/>
             <stories value="Story 57: User filters images by the area they used in"/>
-            <testCaseId value="to-be-added"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4970870"/>
             <description value="User filter asset by category store view"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
