@@ -16,6 +16,7 @@ use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Psr\Log\LoggerInterface;
+use Magento\MediaGalleryIntegration\Model\SaveImageAssetKeywords;
 
 /**
  * Synchronize files in media storage and media assets database records
@@ -53,12 +54,18 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $driver;
 
     /**
+     * @var SaveImageAssetKeywords
+     */
+    private $saveKeywordsInformation;
+
+    /**
      * @param File $driver
      * @param Filesystem $filesystem
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param LoggerInterface $log
+     * @param SaveImageAssetKeywords $saveKeywordsInformation
      */
     public function __construct(
         File $driver,
@@ -66,7 +73,8 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         GetAssetsByPathsInterface $getAssetsByPaths,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
-        LoggerInterface $log
+        LoggerInterface $log,
+        SaveImageAssetKeywords $saveKeywordsInformation
     ) {
         $this->driver = $driver;
         $this->filesystem = $filesystem;
@@ -74,6 +82,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
         $this->log = $log;
+        $this->saveKeywordsInformation = $saveKeywordsInformation;
     }
 
     /**
@@ -89,7 +98,12 @@ class SynchronizeFiles implements SynchronizeFilesInterface
                 continue;
             }
             try {
-                $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
+                $asset = $this->createAssetFromFile->execute($file);
+                $this->saveAsset->execute([$asset]);
+                $this->saveKeywordsInformation->execute(
+                    $file->getPath() . '/' . $file->getFileName(),
+                    $this->getAssetsByPaths->execute([$asset->getPath()])[0]->getId()
+                );
             } catch (\Exception $exception) {
                 $this->log->critical($exception);
                 $failedFiles[] = $file->getFilename();

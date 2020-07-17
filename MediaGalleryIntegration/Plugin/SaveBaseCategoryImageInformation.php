@@ -14,7 +14,7 @@ use Magento\Catalog\Model\ImageUploader;
 use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGalleryIntegration\Model\SaveImageKeywordsInformation;
+use Magento\MediaGalleryIntegration\Model\SaveImageAssetKeywords;
 
 /**
  * Save base category image by SaveAssetsInterface.
@@ -52,7 +52,7 @@ class SaveBaseCategoryImageInformation
     private $storage;
 
     /**
-     * @var SaveImageKeywordsInformation
+     * @var SaveImageAssetKeywords
      */
     private $saveKeywordsInformation;
 
@@ -63,7 +63,7 @@ class SaveBaseCategoryImageInformation
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param Storage $storage
-     * @param SaveImageKeywordsInformation $saveKeywordsInformation
+     * @param SaveImageAssetKeywords $saveKeywordsInformation
      */
     public function __construct(
         DeleteAssetsByPathsInterface $deleteAssetsByPath,
@@ -72,7 +72,7 @@ class SaveBaseCategoryImageInformation
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
         Storage $storage,
-        SaveImageKeywordsInformation $saveKeywordsInformation
+        SaveImageAssetKeywords $saveKeywordsInformation
     ) {
         $this->deleteAssetsByPaths = $deleteAssetsByPath;
         $this->getAssetsByPaths = $getAssetsByPaths;
@@ -102,7 +102,10 @@ class SaveBaseCategoryImageInformation
         
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
         $this->storage->resizeFile($absolutePath);
-        $this->saveKeywordsInformation->execute($file);
+        $this->saveKeywordsInformation->execute(
+            $absolutePath,
+            $this->getAssetsByPaths->execute([$imagePath])[0]->getId()
+        );
 
         return $imagePath;
     }

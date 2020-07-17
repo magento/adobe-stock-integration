@@ -97,7 +97,7 @@ class SaveMediaGalleryAsset
                 'hash' => $this->hashImageContent($destinationPath)
             ];
 
-            $document = $this->setDescriptionFIeld($document, $destinationPath);
+            $document = $this->setDescriptionField($document, $destinationPath);
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
             $this->saveMediaAsset->execute([$mediaGalleryAsset]);
         } catch (\Exception $exception) {

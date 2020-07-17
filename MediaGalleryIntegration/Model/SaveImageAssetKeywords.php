@@ -17,7 +17,7 @@ use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 /**
  * Save image keywords metadata to the database
  */
-class SaveImageKeywordsInformation
+class SaveImageAssetKeywords
 {
     /**
      * @var KeywordInterfaceFactory
@@ -40,49 +40,33 @@ class SaveImageKeywordsInformation
     private $saveAssetKeywords;
 
     /**
-     * @var GetAssetsByPathsInterface
-     */
-    private $getMediaGalleryAssetByPath;
-
-    /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
-
-    /**
      * @param KeywordInterfaceFactory $keywordFactory
      * @param ExtractMetadataInterface $extractMetadata
      * @param SaveAssetsKeywordsInterface $saveAssetKeywords
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
-     * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
-     * @param CreateAssetFromFile $createAssetFromFile
      */
     public function __construct(
         KeywordInterfaceFactory $keywordFactory,
         ExtractMetadataInterface $extractMetadata,
         SaveAssetsKeywordsInterface $saveAssetKeywords,
-        AssetKeywordsInterfaceFactory $assetKeywordsFactory,
-        GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
-        CreateAssetFromFile $createAssetFromFile
+        AssetKeywordsInterfaceFactory $assetKeywordsFactory
     ) {
-        $this->createAssetFromFile = $createAssetFromFile;
         $this->keywordFactory = $keywordFactory;
         $this->extractMetadata = $extractMetadata;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->assetKeywordsFactory = $assetKeywordsFactory;
-        $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
     }
 
     /**
      * Save image keywords metadata to the database.
      *
-     * @param \SplFileInfo $file
+     * @param string $filePath
+     * @params int $mediaAssetId
      */
-    public function execute(\SplFileInfo $file): void
+    public function execute(string $filePath, int $mediaAssetId): void
     {
         $keywords = [];
-        $asset = $this->createAssetFromFile->execute($file);
-        $metadata = $this->extractMetadata->execute($file->getPath() . '/' . $file->getFileName());
+        $metadata = $this->extractMetadata->execute($filePath);
 
         foreach ($metadata->getKeywords() as $keyword) {
             $keywords[] = $this->keywordFactory->create(
@@ -91,8 +75,6 @@ class SaveImageKeywordsInformation
                 ]
             );
         }
-        
-        $mediaAssetId = $this->getMediaGalleryAssetByPath->execute([$asset->getPath()])[0]->getId();
         
         $assetKeywords = $this->assetKeywordsFactory->create([
             'assetId' => $mediaAssetId,

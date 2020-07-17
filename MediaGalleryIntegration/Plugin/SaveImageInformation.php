@@ -16,7 +16,7 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaGalleryIntegration\Model\SaveImageKeywordsInformation;
+use Magento\MediaGalleryIntegration\Model\SaveImageAssetKeywords;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -61,7 +61,7 @@ class SaveImageInformation
     private $filesystem;
 
     /**
-     * @var SaveImageKeywordsInformation
+     * @var SaveImageAssetKeywords
      */
     private $saveKeywordsInformation;
 
@@ -73,7 +73,7 @@ class SaveImageInformation
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
      * @param Storage $storage
-     * @param SaveImageKeywordsInformation $saveKeywordsInformation
+     * @param SaveImageAssetKeywords $saveKeywordsInformation
      */
     public function __construct(
         Filesystem $filesystem,
@@ -83,7 +83,7 @@ class SaveImageInformation
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
         Storage $storage,
-        SaveImageKeywordsInformation $saveKeywordsInformation
+        SaveImageAssetKeywords $saveKeywordsInformation
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
@@ -108,10 +108,13 @@ class SaveImageInformation
         if (!$this->isApplicable($file->getPathName())) {
             return $result;
         }
-        
+
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
         $this->storage->resizeFile($result['path'] . '/' . $result['file']);
-        $this->saveKeywordsInformation->execute($file);
+        $this->saveKeywordsInformation->execute(
+            $result['path'] . '/' . $result['file'],
+            $this->createAssetFromFile->execute($file)->getId()
+        );
 
         return $result;
     }
