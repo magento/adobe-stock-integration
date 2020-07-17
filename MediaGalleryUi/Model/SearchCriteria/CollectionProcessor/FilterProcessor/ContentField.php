@@ -47,5 +47,4 @@ class ContentField implements CustomFilterInterface
 
         return true;
     }
-
 }
