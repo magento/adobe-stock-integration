@@ -5,18 +5,33 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryIntegration\Model;
+namespace Magento\MediaGallerySynchronization\Model;
 
+use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Save image keywords metadata to the database
+ * import image keywords from file metadata
  */
-class SaveImageAssetKeywords
+class ImportImageFileKeywords implements ImportFileInterface
 {
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var File
+     */
+    private $driver;
+
     /**
      * @var KeywordInterfaceFactory
      */
@@ -38,33 +53,43 @@ class SaveImageAssetKeywords
     private $saveAssetKeywords;
 
     /**
+     * @var GetAssetsByPathsInterface
+     */
+    private $getAssetsByPaths;
+
+    /**
+     * @param File $driver
+     * @param Filesystem $filesystem
      * @param KeywordInterfaceFactory $keywordFactory
      * @param ExtractMetadataInterface $extractMetadata
      * @param SaveAssetsKeywordsInterface $saveAssetKeywords
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
+     * @param GetAssetsByPathsInterface $getAssetsByPaths
      */
     public function __construct(
+        File $driver,
+        Filesystem $filesystem,
         KeywordInterfaceFactory $keywordFactory,
         ExtractMetadataInterface $extractMetadata,
         SaveAssetsKeywordsInterface $saveAssetKeywords,
-        AssetKeywordsInterfaceFactory $assetKeywordsFactory
+        AssetKeywordsInterfaceFactory $assetKeywordsFactory,
+        GetAssetsByPathsInterface $getAssetsByPaths
     ) {
+        $this->driver = $driver;
+        $this->filesystem = $filesystem;
         $this->keywordFactory = $keywordFactory;
         $this->extractMetadata = $extractMetadata;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->assetKeywordsFactory = $assetKeywordsFactory;
+        $this->getAssetsByPaths = $getAssetsByPaths;
     }
-
     /**
-     * Save image keywords metadata to the database.
-     *
-     * @param string $filePath
-     * @params int $mediaAssetId
+     * @inheritdoc
      */
-    public function execute(string $filePath, int $mediaAssetId): void
+    public function execute(string $path): void
     {
         $keywords = [];
-        $metadata = $this->extractMetadata->execute($filePath);
+        $metadata = $this->extractMetadata->execute($path);
 
         foreach ($metadata->getKeywords() as $keyword) {
             $keywords[] = $this->keywordFactory->create(
@@ -73,12 +98,31 @@ class SaveImageAssetKeywords
                 ]
             );
         }
-        
+
+        $assetId = $this->getAssetsByPaths->execute([$this->getRelativePath($path)])[0]->getId();
         $assetKeywords = $this->assetKeywordsFactory->create([
-            'assetId' => $mediaAssetId,
+            'assetId' => $assetId,
             'keywords' => $keywords
         ]);
         
         $this->saveAssetKeywords->execute([$assetKeywords]);
+    }
+
+    
+    /**
+     * Get correct path for media asset
+     *
+     * @param string $filePath
+     * @return string
+     */
+    private function getRelativePath(string $filePath): string
+    {
+        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($filePath);
+
+        if ($this->driver->getParentDirectory($path) === '.') {
+            $path = '/' . $path;
+        }
+
+        return $path;
     }
 }

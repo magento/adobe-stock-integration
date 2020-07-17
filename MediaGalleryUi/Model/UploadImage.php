@@ -11,7 +11,6 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 
 /**
@@ -35,26 +34,18 @@ class UploadImage
     private $splFileInfoFactory;
 
     /**
-     * @var SynchronizeFilesInterface
-     */
-    private $synchronizeFiles;
-
-    /**
      * @param Storage $imagesStorage
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param Filesystem $filesystem
-     * @param SynchronizeFilesInterface $synchronizeFiles
      */
     public function __construct(
         Storage $imagesStorage,
         SplFileInfoFactory $splFileInfoFactory,
-        Filesystem $filesystem,
-        SynchronizeFilesInterface $synchronizeFiles
+        Filesystem $filesystem
     ) {
         $this->imagesStorage = $imagesStorage;
         $this->splFileInfoFactory = $splFileInfoFactory;
         $this->filesystem = $filesystem;
-        $this->synchronizeFiles = $synchronizeFiles;
     }
 
     /**
@@ -72,12 +63,5 @@ class UploadImage
         }
         $absolutePath = $mediaDirectory->getAbsolutePath($targetFolder);
         $uploadResult = $this->imagesStorage->uploadFile($absolutePath, $type);
-        $this->synchronizeFiles->execute(
-            [
-                $this->splFileInfoFactory->create(
-                    $uploadResult['path'] . '/' . $uploadResult['file']
-                )
-            ]
-        );
     }
 }
