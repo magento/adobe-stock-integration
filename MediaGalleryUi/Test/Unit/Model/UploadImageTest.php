@@ -13,7 +13,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUi\Model\UploadImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -37,11 +36,6 @@ class UploadImageTest extends TestCase
      * @var Read|MockObject
      */
     private $mediaDirectoryMock;
-
-    /**
-     * @var SynchronizeFilesInterface|MockObject
-     */
-    private $synchronizeFilesMock;
 
     /**
      * @var UploadImage
