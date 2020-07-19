@@ -14,11 +14,8 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
-use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
+use Magento\MediaGalleryUi\Model\SaveImageDetails;
 use Psr\Log\LoggerInterface;
 
 class SaveDetails extends Action implements HttpPostActionInterface
@@ -33,29 +30,14 @@ class SaveDetails extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var SaveAssetsInterface
-     */
-    private $saveAssets;
-
-    /**
-     * @var SaveAssetsKeywordsInterface
-     */
-    private $saveAssetKeywords;
-
-    /**
-     * @var AssetKeywordsInterfaceFactory
-     */
-    private $assetKeywordsFactory;
-
-    /**
-     * @var AssetInterfaceFactory
-     */
-    private $assetFactory;
-
-    /**
      * @var GetAssetsByIdsInterface
      */
     private $getAssetsByIds;
+
+    /**
+     * @var SaveImageDetails
+     */
+    private $saveImage;
 
     /**
      * @var LoggerInterface
@@ -66,29 +48,20 @@ class SaveDetails extends Action implements HttpPostActionInterface
      * SaveDetails constructor.
      *
      * @param Context $context
-     * @param SaveAssetsInterface $saveAssets
-     * @param SaveAssetsKeywordsInterface $saveAssetKeywords
-     * @param AssetInterfaceFactory $assetFactory
-     * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
      * @param GetAssetsByIdsInterface $getAssetsByIds
+     * @param SaveImageDetails $saveImage
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        SaveAssetsInterface $saveAssets,
-        SaveAssetsKeywordsInterface $saveAssetKeywords,
-        AssetInterfaceFactory $assetFactory,
-        AssetKeywordsInterfaceFactory $assetKeywordsFactory,
         GetAssetsByIdsInterface $getAssetsByIds,
+        SaveImageDetails $saveImage,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->saveAssets = $saveAssets;
-        $this->saveAssetKeywords = $saveAssetKeywords;
-        $this->assetFactory = $assetFactory;
-        $this->assetKeywordsFactory = $assetKeywordsFactory;
         $this->getAssetsByIds = $getAssetsByIds;
+        $this->saveImage = $saveImage;
         $this->logger = $logger;
     }
 
@@ -117,30 +90,13 @@ class SaveDetails extends Action implements HttpPostActionInterface
 
         try {
             $asset = current($this->getAssetsByIds->execute([$imageId]));
-            $updatedAsset = $this->assetFactory->create(
-                [
-                    'path' => $asset->getPath(),
-                    'contentType' => $asset->getContentType(),
-                    'width' => $asset->getWidth(),
-                    'height' => $asset->getHeight(),
-                    'size' => $asset->getSize(),
-                    'id' => $asset->getId(),
-                    'title' => $title,
-                    'description' => $description,
-                    'source' => $asset->getSource(),
-                    'hash' => $asset->getHash(),
-                    'created_at' => $asset->getCreatedAt(),
-                    'updated_at' => $asset->getUpdatedAt()
-                ]
+            $this->saveImage->execute(
+                $asset,
+                $imageId,
+                $imageKeywords,
+                $title,
+                $description
             );
-            $this->saveAssets->execute([$updatedAsset]);
-
-            $assetKeywords = $this->assetKeywordsFactory->create([
-                'assetId' => $imageId,
-                'keywords' => $imageKeywords
-            ]);
-            $this->saveAssetKeywords->execute([$assetKeywords]);
-
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
