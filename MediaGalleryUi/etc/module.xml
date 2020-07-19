@@ -9,6 +9,7 @@
     <module name="Magento_MediaGalleryUi">
         <sequence>
             <module name="Magento_Cms" />
+            <module name="Magento_MediaGalleryMetadataApi" />
         </sequence>
     </module>
 </config>
