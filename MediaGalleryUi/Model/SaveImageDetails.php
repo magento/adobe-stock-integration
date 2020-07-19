@@ -94,6 +94,8 @@ class SaveImageDetails
     }
 
     /**
+     * Save image details
+     *
      * @param object $asset
      * @param null|string $imageId
      * @param array $imageKeywords
