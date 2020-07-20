@@ -20,10 +20,6 @@ use Magento\MediaGalleryMetadata\Model\SegmentNames;
  */
 class FileWriter implements FileWriterInterface
 {
-    private const MARKER_IMAGE_FILE_START = "\xD8";
-    private const MARKER_IMAGE_PREFIX = "\xFF";
-    private const MARKER_IMAGE_END = "\xD9";
-
     /**
      * @var DriverInterface
      */
@@ -55,17 +51,9 @@ class FileWriter implements FileWriterInterface
      */
     public function execute(FileInterface $file): void
     {
-        foreach ($file->getSegments() as $segment) {
-            if (strlen($segment->getData()) > 0xfffd) {
-                throw new LocalizedException(__('A Header is too large to fit in the segment!'));
-            }
-        }
-
         $resource = $this->driver->fileOpen($file->getPath(), 'wb');
-
-        $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_FILE_START);
+      
         $this->writeSegments($resource, $file->getSegments());
-        $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_END);
         $this->driver->fileClose($resource);
     }
 
@@ -78,15 +66,11 @@ class FileWriter implements FileWriterInterface
     private function writeSegments($resource, array $segments): void
     {
         foreach ($segments as $segment) {
-            if ($segment->getName() !== 'CompressedImage') {
-                $this->driver->fileWrite(
-                    $resource,
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    self::MARKER_IMAGE_PREFIX . chr($this->segmentNames->getSegmentType($segment->getName()))
-                );
-                $this->driver->fileWrite($resource, pack("n", strlen($segment->getData()) + 2));
-            }
-            $this->driver->fileWrite($resource, $segment->getData());
+            $this->driver->fileWrite(
+                $resource,
+                $segment->getData()
+            );
         }
+        $this->driver->fileWrite($resource, pack("C", ord(";")));
     }
 }

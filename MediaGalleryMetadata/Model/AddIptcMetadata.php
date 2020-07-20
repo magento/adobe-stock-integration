@@ -13,6 +13,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Add metadata to the IPTC data
@@ -62,38 +63,40 @@ class AddIptcMetadata
      */
     public function execute(FileInterface $file, MetadataInterface $metadata, ?SegmentInterface $segment): FileInterface
     {
-        if (is_callable('iptcembed') && is_callable('iptcparse')) {
-            $iptcData =  $segment ? iptcparse($segment->getData()) : [];
+        if (!is_callable('iptcembed') && !is_callable('iptcparse')) {
+            throw new LocalizedException(__('iptcembed() && iptcparse() must be enabled in php configuration'));
+        }
+        
+        $iptcData =  $segment ? iptcparse($segment->getData()) : [];
 
-            if (!empty($metadata->getTitle())) {
-                $iptcData[self::IPTC_TITLE_SEGMENT][0] = $metadata->getTitle();
+        if (!empty($metadata->getTitle())) {
+            $iptcData[self::IPTC_TITLE_SEGMENT][0] = $metadata->getTitle();
+        }
+
+        if (!empty($metadata->getDescription())) {
+            $iptcData[self::IPTC_DESCRIPTION_SEGMENT][0] = $metadata->getDescription();
+        }
+
+        if (!empty($metadata->getKeywords())) {
+            $iptcData = $this->writeKeywords($metadata->getKeywords(), $iptcData);
+        }
+
+        $newData = '';
+
+        foreach ($iptcData as $tag => $values) {
+            foreach ($values as $value) {
+                $newData .= $this->iptcMaketag(2, (int) substr($tag, 2), $value);
             }
+        }
 
-            if (!empty($metadata->getDescription())) {
-                $iptcData[self::IPTC_DESCRIPTION_SEGMENT][0] = $metadata->getDescription();
-            }
-
-            if (!empty($metadata->getKeywords())) {
-                $iptcData = $this->writeKeywords($metadata->getKeywords(), $iptcData);
-            }
-
-            $newData = '';
-
-            foreach ($iptcData as $tag => $values) {
-                foreach ($values as $value) {
-                    $newData .= $this->iptcMaketag(2, (int) substr($tag, 2), $value);
-                }
-            }
-
-            $this->writeFile($file->getPath(), iptcembed($newData, $file->getPath()));
+        $this->writeFile($file->getPath(), iptcembed($newData, $file->getPath()));
             
-            $fileWithIptc = $this->fileReader->execute($file->getPath());
+        $fileWithIptc = $this->fileReader->execute($file->getPath());
             
-            return $this->fileFactory->create([
+        return $this->fileFactory->create([
                 'path' => $fileWithIptc->getPath(),
                 'segments' => $this->getSegmentsWithIptc($fileWithIptc, $file)
         ]);
-        }
     }
 
     /**

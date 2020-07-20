@@ -144,7 +144,7 @@ class FileReader implements FileReaderInterface
             if ($separator == $gifFrameSeparator) {
                 $segments[] = $this->segmentFactory->create([
                     'name' => 'frame',
-                    'data' => $this->readFrame($resource)
+                    'data' => $gifFrameSeparator . $this->readFrame($resource)
                 ]);
                 continue;
             }
@@ -154,7 +154,6 @@ class FileReader implements FileReaderInterface
             }
 
             $segments[] = $this->getExtensionSegment($resource);
-
         } while (!$this->driver->endOfFile($resource));
 
         return $segments;
@@ -169,6 +168,7 @@ class FileReader implements FileReaderInterface
      */
     private function getExtensionSegment($resource): SegmentInterface
     {
+        $gifExtensionSeparator = pack("C", ord("!"));
         $extensionCodeBinary = $this->read($resource, 1);
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $extensionCode = unpack('C', $extensionCodeBinary)[1];
@@ -176,21 +176,21 @@ class FileReader implements FileReaderInterface
         if ($extensionCode == 0xF9) {
             return $this->segmentFactory->create([
                 'name' => 'Graphics Control Extension',
-                'data' => $extensionCodeBinary . $this->readBlock($resource)
+                'data' => $gifExtensionSeparator . $extensionCodeBinary . $this->readBlock($resource)
             ]);
         }
 
         if ($extensionCode == 0xFE) {
             return $this->segmentFactory->create([
                 'name' => 'comment',
-                'data' => $extensionCodeBinary . $this->readBlock($resource)
+                'data' => $gifExtensionSeparator . $extensionCodeBinary . $this->readBlock($resource)
             ]);
         }
 
         if ($extensionCode != 0xFF) {
             return $this->segmentFactory->create([
-                'name' => 'unknown',
-                'data' => $extensionCodeBinary . $this->readBlock($resource)
+                'name' => 'Programm extension',
+                'data' => $gifExtensionSeparator . $extensionCodeBinary . $this->readBlock($resource)
             ]);
         }
 
@@ -206,14 +206,15 @@ class FileReader implements FileReaderInterface
         if ($name == 'XMP DataXMP') {
             return $this->segmentFactory->create([
                 'name' => $name,
-                'data' => $extensionCodeBinary . $blockLengthBinary
+                'data' =>  $gifExtensionSeparator . $extensionCodeBinary . $blockLengthBinary
                     . $name . $this->readBlockWithSubblocks($resource)
             ]);
         }
 
         return $this->segmentFactory->create([
             'name' => $name,
-            'data' => $extensionCodeBinary . $blockLengthBinary . $name . $this->readBlock($resource)
+            'data' =>  $gifExtensionSeparator . $extensionCodeBinary . $blockLengthBinary
+            . $name . $this->readBlock($resource)
         ]);
     }
 
@@ -300,13 +301,9 @@ class FileReader implements FileReaderInterface
     {
         $data = '';
         $subLength = $this->read($resource, 1);
-        $blocks = 0;
 
         while ($subLength !== "\0") {
-            $blocks++;
-            $data .= $subLength;
-
-            $data .= $this->read($resource, ord($subLength));
+            $data .= $subLength . $this->read($resource, ord($subLength));
             $subLength = $this->read($resource, 1);
         }
 
