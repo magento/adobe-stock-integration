@@ -15,6 +15,7 @@ define([
         defaults: {
             template: 'Magento_MediaGalleryUi/image/image-details',
             modalSelector: '',
+            modalWindowSelector: '',
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
@@ -167,6 +168,14 @@ define([
             }
 
             return entityName;
+        },
+
+        /**
+         * Check if details modal is active
+         * @return {Boolean}
+         */
+        isActive: function () {
+            return $(this.modalWindowSelector).hasClass('_show');
         },
 
         /**
