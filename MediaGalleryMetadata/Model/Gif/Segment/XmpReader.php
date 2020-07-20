@@ -84,7 +84,7 @@ class XmpReader implements MetadataReaderInterface
      */
     private function getXmpData(SegmentInterface $segment): string
     {
-        $xmp = substr($segment->getData(), 13);
+        $xmp = substr($segment->getData(), 14);
 
         if (substr($xmp, -self::MAGIC_TRAILER_LENGTH, 3) !== self::MAGIC_TRAILER_START
             || substr($xmp, -4) !== self::MAGIC_TRAILER_END

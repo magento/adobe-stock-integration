@@ -23,7 +23,7 @@ class XmpWriter implements MetadataWriterInterface
 {
     private const XMP_SEGMENT_NAME = 'XMP DataXMP';
     private const XMP_SEGMENT_START = "XMP DataXMP";
-    private const XMP_DATA_START_POSITION = 13;
+    private const XMP_DATA_START_POSITION = 14;
 
     /**
      * @var SegmentInterfaceFactory

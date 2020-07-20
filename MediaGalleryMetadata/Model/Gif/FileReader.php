@@ -213,7 +213,7 @@ class FileReader implements FileReaderInterface
 
         return $this->segmentFactory->create([
             'name' => $name,
-            'data' =>  $gifExtensionSeparator . $extensionCodeBinary . $blockLengthBinary
+            'data' => $gifExtensionSeparator . $extensionCodeBinary . $blockLengthBinary
             . $name . $this->readBlock($resource)
         ]);
     }
@@ -307,7 +307,7 @@ class FileReader implements FileReaderInterface
             $subLength = $this->read($resource, 1);
         }
 
-        return $data;
+        return $data . "\0";
     }
 
     /**
@@ -324,6 +324,6 @@ class FileReader implements FileReaderInterface
         if ($blockLength == 0) {
             return '';
         }
-        return $blockLength . $this->read($resource, $blockLength) . $this->read($resource, 1);
+        return $blockLengthBinary . $this->read($resource, $blockLength) . $this->read($resource, 1);
     }
 }
