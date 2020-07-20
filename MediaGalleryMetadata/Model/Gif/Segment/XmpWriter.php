@@ -22,7 +22,6 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 class XmpWriter implements MetadataWriterInterface
 {
     private const XMP_SEGMENT_NAME = 'XMP DataXMP';
-    private const XMP_SEGMENT_START = "XMP DataXMP";
     private const XMP_DATA_START_POSITION = 14;
 
     /**
@@ -141,7 +140,7 @@ class XmpWriter implements MetadataWriterInterface
 
         return $this->segmentFactory->create([
             'name' => self::XMP_SEGMENT_NAME,
-            'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($xmpData, $metadata)
+            'data' => self::XMP_SEGMENT_NAME . $this->addXmpMetadata->execute($xmpData, $metadata)
         ]);
     }
 
@@ -156,8 +155,8 @@ class XmpWriter implements MetadataWriterInterface
     {
         $data = $segment->getData();
         $start = substr($data, 0, self::XMP_DATA_START_POSITION);
-        $xmpData = $this->getXmpData($data, 'DataXMP', "'w'?>") . "'w'?>";
-        $end = substr($data, strpos($data, "xmpmeta>") + 8);
+        $xmpData = $this->getXmpData($data, self::XMP_SEGMENT_NAME, "\x01");
+        $end = substr($data, strpos($data, "\x01"));
 
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
