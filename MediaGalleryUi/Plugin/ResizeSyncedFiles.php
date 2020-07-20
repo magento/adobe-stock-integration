@@ -10,6 +10,9 @@ namespace Magento\MediaGalleryUi\Plugin;
 use Magento\MediaGallerySynchronization\Model\SynchronizeFiles;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
+/**
+ * Create resizes files that were synced
+ */
 class ResizeSyncedFiles
 {
     /**

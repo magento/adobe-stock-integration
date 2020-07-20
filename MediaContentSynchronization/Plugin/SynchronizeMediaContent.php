@@ -9,7 +9,7 @@ namespace Magento\MediaContentSynchronization\Plugin;
 
 use Magento\MediaContentSynchronization\Model\Publish;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGallerySynchronization\Model\Consume;
+use Magento\MediaGallerySynchronization\Model\Consumer;
 
 /**
  * Run media content synchronization after the media files consumer finish files synchronization.
@@ -32,10 +32,10 @@ class SynchronizeMediaContent
     /**
      * Publish content synchronization request message to the queue.
      *
-     * @param Consume $subject
+     * @param Consumer $subject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(Consume $subject): void
+    public function afterExecute(Consumer $subject): void
     {
         $this->publish->execute();
     }
