@@ -7,8 +7,9 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
+    'Magento_Ui/js/lib/key-codes',
     'Magento_MediaGalleryUi/js/action/getDetails'
-], function ($, _, Component, getDetails) {
+], function ($, _, Component, keyCodes, getDetails) {
     'use strict';
 
     return Component.extend({
@@ -100,6 +101,25 @@ define([
         addMediaGridMessage: function (code, message) {
             this.mediaGridMessages().add(code, message);
             this.mediaGridMessages().scheduleCleanup();
+        },
+
+        /**
+         * Handle Enter key event to save image details
+         *
+         * @param {Object} data
+         * @param {jQuery.Event} event
+         * @returns {Boolean}
+         */
+        handleEnterKey: function (data, event) {
+            var modalElement = $(this.modalSelector),
+                key = keyCodes[event.keyCode];
+
+            if (key === 'enterKey') {
+                event.preventDefault();
+                modalElement.find('.page-action-buttons button.save').click();
+            }
+
+            return true;
         }
     });
 });
