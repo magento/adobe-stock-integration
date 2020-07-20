@@ -46,8 +46,8 @@ class XmpWriter implements MetadataWriterInterface
     private $xmpTemplate;
 
     /**
-     * @param FileInterfaceFactory $fileFactory
-     * @param SegmentInterfaceFactory $segmentFactory
+     * @param FileInterfaceFactory $fileFactoryIntercafe
+     * @param SegmentInterfaceFactory $segmentFactoryInterface
      * @param AddXmpMetadata $addXmpMetadata
      * @param XmpTemplate $xmpTemplate
      */
@@ -83,7 +83,7 @@ class XmpWriter implements MetadataWriterInterface
         if (empty($xmpGifSegments)) {
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $this->insertXmpGifSegment($segments, $this->createXmpSegment($metadata))
+                'segments' => $this->insertXmpGifSegment($gifSegments, $this->createXmpSegment($metadata))
             ]);
         }
 

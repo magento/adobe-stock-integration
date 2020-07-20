@@ -72,21 +72,21 @@ class XmpWriter implements MetadataWriterInterface
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
         $segments = $file->getSegments();
-        $xmpSegments = [];
+        $pngXmpSegments = [];
         foreach ($segments as $key => $segment) {
             if ($this->isXmpSegment($segment)) {
                 $xmpSegments[$key] = $segment;
             }
         }
 
-        if (empty($xmpSegments)) {
+        if (empty($pngXmpSegments)) {
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $this->insertXmpSegment($segments, $this->createXmpSegment($metadata))
+                'segments' => $this->insertPngXmpSegment($segments, $this->createPngXmpSegment($metadata))
             ]);
         }
 
-        foreach ($xmpSegments as $key => $segment) {
+        foreach ($pngXmpSegments as $key => $segment) {
             $segments[$key] = $this->updateSegment($segment, $metadata);
         }
 
@@ -103,7 +103,7 @@ class XmpWriter implements MetadataWriterInterface
      * @param SegmentInterface $xmpSegment
      * @return SegmentInterface[]
      */
-    private function insertXmpSegment(array $segments, SegmentInterface $xmpSegment): array
+    private function insertPngXmpSegment(array $segments, SegmentInterface $xmpSegment): array
     {
         return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
     }
@@ -114,7 +114,7 @@ class XmpWriter implements MetadataWriterInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function createXmpSegment(MetadataInterface $metadata): SegmentInterface
+    public function createPngXmpSegment(MetadataInterface $metadata): SegmentInterface
     {
         $xmpData = $this->xmpTemplate->get();
         return $this->segmentFactory->create([
