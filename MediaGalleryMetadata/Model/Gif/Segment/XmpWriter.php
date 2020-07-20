@@ -23,7 +23,10 @@ class XmpWriter implements MetadataWriterInterface
 {
     private const XMP_SEGMENT_NAME = 'XMP DataXMP';
     private const XMP_DATA_START_POSITION = 14;
+    private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
+    private const MAGIC_TRAILER_END = "\x03\x02\x01\x00\x00";
 
+    
     /**
      * @var SegmentInterfaceFactory
      */
@@ -45,7 +48,7 @@ class XmpWriter implements MetadataWriterInterface
     private $xmpTemplate;
 
     /**
-     * @param FileInterfaceFactory $fileFactoryIntercafe
+     * @param FileInterfaceFactory $fileFactoryInterface
      * @param SegmentInterfaceFactory $segmentFactoryInterface
      * @param AddXmpMetadata $addXmpMetadata
      * @param XmpTemplate $xmpTemplate
@@ -97,7 +100,7 @@ class XmpWriter implements MetadataWriterInterface
     }
 
     /**
-     * Insert XMP segment to gif image segments (at position 1)
+     * Insert XMP segment to gif image segments (at position 3)
      *
      * @param SegmentInterface[] $segments
      * @param SegmentInterface $xmpSegment
@@ -105,7 +108,7 @@ class XmpWriter implements MetadataWriterInterface
      */
     private function insertXmpGifSegment(array $segments, SegmentInterface $xmpSegment): array
     {
-        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
+        return array_merge(array_slice($segments, 0, 4), [$xmpSegment], array_slice($segments, 4));
     }
 
     /**
@@ -138,9 +141,21 @@ class XmpWriter implements MetadataWriterInterface
     {
         $xmpData = $this->xmpTemplate->get();
 
+        $xmpSegment = pack("C", ord("!")) . pack("C", 255) . pack("C", 11).
+                    self::XMP_SEGMENT_NAME . $this->addXmpMetadata->execute($xmpData, $metadata) . "\x01";
+
+        /**
+         * Write Magic trailer 258 bytes see XMP Specification Part 3, 1.1.2 GIF
+         */
+        $i = 255;
+        while ($i>0) {
+            $xmpSegment .= pack("C", $i);
+            $i--;
+        }
+
         return $this->segmentFactory->create([
             'name' => self::XMP_SEGMENT_NAME,
-            'data' => self::XMP_SEGMENT_NAME . $this->addXmpMetadata->execute($xmpData, $metadata)
+            'data' => $xmpSegment . "\0\0"
         ]);
     }
 

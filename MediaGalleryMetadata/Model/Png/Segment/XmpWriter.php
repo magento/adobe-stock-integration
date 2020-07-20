@@ -75,7 +75,7 @@ class XmpWriter implements MetadataWriterInterface
         $pngXmpSegments = [];
         foreach ($segments as $key => $segment) {
             if ($this->isXmpSegment($segment)) {
-                $xmpSegments[$key] = $segment;
+                $pngXmpSegments[$key] = $segment;
             }
         }
 
