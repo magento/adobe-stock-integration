@@ -17,7 +17,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 
 /**
- * XMP Writer
+ * XMP Writer for png format
  */
 class XmpWriter implements MetadataWriterInterface
 {

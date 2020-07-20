@@ -24,9 +24,9 @@ class XmpReader implements MetadataReaderInterface
     /**
      * see XMP Specification Part 3, 1.1.2 GIF
      */
-    private const MAGIC_TRAILER_LENGTH = 257;
+    private const MAGIC_TRAILER_LENGTH = 258;
     private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
-    private const MAGIC_TRAILER_END = "\x03\x02\x01\x00";
+    private const MAGIC_TRAILER_END = "\x03\x02\x01\x00\x00";
 
     /**
      * @var MetadataInterfaceFactory
@@ -87,7 +87,7 @@ class XmpReader implements MetadataReaderInterface
         $xmp = substr($segment->getData(), 14);
 
         if (substr($xmp, -self::MAGIC_TRAILER_LENGTH, 3) !== self::MAGIC_TRAILER_START
-            || substr($xmp, -4) !== self::MAGIC_TRAILER_END
+            || substr($xmp, -5) !== self::MAGIC_TRAILER_END
         ) {
             throw new LocalizedException(__('XMP data is corrupted'));
         }

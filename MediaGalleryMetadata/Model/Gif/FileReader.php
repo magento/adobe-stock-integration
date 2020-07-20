@@ -307,7 +307,7 @@ class FileReader implements FileReaderInterface
             $subLength = $this->read($resource, 1);
         }
 
-        return $data . "\0";
+        return $data . $subLength;
     }
 
     /**

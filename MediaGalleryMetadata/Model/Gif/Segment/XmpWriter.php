@@ -17,7 +17,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 
 /**
- * GIF XMP Writer
+ *  XMP Writer for GIF format
  */
 class XmpWriter implements MetadataWriterInterface
 {
@@ -52,13 +52,13 @@ class XmpWriter implements MetadataWriterInterface
      * @param XmpTemplate $xmpTemplate
      */
     public function __construct(
-        FileInterfaceFactory $fileFactory,
-        SegmentInterfaceFactory $segmentFactory,
+        FileInterfaceFactory $fileFactoryInterface,
+        SegmentInterfaceFactory $segmentFactoryInterface,
         AddXmpMetadata $addXmpMetadata,
         XmpTemplate $xmpTemplate
     ) {
-        $this->fileFactory = $fileFactory;
-        $this->segmentFactory = $segmentFactory;
+        $this->fileFactory = $fileFactoryInterface;
+        $this->segmentFactory = $segmentFactoryInterface;
         $this->addXmpMetadata = $addXmpMetadata;
         $this->xmpTemplate = $xmpTemplate;
     }
@@ -72,39 +72,39 @@ class XmpWriter implements MetadataWriterInterface
      */
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
-        $segments = $file->getSegments();
-        $xmpSegments = [];
-        foreach ($segments as $key => $segment) {
+        $gifSegments = $file->getSegments();
+        $xmpGifSegments = [];
+        foreach ($gifSegments as $key => $segment) {
             if ($this->isSegmentXmp($segment)) {
-                $xmpSegments[$key] = $segment;
+                $xmpGifSegments[$key] = $segment;
             }
         }
 
-        if (empty($xmpSegments)) {
+        if (empty($xmpGifSegments)) {
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $this->insertXmpSegment($segments, $this->createXmpSegment($metadata))
+                'segments' => $this->insertXmpGifSegment($segments, $this->createXmpSegment($metadata))
             ]);
         }
 
-        foreach ($xmpSegments as $key => $segment) {
-            $segments[$key] = $this->updateSegment($segment, $metadata);
+        foreach ($xmpGifSegments as $key => $segment) {
+            $gifSegments[$key] = $this->updateSegment($segment, $metadata);
         }
 
         return $this->fileFactory->create([
             'path' => $file->getPath(),
-            'segments' => $segments
+            'segments' => $gifSegments
         ]);
     }
 
     /**
-     * Insert XMP segment to image segments (at position 1)
+     * Insert XMP segment to gif image segments (at position 1)
      *
      * @param SegmentInterface[] $segments
      * @param SegmentInterface $xmpSegment
      * @return SegmentInterface[]
      */
-    private function insertXmpSegment(array $segments, SegmentInterface $xmpSegment): array
+    private function insertXmpGifSegment(array $segments, SegmentInterface $xmpSegment): array
     {
         return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
     }
@@ -156,8 +156,8 @@ class XmpWriter implements MetadataWriterInterface
     {
         $data = $segment->getData();
         $start = substr($data, 0, self::XMP_DATA_START_POSITION);
-        $xmpData = $this->getXmpData($data, '?>', '<?');
-        $end = substr($data, strpos($data, "='w'?>") + 6);
+        $xmpData = $this->getXmpData($data, 'DataXMP', "'w'?>") . "'w'?>";
+        $end = substr($data, strpos($data, "xmpmeta>") + 8);
 
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
