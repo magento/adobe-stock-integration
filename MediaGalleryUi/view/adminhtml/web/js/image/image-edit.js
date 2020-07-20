@@ -21,18 +21,22 @@ define([
             saveDetailsUrl: '/media_gallery/image/saveDetails',
             images: [],
             image: null,
+            keywordOptions: [],
+            selectedKeywords: [],
+            newKeyword: '',
             modules: {
                 mediaGridMessages: '${ $.mediaGridMessages }',
-                select: '${ $.name }_select'
+                keywordsSelect: '${ $.name }_keywords'
             },
             viewConfig: [
                 {
-                    component: 'Magento_MediaGalleryUi/js/image/edit/keyword-ui-select',
-                    name: '${ $.name }_select'
+                    component: "Magento_Ui/js/form/element/ui-select",
+                    name: '${ $.name }_keywords'
                 }
             ],
             exports: {
-                image: '${ $.name }_select:image'
+                keywordOptions: '${ $.name }_keywords:options',
+                selectedKeywords: '${ $.name }_keywords:value'
             }
         },
 
@@ -45,6 +49,52 @@ define([
             this._super().initView();
 
             return this;
+        },
+
+        /**
+         * Add a new keyword to select
+         */
+        addKeyword: function() {
+            var options = this.keywordOptions(),
+                selected = this.selectedKeywords();
+
+            options.push(this.getOptionForKeyword(this.newKeyword()));
+            selected.push(this.newKeyword());
+            this.newKeyword('');
+
+            this.keywordOptions(options);
+            this.selectedKeywords(selected);
+        },
+
+        /**
+         * Create an option object based on keyword string
+         *
+         * @param {String} keyword
+         * @returns {Object}
+         */
+        getOptionForKeyword: function(keyword) {
+            return {
+                'is_active': 1,
+                level: 1,
+                value: keyword,
+                label: keyword
+            };
+        },
+
+        /**
+         * Convert array of keywords to options format
+         *
+         * @param {Array} tags
+         */
+        setKeywordOptions: function (tags) {
+            var options = [];
+
+            tags.forEach(function (tag) {
+                options.push(this.getOptionForKeyword(tag));
+            }.bind(this));
+
+            this.keywordOptions(options);
+            this.selectedKeywords(tags);
         },
 
         /**
@@ -66,7 +116,10 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'image'
+                    'image',
+                    'keywordOptions',
+                    'selectedKeywords',
+                    'newKeyword'
                 ]);
 
             return this;
@@ -83,7 +136,6 @@ define([
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openEditImageDetailsModal();
-                    this.getKeywordsOp();
                 }.bind(this)).fail(function (message) {
                     this.addMediaGridMessage('error', message);
                 }.bind(this));
@@ -110,6 +162,10 @@ define([
             if (!modalElement.length || _.isUndefined(modalElement.modal)) {
                 return;
             }
+
+            this.setKeywordOptions(this.image().tags);
+            this.newKeyword('');
+
             modalElement.modal('openModal');
         },
 
@@ -124,10 +180,6 @@ define([
             }
 
             modalElement.modal('closeModal');
-        },
-
-        getKeywordsOp: function() {
-            this.select().getKeywordsOp();
         },
 
         /**

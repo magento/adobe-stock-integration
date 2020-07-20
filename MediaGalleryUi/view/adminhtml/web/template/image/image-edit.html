@@ -40,10 +40,30 @@
                               data-validate="{'validate-alphanum-with-spaces':true, 'validate-length':true}"></textarea>
                 </div>
             </div>
-            <div class="admin__field">
-                <!-- ko scope: select -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!-- /ko -->
-            </div>
+            <fieldset class="admin__field">
+                <legend class="admin__field-label">
+                    <span data-bind="i18n: 'Keywords'"></span>
+                </legend>
+                <div class="admin__field-control admin__control-grouped">
+                    <div class="admin__field">
+                        <!-- ko scope: keywordsSelect -->
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+                        <!-- /ko -->
+                    </div>
+                </div>
+                <div class="admin__field admin__field-group-additional admin__field-small">
+                    <div class="admin__field-control">
+                        <input type="text" id="keyword" data-ui-id="keyword" name="keyword" placeholder="New Keyword"
+                               class="admin__control-text" data-bind="value: newKeyword"/>
+                    </div>
+                </div>
+                <div class="admin__field admin__field-group-additional admin__field-small">
+                    <div class="admin__field-control">
+                        <button type="button" class="action-basic">
+                            <span data-bind="i18n: 'Add', click: addKeyword"></span>
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
         </fieldset>
 </div>
