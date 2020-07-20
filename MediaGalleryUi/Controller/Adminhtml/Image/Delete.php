@@ -15,7 +15,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryUi\Model\DeleteImage;
 use Psr\Log\LoggerInterface;
@@ -103,7 +102,7 @@ class Delete extends Action implements HttpPostActionInterface
             $this->deleteImage->execute($assets);
             $responseCode = self::HTTP_OK;
             if (count($imageIds) === 1) {
-                $message = sprintf('The asset %s has been successfully deleted', current($assets)->getTitle());
+                $message = sprintf('The asset "%s" has been successfully deleted', current($assets)->getTitle());
             } else {
                 $message = 'Assets have been successfully deleted';
             }
