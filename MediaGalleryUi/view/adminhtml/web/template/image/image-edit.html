@@ -14,9 +14,9 @@
                 </label>
                 <div class="admin__field-control">
                     <input type="text" id="title" data-ui-id="title" name="title" placeholder="Title"
-                           class="admin__control-text required-entry minimum-length-1 maximum-length-120"
+                           class="admin__control-text required-entry minimum-length-1 maximum-length-128"
                            data-bind="value: image().title, event: {keypress: handleEnterKey}"
-                           data-validate="{'required':true,'validate-alphanum-with-spaces':true, 'validate-length':true}"/>
+                           data-validate="{'required':true,'validate-image-title':true, 'validate-length':true}"/>
                 </div>
             </div>
             <div class="admin__field">
@@ -38,7 +38,7 @@
                               class="admin__control-textarea minimum-length-0 maximum-length-500"
                               rows="7" cols="80"
                               data-bind="value: image().description, event: {keypress: handleEnterKey}"
-                              data-validate="{'validate-alphanum-with-spaces':true, 'validate-length':true}"></textarea>
+                              data-validate="{'validate-image-description':true, 'validate-length':true}"></textarea>
                 </div>
             </div>
         </fieldset>

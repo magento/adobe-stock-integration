@@ -12,7 +12,8 @@ define([
 
     $.validator.addMethod(
         'validate-image-title', function (value) {
-            return /^[a-zA-Z0-9\-\_\.\,\n]+$/i.test(value);
+            return /^[a-zA-Z0-9\-\_\.\,\ ]+$/i.test(value);
 
-        }, $.mage.__('Please name the file using only letters, numbers, underscores and dashes'));
+        }, $.mage.__('Please use only letters (a-z or A-Z), numbers (0-9), dots (.), commas(,), ' +
+            'underscores (_), dashes(-) and spaces on this field.'));
 });
