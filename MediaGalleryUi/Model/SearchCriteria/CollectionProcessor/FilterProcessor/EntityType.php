@@ -85,10 +85,10 @@ class EntityType implements CustomFilterInterface
     private function getNotUsedEntityIds(): Select
     {
         return $this->connection->getConnection()->select()->from(
-            ['mga' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
+            ['media_gallery_asset' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
             ['id']
         )->where(
-            'mga.id  not in ?',
+            'media_gallery_asset.id  not in ?',
             $this->connection->getConnection()->select()->from(
                 ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
                 ['asset_id']
