@@ -13,7 +13,7 @@
             <description>Verifies image keywords on the View Details panel</description>
         </annotations>
         <arguments>
-            <argument name="keywords" type="string"/>
+            <argument name="keywords" />
         </arguments>
 
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.keywords}}" stepKey="grabDescription"/>
