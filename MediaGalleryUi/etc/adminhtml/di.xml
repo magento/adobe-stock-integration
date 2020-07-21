@@ -12,6 +12,7 @@
                 <item name="path" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Directory</item>
                 <item name="fulltext" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Keyword</item>
                 <item name="entity_type" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\EntityType</item>
+                <item name="duplicated" xsi:type="object">Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Duplicated</item>
             </argument>
         </arguments>
     </virtualType>

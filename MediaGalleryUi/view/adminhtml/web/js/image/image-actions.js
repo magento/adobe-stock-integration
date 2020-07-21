@@ -55,6 +55,15 @@ define([
         },
 
         /**
+         * Opens the image edit panel
+         */
+        editImageAction: function () {
+            var record = this.imageModel().getSelected().id;
+
+            this.mediaGalleryEditDetails().showEditDetailsPanel(record);
+        },
+
+        /**
          * Delete image action
          */
         deleteImageAction: function () {
@@ -73,17 +82,23 @@ define([
          */
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
-                modalElement = $(this.modalSelector);
+                modalElement = $(this.modalSelector),
+                dataForm = modalElement.find('#image-edit-details-form'),
+                imageId = this.imageModel().getSelected().id,
+                imageDetails = this.mediaGalleryImageDetails();
 
-            modalElement.find('#image-edit-details-form').validation();
-
-            if (modalElement.find('#image-edit-details-form').validation('isValid')) {
+            if (dataForm.validation('isValid')) {
                 saveDetails(
                     saveDetailsUrl,
-                    modalElement.find('#image-edit-details-form')
+                    dataForm
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();
+                    imageDetails.removeCached(imageId);
+
+                    if (imageDetails.isActive()) {
+                        imageDetails.showImageDetailsById(imageId);
+                    }
                 }.bind(this));
             }
         },
