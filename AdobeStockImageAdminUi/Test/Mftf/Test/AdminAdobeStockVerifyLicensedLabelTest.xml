@@ -23,7 +23,7 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
             <actionGroup ref="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
