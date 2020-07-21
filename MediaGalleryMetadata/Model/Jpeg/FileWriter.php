@@ -56,7 +56,7 @@ class FileWriter implements FileWriterInterface
     public function execute(FileInterface $file): void
     {
         foreach ($file->getSegments() as $segment) {
-            if (strlen($segment->getData()) > 0xfffd) {
+            if ($segment->getName() != 'CompressedImage' && strlen($segment->getData()) > 0xfffd) {
                 throw new LocalizedException(__('A Header is too large to fit in the segment!'));
             }
         }
