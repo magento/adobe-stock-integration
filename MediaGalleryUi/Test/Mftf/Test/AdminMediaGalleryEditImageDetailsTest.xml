@@ -42,7 +42,7 @@
             <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
-            <argument name="description" value="{{UpdatedImageDetails.description}}"/>
+            <argument name="description" value="UpdatedImageDetails.description"/>
         </actionGroup>
     </test>
 </tests>
