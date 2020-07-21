@@ -13,7 +13,7 @@
             <description>Verifies image title on the View Details panel</description>
         </annotations>
         <arguments>
-            <argument name="title" type="string"/>
+            <argument name="title"/>
         </arguments>
 
         <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.title}}" stepKey="grabImageTitle"/>
