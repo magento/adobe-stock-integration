@@ -68,7 +68,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Asset"/>
-            <argument name="optionName" value="{{ImageUpload3.fileName}}"/>
+            <argument name="optionName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
         
