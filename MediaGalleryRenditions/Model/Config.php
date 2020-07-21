@@ -8,13 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryRenditions\Model;
 
-use Magento\MediaGalleryRenditionsApi\Api\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Config for Media Gallery Renditions module
+ * Class responsible for providing access to Media Gallery Renditions system configuration
  */
-class Config implements ConfigInterface
+class Config
 {
     /**
      * Config path for Media Gallery Renditions Width
