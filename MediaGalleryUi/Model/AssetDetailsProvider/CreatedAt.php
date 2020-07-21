@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\AssetDetailsProvider;
 
-use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryUi\Model\AssetDetailsProviderInterface;
 
@@ -21,6 +20,20 @@ class CreatedAt implements AssetDetailsProviderInterface
      * Date format
      */
     private const DATE_FORMAT = 'd/m/Y, g:i A';
+
+    /**
+     * @var DateTime
+     */
+    private $date;
+
+    /**
+     * @param DateTime $date
+     */
+    public function __construct(
+        DateTime $date
+    ) {
+        $this->date = $date;
+    }
 
     /**
      * Provide asset created at date time
@@ -46,8 +59,6 @@ class CreatedAt implements AssetDetailsProviderInterface
      */
     private function formatDate(string $date): string
     {
-        $dateTime = new \DateTime($date);
-
-        return $dateTime->format(self::DATE_FORMAT);
+        return $this->date->gmtDate(self::DATE_FORMAT, $date);
     }
 }

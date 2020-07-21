@@ -9,9 +9,9 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
@@ -22,6 +22,11 @@ use Psr\Log\LoggerInterface;
  */
 class SynchronizeFiles implements SynchronizeFilesInterface
 {
+    /**
+     * Date format
+     */
+    private const DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @var CreateAssetFromFile
      */
@@ -53,8 +58,14 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $driver;
 
     /**
+     * @var DateTime
+     */
+    private $date;
+
+    /**
      * @param File $driver
      * @param Filesystem $filesystem
+     * @param DateTime $date
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param CreateAssetFromFile $createAssetFromFile
      * @param SaveAssetsInterface $saveAsset
@@ -63,6 +74,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     public function __construct(
         File $driver,
         Filesystem $filesystem,
+        DateTime $date,
         GetAssetsByPathsInterface $getAssetsByPaths,
         CreateAssetFromFile $createAssetFromFile,
         SaveAssetsInterface $saveAsset,
@@ -70,6 +82,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     ) {
         $this->driver = $driver;
         $this->filesystem = $filesystem;
+        $this->date = $date;
         $this->getAssetsByPaths = $getAssetsByPaths;
         $this->createAssetFromFile = $createAssetFromFile;
         $this->saveAsset = $saveAsset;
@@ -127,7 +140,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      */
     private function getFileModificationTime(\SplFileInfo $file): string
     {
-        return (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s');
+        return $this->date->gmtDate(self::DATE_FORMAT, $file->getMTime());
     }
 
     /**
