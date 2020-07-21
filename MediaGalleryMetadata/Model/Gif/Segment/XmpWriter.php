@@ -25,7 +25,6 @@ class XmpWriter implements MetadataWriterInterface
     private const XMP_DATA_START_POSITION = 14;
     private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
     private const MAGIC_TRAILER_END = "\x03\x02\x01\x00\x00";
-
     
     /**
      * @var SegmentInterfaceFactory
@@ -48,19 +47,19 @@ class XmpWriter implements MetadataWriterInterface
     private $xmpTemplate;
 
     /**
-     * @param FileInterfaceFactory $fileFactoryInterface
-     * @param SegmentInterfaceFactory $segmentFactoryInterface
+     * @param FileInterfaceFactory $fileFactory
+     * @param SegmentInterfaceFactory $segmentFactory
      * @param AddXmpMetadata $addXmpMetadata
      * @param XmpTemplate $xmpTemplate
      */
     public function __construct(
-        FileInterfaceFactory $fileFactoryInterface,
-        SegmentInterfaceFactory $segmentFactoryInterface,
+        FileInterfaceFactory $fileFactory,
+        SegmentInterfaceFactory $segmentFactory,
         AddXmpMetadata $addXmpMetadata,
         XmpTemplate $xmpTemplate
     ) {
-        $this->fileFactory = $fileFactoryInterface;
-        $this->segmentFactory = $segmentFactoryInterface;
+        $this->fileFactory = $fileFactory;
+        $this->segmentFactory = $segmentFactory;
         $this->addXmpMetadata = $addXmpMetadata;
         $this->xmpTemplate = $xmpTemplate;
     }
@@ -148,7 +147,7 @@ class XmpWriter implements MetadataWriterInterface
          * Write Magic trailer 258 bytes see XMP Specification Part 3, 1.1.2 GIF
          */
         $i = 255;
-        while ($i>0) {
+        while ($i > 0) {
             $xmpSegment .= pack("C", $i);
             $i--;
         }
