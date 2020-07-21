@@ -31,13 +31,13 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
-            <argument name="description" value="Description of the magento image"/>
+            <argument name="description" value="ImageMetadata.description"/>
         </actionGroup>
        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyImageKeywords">
-            <argument name="keywords" value="magento, mediagallerymetadata"/>
+            <argument name="keywords" value="ImageMetadata.keywords"/>
        </actionGroup>
        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageTitleActionGroup" stepKey="verifyImageTitle">
-            <argument name="title" value="Title of the magento image"/>
+            <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
     </test>
 </tests>
