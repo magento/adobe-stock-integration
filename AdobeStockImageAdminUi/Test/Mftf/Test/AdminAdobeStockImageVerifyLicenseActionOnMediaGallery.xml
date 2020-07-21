@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
             <actionGroup ref="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
@@ -37,7 +37,7 @@
         <actionGroup ref="AssertAdminAdobeStockImageUnlicensedLabelActionGroup" stepKey="assertUnlicensedLabel"/>
         <actionGroup ref="AssertAdminAdobeStockImageAssertLicenseButtonMediaGalleryActionGroup" stepKey="assertLicenseButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
-        
+
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>

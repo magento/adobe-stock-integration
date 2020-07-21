@@ -53,13 +53,31 @@
             </settings>
         </filterSearch>
         <filters name="listing_filters">
-            <filterInput name="name" provider="${ $.parentName }">
+            <filterSelect
+                name="asset_id"
+                provider="${ $.parentName }"
+                sortOrder="10"
+                class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
+                component="Magento_Ui/js/form/element/ui-select"
+                template="Magento_MediaGalleryUi/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="entityType" xsi:type="string">catalog_category</item>
+                        <item name="identityColumn" xsi:type="string">entity_id</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="filterPlaceholder" xsi:type="string" translate="true">Asset Title</item>
+                        <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find assets</item>
+                        <item name="searchOptions" xsi:type="boolean">true</item>
+                        <item name="searchUrl" xsi:type="url" path="media_gallery/asset/search" />
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
                 <settings>
-                    <visible>false</visible>
-                    <dataScope>name</dataScope>
-                    <label translate="true">Name</label>
-                </settings>
-            </filterInput>
+                    <caption translate="true">– Please Select assets –</caption>
+                    <label translate="true">Asset</label>
+                    <dataScope>asset_id</dataScope>
+                    </settings>
+            </filterSelect>
          </filters>
         <paging name="listing_paging">
             <settings>
