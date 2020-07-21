@@ -7,14 +7,14 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminEnhancedMediaGalleryVerifyUsedInFilterTest">
+    <test name="AdminEnhancedMediaGalleryVerifyAssetFilterTest">
         <annotations>
             <features value="MediaGallery"/>
-            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1567"/>
-            <title value="User filters images by the area they used in"/>
-            <stories value="User filters images by the area they used in"/>
-            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4930844"/>
-            <description value="User filters images by the area they used in"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1292"/>
+            <title value="User sees entities where asset is used in"/>
+            <stories value="Story 58: User sees entities where asset is used in"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951024"/>
+            <description value="User sees entities where asset is used in"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
@@ -24,20 +24,25 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+               <argument name="category" value="$$category$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
                 <argument name="name" value="wysiwyg"/>
            </actionGroup>
            <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
            <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
-                <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+                <argument name="imageName" value="{{ImageUpload3.fileName}}"/>
            </actionGroup>
            <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
                 <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
             </actionGroup>
             <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
             <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImage"/>
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>            
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
         </after>
 
@@ -47,30 +52,29 @@
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstIMage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
             <argument name="image" value="ImageUpload_1"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
-            <argument name="imageName" value="{{ImageUpload.file}}"/>
+            <argument name="imageName" value="{{ImageUpload3.file}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwygToFilterIMage"/>
-
-        <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
-        <actionGroup ref="AdminMediaGalleryApplyUsedInFilterActionGroup" stepKey="applyUsedInCategoryFilter">
-            <argument name="entityType" value="Categories"/>
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryGridPage"/>
+        
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
+            <argument name="filterName" value="Asset"/>
+            <argument name="optionName" value="{{ImageUpload3.fileName}}"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
-
-        <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
-            <argument name="image" value="ImageUpload"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
+        
+        <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
+            <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
-        <actionGroup ref="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup" stepKey="assertImageNotExistsInGrid">
-            <argument name="image" value="ImageUpload_1"/>
-        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
     </test>
 </tests>
