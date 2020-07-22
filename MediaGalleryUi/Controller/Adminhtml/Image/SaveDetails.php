@@ -14,7 +14,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryUi\Model\SaveImageDetails;
 use Psr\Log\LoggerInterface;
 
@@ -30,11 +29,6 @@ class SaveDetails extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var GetAssetsByIdsInterface
-     */
-    private $getAssetsByIds;
-
-    /**
      * @var SaveImageDetails
      */
     private $saveImage;
@@ -48,19 +42,16 @@ class SaveDetails extends Action implements HttpPostActionInterface
      * SaveDetails constructor.
      *
      * @param Context $context
-     * @param GetAssetsByIdsInterface $getAssetsByIds
      * @param SaveImageDetails $saveImage
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        GetAssetsByIdsInterface $getAssetsByIds,
         SaveImageDetails $saveImage,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->getAssetsByIds = $getAssetsByIds;
         $this->saveImage = $saveImage;
         $this->logger = $logger;
     }
@@ -89,9 +80,7 @@ class SaveDetails extends Action implements HttpPostActionInterface
         }
 
         try {
-            $asset = current($this->getAssetsByIds->execute([$imageId]));
             $this->saveImage->execute(
-                $asset,
                 $imageId,
                 $imageKeywords,
                 $title,

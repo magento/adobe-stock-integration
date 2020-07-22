@@ -7,12 +7,13 @@
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
+use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
@@ -35,6 +36,16 @@ class SaveImageDetails
      * @var AssetKeywordsInterfaceFactory
      */
     private $assetKeywordsFactory;
+
+    /**
+     * @var KeywordInterfaceFactory
+     */
+    private $keywordFactory;
+
+    /**
+     * @var GetAssetsByIdsInterface
+     */
+    private $getAssetsByIds;
 
     /**
      * @var SaveAssetsInterface
@@ -67,6 +78,8 @@ class SaveImageDetails
      * @param Filesystem $fileSystem
      * @param AssetInterfaceFactory $assetFactory
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
+     * @param KeywordInterfaceFactory $keywordFactory
+     * @param GetAssetsByIdsInterface $getAssetsByIds
      * @param SaveAssetsInterface $saveAssets
      * @param SaveAssetsKeywordsInterface $saveAssetKeywords
      * @param AddMetadataInterface $addMetadata
@@ -77,6 +90,8 @@ class SaveImageDetails
         Filesystem $fileSystem,
         AssetInterfaceFactory $assetFactory,
         AssetKeywordsInterfaceFactory $assetKeywordsFactory,
+        KeywordInterfaceFactory $keywordFactory,
+        GetAssetsByIdsInterface $getAssetsByIds,
         SaveAssetsInterface $saveAssets,
         SaveAssetsKeywordsInterface $saveAssetKeywords,
         AddMetadataInterface $addMetadata,
@@ -86,6 +101,8 @@ class SaveImageDetails
         $this->fileSystem = $fileSystem;
         $this->assetFactory = $assetFactory;
         $this->assetKeywordsFactory = $assetKeywordsFactory;
+        $this->keywordFactory = $keywordFactory;
+        $this->getAssetsByIds = $getAssetsByIds;
         $this->saveAssets = $saveAssets;
         $this->saveAssetKeywords = $saveAssetKeywords;
         $this->addMetadata = $addMetadata;
@@ -96,15 +113,15 @@ class SaveImageDetails
     /**
      * Save image details
      *
-     * @param object $asset
      * @param null|string $imageId
      * @param array $imageKeywords
      * @param null|string $imageTitle
      * @param null|string $imageDescription
      * @throws LocalizedException
      */
-    public function execute($asset, $imageId, $imageKeywords, $imageTitle, $imageDescription): void
+    public function execute($imageId, $imageKeywords, $imageTitle, $imageDescription): void
     {
+        $asset = current($this->getAssetsByIds->execute([$imageId]));
         $updatedAsset = $this->assetFactory->create(
             [
                 'path' => $asset->getPath(),
@@ -129,22 +146,14 @@ class SaveImageDetails
             $imageKeywords
         );
 
-        try {
-            $this->saveAssets->execute([$updatedAsset]);
-        } catch (CouldNotSaveException $e) {
-            throw new LocalizedException(__($e->getMessage()), $e);
-        }
+        $this->saveAssets->execute([$updatedAsset]);
 
+        $arrayKeywords = $this->convertKeywords($imageKeywords);
         $assetKeywords = $this->assetKeywordsFactory->create([
             'assetId' => $imageId,
-            'keywords' => $imageKeywords
+            'keywords' => $arrayKeywords
         ]);
-
-        try {
-            $this->saveAssetKeywords->execute([$assetKeywords]);
-        } catch (CouldNotSaveException $e) {
-            throw new LocalizedException(__($e->getMessage()), $e);
-        }
+        $this->saveAssetKeywords->execute([$assetKeywords]);
     }
 
     /**
@@ -154,15 +163,14 @@ class SaveImageDetails
      * @param null|string $imageTitle
      * @param null|string $imageDescription
      * @param array $imageKeywords
-     * @throws FileSystemException
      */
-    public function updateMetadata(
+    private function updateMetadata(
         $imagePath,
         $imageTitle,
         $imageDescription,
         $imageKeywords
     ) {
-        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
         $filePath = $mediaDirectory->getAbsolutePath($imagePath);
         $metadata = $this->metadataFactory->create([
             'title' => $imageTitle,
@@ -175,5 +183,24 @@ class SaveImageDetails
         } catch (LocalizedException $e) {
             $this->logger->critical($e);
         }
+    }
+
+    /**
+     * Convert keywords
+     *
+     * @param array $keywords
+     * @return array
+     */
+    private function convertKeywords(array $keywords): array
+    {
+        $arrayKeywords = [];
+        foreach ($keywords as $keyword) {
+            $arrayKeywords[] = $this->keywordFactory->create(
+                [
+                    'keyword' => $keyword
+                ]
+            );
+        }
+        return $arrayKeywords;
     }
 }
