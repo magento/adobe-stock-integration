@@ -35,13 +35,7 @@
                         <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcWriter</item>
                     </item>
                 </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaGalleryMetadata\Model\File\AddMetadata">
-        <arguments>
-              <argument name="metadataWriters" xsi:type="array">
-                  <item name="png" xsi:type="array">
+                <item name="png" xsi:type="array">
                       <item name="fileReaders" xsi:type="array">
                           <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileReader</item>
                       </item>
@@ -52,9 +46,19 @@
                         <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpWriter</item>
                     </item>
                 </item>
-              </argument>
+            </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\MediaGalleryMetadata\Model\Gif\AddMetadata" type="Magento\MediaGalleryMetadata\Model\File\AddMetadata">
+        <arguments>
+            <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileReader</argument>
+            <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileWriter</argument>
+            <argument name="writers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpWriter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+>>>>>>> 23985ab0e1735d9466ea98f0db7e29faf81d38ac
     <virtualType name="Magento\MediaGalleryMetadata\Model\Gif\ExtractMetadata" type="Magento\MediaGalleryMetadata\Model\File\ExtractMetadata">
         <arguments>
             <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileReader</argument>

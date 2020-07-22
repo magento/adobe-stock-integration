@@ -14,6 +14,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
 
 /**
  * Jpeg IPTC Writer
@@ -21,9 +22,9 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 class IptcWriter implements MetadataWriterInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
-    private const IPTC_SEGMENT_START = 'Photoshop 3.0';
+    private const IPTC_SEGMENT_START = 'Photoshop 3.0\0x00';
     private const IPTC_DATA_START_POSITION = 0;
-
+    
     /**
      * @var SegmentInterfaceFactory
      */
@@ -40,18 +41,26 @@ class IptcWriter implements MetadataWriterInterface
     private $addIptcMetadata;
 
     /**
+     * @var FileReader
+     */
+    private $fileReader;
+
+    /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param AddIptcMetadata $addIptcMetadata
+     * @param FileReader $fileReader
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        AddIptcMetadata $addIptcMetadata
+        AddIptcMetadata $addIptcMetadata,
+        FileReader $fileReader
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->addIptcMetadata = $addIptcMetadata;
+        $this->fileReader = $fileReader;
     }
 
     /**
@@ -64,36 +73,17 @@ class IptcWriter implements MetadataWriterInterface
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
         $segments = $file->getSegments();
+        $iptcSegments = [];
         foreach ($segments as $key => $segment) {
             if ($this->isIptcSegment($segment)) {
-                $segments[$key] = $this->updateSegment($segment, $metadata, $file);
+                $iptcSegments[$key] = $segment;
             }
         }
-        return $this->fileFactory->create([
-            'path' => $file->getPath(),
-            'segments' => $segments
-        ]);
-    }
 
-    /**
-     * Add metadata to the segment
-     *
-     * @param SegmentInterface $segment
-     * @param MetadataInterface $metadata
-     * @param FileInterface $file
-     * @return SegmentInterface
-     */
-    private function updateSegment(
-        SegmentInterface $segment,
-        MetadataInterface $metadata,
-        FileInterface $file
-    ): SegmentInterface {
-        $data = $segment->getData();
-        $start = substr($data, 0, self::IPTC_DATA_START_POSITION);
-        return $this->segmentFactory->create([
-            'name' => $segment->getName(),
-            'data' => $start . $this->addIptcMetadata->execute($file, $metadata, $segment)
-        ]);
+        foreach ($iptcSegments as $segment) {
+            return  $this->addIptcMetadata->execute($file, $metadata, $segment);
+        }
+        return  $this->addIptcMetadata->execute($file, $metadata, null);
     }
 
     /**
