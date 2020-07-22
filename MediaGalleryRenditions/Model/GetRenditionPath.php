@@ -39,7 +39,7 @@ class GetRenditionPath implements GetRenditionPathInterface
         Filesystem $filesystem,
         DriverInterface $file = null
     ) {
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->directory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->file = $file ?: ObjectManager::getInstance()->get(Filesystem\Driver\File::class);
     }
 

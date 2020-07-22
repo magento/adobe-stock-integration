@@ -37,6 +37,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
      * @var CreateAssetFromFile
      */
     private $createAssetFromFile;
+
     /**
      * @var Filesystem
      */
@@ -77,7 +78,9 @@ class GenerateRenditions implements GenerateRenditionsInterface
                 continue;
             }
             $renditionDirectoryPath = $this->getRenditionPath->execute($asset);
-            $renditionImagePath = $renditionDirectoryPath . $asset->getPath();
+            $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)
+                 ->create($renditionDirectoryPath);
+            $renditionImagePath = $renditionDirectoryPath . '/' . $asset->getPath();
             $image = $this->imageFactory->create();
             $image->open($path);
             $image->keepAspectRatio(true);
