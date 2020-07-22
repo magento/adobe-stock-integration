@@ -29,7 +29,7 @@ class ExtractMetadata implements ExtractMetadataInterface
     
     /**
      * @param MetadataInterfaceFactory $metadataFactory
-     * @param array $metdataExtractors
+     * @param array $metadataExtractors
      */
     public function __construct(
         MetadataInterfaceFactory $metadataFactory,
