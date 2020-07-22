@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryRenditions\Model;
+namespace Magento\MediaGalleryRenditionsApi\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class responsible for providing access to Media Gallery Renditions system configuration
+ * Class responsible for providing access to Media Gallery Renditions system configuration.
  */
 class Config
 {

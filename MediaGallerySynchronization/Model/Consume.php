@@ -12,7 +12,7 @@ use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 /**
  * Media gallery image synchronization queue consumer.
  */
-class Consumer
+class Consume
 {
     /**
      * @var SynchronizeInterface

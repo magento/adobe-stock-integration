@@ -9,6 +9,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
     <topic name="media.gallery.synchronization" is_synchronous="false" request="string[]">
         <handler name="media.gallery.synchronization.handler"
-                 type="Magento\MediaGallerySynchronization\Model\Consumer" method="execute"/>
+                 type="Magento\MediaGallerySynchronization\Model\Consume" method="execute"/>
     </topic>
 </config>

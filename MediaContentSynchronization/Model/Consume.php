@@ -12,7 +12,7 @@ use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 /**
  * Media content synchronization queue consumer.
  */
-class Consumer
+class Consume
 {
     /**
      * @var SynchronizeInterface

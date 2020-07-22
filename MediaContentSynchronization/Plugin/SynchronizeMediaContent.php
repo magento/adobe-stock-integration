@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaContentSynchronization\Plugin;
 
 use Magento\MediaContentSynchronization\Model\Publish;
-use Magento\MediaGallerySynchronization\Model\Consumer;
+use Magento\MediaGallerySynchronization\Model\Consume;
 
 /**
  * Run media content synchronization after the media files consumer finish files synchronization.
@@ -31,10 +31,10 @@ class SynchronizeMediaContent
     /**
      * Publish content synchronization request message to the queue.
      *
-     * @param Consumer $subject
+     * @param Consume $subject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(Consumer $subject): void
+    public function afterExecute(Consume $subject): void
     {
         $this->publish->execute();
     }
