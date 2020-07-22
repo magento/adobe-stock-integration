@@ -78,13 +78,10 @@ class FileReader implements FileReaderInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $path): FileInterface
+    public function execute(string $path): ?FileInterface
     {
         if (!$this->isApplicable($path)) {
-            return $this->fileFactory->create([
-                'path' => $path,
-                'segments' => []
-            ]);
+            return null;
         }
         $resource = $this->driver->fileOpen($path, 'rb');
 

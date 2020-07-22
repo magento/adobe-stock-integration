@@ -51,7 +51,7 @@ class AddMetadata implements AddMetadataInterface
                 );
             }
 
-            if (!empty($file->getSegments())) {
+            if (!empty($file)) {
                 try {
                     foreach ($writer['segmentWriters'] as $segmentWriter) {
                         $file = $segmentWriter->execute($file, $metadata);

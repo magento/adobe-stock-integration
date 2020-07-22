@@ -86,13 +86,15 @@ class ExtractMetadata implements ExtractMetadataInterface
         $description = '';
         $keywords = [];
         $file = $this->fileReader->execute($path);
-        foreach ($this->readers as $reader) {
-            $data = $reader->execute($file);
-            $title = $data->getTitle() ?? $title;
-            $description = $data->getDescription() ?? $description;
-            $keywords = $data->getKeywords();
-            if (!empty($title) && !empty($description) && !empty($keywords)) {
-                break;
+        if (!empty($file)) {
+            foreach ($this->readers as $reader) {
+                $data = $reader->execute($file);
+                $title = $data->getTitle() ?? $title;
+                $description = $data->getDescription() ?? $description;
+                $keywords = $data->getKeywords();
+                if (!empty($title) && !empty($description) && !empty($keywords)) {
+                    break;
+                }
             }
         }
         return $this->metadataFactory->create([
