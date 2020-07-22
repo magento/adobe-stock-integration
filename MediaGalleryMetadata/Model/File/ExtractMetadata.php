@@ -10,42 +10,29 @@ namespace Magento\MediaGalleryMetadata\Model\File;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
 
 /**
  * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
  */
 class ExtractMetadata implements ExtractMetadataInterface
 {
-    /**
-     * @var FileReaderInterface
-     */
-    private $fileReader;
-
-    /**
-     * @var MetadataReaderInterface[]
-     */
-    private $readers;
 
     /**
      * @var MetadataInterfaceFactory
      */
     private $metadataFactory;
 
+    
     /**
-     * @param FileReaderInterface $fileReader
      * @param MetadataInterfaceFactory $metadataFactory
-     * @param MetadataReaderInterface[] $readers
+     * @param array $metdataExtractors
      */
     public function __construct(
-        FileReaderInterface $fileReader,
         MetadataInterfaceFactory $metadataFactory,
-        array $readers
+        array $metadataExtractors
     ) {
-        $this->readers = $readers;
-        $this->fileReader = $fileReader;
         $this->metadataFactory = $metadataFactory;
+        $this->metadataExtractors = $metadataExtractors;
     }
 
     /**
@@ -82,18 +69,26 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private function extractMetadata(string $path): MetadataInterface
     {
-        $title = '';
-        $description = '';
-        $keywords = [];
-        $file = $this->fileReader->execute($path);
-        if (!empty($file)) {
-            foreach ($this->readers as $reader) {
-                $data = $reader->execute($file);
-                $title = $data->getTitle() ?? $title;
-                $description = $data->getDescription() ?? $description;
-                $keywords = $data->getKeywords();
-                if (!empty($title) && !empty($description) && !empty($keywords)) {
-                    break;
+        foreach ($this->metadataExtractors as $extractor) {
+            $title = '';
+            $description = '';
+            $keywords = [];
+            foreach ($extractor['fileReaders'] as $fileReader) {
+                $file = $fileReader->execute($path);
+            }
+            if (!empty($file)) {
+                foreach ($extractor['segmentReaders'] as $segmentReader) {
+                    $data = $segmentReader->execute($file);
+                    $title = $data->getTitle() ?? $title;
+                    $description = $data->getDescription() ?? $description;
+                    $keywords = $data->getKeywords();
+                    if (!empty($title) && !empty($description) && !empty($keywords)) {
+                        return $this->metadataFactory->create([
+                            'title' => $title,
+                            'description' => $description,
+                            'keywords' => array_unique($keywords)
+                        ]);
+                    }
                 }
             }
         }
