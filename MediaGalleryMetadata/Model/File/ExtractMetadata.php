@@ -22,6 +22,10 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private $metadataFactory;
 
+    /**
+     * @var array
+     */
+    private $metadataExtractors;
     
     /**
      * @param MetadataInterfaceFactory $metadataFactory
