@@ -8,10 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenMediaGalleryForPageNoEditorActionGroup">
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+    <actionGroup name="AdminOpenMediaGalleryFromPageNoEditorActionGroup">
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImageButton" />
         <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImage" />

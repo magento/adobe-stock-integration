@@ -20,6 +20,8 @@ class EntityType implements CustomFilterInterface
 {
     private const TABLE_ALIAS = 'main_table';
     private const TABLE_MEDIA_CONTENT_ASSET = 'media_content_asset';
+    private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
+    private const NOT_USED = 'not_used';
 
     /**
      * @var ResourceConnection
@@ -41,9 +43,20 @@ class EntityType implements CustomFilterInterface
     {
         $value = $filter->getValue();
         if (is_array($value)) {
+            $conditions = [];
+            
+            if (in_array(self::NOT_USED, $value)) {
+                unset($value[array_search(self::NOT_USED, $value)]);
+                $conditions[] = ['in' => $this->getNotUsedEntityIds()];
+            }
+
+            if (!empty($value)) {
+                $conditions[] = ['in' => $this->getSelectByEntityType($value)];
+            }
+            
             $collection->addFieldToFilter(
                 self::TABLE_ALIAS . '.id',
-                ['in' => $this->getSelectByEntityType($value)]
+                $conditions
             );
         }
         return true;
@@ -63,6 +76,23 @@ class EntityType implements CustomFilterInterface
         )->where(
             'entity_type IN (?)',
             $value
+        );
+    }
+    
+    /**
+     * Return select asset ids that not exists in asset_content_table
+     */
+    private function getNotUsedEntityIds(): Select
+    {
+        return $this->connection->getConnection()->select()->from(
+            ['media_gallery_asset' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
+            ['id']
+        )->where(
+            'media_gallery_asset.id  not in ?',
+            $this->connection->getConnection()->select()->from(
+                ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
+                ['asset_id']
+            )
         );
     }
 }
