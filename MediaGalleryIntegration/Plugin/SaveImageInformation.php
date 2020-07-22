@@ -77,7 +77,7 @@ class SaveImageInformation
 
         return $result;
     }
-    
+
     /**
      * Can asset be saved with provided path
      *
