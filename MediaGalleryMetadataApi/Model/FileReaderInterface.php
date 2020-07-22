@@ -19,12 +19,4 @@ interface FileReaderInterface
      * @return FileInterface
      */
     public function execute(string $path): FileInterface;
-
-    /**
-     * Is the current file reader applicable to a given path
-     *
-     * @param string $path
-     * @return bool
-     */
-    public function isApplicable(string $path): bool;
 }

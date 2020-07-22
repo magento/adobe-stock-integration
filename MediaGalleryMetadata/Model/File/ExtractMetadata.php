@@ -53,10 +53,6 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     public function execute(string $path): MetadataInterface
     {
-        if (!$this->fileReader->isApplicable($path)) {
-            return $this->getEmptyResult();
-        }
-
         try {
             return $this->extractMetadata($path);
         } catch (\Exception $exception) {
@@ -94,8 +90,7 @@ class ExtractMetadata implements ExtractMetadataInterface
             $data = $reader->execute($file);
             $title = $data->getTitle() ?? $title;
             $description = $data->getDescription() ?? $description;
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $keywords = array_merge($keywords, $data->getKeywords());
+            $keywords = $data->getKeywords();
             if (!empty($title) && !empty($description) && !empty($keywords)) {
                 break;
             }

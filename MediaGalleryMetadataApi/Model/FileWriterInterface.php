@@ -15,7 +15,6 @@ use Magento\Framework\Exception\LocalizedException;
  */
 interface FileWriterInterface
 {
-
     /**
      * Write file to filesystem
      *

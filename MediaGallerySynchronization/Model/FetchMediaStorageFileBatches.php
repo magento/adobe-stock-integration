@@ -16,8 +16,6 @@ use Psr\Log\LoggerInterface;
  */
 class FetchMediaStorageFileBatches
 {
-    private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
-
     /**
      * @var GetAssetsIterator
      */
@@ -39,6 +37,11 @@ class FetchMediaStorageFileBatches
     private $driver;
 
     /**
+     * @var string
+     */
+    private $fileExtensionsPattern;
+    
+    /**
      * @var LoggerInterface
      */
     private $log;
@@ -55,6 +58,7 @@ class FetchMediaStorageFileBatches
      * @param GetAssetsIterator $assetsIterator
      * @param File $driver
      * @param int $batchSize
+     * @param string $fileExtensionsPattern
      */
     public function __construct(
         LoggerInterface $log,
@@ -62,7 +66,8 @@ class FetchMediaStorageFileBatches
         Filesystem $filesystem,
         GetAssetsIterator $assetsIterator,
         File $driver,
-        int $batchSize
+        int $batchSize,
+        string $fileExtensionsPattern
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
@@ -70,6 +75,7 @@ class FetchMediaStorageFileBatches
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->batchSize = $batchSize;
+        $this->fileExtensionsPattern = $fileExtensionsPattern;
     }
 
     /**
@@ -111,7 +117,7 @@ class FetchMediaStorageFileBatches
             $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
             return $relativePath
                 && !$this->isPathExcluded->execute($relativePath)
-                && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
+                && preg_match($this->fileExtensionsPattern, $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);
             return false;

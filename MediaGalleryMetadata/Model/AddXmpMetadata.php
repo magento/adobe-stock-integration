@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryMetadata\Model;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
- * Add metadata to the XMP data
+ * Add metadata to the XMP template
  */
 class AddXmpMetadata
 {

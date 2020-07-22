@@ -81,7 +81,7 @@ class XmpWriter implements MetadataWriterInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
+    private function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
     {
         return $this->segmentFactory->create([
             'name' => $segment->getName(),

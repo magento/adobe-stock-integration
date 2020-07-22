@@ -54,9 +54,12 @@ class FileReader implements FileReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * Is the current file reader applicable to a given path
+     *
+     * @param string $path
+     * @return bool
      */
-    public function isApplicable(string $path): bool
+    private function isApplicable(string $path): bool
     {
         $resource = $this->driver->fileOpen($path, 'rb');
         $marker = $this->readHeader($resource);
@@ -70,6 +73,14 @@ class FileReader implements FileReaderInterface
      */
     public function execute(string $path): FileInterface
     {
+        $segments = [];
+                
+        if (!$this->isApplicable($path)) {
+            return $this->fileFactory->create([
+                'path' => $path,
+                'segments' => $segments
+            ]);
+        }
         $resource = $this->driver->fileOpen($path, 'rb');
 
         $header = $this->readHeader($resource);
@@ -78,8 +89,6 @@ class FileReader implements FileReaderInterface
             $this->driver->fileClose($resource);
             throw new LocalizedException(__('Not a PNG image'));
         }
-
-        $segments = [];
 
         do {
             $header = $this->readHeader($resource);

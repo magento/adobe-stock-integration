@@ -115,7 +115,7 @@ class XmpWriter implements MetadataWriterInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function createXmpSegment(MetadataInterface $metadata): SegmentInterface
+    private function createXmpSegment(MetadataInterface $metadata): SegmentInterface
     {
         $xmpData = $this->xmpTemplate->get();
         return $this->segmentFactory->create([
@@ -131,7 +131,7 @@ class XmpWriter implements MetadataWriterInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
+    private function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
     {
         $data = $segment->getData();
         $start = substr($data, 0, self::XMP_DATA_START_POSITION);

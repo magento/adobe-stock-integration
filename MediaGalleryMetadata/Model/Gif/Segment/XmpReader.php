@@ -92,7 +92,6 @@ class XmpReader implements MetadataReaderInterface
             throw new LocalizedException(__('XMP data is corrupted'));
         }
 
-        $xmp = substr($xmp, 0, -self::MAGIC_TRAILER_LENGTH);
-        return $xmp;
+        return substr($xmp, 0, -self::MAGIC_TRAILER_LENGTH);
     }
 }

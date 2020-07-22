@@ -20,6 +20,7 @@
     <type name="Magento\MediaGallerySynchronization\Model\FetchMediaStorageFileBatches">
         <arguments>
             <argument name="batchSize" xsi:type="number">100</argument>
+            <argument name="fileExtensionsPattern" xsi:type="string">#\.(jpg|jpeg|gif|png)$# i</argument>
         </arguments>
     </type>
     <type name="Magento\MediaGallerySynchronization\Model\FetchBatches">

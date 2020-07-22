@@ -61,15 +61,18 @@ class FileReader implements FileReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * Is the current file reader applicable to a given path
+     *
+     * @param string $path
+     * @return bool
      */
-    public function isApplicable(string $path): bool
+    private function isApplicable(string $path): bool
     {
         $resource = $this->driver->fileOpen($path, 'rb');
         $marker = $this->read($resource, 3);
         $this->driver->fileClose($resource);
 
-        return $marker == "GIF";
+        return $marker == 'GIF';
     }
 
     /**
@@ -77,6 +80,12 @@ class FileReader implements FileReaderInterface
      */
     public function execute(string $path): FileInterface
     {
+        if (!$this->isApplicable($path)) {
+            return $this->fileFactory->create([
+                'path' => $path,
+                'segments' => []
+            ]);
+        }
         $resource = $this->driver->fileOpen($path, 'rb');
 
         $header = $this->read($resource, 3);
@@ -154,7 +163,6 @@ class FileReader implements FileReaderInterface
             }
 
             $segments[] = $this->getExtensionSegment($resource);
-
         } while (!$this->driver->endOfFile($resource));
 
         return $segments;
