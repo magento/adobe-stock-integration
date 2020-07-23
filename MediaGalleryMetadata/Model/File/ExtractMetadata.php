@@ -13,6 +13,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
@@ -84,39 +85,35 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private function extractMetadata(string $path): MetadataInterface
     {
-        foreach ($this->metadataExtractors as $extractor) {
-            $title = '';
-            $description = '';
-            $keywords = [];
-            $file = $this->readFile($extractor['fileReaders'], $path);
+        $title = null;
+        $description = null;
+        $keywords = [];
            
+        foreach ($this->metadataExtractors as $extractor) {
+            $file = $this->readFile($extractor['fileReaders'], $path);
             if (!empty($file->getSegments())) {
                 foreach ($extractor['segmentReaders'] as $segmentReader) {
                     $data = $segmentReader->execute($file);
-                    $title = $data->getTitle() ?? $title;
-                    $description = $data->getDescription() ?? $description;
-                    $keywords = $keywords + $data->getKeywords();
-                    if (!empty($title) && !empty($description) && !empty($keywords)) {
-                        return $this->metadataFactory->create([
-                            'title' => $title,
-                            'description' => $description,
-                            'keywords' => array_unique($keywords)
-                        ]);
-                    }
+                    $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
+                    $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
+                    $keywords =  $keywords + $data->getKeywords();
                 }
+            }
+            if (!empty($title) && !empty($description) && !empty($keywords)) {
+                break;
             }
         }
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => array_unique($keywords)
+            'keywords' => empty($keywords) ? null : $keywords
         ]);
     }
 
     /**
      * Read file by given fileReader
      *
-     * @param array $fileReader
+     * @param array $fileReaders
      * @param string $path
      */
     private function readFile(array $fileReaders, string $path): FileInterface

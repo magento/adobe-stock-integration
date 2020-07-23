@@ -36,15 +36,15 @@ class Metadata implements MetadataInterface
     private $extensionAttributes;
 
     /**
-     * @param string $title
-     * @param string $description
-     * @param array $keywords
+     * @param null|string $title
+     * @param null|string $description
+     * @param null|array $keywords
      * @param MetadataExtensionInterface|null $extensionAttributes
      */
     public function __construct(
-        string $title,
-        string $description,
-        array $keywords,
+        ?string $title,
+        ?string $description,
+        ?array $keywords,
         ?MetadataExtensionInterface $extensionAttributes = null
     ) {
         $this->title = $title;
@@ -56,7 +56,7 @@ class Metadata implements MetadataInterface
     /**
      * @inheritdoc
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -64,7 +64,7 @@ class Metadata implements MetadataInterface
     /**
      * @inheritdoc
      */
-    public function getKeywords(): array
+    public function getKeywords(): ?array
     {
         return $this->keywords;
     }
@@ -72,7 +72,7 @@ class Metadata implements MetadataInterface
     /**
      * @inheritdoc
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

@@ -16,7 +16,7 @@ interface ReadFileInterface
      * Create file object from the file
      *
      * @param string $path
-     * @return null|FileInterface
+     * @return FileInterface
      */
-    public function execute(string $path): ?FileInterface;
+    public function execute(string $path): FileInterface;
 }

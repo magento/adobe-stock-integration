@@ -64,7 +64,7 @@ class ReadFile implements ReadFileInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $path): ?FileInterface
+    public function execute(string $path): FileInterface
     {
         $resource = $this->driver->fileOpen($path, 'rb');
 
