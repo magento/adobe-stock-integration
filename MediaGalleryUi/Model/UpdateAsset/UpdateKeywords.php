@@ -5,13 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Model\ProcessImageDetails;
+namespace Magento\MediaGalleryUi\Model\UpdateAsset;
 
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 
-class ProcessKeywords
+class UpdateKeywords
 {
     /**
      * @var AssetKeywordsInterfaceFactory
@@ -46,36 +47,35 @@ class ProcessKeywords
     /**
      * Save asset keywords
      *
-     * @param array $imageKeywords
-     * @param int $imageId
+     * @param string[] $keywords
+     * @param int $assetId
      */
-    public function execute(array $imageKeywords, int $imageId): void
+    public function execute(int $assetId, array $keywords): void
     {
-        $arrayKeywords = $this->convertKeywords($imageKeywords);
-        $assetKeywords = $this->assetKeywordsFactory->create([
-            'assetId' => $imageId,
-            'keywords' => $arrayKeywords
+        $this->saveAssetKeywords->execute([
+            $this->assetKeywordsFactory->create([
+                'assetId' => $assetId,
+                'keywords' => $this->createKeywords($keywords)
+            ])
         ]);
-
-        $this->saveAssetKeywords->execute([$assetKeywords]);
     }
 
     /**
-     * Convert keywords
+     * Create keyword objects from strings
      *
-     * @param array $keywords
-     * @return array
+     * @param string[] $keywords
+     * @return KeywordInterface[]
      */
-    private function convertKeywords(array $keywords): array
+    private function createKeywords(array $keywords): array
     {
-        $arrayKeywords = [];
+        $keywordObjects = [];
         foreach ($keywords as $keyword) {
-            $arrayKeywords[] = $this->keywordFactory->create(
+            $keywordObjects[] = $this->keywordFactory->create(
                 [
                     'keyword' => $keyword
                 ]
             );
         }
-        return $arrayKeywords;
+        return $keywordObjects;
     }
 }

@@ -14,7 +14,8 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryUi\Model\SaveImageDetails;
+use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
+use Magento\MediaGalleryUi\Model\UpdateAsset;
 use Psr\Log\LoggerInterface;
 
 class SaveDetails extends Action implements HttpPostActionInterface
@@ -29,9 +30,14 @@ class SaveDetails extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var SaveImageDetails
+     * @var UpdateAsset
      */
-    private $saveImage;
+    private $updateAsset;
+
+    /**
+     * @var MetadataInterfaceFactory
+     */
+    private $metadataFactory;
 
     /**
      * @var LoggerInterface
@@ -39,20 +45,21 @@ class SaveDetails extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
-     * SaveDetails constructor.
-     *
      * @param Context $context
-     * @param SaveImageDetails $saveImage
+     * @param MetadataInterfaceFactory $metadataFactory
+     * @param UpdateAsset $updateAsset
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        SaveImageDetails $saveImage,
+        MetadataInterfaceFactory $metadataFactory,
+        UpdateAsset $updateAsset,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->saveImage = $saveImage;
+        $this->metadataFactory = $metadataFactory;
+        $this->updateAsset = $updateAsset;
         $this->logger = $logger;
     }
 
@@ -63,12 +70,12 @@ class SaveDetails extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('id');
+        $assetId = (int) $this->getRequest()->getParam('id');
         $title = $this->getRequest()->getParam('title');
         $description = $this->getRequest()->getParam('description');
-        $imageKeywords = (array) $this->getRequest()->getParam('keywords');
+        $keywords = (array) $this->getRequest()->getParam('keywords');
 
-        if ($imageId === 0) {
+        if ($assetId === 0) {
             $responseContent = [
                 'success' => false,
                 'message' => __('Image ID is required.'),
@@ -80,11 +87,13 @@ class SaveDetails extends Action implements HttpPostActionInterface
         }
 
         try {
-            $this->saveImage->execute(
-                $imageId,
-                $imageKeywords,
-                $title,
-                $description
+            $this->updateAsset->execute(
+                $assetId,
+                $this->metadataFactory->create([
+                    'title' => $title,
+                    'description' => $description,
+                    'keywords' => $keywords
+                ])
             );
             $responseCode = self::HTTP_OK;
             $responseContent = [

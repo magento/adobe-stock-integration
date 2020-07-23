@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGalleryUi\Model\ProcessImageDetails\ProcessKeywords;
-use Magento\MediaGalleryUi\Model\ProcessImageDetails\ProcessMetadata;
+use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
+use Magento\MediaGalleryUi\Model\UpdateAsset\UpdateKeywords;
+use Magento\MediaGalleryUi\Model\UpdateAsset\SaveMetadataToFile;
 
-class SaveImageDetails
+class UpdateAsset
 {
     /**
      * @var AssetInterfaceFactory
@@ -31,12 +34,12 @@ class SaveImageDetails
     private $saveAssets;
 
     /**
-     * @var ProcessMetadata
+     * @var SaveMetadataToFile
      */
     private $processMetadata;
 
     /**
-     * @var ProcessKeywords
+     * @var UpdateKeywords
      */
     private $processKeywords;
 
@@ -44,15 +47,15 @@ class SaveImageDetails
      * @param AssetInterfaceFactory $assetFactory
      * @param GetAssetsByIdsInterface $getAssetsByIds
      * @param SaveAssetsInterface $saveAssets
-     * @param ProcessKeywords $processKeywords
-     * @param ProcessMetadata $processMetadata
+     * @param UpdateKeywords $processKeywords
+     * @param SaveMetadataToFile $processMetadata
      */
     public function __construct(
         AssetInterfaceFactory $assetFactory,
         GetAssetsByIdsInterface $getAssetsByIds,
         SaveAssetsInterface $saveAssets,
-        ProcessKeywords $processKeywords,
-        ProcessMetadata $processMetadata
+        UpdateKeywords $processKeywords,
+        SaveMetadataToFile $processMetadata
     ) {
         $this->assetFactory = $assetFactory;
         $this->getAssetsByIds = $getAssetsByIds;
@@ -62,16 +65,15 @@ class SaveImageDetails
     }
 
     /**
-     * Save image details
+     * Save asset details
      *
-     * @param int $imageId
-     * @param array $imageKeywords
-     * @param string $imageTitle
-     * @param string $imageDescription
+     * @param int $id
+     * @param MetadataInterface $data
      */
-    public function execute(int $imageId, array $imageKeywords, string $imageTitle, string $imageDescription): void
+    public function execute(int $id, MetadataInterface $data): void
     {
-        $asset = current($this->getAssetsByIds->execute([$imageId]));
+        $asset = $this->getAsset($id);
+
         $updatedAsset = $this->assetFactory->create(
             [
                 'path' => $asset->getPath(),
@@ -80,8 +82,8 @@ class SaveImageDetails
                 'height' => $asset->getHeight(),
                 'size' => $asset->getSize(),
                 'id' => $asset->getId(),
-                'title' => $imageTitle,
-                'description' => $imageDescription,
+                'title' => $data->getTitle() ?? $asset->getTitle(),
+                'description' => $data->getDescription() ?? $asset->getDescription(),
                 'source' => $asset->getSource(),
                 'hash' => $asset->getHash(),
                 'created_at' => $asset->getCreatedAt(),
@@ -90,7 +92,27 @@ class SaveImageDetails
         );
 
         $this->saveAssets->execute([$updatedAsset]);
-        $this->processMetadata->execute($asset->getPath(), $imageTitle, $imageDescription, $imageKeywords);
-        $this->processKeywords->execute($imageKeywords, $imageId);
+        $this->processMetadata->execute($asset->getPath(), $data);
+
+        $keywords = $data->getKeywords();
+        if (isset($keywords)) {
+            $this->processKeywords->execute($id, $keywords);
+        }
+    }
+
+    /**
+     * Load asset by id
+     *
+     * @param int $id
+     * @return AssetInterface
+     * @throws LocalizedException
+     */
+    private function getAsset(int $id): AssetInterface
+    {
+        $assets = $this->getAssetsByIds->execute([$id]);
+        if (empty($assets)) {
+            throw new LocalizedException(__('Could not retrieve the asset.'));
+        }
+        return current($assets);
     }
 }
