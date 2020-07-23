@@ -20,9 +20,9 @@
                  data-role="thumbnail"/>
         </div>
         <ul class="action-menu" css="_active: $collapsible.opened">
-            <!-- ko scope: actions -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
+            <scope args="actions">
+                <render args="template"/>
+            </scope>
         </ul>
     </div>
     <div class="masonry-image-description">
