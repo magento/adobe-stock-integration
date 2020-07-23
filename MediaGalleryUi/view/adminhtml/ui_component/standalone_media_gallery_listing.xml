@@ -131,7 +131,7 @@
             <filterInput
 		    name="duplicated"
 		    provider="${ $.parentName }"
-		    sortOrder="90"
+		    sortOrder="1000"
                     template="Magento_MediaGalleryUi/grid/filter/checkbox"
                     component="Magento_Ui/js/form/element/single-checkbox">
                 <argument name="data" xsi:type="array">
