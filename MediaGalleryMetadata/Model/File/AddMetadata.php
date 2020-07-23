@@ -56,7 +56,7 @@ class AddMetadata implements AddMetadataInterface
                 try {
                     foreach ($writer['segmentWriters'] as $segmentWriter) {
                         if (!$segmentWriter instanceof MetadataWriterInterface) {
-                            throw new LocalizedException(__('SegmentWriter must implement MetadataInterface'));
+                            throw new LocalizedException(__('SegmentWriter must implement MetadataWriterInterface'));
                         }
 
                         $file = $segmentWriter->execute($file, $metadata);

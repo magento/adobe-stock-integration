@@ -18,7 +18,7 @@ use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
 
 /**
- * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
+ * Extract Metadata from asset fy file by given extractors
  */
 class ExtractMetadata implements ExtractMetadataInterface
 {
@@ -108,7 +108,7 @@ class ExtractMetadata implements ExtractMetadataInterface
     /**
      * Read  file segments by given segmentReader
      *
-     * @param array $fileReaders
+     * @param array $segmentReaders
      * @param FileInterface $file
      */
     private function readSegments(array $segmentReaders, FileInterface $file): array
