@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model;
 
-use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileExtensionInterface;
+use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 
 /**
  * File internal data transfer object

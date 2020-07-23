@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Catalog\Model\ImageUploader;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 
 /**
@@ -39,7 +39,7 @@ class SaveBaseCategoryImageInformation
      * @var GetAssetsByPathsInterface
      */
     private $getAssetsByPaths;
-    
+
     /**
      * @var CreateAssetFromFile
      */
@@ -86,11 +86,11 @@ class SaveBaseCategoryImageInformation
         $file = $this->splFileInfoFactory->create($absolutePath);
         $tmpPath = $subject->getBaseTmpPath() . '/' . $file->getFileName();
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
-        
+
         if (!empty($tmpAssets)) {
             $this->deleteAssetsByPaths->execute([$tmpAssets[0]->getPath()]);
         }
-        
+
         $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
         $this->storage->resizeFile($absolutePath);
 

@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\Framework\File\Uploader;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Uploader;
+use Magento\Framework\Filesystem;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -58,7 +58,7 @@ class SaveImageInformation
      * @var Filesystem
      */
     private $filesystem;
-    
+
     /**
      * @param Filesystem $filesystem
      * @param LoggerInterface $log

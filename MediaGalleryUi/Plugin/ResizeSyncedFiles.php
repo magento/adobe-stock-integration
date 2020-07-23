@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Plugin;
 
-use Magento\MediaGallerySynchronization\Model\SynchronizeFiles;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\MediaGallerySynchronization\Model\SynchronizeFiles;
 
 /**
  * Create resizes files that were synced

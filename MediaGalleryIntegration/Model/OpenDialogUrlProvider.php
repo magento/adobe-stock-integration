@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Model;
 
-use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 
 /**
  * Provider to get open media gallery dialog URL for WYSIWYG and widgets
