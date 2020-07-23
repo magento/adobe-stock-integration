@@ -16,7 +16,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Add metadata to the IPTC data
+ * Write iptc data to the file return updated FileInterface with iptc data
  */
 class AddIptcMetadata
 {

@@ -13,6 +13,9 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
+use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 
 /**
  * Write metadata to the asset file for all supportet types e.g IPTC, XMP ...
@@ -52,9 +55,17 @@ class AddMetadata implements AddMetadataInterface
             if (!empty($file->getSegments())) {
                 try {
                     foreach ($writer['segmentWriters'] as $segmentWriter) {
+                        if (!$segmentWriter instanceof MetadataWriterInterface) {
+                            throw new LocalizedException(__('SegmentWriter must implement MetadataInterface'));
+                        }
+
                         $file = $segmentWriter->execute($file, $metadata);
                     }
                     foreach ($writer['fileWriters'] as $fileWriter) {
+                        if (!$fileWriter instanceof WriteFileInterface) {
+                            throw new LocalizedException(__('FileWriter must implement WriteFileInterface'));
+                        }
+
                         $fileWriter->execute($file);
                     }
                 } catch (\Exception $exception) {
@@ -80,6 +91,10 @@ class AddMetadata implements AddMetadataInterface
         ]);
 
         foreach ($fileReaders as $fileReader) {
+            if (!$fileReader instanceof ReadFileInterface) {
+                throw new LocalizedException(__('FileReader must implement ReadFileInterface'));
+            }
+
             try {
                 $file = $fileReader->execute($path);
             } catch (ValidatorException $exception) {

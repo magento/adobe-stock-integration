@@ -50,7 +50,7 @@
                         <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile</item>
                     </item>
                     <item name="fileWriters" xsi:type="array">
-                        <item name="jpegFileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\WriteFile</item>
+                        <item name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\WriteFile</item>
                     </item>
                     <item name="segmentWriters" xsi:type="array">
                         <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteXmp</item>

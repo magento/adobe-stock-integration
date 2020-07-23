@@ -14,6 +14,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 
 /**
  * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
@@ -124,6 +125,10 @@ class ExtractMetadata implements ExtractMetadataInterface
         ]);
 
         foreach ($fileReaders as $fileReader) {
+            if (!$fileReader instanceof ReadFileInterface) {
+                throw new LocalizedException(__('FileReader must implement ReadFileInterface'));
+            }
+
             try {
                 $file = $fileReader->execute($path);
             } catch (ValidatorException $exception) {
