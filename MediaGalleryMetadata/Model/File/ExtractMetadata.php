@@ -15,6 +15,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
+use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
 
 /**
  * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
@@ -86,20 +87,13 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private function extractMetadata(string $path): MetadataInterface
     {
-        $title = null;
-        $description = null;
-        $keywords = [];
-           
         foreach ($this->metadataExtractors as $extractor) {
             $file = $this->readFile($extractor['fileReaders'], $path);
+
             if (!empty($file->getSegments())) {
-                foreach ($extractor['segmentReaders'] as $segmentReader) {
-                    $data = $segmentReader->execute($file);
-                    $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
-                    $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
-                    $keywords =  $keywords + $data->getKeywords();
-                }
+                list($title, $description, $keywords) = $this->readSegments($extractor['segmentReaders'], $file);
             }
+            
             if (!empty($title) && !empty($description) && !empty($keywords)) {
                 break;
             }
@@ -109,6 +103,31 @@ class ExtractMetadata implements ExtractMetadataInterface
             'description' => $description,
             'keywords' => empty($keywords) ? null : $keywords
         ]);
+    }
+
+    /**
+     * Read  file segments by given segmentReader
+     *
+     * @param array $fileReaders
+     * @param FileInterface $file
+     */
+    private function readSegments(array $segmentReaders, FileInterface $file): array
+    {
+        $title = null;
+        $description = null;
+        $keywords = [];
+        
+        foreach ($segmentReaders as $segmentReader) {
+            if (!$segmentReader instanceof MetadataReaderInterface) {
+                throw new LocalizedException(__('SegmentReader must implement MetadataReaderInterface'));
+            }
+
+            $data = $segmentReader->execute($file);
+            $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
+            $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
+            $keywords =  $keywords + $data->getKeywords();
+        }
+        return [$title, $description, $keywords];
     }
 
     /**

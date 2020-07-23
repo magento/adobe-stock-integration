@@ -69,15 +69,15 @@ class AddIptcMetadata
         
         $iptcData =  $segment ? iptcparse($segment->getData()) : [];
 
-        if (!is_null($metadata->getTitle())) {
+        if ($metadata->getTitle() !== null) {
             $iptcData[self::IPTC_TITLE_SEGMENT][0] = $metadata->getTitle();
         }
 
-        if (!is_null($metadata->getDescription())) {
+        if ($metadata->getDescription() !== null) {
             $iptcData[self::IPTC_DESCRIPTION_SEGMENT][0] = $metadata->getDescription();
         }
 
-        if (!is_null($metadata->getKeywords())) {
+        if ($metadata->getKeywords() !== null) {
             $iptcData = $this->writeKeywords($metadata->getKeywords(), $iptcData);
         }
 

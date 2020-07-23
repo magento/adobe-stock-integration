@@ -38,17 +38,17 @@ class AddXmpMetadata
 
         if (empty($metadata->getTitle())) {
             $this->deleteValueByXpath($xml, self::XMP_XPATH_SELECTOR_TITLE);
-        } elseif (!is_null($metadata->getTitle())) {
+        } elseif ($metadata->getTitle() !== null) {
             $this->setValueByXpath($xml, self::XMP_XPATH_SELECTOR_TITLE, $metadata->getTitle());
         }
         if (empty($metadata->getDescription())) {
             $this->deleteValueByXpath($xml, self::XMP_XPATH_SELECTOR_DESCRIPTION);
-        } elseif (!is_null($metadata->getDescription())) {
+        } elseif ($metadata->getDescription() !== null) {
             $this->setValueByXpath($xml, self::XMP_XPATH_SELECTOR_DESCRIPTION, $metadata->getDescription());
         }
         if (empty($metadata->getKeywords())) {
             $this->deleteValueByXpath($xml, self::XMP_XPATH_SELECTOR_KEYWORDS);
-        } elseif (!is_null($metadata->getKeywords())) {
+        } elseif ($metadata->getKeywords() !== null) {
             $this->updateKeywords($xml, $metadata->getKeywords());
         }
 
@@ -76,11 +76,11 @@ class AddXmpMetadata
     }
 
     /**
-    * Deletes  xml node by xpath
-    *
-    * @param \SimpleXMLElement $xml
-    * @param string $xpath
-    */
+     * Deletes  xml node by xpath
+     *
+     * @param \SimpleXMLElement $xml
+     * @param string $xpath
+     */
     private function deleteValueByXpath(\SimpleXMLElement $xml, string $xpath): void
     {
         foreach ($xml->xpath($xpath) as $element) {
