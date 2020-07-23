@@ -60,6 +60,10 @@
                     <item name="value" xsi:type="string">catalog_product</item>
                     <item name="label" xsi:type="string" translate="true">Products</item>
                 </item>
+                <item name="not_used" xsi:type="array">
+                    <item name="value" xsi:type="string">not_used</item>
+                    <item name="label" xsi:type="string" translate="true">Not used anywhere</item>
+                </item>
             </argument>
         </arguments>
     </type>

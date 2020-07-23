@@ -5,25 +5,27 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
+namespace Magento\MediaGalleryMetadata\Model\Gif\Segment;
 
 use Magento\MediaGalleryMetadata\Model\AddXmpMetadata;
+use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 
 /**
- * XMP Writer for png format
+ *  XMP Writer for GIF format
  */
 class XmpWriter implements MetadataWriterInterface
 {
-    private const XMP_SEGMENT_NAME = 'iTXt';
-    private const XMP_SEGMENT_START = "XML:com.adobe.xmp\x00";
-
+    private const XMP_SEGMENT_NAME = 'XMP DataXMP';
+    private const XMP_DATA_START_POSITION = 14;
+    private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
+    private const MAGIC_TRAILER_END = "\x03\x02\x01\x00\x00";
+    
     /**
      * @var SegmentInterfaceFactory
      */
@@ -63,7 +65,7 @@ class XmpWriter implements MetadataWriterInterface
     }
 
     /**
-     * Add xmp metadata to the png file
+     * Add metadata to the file
      *
      * @param FileInterface $file
      * @param MetadataInterface $metadata
@@ -71,60 +73,93 @@ class XmpWriter implements MetadataWriterInterface
      */
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
-        $segments = $file->getSegments();
-        $pngXmpSegments = [];
-        foreach ($segments as $key => $segment) {
-            if ($this->isXmpSegment($segment)) {
-                $pngXmpSegments[$key] = $segment;
+        $gifSegments = $file->getSegments();
+        $xmpGifSegments = [];
+        foreach ($gifSegments as $key => $segment) {
+            if ($this->isSegmentXmp($segment)) {
+                $xmpGifSegments[$key] = $segment;
             }
         }
 
-        if (empty($pngXmpSegments)) {
+        if (empty($xmpGifSegments)) {
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $this->insertPngXmpSegment($segments, $this->createPngXmpSegment($metadata))
+                'segments' => $this->insertXmpGifSegment($gifSegments, $this->createXmpSegment($metadata))
             ]);
         }
 
-        foreach ($pngXmpSegments as $key => $segment) {
-            $segments[$key] = $this->updateSegment($segment, $metadata);
+        foreach ($xmpGifSegments as $key => $segment) {
+            $gifSegments[$key] = $this->updateSegment($segment, $metadata);
         }
 
         return $this->fileFactory->create([
             'path' => $file->getPath(),
-            'segments' => $segments
+            'segments' => $gifSegments
         ]);
     }
 
     /**
-     * Insert XMP segment to image png segments (at position 1)
+     * Insert XMP segment to gif image segments (at position 3)
      *
      * @param SegmentInterface[] $segments
      * @param SegmentInterface $xmpSegment
      * @return SegmentInterface[]
      */
-    private function insertPngXmpSegment(array $segments, SegmentInterface $xmpSegment): array
+    private function insertXmpGifSegment(array $segments, SegmentInterface $xmpSegment): array
     {
-        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
+        return array_merge(array_slice($segments, 0, 4), [$xmpSegment], array_slice($segments, 4));
     }
 
     /**
-     * Write new png segment  metadata
+     * Return XMP template from string
+     *
+     * @param string $string
+     * @param string $start
+     * @param string $end
+     */
+    private function getXmpData(string $string, string $start, string $end): string
+    {
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) {
+            return '';
+        }
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        
+        return substr($string, $ini, $len);
+    }
+    
+    /**
+     * Write new segment  metadata
      *
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function createPngXmpSegment(MetadataInterface $metadata): SegmentInterface
+    public function createXmpSegment(MetadataInterface $metadata): SegmentInterface
     {
         $xmpData = $this->xmpTemplate->get();
+
+        $xmpSegment = pack("C", ord("!")) . pack("C", 255) . pack("C", 11).
+                    self::XMP_SEGMENT_NAME . $this->addXmpMetadata->execute($xmpData, $metadata) . "\x01";
+
+        /**
+         * Write Magic trailer 258 bytes see XMP Specification Part 3, 1.1.2 GIF
+         */
+        $i = 255;
+        while ($i > 0) {
+            $xmpSegment .= pack("C", $i);
+            $i--;
+        }
+
         return $this->segmentFactory->create([
             'name' => self::XMP_SEGMENT_NAME,
-            'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($xmpData, $metadata)
+            'data' => $xmpSegment . "\0\0"
         ]);
     }
 
     /**
-     * Add metadata to the png xmp segment
+     * Add metadata to the segment
      *
      * @param SegmentInterface $segment
      * @param MetadataInterface $metadata
@@ -132,32 +167,25 @@ class XmpWriter implements MetadataWriterInterface
      */
     public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
     {
+        $data = $segment->getData();
+        $start = substr($data, 0, self::XMP_DATA_START_POSITION);
+        $xmpData = $this->getXmpData($data, self::XMP_SEGMENT_NAME, "\x01");
+        $end = substr($data, strpos($data, "\x01"));
+
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
-            'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($this->getXmpData($segment), $metadata)
+            'data' => $start . $this->addXmpMetadata->execute($xmpData, $metadata) . $end
         ]);
     }
 
     /**
-     * Does segment contain XMP data
+     * Check if segment contains XMP data
      *
      * @param SegmentInterface $segment
      * @return bool
      */
-    private function isXmpSegment(SegmentInterface $segment): bool
+    private function isSegmentXmp(SegmentInterface $segment): bool
     {
-        return $segment->getName() === self::XMP_SEGMENT_NAME
-            && strpos($segment->getData(), '<x:xmpmeta') !== -1;
-    }
-
-    /**
-     * Get XMP xml
-     *
-     * @param SegmentInterface $segment
-     * @return string
-     */
-    private function getXmpData(SegmentInterface $segment): string
-    {
-        return substr($segment->getData(), strpos($segment->getData(), '<x:xmpmeta'));
+        return $segment->getName() === self::XMP_SEGMENT_NAME;
     }
 }
