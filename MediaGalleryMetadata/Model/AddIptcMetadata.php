@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryMetadata\Model;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
-use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -30,7 +30,7 @@ class AddIptcMetadata
     private $driver;
 
     /**
-     * @var FileReader
+     * @var ReadFile
      */
     private $fileReader;
 
@@ -42,12 +42,12 @@ class AddIptcMetadata
     /**
      * @param FileInterfaceFactory $fileFactory
      * @param DriverInterface $driver
-     * @param FileReader $fileReader
+     * @param ReadFile $fileReader
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         DriverInterface $driver,
-        FileReader $fileReader
+        ReadFile $fileReader
     ) {
         $this->fileFactory = $fileFactory;
         $this->driver = $driver;

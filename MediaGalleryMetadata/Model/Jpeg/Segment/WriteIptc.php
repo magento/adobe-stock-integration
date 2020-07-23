@@ -14,12 +14,12 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 
 /**
  * Jpeg IPTC Writer
  */
-class IptcWriter implements MetadataWriterInterface
+class WriteIptc implements MetadataWriterInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
     private const IPTC_SEGMENT_START = 'Photoshop 3.0\0x00';
@@ -41,7 +41,7 @@ class IptcWriter implements MetadataWriterInterface
     private $addIptcMetadata;
 
     /**
-     * @var FileReader
+     * @var ReadFile
      */
     private $fileReader;
 
@@ -49,13 +49,13 @@ class IptcWriter implements MetadataWriterInterface
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param AddIptcMetadata $addIptcMetadata
-     * @param FileReader $fileReader
+     * @param ReadFile $fileReader
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
         AddIptcMetadata $addIptcMetadata,
-        FileReader $fileReader
+        ReadFile $fileReader
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;

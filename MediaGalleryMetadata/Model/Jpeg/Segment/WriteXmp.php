@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Gif\Segment;
+namespace Magento\MediaGalleryMetadata\Model\Jpeg\Segment;
 
 use Magento\MediaGalleryMetadata\Model\AddXmpMetadata;
 use Magento\MediaGalleryMetadata\Model\XmpTemplate;
@@ -17,15 +17,14 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 
 /**
- *  XMP Writer for GIF format
+ * Jpeg XMP Writer
  */
-class XmpWriter implements MetadataWriterInterface
+class WriteXmp implements MetadataWriterInterface
 {
-    private const XMP_SEGMENT_NAME = 'XMP DataXMP';
-    private const XMP_DATA_START_POSITION = 14;
-    private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
-    private const MAGIC_TRAILER_END = "\x03\x02\x01\x00\x00";
-    
+    private const XMP_SEGMENT_NAME = 'APP1';
+    private const XMP_SEGMENT_START = "http://ns.adobe.com/xap/1.0/\x00";
+    private const XMP_DATA_START_POSITION = 29;
+
     /**
      * @var SegmentInterfaceFactory
      */
@@ -73,88 +72,55 @@ class XmpWriter implements MetadataWriterInterface
      */
     public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
-        $gifSegments = $file->getSegments();
-        $xmpGifSegments = [];
-        foreach ($gifSegments as $key => $segment) {
+        $segments = $file->getSegments();
+        $xmpSegments = [];
+        foreach ($segments as $key => $segment) {
             if ($this->isSegmentXmp($segment)) {
-                $xmpGifSegments[$key] = $segment;
+                $xmpSegments[$key] = $segment;
             }
         }
 
-        if (empty($xmpGifSegments)) {
+        if (empty($xmpSegments)) {
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $this->insertXmpGifSegment($gifSegments, $this->createXmpSegment($metadata))
+                'segments' => $this->insertXmpSegment($segments, $this->createXmpSegment($metadata))
             ]);
         }
 
-        foreach ($xmpGifSegments as $key => $segment) {
-            $gifSegments[$key] = $this->updateSegment($segment, $metadata);
+        foreach ($xmpSegments as $key => $segment) {
+            $segments[$key] = $this->updateSegment($segment, $metadata);
         }
 
         return $this->fileFactory->create([
             'path' => $file->getPath(),
-            'segments' => $gifSegments
+            'segments' => $segments
         ]);
     }
 
     /**
-     * Insert XMP segment to gif image segments (at position 3)
+     * Insert XMP segment to image segments (at position 1)
      *
      * @param SegmentInterface[] $segments
      * @param SegmentInterface $xmpSegment
      * @return SegmentInterface[]
      */
-    private function insertXmpGifSegment(array $segments, SegmentInterface $xmpSegment): array
+    private function insertXmpSegment(array $segments, SegmentInterface $xmpSegment): array
     {
-        return array_merge(array_slice($segments, 0, 4), [$xmpSegment], array_slice($segments, 4));
+        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
     }
 
-    /**
-     * Return XMP template from string
-     *
-     * @param string $string
-     * @param string $start
-     * @param string $end
-     */
-    private function getXmpData(string $string, string $start, string $end): string
-    {
-        $string = ' ' . $string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) {
-            return '';
-        }
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        
-        return substr($string, $ini, $len);
-    }
-    
     /**
      * Write new segment  metadata
      *
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function createXmpSegment(MetadataInterface $metadata): SegmentInterface
+    private function createXmpSegment(MetadataInterface $metadata): SegmentInterface
     {
         $xmpData = $this->xmpTemplate->get();
-
-        $xmpSegment = pack("C", ord("!")) . pack("C", 255) . pack("C", 11).
-                    self::XMP_SEGMENT_NAME . $this->addXmpMetadata->execute($xmpData, $metadata) . "\x01";
-
-        /**
-         * Write Magic trailer 258 bytes see XMP Specification Part 3, 1.1.2 GIF
-         */
-        $i = 255;
-        while ($i > 0) {
-            $xmpSegment .= pack("C", $i);
-            $i--;
-        }
-
         return $this->segmentFactory->create([
             'name' => self::XMP_SEGMENT_NAME,
-            'data' => $xmpSegment . "\0\0"
+            'data' => self::XMP_SEGMENT_START . $this->addXmpMetadata->execute($xmpData, $metadata)
         ]);
     }
 
@@ -165,16 +131,14 @@ class XmpWriter implements MetadataWriterInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
+    private function updateSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
     {
         $data = $segment->getData();
         $start = substr($data, 0, self::XMP_DATA_START_POSITION);
-        $xmpData = $this->getXmpData($data, self::XMP_SEGMENT_NAME, "\x01");
-        $end = substr($data, strpos($data, "\x01"));
-
+        $xmpData = substr($data, self::XMP_DATA_START_POSITION);
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
-            'data' => $start . $this->addXmpMetadata->execute($xmpData, $metadata) . $end
+            'data' => $start . $this->addXmpMetadata->execute($xmpData, $metadata)
         ]);
     }
 
@@ -186,6 +150,7 @@ class XmpWriter implements MetadataWriterInterface
      */
     private function isSegmentXmp(SegmentInterface $segment): bool
     {
-        return $segment->getName() === self::XMP_SEGMENT_NAME;
+        return $segment->getName() === self::XMP_SEGMENT_NAME
+            && strncmp($segment->getData(), self::XMP_SEGMENT_START, self::XMP_DATA_START_POSITION) == 0;
     }
 }

@@ -12,13 +12,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * File segments reader
  */
-class FileReader implements FileReaderInterface
+class ReadFile implements ReadFileInterface
 {
     private const PNG_FILE_START = "\x89PNG\x0d\x0a\x1a\x0a";
     private const PNG_MARKER_IMAGE_END = 'IEND';
@@ -54,37 +55,17 @@ class FileReader implements FileReaderInterface
     }
 
     /**
-     * Is the current file reader applicable to a given path
-     *
-     * @param string $path
-     * @return bool
-     */
-    private function isApplicable(string $path): bool
-    {
-        $resource = $this->driver->fileOpen($path, 'rb');
-        $marker = $this->readHeader($resource);
-        $this->driver->fileClose($resource);
-
-        return $marker == self::PNG_FILE_START;
-    }
-
-    /**
      * @inheritdoc
      */
     public function execute(string $path): ?FileInterface
     {
         $segments = [];
-                
-        if (!$this->isApplicable($path)) {
-            return null;
-        }
         $resource = $this->driver->fileOpen($path, 'rb');
-
         $header = $this->readHeader($resource);
 
         if ($header != self::PNG_FILE_START) {
             $this->driver->fileClose($resource);
-            throw new LocalizedException(__('Not a PNG image'));
+            throw new ValidatorException(__('Not a PNG image'));
         }
 
         do {

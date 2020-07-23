@@ -11,9 +11,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpWriter;
-use Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpReader;
-use Magento\MediaGalleryMetadata\Model\Gif\FileReader;
+use Magento\MediaGalleryMetadata\Model\Gif\Segment\WriteXmp;
+use Magento\MediaGalleryMetadata\Model\Gif\Segment\ReadXmp;
+use Magento\MediaGalleryMetadata\Model\Gif\ReadFile;
 use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 
 /**
@@ -22,12 +22,12 @@ use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 class XmpTest extends TestCase
 {
     /**
-     * @var XmpWriter
+     * @var WriteXmp
      */
     private $xmpWriter;
 
     /**
-     * @var XmpReader
+     * @var ReadXmp
      */
     private $xmpReader;
 
@@ -37,7 +37,7 @@ class XmpTest extends TestCase
     private $driver;
 
     /**
-     * @var FileReader
+     * @var ReadFile
      */
     private $fileReader;
 
@@ -51,9 +51,9 @@ class XmpTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->xmpWriter = Bootstrap::getObjectManager()->get(XmpWriter::class);
-        $this->xmpReader = Bootstrap::getObjectManager()->get(XmpReader::class);
-        $this->fileReader = Bootstrap::getObjectManager()->get(FileReader::class);
+        $this->xmpWriter = Bootstrap::getObjectManager()->get(WriteXmp::class);
+        $this->xmpReader = Bootstrap::getObjectManager()->get(ReadXmp::class);
+        $this->fileReader = Bootstrap::getObjectManager()->get(ReadFile::class);
         $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
     }

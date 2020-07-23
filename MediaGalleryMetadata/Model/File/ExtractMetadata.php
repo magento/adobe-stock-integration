@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryMetadata\Model\File;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
@@ -78,7 +79,11 @@ class ExtractMetadata implements ExtractMetadataInterface
             $description = '';
             $keywords = [];
             foreach ($extractor['fileReaders'] as $fileReader) {
-                $file = $fileReader->execute($path);
+                try {
+                    $file = $fileReader->execute($path);
+                } catch (ValidatorException $e) {
+                    continue;
+                }
             }
             if (!empty($file)) {
                 foreach ($extractor['segmentReaders'] as $segmentReader) {

@@ -18,7 +18,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 /**
  * XMP Reader for gif file format
  */
-class XmpReader implements MetadataReaderInterface
+class ReadXmp implements MetadataReaderInterface
 {
     private const XMP_SEGMENT_NAME = 'XMP DataXMP';
     /**

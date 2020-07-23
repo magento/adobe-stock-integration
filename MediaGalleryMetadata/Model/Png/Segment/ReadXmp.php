@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Jpeg\Segment;
+namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
 
 use Magento\MediaGalleryMetadata\Model\GetXmpMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
@@ -15,13 +15,11 @@ use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
- * Jpeg XMP Reader
+ * PNG XMP Reader
  */
-class XmpReader implements MetadataReaderInterface
+class ReadXmp implements MetadataReaderInterface
 {
-    private const XMP_SEGMENT_NAME = 'APP1';
-    private const XMP_SEGMENT_START = "http://ns.adobe.com/xap/1.0/\x00";
-    private const XMP_DATA_START_POSITION = 29;
+    private const XMP_SEGMENT_NAME = 'iTXt';
 
     /**
      * @var MetadataInterfaceFactory
@@ -44,12 +42,15 @@ class XmpReader implements MetadataReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * Read metadata from the file
+     *
+     * @param FileInterface $file
+     * @return MetadataInterface
      */
     public function execute(FileInterface $file): MetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
-            if ($this->isSegmentXmp($segment)) {
+            if ($this->isXmpSegment($segment)) {
                 return $this->getXmpMetadata->execute($this->getXmpData($segment));
             }
         }
@@ -66,10 +67,10 @@ class XmpReader implements MetadataReaderInterface
      * @param SegmentInterface $segment
      * @return bool
      */
-    private function isSegmentXmp(SegmentInterface $segment): bool
+    private function isXmpSegment(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::XMP_SEGMENT_NAME
-            && strncmp($segment->getData(), self::XMP_SEGMENT_START, self::XMP_DATA_START_POSITION) == 0;
+            && strpos($segment->getData(), '<x:xmpmeta') !== -1;
     }
 
     /**
@@ -80,6 +81,6 @@ class XmpReader implements MetadataReaderInterface
      */
     private function getXmpData(SegmentInterface $segment): string
     {
-        return substr($segment->getData(), self::XMP_DATA_START_POSITION);
+        return substr($segment->getData(), strpos($segment->getData(), '<x:xmpmeta'));
     }
 }

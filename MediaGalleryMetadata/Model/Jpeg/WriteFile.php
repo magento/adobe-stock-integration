@@ -11,14 +11,14 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
  * File segments reader
  */
-class FileWriter implements FileWriterInterface
+class WriteFile implements WriteFileInterface
 {
     private const MARKER_IMAGE_FILE_START = "\xD8";
     private const MARKER_IMAGE_PREFIX = "\xFF";

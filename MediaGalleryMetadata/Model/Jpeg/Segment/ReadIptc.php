@@ -17,7 +17,7 @@ use Magento\MediaGalleryMetadata\Model\GetIptcMetadata;
 /**
  * IPTC Reader to read IPTC data for jpeg image
  */
-class IptcReader implements MetadataReaderInterface
+class ReadIptc implements MetadataReaderInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
     private const IPTC_SEGMENT_START = 'Photoshop 3.0';

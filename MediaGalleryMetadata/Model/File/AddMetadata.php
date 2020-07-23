@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\File;
 
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 
 /**
  * Write metadata to the asset file for all supportet types e.g IPTC, XMP ...
@@ -27,11 +25,19 @@ class AddMetadata implements AddMetadataInterface
     private $metadataWriters;
 
     /**
+     * @var FileInterfaceFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @param FileInterfaceFactory $fileFactory
      * @param array[] $metadataWriters
      */
     public function __construct(
+        FileInterfaceFactory $fileFactory,
         array $metadataWriters
     ) {
+        $this->fileFactory = $fileFactory;
         $this->metadataWriters = $metadataWriters;
     }
 
@@ -41,17 +47,8 @@ class AddMetadata implements AddMetadataInterface
     public function execute(string $path, MetadataInterface $metadata): void
     {
         foreach ($this->metadataWriters as $writer) {
-            try {
-                foreach ($writer['fileReaders'] as $fileReader) {
-                    $file = $fileReader->execute($path);
-                }
-            } catch (\Exception $exception) {
-                throw new LocalizedException(
-                    __('Could not parse the image file for metadata: %path', ['path' => $path])
-                );
-            }
-
-            if (!empty($file)) {
+            $file = $this->readFile($writer, $path);
+            if (!empty($file->getSegments())) {
                 try {
                     foreach ($writer['segmentWriters'] as $segmentWriter) {
                         $file = $segmentWriter->execute($file, $metadata);
@@ -66,5 +63,32 @@ class AddMetadata implements AddMetadataInterface
                 }
             }
         }
+    }
+
+    /**
+     * Read file by given writer
+     *
+     * @param array $writer
+     * @param string $path
+     */
+    private function readFile(array $writer, string $path): FileInterface
+    {
+        $file =  $this->fileFactory->create([
+            'path' => $path,
+            'segments' => []
+        ]);
+
+        foreach ($writer['fileReaders'] as $fileReader) {
+            try {
+                $file = $fileReader->execute($path);
+            } catch (ValidatorException $exception) {
+                continue;
+            } catch (\Exception $exception) {
+                throw new LocalizedException(
+                    __('Could not parse the image file for metadata: %path', ['path' => $path])
+                );
+            }
+        }
+        return $file;
     }
 }

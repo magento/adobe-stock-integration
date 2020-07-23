@@ -5,21 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Gif;
+namespace Magento\MediaGalleryMetadata\Model\Png;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
- * File segments writer
+ * File segments reader
  */
-class FileWriter implements FileWriterInterface
+class WriteFile implements WriteFileInterface
 {
+    private const PNG_FILE_START = "\x89PNG\x0d\x0a\x1a\x0a";
+
     /**
      * @var DriverInterface
      */
@@ -43,7 +45,7 @@ class FileWriter implements FileWriterInterface
     }
 
     /**
-     * Write file object to the filesystem
+     * Write PNG file to filesystem
      *
      * @param FileInterface $file
      * @throws LocalizedException
@@ -52,13 +54,14 @@ class FileWriter implements FileWriterInterface
     public function execute(FileInterface $file): void
     {
         $resource = $this->driver->fileOpen($file->getPath(), 'wb');
-      
+
+        $this->driver->fileWrite($resource, self::PNG_FILE_START);
         $this->writeSegments($resource, $file->getSegments());
         $this->driver->fileClose($resource);
     }
 
     /**
-     * Write gif segment
+     * Write PNG segments
      *
      * @param resource $resource
      * @param SegmentInterface[] $segments
@@ -66,11 +69,10 @@ class FileWriter implements FileWriterInterface
     private function writeSegments($resource, array $segments): void
     {
         foreach ($segments as $segment) {
-            $this->driver->fileWrite(
-                $resource,
-                $segment->getData()
-            );
+            $this->driver->fileWrite($resource, pack("N", strlen($segment->getData())));
+            $this->driver->fileWrite($resource, pack("a4", $segment->getName()));
+            $this->driver->fileWrite($resource, $segment->getData());
+            $this->driver->fileWrite($resource, pack("N", crc32($segment->getName() . $segment->getData())));
         }
-        $this->driver->fileWrite($resource, pack("C", ord(";")));
     }
 }

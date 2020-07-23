@@ -16,27 +16,27 @@
             <argument name="metadataExtractors" xsi:type="array">
                <item name="jpeg" xsi:type="array">
                     <item name="fileReaders" xsi:type="array">
-                        <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\FileReader</item>
+                        <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile</item>
                     </item>
                     <item name="segmentReaders" xsi:type="array">
-                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpReader</item>
-                        <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcReader</item>
+                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\ReadXmp</item>
+                        <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\ReadIptc</item>
                     </item>
                 </item>
                 <item name="png" xsi:type="array">
                       <item name="fileReaders" xsi:type="array">
-                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileReader</item>
+                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\ReadFile</item>
                       </item>
                     <item name="segmentReaders" xsi:type="array">
-                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpReader</item>
+                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\ReadXmp</item>
                     </item>
                 </item>
                 <item name="gif" xsi:type="array">
                       <item name="fileReaders" xsi:type="array">
-                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileReader</item>
+                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\ReadFile</item>
                       </item>
                     <item name="segmentReaders" xsi:type="array">
-                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpReader</item>
+                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\ReadXmp</item>
                     </item>
                 </item>
             </argument>
@@ -47,36 +47,36 @@
             <argument name="metadataWriters" xsi:type="array">
                 <item name="jpeg" xsi:type="array">
                     <item name="fileReaders" xsi:type="array">
-                        <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\FileReader</item>
+                        <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile</item>
                     </item>
                     <item name="fileWriters" xsi:type="array">
-                        <item name="jpegFileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\FileWriter</item>
+                        <item name="jpegFileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\WriteFile</item>
                     </item>
                     <item name="segmentWriters" xsi:type="array">
-                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpWriter</item>
-                        <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcWriter</item>
+                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteXmp</item>
+                        <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteIptc</item>
                     </item>
                 </item>
                 <item name="png" xsi:type="array">
                       <item name="fileReaders" xsi:type="array">
-                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileReader</item>
+                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\ReadFile</item>
                       </item>
                       <item name="fileWriters" xsi:type="array">
-                          <item name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileWriter</item>
+                          <item name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\WriteFile</item>
                       </item>
                     <item name="segmentWriters" xsi:type="array">
-                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpWriter</item>
+                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\WriteXmp</item>
                     </item>
                 </item>
                 <item name="gif" xsi:type="array">
                       <item name="fileReaders" xsi:type="array">
-                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileReader</item>
+                          <item name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\ReadFile</item>
                       </item>
                       <item name="fileWriters" xsi:type="array">
-                          <item name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileWriter</item>
+                          <item name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\WriteFile</item>
                       </item>
                     <item name="segmentWriters" xsi:type="array">
-                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpWriter</item>
+                        <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\WriteXmp</item>
                     </item>
                 </item>
             </argument>

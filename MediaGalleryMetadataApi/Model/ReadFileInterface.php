@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryMetadataApi\Model;
 /**
  * File reader
  */
-interface FileReaderInterface
+interface ReadFileInterface
 {
     /**
      * Create file object from the file

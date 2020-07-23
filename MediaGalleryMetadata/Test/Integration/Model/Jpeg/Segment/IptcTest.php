@@ -11,9 +11,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcWriter;
-use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcReader;
-use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteIptc;
+use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\ReadIptc;
+use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -24,12 +24,12 @@ use Magento\Framework\Filesystem;
 class IptcTest extends TestCase
 {
     /**
-     * @var IptcWriter
+     * @var WriteIptc
      */
     private $iptcWriter;
 
     /**
-     * @var IptcReader
+     * @var ReadIptc
      */
     private $iptcReader;
 
@@ -39,7 +39,7 @@ class IptcTest extends TestCase
     private $driver;
 
     /**
-     * @var FileReader
+     * @var ReadFile
      */
     private $fileReader;
 
@@ -60,9 +60,9 @@ class IptcTest extends TestCase
     {
         $this->varDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->iptcWriter = Bootstrap::getObjectManager()->get(IptcWriter::class);
-        $this->iptcReader = Bootstrap::getObjectManager()->get(IptcReader::class);
-        $this->fileReader = Bootstrap::getObjectManager()->get(FileReader::class);
+        $this->iptcWriter = Bootstrap::getObjectManager()->get(WriteIptc::class);
+        $this->iptcReader = Bootstrap::getObjectManager()->get(ReadIptc::class);
+        $this->fileReader = Bootstrap::getObjectManager()->get(ReadFile::class);
         $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
     }
