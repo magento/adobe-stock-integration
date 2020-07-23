@@ -186,7 +186,7 @@ define([
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__('Cannot upload "' + file.name + '". This file format is not supported.')
+                    $t('Cannot upload "' + file.name + '". This file format is not supported.')
                 );
             }.bind(this));
 
@@ -202,7 +202,7 @@ define([
             this.mediaGridMessages().messages.remove(function (item) {
                 return item.code === 'success';
             });
-            this.mediaGridMessages().add('success', $.mage.__('Successfully uploaded ' + prefix));
+            this.mediaGridMessages().add('success', $t('Successfully uploaded ' + prefix));
             this.count(this.count() + 1);
 
         },

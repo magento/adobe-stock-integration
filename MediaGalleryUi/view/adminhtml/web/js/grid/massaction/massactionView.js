@@ -105,7 +105,7 @@ define([
 
             $(this.deleteButtonSelector)
                 .removeClass('media-gallery-actions-buttons')
-                .text($.mage.__('Delete Selected'))
+                .text($t('Delete Selected'))
                 .addClass('primary');
 
             if (!$(this.cancelMassactionButtonSelector).length) {
