@@ -11,6 +11,8 @@ use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 
 /**
  * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
@@ -27,15 +29,23 @@ class ExtractMetadata implements ExtractMetadataInterface
      * @var array
      */
     private $metadataExtractors;
-    
+
     /**
+     * @var FileInterfaceFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @param FileInterfaceFactory $fileFactory
      * @param MetadataInterfaceFactory $metadataFactory
      * @param array $metadataExtractors
      */
     public function __construct(
+        FileInterfaceFactory $fileFactory,
         MetadataInterfaceFactory $metadataFactory,
         array $metadataExtractors
     ) {
+        $this->fileFactory = $fileFactory;
         $this->metadataFactory = $metadataFactory;
         $this->metadataExtractors = $metadataExtractors;
     }
@@ -78,19 +88,14 @@ class ExtractMetadata implements ExtractMetadataInterface
             $title = '';
             $description = '';
             $keywords = [];
-            foreach ($extractor['fileReaders'] as $fileReader) {
-                try {
-                    $file = $fileReader->execute($path);
-                } catch (ValidatorException $e) {
-                    continue;
-                }
-            }
-            if (!empty($file)) {
+            $file = $this->readFile($extractor['fileReaders'], $path);
+           
+            if (!empty($file->getSegments())) {
                 foreach ($extractor['segmentReaders'] as $segmentReader) {
                     $data = $segmentReader->execute($file);
                     $title = $data->getTitle() ?? $title;
                     $description = $data->getDescription() ?? $description;
-                    $keywords = $data->getKeywords();
+                    $keywords = $keywords + $data->getKeywords();
                     if (!empty($title) && !empty($description) && !empty($keywords)) {
                         return $this->metadataFactory->create([
                             'title' => $title,
@@ -106,5 +111,32 @@ class ExtractMetadata implements ExtractMetadataInterface
             'description' => $description,
             'keywords' => array_unique($keywords)
         ]);
+    }
+
+    /**
+     * Read file by given fileReader
+     *
+     * @param array $fileReader
+     * @param string $path
+     */
+    private function readFile(array $fileReaders, string $path): FileInterface
+    {
+        $file =  $this->fileFactory->create([
+            'path' => $path,
+            'segments' => []
+        ]);
+
+        foreach ($fileReaders as $fileReader) {
+            try {
+                $file = $fileReader->execute($path);
+            } catch (ValidatorException $exception) {
+                continue;
+            } catch (\Exception $exception) {
+                throw new LocalizedException(
+                    __('Could not parse the image file for metadata: %path', ['path' => $path])
+                );
+            }
+        }
+        return $file;
     }
 }

@@ -47,7 +47,8 @@ class AddMetadata implements AddMetadataInterface
     public function execute(string $path, MetadataInterface $metadata): void
     {
         foreach ($this->metadataWriters as $writer) {
-            $file = $this->readFile($writer, $path);
+            $file = $this->readFile($writer['fileReaders'], $path);
+            
             if (!empty($file->getSegments())) {
                 try {
                     foreach ($writer['segmentWriters'] as $segmentWriter) {
@@ -66,19 +67,19 @@ class AddMetadata implements AddMetadataInterface
     }
 
     /**
-     * Read file by given writer
+     * Read file by given fileReaders
      *
-     * @param array $writer
+     * @param array $fileReaders
      * @param string $path
      */
-    private function readFile(array $writer, string $path): FileInterface
+    private function readFile(array $fileReaders, string $path): FileInterface
     {
         $file =  $this->fileFactory->create([
             'path' => $path,
             'segments' => []
         ]);
 
-        foreach ($writer['fileReaders'] as $fileReader) {
+        foreach ($fileReaders as $fileReader) {
             try {
                 $file = $fileReader->execute($path);
             } catch (ValidatorException $exception) {
