@@ -11,8 +11,8 @@
         "magento/module-adobe-stock-client": "*",
         "magento/module-adobe-stock-client-api": "*",
         "magento/module-adobe-stock-admin-ui": "*",
-        "magento/module-adobe-ims": "*",
-        "magento/module-adobe-ims-api": "*",
+        "magento/module-media-gallery-renditions": "*",
+        "magento/module-media-gallery-renditions-api": "*",
         "magento/module-media-gallery-ui": "*",
         "magento/module-media-gallery-ui-api": "*",
         "magento/module-media-gallery-integration": "*",
@@ -21,6 +21,10 @@
         "magento/module-media-content-synchronization": "*",
         "magento/module-media-content-synchronization-api": "*",
         "magento/module-media-content-synchronization-catalog": "*",
-        "magento/module-media-content-synchronization-cms": "*"
+        "magento/module-media-content-synchronization-cms": "*",
+        "magento/module-media-gallery-metadata": "*",
+        "magento/module-media-gallery-metadata-api": "*",
+        "magento/module-media-gallery-catalog-ui": "*",
+        "magento/module-media-gallery-cms-ui": "*"
     }
 }

@@ -6,20 +6,26 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
-    'Magento_MediaGalleryUi/js/action/deleteImage',
+    'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Component, deleteImage, image) {
+], function ($, _, Component, deleteImageWithDetailConfirmation, image) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/grid/columns/image/actions',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
+            mediaGalleryEditDetailsName: 'mediaGalleryEditDetails',
             actionsList: [
                 {
                     name: 'image-details',
                     title: $.mage.__('View Details'),
                     handler: 'viewImageDetails'
+                },
+                {
+                    name: 'edit',
+                    title: $.mage.__('Edit'),
+                    handler: 'editImageDetails'
                 },
                 {
                     name: 'delete',
@@ -29,7 +35,8 @@ define([
             ],
             modules: {
                 imageModel: '${ $.imageModelName }',
-                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }',
+                mediaGalleryEditDetails: '${ $.mediaGalleryEditDetailsName }'
             }
         },
 
@@ -51,7 +58,7 @@ define([
         initEvents: function () {
             $(this.imageModel().addSelectedBtnSelector).click(function () {
                 image.insertImage(
-                   this.imageModel().getSelected(),
+                    this.imageModel().getSelected(),
                     {
                         onInsertUrl: this.imageModel().onInsertUrl,
                         storeId: this.imageModel().storeId
@@ -70,7 +77,10 @@ define([
          * @param {Object} record
          */
         deleteImageAction: function (record) {
-            deleteImage.deleteImageAction(record, this.imageModel().deleteImageUrl);
+            var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
+                deleteImageUrl = this.imageModel().deleteImageUrl;
+
+            deleteImageWithDetailConfirmation.deleteImageAction([record.id], imageDetailsUrl, deleteImageUrl);
         },
 
         /**
@@ -82,6 +92,17 @@ define([
             var recordId = this.imageModel().getId(record);
 
             this.mediaGalleryImageDetails().showImageDetailsById(recordId);
+        },
+
+        /**
+         * Edit image details
+         *
+         * @param {Object} record
+         */
+        editImageDetails: function (record) {
+            var recordId = this.imageModel().getId(record);
+
+            this.mediaGalleryEditDetails().showEditDetailsPanel(recordId);
         }
     });
 });

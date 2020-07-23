@@ -1,5 +1,3 @@
-@import AdobeIms
-@import AdobeImsApi
 @import AdobeStockAdminUi
 @import AdobeStockAsset
 @import AdobeStockAssetApi
@@ -8,6 +6,8 @@
 @import AdobeStockImage
 @import AdobeStockImageAdminUi
 @import AdobeStockImageApi
+@import MediaGalleryRenditions
+@import MediaGalleryRenditionsApi
 @import MediaGalleryUi
 @import MediaGalleryUiApi
 @import MediaGalleryIntegration
@@ -17,3 +17,7 @@
 @import MediaContentSynchronizationApi
 @import MediaContentSynchronizationCatalog
 @import MediaContentSynchronizationCms
+@import MediaGalleryMetadata
+@import MediaGalleryMetadataApi
+@import MediaGalleryCatalogUi
+@import MediaGalleryCmsUi
