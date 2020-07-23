@@ -47,8 +47,8 @@ class UpdateKeywords
     /**
      * Save asset keywords
      *
-     * @param string[] $keywords
      * @param int $assetId
+     * @param string[] $keywords
      */
     public function execute(int $assetId, array $keywords): void
     {
