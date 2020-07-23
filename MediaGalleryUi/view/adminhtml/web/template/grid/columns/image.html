@@ -5,6 +5,9 @@
     */
 -->
 <div class="media-gallery-wrap" collapsible>
+  <div class="mediagallery-massaction-checkbox" if="isMassActionMode()">
+    <input type="checkbox" data-bind="attr: { 'data-ui-id': $row().title }, visible: isMassActionMode(), checked: isSelected($row()), click: function () { return select($row()); }" />
+  </div>
     <div class="media-gallery-image">
         <div data-row="file"
              class="masonry-image-block media-gallery-image-block"
@@ -33,7 +36,7 @@
         </ul>
         <div class="media-gallery-image-actions">
             <div class="action-select-wrap">
-                <span class="three-dots"
+                <span class="three-dots" ifnot="isMassActionMode()"
                       toggleCollapsible
                       click="function () { clickOnThreeDots($row(), $collapsible.opened()); }"></span>
             </div>

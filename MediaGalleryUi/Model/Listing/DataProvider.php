@@ -10,10 +10,13 @@ namespace Magento\MediaGalleryUi\Model\Listing;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\MediaGalleryUi\Model\SelectModifierInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Magento\MediaGalleryUi\Ui\Component\Listing\Provider;
 
 /**
  * Media gallery UI data provider. Try catch added for displaying errors in grid
@@ -21,9 +24,14 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiCo
 class DataProvider extends UiComponentDataProvider
 {
     /**
-     * @var SelectModifierInterface
+     * @var CollectionProcessorInterface
      */
-    private $selectModifier;
+    private $collectionProcessor;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
 
     /**
      * @param string $name
@@ -33,7 +41,8 @@ class DataProvider extends UiComponentDataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
-     * @param SelectModifierInterface $selectModifier
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionFactory $collectionFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -46,7 +55,8 @@ class DataProvider extends UiComponentDataProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        SelectModifierInterface $selectModifier,
+        CollectionProcessorInterface $collectionProcessor,
+        CollectionFactory $collectionFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -61,8 +71,8 @@ class DataProvider extends UiComponentDataProvider
             $meta,
             $data
         );
-
-        $this->selectModifier = $selectModifier;
+        $this->collectionFactory = $collectionFactory;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -71,11 +81,7 @@ class DataProvider extends UiComponentDataProvider
     public function getData(): array
     {
         try {
-            /** @var SearchResult $searchResult */
-            $searchResult = $this->getSearchResult();
-            $this->selectModifier->apply($searchResult->getSelect(), $this->getSearchCriteria());
-
-            return $this->searchResultToOutput($searchResult);
+            return $this->searchResultToOutput($this->getSearchResult());
         } catch (\Exception $exception) {
             return [
                 'items' => [],
@@ -83,5 +89,17 @@ class DataProvider extends UiComponentDataProvider
                 'errorMessage' => $exception->getMessage()
             ];
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSearchResult(): SearchResultInterface
+    {
+        /** @var Provider $collection */
+        $collection = $this->collectionFactory->getReport($this->getSearchCriteria()->getRequestName());
+        $this->collectionProcessor->process($this->getSearchCriteria(), $collection);
+
+        return $collection;
     }
 }
