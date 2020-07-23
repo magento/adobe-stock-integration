@@ -5,8 +5,9 @@
 
 define([
     'jquery',
-    'uiComponent'
-], function ($, Component) {
+    'uiComponent',
+    'mage/translate'
+], function ($, Component, $t) {
     'use strict';
 
     return Component.extend({
@@ -32,7 +33,7 @@ define([
                 '.three-dots',
                 '#add_selected'
             ],
-            massactionModeTitle: $.mage.__('Select Images to Delete')
+            massactionModeTitle: $t('Select Images to Delete')
         },
 
         /**

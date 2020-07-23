@@ -10,8 +10,9 @@ define([
     'uiLayout',
     'underscore',
     'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
-    'jquery/jstree/jquery.jstree'
-], function ($, Component, layout, _, createDirectory) {
+    'jquery/jstree/jquery.jstree',
+    'Magento_Ui/js/lib/view/utils/async'
+], function ($, Component, layout, _, createDirectory, async) {
     'use strict';
 
     return Component.extend({
@@ -41,16 +42,14 @@ define([
         initialize: function () {
             this._super().observe(['activeNode']).initView();
 
-            this.waitForCondition(
-                function () {
-                    return $(this.directoryTreeSelector).length === 0;
-                }.bind(this),
+            $.async(
+                this.directoryTreeSelector,
+                this,
                 function () {
                     this.renderDirectoryTree().then(function () {
                         this.initEvents();
                     }.bind(this));
-                }.bind(this)
-            );
+                }.bind(this));
 
             return this;
         },
@@ -59,23 +58,18 @@ define([
          * Render directory tree component.
          */
         renderDirectoryTree: function () {
-            var deferred = $.Deferred();
 
-            this.getJsonTree().then(function (data) {
+            return this.getJsonTree().then(function (data) {
                 this.createFolderIfNotExists(data).then(function (isFolderCreated) {
                     if (isFolderCreated) {
                         this.getJsonTree().then(function (newData) {
                             this.createTree(newData);
-                            deferred.resolve();
                         }.bind(this));
                     } else {
                         this.createTree(data);
-                        deferred.resolve();
                     }
                 }.bind(this));
             }.bind(this));
-
-            return deferred.promise();
         },
 
         /**

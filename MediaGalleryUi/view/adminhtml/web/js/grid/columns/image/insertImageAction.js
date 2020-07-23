@@ -30,7 +30,7 @@ define([
 
             if (!targetElement.length) {
                 window.MediabrowserUtility.closeDialog();
-                throw 'Target element not found for content update';
+                throw $t('Target element not found for content update');
             }
 
             $.ajax({

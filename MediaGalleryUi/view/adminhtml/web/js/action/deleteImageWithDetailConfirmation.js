@@ -6,8 +6,9 @@ define([
     'jquery',
     'underscore',
     'Magento_MediaGalleryUi/js/action/getDetails',
-    'Magento_MediaGalleryUi/js/action/deleteImages'
-], function ($, _, getDetails, deleteImages) {
+    'Magento_MediaGalleryUi/js/action/deleteImages',
+    'mage/translate'
+], function ($, _, getDetails, deleteImages, $t) {
     'use strict';
 
     return {
@@ -23,15 +24,15 @@ define([
          */
         deleteImageAction: function (recordsIds, imageDetailsUrl, deleteImageUrl) {
             var imagesCount = Object.keys(recordsIds).length,
-                confirmationContent = $.mage.__('%1 Are you sure you want to delete "%2" image%3?')
+                confirmationContent = $t('%1 Are you sure you want to delete "%2" image%3?')
                 .replace('%2', Object.keys(recordsIds).length).replace('%3', imagesCount > 1 ? 's' : ''),
                 deferred = $.Deferred();
 
             getDetails(imageDetailsUrl, recordsIds)
-                .then(function (imageDetails) {
+                .then(function (response) {
                         confirmationContent = confirmationContent.replace(
                             '%1',
-                            this.getRecordRelatedContentMessage(imageDetails)
+                            this.getRecordRelatedContentMessage(response.imageDetails)
                         );
                     }.bind(this)).fail(function () {
                 confirmationContent = confirmationContent.replace('%1', '');
@@ -53,12 +54,10 @@ define([
          * @return {String}
          */
         getRecordRelatedContentMessage: function (imageDetails) {
-            var usedInMessage = $.mage.__('%n image%p %v used in %s.'),
+            var usedInMessage = $t('%n image%p %v used in %s.'),
                 usedIn = {},
                 message = '',
-                pronoun,
-                s,
-                linkingVerb;
+                entitiesCount;
 
             $.each(imageDetails, function (key, image) {
                 if (_.isObject(image.details[6]) && !_.isEmpty(image.details[6].value)) {
@@ -72,22 +71,16 @@ define([
                 return '';
             }
             $.each(usedIn, function (entityName, count) {
-                message +=  count + ' ' +  this.getEntityNameWithPrefix(entityName, count) +  ', ';
+                message +=  count + ' ' +  count > 1 ? this.getEntityNameWithPrefix(entityName) : entityName +  ', ';
             }.bind(this));
 
-            if (Object.keys(imageDetails).length  > 1) {
-                pronoun = 'These';
-                s = 's';
-                linkingVerb = 'are';
-            } else {
-                pronoun = 'This';
-                s = '';
-                linkingVerb = 'is';
-            }
-
+            entitiesCount = Object.keys(imageDetails).length  > 1;
             message = message.replace(/,\s*$/, '');
-            message = usedInMessage.replace('%s', message).replace('%n', pronoun).replace('%p', s)
-                .replace('%v', linkingVerb);
+            message = usedInMessage
+                .replace('%s', message)
+                .replace('%n', entitiesCount ? 'These' : 'This')
+                .replace('%p', entitiesCount ? 's' : '')
+                .replace('%v', entitiesCount ? 'are' : 'is');
 
             return message;
         },
@@ -96,22 +89,13 @@ define([
          * Return entity name based on used in count
          *
          * @param {String} entityName
-         * @param {String} count
          */
-        getEntityNameWithPrefix: function (entityName, count) {
-            var name;
-
-            if (count > 1) {
-                if (entityName === this.categoryContentType) {
-                    name = entityName.slice(0, -1) + 'ies';
-                } else {
-                    name = entityName + 's';
-                }
-
-                return name;
+        getEntityNameWithPrefix: function (entityName) {
+            if (entityName === this.categoryContentType) {
+                return entityName.slice(0, -1) + 'ies';
             }
 
-            return entityName;
+            return entityName + 's';
         }
     };
 });

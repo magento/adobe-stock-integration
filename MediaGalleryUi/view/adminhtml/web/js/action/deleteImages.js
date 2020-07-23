@@ -7,7 +7,8 @@ define([
     'underscore',
     'mage/url',
     'Magento_MediaGalleryUi/js/grid/messages',
-    'Magento_Ui/js/modal/confirm'
+    'Magento_Ui/js/modal/confirm',
+    'mage/translate'
 ], function ($, _, urlBuilder, messages, confirmation) {
     'use strict';
 
@@ -75,7 +76,7 @@ define([
                     if (typeof response.responseJSON === 'undefined' ||
                         typeof response.responseJSON.message === 'undefined'
                     ) {
-                        message = 'There was an error on attempt to delete the image.';
+                        message = $t('There was an error on attempt to delete the image.');
                     } else {
                         message = response.responseJSON.message;
                     }

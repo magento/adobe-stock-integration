@@ -9,8 +9,9 @@ define([
     'underscore',
     'Magento_Ui/js/lib/validation/validator',
     'mage/translate',
-    'jquery/file-uploader'
-], function (Component, $, _, validator) {
+    'jquery/file-uploader',
+    'mage/translate'
+], function (Component, $, _, validator, $t) {
     'use strict';
 
     return Component.extend({
@@ -133,7 +134,7 @@ define([
         addValidationErrorMessage: function (message) {
             this.mediaGridMessages().add(
                 'error',
-                $.mage.__(message)
+                $t(message)
             );
 
             this.count() < 2 || this.mediaGridMessages().scheduleCleanup();

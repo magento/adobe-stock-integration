@@ -9,8 +9,9 @@ define([
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'uiLayout',
     'underscore',
-    'Magento_Ui/js/modal/alert'
-], function ($, Component, DeleteImages, Layout, _, uiAlert) {
+    'Magento_Ui/js/modal/alert',
+    'mage/translate'
+], function ($, Component, DeleteImages, Layout, _, uiAlert, $t) {
     'use strict';
 
     return Component.extend({
@@ -126,7 +127,7 @@ define([
                 $(this.massactionView().deleteButtonSelector).on('massDelete', function () {
                     if (this.getSelectedCount() < 1) {
                         uiAlert({
-                            content: $.mage.__('You need to select at least one image')
+                            content: $t('You need to select at least one image')
                         });
 
                     } else {

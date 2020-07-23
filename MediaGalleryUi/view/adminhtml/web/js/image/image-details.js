@@ -49,8 +49,8 @@ define([
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
-                getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
-                    this.images[imageId] = imageDetails[imageId];
+                getDetails(this.imageDetailsUrl, [imageId]).then(function (response) {
+                    this.images[imageId] = response.imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
                 }.bind(this)).fail(function (message) {
@@ -136,9 +136,9 @@ define([
             var usedIn = '';
 
             if (_.isObject(value)) {
-                $.each(value, function (moduleName, count) {
+                $.each(value, function (entityName, count) {
                     usedIn += count + ' ' +
-                        this.getEntityNameWithPrefix(moduleName, count) +
+                        count > 1 ? this.getEntityNameWithPrefix(entityName) : entityName +
                         '</br>';
                 }.bind(this));
 
@@ -152,22 +152,13 @@ define([
         * Return entity name based on used in count
         *
         * @param {String} entityName
-        * @param {String} count
         */
-        getEntityNameWithPrefix: function (entityName, count) {
-            var name;
-
-            if (count > 1) {
-                if (entityName === this.categoryContentType) {
-                    name = entityName.slice(0, -1) + 'ies';
-                } else {
-                    name = entityName + 's';
-                }
-
-                return name;
+        getEntityNameWithPrefix: function (entityName) {
+            if (entityName === this.categoryContentType) {
+                return entityName.slice(0, -1) + 'ies';
             }
 
-            return entityName;
+            return entityName + 's';
         },
 
         /**

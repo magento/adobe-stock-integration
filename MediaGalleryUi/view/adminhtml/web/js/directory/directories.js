@@ -12,8 +12,9 @@ define([
     'Magento_Ui/js/modal/prompt',
     'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'Magento_MediaGalleryUi/js/directory/actions/deleteDirectory',
-    'validation'
-], function ($, Component, confirm, uiAlert, _, prompt, createDirectory, deleteDirectory) {
+    'validation',
+    'mage/translate'
+], function ($, Component, confirm, uiAlert, _, prompt, createDirectory, deleteDirectory, $t) {
     'use strict';
 
     return Component.extend({
@@ -51,7 +52,7 @@ define([
 
             $(this.createFolderButtonSelector).on('create_folder', function () {
                 this.getPrompt({
-                    title: 'New Folder Name:',
+                    title: $t('New Folder Name:'),
                     content: '',
                     actions: {
                         /**
@@ -76,7 +77,7 @@ define([
                         }.bind(this)
                     },
                     buttons: [{
-                        text: $.mage.__('Cancel'),
+                        text: $t('Cancel'),
                         class: 'action-secondary action-dismiss',
 
                         /**
@@ -86,7 +87,7 @@ define([
                             this.closeModal();
                         }
                     }, {
-                        text: $.mage.__('Confirm'),
+                        text: $t('Confirm'),
                         class: 'action-primary action-accept'
                     }]
                 });
