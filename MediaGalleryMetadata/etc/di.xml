@@ -25,6 +25,7 @@
             <argument name="writers" xsi:type="array">
                 <item name="jpeg" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\AddMetadata</item>
                 <item name="png" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\AddMetadata</item>
+                <item name="gif" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\AddMetadata</item>
             </argument>
         </arguments>
     </type>
@@ -44,6 +45,15 @@
             <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\FileWriter</argument>
             <argument name="writers" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\XmpWriter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryMetadata\Model\Gif\AddMetadata" type="Magento\MediaGalleryMetadata\Model\File\AddMetadata">
+        <arguments>
+            <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileReader</argument>
+            <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\FileWriter</argument>
+            <argument name="writers" xsi:type="array">
+                <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpWriter</item>
             </argument>
         </arguments>
     </virtualType>

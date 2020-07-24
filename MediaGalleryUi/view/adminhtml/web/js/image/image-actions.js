@@ -9,7 +9,8 @@ define([
     'uiElement',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
-    'Magento_MediaGalleryUi/js/action/saveDetails'
+    'Magento_MediaGalleryUi/js/action/saveDetails',
+    'mage/validation'
 ], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected, saveDetails) {
     'use strict';
 
@@ -54,6 +55,15 @@ define([
         },
 
         /**
+         * Opens the image edit panel
+         */
+        editImageAction: function () {
+            var record = this.imageModel().getSelected().id;
+
+            this.mediaGalleryEditDetails().showEditDetailsPanel(record);
+        },
+
+        /**
          * Delete image action
          */
         deleteImageAction: function () {
@@ -72,16 +82,25 @@ define([
          */
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
-                modalElement = $(this.modalSelector);
+                modalElement = $(this.modalSelector),
+                dataForm = modalElement.find('#image-edit-details-form'),
+                imageId = this.imageModel().getSelected().id,
+                imageDetails = this.mediaGalleryImageDetails();
 
-            saveDetails(
-                saveDetailsUrl,
-                modalElement.find('#image-edit-details-form')
-            ).then(function () {
-                this.closeModal();
-                this.imageModel().reloadGrid();
-            }.bind(this));
+            if (dataForm.validation('isValid')) {
+                saveDetails(
+                    saveDetailsUrl,
+                    dataForm
+                ).then(function () {
+                    this.closeModal();
+                    this.imageModel().reloadGrid();
+                    imageDetails.removeCached(imageId);
 
+                    if (imageDetails.isActive()) {
+                        imageDetails.showImageDetailsById(imageId);
+                    }
+                }.bind(this));
+            }
         },
 
         /**
