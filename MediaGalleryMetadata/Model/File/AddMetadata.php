@@ -130,7 +130,9 @@ class AddMetadata implements AddMetadataInterface
     ): FileInterface {
         foreach ($metadataWriters as $writer) {
             if (!$writer instanceof WriteMetadataInterface) {
-                throw new LocalizedException(__('SegmentWriter must implement WriteMetadataInterface'));
+                throw new \InvalidArgumentException(
+                    __(get_class($writer) . ' must implement '. WriteFileInterface::class)
+                );
             }
 
             $file = $writer->execute($file, $metadata);

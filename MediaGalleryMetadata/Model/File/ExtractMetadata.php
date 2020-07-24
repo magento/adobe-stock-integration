@@ -142,7 +142,9 @@ class ExtractMetadata implements ExtractMetadataInterface
         
         foreach ($segmentReaders as $segmentReader) {
             if (!$segmentReader instanceof ReadMetadataInterface) {
-                throw new LocalizedException(__('SegmentReader must implement ReadMetadataInterface'));
+                throw new \InvalidArgumentException(
+                    __(get_class($segmentReader). ' must implement ' . ReadMetadataInterface::class)
+                );
             }
 
             $data = $segmentReader->execute($file);
