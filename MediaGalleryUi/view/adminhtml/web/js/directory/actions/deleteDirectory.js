@@ -35,6 +35,8 @@ define([
                 } else {
                     message = response.responseJSON.message;
                 }
+
+                return message;
             }
         });
     };

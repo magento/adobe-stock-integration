@@ -37,22 +37,22 @@ class Duplicated implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection): bool
     {
-        $value = $filter->getValue();
-        if ($value) {
-            $collection->getSelect()
-                ->where('main_table.hash IN ('. $this->getDuplicatedSqlPart() . ' HAVING count(*) > 1)');
+        if ($filter->getValue()) {
+            $collection->getSelect()->where('main_table.hash IN (?)', $this->getDuplicatedIds());
         }
         return true;
     }
-
     /**
      * Return sql part of duplicated values.
      */
-    private function getDuplicatedSqlPart(): Select
+    private function getDuplicatedIds(): array
     {
-        return $this->connection->getConnection()
-                       ->select()
+        $connection = $this->connection->getConnection();
+        return $connection->fetchAssoc(
+            $connection->select()
                        ->from($this->connection->getTableName('media_gallery_asset'), ['hash'])
-                       ->group(['hash']);
+                       ->group('hash')
+                       ->having('COUNT(*) > 1')
+        );
     }
 }

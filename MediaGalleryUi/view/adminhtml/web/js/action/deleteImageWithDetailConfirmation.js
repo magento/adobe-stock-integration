@@ -69,7 +69,7 @@ define([
                 return '';
             }
             $.each(usedIn, function (entityName, count) {
-                message +=  count > 1 ? count + this.getEntityNameWithPrefix(entityName) : count + ' ' + entityName +  ', ';
+                message +=  count > 1 ? count + this.getEntityPrefix(entityName) : count + ' ' + entityName +  ', ';
             }.bind(this));
 
             entitiesCount = Object.keys(imageDetails).length  > 1;
@@ -88,8 +88,8 @@ define([
          *
          * @param {String} entityName
          */
-        getEntityNameWithPrefix: function (entityName) {
-            if (entityName.substr(id.length - 1) === 'y') {
+        getEntityPrefix: function (entityName) {
+            if (entityName.substr(entityName.length - 1) === 'y') {
                 return entityName.slice(0, -1) + 'ies';
             }
 

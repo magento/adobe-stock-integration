@@ -7,8 +7,9 @@
 define([
     'jquery',
     'wysiwygAdapter',
-    'underscore'
-], function ($, wysiwyg, _) {
+    'underscore',
+    'mage/translate'
+], function ($, wysiwyg, _, $t) {
     'use strict';
 
     return {

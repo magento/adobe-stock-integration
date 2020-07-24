@@ -12,7 +12,7 @@ define([
     'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'jquery/jstree/jquery.jstree',
     'Magento_Ui/js/lib/view/utils/async'
-], function ($, Component, layout, _, createDirectory, async) {
+], function ($, Component, layout, _, createDirectory) {
     'use strict';
 
     return Component.extend({
