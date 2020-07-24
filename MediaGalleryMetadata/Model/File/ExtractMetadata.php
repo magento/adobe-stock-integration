@@ -157,7 +157,7 @@ class ExtractMetadata implements ExtractMetadataInterface
     /**
      * Read file by given fileReader
      *
-     * @param ReadFileInterface $fileReader
+     * @param ReadFileInterface $reader
      * @param string $path
      */
     private function readFile(ReadFileInterface $reader, string $path): FileInterface
