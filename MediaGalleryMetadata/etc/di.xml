@@ -11,20 +11,6 @@
     <preference for="Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface" type="Magento\MediaGalleryMetadata\Model\File\ExtractMetadata"/>
     <preference for="Magento\MediaGalleryMetadataApi\Model\FileInterface" type="Magento\MediaGalleryMetadata\Model\File"/>
     <preference for="Magento\MediaGalleryMetadataApi\Model\SegmentInterface" type="Magento\MediaGalleryMetadata\Model\Segment"/>
-    <type name="Magento\MediaGalleryMetadataApi\Model\AddMetadataComposite">
-        <arguments>
-            <argument name="writers" xsi:type="array">
-                <item name="0" xsi:type="object">Magento\MediaGalleryMetadata\Model\File\AddMetadata</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite">
-        <arguments>
-            <argument name="extractors" xsi:type="array">
-                <item name="0" xsi:type="object">Magento\MediaGalleryMetadata\Model\File\ExtractMetadata</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\MediaGalleryMetadata\Model\File\ExtractMetadata">
         <arguments>
             <argument name="fileReaders" xsi:type="array">

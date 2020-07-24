@@ -75,7 +75,7 @@ class FetchMediaStorageFileBatches
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->batchSize = $batchSize;
-        $this->fileExtensionsPattern = $fileExtensionsPattern;
+        $this->fileExtensions = $fileExtensions;
     }
 
     /**
