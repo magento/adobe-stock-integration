@@ -1,5 +1,3 @@
-@import AdobeIms
-@import AdobeImsApi
 @import AdobeStockAdminUi
 @import AdobeStockAsset
 @import AdobeStockAssetApi
@@ -21,4 +19,5 @@
 @import MediaContentSynchronizationCms
 @import MediaGalleryMetadata
 @import MediaGalleryMetadataApi
-@import MediaGAlleryCatalogUi
+@import MediaGalleryCatalogUi
+@import MediaGalleryCmsUi

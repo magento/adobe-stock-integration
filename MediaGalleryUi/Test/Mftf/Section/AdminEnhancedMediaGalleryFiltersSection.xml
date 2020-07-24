@@ -17,6 +17,9 @@
         <element name="activeFilterPlaceholder" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']"/>
         <element name="usedInSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Show Images Used In']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
         <element name="usedInEntityType" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{entityType}}']" parameterized="true"/>
+        <element name="usedInDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
+        <element name="selectFilter" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select" parameterized="true"/>
+        <element name="selectFilterOption" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select/option[@data-title='{{optionLabel}}']" parameterized="true"/>
         <element name="searchOptionsFilter" type="select" selector="//div[label/span[contains(text(), '{{filterName}}')]]//div[@class='action-select admin__action-multiselect']" parameterized="true" timeout="30"/>
         <element name="searchOptionsFilterInput" type="input" selector="//div[label/span[contains(text(), '{{filterName}}')]]//input[@data-role='advanced-select-text']" parameterized="true" timeout="30"/>
         <element name="searchOptionsFilterOption" type="text" selector="//div[label/span[contains(text(), '{{filterName}}')]]//label[@class='admin__action-multiselect-label']/span[text()='{{optionName}}']" parameterized="true" timeout="30"/>
