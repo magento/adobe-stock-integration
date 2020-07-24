@@ -17,9 +17,6 @@
             <description value="User deletes images with less clicks"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1650"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
