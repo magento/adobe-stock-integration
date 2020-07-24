@@ -6,8 +6,9 @@
 define([
     'jquery',
     'uiComponent',
-    'mage/translate'
-], function ($, Component, $t) {
+    'mage/translate',
+    'text!Magento_MediaGalleryUi/template/grid/massactions/cancelButton.html'
+], function ($, Component, $t, cancelMassActionButton) {
     'use strict';
 
     return Component.extend({
@@ -16,7 +17,7 @@ define([
             gridSelector: '[data-id="media-gallery-masonry-grid"]',
             originDeleteSelector: null,
             originCancelEvent: null,
-            cancelMassactionButton: '<button id="cancel_massaction" type="button" class="cancel">Cancel</button>',
+            cancelMassactionButton: cancelMassActionButton,
             isCancelButtonInserted: false,
             deleteButtonSelector: '#delete_massaction',
             addSelectedButtonSelector: '#add_selected',
@@ -128,21 +129,16 @@ define([
          * Change page title per active mode.
          */
         changePageTitle: function () {
-            var deferred = $.Deferred(),
-                  title = $('h1:contains(' + this.standAloneTitle + ')'),
+            var title = $('h1:contains(' + this.standAloneTitle + ')'),
                   titleSelector = title.length === 1 ? title : $('h1:contains(' + this.slidePanelTitle + ')');
 
             if (this.massActionMode()) {
                 this.defaultTitle = titleSelector.text();
                 titleSelector.text(this.massactionModeTitle);
-                deferred.resolve();
             } else {
                 titleSelector = $('h1:contains(' + this.massactionModeTitle + ')');
                 titleSelector.text(this.defaultTitle);
-                deferred.resolve();
             }
-
-            return deferred.promise();
         }
     });
 });

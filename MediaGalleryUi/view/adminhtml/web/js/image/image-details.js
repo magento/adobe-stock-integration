@@ -19,7 +19,6 @@ define([
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
-            categoryContentType: 'Category',
             showAllTags: false,
             image: null,
             modules: {
@@ -154,7 +153,7 @@ define([
         * @param {String} entityName
         */
         getEntityNameWithPrefix: function (entityName) {
-            if (entityName === this.categoryContentType) {
+            if (entityName.substr(id.length - 1) === 'y') {
                 return entityName.slice(0, -1) + 'ies';
             }
 

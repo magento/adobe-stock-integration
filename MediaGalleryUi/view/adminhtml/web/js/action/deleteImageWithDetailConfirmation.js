@@ -13,8 +13,6 @@ define([
 
     return {
 
-        categoryContentType: 'Category',
-
         /**
          * Get information about image use
          *
@@ -71,7 +69,7 @@ define([
                 return '';
             }
             $.each(usedIn, function (entityName, count) {
-                message +=  count + ' ' +  count > 1 ? this.getEntityNameWithPrefix(entityName) : entityName +  ', ';
+                message +=  count > 1 ? count + this.getEntityNameWithPrefix(entityName) : count + ' ' + entityName +  ', ';
             }.bind(this));
 
             entitiesCount = Object.keys(imageDetails).length  > 1;
@@ -91,11 +89,11 @@ define([
          * @param {String} entityName
          */
         getEntityNameWithPrefix: function (entityName) {
-            if (entityName === this.categoryContentType) {
+            if (entityName.substr(id.length - 1) === 'y') {
                 return entityName.slice(0, -1) + 'ies';
             }
 
-            return entityName + 's';
+            return ' ' + entityName + 's';
         }
     };
 });
