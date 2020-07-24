@@ -11,7 +11,7 @@ use Magento\MediaGalleryMetadata\Model\AddIptcMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
@@ -19,7 +19,7 @@ use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 /**
  * Jpeg IPTC Writer
  */
-class WriteIptc implements MetadataWriterInterface
+class WriteIptc implements WriteMetadataInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
     private const IPTC_SEGMENT_START = 'Photoshop 3.0\0x00';

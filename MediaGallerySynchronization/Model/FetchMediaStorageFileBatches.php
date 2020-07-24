@@ -39,7 +39,7 @@ class FetchMediaStorageFileBatches
     /**
      * @var string
      */
-    private $fileExtensionsPattern;
+    private $fileExtensions;
     
     /**
      * @var LoggerInterface
@@ -58,7 +58,7 @@ class FetchMediaStorageFileBatches
      * @param GetAssetsIterator $assetsIterator
      * @param File $driver
      * @param int $batchSize
-     * @param string $fileExtensionsPattern
+     * @param string $fileExtensions
      */
     public function __construct(
         LoggerInterface $log,
@@ -67,7 +67,7 @@ class FetchMediaStorageFileBatches
         GetAssetsIterator $assetsIterator,
         File $driver,
         int $batchSize,
-        string $fileExtensionsPattern
+        string $fileExtensions
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
@@ -117,7 +117,7 @@ class FetchMediaStorageFileBatches
             $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
             return $relativePath
                 && !$this->isPathExcluded->execute($relativePath)
-                && preg_match($this->fileExtensionsPattern, $path);
+                && preg_match('#\.(' . $this->fileExtensions . ')$# i', $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);
             return false;

@@ -12,13 +12,13 @@ use Magento\MediaGalleryMetadata\Model\GetXmpMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * XMP Reader for gif file format
  */
-class ReadXmp implements MetadataReaderInterface
+class ReadXmp implements ReadMetadataInterface
 {
     private const XMP_SEGMENT_NAME = 'XMP DataXMP';
     /**

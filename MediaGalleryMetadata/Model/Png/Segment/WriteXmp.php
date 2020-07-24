@@ -11,7 +11,7 @@ use Magento\MediaGalleryMetadata\Model\AddXmpMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 use Magento\MediaGalleryMetadata\Model\XmpTemplate;
@@ -19,7 +19,7 @@ use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 /**
  * XMP Writer for png format
  */
-class WriteXmp implements MetadataWriterInterface
+class WriteXmp implements WriteMetadataInterface
 {
     private const XMP_SEGMENT_NAME = 'iTXt';
     private const XMP_SEGMENT_START = "XML:com.adobe.xmp\x00";

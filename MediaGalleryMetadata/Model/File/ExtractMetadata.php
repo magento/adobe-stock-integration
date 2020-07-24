@@ -15,7 +15,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 
 /**
  * Extract Metadata from asset fy file by given extractors
@@ -34,6 +34,11 @@ class ExtractMetadata implements ExtractMetadataInterface
     private $metadataExtractors;
 
     /**
+     * @var array
+     */
+    private $fileReaders;
+
+    /**
      * @var FileInterfaceFactory
      */
     private $fileFactory;
@@ -41,15 +46,17 @@ class ExtractMetadata implements ExtractMetadataInterface
     /**
      * @param FileInterfaceFactory $fileFactory
      * @param MetadataInterfaceFactory $metadataFactory
-     * @param array $metadataExtractors
+     * @param array $fileReaders
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         MetadataInterfaceFactory $metadataFactory,
+        array $fileReaders,
         array $metadataExtractors
     ) {
         $this->fileFactory = $fileFactory;
         $this->metadataFactory = $metadataFactory;
+        $this->fileReaders = $fileReaders;
         $this->metadataExtractors = $metadataExtractors;
     }
 
@@ -73,9 +80,9 @@ class ExtractMetadata implements ExtractMetadataInterface
     private function getEmptyResult(): MetadataInterface
     {
         return $this->metadataFactory->create([
-            'title' => '',
-            'description' => '',
-            'keywords' => []
+            'title' => null,
+            'description' => null,
+            'keywords' => null
         ]);
     }
 
@@ -87,17 +94,14 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private function extractMetadata(string $path): MetadataInterface
     {
-        foreach ($this->metadataExtractors as $extractor) {
-            $file = $this->readFile($extractor['fileReaders'], $path);
+        $fileExtension = str_replace('image/', '', getimagesize($path)['mime']);
+        $file = $this->readFile($this->fileReaders[$fileExtension], $path);
 
-            if (!empty($file->getSegments())) {
-                list($title, $description, $keywords) = $this->readSegments($extractor['segmentReaders'], $file);
-            }
-            
-            if (!empty($title) && !empty($description) && !empty($keywords)) {
-                break;
-            }
-        }
+        list($title, $description, $keywords) = $this->readSegments(
+            $this->metadataExtractors[$fileExtension],
+            $file
+        );
+         
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
@@ -118,8 +122,8 @@ class ExtractMetadata implements ExtractMetadataInterface
         $keywords = [];
         
         foreach ($segmentReaders as $segmentReader) {
-            if (!$segmentReader instanceof MetadataReaderInterface) {
-                throw new LocalizedException(__('SegmentReader must implement MetadataReaderInterface'));
+            if (!$segmentReader instanceof ReadMetadataInterface) {
+                throw new LocalizedException(__('SegmentReader must implement ReadMetadataInterface'));
             }
 
             $data = $segmentReader->execute($file);
@@ -133,30 +137,17 @@ class ExtractMetadata implements ExtractMetadataInterface
     /**
      * Read file by given fileReader
      *
-     * @param array $fileReaders
+     * @param ReadFileInterface $fileReader
      * @param string $path
      */
-    private function readFile(array $fileReaders, string $path): FileInterface
+    private function readFile(ReadFileInterface $reader, string $path): FileInterface
     {
-        $file =  $this->fileFactory->create([
-            'path' => $path,
-            'segments' => []
-        ]);
-
-        foreach ($fileReaders as $fileReader) {
-            if (!$fileReader instanceof ReadFileInterface) {
-                throw new LocalizedException(__('FileReader must implement ReadFileInterface'));
-            }
-
-            try {
-                $file = $fileReader->execute($path);
-            } catch (ValidatorException $exception) {
-                continue;
-            } catch (\Exception $exception) {
-                throw new LocalizedException(
-                    __('Could not parse the image file for metadata: %path', ['path' => $path])
-                );
-            }
+        try {
+            $file = $reader->execute($path);
+        } catch (\Exception $exception) {
+            throw new LocalizedException(
+                __('Could not parse the image file for metadata: %path', ['path' => $path])
+            );
         }
         return $file;
     }

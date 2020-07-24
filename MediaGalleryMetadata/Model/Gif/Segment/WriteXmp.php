@@ -12,14 +12,14 @@ use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 
 /**
  *  XMP Writer for GIF format
  */
-class WriteXmp implements MetadataWriterInterface
+class WriteXmp implements WriteMetadataInterface
 {
     private const XMP_SEGMENT_NAME = 'XMP DataXMP';
     private const XMP_DATA_START_POSITION = 14;

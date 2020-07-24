@@ -15,7 +15,7 @@ use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 
 /**
  * Write metadata to the asset file for all supportet types e.g IPTC, XMP ...
@@ -33,14 +33,30 @@ class AddMetadata implements AddMetadataInterface
     private $fileFactory;
 
     /**
+     * @var array
+     */
+    private $fileReaders;
+
+    /**
+     * @var array
+     */
+    private $fileWriters;
+
+    /**
      * @param FileInterfaceFactory $fileFactory
-     * @param array[] $metadataWriters
+     * @param array $metadataWriters
+     * @param array $fileReaders
+     * @param array $fileWriters
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
-        array $metadataWriters
+        array $metadataWriters,
+        array $fileReaders,
+        array $fileWriters
     ) {
         $this->fileFactory = $fileFactory;
+        $this->fileReaders = $fileReaders;
+        $this->fileWriters = $fileWriters;
         $this->metadataWriters = $metadataWriters;
     }
 
@@ -49,62 +65,86 @@ class AddMetadata implements AddMetadataInterface
      */
     public function execute(string $path, MetadataInterface $metadata): void
     {
-        foreach ($this->metadataWriters as $writer) {
-            $file = $this->readFile($writer['fileReaders'], $path);
-            
-            if (!empty($file->getSegments())) {
-                try {
-                    foreach ($writer['segmentWriters'] as $segmentWriter) {
-                        if (!$segmentWriter instanceof MetadataWriterInterface) {
-                            throw new LocalizedException(__('SegmentWriter must implement MetadataWriterInterface'));
-                        }
+        $fileExtension = str_replace('image/', '', getimagesize($path)['mime']);
 
-                        $file = $segmentWriter->execute($file, $metadata);
-                    }
-                    foreach ($writer['fileWriters'] as $fileWriter) {
-                        if (!$fileWriter instanceof WriteFileInterface) {
-                            throw new LocalizedException(__('FileWriter must implement WriteFileInterface'));
-                        }
+        if (!$this->isApplicable($fileExtension)) {
+            throw new LocalizedException(
+                __('File format is not supported: %path', ['path' => $path])
+            );
+        }
 
-                        $fileWriter->execute($file);
-                    }
-                } catch (\Exception $exception) {
-                    throw new LocalizedException(
-                        __('Could not update the image file metadata: %path', ['path' => $path])
-                    );
-                }
-            }
+        $file = $this->readFile($this->fileReaders[$fileExtension], $path);
+        
+        try {
+            $this->writeFile(
+                $this->writeMetadata($file, $this->metadataWriters[$fileExtension], $metadata),
+                $this->fileWriters[$fileExtension]
+            );
+        } catch (\Exception $exception) {
+            throw new LocalizedException(
+                __('Could not update the image file metadata: %path', ['path' => $path])
+            );
         }
     }
 
     /**
-     * Read file by given fileReaders
+     * Is file applicable to add metadata
      *
-     * @param array $fileReaders
+     * @param string $fileExtension
+     */
+    private function isApplicable(string $fileExtension): bool
+    {
+        return isset($this->fileReaders[$fileExtension]) ||
+            isset($this->metadataWriters[$fileExtension]) ||
+            isset($this->fileWriters[$fileExtension]);
+    }
+    
+    /**
+     * Read file by given path
+     *
+     * @param ReadFileInterface $reader
      * @param string $path
      */
-    private function readFile(array $fileReaders, string $path): FileInterface
+    private function readFile(ReadFileInterface $reader, string $path): FileInterface
     {
-        $file =  $this->fileFactory->create([
-            'path' => $path,
-            'segments' => []
-        ]);
-
-        foreach ($fileReaders as $fileReader) {
-            if (!$fileReader instanceof ReadFileInterface) {
-                throw new LocalizedException(__('FileReader must implement ReadFileInterface'));
-            }
-
-            try {
-                $file = $fileReader->execute($path);
-            } catch (ValidatorException $exception) {
-                continue;
-            } catch (\Exception $exception) {
-                throw new LocalizedException(
-                    __('Could not parse the image file for metadata: %path', ['path' => $path])
-                );
-            }
+        try {
+            $file = $reader->execute($path);
+        } catch (\Exception $exception) {
+            throw new LocalizedException(
+                __('Could not parse the image file for metadata: %path', ['path' => $path])
+            );
         }
         return $file;
+    }
+
+    /**
+     * Write metadata by given metadata writer
+     *
+     * @param FileInterface $file
+     * @param array $metadataWriters
+     */
+    private function writeMetadata(
+        FileInterface $file,
+        array $metadataWriters,
+        MetadataInterface $metadata
+    ): FileInterface {
+        foreach ($metadataWriters as $writer) {
+            if (!$writer instanceof WriteMetadataInterface) {
+                throw new LocalizedException(__('SegmentWriter must implement WriteMetadataInterface'));
+            }
+
+            $file = $writer->execute($file, $metadata);
+        }
+        return $file;
+    }
+
+    /**
+     * Write file
+     *
+     * @param FileInterface $file
+     */
+    private function writeFile(FileInterface $file, WriteFileInterface $writer): void
+    {
+        $writer->execute($file);
     }
 }

@@ -11,13 +11,13 @@ use Magento\MediaGalleryMetadata\Model\GetXmpMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * PNG XMP Reader
  */
-class ReadXmp implements MetadataReaderInterface
+class ReadXmp implements ReadMetadataInterface
 {
     private const XMP_SEGMENT_NAME = 'iTXt';
 
