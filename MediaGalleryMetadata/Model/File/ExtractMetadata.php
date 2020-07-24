@@ -18,7 +18,7 @@ use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 
 /**
- * Extract Metadata from asset fy file by given extractors
+ * Extract Metadata from asset file by given extractors
  */
 class ExtractMetadata implements ExtractMetadataInterface
 {
@@ -47,6 +47,7 @@ class ExtractMetadata implements ExtractMetadataInterface
      * @param FileInterfaceFactory $fileFactory
      * @param MetadataInterfaceFactory $metadataFactory
      * @param array $fileReaders
+     * @param array $metadataExtractors
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
@@ -93,8 +94,7 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private function isApplicable(string $fileExtension): bool
     {
-        return isset($this->fileReaders[$fileExtension]) ||
-            isset($this->metadataExtractors[$fileExtension]);
+        return isset($this->fileReaders[$fileExtension]) && isset($this->metadataExtractors[$fileExtension]);
     }
 
 

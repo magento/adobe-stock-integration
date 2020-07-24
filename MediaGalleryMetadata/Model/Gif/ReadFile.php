@@ -72,7 +72,7 @@ class ReadFile implements ReadFileInterface
 
         if ($header != "GIF") {
             $this->driver->fileClose($resource);
-            throw new ValidatorException(__('Not an GIF image'));
+            throw new ValidatorException(__('Not a GIF image'));
         }
 
         $version = $this->read($resource, 3);

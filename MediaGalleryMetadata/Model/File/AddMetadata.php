@@ -94,8 +94,8 @@ class AddMetadata implements AddMetadataInterface
      */
     private function isApplicable(string $fileExtension): bool
     {
-        return isset($this->fileReaders[$fileExtension]) ||
-            isset($this->metadataWriters[$fileExtension]) ||
+        return isset($this->fileReaders[$fileExtension]) &&
+            isset($this->metadataWriters[$fileExtension]) &&
             isset($this->fileWriters[$fileExtension]);
     }
     
@@ -122,6 +122,7 @@ class AddMetadata implements AddMetadataInterface
      *
      * @param FileInterface $file
      * @param array $metadataWriters
+     * @param MetadataInterface $metadata
      */
     private function writeMetadata(
         FileInterface $file,
@@ -144,6 +145,7 @@ class AddMetadata implements AddMetadataInterface
      * Write file
      *
      * @param FileInterface $file
+     * @param WriteFileInterface $writer
      */
     private function writeFile(FileInterface $file, WriteFileInterface $writer): void
     {
