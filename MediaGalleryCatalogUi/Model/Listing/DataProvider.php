@@ -28,6 +28,8 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
  */
 class DataProvider extends UiComponentDataProvider
 {
+    private const ENTITY_ID = 'entity_id';
+
     /**
      * @var SearchResultFactory
      */
@@ -119,7 +121,7 @@ class DataProvider extends UiComponentDataProvider
             ];
         }
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -129,7 +131,7 @@ class DataProvider extends UiComponentDataProvider
         $searchCriteria = $this->skipRootCategory($searchCriteria);
         $collection = $this->categoryList->getList($searchCriteria);
         $items = [];
-        
+
         foreach ($collection->getItems() as $category) {
             $items[] = $this->createDocument(
                 [
@@ -144,12 +146,12 @@ class DataProvider extends UiComponentDataProvider
                 ]
             );
         }
-        
+
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($items);
         $searchResult->setTotalCount($collection->getTotalCount());
-        
+
         return $searchResult;
     }
 
@@ -164,7 +166,7 @@ class DataProvider extends UiComponentDataProvider
         $filterGroups = $searchCriteria->getFilterGroups();
 
         $filters[] = $this->filterBuilder
-                   ->setField('entity_id')
+                   ->setField(self::ENTITY_ID)
                    ->setConditionType('neq')
                    ->setValue(1)
                    ->create();
@@ -172,7 +174,7 @@ class DataProvider extends UiComponentDataProvider
         $searchCriteria->setFilterGroups($filterGroups);
         return $searchCriteria;
     }
-    
+
     /**
      * Add attributes to grid result
      *

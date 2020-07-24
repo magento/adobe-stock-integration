@@ -19,7 +19,7 @@ interface FetchBatchesInterface
      *
      * @param string $tableName
      * @param array $columns
-     * @param string|null $modificationDateColumn
+     * @param string $modificationDateColumn
      * @return \Traversable
      */
     public function execute(string $tableName, array $columns, ?string $modificationDateColumn): \Traversable;
