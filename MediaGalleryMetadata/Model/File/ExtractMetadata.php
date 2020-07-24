@@ -87,6 +87,18 @@ class ExtractMetadata implements ExtractMetadataInterface
     }
 
     /**
+     * Is file applicable extracting metadata
+     *
+     * @param string $fileExtension
+     */
+    private function isApplicable(string $fileExtension): bool
+    {
+        return isset($this->fileReaders[$fileExtension]) ||
+            isset($this->metadataExtractors[$fileExtension]);
+    }
+
+
+    /**
      * Extract metadata from file
      *
      * @param string $path
@@ -95,6 +107,13 @@ class ExtractMetadata implements ExtractMetadataInterface
     private function extractMetadata(string $path): MetadataInterface
     {
         $fileExtension = str_replace('image/', '', getimagesize($path)['mime']);
+
+        if (!$this->isApplicable($fileExtension)) {
+            throw new LocalizedException(
+                __('File format is not supported: %path', ['path' => $path])
+            );
+        }
+
         $file = $this->readFile($this->fileReaders[$fileExtension], $path);
 
         list($title, $description, $keywords) = $this->readSegments(
