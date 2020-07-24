@@ -5,14 +5,14 @@
  */
 -->
 
-<!-- ko ifnot: disableLabel -->
-<label
-        class="admin__form-field-label"
-        data-bind="attr: {for: uid}
-">
-    <span translate="label"></span>
-</label>
-<!-- /ko -->
+<ifnot args="disableLabel">
+    <label
+            class="admin__form-field-label"
+            data-bind="attr: {for: uid}
+    ">
+        <span translate="label"></span>
+    </label>
+</ifnot>
 <div
         class="admin__action-multiselect-wrap action-select-wrap media-gallery-asset-ui-select-filter"
         tabindex="0"
@@ -31,60 +31,60 @@
         },
         outerClick: outerClick.bind($data)
 ">
-    <!-- ko ifnot: chipsEnabled -->
-    <div
-            class="action-select admin__action-multiselect"
-            data-role="advanced-select"
-            data-bind="
+    <ifnot args="chipsEnabled">
+        <div
+                class="action-select admin__action-multiselect"
+                data-role="advanced-select"
+                data-bind="
             css: {_active: listVisible},
             click: function(data, event) {
                 toggleListVisible(data, event)
             }
     ">
-        <div class="admin__action-multiselect-text"
-         data-role="selected-option"
-         ifnot="validationLoading"
-         data-bind="
-         css: {warning: warn().length},
-         text: setCaption()
-    ">
-    </div>
-        <button if="isRemoveSelectedIcon && hasData() || !validationLoading"
-                class="action-close"
-                type="button"
-                data-action="remove-selected-item"
-                tabindex="-1"
-                click="clear"
-        >
-            <span class="action-close-text" translate="'Close'"></span>
-        </button>
-        <div data-role="spinner"
-             class="admin__data-grid-loading-mask"
-             visible="validationLoading"
-             if="validationLoading">
-            <div class="spinner">
-                <span repeat="8"/>
+            <div class="admin__action-multiselect-text"
+                 data-role="selected-option"
+                 ifnot="validationLoading"
+                 data-bind="
+                 css: {warning: warn().length},
+                 text: setCaption()
+            ">
+            </div>
+            <button if="isRemoveSelectedIcon && hasData() || !validationLoading"
+                    class="action-close"
+                    type="button"
+                    data-action="remove-selected-item"
+                    tabindex="-1"
+                    click="clear"
+            >
+                <span class="action-close-text" translate="'Close'"></span>
+            </button>
+            <div data-role="spinner"
+                 class="admin__data-grid-loading-mask"
+                 visible="validationLoading"
+                 if="validationLoading">
+                <div class="spinner">
+                    <span repeat="8"/>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- /ko -->
-    <!-- ko if: chipsEnabled -->
-    <div
-            class="action-select admin__action-multiselect"
-            data-role="advanced-select"
-            data-bind="
+    </ifnot>
+    <if args="chipsEnabled">
+        <div
+                class="action-select admin__action-multiselect"
+                data-role="advanced-select"
+                data-bind="
             css: {_active: listVisible},
             click: function(data, event) {
                 toggleListVisible(data, event)
             }
-    ">
-        <div class="admin__action-multiselect-text"
-             data-bind="
+        ">
+            <div class="admin__action-multiselect-text"
+                 data-bind="
                 visible: !hasData(),
                 i18n: selectedPlaceholders.defaultPlaceholder
-        ">
-        </div>
-        <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
+            ">
+            </div>
+            <each args="{ data: getSelected(), as: 'option'}">
             <span class="admin__action-multiselect-crumb">
                 <span data-bind="text: label">
                 </span>
@@ -98,9 +98,9 @@
                     <span class="action-close-text" translate="'Close'"></span>
                 </button>
             </span>
-        <!-- /ko -->
-    </div>
-    <!-- /ko -->
+            </each>
+        </div>
+    </if>
     <div class="action-menu" css="{ _active: listVisible}">
         <div data-role="spinner"
            class="admin__data-grid-loading-mask"
@@ -110,13 +110,13 @@
             <span repeat="8"/>
         </div>
     </div>
-        <!-- ko if: filterOptions -->
-        <div class="admin__action-multiselect-search-wrap">
-            <input
-                    class="admin__control-text admin__action-multiselect-search"
-                    data-role="advanced-select-text"
-                    type="text"
-                    data-bind="
+        <if args="filterOptions">
+            <div class="admin__action-multiselect-search-wrap">
+                <input
+                        class="admin__control-text admin__action-multiselect-search"
+                        data-role="advanced-select-text"
+                        type="text"
+                        data-bind="
                 event: {
                     keydown: filterOptionsKeydown
                 },
@@ -128,22 +128,22 @@
                 value: filterInputValue,
                 hasFocus: filterOptionsFocus
                 ">
-            <label
-                    class="admin__action-multiselect-search-label"
-                    data-action="advanced-select-search"
-                    data-bind="attr: {for: uid+2}
-            ">
-            </label>
-            <div if="itemsQuantity"
-                 data-bind="text: itemsQuantity"
-                 class="admin__action-multiselect-search-count">
+                <label
+                        class="admin__action-multiselect-search-label"
+                        data-action="advanced-select-search"
+                        data-bind="attr: {for: uid+2}
+                ">
+                </label>
+                <div if="itemsQuantity"
+                     data-bind="text: itemsQuantity"
+                     class="admin__action-multiselect-search-count">
+                </div>
             </div>
-        </div>
-        <div ifnot="options().length"
-             class="admin__action-multiselect-empty-area">
-            <ul data-bind="text: emptyOptionsHtml"/>
-        </div>
-        <!-- /ko -->
+            <div ifnot="options().length"
+                 class="admin__action-multiselect-empty-area">
+                <ul data-bind="text: emptyOptionsHtml"/>
+            </div>
+        </if>
         <ul class="admin__action-multiselect-menu-inner _root"
             data-bind="
                 event: {
@@ -151,12 +151,12 @@
                     scroll: function(data, event){onScrollDown(data, event)}
                 }
             ">
-            <!-- ko foreach: { data: options, as: 'option'}  -->
-            <li class="admin__action-multiselect-menu-inner-item _root"
-                data-bind="css: { _parent: $data.optgroup }"
-                data-role="option-group">
-                <div class="action-menu-item"
-                     data-bind="
+            <each args="{ data: options, as: 'option'}">
+                <li class="admin__action-multiselect-menu-inner-item _root"
+                    data-bind="css: { _parent: $data.optgroup }"
+                    data-role="option-group">
+                    <div class="action-menu-item"
+                         data-bind="
                         css: {
                             _selected: $parent.isSelectedValue(option),
                             _hover: $parent.isHovered(option, $element),
@@ -169,48 +169,47 @@
                             $parent.toggleOptionSelected($data, $index(), event);
                         },
                         clickBubble: false
-                ">
-                    <!-- ko if: $data.optgroup && $parent.showOpenLevelsActionIcon-->
-                    <div class="admin__action-multiselect-dropdown"
-                         data-bind="
+                    ">
+                        <if args="$data.optgroup && $parent.showOpenLevelsActionIcon">
+                            <div class="admin__action-multiselect-dropdown"
+                                 data-bind="
                             click: function(event){
                                 $parent.showLevels($data);
                                 $parent.openChildLevel($data, $element, event);
                             },
                             clickBubble: false
-                         ">
+                            ">
+                            </div>
+                        </if>
+                        <if args="$parent.showCheckbox">
+                            <input
+                                    class="admin__control-checkbox"
+                                    type="checkbox"
+                                    tabindex="-1"
+                                    data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
+                        </if>
+                        <label class="admin__action-multiselect-label">
+                            <span data-bind="text: option.label"></span>
+                            <img if="$parent.getPath(option)"
+                                 class="admin__action-multiselect-item-path"
+                                 data-bind="attr: { src: option.path }"/>
+                        </label>
                     </div>
-                    <!-- /ko-->
-                    <!--ko if: $parent.showCheckbox-->
-                    <input
-                            class="admin__control-checkbox"
-                            type="checkbox"
-                            tabindex="-1"
-                            data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
-                    <!-- /ko-->
-                    <label class="admin__action-multiselect-label">
-                        <span data-bind="text: option.label"></span>
-                        <img if="$parent.getPath(option)"
-                                class="admin__action-multiselect-item-path"
-                                data-bind="attr: { src: option.path }"/>
-                    </label>
-                </div>
-                <!-- ko if: $data.optgroup -->
-                <!-- ko template: {name: $parent.optgroupTmpl, data: {root: $parent, current: $data}} -->
-                <!-- /ko -->
-                <!-- /ko-->
-            </li>
-            <!-- /ko -->
+                    <if args="$data.optgroup">
+                        <render args="{name: $parent.optgroupTmpl, data: {root: $parent, current: $data}}" ></render>
+                    </if>
+                </li>
+            </each>
         </ul>
-        <!-- ko if: $data.closeBtn -->
-        <div class="admin__action-multiselect-actions-wrap">
-            <button class="action-default"
-                    data-action="close-advanced-select"
-                    type="button"
-                    data-bind="click: outerClick">
-                <span translate="closeBtnLabel"></span>
-            </button>
-        </div>
-        <!-- /ko -->
+        <if args="$data.closeBtn">
+            <div class="admin__action-multiselect-actions-wrap">
+                <button class="action-default"
+                        data-action="close-advanced-select"
+                        type="button"
+                        data-bind="click: outerClick">
+                    <span translate="closeBtnLabel"></span>
+                </button>
+            </div>
+        </if>
     </div>
 </div>
