@@ -97,7 +97,6 @@ class ExtractMetadata implements ExtractMetadataInterface
         return isset($this->fileReaders[$fileExtension]) && isset($this->metadataExtractors[$fileExtension]);
     }
 
-
     /**
      * Extract metadata from file
      *
