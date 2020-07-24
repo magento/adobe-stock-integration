@@ -85,7 +85,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         foreach ($files as $file) {
             $path = $this->getFilePath($file);
             $time = $this->getFileModificationTime($file);
-            if (isset($assets[$path]) && $time === $assets[$path]) {
+            if (isset($assets[$path]) && $time) {
                 continue;
             }
             try {
