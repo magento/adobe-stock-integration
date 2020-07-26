@@ -13,8 +13,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 use Magento\MediaGalleryUi\Model\UploadImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -35,19 +33,9 @@ class UploadImageTest extends TestCase
     private $fileSystemMock;
 
     /**
-     * @var SplFileInfoFactory|MockObject
-     */
-    private $splFileInfoFactoryMock;
-
-    /**
      * @var Read|MockObject
      */
     private $mediaDirectoryMock;
-
-    /**
-     * @var SynchronizeFilesInterface|MockObject
-     */
-    private $synchronizeFilesMock;
 
     /**
      * @var UploadImage
@@ -61,17 +49,13 @@ class UploadImageTest extends TestCase
     {
         $this->imagesStorageMock = $this->createMock(Storage::class);
         $this->fileSystemMock = $this->createMock(Filesystem::class);
-        $this->splFileInfoFactoryMock = $this->createMock(SplFileInfoFactory::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
-        $this->synchronizeFilesMock = $this->createMock(SynchronizeFilesInterface::class);
 
         $this->uploadImage = (new ObjectManager($this))->getObject(
             UploadImage::class,
             [
                 'imagesStorage' => $this->imagesStorageMock,
-                'splFileInfoFactory' => $this->splFileInfoFactoryMock,
                 'filesystem' => $this->fileSystemMock,
-                'synchronizeFiles' => $this->synchronizeFilesMock
             ]
         );
     }
@@ -107,12 +91,6 @@ class UploadImageTest extends TestCase
             ->method('uploadFile')
             ->with($absolutePath, $type)
             ->willReturn($uploadResult);
-
-        $fileInfoMock = $this->createMock(\SplFileInfo::class);
-        $this->splFileInfoFactoryMock->expects($this->once())
-            ->method('create')
-            ->with($uploadResult['path'] . '/' . $uploadResult['file'])
-            ->willReturn($fileInfoMock);
 
         $this->uploadImage->execute($targetFolder, $type);
     }
