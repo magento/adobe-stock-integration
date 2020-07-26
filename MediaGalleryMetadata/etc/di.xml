@@ -82,4 +82,34 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\MediaGalleryMetadata\Model\Gif\FileReader">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+     <type name="Magento\MediaGalleryMetadata\Model\XmpTemplate">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+     </type>
+     <type name="Magento\MediaGalleryMetadata\Model\Jpeg\FileWriter">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+     </type>
+     <type name="Magento\MediaGalleryMetadata\Model\Jpeg\FileReader">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+     </type>
+      <type name="Magento\MediaGalleryMetadata\Model\Png\FileWriter">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+      </type>
+      <type name="Magento\MediaGalleryMetadata\Model\Png\FileReader">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
 </config>
