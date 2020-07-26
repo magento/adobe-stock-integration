@@ -83,14 +83,15 @@ define([
         saveImageDetailsAction: function () {
             var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
                 modalElement = $(this.modalSelector),
-                dataForm = modalElement.find('#image-edit-details-form'),
+                form = modalElement.find('#image-edit-details-form'),
                 imageId = this.imageModel().getSelected().id,
+                keywords = this.mediaGalleryEditDetails().selectedKeywords(),
                 imageDetails = this.mediaGalleryImageDetails();
 
-            if (dataForm.validation('isValid')) {
+            if (form.validation('isValid')) {
                 saveDetails(
                     saveDetailsUrl,
-                    dataForm
+                    [form.serialize(), $.param({'keywords': keywords})].join('&')
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();

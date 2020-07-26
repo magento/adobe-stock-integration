@@ -7,17 +7,16 @@ define([
 ], function ($) {
     'use strict';
 
-    return function (saveImageDetailsUrl, formElement) {
+    return function (saveImageDetailsUrl, data) {
         var deferred = $.Deferred(),
-            message,
-            formData = formElement.serialize();
+            message;
 
         $.ajax({
             type: 'POST',
             url: saveImageDetailsUrl,
             dataType: 'json',
             showLoader: true,
-            data: formData,
+            data: data,
 
             /**
              * Resolve with image details if success, reject with response message otherwise
@@ -40,7 +39,6 @@ define([
              * @param {Object} response
              */
             error: function (response) {
-
                 if (typeof response.responseJSON === 'undefined' ||
                     typeof response.responseJSON.message === 'undefined'
                 ) {

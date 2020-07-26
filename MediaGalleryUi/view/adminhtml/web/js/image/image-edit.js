@@ -35,7 +35,9 @@ define([
                 }
             ],
             exports: {
-                keywordOptions: '${ $.name }_keywords:options',
+                keywordOptions: '${ $.name }_keywords:options'
+            },
+            links: {
                 selectedKeywords: '${ $.name }_keywords:value'
             }
         },
