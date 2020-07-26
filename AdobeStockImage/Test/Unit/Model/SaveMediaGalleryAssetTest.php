@@ -20,6 +20,10 @@ use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\AttributeValue;
+use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
  * Test saving a media gallery asset and return its id.
@@ -58,6 +62,16 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $getContentHash;
 
     /**
+     * @var ExtractMetadataInterface|MockObject
+     */
+    private $extractMetadata;
+
+    /**
+     * @var AttributeValueFactory|MockObject
+     */
+    private $attributeValueFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -67,13 +81,17 @@ class SaveMediaGalleryAssetTest extends TestCase
         $this->converter = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->mediaDirectory = $this->createMock(Read::class);
+        $this->extractMetadata = $this->createMock(ExtractMetadataInterface::class);
+        $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
 
         $this->saveMediaAsset = (new ObjectManager($this))->getObject(
             SaveMediaGalleryAsset::class,
             [
                 'saveMediaAsset' =>  $this->saveAssets,
                 'documentToMediaGalleryAsset' =>  $this->converter,
-                'fileSystem' => $this->filesystem
+                'fileSystem' => $this->filesystem,
+                'extractMetadata' => $this->extractMetadata,
+                'attributeValueFactory' => $this->attributeValueFactory
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->saveMediaAsset));
@@ -119,11 +137,31 @@ class SaveMediaGalleryAssetTest extends TestCase
             'size' => $fileSize,
             'hash' => $this->getContentHash->execute($hash)
         ];
+        $attributeMock = $this->createMock(AttributeValue::class);
+        $metadataMock = $this->createMock(MetadataInterface::class);
+        $document->expects($this->once())
+             ->method('getCustomAttributes')
+             ->willReturn([]);
+        $this->extractMetadata->expects($this->once())
+             ->method('execute')
+             ->willReturn($metadataMock);
+        $this->attributeValueFactory->expects($this->once())
+             ->method('create')
+             ->willReturn($attributeMock);
+        
         $mediaGalleryAssetMock = $this->createMock(Asset::class);
         $this->converter->expects($this->once())
             ->method('convert')
             ->with($document, $additionalData)
             ->willReturn($mediaGalleryAssetMock);
+        $attributeMock->expects($this->once())
+            ->method('setAttributeCode');
+        $attributeMock->expects($this->once())
+            ->method('setValue');
+        $metadataMock->expects($this->once())
+            ->method('getDescription');
+        $document->expects($this->once())
+            ->method('setCustomAttributes');
 
         $this->saveAssets->expects($this->once())
             ->method('execute')

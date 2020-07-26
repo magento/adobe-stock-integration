@@ -13,8 +13,9 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Magento\MediaGallerySynchronizationApi\Model\ImportFileComposite;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,24 +29,9 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private const DATE_FORMAT = 'Y-m-d H:i:s';
 
     /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
-
-    /**
-     * @var SaveAssetsInterface
-     */
-    private $saveAsset;
-
-    /**
      * @var LoggerInterface
      */
     private $log;
-
-    /**
-     * @var GetAssetsByPathsInterface
-     */
-    private $getAssetsByPaths;
 
     /**
      * @var Filesystem
@@ -53,9 +39,24 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $filesystem;
 
     /**
+     * @var GetAssetsByPathsInterface
+     */
+    private $getAssetsByPaths;
+    
+    /**
      * @var File
      */
     private $driver;
+
+    /**
+     * @var SplFileInfoFactory
+     */
+    private $splFileInfoFactory;
+
+    /**
+     * @var ImportFileComposite
+     */
+    private $importFileComposite;
 
     /**
      * @var DateTime
@@ -66,27 +67,27 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      * @param File $driver
      * @param Filesystem $filesystem
      * @param DateTime $date
-     * @param GetAssetsByPathsInterface $getAssetsByPaths
-     * @param CreateAssetFromFile $createAssetFromFile
-     * @param SaveAssetsInterface $saveAsset
      * @param LoggerInterface $log
+     * @param SplFileInfoFactory $splFileInfoFactory
+     * @param GetAssetsByPathsInterface $getAssetsByPaths
+     * @param ImportFileComposite $importFileComposite
      */
     public function __construct(
         File $driver,
         Filesystem $filesystem,
         DateTime $date,
+        LoggerInterface $log,
+        SplFileInfoFactory $splFileInfoFactory,
         GetAssetsByPathsInterface $getAssetsByPaths,
-        CreateAssetFromFile $createAssetFromFile,
-        SaveAssetsInterface $saveAsset,
-        LoggerInterface $log
+        ImportFileComposite $importFileComposite
     ) {
         $this->driver = $driver;
         $this->filesystem = $filesystem;
         $this->date = $date;
-        $this->getAssetsByPaths = $getAssetsByPaths;
-        $this->createAssetFromFile = $createAssetFromFile;
-        $this->saveAsset = $saveAsset;
         $this->log = $log;
+        $this->splFileInfoFactory = $splFileInfoFactory;
+        $this->getAssetsByPaths = $getAssetsByPaths;
+        $this->importFileComposite = $importFileComposite;
     }
 
     /**
@@ -95,17 +96,16 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     public function execute(array $files): void
     {
         $assets = $this->getExistingAssets($files);
-        foreach ($files as $file) {
-            $path = $this->getFilePath($file);
-            $time = $this->getFileModificationTime($file);
-            if (isset($assets[$path]) && $time === $assets[$path]) {
+        foreach ($files as $filePath) {
+            $time = $this->getFileModificationTime($filePath);
+            if (isset($assets[$filePath]) && $time === $assets[$filePath]) {
                 continue;
             }
             try {
-                $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
+                $this->importFileComposite->execute($filePath);
             } catch (\Exception $exception) {
                 $this->log->critical($exception);
-                $failedFiles[] = $file->getFilename();
+                $failedFiles[] = $filePath;
             }
         }
 
@@ -122,41 +122,31 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     }
 
     /**
-     * Retrieve relative file path
-     *
-     * @param \SplFileInfo $file
-     * @return string
-     */
-    private function getFilePath(\SplFileInfo $file): string
-    {
-        return $this->getRelativePath($file->getPath() . '/' . $file->getFileName());
-    }
-
-    /**
      * Retrieve formatted file modification time
      *
-     * @param \SplFileInfo $file
+     * @param string $filePath
      * @return string
      */
-    private function getFileModificationTime(\SplFileInfo $file): string
+    private function getFileModificationTime(string $filePath): string
     {
-        return $this->date->gmtDate(self::DATE_FORMAT, $file->getMTime());
+        $fileTime = $this->splFileInfoFactory->create($filePath)->getMTime();
+        return $this->date->gmtDate(self::DATE_FORMAT, $fileTime);
     }
 
     /**
      * Return existing assets from files
      *
-     * @param \SplFileInfo[] $files
+     * @param string[] $filesPaths
      * @return array
      * @throws LocalizedException
      */
-    private function getExistingAssets(array $files): array
+    private function getExistingAssets(array $filesPaths): array
     {
         $result = [];
-        $paths = array_map(function ($file) {
-            return $this->getFilePath($file);
-        }, $files);
-
+        $paths = array_map(function ($filePath) {
+            return $this->getRelativePath($filePath);
+        }, $filesPaths);
+        
         $assets = $this->getAssetsByPaths->execute($paths);
 
         foreach ($assets as $asset) {
@@ -169,12 +159,12 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     /**
      * Get correct path for media asset
      *
-     * @param string $file
+     * @param string $filePath
      * @return string
      */
-    private function getRelativePath(string $file): string
+    private function getRelativePath(string $filePath): string
     {
-        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($file);
+        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($filePath);
 
         if ($this->driver->getParentDirectory($path) === '.') {
             $path = '/' . $path;

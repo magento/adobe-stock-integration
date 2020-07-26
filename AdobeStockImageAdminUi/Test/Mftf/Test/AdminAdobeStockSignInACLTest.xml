@@ -73,7 +73,8 @@
         </actionGroup>
 
         <!-- Verify that user can see Adobe Stock sign in button -->
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithIMSAccess"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithIMSAccess"/>
         <seeElement stepKey="seeAdobeStockSigninButton" selector="{{AdminAdobeStockSection.adobeSignIn}}"/>
 
@@ -96,7 +97,8 @@
         </actionGroup>
 
         <!-- Verify that user can't see to Adobe Stock sign in button -->
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutIMSAccess"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageWithoutIMSAccess"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutIMSAccess"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithoutIMSAccess"/>
         <dontSeeElement stepKey="doNotSeeAdobeStockSigninButton" selector="{{AdminAdobeStockSection.adobeSignIn}}"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromCreatedUser"/>
