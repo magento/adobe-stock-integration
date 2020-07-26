@@ -14,6 +14,7 @@
         <data key="file">magento.jpg</data>
         <data key="fileName">renamed title</data>
         <data key="extension">jpg</data>
+        <data key="keyword">newkeyword</data>
     </entity>
     <entity name="ImageMetadata" type="image">
         <data key="title">Title of the magento image</data>
