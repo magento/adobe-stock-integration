@@ -19,6 +19,5 @@
         <see selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" userInput="(1 Selected)" stepKey="verifySelectedCount"/>
         <click selector="{{AdminEnhancedMediaGalleryMassActionSection.cancelMassActionMode}}" stepKey="cancelMassAction"/>
         <dontSeeElement selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" stepKey="verifyTeminateMAssAction"/>
-        <wait time="5" stepKey="waitToButtonRenders"/>
     </actionGroup>
 </actionGroups>
