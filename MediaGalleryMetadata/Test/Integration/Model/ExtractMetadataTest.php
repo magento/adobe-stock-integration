@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryMetadata\Test\Integration\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class ExtractMetadataTest extends TestCase
 {
     /**
-     * @var ExtractMetadataInterface
+     * @var ExtractMetadataComposite
      */
     private $extractMetadata;
 
@@ -27,7 +27,7 @@ class ExtractMetadataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->extractMetadata = Bootstrap::getObjectManager()->get(ExtractMetadataInterface::class);
+        $this->extractMetadata = Bootstrap::getObjectManager()->get(ExtractMetadataComposite::class);
     }
 
     /**

@@ -33,30 +33,30 @@ class AddMetadata implements AddMetadataInterface
     private $fileFactory;
 
     /**
-     * @var array
+     * @var ReadFileInterface
      */
-    private $fileReaders;
+    private $fileReader;
 
     /**
-     * @var array
+     * @var WriteFileInterface
      */
-    private $fileWriters;
+    private $fileWriter;
 
     /**
      * @param FileInterfaceFactory $fileFactory
+     * @param ReadFileInterface $fileReader
+     * @param WriteFileInterface $fileWriter
      * @param array $metadataWriters
-     * @param array $fileReaders
-     * @param array $fileWriters
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
-        array $metadataWriters,
-        array $fileReaders,
-        array $fileWriters
+        ReadFileInterface $fileReader,
+        WriteFileInterface $fileWriter,
+        array $metadataWriters
     ) {
         $this->fileFactory = $fileFactory;
-        $this->fileReaders = $fileReaders;
-        $this->fileWriters = $fileWriters;
+        $this->fileReader = $fileReader;
+        $this->fileWriter = $fileWriter;
         $this->metadataWriters = $metadataWriters;
     }
 
@@ -65,56 +65,23 @@ class AddMetadata implements AddMetadataInterface
      */
     public function execute(string $path, MetadataInterface $metadata): void
     {
-        $fileExtension = str_replace('image/', '', getimagesize($path)['mime']);
-
-        if (!$this->isApplicable($fileExtension)) {
-            throw new LocalizedException(
-                __('File format is not supported: %path', ['path' => $path])
-            );
-        }
-
-        $file = $this->readFile($this->fileReaders[$fileExtension], $path);
-        
         try {
-            $this->writeFile(
-                $this->writeMetadata($file, $this->metadataWriters[$fileExtension], $metadata),
-                $this->fileWriters[$fileExtension]
-            );
-        } catch (\Exception $exception) {
-            throw new LocalizedException(
-                __('Could not update the image file metadata: %path', ['path' => $path])
-            );
-        }
-    }
-
-    /**
-     * Is file applicable to add metadata
-     *
-     * @param string $fileExtension
-     */
-    private function isApplicable(string $fileExtension): bool
-    {
-        return isset($this->fileReaders[$fileExtension]) &&
-            isset($this->metadataWriters[$fileExtension]) &&
-            isset($this->fileWriters[$fileExtension]);
-    }
-    
-    /**
-     * Read file by given path
-     *
-     * @param ReadFileInterface $reader
-     * @param string $path
-     */
-    private function readFile(ReadFileInterface $reader, string $path): FileInterface
-    {
-        try {
-            $file = $reader->execute($path);
+            $file = $this->fileReader->execute($path);
+        } catch (ValidatorException $e) {
+            return;
         } catch (\Exception $exception) {
             throw new LocalizedException(
                 __('Could not parse the image file for metadata: %path', ['path' => $path])
             );
         }
-        return $file;
+
+        try {
+            $this->fileWriter->execute($this->writeMetadata($file, $metadata));
+        } catch (\Exception $exception) {
+            throw new LocalizedException(
+                __('Could not update the image file metadata: %path', ['path' => $path])
+            );
+        }
     }
 
     /**
@@ -124,12 +91,9 @@ class AddMetadata implements AddMetadataInterface
      * @param array $metadataWriters
      * @param MetadataInterface $metadata
      */
-    private function writeMetadata(
-        FileInterface $file,
-        array $metadataWriters,
-        MetadataInterface $metadata
-    ): FileInterface {
-        foreach ($metadataWriters as $writer) {
+    private function writeMetadata(FileInterface $file, MetadataInterface $metadata): FileInterface
+    {
+        foreach ($this->metadataWriters as $writer) {
             if (!$writer instanceof WriteMetadataInterface) {
                 throw new \InvalidArgumentException(
                     __(get_class($writer) . ' must implement '. WriteFileInterface::class)
@@ -139,16 +103,5 @@ class AddMetadata implements AddMetadataInterface
             $file = $writer->execute($file, $metadata);
         }
         return $file;
-    }
-
-    /**
-     * Write file
-     *
-     * @param FileInterface $file
-     * @param WriteFileInterface $writer
-     */
-    private function writeFile(FileInterface $file, WriteFileInterface $writer): void
-    {
-        $writer->execute($file);
     }
 }

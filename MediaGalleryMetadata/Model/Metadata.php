@@ -42,9 +42,9 @@ class Metadata implements MetadataInterface
      * @param MetadataExtensionInterface|null $extensionAttributes
      */
     public function __construct(
-        ?string $title,
-        ?string $description,
-        ?array $keywords,
+        string $title = null,
+        string $description = null,
+        array $keywords = null,
         ?MetadataExtensionInterface $extensionAttributes = null
     ) {
         $this->title = $title;

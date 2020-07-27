@@ -36,19 +36,19 @@ class AddXmpMetadata
             $xml->registerXPathNamespace($prefix, $url);
         }
 
-        if (empty($metadata->getTitle())) {
+        if ($metadata->getTitle() === null) {
             $this->deleteValueByXpath($xml, self::XMP_XPATH_SELECTOR_TITLE);
-        } elseif ($metadata->getTitle() !== null) {
+        } else {
             $this->setValueByXpath($xml, self::XMP_XPATH_SELECTOR_TITLE, $metadata->getTitle());
         }
-        if (empty($metadata->getDescription())) {
+        if ($metadata->getDescription() === null) {
             $this->deleteValueByXpath($xml, self::XMP_XPATH_SELECTOR_DESCRIPTION);
-        } elseif ($metadata->getDescription() !== null) {
+        } else {
             $this->setValueByXpath($xml, self::XMP_XPATH_SELECTOR_DESCRIPTION, $metadata->getDescription());
         }
-        if (empty($metadata->getKeywords())) {
+        if ($metadata->getKeywords() === null) {
             $this->deleteValueByXpath($xml, self::XMP_XPATH_SELECTOR_KEYWORDS);
-        } elseif ($metadata->getKeywords() !== null) {
+        } else {
             $this->updateKeywords($xml, $metadata->getKeywords());
         }
 

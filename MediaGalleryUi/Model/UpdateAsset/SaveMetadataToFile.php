@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryUi\Model\UpdateAsset;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Model\AddMetadataComposite;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Psr\Log\LoggerInterface;
 
@@ -22,7 +22,7 @@ class SaveMetadataToFile
     private $filesystem;
 
     /**
-     * @var AddMetadataInterface
+     * @var AddMetadataComposite
      */
     private $addMetadata;
 
@@ -33,12 +33,12 @@ class SaveMetadataToFile
 
     /**
      * @param Filesystem $filesystem
-     * @param AddMetadataInterface $addMetadata
+     * @param AddMetadataComposite $addMetadata
      * @param LoggerInterface $logger
      */
     public function __construct(
         Filesystem $filesystem,
-        AddMetadataInterface $addMetadata,
+        AddMetadataComposite $addMetadata,
         LoggerInterface $logger
     ) {
         $this->filesystem = $filesystem;

@@ -18,7 +18,7 @@ use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
@@ -58,7 +58,7 @@ class CreateAssetFromFile
     private $getContentHash;
 
     /**
-     * @var ExtractMetadataInterface
+     * @var ExtractMetadataComposite
      */
     private $extractMetadata;
 
@@ -68,7 +68,7 @@ class CreateAssetFromFile
      * @param File $driver
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      * @param GetContentHashInterface $getContentHash
-     * @param ExtractMetadataInterface $extractMetadata
+     * @param ExtractMetadataComposite $extractMetadata
      */
     public function __construct(
         Filesystem $filesystem,
@@ -76,7 +76,7 @@ class CreateAssetFromFile
         File $driver,
         GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
         GetContentHashInterface $getContentHash,
-        ExtractMetadataInterface $extractMetadata
+        ExtractMetadataComposite $extractMetadata
     ) {
         $this->filesystem = $filesystem;
         $this->assetFactory = $assetFactory;

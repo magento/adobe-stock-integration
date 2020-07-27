@@ -31,12 +31,12 @@ class ExtractMetadata implements ExtractMetadataInterface
     /**
      * @var array
      */
-    private $metadataExtractors;
+    private $segmentReaders;
 
     /**
-     * @var array
+     * @var ReadFileInterface
      */
-    private $fileReaders;
+    private $fileReader;
 
     /**
      * @var FileInterfaceFactory
@@ -46,19 +46,19 @@ class ExtractMetadata implements ExtractMetadataInterface
     /**
      * @param FileInterfaceFactory $fileFactory
      * @param MetadataInterfaceFactory $metadataFactory
-     * @param array $fileReaders
-     * @param array $metadataExtractors
+     * @param ReadFileInterface $fileReader
+     * @param array $segmentReaders
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         MetadataInterfaceFactory $metadataFactory,
-        array $fileReaders,
-        array $metadataExtractors
+        ReadFileInterface $fileReader,
+        array $segmentReaders
     ) {
         $this->fileFactory = $fileFactory;
         $this->metadataFactory = $metadataFactory;
-        $this->fileReaders = $fileReaders;
-        $this->metadataExtractors = $metadataExtractors;
+        $this->fileReader = $fileReader;
+        $this->segmentReaders = $segmentReaders;
     }
 
     /**
@@ -69,32 +69,8 @@ class ExtractMetadata implements ExtractMetadataInterface
         try {
             return $this->extractMetadata($path);
         } catch (\Exception $exception) {
-            return $this->getEmptyResult();
+            return $this->metadataFactory->create();
         }
-    }
-
-    /**
-     * Create empty metadata object
-     *
-     * @return MetadataInterface
-     */
-    private function getEmptyResult(): MetadataInterface
-    {
-        return $this->metadataFactory->create([
-            'title' => null,
-            'description' => null,
-            'keywords' => null
-        ]);
-    }
-
-    /**
-     * Is file applicable extracting metadata
-     *
-     * @param string $fileExtension
-     */
-    private function isApplicable(string $fileExtension): bool
-    {
-        return isset($this->fileReaders[$fileExtension]) && isset($this->metadataExtractors[$fileExtension]);
     }
 
     /**
@@ -105,41 +81,29 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private function extractMetadata(string $path): MetadataInterface
     {
-        $fileExtension = str_replace('image/', '', getimagesize($path)['mime']);
-
-        if (!$this->isApplicable($fileExtension)) {
+        try {
+            $file = $this->fileReader->execute($path);
+        } catch (\Exception $exception) {
             throw new LocalizedException(
-                __('File format is not supported: %path', ['path' => $path])
+                __('Could not parse the image file for metadata: %path', ['path' => $path])
             );
         }
 
-        $file = $this->readFile($this->fileReaders[$fileExtension], $path);
-
-        list($title, $description, $keywords) = $this->readSegments(
-            $this->metadataExtractors[$fileExtension],
-            $file
-        );
-         
-        return $this->metadataFactory->create([
-            'title' => $title,
-            'description' => $description,
-            'keywords' => empty($keywords) ? null : $keywords
-        ]);
+        return $this->readSegments($file);
     }
 
     /**
      * Read  file segments by given segmentReader
      *
-     * @param array $segmentReaders
      * @param FileInterface $file
      */
-    private function readSegments(array $segmentReaders, FileInterface $file): array
+    private function readSegments(FileInterface $file): MetadataInterface
     {
         $title = null;
         $description = null;
         $keywords = [];
         
-        foreach ($segmentReaders as $segmentReader) {
+        foreach ($this->segmentReaders as $segmentReader) {
             if (!$segmentReader instanceof ReadMetadataInterface) {
                 throw new \InvalidArgumentException(
                     __(get_class($segmentReader). ' must implement ' . ReadMetadataInterface::class)
@@ -151,24 +115,11 @@ class ExtractMetadata implements ExtractMetadataInterface
             $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
             $keywords =  $keywords + $data->getKeywords();
         }
-        return [$title, $description, $keywords];
-    }
-
-    /**
-     * Read file by given fileReader
-     *
-     * @param ReadFileInterface $reader
-     * @param string $path
-     */
-    private function readFile(ReadFileInterface $reader, string $path): FileInterface
-    {
-        try {
-            $file = $reader->execute($path);
-        } catch (\Exception $exception) {
-            throw new LocalizedException(
-                __('Could not parse the image file for metadata: %path', ['path' => $path])
-            );
-        }
-        return $file;
+        
+        return $this->metadataFactory->create([
+            'title' => $title,
+            'description' => $description,
+            'keywords' => empty($keywords) ? null : $keywords
+        ]);
     }
 }
