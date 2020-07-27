@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Plugin;
 
-use Magento\MediaGallerySynchronization\Model\SynchronizeFiles;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 class ResizeSyncedFiles
@@ -30,15 +30,15 @@ class ResizeSyncedFiles
      *
      * @param SynchronizeFiles $subject
      * @param \Closure $closure
-     * @param array $files
+     * @param array $filesPaths
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return mixed
      */
-    public function aroundExecute(SynchronizeFiles $subject, \Closure $closure, array $files)
+    public function aroundExecute(SynchronizeFilesInterface $subject, \Closure $closure, array $filesPaths)
     {
-        foreach ($files as $file) {
-            $this->storage->resizeFile($file->getPathName());
+        foreach ($filesPaths as $path) {
+            $this->storage->resizeFile($path);
         }
-        return $closure($files);
+        return $closure($filesPaths);
     }
 }

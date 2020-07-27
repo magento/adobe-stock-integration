@@ -100,10 +100,10 @@ define([
                     if (error) {
                         this.imageModel().addMessage('error', error);
                     }
-                });
+                }.bind(this));
             }.bind(this)).fail(function (message) {
                 this.imageModel().addMessage('error', message);
-            });
+            }.bind(this));
         }
     });
 });
