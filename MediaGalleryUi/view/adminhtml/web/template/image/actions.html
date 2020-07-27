@@ -5,13 +5,8 @@
  */
 -->
 <each args="{ data: actionsList, as: 'action' }">
-    <button type="button"
-            data-bind="click: $parent[action.handler].bind($parent),
-                       attr: {
-                            class: action.classes,
-                            id: 'image-details-action-' + action.name,
-                            title: $t(action.title)
-                       }">
+    <button type="button" click="$parent[action.handler].bind($parent)"
+            attr="{class: action.classes, id: 'image-details-action-' + action.name, title: $t(action.title)}">
         <span data-bind="i18n: action.title"></span>
     </button>
 </each>

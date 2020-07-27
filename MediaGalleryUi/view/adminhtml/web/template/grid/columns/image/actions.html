@@ -7,7 +7,9 @@
 
 <each args="{ data: actionsList, as: 'action' }">
     <li>
-        <a class="action-menu-item" href=""
-           data-bind="text: action.title, click: $parent[action.handler].bind($parent, $row()), 'data-action': 'item-' + action.name" />
+        <a class="action-menu-item" href="" text="action.title"
+           click="$parent[action.handler].bind($parent, $row())"
+           attr="{'data-action': 'item-' + action.name}">
+        </a>
     </li>
 </each>
