@@ -15,6 +15,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Extract Metadata from asset file by given extractors
