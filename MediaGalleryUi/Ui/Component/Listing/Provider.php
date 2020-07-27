@@ -81,7 +81,7 @@ class Provider extends SearchResult
             $data[$key]['content_type'] = strtoupper(str_replace('image/', '', $asset['content_type']));
             $data[$key]['preview_url'] = $asset['path'];
             $data[$key]['keywords'] = isset($keywords[$asset['id']]) ? implode(",", $keywords[$asset['id']]) : '';
-            $data[$key]['source'] = empty($asset['source']) ? 'Local' : $asset['source'];
+            $data[$key]['source'] = empty($asset['source']) ? __('Local') : $asset['source'];
         }
         return $data;
     }

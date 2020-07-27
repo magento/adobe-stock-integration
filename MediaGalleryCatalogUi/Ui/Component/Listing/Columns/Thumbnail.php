@@ -5,13 +5,13 @@
  */
 namespace Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Helper\Image;
 use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Thumbnail column for Category grid

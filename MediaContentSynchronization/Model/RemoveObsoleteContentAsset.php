@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronization\Model;
 
-use Magento\MediaContentSynchronizationApi\Model\GetEntitiesInterface;
-use Magento\MediaContentSynchronization\Model\ResourceModel\GetOutdatedRelations;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
+use Magento\MediaContentSynchronization\Model\ResourceModel\GetOutdatedRelations;
+use Magento\MediaContentSynchronizationApi\Model\GetEntitiesInterface;
 
 /**
  * Remove obsolete content asset from deleted entities

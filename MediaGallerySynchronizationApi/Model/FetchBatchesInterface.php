@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronizationApi\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Fetch data from database in batches
  */

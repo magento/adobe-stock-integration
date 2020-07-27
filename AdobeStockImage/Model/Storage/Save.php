@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model\Storage;
 
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\FileSystemException;
@@ -16,7 +17,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
  * Save images to the file system
