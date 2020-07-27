@@ -91,7 +91,7 @@ define([
                         return;
                     } else if (!this.isFileNameLengthExceeded(data.files[0]).passed) {
                         this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
-                                                       '". Filename is too long, must be 90 chracters or less.');
+                                                       '". Filename is too long, must be 90 characters or less.');
 
                         return;
                     }

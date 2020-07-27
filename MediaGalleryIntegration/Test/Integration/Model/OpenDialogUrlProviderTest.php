@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Test\Integration\Model;
 
-use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\MediaGalleryIntegration\Model\OpenDialogUrlProvider;
+use Magento\MediaGalleryUiApi\Api\ConfigInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**

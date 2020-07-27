@@ -101,6 +101,7 @@ class UploadImageTest extends TestCase
     public function testExecuteWithException(): void
     {
         $targetFolder = 'not-a-folder';
+        $type = 'image';
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
@@ -114,7 +115,7 @@ class UploadImageTest extends TestCase
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Directory not-a-folder does not exist in media directory.');
 
-        $this->uploadImage->execute($targetFolder, null);
+        $this->uploadImage->execute($targetFolder, $type);
     }
 
     /**
@@ -127,7 +128,7 @@ class UploadImageTest extends TestCase
         return [
             [
                 'targetFolder' => 'media/catalog',
-                'type' => null,
+                'type' => 'image',
                 'absolutePath' => 'root/pub/media/catalog/test-image.jpeg'
             ]
         ];
