@@ -14,6 +14,6 @@
         </annotations>
        
 
-        <dontSeeElement selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" stepKey="verifyTeminateMAssAction"/>
+        <dontSeeElement selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" stepKey="verifyTeminateMassAction"/>
     </actionGroup>
 </actionGroups>
