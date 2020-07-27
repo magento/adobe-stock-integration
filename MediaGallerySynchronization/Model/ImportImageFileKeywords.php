@@ -89,17 +89,16 @@ class ImportImageFileKeywords implements ImportFileInterface
     public function execute(string $path): void
     {
         $keywords = [];
-        $keywords = $this->extractMetadata->execute($path)->getKeywords();
+        $metadataKeywords = $this->extractMetadata->execute($path)->getKeywords();
 
-        if ($keywords !== null) {
-            foreach ($keywords as $keyword) {
+        if ($metadataKeywords !== null) {
+            foreach ($metadataKeywords as $keyword) {
                 $keywords[] = $this->keywordFactory->create(
                     [
                         'keyword' => $keyword
                     ]
                 );
             }
-        
 
             $assetId = $this->getAssetsByPaths->execute([$this->getRelativePath($path)])[0]->getId();
             $assetKeywords = $this->assetKeywordsFactory->create([
