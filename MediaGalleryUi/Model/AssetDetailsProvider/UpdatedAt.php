@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\AssetDetailsProvider;
 
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryUi\Model\AssetDetailsProviderInterface;
 
@@ -16,9 +17,18 @@ use Magento\MediaGalleryUi\Model\AssetDetailsProviderInterface;
 class UpdatedAt implements AssetDetailsProviderInterface
 {
     /**
-     * Date format
+     * @var TimezoneInterface
      */
-    private const DATE_FORMAT = 'd/m/Y, g:i A';
+    private $dateTime;
+
+    /**
+     * @param TimezoneInterface $dateTime
+     */
+    public function __construct(
+        TimezoneInterface $dateTime
+    ) {
+        $this->dateTime = $dateTime;
+    }
 
     /**
      * Provide asset updated at date time
@@ -44,8 +54,6 @@ class UpdatedAt implements AssetDetailsProviderInterface
      */
     private function formatDate(string $date): string
     {
-        $dateTime = new \DateTime($date);
-
-        return $dateTime->format(self::DATE_FORMAT);
+        return $this->dateTime->formatDate($date, \IntlDateFormatter::SHORT, true);
     }
 }
