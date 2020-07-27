@@ -186,7 +186,7 @@ define([
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__(message)
+                    $.mage.__(file.name + ': ' + message)
                 );
             }.bind(this));
 
