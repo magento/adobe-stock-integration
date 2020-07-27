@@ -16,6 +16,7 @@
             <argument name="imageName" type="string" defaultValue="magento"/>
         </arguments>
 
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckbox(imageName)}}" stepKey="waitForCheckboxesToAppear"/>
         <checkOption selector="{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckbox(imageName)}}" stepKey="selectImageInGridToDelte"/>
     </actionGroup>
 </actionGroups>
