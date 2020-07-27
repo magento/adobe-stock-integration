@@ -24,6 +24,8 @@
                         <item name="showPath" xsi:type="boolean">false</item>
                         <item name="filterPlaceholder" xsi:type="string" translate="true">Page Title</item>
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find pages</item>
+                        <item name="filterRateLimit" xsi:type="string" translate="true">1000</item>
+                        <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
                     </item>
                 </argument>
                 <settings>
@@ -46,6 +48,8 @@
                         <item name="showPath" xsi:type="boolean">false</item>
                         <item name="filterPlaceholder" xsi:type="string" translate="true">Block Title</item>
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find blocks</item>
+                        <item name="filterRateLimit" xsi:type="string" translate="true">1000</item>
+                        <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
                     </item>
                 </argument>
                 <settings>

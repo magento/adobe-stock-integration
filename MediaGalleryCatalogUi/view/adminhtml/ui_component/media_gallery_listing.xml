@@ -25,6 +25,7 @@
                         <item name="isDisplayMissingValuePlaceholder" xsi:type="boolean">true</item>
                         <item name="isDisplayEmptyPlaceholder" xsi:type="boolean">true</item>
                         <item name="isRemoveSelectedIcon" xsi:type="boolean">true</item>
+                        <item name="filterRateLimit" xsi:type="string" translate="true">1000</item>
                         <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
                         <item name="levelsVisibility" xsi:type="number">1</item>
                         <item name="searchUrl" xsi:type="url" path="catalog/product/search"/>
