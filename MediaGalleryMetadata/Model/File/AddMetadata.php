@@ -88,7 +88,6 @@ class AddMetadata implements AddMetadataInterface
      * Write metadata by given metadata writer
      *
      * @param FileInterface $file
-     * @param array $metadataWriters
      * @param MetadataInterface $metadata
      */
     private function writeMetadata(FileInterface $file, MetadataInterface $metadata): FileInterface

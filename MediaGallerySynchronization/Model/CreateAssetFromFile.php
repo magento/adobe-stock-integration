@@ -133,7 +133,7 @@ class CreateAssetFromFile
         $title = $file->getBasename('.' . $file->getExtension());
         if ($asset) {
             $title = $asset->getTitle();
-        } elseif ($metadata->getTitle() !== "") {
+        } elseif ($metadata->getTitle() !== null) {
             $title = $metadata->getTitle();
         }
         return $title;

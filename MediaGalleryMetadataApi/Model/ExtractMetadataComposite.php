@@ -19,7 +19,7 @@ class ExtractMetadataComposite
     /**
      * @var ExtractMetadataInterface[]
      */
-    private $writers;
+    private $extractors;
 
     /**
      * @param ExtractMetadataInterface[] $extractors
