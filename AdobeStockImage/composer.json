@@ -9,7 +9,8 @@
         "magento/module-adobe-stock-image-api": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery-synchronization-api": "*",
-        "magento/module-cms": "*"
+        "magento/module-cms": "*",
+        "magento/module-media-gallery-metadata-api": "*"
     },
     "suggest": {
         "magento/module-catalog": "*"
