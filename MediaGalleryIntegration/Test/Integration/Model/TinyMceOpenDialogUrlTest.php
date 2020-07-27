@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Test\Integration\Model;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\DataObject;
 use Magento\Tinymce3\Model\Config\Gallery\Config;
 use PHPUnit\Framework\TestCase;
 

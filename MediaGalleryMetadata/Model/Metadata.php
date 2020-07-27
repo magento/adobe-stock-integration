@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model;
 
-use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataExtensionInterface;
+use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
  * Media asset metadata data transfer object

@@ -10,10 +10,10 @@ namespace Magento\MediaGalleryMetadata\Model\Gif;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
-use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
  * File segments writer
@@ -52,7 +52,7 @@ class WriteFile implements WriteFileInterface
     public function execute(FileInterface $file): void
     {
         $resource = $this->driver->fileOpen($file->getPath(), 'wb');
-      
+
         $this->writeSegments($resource, $file->getSegments());
         $this->driver->fileClose($resource);
     }

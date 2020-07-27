@@ -10,12 +10,12 @@ namespace Magento\MediaGalleryMetadata\Model\Jpeg;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\Framework\Exception\ValidatorException;
 
 /**

@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
 
-use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationExtensionInterface;
+use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**

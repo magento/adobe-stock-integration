@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Model;
 
 use AdobeStock\Api\Models\SearchParameters;
-use Magento\AdobeStockClient\Model\SearchParameterProviderInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**

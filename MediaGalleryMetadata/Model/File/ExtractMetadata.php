@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\File;
 
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\Framework\Exception\ValidatorException;

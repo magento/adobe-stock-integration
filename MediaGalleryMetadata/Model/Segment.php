@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model;
 
-use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentExtensionInterface;
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * Segment internal data transfer object

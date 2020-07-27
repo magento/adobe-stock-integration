@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Write iptc data to the file return updated FileInterface with iptc data
@@ -53,7 +54,7 @@ class AddIptcMetadata
         $this->driver = $driver;
         $this->fileReader = $fileReader;
     }
-    
+
     /**
      * Write metadata
      *
@@ -66,7 +67,7 @@ class AddIptcMetadata
         if (!is_callable('iptcembed') && !is_callable('iptcparse')) {
             throw new LocalizedException(__('iptcembed() && iptcparse() must be enabled in php configuration'));
         }
-        
+
         $iptcData =  $segment ? iptcparse($segment->getData()) : [];
 
         if ($metadata->getTitle() !== null) {
@@ -90,9 +91,9 @@ class AddIptcMetadata
         }
 
         $this->writeFile($file->getPath(), iptcembed($newData, $file->getPath()));
-            
+
         $fileWithIptc = $this->fileReader->execute($file->getPath());
-            
+
         return $this->fileFactory->create([
                 'path' => $fileWithIptc->getPath(),
                 'segments' => $this->getSegmentsWithIptc($fileWithIptc, $file)
@@ -118,7 +119,7 @@ class AddIptcMetadata
         }
         return $originFileSegments;
     }
-    
+
     /**
      * Write keywords field to the iptc segment.
      *
@@ -132,7 +133,7 @@ class AddIptcMetadata
         }
         return $iptcData;
     }
-    
+
     /**
      * Write iptc data to the image directly to the file.
      *
@@ -142,7 +143,7 @@ class AddIptcMetadata
     private function writeFile(string $filePath, string $content): void
     {
         $resource = $this->driver->fileOpen($filePath, 'wb');
-            
+
         $this->driver->fileWrite($resource, $content);
         $this->driver->fileClose($resource);
     }
