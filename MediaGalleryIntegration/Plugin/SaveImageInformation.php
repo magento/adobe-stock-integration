@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Uploader;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,11 @@ class SaveImageInformation
      * @var IsPathExcludedInterface
      */
     private $isPathExcluded;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
 
     /**
      * @var LoggerInterface
@@ -48,17 +54,20 @@ class SaveImageInformation
      * @param LoggerInterface $log
      * @param IsPathExcludedInterface $isPathExcluded
      * @param SynchronizeFilesInterface $synchronizeFiles
+     * @param ConfigInterface $config
      */
     public function __construct(
         Filesystem $filesystem,
         LoggerInterface $log,
         IsPathExcludedInterface $isPathExcluded,
-        SynchronizeFilesInterface $synchronizeFiles
+        SynchronizeFilesInterface $synchronizeFiles,
+        ConfigInterface $config
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
         $this->filesystem = $filesystem;
         $this->synchronizeFiles = $synchronizeFiles;
+        $this->config = $config;
     }
 
     /**
@@ -70,6 +79,10 @@ class SaveImageInformation
      */
     public function afterSave(Uploader $subject, array $result): array
     {
+        if (!$this->config->isEnabled()) {
+            return $result;
+        }
+        
         $path = $result['path'] . '/' . $result['file'];
         if (!$this->isApplicable($path)) {
             return $result;
