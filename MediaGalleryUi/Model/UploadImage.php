@@ -43,10 +43,10 @@ class UploadImage
      * Uploads the image and returns file object
      *
      * @param string $targetFolder
-     * @param string|null $type
+     * @param string $type
      * @throws LocalizedException
      */
-    public function execute(string $targetFolder, string $type = null): void
+    public function execute(string $targetFolder, string $type): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         if (!$mediaDirectory->isDirectory($targetFolder)) {
