@@ -5,8 +5,8 @@
  */
 declare(strict_types=1);
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 

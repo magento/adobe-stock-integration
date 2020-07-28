@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 
 /**
@@ -67,7 +68,7 @@ class SaveBaseCategoryImageInformation
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
         $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, "/"), 1);
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
-        
+
         if (!empty($tmpAssets)) {
             $this->deleteAssetsByPaths->execute([$tmpAssets[0]->getPath()]);
         }

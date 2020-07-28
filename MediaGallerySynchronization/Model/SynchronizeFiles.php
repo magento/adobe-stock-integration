@@ -9,20 +9,25 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
-use Psr\Log\LoggerInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 use Magento\MediaGallerySynchronizationApi\Model\ImportFileComposite;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Synchronize files in media storage and media assets database records
  */
 class SynchronizeFiles implements SynchronizeFilesInterface
 {
+    /**
+     * Date format
+     */
+    private const DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @var LoggerInterface
      */
@@ -54,8 +59,14 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $importFileComposite;
 
     /**
+     * @var DateTime
+     */
+    private $date;
+
+    /**
      * @param File $driver
      * @param Filesystem $filesystem
+     * @param DateTime $date
      * @param LoggerInterface $log
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param GetAssetsByPathsInterface $getAssetsByPaths
@@ -64,6 +75,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     public function __construct(
         File $driver,
         Filesystem $filesystem,
+        DateTime $date,
         LoggerInterface $log,
         SplFileInfoFactory $splFileInfoFactory,
         GetAssetsByPathsInterface $getAssetsByPaths,
@@ -71,6 +83,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     ) {
         $this->driver = $driver;
         $this->filesystem = $filesystem;
+        $this->date = $date;
         $this->log = $log;
         $this->splFileInfoFactory = $splFileInfoFactory;
         $this->getAssetsByPaths = $getAssetsByPaths;
@@ -117,7 +130,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private function getFileModificationTime(string $filePath): string
     {
         $fileTime = $this->splFileInfoFactory->create($filePath)->getMTime();
-        return (new \DateTime())->setTimestamp($fileTime)->format('Y-m-d H:i:s');
+        return $this->date->gmtDate(self::DATE_FORMAT, $fileTime);
     }
 
     /**

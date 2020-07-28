@@ -10,12 +10,12 @@ namespace Magento\MediaGalleryMetadata\Model\Jpeg;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\MediaGalleryMetadata\Model\SegmentNames;
 
 /**
  * Jpeg file reader
@@ -137,7 +137,10 @@ class FileReader implements FileReaderInterface
         } while (!$this->driver->endOfFile($resource));
 
         $endOfImageMarkerPosition = strpos($compressedImage, self::MARKER_PREFIX . self::MARKER_IMAGE_END);
-        $compressedImage = substr($compressedImage, 0, $endOfImageMarkerPosition);
+
+        if ($endOfImageMarkerPosition !== false) {
+            $compressedImage = substr($compressedImage, 0, $endOfImageMarkerPosition);
+        }
 
         return $compressedImage;
     }

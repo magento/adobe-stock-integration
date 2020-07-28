@@ -8,15 +8,15 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
-use Magento\Framework\Api\AttributeValueFactory;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 
 /**
  * Process save action of the media gallery asset.

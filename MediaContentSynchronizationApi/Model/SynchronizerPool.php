@@ -10,7 +10,7 @@ namespace Magento\MediaContentSynchronizationApi\Model;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
 
 /**
- * A pool of content with assets synchronizers
+ * A pool that handles content and assets synchronization.
  * @see SynchronizeFilesInterface
  */
 class SynchronizerPool

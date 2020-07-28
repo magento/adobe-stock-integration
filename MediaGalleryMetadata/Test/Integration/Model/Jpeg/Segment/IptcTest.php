@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Test\Integration\Model\Jpeg\Segment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcWriter;
+use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcWriter;
-use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\IptcReader;
-use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
-use Magento\MediaGalleryMetadata\Model\MetadataFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 
 /**
  * Test for IPTC reader and writer
@@ -91,11 +91,11 @@ class IptcTest extends TestCase
         );
         $modifiableFilePath = $this->fileReader->execute($modifiableFilePath);
         $originalMetadata = $this->iptcReader->execute($modifiableFilePath);
-        
+
         $this->assertEmpty($originalMetadata->getTitle());
         $this->assertEmpty($originalMetadata->getDescription());
         $this->assertEmpty($originalMetadata->getKeywords());
-        
+
         $updatedFile = $this->iptcWriter->execute(
             $modifiableFilePath,
             $this->metadataFactory->create([
