@@ -32,7 +32,7 @@ class ResizeSyncedFiles
      * @param \Closure $closure
      * @param array $filesPaths
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @return mixed
+     * @return void
      */
     public function aroundExecute(SynchronizeFilesInterface $subject, \Closure $closure, array $filesPaths)
     {

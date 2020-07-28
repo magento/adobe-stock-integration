@@ -27,6 +27,14 @@ class SynchronizerPool
      */
     public function __construct(array $synchronizers = [])
     {
+        foreach ($synchronizers as $name => $synchronizer) {
+            if (!$synchronizer instanceof SynchronizeFilesInterface) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Synchronizer must implement %s.',
+                    SynchronizeFilesInterface::class
+                ));
+            }
+        }
         $this->synchronizers = $synchronizers;
     }
 

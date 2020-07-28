@@ -15,7 +15,7 @@ interface SynchronizeFilesInterface
     /**
      * Create media gallery assets based on files information and save them to database
      *
-     * @param array $items
+     * @param string[] $items
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(array $items): void;
