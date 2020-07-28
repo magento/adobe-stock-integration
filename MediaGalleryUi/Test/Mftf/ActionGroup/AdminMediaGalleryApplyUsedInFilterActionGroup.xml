@@ -18,6 +18,6 @@
 
         <click selector="{{AdminEnhancedMediaGalleryFiltersSection.usedInSelectDropdown}}" stepKey="openUsedInfilter"/>
         <click selector="{{AdminEnhancedMediaGalleryFiltersSection.usedInEntityType(entityType)}}" stepKey="selectEntityType"/>
-        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.uiSelectDoneButton}}" stepKey="clickDone"/>
+        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.searchOptionsFilterDone(filterName)}}" stepKey="clickDone"/>
      </actionGroup>
 </actionGroups>
