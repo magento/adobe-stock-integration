@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Model;
 
-use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationExtensionInterface;
+use Magento\AdobeStockClientApi\Api\Data\LicenseConfirmationInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -47,7 +47,7 @@ class LicenseConfirmation extends AbstractExtensibleModel implements LicenseConf
     /**
      * @inheritdoc
      */
-    public function getCanLicense(): bool
+    public function isCanLicense(): bool
     {
         return $this->getData(self::CAN_LICENSE);
     }

@@ -11,7 +11,6 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockImage\Model\SerializeImage;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Exception\SerializationException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

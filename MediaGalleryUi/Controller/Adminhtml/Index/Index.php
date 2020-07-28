@@ -10,8 +10,8 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Index;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\Layout;
+use Magento\Framework\View\Result\LayoutFactory;
 
 /**
  * Controller serving the media gallery content

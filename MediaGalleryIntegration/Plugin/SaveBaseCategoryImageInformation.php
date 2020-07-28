@@ -12,25 +12,13 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 
 /**
  * Save base category image by SaveAssetsInterface.
  */
 class SaveBaseCategoryImageInformation
 {
-    /**
-     * @var SplFileInfoFactory
-     */
-    private $splFileInfoFactory;
-
-    /**
-     * @var SaveAssetsInterface
-     */
-    private $saveAsset;
-
     /**
      * @var DeleteAssetsByPathsInterface
      */
@@ -42,44 +30,31 @@ class SaveBaseCategoryImageInformation
     private $getAssetsByPaths;
 
     /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
-
-    /**
      * @var Storage
      */
     private $storage;
+
     /**
-     * @var GenerateRenditionsInterface
+     * @var SynchronizeFilesInterface
      */
-    private $generateRenditions;
+    private $synchronizeFiles;
 
     /**
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPath
      * @param GetAssetsByPathsInterface $getAssetsByPaths
-     * @param SplFileInfoFactory $splFileInfoFactory
-     * @param CreateAssetFromFile $createAssetFromFile
-     * @param SaveAssetsInterface $saveAsset
-     * @param GenerateRenditionsInterface $generateRenditions
      * @param Storage $storage
+     * @param SynchronizeFilesInterface $synchronizeFiles
      */
     public function __construct(
         DeleteAssetsByPathsInterface $deleteAssetsByPath,
         GetAssetsByPathsInterface $getAssetsByPaths,
-        SplFileInfoFactory $splFileInfoFactory,
-        CreateAssetFromFile $createAssetFromFile,
-        SaveAssetsInterface $saveAsset,
-        GenerateRenditionsInterface $generateRenditions,
-        Storage $storage
+        Storage $storage,
+        SynchronizeFilesInterface $synchronizeFiles
     ) {
         $this->deleteAssetsByPaths = $deleteAssetsByPath;
         $this->getAssetsByPaths = $getAssetsByPaths;
-        $this->splFileInfoFactory = $splFileInfoFactory;
-        $this->createAssetFromFile = $createAssetFromFile;
-        $this->saveAsset = $saveAsset;
         $this->storage = $storage;
-        $this->generateRenditions = $generateRenditions;
+        $this->synchronizeFiles = $synchronizeFiles;
     }
 
     /**
@@ -91,18 +66,15 @@ class SaveBaseCategoryImageInformation
     public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
     {
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
-        $file = $this->splFileInfoFactory->create($absolutePath);
-        $tmpPath = $subject->getBaseTmpPath() . '/' . $file->getFileName();
+        $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, "/"), 1);
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
 
         if (!empty($tmpAssets)) {
             $this->deleteAssetsByPaths->execute([$tmpAssets[0]->getPath()]);
         }
 
-        $createAsset = $this->createAssetFromFile->execute($file);
-        $this->saveAsset->execute([$createAsset]);
-        $this->storage->resizeFile($absolutePath);
-        $this->generateRenditions->execute([$createAsset]);
+        $this->synchronizeFiles->execute([$absolutePath]);
+
         return $imagePath;
     }
 }

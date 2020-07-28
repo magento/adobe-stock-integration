@@ -7,16 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\Framework\File\Uploader;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
+use Magento\Framework\File\Uploader;
+use Magento\Framework\Filesystem;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -31,26 +29,6 @@ class SaveImageInformation
     private $isPathExcluded;
 
     /**
-     * @var SplFileInfoFactory
-     */
-    private $splFileInfoFactory;
-
-    /**
-     * @var SaveAssetsInterface
-     */
-    private $saveAsset;
-
-    /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
-
-    /**
-     * @var Storage
-     */
-    private $storage;
-
-    /**
      * @var LoggerInterface
      */
     private $log;
@@ -61,38 +39,26 @@ class SaveImageInformation
     private $filesystem;
 
     /**
-     * @var GenerateRenditionsInterface
+     * @var SynchronizeFilesInterface
      */
-    private $generateRenditions;
+    private $synchronizeFiles;
 
     /**
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
      * @param IsPathExcludedInterface $isPathExcluded
-     * @param SplFileInfoFactory $splFileInfoFactory
-     * @param CreateAssetFromFile $createAssetFromFile
-     * @param SaveAssetsInterface $saveAsset
-     * @param GenerateRenditionsInterface $generateRenditions
-     * @param Storage $storage
+     * @param SynchronizeFilesInterface $synchronizeFiles
      */
     public function __construct(
         Filesystem $filesystem,
         LoggerInterface $log,
         IsPathExcludedInterface $isPathExcluded,
-        SplFileInfoFactory $splFileInfoFactory,
-        CreateAssetFromFile $createAssetFromFile,
-        SaveAssetsInterface $saveAsset,
-        GenerateRenditionsInterface $generateRenditions,
-        Storage $storage
+        SynchronizeFilesInterface $synchronizeFiles
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
-        $this->splFileInfoFactory = $splFileInfoFactory;
-        $this->createAssetFromFile = $createAssetFromFile;
-        $this->saveAsset = $saveAsset;
-        $this->storage = $storage;
         $this->filesystem = $filesystem;
-        $this->generateRenditions = $generateRenditions;
+        $this->synchronizeFiles = $synchronizeFiles;
     }
 
     /**
@@ -100,21 +66,16 @@ class SaveImageInformation
      *
      * @param Uploader $subject
      * @param array $result
-     * @return array
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\ValidatorException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(Uploader $subject, array $result): array
     {
-        $file = $this->splFileInfoFactory->create($result['path'] . DIRECTORY_SEPARATOR . $result['file']);
-        if (!$this->isApplicable($file->getPathName())) {
+        $path = $result['path'] . '/' . $result['file'];
+        if (!$this->isApplicable($path)) {
             return $result;
         }
-        $createAsset = $this->createAssetFromFile->execute($file);
-        $this->saveAsset->execute([$createAsset]);
-        $this->storage->resizeFile($result['path'] . DIRECTORY_SEPARATOR . $result['file']);
-        $this->generateRenditions->execute([$createAsset]);
+        $this->synchronizeFiles->execute([$path]);
+
         return $result;
     }
 

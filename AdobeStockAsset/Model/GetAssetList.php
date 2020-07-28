@@ -10,8 +10,8 @@ namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;

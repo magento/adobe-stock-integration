@@ -11,6 +11,7 @@
         <annotations>
             <features value="AdobeStockMediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/428"/>
+            <stories value="View adobe stock image details"/>
             <title value="View adobe stock image details"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4653671"/>
             <description value="User views adobe stock image attributes in Media Gallery"/>
@@ -19,7 +20,7 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>

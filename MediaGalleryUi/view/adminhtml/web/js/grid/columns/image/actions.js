@@ -15,11 +15,17 @@ define([
         defaults: {
             template: 'Magento_MediaGalleryUi/grid/columns/image/actions',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
+            mediaGalleryEditDetailsName: 'mediaGalleryEditDetails',
             actionsList: [
                 {
                     name: 'image-details',
                     title: $.mage.__('View Details'),
                     handler: 'viewImageDetails'
+                },
+                {
+                    name: 'edit',
+                    title: $.mage.__('Edit'),
+                    handler: 'editImageDetails'
                 },
                 {
                     name: 'delete',
@@ -29,7 +35,8 @@ define([
             ],
             modules: {
                 imageModel: '${ $.imageModelName }',
-                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }',
+                mediaGalleryEditDetails: '${ $.mediaGalleryEditDetailsName }'
             }
         },
 
@@ -73,7 +80,7 @@ define([
             var imageDetailsUrl = this.mediaGalleryImageDetails().imageDetailsUrl,
                 deleteImageUrl = this.imageModel().deleteImageUrl;
 
-            deleteImageWithDetailConfirmation.deleteImageAction(record, imageDetailsUrl, deleteImageUrl);
+            deleteImageWithDetailConfirmation.deleteImageAction([record.id], imageDetailsUrl, deleteImageUrl);
         },
 
         /**
@@ -85,6 +92,17 @@ define([
             var recordId = this.imageModel().getId(record);
 
             this.mediaGalleryImageDetails().showImageDetailsById(recordId);
+        },
+
+        /**
+         * Edit image details
+         *
+         * @param {Object} record
+         */
+        editImageDetails: function (record) {
+            var recordId = this.imageModel().getId(record);
+
+            this.mediaGalleryEditDetails().showEditDetailsPanel(recordId);
         }
     });
 });

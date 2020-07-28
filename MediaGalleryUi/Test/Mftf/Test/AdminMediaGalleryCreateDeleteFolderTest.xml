@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         </before>
 
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
@@ -37,7 +37,7 @@
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder"/>
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
 
-        <actionGroup ref="AdminOpenMediaGalleryForPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
 
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}" stepKey="deleteFolderButtonIsNotDisabled"/>

@@ -67,11 +67,11 @@ define([
          */
         isVisible: function (record, name) {
             if (name === this.licenseAction.name) {
-                if (_.isNull(record['is_licensed'])) {
+                if (_.isUndefined(record.overlay) || record.overlay === '') {
                     return false;
                 }
 
-                return !parseInt(record['is_licensed'], 16);
+                return true;
             }
 
             return true;
@@ -83,14 +83,14 @@ define([
          * @param {Number} imageId
          */
         getImageRecord: function (imageId) {
-            getDetails(this.imageDetailsUrl, imageId).then(function (imageDetails) {
-                var id = imageDetails['adobe_stock'][0].value;
+            getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
+                var id = imageDetails[imageId]['adobe_stock'][0].value;
 
                 this.image().actions().licenseProcess(
                     id,
-                    imageDetails.title,
-                    imageDetails.path,
-                    imageDetails['content_type'],
+                    imageDetails[imageId].title,
+                    imageDetails[imageId].path,
+                    imageDetails[imageId]['content_type'],
                     true
                 ).then(function () {
                     this.image().actions().login().getUserQuota();
@@ -100,10 +100,10 @@ define([
                     if (error) {
                         this.imageModel().addMessage('error', error);
                     }
-                });
+                }.bind(this));
             }.bind(this)).fail(function (message) {
                 this.imageModel().addMessage('error', message);
-            });
+            }.bind(this));
         }
     });
 });

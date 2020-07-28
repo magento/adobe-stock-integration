@@ -8,8 +8,10 @@ define([
     'underscore',
     'uiElement',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
-    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected) {
+    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
+    'Magento_MediaGalleryUi/js/action/saveDetails',
+    'mage/validation'
+], function ($, _, Element, deleteImageWithDetailConfirmation, addSelected, saveDetails) {
     'use strict';
 
     return Element.extend({
@@ -17,10 +19,12 @@ define([
             modalSelector: '',
             modalWindowSelector: '',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
+            mediaGalleryEditDetailsName: 'mediaGalleryEditDetails',
             template: 'Magento_MediaGalleryUi/image/actions',
             modules: {
                 imageModel: '${ $.imageModelName }',
-                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }'
+                mediaGalleryImageDetails: '${ $.mediaGalleryImageDetailsName }',
+                mediaGalleryEditDetails: '${ $.mediaGalleryEditDetailsName }'
             }
         },
 
@@ -51,6 +55,15 @@ define([
         },
 
         /**
+         * Opens the image edit panel
+         */
+        editImageAction: function () {
+            var record = this.imageModel().getSelected().id;
+
+            this.mediaGalleryEditDetails().showEditDetailsPanel(record);
+        },
+
+        /**
          * Delete image action
          */
         deleteImageAction: function () {
@@ -58,10 +71,36 @@ define([
                 deleteImageUrl = this.imageModel().deleteImageUrl;
 
             deleteImageWithDetailConfirmation.deleteImageAction(
-                this.imageModel().getSelected(),
+                [this.imageModel().getSelected().id],
                 imageDetailsUrl,
                 deleteImageUrl
             );
+        },
+
+        /**
+         * Save image details action
+         */
+        saveImageDetailsAction: function () {
+            var saveDetailsUrl = this.mediaGalleryEditDetails().saveDetailsUrl,
+                modalElement = $(this.modalSelector),
+                dataForm = modalElement.find('#image-edit-details-form'),
+                imageId = this.imageModel().getSelected().id,
+                imageDetails = this.mediaGalleryImageDetails();
+
+            if (dataForm.validation('isValid')) {
+                saveDetails(
+                    saveDetailsUrl,
+                    dataForm
+                ).then(function () {
+                    this.closeModal();
+                    this.imageModel().reloadGrid();
+                    imageDetails.removeCached(imageId);
+
+                    if (imageDetails.isActive()) {
+                        imageDetails.showImageDetailsById(imageId);
+                    }
+                }.bind(this));
+            }
         },
 
         /**

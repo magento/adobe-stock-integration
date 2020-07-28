@@ -15,7 +15,6 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
 /**

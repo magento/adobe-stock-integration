@@ -66,12 +66,12 @@ class Details extends Action implements HttpGetActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $id = (int) $this->getRequest()->getParam('id');
+        $ids = $this->getRequest()->getParam('ids');
 
-        if ($id === 0) {
+        if (empty($ids) || !is_array($ids)) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Asset ID is required.'),
+                'message' => __('Assets Ids is required, and must be of type array.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -80,7 +80,7 @@ class Details extends Action implements HttpGetActionInterface
         }
 
         try {
-            $details = $this->getDetailsByAssetId->execute($id);
+            $details = $this->getDetailsByAssetId->execute($ids);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

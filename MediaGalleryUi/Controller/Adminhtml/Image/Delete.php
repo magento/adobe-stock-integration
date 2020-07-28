@@ -15,7 +15,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryUi\Model\DeleteImage;
 use Psr\Log\LoggerInterface;
@@ -85,12 +84,12 @@ class Delete extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('id');
+        $imageIds = $this->getRequest()->getParam('ids');
 
-        if ($imageId === 0) {
+        if (empty($imageIds) || !is_array($imageIds)) {
             $responseContent = [
                 'success' => false,
-                'message' => __('Image ID is required.'),
+                'message' => __('Image Ids are required and must be of type array.'),
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
@@ -99,14 +98,17 @@ class Delete extends Action implements HttpPostActionInterface
         }
 
         try {
-            $assets = $this->getAssetsByIds->execute([$imageId]);
-            /** @var AssetInterface $asset */
-            $asset = current($assets);
-            $this->deleteImage->execute($asset);
+            $assets = $this->getAssetsByIds->execute($imageIds);
+            $this->deleteImage->execute($assets);
             $responseCode = self::HTTP_OK;
+            if (count($imageIds) === 1) {
+                $message = sprintf('The asset "%s" has been successfully deleted', current($assets)->getTitle());
+            } else {
+                $message = 'Assets have been successfully deleted';
+            }
             $responseContent = [
                 'success' => true,
-                'message' => __('You have successfully removed the image "%image"', ['image' => $asset->getTitle()]),
+                'message' => __($message),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
@@ -119,7 +121,7 @@ class Delete extends Action implements HttpPostActionInterface
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred on attempt to save image.'),
+                'message' => __('An error occurred on attempt to delete image.'),
             ];
         }
 

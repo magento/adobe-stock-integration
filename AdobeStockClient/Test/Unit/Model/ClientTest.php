@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\AdobeStockClient\Test\Unit\Model;
 
 use AdobeStock\Api\Models\LicenseEntitlement;
-use AdobeStock\Api\Models\LicensePurchaseOptions;
 use AdobeStock\Api\Models\LicenseEntitlementQuota;
+use AdobeStock\Api\Models\LicensePurchaseOptions;
 use AdobeStock\Api\Models\StockFile;
 use AdobeStock\Api\Request\License;
-use AdobeStock\Api\Response\License as ResponseLicense;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
+use AdobeStock\Api\Response\License as ResponseLicense;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use Magento\AdobeStockClient\Model\Client;
 use Magento\AdobeStockClient\Model\ConnectionWrapper;
@@ -37,6 +37,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Config data test.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ClientTest extends TestCase
 {
