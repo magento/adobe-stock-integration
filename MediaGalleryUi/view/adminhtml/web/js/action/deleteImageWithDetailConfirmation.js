@@ -52,10 +52,8 @@ define([
          * @return {String}
          */
         getRecordRelatedContentMessage: function (imageDetails) {
-            var usedInMessage = $t('%n image%p %v used in %s.'),
-                usedIn = {},
-                message = '',
-                entitiesCount;
+            var usedInMessage = $t('The selected assets are used for the following entities content: '),
+                usedIn = {};
 
             $.each(imageDetails, function (key, image) {
                 if (_.isObject(image.details[6]) && !_.isEmpty(image.details[6].value)) {
@@ -69,18 +67,10 @@ define([
                 return '';
             }
             $.each(usedIn, function (entityName, count) {
-                message +=  count > 1 ? count + this.getEntityPrefix(entityName) : count + ' ' + entityName +  ', ';
+                usedInMessage +=  entityName +  '(' + count + '), ';
             }.bind(this));
 
-            entitiesCount = Object.keys(imageDetails).length  > 1;
-            message = message.replace(/,\s*$/, '');
-            message = usedInMessage
-                .replace('%s', message)
-                .replace('%n', entitiesCount ? 'These' : 'This')
-                .replace('%p', entitiesCount ? 's' : '')
-                .replace('%v', entitiesCount ? 'are' : 'is');
-
-            return message;
+            return usedInMessage;
         },
 
         /**

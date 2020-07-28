@@ -27,8 +27,8 @@
     <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
         <arguments>
             <argument name="contentTypes" xsi:type="array">
-                <item name="catalog_category" xsi:type="string">Category</item>
-                <item name="catalog_product" xsi:type="string">Product</item>
+                <item name="catalog_category" xsi:type="string">Categories</item>
+                <item name="catalog_product" xsi:type="string">Products</item>
             </argument>
         </arguments>
     </type>

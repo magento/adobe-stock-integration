@@ -136,28 +136,13 @@ define([
 
             if (_.isObject(value)) {
                 $.each(value, function (entityName, count) {
-                    usedIn += count + ' ' +
-                        count > 1 ? this.getEntityNameWithPrefix(entityName) : entityName +
-                        '</br>';
+                    usedIn += count + ' ' +  entityName + '</br>';
                 }.bind(this));
 
                 return usedIn;
             }
 
             return value;
-        },
-
-        /**
-        * Return entity name based on used in count
-        *
-        * @param {String} entityName
-        */
-        getEntityNameWithPrefix: function (entityName) {
-            if (entityName.substr(entityName.length - 1) === 'y') {
-                return entityName.slice(0, -1) + 'ies';
-            }
-
-            return entityName + 's';
         },
 
         /**
