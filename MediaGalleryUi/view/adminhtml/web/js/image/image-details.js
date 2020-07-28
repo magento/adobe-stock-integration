@@ -137,7 +137,7 @@ define([
             if (_.isObject(value)) {
                 $.each(value, function (entityName, count) {
                     usedIn += count + ' ' +  entityName + '</br>';
-                }.bind(this));
+                });
 
                 return usedIn;
             }

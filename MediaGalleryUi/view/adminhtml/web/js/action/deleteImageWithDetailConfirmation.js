@@ -68,7 +68,7 @@ define([
             }
             $.each(usedIn, function (entityName, count) {
                 usedInMessage +=  entityName +  '(' + count + '), ';
-            }.bind(this));
+            });
 
             return usedInMessage;
         },
