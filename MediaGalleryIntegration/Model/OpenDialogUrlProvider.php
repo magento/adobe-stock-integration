@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryIntegration\Model;
 
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Provider to get open media gallery dialog URL for WYSIWYG and widgets
  */
-class OpenDialogUrlProvider
+class OpenDialogUrlProvider extends DataObject
 {
     /**
      * @var ConfigInterface
