@@ -111,7 +111,7 @@ define([
 
             if (!$(this.cancelMassactionButtonSelector).length) {
                 $(this.pageActionsSelector).append(this.cancelMassactionButton);
-                $('#cancel_massaction').text($t('Cancel'));
+                $('#cancel_massaction').applyBindings();
                 this.isCancelButtonInserted = true;
             } else {
                 $(this.cancelMassactionButtonSelector).replaceWith(this.cancelMassactionButton);

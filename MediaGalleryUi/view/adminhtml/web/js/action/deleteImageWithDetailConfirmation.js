@@ -71,19 +71,6 @@ define([
             });
 
             return usedInMessage;
-        },
-
-        /**
-         * Return entity name based on used in count
-         *
-         * @param {String} entityName
-         */
-        getEntityPrefix: function (entityName) {
-            if (entityName.substr(entityName.length - 1) === 'y') {
-                return entityName.slice(0, -1) + 'ies';
-            }
-
-            return ' ' + entityName + 's';
         }
     };
 });
