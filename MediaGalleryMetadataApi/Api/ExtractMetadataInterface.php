@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadataApi\Api;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**

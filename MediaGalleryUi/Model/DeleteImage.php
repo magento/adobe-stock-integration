@@ -52,11 +52,10 @@ class DeleteImage
     }
 
     /**
-     * Delete asset image physically from file storage and from data storage via MediaGallery plugin.
-     *
-     * @see \Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage
+     * Delete asset image physically from file storage and from data storage.
      *
      * @param AssetInterface[] $assets
+     * @throws LocalizedException
      */
     public function execute(array $assets): void
     {

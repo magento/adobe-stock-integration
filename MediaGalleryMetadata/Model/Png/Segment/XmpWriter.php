@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
 
 use Magento\MediaGalleryMetadata\Model\AddXmpMetadata;
+use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 
 /**
  * XMP Writer for png format

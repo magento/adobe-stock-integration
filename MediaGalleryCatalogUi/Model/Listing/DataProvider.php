@@ -8,19 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryCatalogUi\Model\Listing;
 
+use Magento\Catalog\Api\CategoryListInterface;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\DocumentFactory;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
-use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Api\Search\DocumentFactory;
-use Magento\Catalog\Api\CategoryListInterface;
-use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * DataProvider of category grid.
@@ -119,7 +119,7 @@ class DataProvider extends UiComponentDataProvider
             ];
         }
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -129,7 +129,7 @@ class DataProvider extends UiComponentDataProvider
         $searchCriteria = $this->skipRootCategory($searchCriteria);
         $collection = $this->categoryList->getList($searchCriteria);
         $items = [];
-        
+
         foreach ($collection->getItems() as $category) {
             $items[] = $this->createDocument(
                 [
@@ -144,12 +144,12 @@ class DataProvider extends UiComponentDataProvider
                 ]
             );
         }
-        
+
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($items);
         $searchResult->setTotalCount($collection->getTotalCount());
-        
+
         return $searchResult;
     }
 
@@ -172,7 +172,7 @@ class DataProvider extends UiComponentDataProvider
         $searchCriteria->setFilterGroups($filterGroups);
         return $searchCriteria;
     }
-    
+
     /**
      * Add attributes to grid result
      *

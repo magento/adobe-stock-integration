@@ -13,6 +13,6 @@
             <description>Asserts images has been deleted in mass action.</description>
         </annotations>
 
-        <see userInput='The assets have been successfully deleted' stepKey="verifyDeleteImages"/>
+        <see userInput='Assets have been successfully deleted' stepKey="verifyDeleteImages"/>
     </actionGroup>
 </actionGroups>
