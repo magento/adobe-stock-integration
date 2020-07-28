@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronizationApi\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\InstantPurchase\Model\ShippingMethodChoose\DeferredShippingMethodChooserInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 
 /**
@@ -27,6 +29,14 @@ class SynchronizerPool
      */
     public function __construct(array $synchronizers = [])
     {
+        foreach ($synchronizers as $name => $synchronizer) {
+            if (!$synchronizer instanceof SynchronizeFilesInterface) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Synchronizer must implement %s.',
+                    SynchronizeFilesInterface::class
+                ));
+            }
+        }
         $this->synchronizers = $synchronizers;
     }
 

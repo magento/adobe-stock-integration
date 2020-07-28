@@ -64,10 +64,6 @@ class Synchronize implements SynchronizeInterface
         $failed = [];
 
         foreach ($this->synchronizerPool->get() as $name => $synchronizer) {
-            if (!$synchronizer instanceof SynchronizeFilesInterface) {
-                throw new LocalizedException(__('Synchronizer must implement SynchronizeFilesInterface'));
-            }
-
             foreach ($this->batchGenerator->execute() as $batch) {
                 try {
                     $synchronizer->execute($batch);
