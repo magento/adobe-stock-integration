@@ -12,9 +12,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryMetadataApi\Model\AddMetadataComposite;
+use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class AddMetadataTest extends TestCase
 {
     /**
-     * @var AddMetadataComposite
+     * @var AddMetadataInterface
      */
     private $addMetadata;
 
@@ -44,7 +44,7 @@ class AddMetadataTest extends TestCase
     private $metadataFactory;
 
     /**
-     * @var ExtractMetadataComposite
+     * @var ExtractMetadataInterface
      */
     private $extractMetadata;
 
@@ -53,12 +53,12 @@ class AddMetadataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->addMetadata = Bootstrap::getObjectManager()->get(AddMetadataComposite::class);
+        $this->addMetadata = Bootstrap::getObjectManager()->get(AddMetadataInterface::class);
         $this->varDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataInterfaceFactory::class);
-        $this->extractMetadata = Bootstrap::getObjectManager()->get(ExtractMetadataComposite::class);
+        $this->extractMetadata = Bootstrap::getObjectManager()->get(ExtractMetadataInterface::class);
     }
 
     /**

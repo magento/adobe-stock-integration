@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
-use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
@@ -43,7 +43,7 @@ class ImportImageFileKeywords implements ImportFileInterface
     private $assetKeywordsFactory;
     
     /**
-     * @var ExtractMetadataComposite
+     * @var ExtractMetadataInterface
      */
     private $extractMetadata;
 
@@ -61,7 +61,7 @@ class ImportImageFileKeywords implements ImportFileInterface
      * @param File $driver
      * @param Filesystem $filesystem
      * @param KeywordInterfaceFactory $keywordFactory
-     * @param ExtractMetadataComposite $extractMetadata
+     * @param ExtractMetadataInterface $extractMetadata
      * @param SaveAssetsKeywordsInterface $saveAssetKeywords
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
      * @param GetAssetsByPathsInterface $getAssetsByPaths
@@ -70,7 +70,7 @@ class ImportImageFileKeywords implements ImportFileInterface
         File $driver,
         Filesystem $filesystem,
         KeywordInterfaceFactory $keywordFactory,
-        ExtractMetadataComposite $extractMetadata,
+        ExtractMetadataInterface $extractMetadata,
         SaveAssetsKeywordsInterface $saveAssetKeywords,
         AssetKeywordsInterfaceFactory $assetKeywordsFactory,
         GetAssetsByPathsInterface $getAssetsByPaths

@@ -59,7 +59,6 @@ class ReadFile implements ReadFileInterface
      */
     public function execute(string $path): FileInterface
     {
-        $segments = [];
         $resource = $this->driver->fileOpen($path, 'rb');
         $header = $this->readHeader($resource);
 

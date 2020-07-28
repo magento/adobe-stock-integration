@@ -10,11 +10,12 @@ namespace Magento\MediaGalleryMetadataApi\Model;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 
 /**
  * Metadata extractor composite
  */
-class ExtractMetadataComposite
+class ExtractMetadataComposite implements ExtractMetadataInterface
 {
     /**
      * @var ExtractMetadataInterface[]
@@ -22,10 +23,19 @@ class ExtractMetadataComposite
     private $extractors;
 
     /**
+     * @var MetadataInterfaceFactory
+     */
+    private $metadataFactory;
+
+    /**
+     * @param MetadataInterfaceFactory $metadataFactory
      * @param ExtractMetadataInterface[] $extractors
      */
-    public function __construct(array $extractors)
-    {
+    public function __construct(
+        MetadataInterfaceFactory $metadataFactory,
+        array $extractors
+    ) {
+        $this->metadataFactory = $metadataFactory;
         $this->extractors = $extractors;
     }
 
@@ -38,14 +48,25 @@ class ExtractMetadataComposite
      */
     public function execute(string $path): MetadataInterface
     {
+        $title = null;
+        $description = null;
+        $keywords = [];
+
         foreach ($this->extractors as $extractor) {
-            $metadata = $extractor->execute($path);
-            if ($metadata->getTitle() !== null ||
-                $metadata->getDescription() !== null ||
-                $metadata->getKeywords() !== null) {
-                break;
+            $data = $extractor->execute($path);
+            $title = $data->getTitle() !== null ? $data->getTitle() : $title;
+            $description = $data->getDescription() !== null ? $data->getDescription() : $description;
+
+            if ($data->getKeywords() !== null) {
+                foreach ($data->getKeywords() as $keyword) {
+                    $keywords[] = $keyword;
+                }
             }
         }
-        return $metadata;
+        return $this->metadataFactory->create([
+            'title' => $title,
+            'description' => $description,
+            'keywords' => empty($keywords) ? null : $keywords
+        ]);
     }
 }

@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
-use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Test saving a media gallery asset and return its id.
@@ -81,7 +81,7 @@ class SaveMediaGalleryAssetTest extends TestCase
         $this->converter = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->mediaDirectory = $this->createMock(Read::class);
-        $this->extractMetadata = $this->createMock(ExtractMetadataComposite::class);
+        $this->extractMetadata = $this->createMock(ExtractMetadataInterface::class);
         $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
 
         $this->saveMediaAsset = (new ObjectManager($this))->getObject(

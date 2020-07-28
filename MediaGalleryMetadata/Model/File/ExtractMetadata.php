@@ -15,12 +15,11 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Extract Metadata from asset file by given extractors
  */
-class ExtractMetadata implements ExtractMetadataInterface
+class ExtractMetadata
 {
 
     /**
@@ -111,9 +110,14 @@ class ExtractMetadata implements ExtractMetadataInterface
             }
 
             $data = $segmentReader->execute($file);
-            $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
-            $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
-            $keywords =  $keywords + $data->getKeywords();
+            $title = $data->getTitle() !== null ? $data->getTitle() : $title;
+            $description = $data->getDescription() !== null ? $data->getDescription() : $description;
+
+            if ($data->getKeywords() !== null) {
+                foreach ($data->getKeywords() as $keyword) {
+                    $keywords[] = $keyword;
+                }
+            }
         }
         
         return $this->metadataFactory->create([

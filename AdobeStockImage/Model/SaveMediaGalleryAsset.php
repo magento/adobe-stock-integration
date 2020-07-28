@@ -16,7 +16,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
-use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Process save action of the media gallery asset.
@@ -49,7 +49,7 @@ class SaveMediaGalleryAsset
     private $fileSystem;
 
     /**
-     * @var ExtractMetadataComposite
+     * @var ExtractMetadataInterface
      */
     private $extractMetadata;
 
@@ -58,7 +58,7 @@ class SaveMediaGalleryAsset
      * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
      * @param GetContentHashInterface $getContentHash
      * @param Filesystem $fileSystem
-     * @param ExtractMetadataComposite $extractMetadata
+     * @param ExtractMetadataInterface $extractMetadata
      * @param AttributeValueFactory $attributeValueFactory
      */
     public function __construct(
@@ -66,7 +66,7 @@ class SaveMediaGalleryAsset
         DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
         GetContentHashInterface $getContentHash,
         Filesystem $fileSystem,
-        ExtractMetadataComposite $extractMetadata,
+        ExtractMetadataInterface $extractMetadata,
         AttributeValueFactory $attributeValueFactory
     ) {
         $this->saveMediaAsset = $saveMediaAsset;

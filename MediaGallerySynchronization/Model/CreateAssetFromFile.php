@@ -18,8 +18,8 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
-use Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Create media asset object based on the file information
@@ -58,7 +58,7 @@ class CreateAssetFromFile
     private $getContentHash;
 
     /**
-     * @var ExtractMetadataComposite
+     * @var ExtractMetadataInterface
      */
     private $extractMetadata;
 
@@ -68,7 +68,7 @@ class CreateAssetFromFile
      * @param File $driver
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      * @param GetContentHashInterface $getContentHash
-     * @param ExtractMetadataComposite $extractMetadata
+     * @param ExtractMetadataInterface $extractMetadata
      */
     public function __construct(
         Filesystem $filesystem,
@@ -76,7 +76,7 @@ class CreateAssetFromFile
         File $driver,
         GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
         GetContentHashInterface $getContentHash,
-        ExtractMetadataComposite $extractMetadata
+        ExtractMetadataInterface $extractMetadata
     ) {
         $this->filesystem = $filesystem;
         $this->assetFactory = $assetFactory;

@@ -7,8 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface" type="Magento\MediaGalleryMetadata\Model\Metadata"/>
-    <preference for="Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface" type="Magento\MediaGalleryMetadata\Model\File\AddMetadata"/>
-    <preference for="Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface" type="Magento\MediaGalleryMetadata\Model\File\ExtractMetadata"/>
+    <preference for="Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface" type="Magento\MediaGalleryMetadataApi\Model\AddMetadataComposite"/>
+    <preference for="Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface" type="Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite"/>
     <preference for="Magento\MediaGalleryMetadataApi\Model\FileInterface" type="Magento\MediaGalleryMetadata\Model\File"/>
     <preference for="Magento\MediaGalleryMetadataApi\Model\SegmentInterface" type="Magento\MediaGalleryMetadata\Model\Segment"/>
     <type name="Magento\MediaGalleryMetadataApi\Model\ExtractMetadataComposite">
@@ -73,7 +73,7 @@
         <arguments>
             <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile</argument>
             <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\WriteFile</argument>
-            <argument name="metadataWriters" xsi:type="array">
+            <argument name="segmentWriters" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteXmp</item>
                 <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteIptc</item>
             </argument>
@@ -83,7 +83,7 @@
         <arguments>
             <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\ReadFile</argument>
             <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\WriteFile</argument>
-            <argument name="metadataWriters" xsi:type="array">
+            <argument name="segmentWriters" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\WriteXmp</item>
             </argument>
         </arguments>
@@ -92,7 +92,7 @@
         <arguments>
             <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\ReadFile</argument>
             <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\WriteFile</argument>
-            <argument name="metadataWriters" xsi:type="array">
+            <argument name="segmentWriters" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Gif\Segment\WriteXmp</item>
             </argument>
         </arguments>
