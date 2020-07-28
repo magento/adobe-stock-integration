@@ -72,11 +72,30 @@ class ReadFile implements ReadFileInterface
     /**
      * @inheritdoc
      */
+    public function isApplicable(string $path): bool
+    {
+        $resource = $this->driver->fileOpen($path, 'rb');
+        try {
+            $marker = $this->readMarker($resource);
+        } catch (LocalizedException $exception) {
+            return false;
+        }
+        $this->driver->fileClose($resource);
+
+        return $marker == self::MARKER_IMAGE_FILE_START;
+    }
+    
+    /**
+     * @inheritdoc
+     */
     public function execute(string $path): FileInterface
     {
-        $segments = [];
+        if (!$this->isApplicable($path)) {
+            throw new ValidatorException(__('Not a JPEG image'));
+        }
+
         $resource = $this->driver->fileOpen($path, 'rb');
-        $marker = $this->read($resource, self::TWO_BYTES)[1];
+        $marker = $this->readMarker($resource);
 
         if ($marker != self::MARKER_IMAGE_FILE_START) {
             $this->driver->fileClose($resource);
@@ -84,7 +103,7 @@ class ReadFile implements ReadFileInterface
         }
 
         do {
-            $marker = $this->read($resource, self::TWO_BYTES)[1];
+            $marker = $this->readMarker($resource);
             $segments[] = $this->readSegment($resource, ord($marker));
         } while (($marker != self::MARKER_IMAGE_START) && (!$this->driver->endOfFile($resource)));
 
@@ -105,6 +124,25 @@ class ReadFile implements ReadFileInterface
         ]);
     }
 
+    /**
+     * Read jpeg marker
+     *
+     * @param resource $resource
+     * @return string
+     * @throws FileSystemException
+     */
+    private function readMarker($resource): string
+    {
+        $data = $this->read($resource, self::TWO_BYTES);
+
+        if ($data[0] != self::MARKER_PREFIX) {
+            $this->driver->fileClose($resource);
+            throw new LocalizedException(__('File is corrupted'));
+        }
+
+        return $data[1];
+    }
+    
     /**
      * Read compressed image
      *

@@ -110,10 +110,10 @@ class ExtractMetadata
             }
 
             $data = $segmentReader->execute($file);
-            $title = $data->getTitle() !== null ? $data->getTitle() : $title;
-            $description = $data->getDescription() !== null ? $data->getDescription() : $description;
+            $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
+            $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
 
-            if ($data->getKeywords() !== null) {
+            if (!empty($data->getKeywords())) {
                 foreach ($data->getKeywords() as $keyword) {
                     $keywords[] = $keyword;
                 }
@@ -123,7 +123,7 @@ class ExtractMetadata
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => empty($keywords) ? null : $keywords
+            'keywords' => empty($keywords) ? null : array_unique($keywords)
         ]);
     }
 }
