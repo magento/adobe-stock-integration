@@ -7,15 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\Framework\File\Uploader;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Uploader;
+use Magento\Framework\Filesystem;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -30,26 +29,6 @@ class SaveImageInformation
     private $isPathExcluded;
 
     /**
-     * @var SplFileInfoFactory
-     */
-    private $splFileInfoFactory;
-
-    /**
-     * @var SaveAssetsInterface
-     */
-    private $saveAsset;
-
-    /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
-
-    /**
-     * @var Storage
-     */
-    private $storage;
-
-    /**
      * @var LoggerInterface
      */
     private $log;
@@ -58,32 +37,28 @@ class SaveImageInformation
      * @var Filesystem
      */
     private $filesystem;
-    
+
+    /**
+     * @var SynchronizeFilesInterface
+     */
+    private $synchronizeFiles;
+
     /**
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
      * @param IsPathExcludedInterface $isPathExcluded
-     * @param SplFileInfoFactory $splFileInfoFactory
-     * @param CreateAssetFromFile $createAssetFromFile
-     * @param SaveAssetsInterface $saveAsset
-     * @param Storage $storage
+     * @param SynchronizeFilesInterface $synchronizeFiles
      */
     public function __construct(
         Filesystem $filesystem,
         LoggerInterface $log,
         IsPathExcludedInterface $isPathExcluded,
-        SplFileInfoFactory $splFileInfoFactory,
-        CreateAssetFromFile $createAssetFromFile,
-        SaveAssetsInterface $saveAsset,
-        Storage $storage
+        SynchronizeFilesInterface $synchronizeFiles
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
-        $this->splFileInfoFactory = $splFileInfoFactory;
-        $this->createAssetFromFile = $createAssetFromFile;
-        $this->saveAsset = $saveAsset;
-        $this->storage = $storage;
         $this->filesystem = $filesystem;
+        $this->synchronizeFiles = $synchronizeFiles;
     }
 
     /**
@@ -95,12 +70,11 @@ class SaveImageInformation
      */
     public function afterSave(Uploader $subject, array $result): array
     {
-        $file = $this->splFileInfoFactory->create($result['path'] . '/' . $result['file']);
-        if (!$this->isApplicable($file->getPathName())) {
+        $path = $result['path'] . '/' . $result['file'];
+        if (!$this->isApplicable($path)) {
             return $result;
         }
-        $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
-        $this->storage->resizeFile($result['path'] . '/' . $result['file']);
+        $this->synchronizeFiles->execute([$path]);
 
         return $result;
     }

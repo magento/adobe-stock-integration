@@ -30,8 +30,7 @@
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$page$$"/>
         </actionGroup>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>

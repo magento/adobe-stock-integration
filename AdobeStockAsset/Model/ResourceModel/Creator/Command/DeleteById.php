@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Creator\Command;
 
+use Magento\AdobeStockAssetApi\Model\Creator\Command\DeleteByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\AdobeStockAssetApi\Model\Creator\Command\DeleteByIdInterface;
 use Psr\Log\LoggerInterface;
 
 /**

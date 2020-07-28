@@ -8,14 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters;
 
-use Magento\Ui\Component\Filters\Type\Select;
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Ui\Component\Filters\FilterModifier;
-use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
+use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\Component\Filters\Type\Select;
 
 /**
  * Asset  filter
@@ -60,7 +59,7 @@ class Asset extends Select
         );
         $this->getContentIdentities = $getContentIdentities;
     }
-    
+
     /**
      * Apply filter
      *

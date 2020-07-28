@@ -24,6 +24,7 @@
         </before>
         <after>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewContentImageDetails"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteCategoryImage"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
