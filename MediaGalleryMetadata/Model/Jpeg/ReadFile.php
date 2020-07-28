@@ -120,7 +120,10 @@ class ReadFile implements ReadFileInterface
         } while (!$this->driver->endOfFile($resource));
 
         $endOfImageMarkerPosition = strpos($compressedImage, self::MARKER_PREFIX . self::MARKER_IMAGE_END);
-        $compressedImage = substr($compressedImage, 0, $endOfImageMarkerPosition);
+
+        if ($endOfImageMarkerPosition !== false) {
+            $compressedImage = substr($compressedImage, 0, $endOfImageMarkerPosition);
+        }
 
         return $compressedImage;
     }
