@@ -75,7 +75,7 @@ class SaveBaseCategoryImageInformation
     public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
     {
         if (!$this->config->isEnabled()) {
-            return $result;
+            return $imagePath;
         }
         
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
