@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing;
 
 use Magento\AdobeStockImageAdminUi\Model\IsAdobeStockIntegrationEnabled;
-use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Adobe Stock Search Button
@@ -30,7 +30,7 @@ class SearchAdobeStockButton implements ButtonProviderInterface
      * @var AuthorizationInterface
      */
     private $authorization;
-  
+
     /**
      * @param AuthorizationInterface $authorization
      * @param IsAdobeStockIntegrationEnabled $isAdobeStockIntegrationEnabled

@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
+use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Service for getting asset by content id

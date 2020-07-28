@@ -10,6 +10,9 @@ namespace Magento\MediaGalleryUi\Plugin;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
+/**
+ * Create resizes files that were synced
+ */
 class ResizeSyncedFiles
 {
     /**
@@ -28,7 +31,7 @@ class ResizeSyncedFiles
     /**
      * Create thumbnails for synced files.
      *
-     * @param SynchronizeFiles $subject
+     * @param SynchronizeFilesInterface $subject
      * @param \Closure $closure
      * @param array $filesPaths
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -11,10 +11,10 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
 use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface;
 use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterfaceFactory;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Returns asset links which entities has been deleted.

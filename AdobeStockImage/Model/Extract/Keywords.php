@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model\Extract;
 
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 
 /**
