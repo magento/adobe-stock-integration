@@ -12,7 +12,7 @@
             <filterSelect
                     name="product_id"
                     provider="${ $.parentName }"
-                    sortOrder="100"
+                    sortOrder="110"
                     component="Magento_Catalog/js/components/product-ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
@@ -39,7 +39,7 @@
             <filterSelect
                     name="category_id"
                     provider="${ $.parentName }"
-                    sortOrder="110"
+                    sortOrder="100"
                     component="Magento_Catalog/js/components/new-category"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
