@@ -62,33 +62,42 @@ class ExtractMetadataTest extends TestCase
     public function filesProvider(): array
     {
         return [
-            //    [
-            //  'macos-photos.jpeg',
-            //  'Title of the magento image',
-            //  'Description of the magento image',
-            //  [
-            //      'magento',
-            //      'mediagallerymetadata'
-            //  ]
-            // ],
-            // [
-            //  'macos-preview.png',
-            //  'Title of the magento image',
-            //  'Description of the magento image',
-            //  [
-            //      'magento',
-            //      'mediagallerymetadata'
-            //  ]
-            //],
-            //[
-            //  'iptc_only.jpeg',
-            //  'Title of the magento image',
-            //  'Description of the magento image',
-            //  [
-            //      'magento',
-            //      'mediagallerymetadata'
-            //  ]
-            //],
+            [
+                'macos-photos.jpeg',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
+                ]
+            ],
+            [
+                'macos-preview.png',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
+                ]
+            ],
+            [
+                'iptc_only.jpeg',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
+                ]
+            ],
+            [
+                'exiftool.gif',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
+                ]
+            ],
             [
                 'iptc_only.png',
                 'Title of the magento image',
@@ -98,15 +107,6 @@ class ExtractMetadataTest extends TestCase
                     'awesome'
                 ]
             ],
-            //[
-            //  'exiftool.gif',
-            //  'Title of the magento image',
-            //  'Description of the magento image',
-            //  [
-            //      'magento',
-            //      'mediagallerymetadata'
-            //  ]
-            //]
         ];
     }
 }
