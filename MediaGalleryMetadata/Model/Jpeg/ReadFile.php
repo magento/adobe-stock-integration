@@ -84,7 +84,7 @@ class ReadFile implements ReadFileInterface
 
         return $marker == self::MARKER_IMAGE_FILE_START;
     }
-    
+
     /**
      * @inheritdoc
      */
