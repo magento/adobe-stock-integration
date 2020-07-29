@@ -21,8 +21,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 class ReadIptc implements ReadMetadataInterface
 {
     private const IPTC_SEGMENT_NAME = 'zTXt';
-    private const IPTC_SEGMENT_START = 'Raw profile type iptc';
-    private const IPTC_DATA_START_POSITION = 0;
+    private const IPTC_SEGMENT_START = 'iptc';
+    private const IPTC_DATA_START_POSITION = 17;
 
     /**
      * @var MetadataInterfaceFactory
@@ -53,7 +53,7 @@ class ReadIptc implements ReadMetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
             if ($this->isIptcSegment($segment)) {
-                return $this->getIptcData($segment, $file);
+                return $this->getIptcData($segment);
             }
         }
         
@@ -67,17 +67,39 @@ class ReadIptc implements ReadMetadataInterface
     /**
      * Read iptc data from zTXt segment
      *
-     * @param SegmentInterface $segment
      * @param FileInterface $file
      */
-    private function getIptcData(SegmentInterface $segment, FileInterface $file): MetadataInterface
+    private function getIptcData(SegmentInterface $segment): MetadataInterface
     {
-        $resource = $this->driver->fileOpen($file->getPath(), 'rb');
-        $data = $this->read($resource, 8);
+        $data = trim(preg_replace('/\s+/', '', substr(gzinflate(substr($segment->getData(), 25)), 5)));
+        $binData = hex2bin($data);
+
+        $descriptionMarker = pack("C", 2) . 'x' . pack("C", 0);
+        $description = substr(
+            $binData,
+            strpos($binData, $descriptionMarker) + 4,
+            ord(substr($binData, strpos($binData, $descriptionMarker) + 3, 1))
+        );
+
+        $titleMarker =  pack("C", 2) . 'i' . pack("C", 0);
+        $title = substr(
+            $binData,
+            strpos($binData, $titleMarker) + 4,
+            ord(substr($binData, strpos($binData, $titleMarker) + 3, 1))
+        );
+
+        $keywordsMarker = pack("C", 2) . pack("C", 25) . pack("C", 0);
+        $keywords = substr(
+            $binData,
+            strpos($binData, $keywordsMarker) + 4,
+            ord(substr($binData, strpos($binData, $keywordsMarker) + 3, 1))
+        );
+
+
         return $this->metadataFactory->create([
-            'title' => '',
-            'description' => '',
-            'keywords' => []
+            'title' => $title,
+            'description' => $description,
+            'keywords' => explode(',', $keywords)
         ]);
     }
 
@@ -109,6 +131,10 @@ class ReadIptc implements ReadMetadataInterface
     private function isIptcSegment(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::IPTC_SEGMENT_NAME
-            && strncmp($segment->getData(), self::IPTC_SEGMENT_START, self::IPTC_DATA_START_POSITION) == 0;
+            && strncmp(
+                substr($segment->getData(), self::IPTC_DATA_START_POSITION, 4),
+                self::IPTC_SEGMENT_START,
+                self::IPTC_DATA_START_POSITION
+            ) == 0;
     }
 }
