@@ -17,5 +17,6 @@
         "psr-4": {
             "Magento\\AdobeImsApi\\": ""
         }
-    }
+    },
+    "version": "1.0.1"
 }

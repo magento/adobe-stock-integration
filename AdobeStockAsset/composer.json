@@ -4,8 +4,8 @@
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
-        "magento/module-adobe-stock-asset-api": "*",
-        "magento/module-adobe-stock-client-api": "*",
+        "magento/module-adobe-stock-asset-api": "1.0.*",
+        "magento/module-adobe-stock-client-api": "1.0.*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery": "*",
         "magento/module-config": "*"
@@ -22,5 +22,6 @@
         "psr-4": {
             "Magento\\AdobeStockAsset\\": ""
         }
-    }
+    },
+    "version": "1.0.1"
 }

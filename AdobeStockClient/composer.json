@@ -4,8 +4,8 @@
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
-        "magento/module-adobe-ims-api": "*",
-        "magento/module-adobe-stock-client-api": "*",
+        "magento/module-adobe-ims-api": "1.0.*",
+        "magento/module-adobe-stock-client-api": "1.0.*",
         "astock/stock-api-libphp": "^1.1.3"
     },
     "type": "magento2-module",
@@ -20,5 +20,6 @@
         "psr-4": {
             "Magento\\AdobeStockClient\\": ""
         }
-    }
+    },
+    "version": "1.0.1"
 }

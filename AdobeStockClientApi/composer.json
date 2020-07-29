@@ -17,5 +17,6 @@
         "psr-4": {
             "Magento\\AdobeStockClientApi\\": ""
         }
-    }
+    },
+    "version": "1.0.1"
 }
