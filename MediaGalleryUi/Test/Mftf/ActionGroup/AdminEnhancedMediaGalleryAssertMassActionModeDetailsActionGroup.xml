@@ -17,7 +17,5 @@
         </arguments>
         <click selector="{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckbox(imageName)}}" stepKey="selectImageInGridToDelte"/>
         <see selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" userInput="(1 Selected)" stepKey="verifySelectedCount"/>
-        <click selector="{{AdminEnhancedMediaGalleryMassActionSection.cancelMassActionMode}}" stepKey="cancelMassAction"/>
-        <dontSeeElement selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" stepKey="verifyTeminateMAssAction"/>
     </actionGroup>
 </actionGroups>

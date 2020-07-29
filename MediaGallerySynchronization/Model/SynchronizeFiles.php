@@ -42,7 +42,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      * @var GetAssetsByPathsInterface
      */
     private $getAssetsByPaths;
-    
+
     /**
      * @var File
      */
@@ -146,7 +146,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         $paths = array_map(function ($filePath) {
             return $this->getRelativePath($filePath);
         }, $filesPaths);
-        
+
         $assets = $this->getAssetsByPaths->execute($paths);
 
         foreach ($assets as $asset) {
