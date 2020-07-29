@@ -85,30 +85,32 @@ class ReadIptc implements ReadMetadataInterface
         $binData = hex2bin($iptcData);
 
         $descriptionMarker = pack("C", 2) . 'x' . pack("C", 0);
-
-        if (strpos($binData, $descriptionMarker)) {
+        $descriptionStartPosition = strpos($binData, $descriptionMarker);
+        if ($descriptionStartPosition) {
             $description = substr(
                 $binData,
                 strpos($binData, $descriptionMarker) + 4,
-                ord(substr($binData, strpos($binData, $descriptionMarker) + 3, 1))
+                ord(substr($binData, $descriptionStartPosition + 3, 1))
             );
         }
 
         $titleMarker =  pack("C", 2) . 'i' . pack("C", 0);
-        if (strpos($binData, $titleMarker)) {
+        $titleStartPosition = strpos($binData, $titleMarker);
+        if ($titleStartPosition) {
             $title = substr(
                 $binData,
                 strpos($binData, $titleMarker) + 4,
-                ord(substr($binData, strpos($binData, $titleMarker) + 3, 1))
+                ord(substr($binData, $titleStartPosition + 3, 1))
             );
         }
 
         $keywordsMarker = pack("C", 2) . pack("C", 25) . pack("C", 0);
-        if (strpos($binData, $keywordsMarker)) {
+        $keywordsStartPosition = strpos($binData, $keywordsMarker);
+        if ($keywordsStartPosition) {
             $keywords = substr(
                 $binData,
                 strpos($binData, $keywordsMarker) + 4,
-                ord(substr($binData, strpos($binData, $keywordsMarker) + 3, 1))
+                ord(substr($binData, $keywordsStartPosition + 3, 1))
             );
         }
 
