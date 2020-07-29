@@ -13,7 +13,6 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * IPTC Reader to read IPTC data for png image
@@ -31,19 +30,11 @@ class ReadIptc implements ReadMetadataInterface
     private $metadataFactory;
 
     /**
-     * @var DriverInterface
-     */
-    private $driver;
-
-    /**
-     * @param DriverInterface $driver
      * @param MetadataInterfaceFactory $metadataFactory
      */
     public function __construct(
-        DriverInterface $driver,
         MetadataInterfaceFactory $metadataFactory
     ) {
-        $this->driver = $driver;
         $this->metadataFactory = $metadataFactory;
     }
 
