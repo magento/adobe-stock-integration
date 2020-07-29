@@ -34,7 +34,7 @@
             <filterSelect
                     name="block_id"
                     provider="${ $.parentName }"
-                    sortOrder="120"
+                    sortOrder="130"
                     component="Magento_Ui/js/form/element/ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
