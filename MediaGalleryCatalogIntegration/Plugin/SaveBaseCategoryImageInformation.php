@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryIntegration\Plugin;
+namespace Magento\MediaGalleryCatalogIntegration\Plugin;
 
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 
@@ -39,7 +39,7 @@ class SaveBaseCategoryImageInformation
      * @var Storage
      */
     private $storage;
-    
+
     /**
      * @var SynchronizeFilesInterface
      */
@@ -71,13 +71,15 @@ class SaveBaseCategoryImageInformation
      *
      * @param ImageUploader $subject
      * @param string $imagePath
+     * @return string
+     * @throws LocalizedException
      */
     public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
     {
         if (!$this->config->isEnabled()) {
             return $imagePath;
         }
-        
+
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
         $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, "/"), 1);
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
