@@ -19,12 +19,12 @@
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <createData entity="_defaultCmsPage" stepKey="page" />
+            <createData entity="customCmsPage2" stepKey="page" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteAsset"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteAsset"/>
             <deleteData createDataKey="page" stepKey="deletePage"/>
         </after>
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
