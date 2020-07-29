@@ -74,7 +74,7 @@
         <bookmark name="bookmarks"/>
         <filterSearch name="fulltext" />
         <filters name="listing_filters">
-            <filterInput name="path" provider="${ $.parentName }" sortOrder="100">
+            <filterInput name="path" provider="${ $.parentName }" sortOrder="2000">
                 <settings>
                     <visible>false</visible>
                     <dataScope>path</dataScope>
