@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Catalog\Model\ImageUploader;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 
 /**
  * Save base category image by SaveAssetsInterface.
@@ -21,14 +21,9 @@ use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 class SaveBaseCategoryImageInformation
 {
     /**
-     * @var SplFileInfoFactory
+     * @var ConfigInterface
      */
-    private $splFileInfoFactory;
-
-    /**
-     * @var SaveAssetsInterface
-     */
-    private $saveAsset;
+    private $config;
 
     /**
      * @var DeleteAssetsByPathsInterface
@@ -39,39 +34,36 @@ class SaveBaseCategoryImageInformation
      * @var GetAssetsByPathsInterface
      */
     private $getAssetsByPaths;
-    
-    /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
 
     /**
      * @var Storage
      */
     private $storage;
+    
+    /**
+     * @var SynchronizeFilesInterface
+     */
+    private $synchronizeFiles;
 
     /**
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPath
      * @param GetAssetsByPathsInterface $getAssetsByPaths
-     * @param SplFileInfoFactory $splFileInfoFactory
-     * @param CreateAssetFromFile $createAssetFromFile
-     * @param SaveAssetsInterface $saveAsset
      * @param Storage $storage
+     * @param SynchronizeFilesInterface $synchronizeFiles
+     * @param ConfigInterface $config
      */
     public function __construct(
         DeleteAssetsByPathsInterface $deleteAssetsByPath,
         GetAssetsByPathsInterface $getAssetsByPaths,
-        SplFileInfoFactory $splFileInfoFactory,
-        CreateAssetFromFile $createAssetFromFile,
-        SaveAssetsInterface $saveAsset,
-        Storage $storage
+        Storage $storage,
+        SynchronizeFilesInterface $synchronizeFiles,
+        ConfigInterface $config
     ) {
         $this->deleteAssetsByPaths = $deleteAssetsByPath;
         $this->getAssetsByPaths = $getAssetsByPaths;
-        $this->splFileInfoFactory = $splFileInfoFactory;
-        $this->createAssetFromFile = $createAssetFromFile;
-        $this->saveAsset = $saveAsset;
         $this->storage = $storage;
+        $this->synchronizeFiles = $synchronizeFiles;
+        $this->config = $config;
     }
 
     /**
@@ -82,17 +74,19 @@ class SaveBaseCategoryImageInformation
      */
     public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
     {
-        $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
-        $file = $this->splFileInfoFactory->create($absolutePath);
-        $tmpPath = $subject->getBaseTmpPath() . '/' . $file->getFileName();
-        $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
+        if (!$this->config->isEnabled()) {
+            return $imagePath;
+        }
         
+        $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
+        $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, "/"), 1);
+        $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
+
         if (!empty($tmpAssets)) {
             $this->deleteAssetsByPaths->execute([$tmpAssets[0]->getPath()]);
         }
-        
-        $this->saveAsset->execute([$this->createAssetFromFile->execute($file)]);
-        $this->storage->resizeFile($absolutePath);
+
+        $this->synchronizeFiles->execute([$absolutePath]);
 
         return $imagePath;
     }

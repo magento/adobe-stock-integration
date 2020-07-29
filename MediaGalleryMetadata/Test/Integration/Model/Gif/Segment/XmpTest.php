@@ -9,12 +9,12 @@ namespace Magento\MediaGalleryMetadata\Test\Integration\Model\Gif\Segment;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\Gif\FileReader;
+use Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpReader;
+use Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpWriter;
+use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpWriter;
-use Magento\MediaGalleryMetadata\Model\Gif\Segment\XmpReader;
-use Magento\MediaGalleryMetadata\Model\Gif\FileReader;
-use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 
 /**
  * Test for XMP reader and writer gif format

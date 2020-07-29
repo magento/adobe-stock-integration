@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaContentSynchronizationApi\Model;
 
 /**
- * Get Entites by provided configuration.
+ * Get entities for media content by provided configuration.
  */
 interface GetEntitiesInterface
 {

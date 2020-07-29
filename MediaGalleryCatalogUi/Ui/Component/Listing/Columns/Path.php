@@ -5,10 +5,10 @@
  */
 namespace Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Path column for Category grid

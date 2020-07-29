@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model\AssetDetailsProvider;
 
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryUi\Model\AssetDetailsProviderInterface;
 

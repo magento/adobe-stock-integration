@@ -91,7 +91,7 @@ define([
                         return;
                     } else if (!this.isFileNameLengthExceeded(data.files[0]).passed) {
                         this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
-                                                       '". Filename is too long, must be 90 chracters or less.');
+                                                       '". Filename is too long, must be 90 characters or less.');
 
                         return;
                     }
@@ -114,7 +114,7 @@ define([
                     var response = data.jqXHR.responseJSON;
 
                     if (!response.success) {
-                        this.showErrorMessage(data);
+                        this.showErrorMessage(data, response.message);
 
                         return;
                     }
@@ -180,12 +180,13 @@ define([
          * Show error meassages with file name.
          *
          * @param {Object} data
+         * @param {String} message
          */
-        showErrorMessage: function (data) {
+        showErrorMessage: function (data, message) {
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__('Cannot upload "' + file.name + '". This file format is not supported.')
+                    $.mage.__(file.name + ': ' + message)
                 );
             }.bind(this));
 

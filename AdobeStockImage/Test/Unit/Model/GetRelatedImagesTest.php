@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockImage\Model\SerializeImage;
 use Magento\AdobeStockImage\Model\GetRelatedImages;
+use Magento\AdobeStockImage\Model\SerializeImage;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Filter;

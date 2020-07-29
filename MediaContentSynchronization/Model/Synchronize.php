@@ -13,7 +13,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaContentSynchronizationApi\Model\SynchronizerPool;
 use Psr\Log\LoggerInterface;
-use Magento\MediaContentSynchronization\Model\RemoveObsoleteContentAsset;
 
 /**
  * Synchronize content with assets

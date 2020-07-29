@@ -14,7 +14,7 @@ namespace Magento\MediaGalleryUiApi\Api;
 interface ConfigInterface
 {
     /**
-     * Check if masonry grid UI is enabled for Magento media gallery
+     * Check if grid UI is enabled for Magento media gallery
      *
      * @return bool
      */

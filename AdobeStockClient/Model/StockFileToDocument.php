@@ -11,10 +11,10 @@ namespace Magento\AdobeStockClient\Model;
 use AdobeStock\Api\Models\StockFile;
 use Exception;
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\Search\DocumentFactory;
-use Magento\Framework\Api\Search\Document;
-use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\DocumentFactory;
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 

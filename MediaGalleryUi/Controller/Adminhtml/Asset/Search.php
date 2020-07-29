@@ -10,17 +10,17 @@ namespace Magento\MediaGalleryUi\Controller\Adminhtml\Asset;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Cms\Helper\Wysiwyg\Images;
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\SearchAssetsInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Cms\Helper\Wysiwyg\Images;
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
  * Controller getting the asset options for multiselect filter
@@ -30,7 +30,7 @@ class Search extends Action implements HttpGetActionInterface
     private const HTTP_OK = 200;
     private const HTTP_INTERNAL_ERROR = 500;
     private const HTTP_BAD_REQUEST = 400;
-    
+
     /**
      * @see _isAllowed()
      */

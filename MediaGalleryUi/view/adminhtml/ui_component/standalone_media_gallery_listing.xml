@@ -74,7 +74,7 @@
         <bookmark name="bookmarks"/>
         <filterSearch name="fulltext" />
         <filters name="listing_filters">
-            <filterInput name="path" provider="${ $.parentName }" sortOrder="100">
+            <filterInput name="path" provider="${ $.parentName }" sortOrder="2000">
                 <settings>
                     <visible>false</visible>
                     <dataScope>path</dataScope>
@@ -84,7 +84,7 @@
             <filterRange name="created_at"
                          class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
-                         template="ui/grid/filters/elements/group" sortOrder="30">
+                         template="ui/grid/filters/elements/group" sortOrder="10">
                 <settings>
                     <rangeType>date</rangeType>
                     <label translate="true">Uploaded Date</label>
@@ -94,14 +94,14 @@
             <filterRange name="updated_at"
                          class="Magento\Ui\Component\Filters\Type\Date"
                          provider="${ $.parentName }"
-                         template="ui/grid/filters/elements/group" sortOrder="40">
+                         template="ui/grid/filters/elements/group" sortOrder="20">
                 <settings>
                     <rangeType>date</rangeType>
                     <label translate="true">Modification Date</label>
                     <dataScope>updated_at</dataScope>
                 </settings>
             </filterRange>
-            <filterSelect name="entity_type" provider="${ $.parentName }" sortOrder="70"  component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
+            <filterSelect name="entity_type" provider="${ $.parentName }" sortOrder="210"  component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
                 <settings>
                     <caption translate="true">All</caption>
                     <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\UsedIn"/>
@@ -109,7 +109,7 @@
                     <dataScope>entity_type</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="content_status" provider="${ $.parentName }" sortOrder="10">
+            <filterSelect name="content_status" provider="${ $.parentName }" sortOrder="220">
                 <settings>
                     <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\Status"/>
                     <label translate="true">Content Status</label>
@@ -117,7 +117,7 @@
                     <dataScope>content_status</dataScope>
                 </settings>
             </filterSelect>
-            <filterSelect name="store_id" provider="${ $.parentName }">
+            <filterSelect name="store_id" provider="${ $.parentName }" sortOrder="200">
                 <settings>
                     <captionValue>0</captionValue>
                     <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\Store"/>
@@ -131,7 +131,7 @@
             <filterInput
 		    name="duplicated"
 		    provider="${ $.parentName }"
-		    sortOrder="90"
+		    sortOrder="300"
                     template="Magento_MediaGalleryUi/grid/filter/checkbox"
                     component="Magento_Ui/js/form/element/single-checkbox">
                 <argument name="data" xsi:type="array">
