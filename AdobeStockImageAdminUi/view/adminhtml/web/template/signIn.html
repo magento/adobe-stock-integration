@@ -8,7 +8,8 @@
     class="adobe-sign-in-button"
     id="adobeImsSignIn"
     data-role="signInBtn"
-    data-bind="click: loginClick, visible: !user().isAuthorized"
+    click="loginClick"
+    visible="!user().isAuthorized"
     type="button">
     <span>Sign In</span>
 </button>
@@ -16,15 +17,16 @@
     <div class="admin__action-dropdown-wrap" data-bind="collapsible">
         <img class="adobe-profile-image-small"
              attr="src: user().image"
-             data-bind="visible: user().isAuthorized"/>
+             visible="user().isAuthorized"/>
         <button
             type="button"
             data-toggle="dropdown"
             class="adobe-user-name admin__action-dropdown"
-            data-bind="visible: user().isAuthorized, toggleCollapsible">
-            <span><!--ko text: user().name--><!--/ko--></span>
+            visible="user().isAuthorized"
+            data-bind="toggleCollapsible">
+            <span text="user().name"></span>
         </button>
-        <ul class="admin__action-dropdown-menu adobe-user-popup" data-bind="visible: user().isAuthorized">
+        <ul class="admin__action-dropdown-menu adobe-user-popup" visible="user().isAuthorized">
             <li>
                 <img class="adobe-profile-image-large" attr="src: user().image">
             </li>
@@ -44,7 +46,7 @@
                 <button
                         class="adobe-sign-out-button"
                         id="adobeImsSignOut"
-                        data-bind="click: logout"
+                        click="logout"
                         data-role="signOutBtn"
                         type="button">
                     <span>Sign Out</span>

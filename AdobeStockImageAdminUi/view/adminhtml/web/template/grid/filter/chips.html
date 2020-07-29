@@ -13,7 +13,7 @@
             <each args="elems">
                 <li outereach="previews">
                     <span text="label + '\\:'"/>
-                    <span if="typeof preview ==='string' && label === 'Color'" class="color-rectangle" data-bind="style:{ 'background-color' :  preview }"/>
+                    <span if="typeof preview ==='string' && label === 'Color'" class="color-rectangle" ko-style="{ 'background-color' :  preview }" />
                     <span if="typeof preview === 'string'" text="preview"/>
                     <span if="typeof preview === 'object'">
                         <text args="preview[0] || '...'"/> - <text args="preview[1] || '...'"/>

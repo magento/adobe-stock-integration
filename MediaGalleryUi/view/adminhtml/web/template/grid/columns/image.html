@@ -6,7 +6,7 @@
 -->
 <div class="media-gallery-wrap" collapsible>
   <div class="mediagallery-massaction-checkbox" if="isMassActionMode()">
-    <input type="checkbox" data-bind="attr: { 'data-ui-id': $row().title }, visible: isMassActionMode(), checked: isSelected($row()), click: function () { return select($row()); }" />
+      <input type="checkbox" attr="{ 'data-ui-id': $row().title }" visible="isMassActionMode()" ko-checked="isSelected($row())" click="function () { return select($row()); }"/>
   </div>
     <div class="media-gallery-image">
         <div data-row="file"
@@ -27,12 +27,12 @@
     </div>
     <div class="masonry-image-description">
         <ul class="media-gallery-image-details">
-            <li class="name" data-ui-id="title" data-bind="text: $row().title"></li>
+            <li class="name" data-ui-id="title" text="$row().title"></li>
             <li class="source">
-                <img if="$row().source" class="adobe-stock-icon" data-bind="attr: { src: $row().source }" />
+                <img if="$row().source" class="adobe-stock-icon" attr="{ src: $row().source }"/>
             </li>
-            <li class="type" data-ui-id="content-type" data-bind="text: $row().content_type"></li> &#8226;
-            <li class="dimensions" data-ui-id="dimensions" data-bind="text: $row().width + 'x' + $row().height"></li>
+            <li class="type" data-ui-id="content-type" text="$row().content_type"></li> &#8226;
+            <li class="dimensions" data-ui-id="dimensions" text="text: $row().width + 'x' + $row().height"></li>
         </ul>
         <div class="media-gallery-image-actions">
             <div class="action-select-wrap">
