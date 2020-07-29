@@ -23,7 +23,8 @@ class ReadIptc implements ReadMetadataInterface
     private const IPTC_SEGMENT_NAME = 'zTXt';
     private const IPTC_SEGMENT_START = 'iptc';
     private const IPTC_DATA_START_POSITION = 17;
-
+    private const IPTC_CHUNK_MARKER_LENGTH = 4;
+    
     /**
      * @var MetadataInterfaceFactory
      */
@@ -89,7 +90,7 @@ class ReadIptc implements ReadMetadataInterface
         if ($descriptionStartPosition) {
             $description = substr(
                 $binData,
-                strpos($binData, $descriptionMarker) + 4,
+                $descriptionStartPosition + self::IPTC_CHUNK_MARKER_LENGTH,
                 ord(substr($binData, $descriptionStartPosition + 3, 1))
             );
         }
@@ -99,7 +100,7 @@ class ReadIptc implements ReadMetadataInterface
         if ($titleStartPosition) {
             $title = substr(
                 $binData,
-                strpos($binData, $titleMarker) + 4,
+                $titleStartPosition + self::IPTC_CHUNK_MARKER_LENGTH,
                 ord(substr($binData, $titleStartPosition + 3, 1))
             );
         }
@@ -109,7 +110,7 @@ class ReadIptc implements ReadMetadataInterface
         if ($keywordsStartPosition) {
             $keywords = substr(
                 $binData,
-                strpos($binData, $keywordsMarker) + 4,
+                $keywordsStartPosition + self::IPTC_CHUNK_MARKER_LENGTH,
                 ord(substr($binData, $keywordsStartPosition + 3, 1))
             );
         }
