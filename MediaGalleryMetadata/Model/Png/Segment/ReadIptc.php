@@ -67,59 +67,56 @@ class ReadIptc implements ReadMetadataInterface
     /**
      * Read iptc data from zTXt segment
      *
-     * @param FileInterface $file
+     * @param SegmentInterface $segment
      */
     private function getIptcData(SegmentInterface $segment): MetadataInterface
     {
-        $data = trim(preg_replace('/\s+/', '', substr(gzinflate(substr($segment->getData(), 25)), 5)));
-        $binData = hex2bin($data);
+        $description = null;
+        $title = null;
+        $keywords = null;
+        
+        $iptSegmentStartPosition = strpos($segment->getData(), pack("C", 0) . pack("C", 0) . 'x');
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $uncompressedData = gzuncompress(substr($segment->getData(), $iptSegmentStartPosition + 2));
+        
+        $data = explode(PHP_EOL, trim($uncompressedData));
+        //remove header and size from hex string
+        $iptcData = implode(array_slice($data, 2));
+        $binData = hex2bin($iptcData);
 
         $descriptionMarker = pack("C", 2) . 'x' . pack("C", 0);
-        $description = substr(
-            $binData,
-            strpos($binData, $descriptionMarker) + 4,
-            ord(substr($binData, strpos($binData, $descriptionMarker) + 3, 1))
-        );
+
+        if (strpos($binData, $descriptionMarker)) {
+            $description = substr(
+                $binData,
+                strpos($binData, $descriptionMarker) + 4,
+                ord(substr($binData, strpos($binData, $descriptionMarker) + 3, 1))
+            );
+        }
 
         $titleMarker =  pack("C", 2) . 'i' . pack("C", 0);
-        $title = substr(
-            $binData,
-            strpos($binData, $titleMarker) + 4,
-            ord(substr($binData, strpos($binData, $titleMarker) + 3, 1))
-        );
+        if (strpos($binData, $titleMarker)) {
+            $title = substr(
+                $binData,
+                strpos($binData, $titleMarker) + 4,
+                ord(substr($binData, strpos($binData, $titleMarker) + 3, 1))
+            );
+        }
 
         $keywordsMarker = pack("C", 2) . pack("C", 25) . pack("C", 0);
-        $keywords = substr(
-            $binData,
-            strpos($binData, $keywordsMarker) + 4,
-            ord(substr($binData, strpos($binData, $keywordsMarker) + 3, 1))
-        );
-
+        if (strpos($binData, $keywordsMarker)) {
+            $keywords = substr(
+                $binData,
+                strpos($binData, $keywordsMarker) + 4,
+                ord(substr($binData, strpos($binData, $keywordsMarker) + 3, 1))
+            );
+        }
 
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
             'keywords' => explode(',', $keywords)
         ]);
-    }
-
-    /**
-     * Read wrapper
-     *
-     * @param resource $resource
-     * @param int $length
-     * @return string
-     * @throws FileSystemException
-     */
-    private function read($resource, int $length): string
-    {
-        $data = '';
-
-        while (!$this->driver->endOfFile($resource) && strlen($data) < $length) {
-            $data .= $this->driver->fileRead($resource, $length - strlen($data));
-        }
-
-        return $data;
     }
 
     /**

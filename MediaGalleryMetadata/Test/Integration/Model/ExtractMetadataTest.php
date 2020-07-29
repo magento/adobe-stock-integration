@@ -101,7 +101,7 @@ class ExtractMetadataTest extends TestCase
             [
                 'iptc_only.png',
                 'Title of the magento image',
-                'sdsd',
+                'PNG format is awesome',
                 [
                     'png',
                     'awesome'
