@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockClient\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\AdobeStockClient\Model\ConnectionFactory;
 use AdobeStock\Api\Client\AdobeStock;
+use Magento\AdobeStockClient\Model\ConnectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for search  parameters provider.

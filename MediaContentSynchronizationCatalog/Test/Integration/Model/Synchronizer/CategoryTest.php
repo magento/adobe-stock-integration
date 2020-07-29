@@ -8,10 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCatalog\Test\Integration\Model\Synchronizer;
 
-use Magento\Cms\Api\BlockRepositoryInterface;
-use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;

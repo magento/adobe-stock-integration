@@ -13,11 +13,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\Component\Filters\Type\AbstractFilter;
+use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Ui\Component\Form\Element\ColorPicker;
 use Magento\Ui\Component\Form\Element\Input as ElementInput;
-use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
-use Magento\Ui\Component\Filters\Type\Input;
 
 /**
  * Color grid filter

@@ -63,6 +63,7 @@ class Upload extends Action implements HttpPostActionInterface
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $targetFolder = $this->getRequest()->getParam('target_folder');
+        $type = $this->getRequest()->getParam('type');
 
         if (!$targetFolder) {
             $responseContent = [
@@ -76,7 +77,7 @@ class Upload extends Action implements HttpPostActionInterface
         }
 
         try {
-            $this->uploadImage->execute($targetFolder);
+            $this->uploadImage->execute($targetFolder, $type);
 
             $responseCode = self::HTTP_OK;
             $responseContent = [

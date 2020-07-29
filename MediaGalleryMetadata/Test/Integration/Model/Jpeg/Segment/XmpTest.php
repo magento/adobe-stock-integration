@@ -9,12 +9,12 @@ namespace Magento\MediaGalleryMetadata\Test\Integration\Model\Jpeg\Segment;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpWriter;
+use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpWriter;
-use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\XmpReader;
-use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
-use Magento\MediaGalleryMetadata\Model\MetadataFactory;
 
 /**
  * Test for XMP reader and writer
