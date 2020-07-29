@@ -9,7 +9,8 @@ define([
     'uiComponent',
     'uiLayout',
     'Magento_Ui/js/lib/key-codes',
-    'Magento_MediaGalleryUi/js/action/getDetails'
+    'Magento_MediaGalleryUi/js/action/getDetails',
+    'mage/validation'
 ], function ($, _, Component, layout, keyCodes, getDetails) {
     'use strict';
 
@@ -24,6 +25,7 @@ define([
             keywordOptions: [],
             selectedKeywords: [],
             newKeyword: '',
+            newKeywordSelector: '#keyword',
             modules: {
                 mediaGridMessages: '${ $.mediaGridMessages }',
                 keywordsSelect: '${ $.name }_keywords'
@@ -58,7 +60,13 @@ define([
          */
         addKeyword: function() {
             var options = this.keywordOptions(),
-                selected = this.selectedKeywords();
+                selected = this.selectedKeywords(),
+                newKeywordField = $(this.newKeywordSelector)
+
+            newKeywordField.validation();
+            if (!newKeywordField.validation('isValid') || this.newKeyword() === '') {
+                return;
+            }
 
             options.push(this.getOptionForKeyword(this.newKeyword()));
             selected.push(this.newKeyword());

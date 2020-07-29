@@ -48,12 +48,21 @@ use Magento\Backend\Block\Template;
                         "imageEditDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageEditDetailsUrl')); ?>",
                         "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
                         "modalSelector": ".media-gallery-edit-image-details-modal",
-                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
+                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages",
+                        "viewConfig": [
+                            {
+                                "component": "Magento_Ui/js/form/element/ui-select",
+                                "name": "${ $.name }_keywords",
+                                "template": "ui/grid/filters/elements/ui-select",
+                                "disableLabel": true
+                            }
+                        ]
                     }
                 }
             },
             "Magento_MediaGalleryUi/js/validation/validate-image-title": {},
-            "Magento_MediaGalleryUi/js/validation/validate-image-description": {}
+            "Magento_MediaGalleryUi/js/validation/validate-image-description": {},
+            "Magento_MediaGalleryUi/js/validation/validate-image-keyword": {}
         },
         "#media-gallery-image-edit-details-messages": {
             "Magento_Ui/js/core/app": {
