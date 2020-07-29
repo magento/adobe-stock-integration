@@ -115,7 +115,7 @@ define([
                     var response = data.jqXHR.responseJSON;
 
                     if (!response.success) {
-                        this.showErrorMessage(data);
+                        this.showErrorMessage(data, response.message);
 
                         return;
                     }
@@ -181,12 +181,13 @@ define([
          * Show error meassages with file name.
          *
          * @param {Object} data
+         * @param {String} message
          */
-        showErrorMessage: function (data) {
+        showErrorMessage: function (data, message) {
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $t('Cannot upload "' + file.name + '". This file format is not supported.')
+                    file.name + ': ' + $t(message)
                 );
             }.bind(this));
 

@@ -14,9 +14,9 @@ define([
 
     return function (ids, deleteUrl, confirmationContent) {
         var deferred = $.Deferred(),
-               title = $t('Delete image'),
+               title = $t('Delete assets'),
                cancelText = $t('Cancel'),
-               deleteImageText = $t('Delete Image');
+               deleteImageText = $t('Delete');
 
         /**
          * Send deletion request with redords ids

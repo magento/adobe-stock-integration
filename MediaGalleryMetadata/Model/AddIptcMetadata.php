@@ -112,7 +112,11 @@ class AddIptcMetadata
 
         foreach ($segments as $key => $segment) {
             if ($segment->getName() === 'APP13') {
-                $originFileSegments[$key] = $segments[$key];
+                foreach ($originFileSegments as $originKey => $segment) {
+                    if ($segment->getName() === 'APP13') {
+                        $originFileSegments[$originKey] = $segments[$key];
+                    }
+                }
                 return $originFileSegments;
             }
         }
