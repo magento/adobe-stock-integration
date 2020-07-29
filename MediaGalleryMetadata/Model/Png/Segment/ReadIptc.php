@@ -109,7 +109,7 @@ class ReadIptc implements ReadMetadataInterface
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => explode(',', $keywords)
+            'keywords' => !empty($keywords) ? explode(',', $keywords) : null
         ]);
     }
 
