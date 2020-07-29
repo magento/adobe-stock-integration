@@ -19,7 +19,7 @@
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <createData entity="customCmsPage2" stepKey="page" />
+            <createData entity="_duplicatedCMSPage" stepKey="page" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
