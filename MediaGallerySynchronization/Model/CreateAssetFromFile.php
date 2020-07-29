@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
@@ -15,9 +17,9 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Create media asset object based on the file information
@@ -56,24 +58,32 @@ class CreateAssetFromFile
     private $getContentHash;
 
     /**
+     * @var ExtractMetadataInterface
+     */
+    private $extractMetadata;
+
+    /**
      * @param Filesystem $filesystem
      * @param AssetInterfaceFactory $assetFactory
      * @param File $driver
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      * @param GetContentHashInterface $getContentHash
+     * @param ExtractMetadataInterface $extractMetadata
      */
     public function __construct(
         Filesystem $filesystem,
         AssetInterfaceFactory $assetFactory,
         File $driver,
         GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
-        GetContentHashInterface $getContentHash
+        GetContentHashInterface $getContentHash,
+        ExtractMetadataInterface $extractMetadata
     ) {
         $this->filesystem = $filesystem;
         $this->assetFactory = $assetFactory;
         $this->driver = $driver;
         $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
         $this->getContentHash = $getContentHash;
+        $this->extractMetadata = $extractMetadata;
     }
 
     /**
@@ -84,18 +94,21 @@ class CreateAssetFromFile
      * @throws LocalizedException
      * @throws ValidatorException
      */
-    public function execute(\SplFileInfo $file)
+    public function execute(\SplFileInfo $file): AssetInterface
     {
         $path = $file->getPath() . '/' . $file->getFileName();
 
         [$width, $height] = getimagesize($path);
-
         $asset = $this->getAsset($path);
+
+        $metadata = $this->extractMetadata->execute($path);
+        
         return $this->assetFactory->create(
             [
                 'id' => $asset ? $asset->getId() : null,
                 'path' => $this->getRelativePath($path),
-                'title' => $asset ? $asset->getTitle() : $file->getBasename('.' . $file->getExtension()),
+                'title' => $this->getAssetTitle($file, $asset, $metadata),
+                'description' => $metadata->getDescription(),
                 'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
                 'width' => $width,
@@ -106,6 +119,24 @@ class CreateAssetFromFile
                 'source' => $asset ? $asset->getSource() : 'Local'
             ]
         );
+    }
+
+    /**
+     * Returns asset title from metadata if available
+     *
+     * @param \SplFileInfo $file
+     * @param null|AssetInterface $asset
+     * @param MetadataInterface $metadata
+     */
+    private function getAssetTitle(\SplFileInfo $file, ?AssetInterface $asset, MetadataInterface $metadata): string
+    {
+        $title = $file->getBasename('.' . $file->getExtension());
+        if ($asset) {
+            $title = $asset->getTitle();
+        } elseif ($metadata->getTitle() !== "") {
+            $title = $metadata->getTitle();
+        }
+        return $title;
     }
 
     /**

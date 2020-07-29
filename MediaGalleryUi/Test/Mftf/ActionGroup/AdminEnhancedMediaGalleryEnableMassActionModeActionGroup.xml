@@ -13,6 +13,7 @@
             <description>Activate massaction mode by click on Delete Selected..</description>
         </annotations>
 
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryMassActionSection.deleteSelected}}" stepKey="waitForMassActionButton"/>
         <click selector="{{AdminEnhancedMediaGalleryMassActionSection.deleteSelected}}" stepKey="clickOnMassActionButton"/>
     </actionGroup>
 </actionGroups>

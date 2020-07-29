@@ -87,7 +87,7 @@ class FetchMediaStorageFileBatches
                 continue;
             }
 
-            $batch[] = $file;
+            $batch[] = $file->getPath() . '/' . $file->getFileName();
             if (++$i == $this->batchSize) {
                 yield $batch;
                 $i = 0;

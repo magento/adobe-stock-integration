@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\MediaContentSynchronization\Plugin;
 
 use Magento\MediaContentSynchronization\Model\Publish;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGallerySynchronization\Model\Consume;
 
 /**

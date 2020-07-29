@@ -15,7 +15,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryUi\Model\DeleteImage;
 use Psr\Log\LoggerInterface;
@@ -102,17 +101,14 @@ class Delete extends Action implements HttpPostActionInterface
             $assets = $this->getAssetsByIds->execute($imageIds);
             $this->deleteImage->execute($assets);
             $responseCode = self::HTTP_OK;
-            $message = count($imageIds) > 1 ?
-                     'assets have been' :
-                     ' asset "' . current($assets)->getTitle() . '" has been';
+            if (count($imageIds) === 1) {
+                $message = sprintf('The asset "%s" has been successfully deleted', current($assets)->getTitle());
+            } else {
+                $message = 'Assets have been successfully deleted';
+            }
             $responseContent = [
                 'success' => true,
-                'message' => __(
-                    'The %message successfully deleted',
-                    [
-                        'message' => $message
-                    ]
-                ),
+                'message' => __($message),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;

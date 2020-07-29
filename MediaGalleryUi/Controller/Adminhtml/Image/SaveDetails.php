@@ -14,11 +14,13 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
+use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
+use Magento\MediaGalleryUi\Model\UpdateAsset;
 use Psr\Log\LoggerInterface;
 
 class SaveDetails extends Action implements HttpPostActionInterface
@@ -33,29 +35,14 @@ class SaveDetails extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var SaveAssetsInterface
+     * @var UpdateAsset
      */
-    private $saveAssets;
+    private $updateAsset;
 
     /**
-     * @var SaveAssetsKeywordsInterface
+     * @var MetadataInterfaceFactory
      */
-    private $saveAssetKeywords;
-
-    /**
-     * @var AssetKeywordsInterfaceFactory
-     */
-    private $assetKeywordsFactory;
-
-    /**
-     * @var AssetInterfaceFactory
-     */
-    private $assetFactory;
-
-    /**
-     * @var GetAssetsByIdsInterface
-     */
-    private $getAssetsByIds;
+    private $metadataFactory;
 
     /**
      * @var LoggerInterface
@@ -63,32 +50,21 @@ class SaveDetails extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
-     * SaveDetails constructor.
-     *
      * @param Context $context
-     * @param SaveAssetsInterface $saveAssets
-     * @param SaveAssetsKeywordsInterface $saveAssetKeywords
-     * @param AssetInterfaceFactory $assetFactory
-     * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
-     * @param GetAssetsByIdsInterface $getAssetsByIds
+     * @param MetadataInterfaceFactory $metadataFactory
+     * @param UpdateAsset $updateAsset
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        SaveAssetsInterface $saveAssets,
-        SaveAssetsKeywordsInterface $saveAssetKeywords,
-        AssetInterfaceFactory $assetFactory,
-        AssetKeywordsInterfaceFactory $assetKeywordsFactory,
-        GetAssetsByIdsInterface $getAssetsByIds,
+        MetadataInterfaceFactory $metadataFactory,
+        UpdateAsset $updateAsset,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->saveAssets = $saveAssets;
-        $this->saveAssetKeywords = $saveAssetKeywords;
-        $this->assetFactory = $assetFactory;
-        $this->assetKeywordsFactory = $assetKeywordsFactory;
-        $this->getAssetsByIds = $getAssetsByIds;
+        $this->metadataFactory = $metadataFactory;
+        $this->updateAsset = $updateAsset;
         $this->logger = $logger;
     }
 
@@ -99,12 +75,12 @@ class SaveDetails extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $imageId = (int) $this->getRequest()->getParam('id');
+        $assetId = (int) $this->getRequest()->getParam('id');
         $title = $this->getRequest()->getParam('title');
         $description = $this->getRequest()->getParam('description');
-        $imageKeywords = (array) $this->getRequest()->getParam('keywords');
+        $keywords = (array) $this->getRequest()->getParam('keywords');
 
-        if ($imageId === 0) {
+        if ($assetId === 0) {
             $responseContent = [
                 'success' => false,
                 'message' => __('Image ID is required.'),
@@ -116,31 +92,14 @@ class SaveDetails extends Action implements HttpPostActionInterface
         }
 
         try {
-            $asset = current($this->getAssetsByIds->execute([$imageId]));
-            $updatedAsset = $this->assetFactory->create(
-                [
-                    'path' => $asset->getPath(),
-                    'contentType' => $asset->getContentType(),
-                    'width' => $asset->getWidth(),
-                    'height' => $asset->getHeight(),
-                    'size' => $asset->getSize(),
-                    'id' => $asset->getId(),
+            $this->updateAsset->execute(
+                $assetId,
+                $this->metadataFactory->create([
                     'title' => $title,
                     'description' => $description,
-                    'source' => $asset->getSource(),
-                    'hash' => $asset->getHash(),
-                    'created_at' => $asset->getCreatedAt(),
-                    'updated_at' => $asset->getUpdatedAt()
-                ]
+                    'keywords' => $keywords
+                ])
             );
-            $this->saveAssets->execute([$updatedAsset]);
-
-            $assetKeywords = $this->assetKeywordsFactory->create([
-                'assetId' => $imageId,
-                'keywords' => $imageKeywords
-            ]);
-            $this->saveAssetKeywords->execute([$assetKeywords]);
-
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,

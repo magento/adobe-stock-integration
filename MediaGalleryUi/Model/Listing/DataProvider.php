@@ -15,7 +15,6 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
-use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\MediaGalleryUi\Ui\Component\Listing\Provider;
 
 /**

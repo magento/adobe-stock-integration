@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAssetApi\Api;
 
-use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Service for getting asset list filtered by search criteria

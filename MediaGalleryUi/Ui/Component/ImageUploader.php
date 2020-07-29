@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Ui\Component;
 
+use Magento\Framework\File\Size;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Container;
-use Magento\Framework\File\Size;
 
 /**
  * Image Uploader component
@@ -29,7 +29,7 @@ class ImageUploader extends Container
      * @var Size
      */
     private $size;
-    
+
     /**
      * @param Size $size
      * @param ContextInterface $context
