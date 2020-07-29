@@ -30,7 +30,7 @@ define([
             },
             viewConfig: [
                 {
-                    component: "Magento_Ui/js/form/element/ui-select",
+                    component: 'Magento_Ui/js/form/element/ui-select',
                     name: '${ $.name }_keywords'
                 }
             ],

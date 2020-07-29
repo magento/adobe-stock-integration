@@ -91,7 +91,9 @@ define([
             if (form.validation('isValid')) {
                 saveDetails(
                     saveDetailsUrl,
-                    [form.serialize(), $.param({'keywords': keywords})].join('&')
+                    [form.serialize(), $.param({
+                        'keywords': keywords
+                    })].join('&')
                 ).then(function () {
                     this.closeModal();
                     this.imageModel().reloadGrid();
