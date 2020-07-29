@@ -53,6 +53,12 @@ class ExtractMetadataComposite implements ExtractMetadataInterface
         $keywords = [];
 
         foreach ($this->extractors as $extractor) {
+            if (!$extractor instanceof ExtractMetadataInterface) {
+                throw new \InvalidArgumentException(
+                    __(get_class($extractor) . ' must implement '. ExtractMetadataInterface::class)
+                );
+            }
+
             $data = $extractor->execute($path);
             $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
             $description = !empty($data->getDescription()) ? $data->getDescription() : $description;

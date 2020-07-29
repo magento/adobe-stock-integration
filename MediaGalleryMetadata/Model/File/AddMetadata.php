@@ -15,11 +15,12 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 
 /**
  * Add metadata to the asset by path. Should be used as a virtual type with a file type specific configuration
  */
-class AddMetadata
+class AddMetadata implements AddMetadataInterface
 {
     /**
      * @var array
