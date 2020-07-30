@@ -17,12 +17,13 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 /**
  * IPTC Writer to write IPTC data for png image
  */
-class WriteIPtc implements WriteMetadataInterface
+class WriteIptc implements WriteMetadataInterface
 {
     private const IPTC_SEGMENT_NAME = 'zTXt';
     private const IPTC_SEGMENT_START = 'iptc';
     private const IPTC_DATA_START_POSITION = 17;
-
+    private const IPTC_SEGMENT_START_STRING = 'Raw profile type iptc';
+    
     /**
      * @var SegmentInterfaceFactory
      */
@@ -62,10 +63,18 @@ class WriteIPtc implements WriteMetadataInterface
             }
         }
 
+        if (!is_callable('gzcompress') && !is_callable('gzuncompress')) {
+            throw new LocalizedException(
+                __('zlib::gzcompress() && zlib::gzuncompress() must be enabled in php configuration')
+            );
+        }
+      
         if (empty($pngIptcSegments)) {
+            $segments[] =  $this->createPngIptcSegment($metadata);
+
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $segments[] =  $this->createPngIptcSegment($metadata)
+                'segments' => $segments
             ]);
         }
 
@@ -79,6 +88,50 @@ class WriteIPtc implements WriteMetadataInterface
         ]);
     }
 
+    /**
+     * Create new  zTXt segment with metadata
+     *
+     * @param MetadataInterface $metadata
+     */
+    private function createPngIptcSegment(MetadataInterface $metadata): SegmentInterface
+    {
+        $start = '8BIM'. str_repeat(pack('C', 4), 2) . str_repeat(pack("C", 0), 5) . 'c' . pack('C', 28) . pack('C', 1);
+        $compression = 'Z' . pack('C', 0) . pack('C', 3) . pack('C', 27) . '%G' . pack('C', 28) . pack('C', 1);
+        $end = str_repeat(pack('C', 0), 2) . pack('C', 2) . pack('C', 0) . pack('C', 4) . pack('C', 28);
+        $binData = $start . $compression . $end;
+
+        $description = $metadata->getDescription();
+        if ($description !== null) {
+            $descriptionMarker = pack("C", 2) . 'x' . pack("C", 0);
+            $binData .= $descriptionMarker . pack('C', strlen($description)) . $description . pack('C', 28);
+        }
+
+        $title = $metadata->getTitle();
+        if ($title !== null) {
+            $titleMarker =  pack("C", 2) . 'i' . pack("C", 0);
+            $binData .= $titleMarker . pack('C', strlen($title)) . $title . pack('C', 28);
+        }
+
+        $keywords = $metadata->getKeywords();
+        if ($keywords !== null) {
+            $keywordsMarker = pack("C", 2) . pack("C", 25) . pack("C", 0);
+            $keywords = implode(',', $keywords);
+            $binData .= $keywordsMarker . pack('C', strlen($keywords)) . $keywords . pack('C', 28);
+        }
+     
+     
+        
+        $binData .= pack('C', 0);
+        $hexString = bin2hex($binData);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $compressedIptcData = gzcompress(PHP_EOL . 'iptc' . PHP_EOL . strlen($binData) . PHP_EOL . $hexString);
+        
+        return $this->segmentFactory->create([
+            'name' => self::IPTC_SEGMENT_NAME,
+            'data' => self::IPTC_SEGMENT_START_STRING . str_repeat(pack('C', 0), 2) . $compressedIptcData
+        ]);
+    }
+    
     /**
      * Update iptc data to zTXt segment
      *
