@@ -83,21 +83,21 @@ define([
          * @param {Number} imageId
          */
         getImageRecord: function (imageId) {
-            getDetails(this.imageDetailsUrl, [imageId]).then(function (response) {
-                var id = response.imageDetails[imageId]['adobe_stock'][0].value;
+            getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
+                var id = imageDetails[imageId]['adobe_stock'][0].value;
 
                 this.image().actions().licenseProcess(
                     id,
-                    response.imageDetails[imageId].title,
-                    response.imageDetails[imageId].path,
-                    response.imageDetails[imageId]['content_type'],
+                    imageDetails[imageId].title,
+                    imageDetails[imageId].path,
+                    imageDetails[imageId]['content_type'],
                     true
                 ).then(function () {
                     this.image().actions().login().getUserQuota();
                     this.imageModel().reloadGrid();
                     this.imageModel().addMessage('success', $.mage.__('The image has been licensed.'));
-                }.bind(this)).fail(function (jqXHR) {
-                    this.imageModel().addMessage('error', JSON.parse(jqXHR.responseText).message);
+                }.bind(this)).fail(function (error) {
+                    this.imageModel().addMessage('error', error);
                 }.bind(this));
             }.bind(this)).fail(function (message) {
                 this.imageModel().addMessage('error', message);

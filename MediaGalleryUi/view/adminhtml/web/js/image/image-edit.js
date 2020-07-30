@@ -50,8 +50,8 @@ define([
                     this.images[imageId] = response.imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openEditImageDetailsModal();
-                }.bind(this)).fail(function (jqXHR) {
-                    this.addMediaGridMessage('error', JSON.parse(jqXHR.responseText).message);
+                }.bind(this)).fail(function (error) {
+                    this.addMediaGridMessage('error', error);
                 }.bind(this));
 
                 return;

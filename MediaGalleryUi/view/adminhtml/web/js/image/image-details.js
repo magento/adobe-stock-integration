@@ -48,12 +48,12 @@ define([
          */
         showImageDetailsById: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
-                getDetails(this.imageDetailsUrl, [imageId]).then(function (response) {
-                    this.images[imageId] = response.imageDetails[imageId];
+                getDetails(this.imageDetailsUrl, [imageId]).then(function (imageDetails) {
+                    this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
-                }.bind(this)).fail(function (jqXHR) {
-                    this.addMediaGridMessage('error', JSON.parse(jqXHR.responseText).message);
+                }.bind(this)).fail(function (error) {
+                    this.addMediaGridMessage('error', error);
                 }.bind(this));
 
                 return;
@@ -136,7 +136,7 @@ define([
 
             if (_.isObject(value)) {
                 $.each(value, function (entityName, count) {
-                    usedIn += entityName +  '(' + count + ') </br>';
+                    usedIn += entityName +  '(' + count + ')  </br>';
                 });
 
                 return usedIn;

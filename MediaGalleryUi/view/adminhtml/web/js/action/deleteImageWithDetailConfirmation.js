@@ -27,18 +27,18 @@ define([
                 deferred = $.Deferred();
 
             getDetails(imageDetailsUrl, recordsIds)
-                .then(function (response) {
+                .then(function (imageDetails) {
                         confirmationContent = confirmationContent.replace(
                             '%1',
-                            this.getRecordRelatedContentMessage(response.imageDetails)
+                            this.getRecordRelatedContentMessage(imageDetails)
                         );
                     }.bind(this)).fail(function () {
                 confirmationContent = confirmationContent.replace('%1', '');
             }).always(function () {
                 deleteImages(recordsIds, deleteImageUrl, confirmationContent).then(function (status) {
                     deferred.resolve(status);
-                }).fail(function (jqXHR) {
-                    deferred.reject(JSON.parse(jqXHR.responseText).message);
+                }).fail(function (error) {
+                    deferred.reject(error);
                 });
             });
 
