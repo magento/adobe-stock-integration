@@ -11,13 +11,13 @@ use Magento\MediaGalleryMetadata\Model\GetXmpMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * Jpeg XMP Reader
  */
-class XmpReader implements MetadataReaderInterface
+class ReadXmp implements ReadMetadataInterface
 {
     private const XMP_SEGMENT_NAME = 'APP1';
     private const XMP_SEGMENT_START = "http://ns.adobe.com/xap/1.0/\x00";

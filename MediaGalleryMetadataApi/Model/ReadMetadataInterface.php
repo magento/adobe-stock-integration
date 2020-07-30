@@ -14,7 +14,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 /**
  * Metadata reader
  */
-interface MetadataReaderInterface
+interface ReadMetadataInterface
 {
     /**
      * Read metadata from the file
