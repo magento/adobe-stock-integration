@@ -20,10 +20,10 @@ use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Test saving a media gallery asset and return its id.
