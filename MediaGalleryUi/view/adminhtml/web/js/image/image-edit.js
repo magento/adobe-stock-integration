@@ -46,8 +46,8 @@ define([
          */
         showEditDetailsPanel: function (imageId) {
             if (_.isUndefined(this.images[imageId])) {
-                getDetails(this.imageEditDetailsUrl, [imageId]).then(function (response) {
-                    this.images[imageId] = response.imageDetails[imageId];
+                getDetails(this.imageEditDetailsUrl, [imageId]).then(function (imageDetails) {
+                    this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openEditImageDetailsModal();
                 }.bind(this)).fail(function (error) {
