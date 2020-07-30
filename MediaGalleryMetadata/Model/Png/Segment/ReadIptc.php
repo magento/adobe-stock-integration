@@ -44,6 +44,11 @@ class ReadIptc implements ReadMetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
             if ($this->isIptcSegment($segment)) {
+                if (!is_callable('gzcompress') && !is_callable('gzuncompress')) {
+                    throw new LocalizedException(
+                        __('zlib::gzcompress() && zlib::gzuncompress() must be enabled in php configuration')
+                    );
+                }
                 return $this->getIptcData($segment);
             }
         }
