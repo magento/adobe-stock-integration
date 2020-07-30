@@ -8,33 +8,40 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
 
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
-use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 
 /**
- * IPTC Reader to read IPTC data for png image
+ * IPTC Writer to write IPTC data for png image
  */
-class ReadIptc implements ReadMetadataInterface
+class WriteIPtc implements WriteMetadataInterface
 {
     private const IPTC_SEGMENT_NAME = 'zTXt';
     private const IPTC_SEGMENT_START = 'iptc';
     private const IPTC_DATA_START_POSITION = 17;
-    private const IPTC_CHUNK_MARKER_LENGTH = 4;
-    
-    /**
-     * @var MetadataInterfaceFactory
-     */
-    private $metadataFactory;
 
     /**
-     * @param MetadataInterfaceFactory $metadataFactory
+     * @var SegmentInterfaceFactory
+     */
+    private $segmentFactory;
+
+    /**
+     * @var FileInterfaceFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @param FileInterfaceFactory $fileFactory
+     * @param SegmentInterfaceFactory $segmentFactory
      */
     public function __construct(
-        MetadataInterfaceFactory $metadataFactory
+        FileInterfaceFactory $fileFactory,
+        SegmentInterfaceFactory $segmentFactory
     ) {
-        $this->metadataFactory = $metadataFactory;
+        $this->fileFactory = $fileFactory;
+        $this->segmentFactory = $segmentFactory;
     }
 
     /**
@@ -42,16 +49,28 @@ class ReadIptc implements ReadMetadataInterface
      */
     public function execute(FileInterface $file): MetadataInterface
     {
-        foreach ($file->getSegments() as $segment) {
+        $segments = $file->getSegments();
+        $pngIptcSegments = [];
+        foreach ($segments as $key => $segment) {
             if ($this->isIptcSegment($segment)) {
-                return $this->getIptcData($segment);
+                $pngIptcSegments[$key] = $segment;
             }
         }
-        
-        return $this->metadataFactory->create([
-            'title' => null,
-            'description' => null,
-            'keywords' => null
+
+        if (empty($pngIptcSegments)) {
+            return $this->fileFactory->create([
+                'path' => $file->getPath(),
+                'segments' => $segments[] =  $this->createPngIptcSegment($metadata)
+            ]);
+        }
+
+        foreach ($pngXmpSegments as $key => $segment) {
+            $segments[$key] = $this->updateIptcSegment($segment, $metadata);
+        }
+
+        return $this->fileFactory->create([
+            'path' => $file->getPath(),
+            'segments' => $segments
         ]);
     }
 
@@ -59,8 +78,9 @@ class ReadIptc implements ReadMetadataInterface
      * Read iptc data from zTXt segment
      *
      * @param SegmentInterface $segment
+     * @param MetadataInterface $metadata
      */
-    private function getIptcData(SegmentInterface $segment): MetadataInterface
+    private function updateIptcSegment(SegmentInterface $segment, MetadataInterface $metadata): SegmentInterface
     {
         $description = null;
         $title = null;
@@ -76,39 +96,18 @@ class ReadIptc implements ReadMetadataInterface
         $binData = hex2bin($iptcData);
 
         $descriptionMarker = pack("C", 2) . 'x' . pack("C", 0);
-        $descriptionStartPosition = strpos($binData, $descriptionMarker);
-        if ($descriptionStartPosition) {
-            $description = substr(
-                $binData,
-                $descriptionStartPosition + self::IPTC_CHUNK_MARKER_LENGTH,
-                ord(substr($binData, $descriptionStartPosition + 3, 1))
-            );
-        }
+        $descriptionStartPosition = strpos($binData, $descriptionMarker) + 4;
+        
 
         $titleMarker =  pack("C", 2) . 'i' . pack("C", 0);
         $titleStartPosition = strpos($binData, $titleMarker);
-        if ($titleStartPosition) {
-            $title = substr(
-                $binData,
-                $titleStartPosition + self::IPTC_CHUNK_MARKER_LENGTH,
-                ord(substr($binData, $titleStartPosition + 3, 1))
-            );
-        }
 
         $keywordsMarker = pack("C", 2) . pack("C", 25) . pack("C", 0);
         $keywordsStartPosition = strpos($binData, $keywordsMarker);
-        if ($keywordsStartPosition) {
-            $keywords = substr(
-                $binData,
-                $keywordsStartPosition + self::IPTC_CHUNK_MARKER_LENGTH,
-                ord(substr($binData, $keywordsStartPosition + 3, 1))
-            );
-        }
 
-        return $this->metadataFactory->create([
-            'title' => $title,
-            'description' => $description,
-            'keywords' => !empty($keywords) ? explode(',', $keywords) : null
+        return $this->segmentFactory->create([
+            'name' => $segment->getName(),
+            'data' => $segmentDataCompressed
         ]);
     }
 
