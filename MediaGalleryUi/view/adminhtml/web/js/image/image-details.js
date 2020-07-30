@@ -52,8 +52,8 @@ define([
                     this.images[imageId] = response.imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
-                }.bind(this)).fail(function (message) {
-                    this.addMediaGridMessage('error', message);
+                }.bind(this)).fail(function (jqXHR) {
+                    this.addMediaGridMessage('error', JSON.parse(jqXHR.responseText).message);
                 }.bind(this));
 
                 return;
@@ -136,7 +136,7 @@ define([
 
             if (_.isObject(value)) {
                 $.each(value, function (entityName, count) {
-                    usedIn += count + ' ' +  entityName + '</br>';
+                    usedIn += entityName +  '(' + count + ') </br>';
                 });
 
                 return usedIn;

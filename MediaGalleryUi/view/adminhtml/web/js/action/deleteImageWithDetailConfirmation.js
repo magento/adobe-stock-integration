@@ -37,8 +37,8 @@ define([
             }).always(function () {
                 deleteImages(recordsIds, deleteImageUrl, confirmationContent).then(function (status) {
                     deferred.resolve(status);
-                }).fail(function (message) {
-                    deferred.reject(message);
+                }).fail(function (jqXHR) {
+                    deferred.reject(JSON.parse(jqXHR.responseText).message);
                 });
             });
 

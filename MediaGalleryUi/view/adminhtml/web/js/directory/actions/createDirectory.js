@@ -20,25 +20,7 @@ define([
             dataType: 'json',
             showLoader: true,
             data: data,
-            context: this,
-
-            /**
-             * Extract the message and reject
-             *
-             * @param {Object} response
-             */
-            error: function (response) {
-
-                if (typeof response.responseJSON === 'undefined' ||
-                    typeof response.responseJSON.message === 'undefined'
-                ) {
-                    message = $t('Could not create the directory.');
-                } else {
-                    message = response.responseJSON.message;
-                }
-
-                return message;
-            }
+            context: this
         });
     };
 });

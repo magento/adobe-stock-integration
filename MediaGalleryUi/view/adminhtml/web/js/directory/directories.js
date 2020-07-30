@@ -69,9 +69,9 @@ define([
                                     }.bind(this));
                                 }.bind(this));
 
-                            }.bind(this)).fail(function (error) {
+                            }.bind(this)).fail(function (jqXHR) {
                                 uiAlert({
-                                    content: error
+                                    content: JSON.parse(jqXHR.responseText).message
                                 });
                             });
                         }.bind(this)
@@ -155,9 +155,9 @@ define([
                             this.directoryTree().removeNode();
                             this.directoryTree().selectStorageRoot();
                             $(window).trigger('folderDeleted.enhancedMediaGallery');
-                        }.bind(this)).fail(function (error) {
+                        }.bind(this)).fail(function (jqXHR) {
                             uiAlert({
-                                content: error
+                                content: JSON.parse(jqXHR.responseText).message
                             });
                         });
                     }.bind(this)

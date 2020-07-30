@@ -111,14 +111,13 @@ define([
 
             if (!$(this.cancelMassactionButtonSelector).length) {
                 $(this.pageActionsSelector).append(this.cancelMassactionButton);
-                $('#cancel_massaction').applyBindings();
                 this.isCancelButtonInserted = true;
             } else {
                 $(this.cancelMassactionButtonSelector).replaceWith(this.cancelMassactionButton);
             }
             $('#cancel_massaction').on('click', function () {
                 $(window).trigger('terminateMassAction.MediaGallery');
-            });
+            }).applyBindings();
 
             $(this.deleteButtonSelector).off('click').on('click', function () {
                 $(this.deleteButtonSelector).trigger('massDelete');

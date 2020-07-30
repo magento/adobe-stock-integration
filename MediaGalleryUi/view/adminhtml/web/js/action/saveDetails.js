@@ -17,25 +17,7 @@ define([
             url: saveImageDetailsUrl,
             dataType: 'json',
             showLoader: true,
-            data: formData,
-
-            /**
-             * Extract the message and reject
-             *
-             * @param {Object} response
-             */
-            error: function (response) {
-
-                if (typeof response.responseJSON === 'undefined' ||
-                    typeof response.responseJSON.message === 'undefined'
-                ) {
-                    message = $t('Could not save image details.');
-                } else {
-                    message = response.responseJSON.message;
-                }
-
-                return message;
-            }
+            data: formData
         });
     };
 });

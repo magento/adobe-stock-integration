@@ -96,10 +96,8 @@ define([
                     this.image().actions().login().getUserQuota();
                     this.imageModel().reloadGrid();
                     this.imageModel().addMessage('success', $.mage.__('The image has been licensed.'));
-                }.bind(this)).fail(function (error) {
-                    if (error) {
-                        this.imageModel().addMessage('error', error);
-                    }
+                }.bind(this)).fail(function (jqXHR) {
+                    this.imageModel().addMessage('error', JSON.parse(jqXHR.responseText).message);
                 }.bind(this));
             }.bind(this)).fail(function (message) {
                 this.imageModel().addMessage('error', message);
