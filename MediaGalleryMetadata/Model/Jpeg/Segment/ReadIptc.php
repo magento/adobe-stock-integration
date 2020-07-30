@@ -11,13 +11,13 @@ use Magento\MediaGalleryMetadata\Model\GetIptcMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * IPTC Reader to read IPTC data for jpeg image
  */
-class IptcReader implements MetadataReaderInterface
+class ReadIptc implements ReadMetadataInterface
 {
     private const IPTC_SEGMENT_NAME = 'APP13';
     private const IPTC_SEGMENT_START = 'Photoshop 3.0';
