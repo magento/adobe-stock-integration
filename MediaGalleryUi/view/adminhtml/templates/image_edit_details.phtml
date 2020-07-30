@@ -47,16 +47,7 @@ use Magento\Backend\Block\Template;
                         "component": "Magento_MediaGalleryUi/js/image/image-edit",
                         "imageEditDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageEditDetailsUrl')); ?>",
                         "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
-                        "modalSelector": ".media-gallery-edit-image-details-modal",
-                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages",
-                        "viewConfig": [
-                            {
-                                "component": "Magento_Ui/js/form/element/ui-select",
-                                "name": "${ $.name }_keywords",
-                                "template": "ui/grid/filters/elements/ui-select",
-                                "disableLabel": true
-                            }
-                        ]
+                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
                     }
                 }
             },

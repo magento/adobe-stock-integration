@@ -17,7 +17,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/image/image-edit',
-            modalSelector: '',
+            modalSelector: '.media-gallery-edit-image-details-modal',
             imageEditDetailsUrl: '/media_gallery/image/details',
             saveDetailsUrl: '/media_gallery/image/saveDetails',
             images: [],
@@ -33,7 +33,9 @@ define([
             viewConfig: [
                 {
                     component: 'Magento_Ui/js/form/element/ui-select',
-                    name: '${ $.name }_keywords'
+                    name: '${ $.name }_keywords',
+                    template: 'ui/grid/filters/elements/ui-select',
+                    disableLabel: true
                 }
             ],
             exports: {
@@ -58,10 +60,10 @@ define([
         /**
          * Add a new keyword to select
          */
-        addKeyword: function() {
+        addKeyword: function () {
             var options = this.keywordOptions(),
                 selected = this.selectedKeywords(),
-                newKeywordField = $(this.newKeywordSelector)
+                newKeywordField = $(this.newKeywordSelector);
 
             newKeywordField.validation();
             if (!newKeywordField.validation('isValid') || this.newKeyword() === '') {
@@ -84,7 +86,7 @@ define([
          */
         getOptionForKeyword: function(keyword) {
             return {
-                'is_active': 1,
+                is_active: 1,
                 level: 1,
                 value: keyword,
                 label: keyword
