@@ -13,6 +13,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * IPTC Writer to write IPTC data for png image
@@ -118,8 +119,6 @@ class WriteIptc implements WriteMetadataInterface
             $keywords = implode(',', $keywords);
             $binData .= $keywordsMarker . pack('C', strlen($keywords)) . $keywords . pack('C', 28);
         }
-     
-     
         
         $binData .= pack('C', 0);
         $hexString = bin2hex($binData);

@@ -12,6 +12,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * IPTC Reader to read IPTC data for png image
