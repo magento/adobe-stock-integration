@@ -3,7 +3,9 @@
     "description": "Magento module that implements height and width fields for for media gallery items.",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*"
+        "magento/framework": "*",
+        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-gallery-synchronization": "*"
     },
     "type": "magento2-module",
     "license": [

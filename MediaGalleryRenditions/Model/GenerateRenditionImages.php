@@ -5,10 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronization\Model;
+namespace Magento\MediaGalleryRenditions\Model;
 
 use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
 use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 
 /**
@@ -52,7 +53,6 @@ class GenerateRenditionImages implements ImportFileInterface
     public function execute(string $path): void
     {
         $file = $this->splFileInfoFactory->create($path);
-        $createdAsset = $this->createAssetFromFile->execute($file);
-        $this->generateRenditions->execute([$createdAsset]);
+        $this->generateRenditions->execute([$this->createAssetFromFile->execute($file)]);
     }
 }
