@@ -17,6 +17,7 @@ define([
             modalSelector: '',
             modalWindowSelector: '',
             imageDetailsUrl: '/media_gallery/image/details',
+            cmsPageUrl: '/cms/page/index',
             images: [],
             tagListLimit: 7,
             categoryContentType: 'Category',
@@ -137,8 +138,8 @@ define([
 
             if (_.isObject(value)) {
                 $.each(value, function (moduleName, count) {
-                    usedIn += count + ' ' +
-                        this.getEntityNameWithPrefix(moduleName, count) +
+                    usedIn += '<a href="'+ this.getFilterUrl(moduleName) +'">' + count + ' ' +
+                        this.getEntityNameWithPrefix(moduleName, count) + '</a>' +
                         '</br>';
                 }.bind(this));
 
@@ -185,6 +186,17 @@ define([
          */
         removeCached: function (id) {
             delete this.images[id];
+        },
+
+        /**
+         * Get filter url
+         *
+         * @param {String} moduleName
+         */
+        getFilterUrl: function (moduleName) {
+            if (moduleName === "Page") {
+                return this.cmsPageUrl + '?filters[asset_id]=' + this.image().id;
+            }
         }
     });
 });

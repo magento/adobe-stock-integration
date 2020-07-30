@@ -46,6 +46,7 @@ use Magento\Backend\Block\Template;
                     "mediaGalleryImageDetails": {
                         "component": "Magento_MediaGalleryUi/js/image/image-details",
                         "imageDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageDetailsUrl')); ?>",
+                        "cmsPageUrl": "<?= $escaper->escapeJs($block->getData('cmsPageUrl')); ?>",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "modalWindowSelector": ".media-gallery-image-details",
                         "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
