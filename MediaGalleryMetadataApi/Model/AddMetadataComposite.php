@@ -39,6 +39,12 @@ class AddMetadataComposite implements AddMetadataInterface
     public function execute(string $path, MetadataInterface $data): void
     {
         foreach ($this->writers as $writer) {
+            if (!$writer instanceof AddMetadataInterface) {
+                throw new \InvalidArgumentException(
+                    __(get_class($writer) . ' must implement '. AddMetadataInterface::class)
+                );
+            }
+
             $writer->execute($path, $data);
         }
     }

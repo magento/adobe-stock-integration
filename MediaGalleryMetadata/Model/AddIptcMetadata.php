@@ -12,11 +12,12 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
+use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 
 /**
- * Add metadata to the IPTC data
+ * Write iptc data to the file return updated FileInterface with iptc data
  */
 class AddIptcMetadata
 {
@@ -30,7 +31,7 @@ class AddIptcMetadata
     private $driver;
 
     /**
-     * @var FileReader
+     * @var ReadFile
      */
     private $fileReader;
 
@@ -42,12 +43,12 @@ class AddIptcMetadata
     /**
      * @param FileInterfaceFactory $fileFactory
      * @param DriverInterface $driver
-     * @param FileReader $fileReader
+     * @param ReadFile $fileReader
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         DriverInterface $driver,
-        FileReader $fileReader
+        ReadFile $fileReader
     ) {
         $this->fileFactory = $fileFactory;
         $this->driver = $driver;
@@ -69,15 +70,15 @@ class AddIptcMetadata
 
         $iptcData =  $segment ? iptcparse($segment->getData()) : [];
 
-        if (!empty($metadata->getTitle())) {
+        if ($metadata->getTitle() !== null) {
             $iptcData[self::IPTC_TITLE_SEGMENT][0] = $metadata->getTitle();
         }
 
-        if (!empty($metadata->getDescription())) {
+        if ($metadata->getDescription() !== null) {
             $iptcData[self::IPTC_DESCRIPTION_SEGMENT][0] = $metadata->getDescription();
         }
 
-        if (!empty($metadata->getKeywords())) {
+        if ($metadata->getKeywords() !== null) {
             $iptcData = $this->writeKeywords($metadata->getKeywords(), $iptcData);
         }
 

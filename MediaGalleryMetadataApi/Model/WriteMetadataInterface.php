@@ -12,7 +12,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 /**
  * Metadata writer
  */
-interface MetadataWriterInterface
+interface WriteMetadataInterface
 {
     /**
      * Add metadata to the file

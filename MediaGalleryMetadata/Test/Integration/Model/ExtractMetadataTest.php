@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class ExtractMetadataTest extends TestCase
 {
     /**
-     * @var ExtractMetadataInterface
+     * @var ExtractMetadataComposite
      */
     private $extractMetadata;
 
