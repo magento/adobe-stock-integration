@@ -5,7 +5,7 @@
  */
 -->
 <ul class="messages" if="getMessages().length > 0">
-    <!-- ko foreach: getMessages() -->
+    <each args="getMessages()">
         <div class="messages">
             <div attr="class: 'message message-'+code">
                 <div data-ui-id="messages-message-error">
@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-    <!-- /ko -->
+    </each>
 </ul>
 <button class="action-secondary" type="button" visible="!isDownloaded() && !isLicensed()" click="function(){ savePreviewClick() }">
     <span translate="'Save Preview'"/>
