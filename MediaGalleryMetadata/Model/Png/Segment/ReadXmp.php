@@ -51,11 +51,6 @@ class ReadXmp implements ReadMetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
             if ($this->isXmpSegment($segment)) {
-                return $this->metadataFactory->create([
-            'title' => '',
-            'description' => '',
-            'keywords' => []
-        ]);
                 return $this->getXmpMetadata->execute($this->getXmpData($segment));
             }
         }

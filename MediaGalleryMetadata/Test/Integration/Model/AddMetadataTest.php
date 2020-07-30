@@ -117,81 +117,81 @@ class AddMetadataTest extends TestCase
                     'mediagallery'
                 ]
             ],
-            //[
-            //  'macos-photos.jpeg',
-            //  'Updated Title',
-            //  'Updated Description',
-            //  [
-            //      'magento2',
-            //      'mediagallery'
-            //  ]
-            // ],
-            //[
-            //  'macos-photos.jpeg',
-            //  'Updated Title',
-            //  null,
-            //  null
-            //],
-            //[
-            //  'iptc_only.jpeg',
-            //  'Updated Title',
-            //  'Updated Description',
-            //  [
-            //      'magento2',
-            //      'mediagallery'
-              //  ]
-            //],
-            // [
-            //  'empty_iptc.jpeg',
-            //  'Updated Title',
-            //  null,
-            //  null
-            // ],
-            //[
-            //  'macos-preview.png',
-            //  'Title of the magento image 2',
-            //  'Description of the magento image 2',
-            //  [
-            //      'magento2',
-            //      'community'
-            //  ]
-            // ],
-            //[
-            //  'empty_xmp_image.jpeg',
-            //  'Title of the magento image',
-            //  'Description of the magento image 2',
-            //  [
-            //      'magento2',
-            //      'community'
-            //  ],
-            //],
-            // [
-            //  'empty_xmp_image.png',
-            //  'Title of the magento image',
-            //  'Description of the magento image 2',
-            //  [
-            //      'magento2',
-            //      'community'
-            //  ],
-            //],
-            // [
-            //   'exiftool.gif',
-            //  'Updated Title',
-            //  'Updated Description',
-            //  [
-            //      'magento2',
-            //      'mediagallery'
-            //  ]
-            // ],
-            // [
-            //   'empty_exiftool.gif',
-            //   'Updated Title',
-            //  'Updated Description',
-              // [
-                  //    'magento2',
-            //     'mediagallery'
-            //  ]
-            //]
+            [
+                'macos-photos.jpeg',
+                'Updated Title',
+                'Updated Description',
+                [
+                    'magento2',
+                    'mediagallery'
+                ]
+            ],
+             [
+                'macos-photos.jpeg',
+                'Updated Title',
+                null,
+                null
+            ],
+            [
+                'iptc_only.jpeg',
+                'Updated Title',
+                'Updated Description',
+                [
+                    'magento2',
+                    'mediagallery'
+                ]
+            ],
+            [
+                'empty_iptc.jpeg',
+                'Updated Title',
+                null,
+                null
+            ],
+            [
+                'macos-preview.png',
+                'Title of the magento image 2',
+                'Description of the magento image 2',
+                [
+                    'magento2',
+                    'community'
+                ]
+            ],
+            [
+                'empty_xmp_image.jpeg',
+                'Title of the magento image',
+                'Description of the magento image 2',
+                [
+                    'magento2',
+                    'community'
+                ],
+            ],
+            [
+                'empty_xmp_image.png',
+                'Title of the magento image',
+                'Description of the magento image 2',
+                [
+                    'magento2',
+                    'community'
+                ],
+            ],
+             [
+                'exiftool.gif',
+                'Updated Title',
+                'Updated Description',
+                [
+                    'magento2',
+                    'mediagallery'
+                ]
+             ],
+             [
+                'empty_exiftool.gif',
+                'Updated Title',
+                'Updated Description',
+                [
+                    'magento2',
+                    'mediagallery'
+                ]
+             ]
         ];
     }
 }
