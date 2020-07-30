@@ -12,6 +12,7 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 
 /**
  * IPTC Writer to write IPTC data for png image
@@ -45,9 +46,13 @@ class WriteIPtc implements WriteMetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * Write iptc metadata to zTXt segment
+     *
+     * @param FileInterface $file
+     * @param MetadataInterface $metadata
+     * @return FileInterface
      */
-    public function execute(FileInterface $file): MetadataInterface
+    public function execute(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
         $segments = $file->getSegments();
         $pngIptcSegments = [];
@@ -64,7 +69,7 @@ class WriteIPtc implements WriteMetadataInterface
             ]);
         }
 
-        foreach ($pngXmpSegments as $key => $segment) {
+        foreach ($pngIptcSegments as $key => $segment) {
             $segments[$key] = $this->updateIptcSegment($segment, $metadata);
         }
 
@@ -75,7 +80,7 @@ class WriteIPtc implements WriteMetadataInterface
     }
 
     /**
-     * Read iptc data from zTXt segment
+     * Update iptc data to zTXt segment
      *
      * @param SegmentInterface $segment
      * @param MetadataInterface $metadata
@@ -95,19 +100,45 @@ class WriteIPtc implements WriteMetadataInterface
         $iptcData = implode(array_slice($data, 2));
         $binData = hex2bin($iptcData);
 
-        $descriptionMarker = pack("C", 2) . 'x' . pack("C", 0);
-        $descriptionStartPosition = strpos($binData, $descriptionMarker) + 4;
+        if ($metadata->getDescription() !== null) {
+            $description = $metadata->getDescription();
+            $descriptionMarker = pack("C", 2) . 'x' . pack("C", 0);
+            $descriptionStartPosition = strpos($binData, $descriptionMarker) + 3;
+            $binData = substr_replace(
+                $binData,
+                pack("C", strlen($description)) . $description,
+                $descriptionStartPosition
+            ) . substr($binData, $descriptionStartPosition + 1 + ord(substr($binData, $descriptionStartPosition)));
+        }
+
+        if ($metadata->getTitle() !== null) {
+            $title = $metadata->getTitle();
+            $titleMarker =  pack("C", 2) . 'i' . pack("C", 0);
+            $titleStartPosition = strpos($binData, $titleMarker) + 3;
+            $binData = substr_replace(
+                $binData,
+                pack("C", strlen($title)) . $title,
+                $titleStartPosition
+            ) . substr($binData, $titleStartPosition + 1 + ord(substr($binData, $titleStartPosition)));
+        }
+
+        if ($metadata->getKeywords() !== null) {
+            $keywords = implode(',', $metadata->getKeywords());
+            $keywordsMarker = pack("C", 2) . pack("C", 25) . pack("C", 0);
+            $keywordsStartPosition = strpos($binData, $keywordsMarker) + 3;
+            $binData = substr_replace(
+                $binData,
+                pack("C", strlen($keywords)) . $keywords,
+                $keywordsStartPosition
+            ) . substr($binData, $keywordsStartPosition + 1 + ord(substr($binData, $keywordsStartPosition)));
+        }
+        $hexString = bin2hex($binData);
+        $iptcSegmentStart = substr($segment->getData(), 0, $iptSegmentStartPosition + 2);
+        $segmentDataCompressed = gzcompress(PHP_EOL . $data[0] . PHP_EOL . strlen($binData) . PHP_EOL . $hexString);
         
-
-        $titleMarker =  pack("C", 2) . 'i' . pack("C", 0);
-        $titleStartPosition = strpos($binData, $titleMarker);
-
-        $keywordsMarker = pack("C", 2) . pack("C", 25) . pack("C", 0);
-        $keywordsStartPosition = strpos($binData, $keywordsMarker);
-
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
-            'data' => $segmentDataCompressed
+            'data' => $iptcSegmentStart . $segmentDataCompressed
         ]);
     }
 
