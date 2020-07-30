@@ -15,6 +15,7 @@
             <argument name="importers" xsi:type="array">
                 <item name="0" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportMediaAsset</item>
                 <item name="1" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportImageFileKeywords</item>
+                <item name="generateRenditionImages" xsi:type="object">Magento\MediaGallerySynchronization\Model\GenerateRenditionImages</item>
             </argument>
         </arguments>
     </type>

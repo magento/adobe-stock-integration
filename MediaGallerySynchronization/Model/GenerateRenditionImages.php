@@ -8,19 +8,14 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 
 /**
- * Import image file to the media gallery asset table
+ * Generate Rendition Images
  */
-class ImportMediaAsset implements ImportFileInterface
+class GenerateRenditionImages implements ImportFileInterface
 {
-    /**
-     * @var SaveAssetsInterface
-     */
-    private $saveAssets;
-
     /**
      * @var SplFileInfoFactory
      */
@@ -32,18 +27,23 @@ class ImportMediaAsset implements ImportFileInterface
     private $createAssetFromFile;
 
     /**
+     * @var GenerateRenditionsInterface
+     */
+    private $generateRenditions;
+
+    /**
      * @param SplFileInfoFactory $splFileInfoFactory
-     * @param SaveAssetsInterface $saveAssets
      * @param CreateAssetFromFile $createAssetFromFile
+     * @param GenerateRenditionsInterface $generateRenditions
      */
     public function __construct(
         SplFileInfoFactory $splFileInfoFactory,
-        SaveAssetsInterface $saveAssets,
-        CreateAssetFromFile $createAssetFromFile
+        CreateAssetFromFile $createAssetFromFile,
+        GenerateRenditionsInterface $generateRenditions
     ) {
         $this->splFileInfoFactory = $splFileInfoFactory;
-        $this->saveAssets = $saveAssets;
         $this->createAssetFromFile = $createAssetFromFile;
+        $this->generateRenditions = $generateRenditions;
     }
 
     /**
@@ -52,6 +52,7 @@ class ImportMediaAsset implements ImportFileInterface
     public function execute(string $path): void
     {
         $file = $this->splFileInfoFactory->create($path);
-        $this->saveAssets->execute([$this->createAssetFromFile->execute($file)]);
+        $createdAsset = $this->createAssetFromFile->execute($file);
+        $this->generateRenditions->execute([$createdAsset]);
     }
 }
