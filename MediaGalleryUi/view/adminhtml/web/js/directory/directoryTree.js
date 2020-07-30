@@ -316,6 +316,8 @@ define([
                 $(this.directoryTreeSelector).jstree('deselect_all');
                 this.activeNode(null);
                 this.directories().setInActive();
+            } else {
+                this.checkChipFiltersState();
             }
         },
 
