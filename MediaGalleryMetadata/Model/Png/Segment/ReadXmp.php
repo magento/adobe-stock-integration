@@ -5,28 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Gif\Segment;
+namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadata\Model\GetXmpMetadata;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
- * XMP Reader for gif file format
+ * PNG XMP Reader
  */
-class XmpReader implements MetadataReaderInterface
+class ReadXmp implements ReadMetadataInterface
 {
-    private const XMP_SEGMENT_NAME = 'XMP DataXMP';
-    /**
-     * see XMP Specification Part 3, 1.1.2 GIF
-     */
-    private const MAGIC_TRAILER_LENGTH = 258;
-    private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
-    private const MAGIC_TRAILER_END = "\x03\x02\x01\x00\x00";
+    private const XMP_SEGMENT_NAME = 'iTXt';
 
     /**
      * @var MetadataInterfaceFactory
@@ -49,12 +42,15 @@ class XmpReader implements MetadataReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * Read metadata from the file
+     *
+     * @param FileInterface $file
+     * @return MetadataInterface
      */
     public function execute(FileInterface $file): MetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
-            if ($this->isXmp($segment)) {
+            if ($this->isXmpSegment($segment)) {
                 return $this->getXmpMetadata->execute($this->getXmpData($segment));
             }
         }
@@ -71,9 +67,10 @@ class XmpReader implements MetadataReaderInterface
      * @param SegmentInterface $segment
      * @return bool
      */
-    private function isXmp(SegmentInterface $segment): bool
+    private function isXmpSegment(SegmentInterface $segment): bool
     {
-        return $segment->getName() === self::XMP_SEGMENT_NAME;
+        return $segment->getName() === self::XMP_SEGMENT_NAME
+            && strpos($segment->getData(), '<x:xmpmeta') !== -1;
     }
 
     /**
@@ -84,15 +81,6 @@ class XmpReader implements MetadataReaderInterface
      */
     private function getXmpData(SegmentInterface $segment): string
     {
-        $xmp = substr($segment->getData(), 14);
-
-        if (substr($xmp, -self::MAGIC_TRAILER_LENGTH, 3) !== self::MAGIC_TRAILER_START
-            || substr($xmp, -5) !== self::MAGIC_TRAILER_END
-        ) {
-            throw new LocalizedException(__('XMP data is corrupted'));
-        }
-
-        $xmp = substr($xmp, 0, -self::MAGIC_TRAILER_LENGTH);
-        return $xmp;
+        return substr($segment->getData(), strpos($segment->getData(), '<x:xmpmeta'));
     }
 }

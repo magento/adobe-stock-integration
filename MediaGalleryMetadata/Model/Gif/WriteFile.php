@@ -12,13 +12,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * File segments writer
  */
-class FileWriter implements FileWriterInterface
+class WriteFile implements WriteFileInterface
 {
     /**
      * @var DriverInterface
