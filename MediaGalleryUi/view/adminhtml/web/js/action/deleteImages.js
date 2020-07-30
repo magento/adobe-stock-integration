@@ -13,9 +13,9 @@ define([
 
     return function (ids, deleteUrl, confirmationContent) {
         var deferred = $.Deferred(),
-               title = $.mage.__('Delete image'),
+               title = $.mage.__('Delete images'),
                cancelText = $.mage.__('Cancel'),
-               deleteImageText = $.mage.__('Delete Image');
+               deleteImageText = $.mage.__('Delete');
 
         /**
          * Send deletion request with redords ids

@@ -102,14 +102,15 @@ class CreateAssetFromFile
         $asset = $this->getAsset($path);
 
         $metadata = $this->extractMetadata->execute($path);
-        
+
         return $this->assetFactory->create(
             [
                 'id' => $asset ? $asset->getId() : null,
                 'path' => $this->getRelativePath($path),
                 'title' => $this->getAssetTitle($file, $asset, $metadata),
                 'description' => $metadata->getDescription(),
-                'createdAt' => (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
+                'createdAt' => $asset ? $asset->getCreatedAt() :
+                    (new \DateTime())->setTimestamp($file->getCTime())->format('Y-m-d H:i:s'),
                 'updatedAt' => (new \DateTime())->setTimestamp($file->getMTime())->format('Y-m-d H:i:s'),
                 'width' => $width,
                 'height' => $height,
