@@ -66,7 +66,7 @@ class WriteIptc implements WriteMetadataInterface
 
         if (!is_callable('gzcompress') && !is_callable('gzuncompress')) {
             throw new LocalizedException(
-                __('zlib::gzcompress() && zlib::gzuncompress() must be enabled in php configuration')
+                __('zlib gzcompress() && zlib gzuncompress() must be enabled in php configuration')
             );
         }
       
@@ -186,6 +186,7 @@ class WriteIptc implements WriteMetadataInterface
         }
         $hexString = bin2hex($binData);
         $iptcSegmentStart = substr($segment->getData(), 0, $iptSegmentStartPosition + 2);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $segmentDataCompressed = gzcompress(PHP_EOL . $data[0] . PHP_EOL . strlen($binData) . PHP_EOL . $hexString);
         
         return $this->segmentFactory->create([
