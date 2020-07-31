@@ -36,9 +36,13 @@
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
-        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectContentImageInGrid">
-            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="editImage"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
+            <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
+        
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploaderAgain"/>
@@ -49,7 +53,7 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
-            <argument name="title" value="ImageMetadata.title"/>
+            <argument name="title" value="UpdatedImageDetails.title"/>
         </actionGroup>
    </test>
 </tests>

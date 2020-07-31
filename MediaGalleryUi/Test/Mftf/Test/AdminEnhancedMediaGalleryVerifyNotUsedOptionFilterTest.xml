@@ -51,6 +51,13 @@
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
             <argument name="image" value="ImageUpload_1"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="editImage"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
+
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
@@ -69,7 +76,7 @@
             <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup" stepKey="assertImageNotExistsInGrid">
-            <argument name="title" value="ImageUpload_1.fileName"/>
+            <argument name="title" value="UpdatedImageDetails.fileName"/>
         </actionGroup>
     </test>
 </tests>
