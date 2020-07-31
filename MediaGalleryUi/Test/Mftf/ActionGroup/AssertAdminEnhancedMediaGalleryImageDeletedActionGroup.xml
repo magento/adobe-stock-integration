@@ -15,7 +15,6 @@
         <arguments>
             <argument name="image"/>
         </arguments>
-        <see userInput='The asset "{{image.fileName}}" has been successfully deleted' stepKey="verifyDeleteImage"/>
-        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(image.file)}}" stepKey="dontSeeImage"/>
+        <see userInput='The asset "{{image.title}}" has been successfully deleted' stepKey="verifyDeleteImage"/>
     </actionGroup>
 </actionGroups>

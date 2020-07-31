@@ -23,12 +23,15 @@
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         </before>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
+            <argument name="image" value="ImageMetadata"/>
+        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup" stepKey="assertImageDeleted">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageMetadata"/>
         </actionGroup>
     </test>
 </tests>
