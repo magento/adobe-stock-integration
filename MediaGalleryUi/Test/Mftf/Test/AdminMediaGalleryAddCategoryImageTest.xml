@@ -49,7 +49,7 @@
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField">
-            <argument name="imageName" value="{{ImageUpload3.filename}}" />
+            <argument name="imageName" value="{{ImageUpload3.fileName}}" />
         </actionGroup>
     </test>
 </tests>

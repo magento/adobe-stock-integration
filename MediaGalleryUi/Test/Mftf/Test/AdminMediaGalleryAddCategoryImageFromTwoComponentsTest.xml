@@ -65,10 +65,10 @@
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedCategoryImage"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="reSaveCategory"/>
         <actionGroup ref="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertContentImageIsVisible">
-            <argument name="imageName" value="{{ImageUpload3.file}}"/>
+            <argument name="imageName" value="{{ImageUpload3.fileName}}"/>
         </actionGroup>
         <actionGroup ref="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertCategoryImageIsVisible">
-            <argument name="imageName" value="{{ImageUpload_1.file}}"/>
+            <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
         </actionGroup>
     </test>
 </tests>
