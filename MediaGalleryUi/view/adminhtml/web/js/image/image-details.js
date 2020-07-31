@@ -17,12 +17,12 @@ define([
             modalSelector: '',
             modalWindowSelector: '',
             imageDetailsUrl: '/media_gallery/image/details',
-            cmsPageUrl: '/cms/page/index',
             images: [],
             tagListLimit: 7,
             categoryContentType: 'Category',
             showAllTags: false,
             image: null,
+            usedInComponents : [],
             modules: {
                 mediaGridMessages: '${ $.mediaGridMessages }'
             }
@@ -128,47 +128,49 @@ define([
         },
 
         /**
-         * Get image details value
+         * Check if asset is used or not
          *
-         * @param {Object|String} value
-         * @return {String}
+         * @param value
          */
-        getValueUnsanitizedHtml: function (value) {
-            var usedIn = '';
-
-            if (_.isObject(value)) {
-                $.each(value, function (moduleName, count) {
-                    usedIn += '<a href="'+ this.getFilterUrl(moduleName) +'">' + count + ' ' +
-                        this.getEntityNameWithPrefix(moduleName, count) + '</a>' +
-                        '</br>';
-                }.bind(this));
-
-                return usedIn;
-            }
-
-            return value;
+        isUsedIn: function (value) {
+            return _.isObject(value);
         },
 
         /**
-        * Return entity name based on used in count
-        *
-        * @param {String} entityName
-        * @param {String} count
-        */
-        getEntityNameWithPrefix: function (entityName, count) {
+         * Converting object into Array
+         *
+         * @param object
+         */
+        convertObjectToArray: function (object) {
+            var usedIn = [];
+
+            $.each(object, function (moduleName, count) {
+                usedIn.push(count + ' ' + moduleName);
+            });
+            return usedIn;
+        },
+
+        /**
+         * Return entity name based on used in count
+         *
+         * @param usedIn
+         */
+        getEntityNameWithPrefix: function (usedIn) {
+            var count = usedIn.match(/\d+/g);
+            var entityName =  usedIn.match(/[a-zA-Z]+/g);
             var name;
 
-            if (count > 1) {
-                if (entityName === this.categoryContentType) {
-                    name = entityName.slice(0, -1) + 'ies';
+            if (count[0] > 1) {
+                if (entityName[0] === this.categoryContentType) {
+                    name = count[0] + ' ' + entityName[0].slice(0, -1) + 'ies';
                 } else {
-                    name = entityName + 's';
+                    name = count[0] + ' ' + entityName[0] + 's';
                 }
 
                 return name;
             }
 
-            return entityName;
+            return count[0] + ' ' +entityName[0];
         },
 
         /**
@@ -191,12 +193,20 @@ define([
         /**
          * Get filter url
          *
-         * @param {String} moduleName
+         * @param usedIn
          */
-        getFilterUrl: function (moduleName) {
-            if (moduleName === "Page") {
-                return this.cmsPageUrl + '?filters[asset_id]=' + this.image().id;
-            }
+        getFilterUrl: function (usedIn) {
+            var moduleName =  usedIn.match(/[a-zA-Z]+/g),
+                url = '',
+                self = this;
+
+            _.each(this.usedInComponents, function (usedInComponent) {
+                if (moduleName[0] === usedInComponent.name) {
+                    url = usedInComponent.url + '?filters[asset_id]=' + self.image().id;
+                }
+            });
+
+            return url;
         }
     });
 });

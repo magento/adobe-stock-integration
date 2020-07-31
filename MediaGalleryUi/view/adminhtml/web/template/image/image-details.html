@@ -23,10 +23,21 @@
         <div class="general-details image-details-section" if="image().details">
             <h3 data-bind="i18n: 'Details'"></h3>
             <div class="attributes">
-                <each args="image().details">
-                    <div class="attribute"  if="$parent.getValueUnsanitizedHtml(value)">
-                        <span class="title" data-bind="i18n: title"></span>
-                        <div class="value" html="$parent.getValueUnsanitizedHtml(value)"></div>
+                <each args="data: image().details, as: '$detail'">
+                    <div class="attribute"  if="$detail.value">
+                        <span class="title" if="$detail.value" data-bind="i18n: title"></span>
+                        <!--ko ifnot: $parent.isUsedIn($detail.value) -->
+                        <div class="value" html="$detail.value"></div>
+                        <!-- /ko -->
+                        <!--ko if: $parent.isUsedIn($detail.value) -->
+                        <each args="data: $parent.convertObjectToArray($detail.value), as: '$usedIn'">
+                            <div class="value">
+                                <a attr="href: $parents[1].getFilterUrl($usedIn)"
+                                   data-bind="text: $parents[1].getEntityNameWithPrefix($usedIn)"></a>
+                                </br>
+                            </div>
+                        </each>
+                        <!-- /ko -->
                     </div>
                 </each>
             </div>
