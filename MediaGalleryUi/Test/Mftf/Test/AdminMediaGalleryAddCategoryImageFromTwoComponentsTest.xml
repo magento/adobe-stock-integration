@@ -31,7 +31,7 @@
                 <argument name="imageName" value="{{ImageMetadata.title}}"/>
             </actionGroup>
             <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
-                <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
+                <argument name="imageName" value="{{UpdatedImageDetails.title}}"/>
             </actionGroup>
             <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
             <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
