@@ -97,33 +97,11 @@ class SaveMediaGalleryAsset
                 'hash' => $this->hashImageContent($destinationPath)
             ];
 
-            $document = $this->setDescriptionField($document, $destinationPath);
             $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
             $this->saveMediaAsset->execute([$mediaGalleryAsset]);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Could not save media gallery asset.'), $exception);
         }
-    }
-
-    /**
-     * Set description from file metadata
-     *
-     * @param Document $document
-     * @param string $destinationPath
-     */
-    private function setDescriptionField(Document $document, string $destinationPath): Document
-    {
-        $customAttributes = $document->getCustomAttributes();
-        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
-        $metadata = $this->extractMetadata->execute($mediaDirectory->getAbsolutePath($destinationPath));
-        $attribute = $this->attributeValueFactory->create();
-
-        $attribute->setAttributeCode('description');
-        $attribute->setValue($metadata->getDescription());
-        $customAttributes['description'] = $attribute;
-        $document->setCustomAttributes($customAttributes);
-        
-        return $document;
     }
 
     /**

@@ -51,7 +51,6 @@ class MediaGalleryAsset
         return $this->assetFactory->create([
             'path' => $assetData['path'],
             'title' => $assetData['title'],
-            'description' => $assetData['description'],
             'width' => $assetData['width'],
             'height' => $assetData['height'],
             'size' => $assetData['size'],

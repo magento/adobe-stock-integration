@@ -16,6 +16,9 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Psr\Log\LoggerInterface;
+use Magento\MediaGallerySynchronizationApi\Model\ImportFileComposite;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Save an image provided with the adobe Stock integration.
@@ -23,6 +26,16 @@ use Psr\Log\LoggerInterface;
  */
 class SaveImage implements SaveImageInterface
 {
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var ImportFileComposite
+     */
+    private $importFileComposite;
+
     /**
      * @var SaveAssetInterface
      */
@@ -72,6 +85,8 @@ class SaveImage implements SaveImageInterface
      * @param SaveMediaGalleryAsset $saveMediaGalleryAsset
      * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
      * @param LoggerInterface $logger
+     * @param Filesystem $filesystem
+     * @param ImportFileComposite $importFileComposite
      */
     public function __construct(
         SaveAssetInterface $saveAdobeStockAsset,
@@ -81,7 +96,9 @@ class SaveImage implements SaveImageInterface
         SaveImageFile $saveImageFile,
         SaveMediaGalleryAsset $saveMediaGalleryAsset,
         GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ImportFileComposite $importFileComposite,
+        Filesystem $filesystem
     ) {
         $this->saveAdobeStockAsset = $saveAdobeStockAsset;
         $this->documentToAsset = $documentToAsset;
@@ -91,6 +108,8 @@ class SaveImage implements SaveImageInterface
         $this->saveMediaGalleryAsset = $saveMediaGalleryAsset;
         $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
         $this->logger = $logger;
+        $this->importFileComposite = $importFileComposite;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -109,6 +128,8 @@ class SaveImage implements SaveImageInterface
             $this->saveMediaGalleryAsset->execute($document, $destinationPath);
             $mediaAssetId = $this->getMediaGalleryAssetByPath->execute([$destinationPath])[0]->getId();
 
+            $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($destinationPath);
+            $this->importFileComposite->execute($path);
             $this->saveKeywords->execute(
                 $mediaAssetId,
                 $this->documentToKeywords->convert($document)
