@@ -38,7 +38,7 @@
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImageInGrid">
-            <argument name="imageName" value="{{Imagemetadata.title}}"/>
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
@@ -51,7 +51,7 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
-            <argument name="title" value="Imagemetadata.title"/>
+            <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
     </test>
 </tests>
