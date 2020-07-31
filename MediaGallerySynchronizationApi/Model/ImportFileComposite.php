@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronizationApi\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
+
 /**
  * File save pool
  */
@@ -23,7 +26,7 @@ class ImportFileComposite
     public function __construct(array $importers)
     {
         ksort($importers);
-        $this->importers =$importers;
+        $this->importers = $importers;
     }
 
     /**
