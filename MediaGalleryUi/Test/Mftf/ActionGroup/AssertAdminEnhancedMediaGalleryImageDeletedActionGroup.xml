@@ -13,8 +13,8 @@
             <description>Assert that an image was deleted from Enhanced Media Gallery.</description>
         </annotations>
         <arguments>
-            <argument name="image"/>
+            <argument name="title"/>
         </arguments>
-        <see userInput='The asset "{{image.title}}" has been successfully deleted' stepKey="verifyDeleteImage"/>
+        <see userInput='The asset "{{title}}" has been successfully deleted' stepKey="verifyDeleteImage"/>
     </actionGroup>
 </actionGroups>
