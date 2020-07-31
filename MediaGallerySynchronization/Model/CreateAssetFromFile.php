@@ -17,9 +17,9 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 
 /**
  * Create media asset object based on the file information
@@ -134,7 +134,7 @@ class CreateAssetFromFile
         $title = $file->getBasename('.' . $file->getExtension());
         if ($asset) {
             $title = $asset->getTitle();
-        } elseif ($metadata->getTitle() !== "") {
+        } elseif ($metadata->getTitle() !== null) {
             $title = $metadata->getTitle();
         }
         return $title;

@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class AddMetadataTest extends TestCase
 {
     /**
-     * @var ExtractMetadataInterface
+     * @var AddMetadataInterface
      */
     private $addMetadata;
 
@@ -65,17 +65,17 @@ class AddMetadataTest extends TestCase
      * Test for ExtractMetadata::execute
      *
      * @dataProvider filesProvider
-     * @param string $fileName
-     * @param string $title
-     * @param string $description
-     * @param array $keywords
+     * @param null|string $fileName
+     * @param null|string $title
+     * @param null|string $description
+     * @param null|array $keywords
      * @throws LocalizedException
      */
     public function testExecute(
-        string $fileName,
-        string $title,
-        string $description,
-        array $keywords
+        ?string $fileName,
+        ?string $title,
+        ?string $description,
+        ?array $keywords
     ): void {
         $path = realpath(__DIR__ . '/../../_files/' . $fileName);
         $modifiableFilePath = $this->varDirectory->getAbsolutePath($fileName);
@@ -117,6 +117,12 @@ class AddMetadataTest extends TestCase
                     'mediagallery'
                 ]
             ],
+             [
+                'macos-photos.jpeg',
+                'Updated Title',
+                null,
+                null
+            ],
             [
                 'iptc_only.jpeg',
                 'Updated Title',
@@ -125,6 +131,12 @@ class AddMetadataTest extends TestCase
                     'magento2',
                     'mediagallery'
                 ]
+            ],
+            [
+                'empty_iptc.jpeg',
+                'Updated Title',
+                null,
+                null
             ],
             [
                 'macos-preview.png',

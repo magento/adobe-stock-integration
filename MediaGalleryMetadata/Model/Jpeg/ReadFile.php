@@ -13,14 +13,15 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Jpeg file reader
  */
-class FileReader implements FileReaderInterface
+class ReadFile implements ReadFileInterface
 {
     private const MARKER_IMAGE_FILE_START = "\xD8";
     private const MARKER_PREFIX = "\xFF";
@@ -89,16 +90,17 @@ class FileReader implements FileReaderInterface
      */
     public function execute(string $path): FileInterface
     {
-        $resource = $this->driver->fileOpen($path, 'rb');
+        if (!$this->isApplicable($path)) {
+            throw new ValidatorException(__('Not a JPEG image'));
+        }
 
+        $resource = $this->driver->fileOpen($path, 'rb');
         $marker = $this->readMarker($resource);
 
         if ($marker != self::MARKER_IMAGE_FILE_START) {
             $this->driver->fileClose($resource);
-            throw new LocalizedException(__('Not a JPEG image'));
+            throw new ValidatorException(__('Not a JPEG image'));
         }
-
-        $segments = [];
 
         do {
             $marker = $this->readMarker($resource);
@@ -122,6 +124,25 @@ class FileReader implements FileReaderInterface
         ]);
     }
 
+    /**
+     * Read jpeg marker
+     *
+     * @param resource $resource
+     * @return string
+     * @throws FileSystemException
+     */
+    private function readMarker($resource): string
+    {
+        $data = $this->read($resource, self::TWO_BYTES);
+
+        if ($data[0] != self::MARKER_PREFIX) {
+            $this->driver->fileClose($resource);
+            throw new LocalizedException(__('File is corrupted'));
+        }
+
+        return $data[1];
+    }
+    
     /**
      * Read compressed image
      *
@@ -161,25 +182,6 @@ class FileReader implements FileReaderInterface
             'name' => $this->segmentNames->getSegmentName($segmentType),
             'data' => $this->read($resource, $segmentSize)
         ]);
-    }
-
-    /**
-     * Read jpeg marker
-     *
-     * @param resource $resource
-     * @return string
-     * @throws FileSystemException
-     */
-    private function readMarker($resource): string
-    {
-        $data = $this->read($resource, self::TWO_BYTES);
-
-        if ($data[0] != self::MARKER_PREFIX) {
-            $this->driver->fileClose($resource);
-            throw new LocalizedException(__('File is corrupted'));
-        }
-
-        return $data[1];
     }
 
     /**
