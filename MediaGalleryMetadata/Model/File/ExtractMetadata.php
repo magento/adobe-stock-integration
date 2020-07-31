@@ -9,24 +9,19 @@ namespace Magento\MediaGalleryMetadata\Model\File;
 
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\FileInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
+use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataReaderInterface;
 
 /**
- * Extract metadata from the asset by path. Should be used as a virtual type with a file type specific configuration
+ * Extract Metadata from asset file by given extractors
  */
 class ExtractMetadata implements ExtractMetadataInterface
 {
-    /**
-     * @var FileReaderInterface
-     */
-    private $fileReader;
-
-    /**
-     * @var MetadataReaderInterface[]
-     */
-    private $readers;
 
     /**
      * @var MetadataInterfaceFactory
@@ -34,18 +29,36 @@ class ExtractMetadata implements ExtractMetadataInterface
     private $metadataFactory;
 
     /**
-     * @param FileReaderInterface $fileReader
+     * @var array
+     */
+    private $segmentReaders;
+
+    /**
+     * @var ReadFileInterface
+     */
+    private $fileReader;
+
+    /**
+     * @var FileInterfaceFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @param FileInterfaceFactory $fileFactory
      * @param MetadataInterfaceFactory $metadataFactory
-     * @param MetadataReaderInterface[] $readers
+     * @param ReadFileInterface $fileReader
+     * @param array $segmentReaders
      */
     public function __construct(
-        FileReaderInterface $fileReader,
+        FileInterfaceFactory $fileFactory,
         MetadataInterfaceFactory $metadataFactory,
-        array $readers
+        ReadFileInterface $fileReader,
+        array $segmentReaders
     ) {
-        $this->readers = $readers;
-        $this->fileReader = $fileReader;
+        $this->fileFactory = $fileFactory;
         $this->metadataFactory = $metadataFactory;
+        $this->fileReader = $fileReader;
+        $this->segmentReaders = $segmentReaders;
     }
 
     /**
@@ -53,29 +66,11 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     public function execute(string $path): MetadataInterface
     {
-        if (!$this->fileReader->isApplicable($path)) {
-            return $this->getEmptyResult();
-        }
-
         try {
             return $this->extractMetadata($path);
         } catch (\Exception $exception) {
-            return $this->getEmptyResult();
+            return $this->metadataFactory->create();
         }
-    }
-
-    /**
-     * Create empty metadata object
-     *
-     * @return MetadataInterface
-     */
-    private function getEmptyResult(): MetadataInterface
-    {
-        return $this->metadataFactory->create([
-            'title' => '',
-            'description' => '',
-            'keywords' => []
-        ]);
     }
 
     /**
@@ -86,24 +81,50 @@ class ExtractMetadata implements ExtractMetadataInterface
      */
     private function extractMetadata(string $path): MetadataInterface
     {
-        $title = '';
-        $description = '';
+        try {
+            $file = $this->fileReader->execute($path);
+        } catch (\Exception $exception) {
+            throw new LocalizedException(
+                __('Could not parse the image file for metadata: %path', ['path' => $path])
+            );
+        }
+
+        return $this->readSegments($file);
+    }
+
+    /**
+     * Read  file segments by given segmentReader
+     *
+     * @param FileInterface $file
+     */
+    private function readSegments(FileInterface $file): MetadataInterface
+    {
+        $title = null;
+        $description = null;
         $keywords = [];
-        $file = $this->fileReader->execute($path);
-        foreach ($this->readers as $reader) {
-            $data = $reader->execute($file);
-            $title = $data->getTitle() ?? $title;
-            $description = $data->getDescription() ?? $description;
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $keywords = array_merge($keywords, $data->getKeywords());
-            if (!empty($title) && !empty($description) && !empty($keywords)) {
-                break;
+        
+        foreach ($this->segmentReaders as $segmentReader) {
+            if (!$segmentReader instanceof ReadMetadataInterface) {
+                throw new \InvalidArgumentException(
+                    __(get_class($segmentReader). ' must implement ' . ReadMetadataInterface::class)
+                );
+            }
+
+            $data = $segmentReader->execute($file);
+            $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
+            $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
+
+            if (!empty($data->getKeywords())) {
+                foreach ($data->getKeywords() as $keyword) {
+                    $keywords[] = $keyword;
+                }
             }
         }
+        
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => array_unique($keywords)
+            'keywords' => empty($keywords) ? null : array_unique($keywords)
         ]);
     }
 }

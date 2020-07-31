@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\File;
 
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileReaderInterface;
-use Magento\MediaGalleryMetadataApi\Model\FileWriterInterface;
-use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
+use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 
 /**
  * Add metadata to the asset by path. Should be used as a virtual type with a file type specific configuration
@@ -22,30 +23,41 @@ use Magento\MediaGalleryMetadataApi\Model\MetadataWriterInterface;
 class AddMetadata implements AddMetadataInterface
 {
     /**
-     * @var MetadataWriterInterface[]
+     * @var array
      */
-    private $writers;
+    private $segmentWriters;
 
     /**
-     * @var FileReaderInterface
+     * @var FileInterfaceFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @var ReadFileInterface
      */
     private $fileReader;
 
     /**
-     * @var FileWriterInterface
+     * @var WriteFileInterface
      */
     private $fileWriter;
 
     /**
-     * @param FileReaderInterface $fileReader
-     * @param FileWriterInterface $fileWriter
-     * @param MetadataWriterInterface[] $writers
+     * @param FileInterfaceFactory $fileFactory
+     * @param ReadFileInterface $fileReader
+     * @param WriteFileInterface $fileWriter
+     * @param array $segmentWriters
      */
-    public function __construct(FileReaderInterface $fileReader, FileWriterInterface $fileWriter, array $writers)
-    {
+    public function __construct(
+        FileInterfaceFactory $fileFactory,
+        ReadFileInterface $fileReader,
+        WriteFileInterface $fileWriter,
+        array $segmentWriters
+    ) {
+        $this->fileFactory = $fileFactory;
         $this->fileReader = $fileReader;
         $this->fileWriter = $fileWriter;
-        $this->writers = $writers;
+        $this->segmentWriters = $segmentWriters;
     }
 
     /**
@@ -53,50 +65,42 @@ class AddMetadata implements AddMetadataInterface
      */
     public function execute(string $path, MetadataInterface $metadata): void
     {
-        if (!$this->fileReader->isApplicable($path)) {
-            return;
-        }
-
         try {
             $file = $this->fileReader->execute($path);
+        } catch (ValidatorException $e) {
+            return;
         } catch (\Exception $exception) {
             throw new LocalizedException(
-                __(
-                    'Could not parse the image file for metadata: %path',
-                    [
-                        'path' => $path
-                    ]
-                )
+                __('Could not parse the image file for metadata: %path', ['path' => $path])
             );
         }
 
         try {
-            $this->writeMetadata($file, $metadata);
+            $this->fileWriter->execute($this->writeMetadata($file, $metadata));
         } catch (\Exception $exception) {
             throw new LocalizedException(
-                __(
-                    'Could not update the image file metadata: %path',
-                    [
-                        'path' => $path
-                    ]
-                )
+                __('Could not update the image file metadata: %path', ['path' => $path])
             );
         }
     }
 
     /**
-     * Write metadata to the filesystem
+     * Write metadata by given metadata writer
      *
      * @param FileInterface $file
      * @param MetadataInterface $metadata
-     * @throws LocalizedException
-     * @throws FileSystemException
      */
-    private function writeMetadata(FileInterface $file, MetadataInterface $metadata): void
+    private function writeMetadata(FileInterface $file, MetadataInterface $metadata): FileInterface
     {
-        foreach ($this->writers as $writer) {
+        foreach ($this->segmentWriters as $writer) {
+            if (!$writer instanceof WriteMetadataInterface) {
+                throw new \InvalidArgumentException(
+                    __(get_class($writer) . ' must implement '. WriteFileInterface::class)
+                );
+            }
+
             $file = $writer->execute($file, $metadata);
         }
-        $this->fileWriter->execute($file);
+        return $file;
     }
 }

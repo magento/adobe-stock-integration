@@ -19,23 +19,23 @@ interface MetadataInterface extends ExtensibleDataInterface
     /**
      * Get asset title
      *
-     * @return string
+     * @return null|string
      */
-    public function getTitle(): string;
+    public function getTitle(): ?string;
 
     /**
      * Get asset description
      *
-     * @return string
+     * @return null|string
      */
-    public function getDescription(): string;
+    public function getDescription(): ?string;
 
     /**
      * Get asset keywords
      *
-     * @return array
+     * @return null|array
      */
-    public function getKeywords(): array;
+    public function getKeywords(): ?array;
 
     /**
      * Get extension attributes
