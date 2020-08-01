@@ -13,7 +13,7 @@ use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
 /**
  * File save pool
  */
-class ImportFileComposite
+class ImportFileComposite implements ImportFileInterface
 {
     /**
      * @var ImportFileInterface[]

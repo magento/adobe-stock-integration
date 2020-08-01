@@ -39,7 +39,7 @@ class SaveBaseCategoryImageInformation
      * @var Storage
      */
     private $storage;
-    
+
     /**
      * @var SynchronizeFilesInterface
      */
@@ -77,7 +77,7 @@ class SaveBaseCategoryImageInformation
         if (!$this->config->isEnabled()) {
             return $imagePath;
         }
-        
+
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
         $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, "/"), 1);
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);

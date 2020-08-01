@@ -82,7 +82,7 @@ class SaveImageInformation
         if (!$this->config->isEnabled()) {
             return $result;
         }
-        
+
         $path = $result['path'] . '/' . $result['file'];
         if (!$this->isApplicable($path)) {
             return $result;

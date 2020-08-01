@@ -7,23 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
-use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToAsset;
+use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
+use Magento\AdobeStockImage\Model\SaveKeywords;
 use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\Asset;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
+use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\AttributeValue;
-use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Test saving a media gallery asset and return its id.
@@ -37,9 +38,9 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $saveAssets;
 
     /**
-     * @var DocumentToMediaGalleryAsset|MockObject
+     * @var DocumentToAsset|MockObject
      */
-    private $converter;
+    private $documentToAsset;
 
     /**
      * @var FileSystem|MockObject
@@ -57,19 +58,19 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $saveMediaAsset;
 
     /**
-     * @var GetContentHashInterface|MockObject
+     * @var SaveKeywords|MockObject
      */
-    private $getContentHash;
+    private $saveKeywords;
 
     /**
-     * @var ExtractMetadataInterface|MockObject
+     * @var GetAssetsByPathsInterface|MockObject
      */
-    private $extractMetadata;
+    private $getAssetsByPaths;
 
     /**
-     * @var AttributeValueFactory|MockObject
+     * @var ImportFileInterface|MockObject
      */
-    private $attributeValueFactory;
+    private $importFile;
 
     /**
      * @inheritdoc
@@ -77,37 +78,61 @@ class SaveMediaGalleryAssetTest extends TestCase
     protected function setUp(): void
     {
         $this->saveAssets = $this->createMock(SaveAssetsInterface::class);
-        $this->getContentHash = $this->createMock(GetContentHashInterface::class);
-        $this->converter = $this->createMock(DocumentToMediaGalleryAsset::class);
+        $this->saveKeywords = $this->createMock(SaveKeywords::class);
+        $this->documentToAsset = $this->createMock(DocumentToAsset::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->mediaDirectory = $this->createMock(Read::class);
-        $this->extractMetadata = $this->createMock(ExtractMetadataInterface::class);
-        $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
+        $this->getAssetsByPaths = $this->createMock(GetAssetsByPathsInterface::class);
+        $this->importFile = $this->createMock(ImportFileInterface::class);
 
         $this->saveMediaAsset = (new ObjectManager($this))->getObject(
             SaveMediaGalleryAsset::class,
             [
-                'saveMediaAsset' =>  $this->saveAssets,
-                'documentToMediaGalleryAsset' =>  $this->converter,
-                'fileSystem' => $this->filesystem,
-                'extractMetadata' => $this->extractMetadata,
-                'attributeValueFactory' => $this->attributeValueFactory
+                'saveAssets' =>  $this->saveAssets,
+                'saveKeywords' =>  $this->saveKeywords,
+                'documentToAsset' =>  $this->documentToAsset,
+                'filesystem' => $this->filesystem,
+                'getAssetsByPaths' => $this->getAssetsByPaths,
+                'importFile' => $this->importFile
             ]
         );
-        $reflection = new \ReflectionClass(get_class($this->saveMediaAsset));
-        $reflectionMethod = $reflection->getMethod('calculateFileSize');
-        $reflectionMethod->setAccessible(true);
     }
 
     /**
      * Verify successful save of a media gallery asset id.
      *
+     * @dataProvider imageDataProvider
+     * @param Document $document
+     * @param string $path
      * @throws CouldNotSaveException
+     * @throws LocalizedException
      */
-    public function testExecute(): void
+    public function testExecute(Document $document, string $path): void
     {
-        $document = $this->createMock(Document::class);
-        $destinationPath = 'path';
+        $asset = $this->createMock(AssetInterface::class);
+        $absolutePath = 'root/pub/media/' . $path;
+        $assetId = 42;
+
+        $this->documentToAsset->expects($this->once())
+            ->method('convert')
+            ->willReturn($asset);
+
+        $this->saveAssets->expects($this->once())
+            ->method('execute')
+            ->with([$asset]);
+
+        $this->getAssetsByPaths->expects($this->once())
+            ->method('execute')
+            ->with([$path])
+            ->willReturn([$asset]);
+
+        $asset->expects($this->any())
+            ->method('getId')
+            ->willReturn($assetId);
+
+        $this->saveKeywords->expects($this->once())
+            ->method('execute')
+            ->with($assetId, $document);
 
         $this->filesystem->expects($this->atLeastOnce())
             ->method('getDirectoryRead')
@@ -116,57 +141,31 @@ class SaveMediaGalleryAssetTest extends TestCase
 
         $this->mediaDirectory->expects($this->atLeastOnce())
             ->method('getAbsolutePath')
-            ->with($destinationPath)
-            ->willReturn('root/pub/media/catalog/test-image.jpeg');
+            ->with($path)
+            ->willReturn($absolutePath);
 
-        $fileSize = 42;
-        $this->mediaDirectory->expects($this->once())
-            ->method('stat')
-            ->willReturn(['size' => $fileSize]);
-
-        $hash = 'hash';
-
-        $this->mediaDirectory->expects($this->once())
-            ->method('readFile')
-            ->willReturn($hash);
-
-        $additionalData = [
-            'id' => null,
-            'path' => $destinationPath,
-            'source' => 'Adobe Stock',
-            'size' => $fileSize,
-            'hash' => $this->getContentHash->execute($hash)
-        ];
-        $attributeMock = $this->createMock(AttributeValue::class);
-        $metadataMock = $this->createMock(MetadataInterface::class);
-        $document->expects($this->once())
-             ->method('getCustomAttributes')
-             ->willReturn([]);
-        $this->extractMetadata->expects($this->once())
-             ->method('execute')
-             ->willReturn($metadataMock);
-        $this->attributeValueFactory->expects($this->once())
-             ->method('create')
-             ->willReturn($attributeMock);
-        
-        $mediaGalleryAssetMock = $this->createMock(Asset::class);
-        $this->converter->expects($this->once())
-            ->method('convert')
-            ->with($document, $additionalData)
-            ->willReturn($mediaGalleryAssetMock);
-        $attributeMock->expects($this->once())
-            ->method('setAttributeCode');
-        $attributeMock->expects($this->once())
-            ->method('setValue');
-        $metadataMock->expects($this->once())
-            ->method('getDescription');
-        $document->expects($this->once())
-            ->method('setCustomAttributes');
-
-        $this->saveAssets->expects($this->once())
+        $this->importFile->expects($this->once())
             ->method('execute')
-            ->with([$mediaGalleryAssetMock]);
+            ->with($absolutePath);
 
-        $this->saveMediaAsset->execute($document, $destinationPath);
+        $this->assertEquals(
+            $assetId,
+            $this->saveMediaAsset->execute($document, $path)
+        );
+    }
+
+    /**
+     * Data provider for testExecute
+     *
+     * @return array[]
+     */
+    public function imageDataProvider(): array
+    {
+        return [
+            [
+                $this->createMock(Document::class),
+                'catalog/test-image.jpeg'
+            ]
+        ];
     }
 }

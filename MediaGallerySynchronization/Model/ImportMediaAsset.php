@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
 
 /**
  * Import image file to the media gallery asset table
@@ -30,7 +30,7 @@ class ImportMediaAsset implements ImportFileInterface
      * @var CreateAssetFromFile
      */
     private $createAssetFromFile;
-    
+
     /**
      * @param SplFileInfoFactory $splFileInfoFactory
      * @param SaveAssetsInterface $saveAssets
@@ -51,7 +51,12 @@ class ImportMediaAsset implements ImportFileInterface
      */
     public function execute(string $path): void
     {
-        $file = $this->splFileInfoFactory->create($path);
-        $this->saveAssets->execute([$this->createAssetFromFile->execute($file)]);
+        $this->saveAssets->execute(
+            [
+                $this->createAssetFromFile->execute(
+                    $this->splFileInfoFactory->create($path)
+                )
+            ]
+        );
     }
 }

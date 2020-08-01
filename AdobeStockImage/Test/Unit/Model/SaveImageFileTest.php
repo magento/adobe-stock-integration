@@ -76,8 +76,7 @@ class SaveImageFileTest extends TestCase
 
         $this->storageSave->expects($this->once())
             ->method('execute')
-            ->with($url, $destinationPath)
-            ->willReturn($path);
+            ->with($url, $destinationPath);
 
         $this->saveImageFile->execute($document, $url, $destinationPath);
     }
