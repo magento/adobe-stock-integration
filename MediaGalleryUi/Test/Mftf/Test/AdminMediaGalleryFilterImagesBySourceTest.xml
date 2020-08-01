@@ -31,7 +31,7 @@
         </after>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadContentImage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectSourceFilterActionGroup" stepKey="applyLocalFilter">
@@ -39,7 +39,7 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilterToApplySourceFilter"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectSourceFilterActionGroup" stepKey="applyAdobeStockFilter">
@@ -47,7 +47,7 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFiltersWithAdobeStockOption"/>
         <actionGroup ref="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup" stepKey="assertImageNotExistsInGrid">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
     </test>
 </tests>
