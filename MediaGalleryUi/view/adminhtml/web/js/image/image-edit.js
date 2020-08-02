@@ -66,6 +66,7 @@ define([
                 newKeywordField = $(this.newKeywordSelector);
 
             newKeywordField.validation();
+
             if (!newKeywordField.validation('isValid') || this.newKeyword() === '') {
                 return;
             }
