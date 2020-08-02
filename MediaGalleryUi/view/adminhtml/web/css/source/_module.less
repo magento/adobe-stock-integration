@@ -17,7 +17,7 @@
 @color-media-gallery-buttons-background: #e3e3e3;
 @color-media-gallery-buttons-border: #adadad;
 @color-media-gallery-buttons-text: #514943;
-@color-media-gallery-checkbox-background: #eee; 
+@color-media-gallery-checkbox-background: #eee;
 
 & when (@media-common = true) {
 
@@ -36,7 +36,7 @@
             overflow: hidden;
             text-overflow: ellipsis
         }
-        
+
         .admin__action-multiselect-label > span {
             display: block;
             margin-top: -2px;
@@ -47,19 +47,19 @@
             position: absolute;
             text-overflow: ellipsis;
         }
-        
+
         .admin__action-multiselect-item-path {
             float: right;
             max-height: 70px;
             max-width: 70px;
         }
-        
+
         .admin__action-multiselect-label {
             display: inline-block;
             width: 100%;
         }
     }
-    
+
     .page-actions-buttons > button.no-display {
         display: none;
     }
@@ -92,7 +92,7 @@
         margin-left: -15px;
         padding-right: 20px;
     }
-    
+
     .media-gallery-container {
 
         .masonry-image-grid .no-data-message-container,
@@ -322,6 +322,15 @@
         }
 
         .admin__data-grid-filters .admin__form-field {
+            .action-select-wrap {
+                .action-menu {
+                    width: 110%;
+                }
+                .admin__action-multiselect-search-label {
+                    right: 1.5rem;
+                }
+            }
+
             .action-close {
                 padding: 0;
                 &:before {

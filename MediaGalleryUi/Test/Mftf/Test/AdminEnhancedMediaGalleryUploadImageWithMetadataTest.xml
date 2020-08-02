@@ -22,10 +22,6 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         </before>
-        <after>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
-        </after>
-
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -38,6 +34,37 @@
        </actionGroup>
        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageTitleActionGroup" stepKey="verifyImageTitle">
             <argument name="title" value="ImageMetadata.title"/>
+       </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteJpegImage"/>
+
+       <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadPngImage">
+            <argument name="image" value="ImageUploadPng"/>
+       </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewPngImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyPngImageDescription">
+            <argument name="description" value="ImageMetadata.description"/>
         </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyPngImageKeywords">
+            <argument name="keywords" value="ImageMetadata.keywords"/>
+       </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageTitleActionGroup" stepKey="verifyPngImageTitle">
+            <argument name="title" value="ImageMetadata.title"/>
+       </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deletePngImage"/>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadGifImage">
+            <argument name="image" value="ImageUploadGif"/>
+       </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewGifImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyGifImageDescription">
+            <argument name="description" value="ImageMetadata.description"/>
+        </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyGifImageKeywords">
+            <argument name="keywords" value="ImageMetadata.keywords"/>
+       </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageTitleActionGroup" stepKey="verifyGifImageTitle">
+            <argument name="title" value="ImageMetadata.title"/>
+       </actionGroup>
+       <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteGifImage"/>
     </test>
 </tests>

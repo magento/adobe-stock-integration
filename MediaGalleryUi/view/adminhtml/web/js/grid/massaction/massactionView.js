@@ -95,8 +95,11 @@ define([
           * Activate mass action buttons view
           */
         activateMassactionButtonView: function () {
-            this.originDeleteSelector = $(this.deleteButtonSelector).clone(true, true);
-            this.originCancelEvent = $('#cancel').clone(true);
+            this.originDeleteSelector = $(this.deleteButtonSelector).clone();
+            $(this.originDeleteSelector).click(function () {
+                $(window).trigger('massAction.MediaGallery');
+            });
+            this.originCancelEvent = $('#cancel').clone(true, true);
 
             $.each(this.buttonsIds, function (key, value) {
                 $(value).addClass('no-display');
