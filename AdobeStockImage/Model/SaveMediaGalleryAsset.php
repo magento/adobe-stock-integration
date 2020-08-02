@@ -9,14 +9,12 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToAsset;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 
 /**
  * Process save action of the media gallery asset and keywords.
@@ -31,19 +29,14 @@ class SaveMediaGalleryAsset
     private $documentToAsset;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var GetAssetsByPathsInterface
      */
     private $getAssetsByPaths;
 
     /**
-     * @var ImportFileInterface
+     * @var SynchronizeFilesInterface
      */
-    private $importFile;
+    private $importFiles;
 
     /**
      * @var SaveAssetsInterface
@@ -57,24 +50,21 @@ class SaveMediaGalleryAsset
 
     /**
      * @param DocumentToAsset $documentToAsset
-     * @param Filesystem $filesystem
      * @param GetAssetsByPathsInterface $getAssetsByPaths
-     * @param ImportFileInterface $importFile
+     * @param SynchronizeFilesInterface $importFiles
      * @param SaveAssetsInterface $saveAssets
      * @param SaveKeywords $saveKeywords
      */
     public function __construct(
         DocumentToAsset $documentToAsset,
-        Filesystem $filesystem,
         GetAssetsByPathsInterface $getAssetsByPaths,
-        ImportFileInterface $importFile,
+        SynchronizeFilesInterface $importFiles,
         SaveAssetsInterface $saveAssets,
         SaveKeywords $saveKeywords
     ) {
         $this->documentToAsset = $documentToAsset;
-        $this->filesystem = $filesystem;
         $this->getAssetsByPaths = $getAssetsByPaths;
-        $this->importFile = $importFile;
+        $this->importFiles = $importFiles;
         $this->saveAssets = $saveAssets;
         $this->saveKeywords = $saveKeywords;
     }
@@ -91,9 +81,7 @@ class SaveMediaGalleryAsset
     public function execute(Document $document, string $path): int
     {
         try {
-            $this->importFile->execute(
-                $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($path)
-            );
+            $this->importFiles->execute([$path]);
             $asset = $this->getAssetsByPaths->execute([$path])[0];
             $this->saveAsset($document, $asset);
             $this->saveKeywords($document, $asset->getId());

@@ -8,21 +8,17 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToAsset;
-use Magento\AdobeStockImage\Model\Extract\Keywords as DocumentToKeywords;
 use Magento\AdobeStockImage\Model\SaveKeywords;
 use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,11 +37,6 @@ class SaveMediaGalleryAssetTest extends TestCase
      * @var DocumentToAsset|MockObject
      */
     private $documentToAsset;
-
-    /**
-     * @var FileSystem|MockObject
-     */
-    private $filesystem;
 
     /**
      * @var Read|MockObject
@@ -68,9 +59,9 @@ class SaveMediaGalleryAssetTest extends TestCase
     private $getAssetsByPaths;
 
     /**
-     * @var ImportFileInterface|MockObject
+     * @var SynchronizeFilesInterface|MockObject
      */
-    private $importFile;
+    private $importFiles;
 
     /**
      * @inheritdoc
@@ -80,10 +71,9 @@ class SaveMediaGalleryAssetTest extends TestCase
         $this->saveAssets = $this->createMock(SaveAssetsInterface::class);
         $this->saveKeywords = $this->createMock(SaveKeywords::class);
         $this->documentToAsset = $this->createMock(DocumentToAsset::class);
-        $this->filesystem = $this->createMock(Filesystem::class);
         $this->mediaDirectory = $this->createMock(Read::class);
         $this->getAssetsByPaths = $this->createMock(GetAssetsByPathsInterface::class);
-        $this->importFile = $this->createMock(ImportFileInterface::class);
+        $this->importFiles = $this->createMock(SynchronizeFilesInterface::class);
 
         $this->saveMediaAsset = (new ObjectManager($this))->getObject(
             SaveMediaGalleryAsset::class,
@@ -91,9 +81,8 @@ class SaveMediaGalleryAssetTest extends TestCase
                 'saveAssets' =>  $this->saveAssets,
                 'saveKeywords' =>  $this->saveKeywords,
                 'documentToAsset' =>  $this->documentToAsset,
-                'filesystem' => $this->filesystem,
                 'getAssetsByPaths' => $this->getAssetsByPaths,
-                'importFile' => $this->importFile
+                'importFiles' => $this->importFiles
             ]
         );
     }
@@ -110,7 +99,6 @@ class SaveMediaGalleryAssetTest extends TestCase
     public function testExecute(Document $document, string $path): void
     {
         $asset = $this->createMock(AssetInterface::class);
-        $absolutePath = 'root/pub/media/' . $path;
         $assetId = 42;
 
         $this->documentToAsset->expects($this->once())
@@ -134,19 +122,9 @@ class SaveMediaGalleryAssetTest extends TestCase
             ->method('execute')
             ->with($assetId, $document);
 
-        $this->filesystem->expects($this->atLeastOnce())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::MEDIA)
-            ->willReturn($this->mediaDirectory);
-
-        $this->mediaDirectory->expects($this->atLeastOnce())
-            ->method('getAbsolutePath')
-            ->with($path)
-            ->willReturn($absolutePath);
-
-        $this->importFile->expects($this->once())
+        $this->importFiles->expects($this->once())
             ->method('execute')
-            ->with($absolutePath);
+            ->with([$path]);
 
         $this->assertEquals(
             $assetId,

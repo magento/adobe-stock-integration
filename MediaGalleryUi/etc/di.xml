@@ -40,7 +40,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFileComposite">
+    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <plugin name="createMediaGalleryThumbnails" type="Magento\MediaGalleryUi\Plugin\CreateThumbnails"/>
     </type>
     <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">

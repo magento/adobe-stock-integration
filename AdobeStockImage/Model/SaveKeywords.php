@@ -36,6 +36,7 @@ class SaveKeywords
     /**
      * @param SaveAssetsKeywordsInterface $saveAssetKeywords
      * @param AssetKeywordsInterfaceFactory $assetKeywordsFactory
+     * @param DocumentToKeywords $documentToKeywords
      */
     public function __construct(
         SaveAssetsKeywordsInterface $saveAssetKeywords,

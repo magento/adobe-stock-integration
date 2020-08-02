@@ -9,6 +9,8 @@ namespace Magento\MediaGalleryIntegration\Plugin;
 
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
@@ -46,7 +48,13 @@ class SaveBaseCategoryImageInformation
     private $synchronizeFiles;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPath
+     * @param Filesystem $filesystem
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param Storage $storage
      * @param SynchronizeFilesInterface $synchronizeFiles
@@ -54,12 +62,14 @@ class SaveBaseCategoryImageInformation
      */
     public function __construct(
         DeleteAssetsByPathsInterface $deleteAssetsByPath,
+        Filesystem $filesystem,
         GetAssetsByPathsInterface $getAssetsByPaths,
         Storage $storage,
         SynchronizeFilesInterface $synchronizeFiles,
         ConfigInterface $config
     ) {
         $this->deleteAssetsByPaths = $deleteAssetsByPath;
+        $this->filesystem = $filesystem;
         $this->getAssetsByPaths = $getAssetsByPaths;
         $this->storage = $storage;
         $this->synchronizeFiles = $synchronizeFiles;
@@ -79,14 +89,18 @@ class SaveBaseCategoryImageInformation
         }
 
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
-        $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, "/"), 1);
+        $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, '/'), 1);
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
 
         if (!empty($tmpAssets)) {
             $this->deleteAssetsByPaths->execute([$tmpAssets[0]->getPath()]);
         }
 
-        $this->synchronizeFiles->execute([$absolutePath]);
+        $this->synchronizeFiles->execute(
+            [
+                $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($absolutePath)
+            ]
+        );
 
         return $imagePath;
     }

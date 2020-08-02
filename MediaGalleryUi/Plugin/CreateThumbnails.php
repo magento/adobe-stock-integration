@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Plugin;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\MediaGallerySynchronizationApi\Model\ImportFileComposite;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite;
 
 /**
  * Create resizes files that were synced
@@ -21,24 +23,34 @@ class CreateThumbnails
     private $storage;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param Storage $storage
      */
-    public function __construct(Storage $storage)
+    public function __construct(Filesystem $filesystem, Storage $storage)
     {
         $this->storage = $storage;
+        $this->filesystem = $filesystem;
     }
 
     /**
      * Create thumbnails for synced files.
      *
-     * @param ImportFileComposite $subject
-     * @param string $path
+     * @param ImportFilesComposite $subject
+     * @param string[] $path
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(ImportFileComposite $subject, string $path): string
+    public function beforeExecute(ImportFilesComposite $subject, array $paths): array
     {
-        $this->storage->resizeFile($path);
+        foreach ($paths as $path) {
+            $this->storage->resizeFile(
+                $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($path)
+            );
+        }
 
-        return $path;
+        return [$paths];
     }
 }

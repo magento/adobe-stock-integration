@@ -7,21 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronizationApi\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
-
 /**
  * File save pool
  */
-class ImportFileComposite implements ImportFileInterface
+class ImportFilesComposite implements ImportFilesInterface
 {
     /**
-     * @var ImportFileInterface[]
+     * @var ImportFilesInterface[]
      */
     private $importers;
 
     /**
-     * @param ImportFileInterface[] $importers
+     * @param ImportFilesInterface[] $importers
      */
     public function __construct(array $importers)
     {
@@ -30,15 +27,12 @@ class ImportFileComposite implements ImportFileInterface
     }
 
     /**
-     * Save file data
-     *
-     * @param string $path
-     * @throws LocalizedException
+     * @inheritdoc
      */
-    public function execute(string $path): void
+    public function execute(array $paths): void
     {
         foreach ($this->importers as $importer) {
-            $importer->execute($path);
+            $importer->execute($paths);
         }
     }
 }
