@@ -30,7 +30,8 @@ class SynchronizerPool
         foreach ($synchronizers as $name => $synchronizer) {
             if (!$synchronizer instanceof SynchronizeFilesInterface) {
                 throw new \InvalidArgumentException(sprintf(
-                    'Synchronizer must implement %s.',
+                    'Synchronizer %s must implement %s.',
+                    $name,
                     SynchronizeFilesInterface::class
                 ));
             }
