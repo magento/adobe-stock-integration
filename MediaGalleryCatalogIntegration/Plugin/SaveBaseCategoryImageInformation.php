@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryIntegration\Plugin;
+namespace Magento\MediaGalleryCatalogIntegration\Plugin;
 
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 
@@ -81,6 +81,8 @@ class SaveBaseCategoryImageInformation
      *
      * @param ImageUploader $subject
      * @param string $imagePath
+     * @return string
+     * @throws LocalizedException
      */
     public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
     {

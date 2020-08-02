@@ -7,10 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 
 /**
@@ -24,36 +21,20 @@ class ImportMediaAsset implements ImportFilesInterface
     private $saveAssets;
 
     /**
-     * @var SplFileInfoFactory
+     * @var GetAssetFromPath
      */
-    private $splFileInfoFactory;
+    private $getAssetFromPath;
 
     /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @param SplFileInfoFactory $splFileInfoFactory
      * @param SaveAssetsInterface $saveAssets
-     * @param CreateAssetFromFile $createAssetFromFile
-     * @param Filesystem $filesystem
+     * @param GetAssetFromPath $getAssetFromPath
      */
     public function __construct(
-        SplFileInfoFactory $splFileInfoFactory,
         SaveAssetsInterface $saveAssets,
-        CreateAssetFromFile $createAssetFromFile,
-        Filesystem $filesystem
+        GetAssetFromPath $getAssetFromPath
     ) {
-        $this->splFileInfoFactory = $splFileInfoFactory;
         $this->saveAssets = $saveAssets;
-        $this->createAssetFromFile = $createAssetFromFile;
-        $this->filesystem = $filesystem;
+        $this->getAssetFromPath = $getAssetFromPath;
     }
 
     /**
@@ -64,11 +45,7 @@ class ImportMediaAsset implements ImportFilesInterface
         $assets = [];
 
         foreach ($paths as $path) {
-            $assets[] = $this->createAssetFromFile->execute(
-                $this->splFileInfoFactory->create(
-                    $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($path)
-                )
-            );
+            $assets[] = $this->getAssetFromPath->execute($path);
         }
 
         $this->saveAssets->execute($assets);

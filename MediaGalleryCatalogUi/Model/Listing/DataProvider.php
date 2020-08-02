@@ -28,6 +28,8 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiCo
  */
 class DataProvider extends UiComponentDataProvider
 {
+    private const ENTITY_ID = 'entity_id';
+
     /**
      * @var SearchResultFactory
      */
@@ -164,7 +166,7 @@ class DataProvider extends UiComponentDataProvider
         $filterGroups = $searchCriteria->getFilterGroups();
 
         $filters[] = $this->filterBuilder
-                   ->setField('entity_id')
+                   ->setField(self::ENTITY_ID)
                    ->setConditionType('neq')
                    ->setValue(1)
                    ->create();
