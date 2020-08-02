@@ -10,7 +10,7 @@
     <preference for="Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface" type="Magento\MediaGallerySynchronization\Model\FetchBatches"/>
     <preference for="Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface" type="Magento\MediaGallerySynchronization\Model\SynchronizeFiles"/>
     <preference for="Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface" type="Magento\MediaGallerySynchronization\Model\GetContentHash"/>
-    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFileComposite">
+    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="0" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportMediaAsset</item>
