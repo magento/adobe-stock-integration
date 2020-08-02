@@ -8,14 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertImageInGridActionGroup">
+    <actionGroup name="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup">
         <annotations>
-            <description>Asserts that image exists in media gallery grid</description>
+            <description>Closes View Details panel</description>
         </annotations>
-        <arguments>
-            <argument name="title"/>
-        </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
 
+        <click selector="{{AdminEnhancedMediaGalleryViewDetailsSection.cancel}}" stepKey="clickCancel"/>
+        <wait time="1" stepKey="waitForElementRender"/>
     </actionGroup>
 </actionGroups>
