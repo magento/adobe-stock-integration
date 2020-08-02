@@ -21,3 +21,4 @@
 @import MediaGalleryMetadataApi
 @import MediaGalleryCatalogUi
 @import MediaGalleryCmsUi
+@import MediaGalleryCatalogIntegration
