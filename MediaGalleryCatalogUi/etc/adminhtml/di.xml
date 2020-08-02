@@ -24,4 +24,12 @@
             <argument name="entityType" xsi:type="string">catalog_category</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
+        <arguments>
+            <argument name="contentTypes" xsi:type="array">
+                <item name="catalog_category" xsi:type="string">Categories</item>
+                <item name="catalog_product" xsi:type="string">Products</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

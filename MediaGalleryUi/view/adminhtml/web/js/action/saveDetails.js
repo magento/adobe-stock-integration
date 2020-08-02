@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'mage/translate'
+], function ($, $t) {
     'use strict';
 
     return function (saveImageDetailsUrl, formElement) {
@@ -44,7 +45,7 @@ define([
                 if (typeof response.responseJSON === 'undefined' ||
                     typeof response.responseJSON.message === 'undefined'
                 ) {
-                    message = $.mage.__('Could not save image details.');
+                    message = $t('Could not save image details.');
                 } else {
                     message = response.responseJSON.message;
                 }

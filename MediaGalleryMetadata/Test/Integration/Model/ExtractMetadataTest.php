@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class ExtractMetadataTest extends TestCase
 {
     /**
-     * @var ExtractMetadataInterface
+     * @var ExtractMetadataComposite
      */
     private $extractMetadata;
 
@@ -97,7 +97,16 @@ class ExtractMetadataTest extends TestCase
                     'magento',
                     'mediagallerymetadata'
                 ]
-            ]
+            ],
+            [
+                'iptc_only.png',
+                'Title of the magento image',
+                'PNG format is awesome',
+                [
+                    'png',
+                    'awesome'
+                ]
+            ],
         ];
     }
 }

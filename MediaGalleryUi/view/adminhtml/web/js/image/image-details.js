@@ -19,7 +19,6 @@ define([
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
-            categoryContentType: 'Category',
             showAllTags: false,
             image: null,
             usedInComponents : [],
@@ -54,8 +53,8 @@ define([
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
-                }.bind(this)).fail(function (message) {
-                    this.addMediaGridMessage('error', message);
+                }.bind(this)).fail(function (error) {
+                    this.addMediaGridMessage('error', error);
                 }.bind(this));
 
                 return;
@@ -148,29 +147,6 @@ define([
                 usedIn.push(count + ' ' + moduleName);
             });
             return usedIn;
-        },
-
-        /**
-         * Return entity name based on used in count
-         *
-         * @param usedIn
-         */
-        getEntityNameWithPrefix: function (usedIn) {
-            var count = usedIn.match(/\d+/g);
-            var entityName =  usedIn.match(/[a-zA-Z]+/g);
-            var name;
-
-            if (count[0] > 1) {
-                if (entityName[0] === this.categoryContentType) {
-                    name = count[0] + ' ' + entityName[0].slice(0, -1) + 'ies';
-                } else {
-                    name = count[0] + ' ' + entityName[0] + 's';
-                }
-
-                return name;
-            }
-
-            return count[0] + ' ' +entityName[0];
         },
 
         /**

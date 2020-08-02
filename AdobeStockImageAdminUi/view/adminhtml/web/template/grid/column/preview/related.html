@@ -30,47 +30,47 @@
 
     <div id="adobe-stock-tabs-content"
          class="adobe-stock-related-images-tab-content">
-        <div class="spinner related-loader" data-bind="visible: loader">
+        <div class="spinner related-loader" visible="loader">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </div>
         <div if="showSeriesTab($row())" attr="'id': 'series_content_' + $row().id">
-            <!-- ko foreach: getSeries($row()) -->
-            <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToSeriesImage($data) }">
-                <img attr="src: thumbnail_url, alt: title">
-            </div>
-            <!-- /ko -->
-            <!-- ko if: canShowMoreSeriesImages($row()) -->
-            <div class="see-more-wrapper" data-bind="click: function(){ seeMoreFromSeries($row()) }">
-                <div class="see-more-content">
-                    <div class="three-dots">
-                        <span class="dots"></span>
-                        <span class="dots"></span>
-                        <span class="dots"></span>
-                    </div>
-                    <a href="" class="see-more">See more</a>
+            <each args="getSeries($row())">
+                <div class="thumbnail" click="function(){ $parent.switchImagePreviewToSeriesImage($data) }">
+                    <img attr="src: thumbnail_url, alt: title">
                 </div>
-            </div>
-            <!-- /ko -->
+            </each>
+            <if args="canShowMoreSeriesImages($row())">
+                <div class="see-more-wrapper" click="function(){ seeMoreFromSeries($row()) }">
+                    <div class="see-more-content">
+                        <div class="three-dots">
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                        </div>
+                        <a href="" class="see-more">See more</a>
+                    </div>
+                </div>
+            </if>
         </div>
         <div if="showModelTab($row())" attr="'id': 'model_content_' + $row().id">
-            <!-- ko foreach: getModel($row()) -->
-            <div class="thumbnail" data-bind="click: function(){ $parent.switchImagePreviewToModelImage($data) }">
-                <img attr="src: thumbnail_url, alt: title">
-            </div>
-            <!-- /ko -->
-            <!-- ko if: canShowMoreModelImages($row()) -->
-            <div class="see-more-wrapper" data-bind="click: function(){ seeMoreFromModel($row()) }">
-                <div class="see-more-content">
-                    <div class="three-dots">
-                        <span class="dots"></span>
-                        <span class="dots"></span>
-                        <span class="dots"></span>
-                    </div>
-                    <a href="" class="see-more">See more</a>
+            <each args="getModel($row())">
+                <div class="thumbnail" click="function(){ $parent.switchImagePreviewToModelImage($data) }">
+                    <img attr="src: thumbnail_url, alt: title">
                 </div>
-            </div>
-            <!-- /ko -->
+            </each>
+            <if args="canShowMoreModelImages($row())">
+                <div class="see-more-wrapper" click="function(){ seeMoreFromModel($row()) }">
+                    <div class="see-more-content">
+                        <div class="three-dots">
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                            <span class="dots"></span>
+                        </div>
+                        <a href="" class="see-more">See more</a>
+                    </div>
+                </div>
+            </if>
         </div>
     </div>
 </div>

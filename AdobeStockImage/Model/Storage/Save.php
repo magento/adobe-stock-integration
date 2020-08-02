@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model\Storage;
 
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\FileSystemException;
@@ -41,26 +40,18 @@ class Save
     private $isPathExcluded;
 
     /**
-     * @var Storage
-     */
-    private $storage;
-
-    /**
      * @param Filesystem $filesystem
      * @param Https $driver
      * @param IsPathExcludedInterface $isPathExcluded
-     * @param Storage $storage
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        IsPathExcludedInterface $isPathExcluded,
-        Storage $storage
+        IsPathExcludedInterface $isPathExcluded
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->isPathExcluded = $isPathExcluded;
-        $this->storage = $storage;
     }
 
     /**
@@ -90,7 +81,6 @@ class Save
 
         $fileContents = $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl));
         $mediaDirectory->writeFile($destinationPath, $fileContents);
-        $this->storage->resizeFile($mediaDirectory->getAbsolutePath($destinationPath));
     }
 
     /**
