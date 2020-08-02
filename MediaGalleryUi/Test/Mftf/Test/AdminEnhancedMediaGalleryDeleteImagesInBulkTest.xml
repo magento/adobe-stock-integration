@@ -33,6 +33,9 @@
         <actionGroup ref="AdminEnhancedMediaGalleryAssertMassActionModeDetailsActionGroup" stepKey="assertMassActionModeAvailable">
             <argument name="imageName" value="{{ImageUpload.fileName}}"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryDisableMassactionModeActionGroup" stepKey="disableMassActionMode"/>
+        
+        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
             <argument name="imageName" value="{{ImageUpload.fileName}}"/>
          </actionGroup>
