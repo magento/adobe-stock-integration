@@ -149,8 +149,8 @@ define([
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openEditImageDetailsModal();
-                }.bind(this)).fail(function (message) {
-                    this.addMediaGridMessage('error', message);
+                }.bind(this)).fail(function (error) {
+                    this.addMediaGridMessage('error', error);
                 }.bind(this));
 
                 return;
