@@ -51,7 +51,7 @@ class EntityType implements CustomFilterInterface
             }
 
             if (!empty($value)) {
-                $conditions[] = ['in' => $this->getSelectByEntityType($value)];
+                $conditions[] = ['in' => $this->getEntityTypesIds($value)];
             }
             
             $collection->addFieldToFilter(
@@ -63,35 +63,42 @@ class EntityType implements CustomFilterInterface
     }
 
     /**
-     * Return select asset ids by entity type
+     * Return  asset ids by entity type
      *
      * @param array $value
      * @return Select
      */
-    private function getSelectByEntityType(array $value): Select
+    private function getEntityTypesIds(array $value): array
     {
-        return $this->connection->getConnection()->select()->from(
-            ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
-            ['asset_id']
-        )->where(
-            'entity_type IN (?)',
-            $value
+        $connection = $this->connection->getConnection();
+        return $connection->fetchAssoc(
+            $connection->select()->from(
+                ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
+                ['asset_id']
+            )->where(
+                'entity_type IN (?)',
+                $value
+            )
         );
     }
     
     /**
-     * Return select asset ids that not exists in asset_content_table
+     * Return  asset ids that not exists in asset_content_table
      */
-    private function getNotUsedEntityIds(): Select
+    private function getNotUsedEntityIds(): array
     {
-        return $this->connection->getConnection()->select()->from(
-            ['media_gallery_asset' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
-            ['id']
-        )->where(
-            'media_gallery_asset.id  not in ?',
-            $this->connection->getConnection()->select()->from(
-                ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
-                ['asset_id']
+        $connection = $this->connection->getConnection();
+        
+        return $connection->fetchAssoc(
+            $connection->select()->from(
+                ['media_gallery_asset' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
+                ['id']
+            )->where(
+                'media_gallery_asset.id  not in ?',
+                $this->connection->getConnection()->select()->from(
+                    ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
+                    ['asset_id']
+                )
             )
         );
     }

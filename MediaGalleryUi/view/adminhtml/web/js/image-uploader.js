@@ -10,7 +10,7 @@ define([
     'Magento_Ui/js/lib/validation/validator',
     'mage/translate',
     'jquery/file-uploader'
-], function (Component, $, _, validator) {
+], function (Component, $, _, validator, $t) {
     'use strict';
 
     return Component.extend({
@@ -113,6 +113,12 @@ define([
                 done: function (e, data) {
                     var response = data.jqXHR.responseJSON;
 
+                    if (!response) {
+                        this.showErrorMessage(data, $t('Could not upload the asset.'));
+
+                        return;
+                    }
+
                     if (!response.success) {
                         this.showErrorMessage(data, response.message);
 
@@ -133,7 +139,7 @@ define([
         addValidationErrorMessage: function (message) {
             this.mediaGridMessages().add(
                 'error',
-                $.mage.__(message)
+                $t(message)
             );
 
             this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
@@ -186,7 +192,7 @@ define([
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__(file.name + ': ' + message)
+                    file.name + ': ' + $t(message)
                 );
             }.bind(this));
 
@@ -202,7 +208,7 @@ define([
             this.mediaGridMessages().messages.remove(function (item) {
                 return item.code === 'success';
             });
-            this.mediaGridMessages().add('success', $.mage.__('Successfully uploaded ' + prefix));
+            this.mediaGridMessages().add('success', $t('Successfully uploaded ' + prefix));
             this.count(this.count() + 1);
 
         },

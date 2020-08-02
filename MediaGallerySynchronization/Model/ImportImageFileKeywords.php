@@ -7,20 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
-use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 
 /**
  * import image keywords from file metadata
  */
-class ImportImageFileKeywords implements ImportFileInterface
+class ImportImageFileKeywords implements ImportFilesInterface
 {
     /**
      * @var Filesystem
@@ -41,14 +43,14 @@ class ImportImageFileKeywords implements ImportFileInterface
      * @var AssetKeywordsInterfaceFactory
      */
     private $assetKeywordsFactory;
-    
+
     /**
      * @var ExtractMetadataInterface
      */
     private $extractMetadata;
 
     /**
-     * @var SaveKeywords
+     * @var SaveAssetsKeywordsInterface
      */
     private $saveAssetKeywords;
 
@@ -86,44 +88,65 @@ class ImportImageFileKeywords implements ImportFileInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $path): void
+    public function execute(array $paths): void
     {
         $keywords = [];
-        $metadataKeywords = $this->extractMetadata->execute($path)->getKeywords();
 
-        if ($metadataKeywords !== null) {
-            foreach ($metadataKeywords as $keyword) {
-                $keywords[] = $this->keywordFactory->create(
-                    [
-                        'keyword' => $keyword
-                    ]
-                );
+        foreach ($paths as $path) {
+            $metadataKeywords = $this->getMetadataKeywords($path);
+            if ($metadataKeywords !== null) {
+                $keywords[$path] = $metadataKeywords;
             }
+        }
 
-            $assetId = $this->getAssetsByPaths->execute([$this->getRelativePath($path)])[0]->getId();
-            $assetKeywords = $this->assetKeywordsFactory->create([
-                'assetId' => $assetId,
-                'keywords' => $keywords
+        $assets = $this->getAssetsByPaths->execute(array_keys($keywords));
+
+        $assetKeywords = [];
+
+        foreach ($assets as $asset) {
+            $assetKeywords[] = $this->assetKeywordsFactory->create([
+                'assetId' => $asset->getId(),
+                'keywords' => $keywords[$asset->getPath()]
             ]);
-        
-            $this->saveAssetKeywords->execute([$assetKeywords]);
         }
+
+        $this->saveAssetKeywords->execute($assetKeywords);
     }
-    
-    /**
-     * Get correct path for media asset
-     *
-     * @param string $filePath
-     * @return string
-     */
-    private function getRelativePath(string $filePath): string
-    {
-        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($filePath);
 
-        if ($this->driver->getParentDirectory($path) === '.') {
-            $path = '/' . $path;
+    /**
+     * Get keywords from file metadata
+     *
+     * @param string $path
+     * @return KeywordInterface[]|null
+     */
+    private function getMetadataKeywords(string $path): ?array
+    {
+        $metadataKeywords = $this->extractMetadata->execute($this->getMediaDirectory()->getAbsolutePath($path))
+            ->getKeywords();
+        if ($metadataKeywords === null) {
+            return null;
         }
 
-        return $path;
+        $keywords = [];
+
+        foreach ($metadataKeywords as $keyword) {
+            $keywords[] = $this->keywordFactory->create(
+                [
+                    'keyword' => $keyword
+                ]
+            );
+        }
+
+        return $keywords;
+    }
+
+    /**
+     * Retrieve media directory instance with read access
+     *
+     * @return ReadInterface
+     */
+    private function getMediaDirectory(): ReadInterface
+    {
+        return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 }
