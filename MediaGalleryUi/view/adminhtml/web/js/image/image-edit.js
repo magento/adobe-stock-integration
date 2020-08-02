@@ -85,7 +85,7 @@ define([
          * @param {String} keyword
          * @returns {Object}
          */
-        getOptionForKeyword: function(keyword) {
+        getOptionForKeyword: function (keyword) {
             return {
                 is_active: 1,
                 level: 1,
