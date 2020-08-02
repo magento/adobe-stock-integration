@@ -47,13 +47,13 @@ class CategoryActions extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            $storeId = $this->context->getFilterParam('store_id');
-
             foreach ($dataSource['data']['items'] as &$item) {
                 $item[$this->getData('name')]['edit'] = [
                     'href' => $this->urlBuilder->getUrl(
                         'catalog/category/edit',
-                        ['id' => $item['entity_id'], 'store' => $storeId]
+                        [
+                            'id' => $item['entity_id']
+                        ]
                     ),
                     'label' => __('Edit'),
                     'hidden' => false,
