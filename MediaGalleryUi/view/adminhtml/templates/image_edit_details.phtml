@@ -33,9 +33,11 @@ use Magento\Backend\Block\Template;
     <div id="media-gallery-image-edit-details-messages" data-bind="scope: 'mediaGalleryEditDetailsMessages'">
         <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
-    <div id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    </div>
+    <form data-bind="mageInit:{'validation':{}}" id="image-edit-details-form" method="post" enctype="multipart/form-data">
+        <div id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
+    </form>
 </div>
 
 <script type="text/x-magento-init">
