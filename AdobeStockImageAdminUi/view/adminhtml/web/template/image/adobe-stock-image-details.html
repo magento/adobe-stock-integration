@@ -5,12 +5,12 @@
  */
 -->
 <div class="adobe-stock-image-details image-details-section" if="$parent.image().adobe_stock">
-    <h3 data-bind="i18n: 'Adobe Stock'"></h3>
+    <h3 translate="'Adobe Stock'"></h3>
     <div class="attributes">
         <each args="$parent.image().adobe_stock">
             <div class="attribute"  if="value">
-                <span class="title" data-bind="i18n: title"></span>
-                <div class="value" data-bind="text: value"></div>
+                <span class="title" translate="title"></span>
+                <div class="value" text="value"></div>
             </div>
         </each>
     </div>
