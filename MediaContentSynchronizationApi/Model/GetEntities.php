@@ -10,7 +10,7 @@ namespace Magento\MediaContentSynchronizationApi\Model;
 /**
  * Configuration of entities used for media content.
  */
-class Entities implements GetEntitiesInterface
+class GetEntities implements GetEntitiesInterface
 {
     /**
      * @var array

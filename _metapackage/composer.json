@@ -25,6 +25,7 @@
         "magento/module-media-gallery-metadata": "*",
         "magento/module-media-gallery-metadata-api": "*",
         "magento/module-media-gallery-catalog-ui": "*",
-        "magento/module-media-gallery-cms-ui": "*"
+        "magento/module-media-gallery-cms-ui": "*",
+        "magento/module-media-gallery-catalog-integration": "*"
     }
 }

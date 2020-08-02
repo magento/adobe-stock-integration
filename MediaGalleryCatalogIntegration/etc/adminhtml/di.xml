@@ -6,5 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\MediaContentSynchronizationApi\Model\GetEntitiesInterface" type="Magento\MediaContentSynchronizationApi\Model\GetEntities"/>
+    <type name="Magento\Catalog\Model\ImageUploader">
+        <plugin name="save_category_image" type="Magento\MediaGalleryCatalogIntegration\Plugin\SaveBaseCategoryImageInformation"/>
+    </type>
 </config>

@@ -58,9 +58,12 @@ class Synchronize extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Synchronizing content with assets...');
-        $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () {
-            $this->synchronizeContent->execute();
-        });
+        $this->state->emulateAreaCode(
+            Area::AREA_ADMINHTML,
+            function () {
+                $this->synchronizeContent->execute();
+            }
+        );
         $output->writeln('Completed content synchronization.');
         return Cli::RETURN_SUCCESS;
     }
