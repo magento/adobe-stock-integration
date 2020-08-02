@@ -35,6 +35,7 @@ class UsedIn implements AssetDetailsProviderInterface
 
     /**
      * @param GetContentByAssetIdsInterface $getContent
+     * @param UrlInterface $url
      * @param array $contentTypes
      */
     public function __construct(

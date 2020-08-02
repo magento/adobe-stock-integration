@@ -68,7 +68,9 @@ class Asset extends Select
     public function applyFilter()
     {
         if (isset($this->filterData[$this->getName()])) {
-            $ids = is_array($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : [$this->filterData[$this->getName()]];
+            $ids = is_array($this->filterData[$this->getName()])
+                ? $this->filterData[$this->getName()]
+                : [$this->filterData[$this->getName()]];
             $filter = $this->filterBuilder->setConditionType('in')
                     ->setField($this->_data['config']['identityColumn'])
                     ->setValue($this->getEntityIdsByAsset($ids))

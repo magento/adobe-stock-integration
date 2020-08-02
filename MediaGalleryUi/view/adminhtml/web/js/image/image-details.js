@@ -128,7 +128,7 @@ define([
         /**
          * Is value an object
          *
-         * @param value
+         * @param {*} value
          * @returns {Boolean}
          */
         isArray: function (value) {
