@@ -85,6 +85,7 @@
             <argument name="fileWriter" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\WriteFile</argument>
             <argument name="segmentWriters" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\WriteXmp</item>
+                <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\WriteIptc</item>
             </argument>
         </arguments>
     </virtualType>
@@ -110,6 +111,7 @@
             <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\ReadFile</argument>
             <argument name="segmentReaders" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\ReadXmp</item>
+                <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\ReadIptc</item>
             </argument>
         </arguments>
     </virtualType>

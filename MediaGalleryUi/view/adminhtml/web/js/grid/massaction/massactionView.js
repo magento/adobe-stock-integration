@@ -5,8 +5,10 @@
 
 define([
     'jquery',
-    'uiComponent'
-], function ($, Component) {
+    'uiComponent',
+    'mage/translate',
+    'text!Magento_MediaGalleryUi/template/grid/massactions/cancelButton.html'
+], function ($, Component, $t, cancelMassActionButton) {
     'use strict';
 
     return Component.extend({
@@ -15,7 +17,7 @@ define([
             gridSelector: '[data-id="media-gallery-masonry-grid"]',
             originDeleteSelector: null,
             originCancelEvent: null,
-            cancelMassactionButton: '<button id="cancel_massaction" type="button" class="cancel">Cancel</button>',
+            cancelMassactionButton: cancelMassActionButton,
             isCancelButtonInserted: false,
             deleteButtonSelector: '#delete_massaction',
             addSelectedButtonSelector: '#add_selected',
@@ -32,7 +34,7 @@ define([
                 '.three-dots',
                 '#add_selected'
             ],
-            massactionModeTitle: $.mage.__('Select Images to Delete')
+            massactionModeTitle: $t('Select Images to Delete')
         },
 
         /**
@@ -95,8 +97,11 @@ define([
           * Activate mass action buttons view
           */
         activateMassactionButtonView: function () {
-            this.originDeleteSelector = $(this.deleteButtonSelector).clone(true, true);
-            this.originCancelEvent = $('#cancel').clone(true);
+            this.originDeleteSelector = $(this.deleteButtonSelector).clone();
+            $(this.originDeleteSelector).click(function () {
+                $(window).trigger('massAction.MediaGallery');
+            });
+            this.originCancelEvent = $('#cancel').clone(true, true);
 
             $.each(this.buttonsIds, function (key, value) {
                 $(value).addClass('no-display');
@@ -104,7 +109,7 @@ define([
 
             $(this.deleteButtonSelector)
                 .removeClass('media-gallery-actions-buttons')
-                .text($.mage.__('Delete Selected'))
+                .text($t('Delete Selected'))
                 .addClass('primary');
 
             if (!$(this.cancelMassactionButtonSelector).length) {
@@ -115,7 +120,7 @@ define([
             }
             $('#cancel_massaction').on('click', function () {
                 $(window).trigger('terminateMassAction.MediaGallery');
-            });
+            }).applyBindings();
 
             $(this.deleteButtonSelector).off('click').on('click', function () {
                 $(this.deleteButtonSelector).trigger('massDelete');
@@ -127,21 +132,16 @@ define([
          * Change page title per active mode.
          */
         changePageTitle: function () {
-            var deferred = $.Deferred(),
-                  title = $('h1:contains(' + this.standAloneTitle + ')'),
+            var title = $('h1:contains(' + this.standAloneTitle + ')'),
                   titleSelector = title.length === 1 ? title : $('h1:contains(' + this.slidePanelTitle + ')');
 
             if (this.massActionMode()) {
                 this.defaultTitle = titleSelector.text();
                 titleSelector.text(this.massactionModeTitle);
-                deferred.resolve();
             } else {
                 titleSelector = $('h1:contains(' + this.massactionModeTitle + ')');
                 titleSelector.text(this.defaultTitle);
-                deferred.resolve();
             }
-
-            return deferred.promise();
         }
     });
 });

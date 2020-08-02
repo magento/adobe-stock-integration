@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 
 /**
  * Import image file to the media gallery asset table
  */
-class ImportMediaAsset implements ImportFileInterface
+class ImportMediaAsset implements ImportFilesInterface
 {
     /**
      * @var SaveAssetsInterface
@@ -21,27 +24,53 @@ class ImportMediaAsset implements ImportFileInterface
     private $saveAssets;
 
     /**
-     * @var GetAssetFromPath
+     * @var SplFileInfoFactory
      */
-    private $getAssetFromPath;
+    private $splFileInfoFactory;
 
     /**
+     * @var CreateAssetFromFile
+     */
+    private $createAssetFromFile;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @param SplFileInfoFactory $splFileInfoFactory
      * @param SaveAssetsInterface $saveAssets
-     * @param GetAssetFromPath $getAssetFromPath
+     * @param CreateAssetFromFile $createAssetFromFile
+     * @param Filesystem $filesystem
      */
     public function __construct(
+        SplFileInfoFactory $splFileInfoFactory,
         SaveAssetsInterface $saveAssets,
-        GetAssetFromPath $getAssetFromPath
+        CreateAssetFromFile $createAssetFromFile,
+        Filesystem $filesystem
     ) {
+        $this->splFileInfoFactory = $splFileInfoFactory;
         $this->saveAssets = $saveAssets;
-        $this->getAssetFromPath = $getAssetFromPath;
+        $this->createAssetFromFile = $createAssetFromFile;
+        $this->filesystem = $filesystem;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(string $path): void
+    public function execute(array $paths): void
     {
-        $this->saveAssets->execute([$this->getAssetFromPath->execute($path)]);
+        $assets = [];
+
+        foreach ($paths as $path) {
+            $assets[] = $this->createAssetFromFile->execute(
+                $this->splFileInfoFactory->create(
+                    $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($path)
+                )
+            );
+        }
+
+        $this->saveAssets->execute($assets);
     }
 }

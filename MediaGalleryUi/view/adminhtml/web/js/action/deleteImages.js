@@ -7,15 +7,16 @@ define([
     'underscore',
     'mage/url',
     'Magento_MediaGalleryUi/js/grid/messages',
-    'Magento_Ui/js/modal/confirm'
-], function ($, _, urlBuilder, messages, confirmation) {
+    'Magento_Ui/js/modal/confirm',
+    'mage/translate'
+], function ($, _, urlBuilder, messages, confirmation, $t) {
     'use strict';
 
     return function (ids, deleteUrl, confirmationContent) {
         var deferred = $.Deferred(),
-               title = $.mage.__('Delete images'),
-               cancelText = $.mage.__('Cancel'),
-               deleteImageText = $.mage.__('Delete');
+               title = $t('Delete assets'),
+               cancelText = $t('Cancel'),
+               deleteImageText = $t('Delete');
 
         /**
          * Send deletion request with redords ids
@@ -45,7 +46,7 @@ define([
                     var message = !_.isUndefined(response.message) ? response.message : null;
 
                     if (!response.success) {
-                        message = message || $.mage.__('There was an error on attempt to delete the images.');
+                        message = message || $t('There was an error on attempt to delete the images.');
                         $(window).trigger('fileDeleted.enhancedMediaGallery', {
                             reload: false,
                             message: message,
@@ -55,7 +56,7 @@ define([
                         deferred.reject(message);
                     }
 
-                    message = message || $.mage.__('You have successfully removed the images.');
+                    message = message || $t('You have successfully removed the images.');
                     $(window).trigger('fileDeleted.enhancedMediaGallery', {
                         reload: true,
                         message: message,
@@ -75,7 +76,7 @@ define([
                     if (typeof response.responseJSON === 'undefined' ||
                         typeof response.responseJSON.message === 'undefined'
                     ) {
-                        message = 'There was an error on attempt to delete the image.';
+                        message = $t('There was an error on attempt to delete the image.');
                     } else {
                         message = response.responseJSON.message;
                     }

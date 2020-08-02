@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'mage/translate'
+], function ($, $t) {
     'use strict';
 
     return function (imageDetailsUrl, imageIds) {
@@ -46,7 +47,7 @@ define([
                 if (typeof response.responseJSON === 'undefined' ||
                     typeof response.responseJSON.message === 'undefined'
                 ) {
-                    message = $.mage.__('Could not retrieve image details.');
+                    message = $t('Could not retrieve image details.');
                 } else {
                     message = response.responseJSON.message;
                 }

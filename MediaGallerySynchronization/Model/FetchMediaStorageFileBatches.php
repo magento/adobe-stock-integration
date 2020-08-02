@@ -40,7 +40,7 @@ class FetchMediaStorageFileBatches
      * @var string
      */
     private $fileExtensions;
-    
+
     /**
      * @var LoggerInterface
      */
@@ -89,11 +89,13 @@ class FetchMediaStorageFileBatches
 
         /** @var \SplFileInfo $file */
         foreach ($this->getAssetsIterator->execute($mediaDirectory->getAbsolutePath()) as $file) {
-            if (!$this->isApplicable($file->getPathName())) {
+            $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
+                ->getRelativePath($file->getPathName());
+            if (!$this->isApplicable($relativePath)) {
                 continue;
             }
 
-            $batch[] = $file->getPath() . '/' . $file->getFileName();
+            $batch[] = $relativePath;
             if (++$i == $this->batchSize) {
                 yield $batch;
                 $i = 0;
@@ -114,9 +116,8 @@ class FetchMediaStorageFileBatches
     private function isApplicable(string $path): bool
     {
         try {
-            $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
-            return $relativePath
-                && !$this->isPathExcluded->execute($relativePath)
+            return $path
+                && !$this->isPathExcluded->execute($path)
                 && preg_match('#\.(' . implode("|", $this->fileExtensions) . ')$# i', $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);

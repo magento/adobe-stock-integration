@@ -7,8 +7,9 @@
 define([
     'jquery',
     'wysiwygAdapter',
-    'underscore'
-], function ($, wysiwyg, _) {
+    'underscore',
+    'mage/translate'
+], function ($, wysiwyg, _, $t) {
     'use strict';
 
     return {
@@ -30,7 +31,7 @@ define([
 
             if (!targetElement.length) {
                 window.MediabrowserUtility.closeDialog();
-                throw 'Target element not found for content update';
+                throw $t('Target element not found for content update');
             }
 
             $.ajax({
