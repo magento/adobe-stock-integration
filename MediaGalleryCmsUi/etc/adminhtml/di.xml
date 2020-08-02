@@ -24,4 +24,12 @@
             <argument name="entityType" xsi:type="string">cms_block</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
+        <arguments>
+            <argument name="contentTypes" xsi:type="array">
+                <item name="cms_block" xsi:type="string">Blocks</item>
+                <item name="cms_page" xsi:type="string">Pages</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

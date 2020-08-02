@@ -7,8 +7,9 @@ define([
     'underscore',
     'uiComponent',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
-    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction'
-], function ($, _, Component, deleteImageWithDetailConfirmation, image) {
+    'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
+    'mage/translate'
+], function ($, _, Component, deleteImageWithDetailConfirmation, image, $t) {
     'use strict';
 
     return Component.extend({
@@ -19,17 +20,17 @@ define([
             actionsList: [
                 {
                     name: 'image-details',
-                    title: $.mage.__('View Details'),
+                    title: $t('View Details'),
                     handler: 'viewImageDetails'
                 },
                 {
                     name: 'edit',
-                    title: $.mage.__('Edit'),
+                    title: $t('Edit'),
                     handler: 'editImageDetails'
                 },
                 {
                     name: 'delete',
-                    title: $.mage.__('Delete'),
+                    title: $t('Delete'),
                     handler: 'deleteImageAction'
                 }
             ],
