@@ -13,8 +13,6 @@
 	        <block name="image.details" class="Magento\Backend\Block\Template" template="Magento_MediaGalleryUi::image_details_standalone.phtml">
                 <arguments>
                     <argument name="imageDetailsUrl" xsi:type="url" path="media_gallery/image/details"/>
-                    <argument name="cmsPageUrl" xsi:type="url" path="cms/page/index"/>
-                    <argument name="cmsBlockUrl" xsi:type="url" path="cms/block/index"/>
                 </arguments>
 	        </block>
             <block name="image.edit.details" class="Magento\Backend\Block\Template" template="Magento_MediaGalleryUi::image_edit_details_standalone.phtml">

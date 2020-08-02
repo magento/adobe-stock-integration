@@ -46,16 +46,6 @@ use Magento\Backend\Block\Template;
                     "mediaGalleryImageDetails": {
                         "component": "Magento_MediaGalleryUi/js/image/image-details",
                         "imageDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageDetailsUrl')); ?>",
-                        "usedInComponents": [
-                            {
-                                "name": "<?= $escaper->escapeJs(__('Page')); ?>",
-                                "url": "<?= $escaper->escapeJs($block->getData('cmsPageUrl')); ?>"
-                            },
-                            {
-                                "name": "<?= $escaper->escapeJs(__('Block')); ?>",
-                                "url": "<?= $escaper->escapeJs($block->getData('cmsBlockUrl')); ?>"
-                            }
-                        ],
                         "modalSelector": ".media-gallery-image-details-modal",
                         "modalWindowSelector": ".media-gallery-image-details",
                         "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
