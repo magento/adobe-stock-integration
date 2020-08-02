@@ -10,6 +10,7 @@ namespace Magento\MediaGallerySynchronization\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
@@ -96,8 +97,8 @@ class CreateAssetFromFile
      */
     public function execute(string $path): AssetInterface
     {
-        $file = $this->splFileInfoFactory->create($path);
-        $absolutePath = $file->getPath() . '/' . $file->getFileName();
+        $absolutePath = $this->getMediaDirectory()->getAbsolutePath($path);
+        $file = $this->splFileInfoFactory->create($absolutePath);
         [$width, $height] = getimagesize($absolutePath);
 
         $metadata = $this->extractMetadata->execute($absolutePath);
@@ -129,8 +130,16 @@ class CreateAssetFromFile
      */
     private function getHash(string $path): string
     {
-        return $this->getContentHash->execute(
-            $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->readFile($path)
-        );
+        return $this->getContentHash->execute($this->getMediaDirectory()->readFile($path));
+    }
+
+    /**
+     * Retrieve media directory instance with read access
+     *
+     * @return ReadInterface
+     */
+    private function getMediaDirectory(): ReadInterface
+    {
+        return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 }
