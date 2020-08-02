@@ -21,7 +21,6 @@ define([
             tagListLimit: 7,
             showAllTags: false,
             image: null,
-            usedInComponents : [],
             modules: {
                 mediaGridMessages: '${ $.mediaGridMessages }'
             }
@@ -127,26 +126,32 @@ define([
         },
 
         /**
-         * Check if asset is used or not
+         * Is value an object
          *
          * @param value
+         * @returns {Boolean}
          */
-        isUsedIn: function (value) {
-            return _.isObject(value);
+        isArray: function (value) {
+            return _.isArray(value);
         },
 
         /**
-         * Converting object into Array
+         * Get name and number text for used in link
          *
-         * @param object
+         * @param {Object} item
+         * @returns {String}
          */
-        convertObjectToArray: function (object) {
-            var usedIn = [];
+        getUsedInText: function (item) {
+            return item.name +  '(' + item.number + ')';
+        },
 
-            $.each(object, function (moduleName, count) {
-                usedIn.push(count + ' ' + moduleName);
-            });
-            return usedIn;
+        /**
+         * Get filter url
+         *
+         * @param {String} link
+         */
+        getFilterUrl: function (link) {
+            return link + '?filters[asset_id]=' + this.image().id;
         },
 
         /**
@@ -164,25 +169,6 @@ define([
          */
         removeCached: function (id) {
             delete this.images[id];
-        },
-
-        /**
-         * Get filter url
-         *
-         * @param usedIn
-         */
-        getFilterUrl: function (usedIn) {
-            var moduleName =  usedIn.match(/[a-zA-Z]+/g),
-                url = '',
-                self = this;
-
-            _.each(this.usedInComponents, function (usedInComponent) {
-                if (moduleName[0] === usedInComponent.name) {
-                    url = usedInComponent.url + '?filters[asset_id]=' + self.image().id;
-                }
-            });
-
-            return url;
         }
     });
 });

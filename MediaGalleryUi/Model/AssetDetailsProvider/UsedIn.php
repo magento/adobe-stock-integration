@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\AssetDetailsProvider;
 
+use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
@@ -28,14 +29,21 @@ class UsedIn implements AssetDetailsProviderInterface
     private $contentTypes;
 
     /**
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
      * @param GetContentByAssetIdsInterface $getContent
      * @param array $contentTypes
      */
     public function __construct(
         GetContentByAssetIdsInterface $getContent,
+        UrlInterface $url,
         array $contentTypes = []
     ) {
         $this->getContent = $getContent;
+        $this->url = $url;
         $this->contentTypes = $contentTypes;
     }
 
@@ -63,6 +71,26 @@ class UsedIn implements AssetDetailsProviderInterface
      */
     private function getUsedIn(int $assetId): array
     {
+        $details = [];
+
+        foreach ($this->getUsedInCounts($assetId) as $type => $number) {
+            $details[$type] = $this->contentTypes[$type] ?? ['name' => $type, 'link' => null];
+            $details[$type]['number'] = $number;
+            $details[$type]['link'] = $details[$type]['link'] ? $this->url->getUrl($details[$type]['link']) : null;
+        }
+
+        return array_values($details);
+    }
+
+    /**
+     * Get used in counts per type
+     *
+     * @param int $assetId
+     * @return int[]
+     * @throws IntegrationException
+     */
+    private function getUsedInCounts(int $assetId): array
+    {
         $usedIn = [];
         $entityIds = [];
 
@@ -70,12 +98,12 @@ class UsedIn implements AssetDetailsProviderInterface
 
         foreach ($contentIdentities as $contentIdentity) {
             $entityId = $contentIdentity->getEntityId();
-            $type = $this->contentTypes[$contentIdentity->getEntityType()] ?? $contentIdentity->getEntityType();
+            $type = $contentIdentity->getEntityType();
 
             if (!isset($entityIds[$type])) {
                 $usedIn[$type] = 1;
             } elseif ($entityIds[$type]['entity_id'] !== $entityId) {
-                    ++$usedIn[$type];
+                ++$usedIn[$type];
             }
             $entityIds[$type]['entity_id'] = $entityId;
         }
