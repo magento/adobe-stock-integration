@@ -84,7 +84,7 @@ class SaveImageInformation
         }
 
         $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
-            ->getRelativePath($result['path'] . $result['file']);
+            ->getRelativePath(rtrim($result['path'], '/') . '/' . ltrim($result['file'], '/'));
         if (!$this->isApplicable($path)) {
             return $result;
         }

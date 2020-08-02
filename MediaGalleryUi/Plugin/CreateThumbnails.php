@@ -28,6 +28,7 @@ class CreateThumbnails
     private $filesystem;
 
     /**
+     * @param Filesystem $filesystem
      * @param Storage $storage
      */
     public function __construct(Filesystem $filesystem, Storage $storage)
@@ -40,7 +41,7 @@ class CreateThumbnails
      * Create thumbnails for synced files.
      *
      * @param ImportFilesComposite $subject
-     * @param string[] $path
+     * @param string[] $paths
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(ImportFilesComposite $subject, array $paths): array
