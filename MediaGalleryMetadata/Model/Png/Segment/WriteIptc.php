@@ -96,7 +96,8 @@ class WriteIptc implements WriteMetadataInterface
      */
     private function createPngIptcSegment(MetadataInterface $metadata): SegmentInterface
     {
-        $start = '8BIM' . str_repeat(pack('C', 4), 2) . str_repeat(pack("C", 0), 5) . 'c' . pack('C', 28) . pack('C', 1);
+        $start = '8BIM' . str_repeat(pack('C', 4), 2) . str_repeat(pack("C", 0), 5)
+            . 'c' . pack('C', 28) . pack('C', 1);
         $compression = 'Z' . pack('C', 0) . pack('C', 3) . pack('C', 27) . '%G' . pack('C', 28) . pack('C', 1);
         $end = str_repeat(pack('C', 0), 2) . pack('C', 2) . pack('C', 0) . pack('C', 4) . pack('C', 28);
         $binData = $start . $compression . $end;
