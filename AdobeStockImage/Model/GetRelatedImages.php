@@ -115,7 +115,6 @@ class GetRelatedImages implements GetRelatedImagesInterface
     private function serializeRelatedImages(array $images): array
     {
         $data = [];
-        /** @var Document $image */
         foreach ($images as $image) {
             $data[] = $this->serializeImage->execute($image);
         }

@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
-use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 
 /**
  * IPTC Writer to write IPTC data for png image
@@ -24,7 +24,7 @@ class WriteIptc implements WriteMetadataInterface
     private const IPTC_SEGMENT_START = 'iptc';
     private const IPTC_DATA_START_POSITION = 17;
     private const IPTC_SEGMENT_START_STRING = 'Raw profile type iptc';
-    
+
     /**
      * @var SegmentInterfaceFactory
      */
@@ -69,7 +69,7 @@ class WriteIptc implements WriteMetadataInterface
                 __('zlib gzcompress() && zlib gzuncompress() must be enabled in php configuration')
             );
         }
-      
+
         if (empty($pngIptcSegments)) {
             $segments[] =  $this->createPngIptcSegment($metadata);
 
@@ -96,7 +96,7 @@ class WriteIptc implements WriteMetadataInterface
      */
     private function createPngIptcSegment(MetadataInterface $metadata): SegmentInterface
     {
-        $start = '8BIM'. str_repeat(pack('C', 4), 2) . str_repeat(pack("C", 0), 5) . 'c' . pack('C', 28) . pack('C', 1);
+        $start = '8BIM' . str_repeat(pack('C', 4), 2) . str_repeat(pack("C", 0), 5) . 'c' . pack('C', 28) . pack('C', 1);
         $compression = 'Z' . pack('C', 0) . pack('C', 3) . pack('C', 27) . '%G' . pack('C', 28) . pack('C', 1);
         $end = str_repeat(pack('C', 0), 2) . pack('C', 2) . pack('C', 0) . pack('C', 4) . pack('C', 28);
         $binData = $start . $compression . $end;
@@ -119,18 +119,18 @@ class WriteIptc implements WriteMetadataInterface
             $keywords = implode(',', $keywords);
             $binData .= $keywordsMarker . pack('C', strlen($keywords)) . $keywords . pack('C', 28);
         }
-        
+
         $binData .= pack('C', 0);
         $hexString = bin2hex($binData);
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $compressedIptcData = gzcompress(PHP_EOL . 'iptc' . PHP_EOL . strlen($binData) . PHP_EOL . $hexString);
-        
+
         return $this->segmentFactory->create([
             'name' => self::IPTC_SEGMENT_NAME,
             'data' => self::IPTC_SEGMENT_START_STRING . str_repeat(pack('C', 0), 2) . $compressedIptcData
         ]);
     }
-    
+
     /**
      * Update iptc data to zTXt segment
      *
@@ -142,11 +142,11 @@ class WriteIptc implements WriteMetadataInterface
         $description = null;
         $title = null;
         $keywords = null;
-        
+
         $iptSegmentStartPosition = strpos($segment->getData(), pack("C", 0) . pack("C", 0) . 'x');
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $uncompressedData = gzuncompress(substr($segment->getData(), $iptSegmentStartPosition + 2));
-        
+
         $data = explode(PHP_EOL, trim($uncompressedData));
         //remove header and size from hex string
         $iptcData = implode(array_slice($data, 2));
@@ -188,7 +188,7 @@ class WriteIptc implements WriteMetadataInterface
         $iptcSegmentStart = substr($segment->getData(), 0, $iptSegmentStartPosition + 2);
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $segmentDataCompressed = gzcompress(PHP_EOL . $data[0] . PHP_EOL . strlen($binData) . PHP_EOL . $hexString);
-        
+
         return $this->segmentFactory->create([
             'name' => $segment->getName(),
             'data' => $iptcSegmentStart . $segmentDataCompressed

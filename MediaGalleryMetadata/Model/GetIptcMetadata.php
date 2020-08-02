@@ -19,7 +19,7 @@ class GetIptcMetadata
     private const IPTC_TITLE = '2#005';
     private const IPTC_DESCRIPTION = '2#120';
     private const IPTC_KEYWORDS = '2#025';
-    
+
     /**
      * @var MetadataInterfaceFactory
      */
@@ -37,17 +37,17 @@ class GetIptcMetadata
     /**
      * Parse metadata
      *
-     * @param SegmentInterface $segment
+     * @param string $data
      * @return MetadataInterface
      */
-    public function execute(SegmentInterface $segment): MetadataInterface
+    public function execute(string $data): MetadataInterface
     {
         $title = '';
         $description = '';
         $keywords = [];
-        
+
         if (is_callable('iptcparse')) {
-            $iptcData = iptcparse($segment->getData());
+            $iptcData = iptcparse($data);
 
             if (!empty($iptcData[self::IPTC_TITLE])) {
                 $title = trim($iptcData[self::IPTC_TITLE][0]);
@@ -61,6 +61,7 @@ class GetIptcMetadata
                 $keywords = array_values($iptcData[self::IPTC_KEYWORDS]);
             }
         }
+
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,

@@ -88,7 +88,7 @@ class GetOutdatedRelations
             $select->joinLeft(
                 ['et' => $entityData->getEntityTable()],
                 'et.' . $entityData->getIdentifierField() . ' =  mca.entity_id ',
-                [$entityData->getIdentifierField(). ' AS entity_identifier']
+                [$entityData->getIdentifierField() . ' AS entity_identifier']
             );
             $select->where('et.' . $entityData->getIdentifierField() . ' IS NULL');
             $select->where('mca.entity_type = ?', $entityData->getEavEntityType() ?? $entityData->getEntityTable());

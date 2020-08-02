@@ -116,7 +116,6 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : CategorySearchResultsInterface
     {
-        /** @var CategoryCollection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process(
             $collection,
@@ -125,7 +124,6 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var CategorySearchResultsInterface $searchResults */
         $searchResults = $this->searchResultFactory->create();
         $searchResults->setItems($collection->getItems());
         $searchResults->setSearchCriteria($searchCriteria);

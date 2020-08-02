@@ -75,7 +75,7 @@ class UsedIn implements AssetDetailsProviderInterface
             if (!isset($entityIds[$type])) {
                 $usedIn[$type] = 1;
             } elseif ($entityIds[$type]['entity_id'] !== $entityId) {
-                    ++$usedIn[$type];
+                ++$usedIn[$type];
             }
             $entityIds[$type]['entity_id'] = $entityId;
         }

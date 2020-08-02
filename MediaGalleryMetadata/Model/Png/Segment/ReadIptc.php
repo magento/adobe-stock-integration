@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * IPTC Reader to read IPTC data for png image
@@ -23,7 +23,7 @@ class ReadIptc implements ReadMetadataInterface
     private const IPTC_SEGMENT_START = 'iptc';
     private const IPTC_DATA_START_POSITION = 17;
     private const IPTC_CHUNK_MARKER_LENGTH = 4;
-    
+
     /**
      * @var MetadataInterfaceFactory
      */
@@ -53,7 +53,7 @@ class ReadIptc implements ReadMetadataInterface
                 return $this->getIptcData($segment);
             }
         }
-        
+
         return $this->metadataFactory->create([
             'title' => null,
             'description' => null,
@@ -71,11 +71,11 @@ class ReadIptc implements ReadMetadataInterface
         $description = null;
         $title = null;
         $keywords = null;
-        
+
         $iptSegmentStartPosition = strpos($segment->getData(), pack("C", 0) . pack("C", 0) . 'x');
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $uncompressedData = gzuncompress(substr($segment->getData(), $iptSegmentStartPosition + 2));
-        
+
         $data = explode(PHP_EOL, trim($uncompressedData));
         //remove header and size from hex string
         $iptcData = implode(array_slice($data, 2));

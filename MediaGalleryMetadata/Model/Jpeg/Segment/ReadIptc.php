@@ -52,7 +52,7 @@ class ReadIptc implements ReadMetadataInterface
     {
         foreach ($file->getSegments() as $segment) {
             if ($this->isIptcSegment($segment)) {
-                return $this->getIptcData->execute($segment);
+                return $this->getIptcData->execute($segment->getData());
             }
         }
         return $this->metadataFactory->create([

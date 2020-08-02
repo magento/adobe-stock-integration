@@ -11,7 +11,6 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\DB\Select;
 
 /**
  * Custom filter to filter collection by entity type
@@ -44,7 +43,7 @@ class EntityType implements CustomFilterInterface
         $value = $filter->getValue();
         if (is_array($value)) {
             $conditions = [];
-            
+
             if (in_array(self::NOT_USED, $value)) {
                 unset($value[array_search(self::NOT_USED, $value)]);
                 $conditions[] = ['in' => $this->getNotUsedEntityIds()];
@@ -53,7 +52,7 @@ class EntityType implements CustomFilterInterface
             if (!empty($value)) {
                 $conditions[] = ['in' => $this->getEntityTypesIds($value)];
             }
-            
+
             $collection->addFieldToFilter(
                 self::TABLE_ALIAS . '.id',
                 $conditions
@@ -66,7 +65,7 @@ class EntityType implements CustomFilterInterface
      * Return  asset ids by entity type
      *
      * @param array $value
-     * @return Select
+     * @return array
      */
     private function getEntityTypesIds(array $value): array
     {
@@ -81,14 +80,14 @@ class EntityType implements CustomFilterInterface
             )
         );
     }
-    
+
     /**
      * Return  asset ids that not exists in asset_content_table
      */
     private function getNotUsedEntityIds(): array
     {
         $connection = $this->connection->getConnection();
-        
+
         return $connection->fetchAssoc(
             $connection->select()->from(
                 ['media_gallery_asset' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],

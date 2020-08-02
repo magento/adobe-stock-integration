@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryMetadata\Model\Jpeg\Segment;
 
 use Magento\MediaGalleryMetadata\Model\AddIptcMetadata;
+use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
-use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 
 /**
  * Jpeg IPTC Writer

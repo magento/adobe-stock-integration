@@ -87,7 +87,7 @@ class AddXmpMetadata
             unset($element[0]);
         }
     }
-    
+
     /**
      * Set value to xml node by xpath
      *

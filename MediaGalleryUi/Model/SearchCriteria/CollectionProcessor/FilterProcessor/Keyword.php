@@ -54,7 +54,7 @@ class Keyword implements CustomFilterInterface
      * Return  asset ids by keyword
      *
      * @param string $value
-     * @return Select
+     * @return array
      */
     private function getAssetIdsByKeyword(string $value): array
     {
