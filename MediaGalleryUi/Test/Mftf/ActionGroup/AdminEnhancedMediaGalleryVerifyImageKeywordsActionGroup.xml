@@ -13,12 +13,12 @@
             <description>Verifies image keywords on the View Details panel</description>
         </annotations>
         <arguments>
-            <argument name="keywords" />
+            <argument name="keywords"/>
         </arguments>
 
-        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.keywords}}" stepKey="grabDescription"/>
-        <assertStringContainsString stepKey="verifyDescription">
-            <actualResult type="variable">grabDescription</actualResult>
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.keywords}}" stepKey="grabKeywords"/>
+        <assertStringContainsString stepKey="verifyKeywords">
+            <actualResult type="variable">grabKeywords</actualResult>
             <expectedResult type="string">{{keywords}}</expectedResult>
         </assertStringContainsString>
     </actionGroup>

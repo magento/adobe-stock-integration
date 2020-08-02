@@ -7,22 +7,118 @@ define([
     'jquery',
     'underscore',
     'uiComponent',
+    'uiLayout',
     'Magento_Ui/js/lib/key-codes',
-    'Magento_MediaGalleryUi/js/action/getDetails'
-], function ($, _, Component, keyCodes, getDetails) {
+    'Magento_MediaGalleryUi/js/action/getDetails',
+    'mage/validation'
+], function ($, _, Component, layout, keyCodes, getDetails) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/image/image-edit',
-            modalSelector: '',
+            modalSelector: '.media-gallery-edit-image-details-modal',
             imageEditDetailsUrl: '/media_gallery/image/details',
             saveDetailsUrl: '/media_gallery/image/saveDetails',
             images: [],
             image: null,
+            keywordOptions: [],
+            selectedKeywords: [],
+            newKeyword: '',
+            newKeywordSelector: '#keyword',
             modules: {
-                mediaGridMessages: '${ $.mediaGridMessages }'
+                mediaGridMessages: '${ $.mediaGridMessages }',
+                keywordsSelect: '${ $.name }_keywords'
+            },
+            viewConfig: [
+                {
+                    component: 'Magento_Ui/js/form/element/ui-select',
+                    name: '${ $.name }_keywords',
+                    template: 'ui/grid/filters/elements/ui-select',
+                    disableLabel: true
+                }
+            ],
+            exports: {
+                keywordOptions: '${ $.name }_keywords:options'
+            },
+            links: {
+                selectedKeywords: '${ $.name }_keywords:value'
             }
+        },
+
+        /**
+         * Initialize the component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super().initView();
+
+            return this;
+        },
+
+        /**
+         * Add a new keyword to select
+         */
+        addKeyword: function () {
+            var options = this.keywordOptions(),
+                selected = this.selectedKeywords(),
+                newKeywordField = $(this.newKeywordSelector);
+
+            newKeywordField.validation();
+
+            if (!newKeywordField.validation('isValid') || this.newKeyword() === '') {
+                return;
+            }
+
+            options.push(this.getOptionForKeyword(this.newKeyword()));
+            selected.push(this.newKeyword());
+            this.newKeyword('');
+
+            this.keywordOptions(options);
+            this.selectedKeywords(selected);
+        },
+
+        /**
+         * Create an option object based on keyword string
+         *
+         * @param {String} keyword
+         * @returns {Object}
+         */
+        getOptionForKeyword: function (keyword) {
+            return {
+                'is_active': 1,
+                level: 1,
+                value: keyword,
+                label: keyword
+            };
+        },
+
+        /**
+         * Convert array of keywords to options format
+         *
+         * @param {Array} tags
+         */
+        setKeywordOptions: function (tags) {
+            var options = [];
+
+            tags.forEach(function (tag) {
+                options.push(this.getOptionForKeyword(tag));
+            }.bind(this));
+
+            this.keywordOptions(options);
+            this.selectedKeywords(tags);
+        },
+
+        /**
+         * Initialize child components
+         *
+         * @returns {Object}
+         */
+        initView: function () {
+            layout(this.viewConfig);
+
+            return this;
         },
 
         /**
@@ -33,7 +129,10 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'image'
+                    'image',
+                    'keywordOptions',
+                    'selectedKeywords',
+                    'newKeyword'
                 ]);
 
             return this;
@@ -76,6 +175,10 @@ define([
             if (!modalElement.length || _.isUndefined(modalElement.modal)) {
                 return;
             }
+
+            this.setKeywordOptions(this.image().tags);
+            this.newKeyword('');
+
             modalElement.modal('openModal');
         },
 
