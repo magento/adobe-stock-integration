@@ -139,7 +139,7 @@ define([
         addValidationErrorMessage: function (message) {
             this.mediaGridMessages().add(
                 'error',
-                $.mage.__(message)
+                $t(message)
             );
 
             this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
@@ -192,7 +192,7 @@ define([
             data.files.each(function (file) {
                 this.mediaGridMessages().add(
                     'error',
-                    $.mage.__(file.name + ': ' + message)
+                    file.name + ': ' + $t(message)
                 );
             }.bind(this));
 
@@ -208,7 +208,7 @@ define([
             this.mediaGridMessages().messages.remove(function (item) {
                 return item.code === 'success';
             });
-            this.mediaGridMessages().add('success', $.mage.__('Successfully uploaded ' + prefix));
+            this.mediaGridMessages().add('success', $t('Successfully uploaded ' + prefix));
             this.count(this.count() + 1);
 
         },
