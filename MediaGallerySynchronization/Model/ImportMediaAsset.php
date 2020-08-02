@@ -9,7 +9,6 @@ namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 
 /**
  * Import image file to the media gallery asset table
@@ -22,28 +21,20 @@ class ImportMediaAsset implements ImportFileInterface
     private $saveAssets;
 
     /**
-     * @var SplFileInfoFactory
+     * @var GetAssetFromPath
      */
-    private $splFileInfoFactory;
+    private $getAssetFromPath;
 
     /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
-    
-    /**
-     * @param SplFileInfoFactory $splFileInfoFactory
      * @param SaveAssetsInterface $saveAssets
-     * @param CreateAssetFromFile $createAssetFromFile
+     * @param GetAssetFromPath $getAssetFromPath
      */
     public function __construct(
-        SplFileInfoFactory $splFileInfoFactory,
         SaveAssetsInterface $saveAssets,
-        CreateAssetFromFile $createAssetFromFile
+        GetAssetFromPath $getAssetFromPath
     ) {
-        $this->splFileInfoFactory = $splFileInfoFactory;
         $this->saveAssets = $saveAssets;
-        $this->createAssetFromFile = $createAssetFromFile;
+        $this->getAssetFromPath = $getAssetFromPath;
     }
 
     /**
@@ -51,7 +42,6 @@ class ImportMediaAsset implements ImportFileInterface
      */
     public function execute(string $path): void
     {
-        $file = $this->splFileInfoFactory->create($path);
-        $this->saveAssets->execute([$this->createAssetFromFile->execute($file)]);
+        $this->saveAssets->execute([$this->getAssetFromPath->execute($path)]);
     }
 }

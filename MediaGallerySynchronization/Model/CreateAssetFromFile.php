@@ -7,23 +7,38 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
+use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 
-/**
- * Create media asset object based on the file information
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class CreateAssetFromFile
 {
     /**
-     * @var GetAssetsByPathsInterface
+     * Date format
      */
-    private $getMediaGalleryAssetByPath;
+    private const DATE_FORMAT = 'Y-m-d H:i:s';
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var File
+     */
+    private $driver;
+
+    /**
+     * @var TimezoneInterface;
+     */
+    private $date;
 
     /**
      * @var AssetInterfaceFactory
@@ -31,9 +46,9 @@ class CreateAssetFromFile
     private $assetFactory;
 
     /**
-     * @var UpdateAsset
+     * @var GetContentHashInterface
      */
-    private $updateAsset;
+    private $getContentHash;
 
     /**
      * @var ExtractMetadataInterface
@@ -41,52 +56,81 @@ class CreateAssetFromFile
     private $extractMetadata;
 
     /**
+     * @var SplFileInfoFactory
+     */
+    private $splFileInfoFactory;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param File $driver
+     * @param TimezoneInterface $date
      * @param AssetInterfaceFactory $assetFactory
-     * @param GetAssetsByPathsInterface $getMediaGalleryAssetByPath
-     * @param UpdateAsset $updateAsset
+     * @param GetContentHashInterface $getContentHash
      * @param ExtractMetadataInterface $extractMetadata
+     * @param SplFileInfoFactory $splFileInfoFactory
      */
     public function __construct(
+        Filesystem $filesystem,
+        File $driver,
+        TimezoneInterface $date,
         AssetInterfaceFactory $assetFactory,
-        GetAssetsByPathsInterface $getMediaGalleryAssetByPath,
-        UpdateAsset $updateAsset,
-        ExtractMetadataInterface $extractMetadata
+        GetContentHashInterface $getContentHash,
+        ExtractMetadataInterface $extractMetadata,
+        SplFileInfoFactory $splFileInfoFactory
     ) {
+        $this->filesystem = $filesystem;
+        $this->driver = $driver;
+        $this->date = $date;
         $this->assetFactory = $assetFactory;
-        $this->getMediaGalleryAssetByPath = $getMediaGalleryAssetByPath;
-        $this->updateAsset = $updateAsset;
+        $this->getContentHash = $getContentHash;
         $this->extractMetadata = $extractMetadata;
+        $this->splFileInfoFactory = $splFileInfoFactory;
     }
 
     /**
-     * Create media asset object based on the file information
-     *
-     * @param \SplFileInfo $file
-     * @return AssetInterface
-     * @throws LocalizedException
-     * @throws ValidatorException
-     */
-    public function execute(\SplFileInfo $file): AssetInterface
-    {
-        $path = $file->getPath() . '/' . $file->getFileName();
-        $asset = $this->getAsset($path);
-        $metadata = $this->extractMetadata->execute($path);
-        $updatedAsset = $this->updateAsset->execute($file, $asset, $metadata);
-
-        return $updatedAsset;
-    }
-
-    /**
-     * Returns asset if asset already exist by provided path
+     * Create and format media asset object
      *
      * @param string $path
-     * @return AssetInterface|null
-     * @throws ValidatorException
-     * @throws LocalizedException
+     * @return AssetInterface
+     * @throws FileSystemException
      */
-    private function getAsset(string $path): ?AssetInterface
+    public function execute(string $path): AssetInterface
     {
-        $asset = $this->getMediaGalleryAssetByPath->execute([$this->updateAsset->getRelativePath($path)]);
-        return !empty($asset) ? $asset[0] : null;
+        $file = $this->splFileInfoFactory->create($path);
+        $absolutePath = $file->getPath() . '/' . $file->getFileName();
+        [$width, $height] = getimagesize($absolutePath);
+
+        $metadata = $this->extractMetadata->execute($absolutePath);
+
+        return $this->assetFactory->create(
+            [
+                'id' => null,
+                'path' => $path,
+                'title' => $metadata->getTitle() ?: $file->getBasename('.' . $file->getExtension()),
+                'description' => $metadata->getDescription(),
+                'createdAt' => $this->date->date($file->getCTime())->format(self::DATE_FORMAT),
+                'updatedAt' => $this->date->date($file->getMTime())->format(self::DATE_FORMAT),
+                'width' => $width,
+                'height' => $height,
+                'hash' => $this->getHash($path),
+                'size' => $file->getSize(),
+                'contentType' => 'image/' . $file->getExtension(),
+                'source' => 'Local'
+            ]
+        );
+    }
+
+    /**
+     * Get hash image content.
+     *
+     * @param string $path
+     * @return string
+     * @throws FileSystemException
+     */
+    private function getHash(string $path): string
+    {
+        return $this->getContentHash->execute(
+            $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->readFile($path)
+        );
     }
 }

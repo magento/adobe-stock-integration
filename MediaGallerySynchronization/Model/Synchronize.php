@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool;
 use Psr\Log\LoggerInterface;
@@ -63,6 +64,10 @@ class Synchronize implements SynchronizeInterface
         $failed = [];
 
         foreach ($this->synchronizerPool->get() as $name => $synchronizer) {
+            if (!$synchronizer instanceof SynchronizeFilesInterface) {
+                $failed[] = $name;
+                continue;
+            }
             foreach ($this->batchGenerator->execute() as $batch) {
                 try {
                     $synchronizer->execute($batch);
