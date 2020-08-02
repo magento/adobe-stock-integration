@@ -40,8 +40,8 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface">
-        <plugin name="create_thumbnails_for_synced_fiels" type="Magento\MediaGalleryUi\Plugin\ResizeSyncedFiles"/>
+    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
+        <plugin name="createMediaGalleryThumbnails" type="Magento\MediaGalleryUi\Plugin\CreateThumbnails"/>
     </type>
     <type name="Magento\MediaGalleryUi\Model\AssetDetailsProviderPool">
         <arguments>

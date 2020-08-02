@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImageApi\Api;
 
 use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Downloads the image from the $url, saves it to $destinationPath in media gallery
@@ -24,6 +25,7 @@ interface SaveImageInterface
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
+     * @throws LocalizedException
      */
     public function execute(Document $document, string $url, string $destinationPath): void;
 }

@@ -9,8 +9,7 @@ define([
     'underscore',
     'Magento_Ui/js/lib/validation/validator',
     'mage/translate',
-    'jquery/file-uploader',
-    'mage/translate'
+    'jquery/file-uploader'
 ], function (Component, $, _, validator, $t) {
     'use strict';
 
@@ -113,6 +112,12 @@ define([
 
                 done: function (e, data) {
                     var response = data.jqXHR.responseJSON;
+
+                    if (!response) {
+                        this.showErrorMessage(data, $t('Could not upload the asset.'));
+
+                        return;
+                    }
 
                     if (!response.success) {
                         this.showErrorMessage(data, response.message);
