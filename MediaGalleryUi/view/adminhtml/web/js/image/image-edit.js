@@ -87,7 +87,7 @@ define([
          */
         getOptionForKeyword: function (keyword) {
             return {
-                is_active: 1,
+                'is_active': 1,
                 level: 1,
                 value: keyword,
                 label: keyword
