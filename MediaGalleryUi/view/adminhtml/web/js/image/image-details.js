@@ -132,7 +132,7 @@ define([
          * @returns {Boolean}
          */
         isArray: function (value) {
-            return _.isArray(value) && value.length > 0;
+            return _.isArray(value);
         },
 
         /**
