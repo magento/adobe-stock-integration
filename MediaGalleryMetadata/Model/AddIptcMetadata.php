@@ -9,12 +9,11 @@ namespace Magento\MediaGalleryMetadata\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryMetadata\Model\Jpeg\FileReader;
+use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
-use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * Write iptc data to the file return updated FileInterface with iptc data
@@ -166,7 +165,7 @@ class AddIptcMetadata
         $retval = chr(0x1C) . chr($rec) . chr($tag);
 
         if ($length < 0x8000) {
-            $retval .= chr($length >> 8) .  chr($length & 0xFF);
+            $retval .= chr($length >> 8) . chr($length & 0xFF);
         } else {
             $retval .= chr(0x80) .
                    chr(0x04) .

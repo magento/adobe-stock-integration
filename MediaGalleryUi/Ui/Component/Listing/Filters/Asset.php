@@ -83,7 +83,7 @@ class Asset extends Select
     /**
      * Return entity ids by assets ids.
      *
-     * @param string $ids
+     * @param array $ids
      */
     private function getEntityIdsByAsset(array $ids): string
     {

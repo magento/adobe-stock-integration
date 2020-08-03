@@ -12,9 +12,9 @@ use Magento\MediaGalleryMetadata\Model\XmpTemplate;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
 
 /**
  *  XMP Writer for GIF format
@@ -25,7 +25,7 @@ class WriteXmp implements WriteMetadataInterface
     private const XMP_DATA_START_POSITION = 14;
     private const MAGIC_TRAILER_START = "\x01\xFF\xFE";
     private const MAGIC_TRAILER_END = "\x03\x02\x01\x00\x00";
-    
+
     /**
      * @var SegmentInterfaceFactory
      */
@@ -126,10 +126,10 @@ class WriteXmp implements WriteMetadataInterface
         }
         $ini += strlen($start);
         $len = strpos($string, $end, $ini) - $ini;
-        
+
         return substr($string, $ini, $len);
     }
-    
+
     /**
      * Write new segment  metadata
      *
@@ -140,7 +140,7 @@ class WriteXmp implements WriteMetadataInterface
     {
         $xmpData = $this->xmpTemplate->get();
 
-        $xmpSegment = pack("C", ord("!")) . pack("C", 255) . pack("C", 11).
+        $xmpSegment = pack("C", ord("!")) . pack("C", 255) . pack("C", 11) .
                     self::XMP_SEGMENT_NAME . $this->addXmpMetadata->execute($xmpData, $metadata) . "\x01";
 
         /**

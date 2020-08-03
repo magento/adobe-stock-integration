@@ -9,8 +9,8 @@ namespace Magento\MediaGalleryMetadataApi\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Metadata extractor composite
@@ -55,7 +55,7 @@ class ExtractMetadataComposite implements ExtractMetadataInterface
         foreach ($this->extractors as $extractor) {
             if (!$extractor instanceof ExtractMetadataInterface) {
                 throw new \InvalidArgumentException(
-                    __(get_class($extractor) . ' must implement '. ExtractMetadataInterface::class)
+                    __(get_class($extractor) . ' must implement ' . ExtractMetadataInterface::class)
                 );
             }
 

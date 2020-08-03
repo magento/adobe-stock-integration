@@ -19,6 +19,9 @@ use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
 use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
 
+/**
+ * Create media asset object based on the file information
+ */
 class CreateAssetFromFile
 {
     /**
