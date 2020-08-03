@@ -26,7 +26,7 @@ define([
                 filterChips: '${ $.filterChipsProvider }'
             },
             listens: {
-                '${ $.provider }:params.filters.path': 'clearFiltersHandle'
+                '${ $.provider }:params.filters.path': 'updateSelectedDirectory'
             },
             viewConfig: [{
                 component: 'Magento_MediaGalleryUi/js/directory/directories',
@@ -247,7 +247,7 @@ define([
         /**
          * Verify directory filter on init event, select folder per directory filter state
          */
-        checkChipFiltersState: function () {
+        updateSelectedDirectory: function () {
             var currentFilterPath = this.filterChips().filters.path,
                 isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
                 currentTreePath;
@@ -259,6 +259,12 @@ define([
                 this.locateNode(currentTreePath);
             } else {
                 this.selectStorageRoot();
+            }
+
+            if (_.isUndefined(currentFilterPath)) {
+                $(this.directoryTreeSelector).jstree('deselect_all');
+                this.activeNode(null);
+                this.directories().setInActive();
             }
         },
 
@@ -300,19 +306,6 @@ define([
             $(this.directoryTreeSelector).jstree('open_node', '#' + path);
             $(this.directoryTreeSelector).jstree('select_node', '#' + path, true);
 
-        },
-
-        /**
-         * Listener to clear filters event
-         */
-        clearFiltersHandle: function () {
-            if (_.isUndefined(this.filterChips().filters.path)) {
-                $(this.directoryTreeSelector).jstree('deselect_all');
-                this.activeNode(null);
-                this.directories().setInActive();
-            } else {
-                this.checkChipFiltersState();
-            }
         },
 
         /**
