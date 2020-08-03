@@ -220,7 +220,7 @@ define([
                                 this.firejsTreeEvents();
                             }.bind(this));
                         } else {
-                            this.checkChipFiltersState();
+                            this.updateSelectedDirectory();
                         }
                     }.bind(this));
                 }.bind(this));
@@ -239,7 +239,7 @@ define([
             }.bind(this));
 
             $(this.directoryTreeSelector).on('loaded.jstree', function () {
-                this.checkChipFiltersState();
+                this.updateSelectedDirectory();
             }.bind(this));
 
         },
