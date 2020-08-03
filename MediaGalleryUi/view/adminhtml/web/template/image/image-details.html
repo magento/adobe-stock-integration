@@ -25,8 +25,8 @@
             <div class="attributes">
                 <each args="image().details">
                     <div class="attribute"  if="value">
-                        <ifnot args="$parent.isArray(value)">
-                            <span class="title" translate="title"></span>
+                      <span if="$parent.notEmpty(value)" class="title" translate="title"></span>
+                       <ifnot args="$parent.isArray(value)">
                             <div class="value" text="value"></div>
                         </ifnot>
                         <if args="$parent.isArray(value)">

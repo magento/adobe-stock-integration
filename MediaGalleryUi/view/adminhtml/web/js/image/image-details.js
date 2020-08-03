@@ -132,7 +132,17 @@ define([
          * @returns {Boolean}
          */
         isArray: function (value) {
-            return _.isArray(value) && value.length === 0;
+            return _.isArray(value) && value.length > 0;
+        },
+
+        /**
+         * Is value not empty
+         *
+         * @param {*} value
+         * @returns {Boolean}
+         */
+        notEmpty: function (value) {
+            return value.length > 0;
         },
 
         /**
