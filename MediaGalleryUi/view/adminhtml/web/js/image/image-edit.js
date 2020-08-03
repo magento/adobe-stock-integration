@@ -75,7 +75,6 @@ define([
 
             $.async(
                 this.keywordsSelect().rootListSelector,
-                this,
                 function () {
                     $(this.keywordsSelect().rootListSelector).off('mousemove');
                 }.bind(this)
