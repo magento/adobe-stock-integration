@@ -112,7 +112,7 @@ define([
          *
          * @param {String} tagText
          * @param {Number} tagIndex
-*         * @return {String}
+         * @return {String}
          */
         getTagText: function (tagText, tagIndex) {
             return tagText + (this.image().tags.length - 1 === tagIndex ? '' : ',');
