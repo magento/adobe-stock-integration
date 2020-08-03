@@ -6,20 +6,20 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronizationApi\Api;
+namespace Magento\MediaGallerySynchronizationApi\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Save file data
+ * Save media files data
  */
-interface ImportFileInterface
+interface ImportFilesInterface
 {
     /**
-     * Save file data
+     * Save media files data
      *
-     * @param string $path
+     * @param string[] $paths
      * @throws LocalizedException
      */
-    public function execute(string $path): void;
+    public function execute(array $paths): void;
 }

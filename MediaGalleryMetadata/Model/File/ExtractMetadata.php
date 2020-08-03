@@ -7,15 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\File;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
-use Magento\Framework\Exception\ValidatorException;
-use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
+use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\ReadMetadataInterface;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 
 /**
  * Extract Metadata from asset file by given extractors
@@ -102,11 +101,11 @@ class ExtractMetadata implements ExtractMetadataInterface
         $title = null;
         $description = null;
         $keywords = [];
-        
+
         foreach ($this->segmentReaders as $segmentReader) {
             if (!$segmentReader instanceof ReadMetadataInterface) {
                 throw new \InvalidArgumentException(
-                    __(get_class($segmentReader). ' must implement ' . ReadMetadataInterface::class)
+                    __(get_class($segmentReader) . ' must implement ' . ReadMetadataInterface::class)
                 );
             }
 
@@ -120,7 +119,7 @@ class ExtractMetadata implements ExtractMetadataInterface
                 }
             }
         }
-        
+
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,

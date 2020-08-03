@@ -41,7 +41,7 @@ class AddMetadataComposite implements AddMetadataInterface
         foreach ($this->writers as $writer) {
             if (!$writer instanceof AddMetadataInterface) {
                 throw new \InvalidArgumentException(
-                    __(get_class($writer) . ' must implement '. AddMetadataInterface::class)
+                    __(get_class($writer) . ' must implement ' . AddMetadataInterface::class)
                 );
             }
 

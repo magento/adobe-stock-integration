@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryMetadata\Model\File;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
-use Magento\Framework\Exception\ValidatorException;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\WriteMetadataInterface;
-use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 
 /**
  * Add metadata to the asset by path. Should be used as a virtual type with a file type specific configuration
@@ -95,7 +95,7 @@ class AddMetadata implements AddMetadataInterface
         foreach ($this->segmentWriters as $writer) {
             if (!$writer instanceof WriteMetadataInterface) {
                 throw new \InvalidArgumentException(
-                    __(get_class($writer) . ' must implement '. WriteFileInterface::class)
+                    __(get_class($writer) . ' must implement ' . WriteFileInterface::class)
                 );
             }
 

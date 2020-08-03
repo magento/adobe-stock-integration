@@ -35,7 +35,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
 
         <actionGroup ref="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup" stepKey="verifyImageIsDeleted">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="title" value="ImageUpload.filename"/>
         </actionGroup>
     </test>
 </tests>

@@ -6,13 +6,12 @@
 -->
 <div class="media-gallery-image-uploader-container">
     <form id="image-uploader-form" class="no-display" method="POST" enctype="multipart/form-data">
-        <input data-bind="afterRender: initializeFileUpload" id="image-uploader-input" type="file" name="image"
+        <input afterRender="initializeFileUpload" id="image-uploader-input" type="file" name="image"
                multiple="multiple"/>
     </form>
-    <div data-role="spinner" class="admin__data-grid-loading-mask" data-bind="visible: loader">
+    <div data-role="spinner" class="admin__data-grid-loading-mask" visible="loader">
         <div class="spinner">
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
+            <span repeat="8"/>
         </div>
     </div>
 </div>

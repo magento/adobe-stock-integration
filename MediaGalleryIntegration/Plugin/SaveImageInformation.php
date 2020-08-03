@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Uploader;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -82,8 +81,9 @@ class SaveImageInformation
         if (!$this->config->isEnabled()) {
             return $result;
         }
-        
-        $path = $result['path'] . '/' . $result['file'];
+
+        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
+            ->getRelativePath(rtrim($result['path'], '/') . '/' . ltrim($result['file'], '/'));
         if (!$this->isApplicable($path)) {
             return $result;
         }
@@ -101,9 +101,8 @@ class SaveImageInformation
     private function isApplicable(string $path): bool
     {
         try {
-            $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
-            return $relativePath
-                && !$this->isPathExcluded->execute($relativePath)
+            return $path
+                && !$this->isPathExcluded->execute($path)
                 && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);

@@ -13,9 +13,9 @@
             <description>Asserts that image does not exists in media gallery grid</description>
         </annotations>
         <arguments>
-            <argument name="image"/>
+            <argument name="title"/>
         </arguments>
-        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(image.file)}}" stepKey="waitForImageToBeVisible"/>
+        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
 
     </actionGroup>
 </actionGroups>

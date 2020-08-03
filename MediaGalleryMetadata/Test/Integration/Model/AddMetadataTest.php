@@ -109,6 +109,15 @@ class AddMetadataTest extends TestCase
     {
         return [
             [
+                'iptc_only.png',
+                'Updated Title',
+                'Updated Description',
+                [
+                    'magento2',
+                    'mediagallery'
+                ]
+            ],
+            [
                 'macos-photos.jpeg',
                 'Updated Title',
                 'Updated Description',

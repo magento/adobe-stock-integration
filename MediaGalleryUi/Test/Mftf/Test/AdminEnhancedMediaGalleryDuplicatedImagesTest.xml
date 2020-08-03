@@ -46,10 +46,10 @@
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
 
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertFirstImageInGrid">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="title" value="ImageUpload.filename"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertSecondImageInGrid">
-            <argument name="image" value="ImageUpload_1"/>
+            <argument name="title" value="ImageUpload_1.filename"/>
         </actionGroup>
        </test>
 </tests>

@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'mage/translate'
+], function ($, $t) {
     'use strict';
 
     return function (createFolderUrl, paths) {
@@ -47,7 +48,7 @@ define([
                 if (typeof response.responseJSON === 'undefined' ||
                     typeof response.responseJSON.message === 'undefined'
                 ) {
-                    message = $.mage.__('Could not create the directory.');
+                    message = $t('Could not create the directory.');
                 } else {
                     message = response.responseJSON.message;
                 }

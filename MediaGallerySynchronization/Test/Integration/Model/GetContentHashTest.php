@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for GetContentHashInterface.
  */
-class GetContentHashInterfaceTest extends TestCase
+class GetContentHashTest extends TestCase
 {
     /**
      * @var GetContentHashInterface
@@ -51,20 +51,9 @@ class GetContentHashInterfaceTest extends TestCase
         string $secondFile,
         bool $isEqual
     ): void {
-        $firstFileContent = $this->getImageContent($firstFile);
-        $secondFileContent = $this->getImageContent($secondFile);
-
-        if ($isEqual) {
-            $this->assertEquals(
-                $this->getContentHash->execute($firstFileContent),
-                $this->getContentHash->execute($secondFileContent)
-            );
-        } else {
-            $this->assertNotEquals(
-                $this->getContentHash->execute($firstFileContent),
-                $this->getContentHash->execute($secondFileContent)
-            );
-        }
+        $firstHash = $this->getContentHash->execute($this->getImageContent($firstFile));
+        $secondHash = $this->getContentHash->execute($this->getImageContent($secondFile));
+        $isEqual ? $this->assertEquals($firstHash, $secondHash) : $this->assertNotEquals($firstHash, $secondHash);
     }
 
     /**
@@ -97,8 +86,7 @@ class GetContentHashInterfaceTest extends TestCase
      */
     private function getImageContent(string $filename): string
     {
-        $path = $this->getImageFilePath($filename);
-        return $this->driver->fileGetContents($path);
+        return $this->driver->fileGetContents($this->getImageFilePath($filename));
     }
 
     /**

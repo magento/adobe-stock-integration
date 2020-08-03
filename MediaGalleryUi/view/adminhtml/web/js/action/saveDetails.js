@@ -3,21 +3,21 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'mage/translate'
+], function ($, $t) {
     'use strict';
 
-    return function (saveImageDetailsUrl, formElement) {
+    return function (saveImageDetailsUrl, data) {
         var deferred = $.Deferred(),
-            message,
-            formData = formElement.serialize();
+            message;
 
         $.ajax({
             type: 'POST',
             url: saveImageDetailsUrl,
             dataType: 'json',
             showLoader: true,
-            data: formData,
+            data: data,
 
             /**
              * Resolve with image details if success, reject with response message otherwise
@@ -40,11 +40,10 @@ define([
              * @param {Object} response
              */
             error: function (response) {
-
                 if (typeof response.responseJSON === 'undefined' ||
                     typeof response.responseJSON.message === 'undefined'
                 ) {
-                    message = $.mage.__('Could not save image details.');
+                    message = $t('Could not save image details.');
                 } else {
                     message = response.responseJSON.message;
                 }

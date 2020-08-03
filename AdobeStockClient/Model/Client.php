@@ -159,7 +159,6 @@ class Client implements ClientInterface
      */
     private function getLicenseRequest(int $contentId): LicenseRequest
     {
-        /** @var LicenseRequest $licenseRequest */
         $licenseRequest = $this->licenseRequestFactory->create();
         $licenseRequest->setContentId($contentId)
             ->setLocale($this->localeResolver->getLocale())
@@ -187,7 +186,7 @@ class Client implements ClientInterface
     public function getQuota(): UserQuotaInterface
     {
         $quota = $this->getLicenseInfo(0)->getEntitlement()->getFullEntitlementQuota();
-        /** @var UserQuotaInterface $userQuota */
+
         $userQuota = $this->userQuotaFactory->create();
         $userQuota->setImages((int) $quota->standard_credits_quota);
         $userQuota->setCredits((int) $quota->premium_credits_quota);
@@ -203,7 +202,7 @@ class Client implements ClientInterface
         $purchaseOptions = $this->getLicenseInfo($contentId)->getPurchaseOptions();
         $message = $purchaseOptions->getMessage();
         $canPurchase = $purchaseOptions->getPurchaseState() === 'possible';
-        /** @var LicenseConfirmationInterface $userQuota */
+
         $userQuota = $this->licenseConfirmationFactory->create();
         $userQuota->setMessage($message);
         $userQuota->setCanLicense($canPurchase);
