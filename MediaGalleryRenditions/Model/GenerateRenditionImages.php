@@ -7,25 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryRenditions\Model;
 
-use Magento\MediaGallerySynchronizationApi\Api\ImportFileInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGallerySynchronization\Model\CreateAssetFromFile;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGallerySynchronization\Model\GetAssetFromPath;
+use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 
 /**
  * Generate Rendition Images
  */
-class GenerateRenditionImages implements ImportFileInterface
+class GenerateRenditionImages implements ImportFilesInterface
 {
     /**
-     * @var SplFileInfoFactory
+     * @var GetAssetFromPath
      */
-    private $splFileInfoFactory;
-
-    /**
-     * @var CreateAssetFromFile
-     */
-    private $createAssetFromFile;
+    private $getAssetFromPath;
 
     /**
      * @var GenerateRenditionsInterface
@@ -33,26 +28,30 @@ class GenerateRenditionImages implements ImportFileInterface
     private $generateRenditions;
 
     /**
-     * @param SplFileInfoFactory $splFileInfoFactory
-     * @param CreateAssetFromFile $createAssetFromFile
+     * @param GetAssetFromPath $getAssetFromPath
      * @param GenerateRenditionsInterface $generateRenditions
      */
     public function __construct(
-        SplFileInfoFactory $splFileInfoFactory,
-        CreateAssetFromFile $createAssetFromFile,
+        GetAssetFromPath $getAssetFromPath,
         GenerateRenditionsInterface $generateRenditions
     ) {
-        $this->splFileInfoFactory = $splFileInfoFactory;
-        $this->createAssetFromFile = $createAssetFromFile;
+        $this->getAssetFromPath = $getAssetFromPath;
         $this->generateRenditions = $generateRenditions;
     }
 
     /**
-     * @inheritdoc
+     * Save media files data
+     *
+     * @param string[] $paths
+     * @throws LocalizedException
      */
-    public function execute(string $path): void
+    public function execute(array $paths): void
     {
-        $file = $this->splFileInfoFactory->create($path);
-        $this->generateRenditions->execute([$this->createAssetFromFile->execute($file)]);
+        $assets = [];
+
+        foreach ($paths as $path) {
+            $assets[] = $this->getAssetFromPath->execute($path);
+        }
+        $this->generateRenditions->execute($assets);
     }
 }

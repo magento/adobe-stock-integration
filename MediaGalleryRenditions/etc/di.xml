@@ -9,7 +9,7 @@
     <preference for="Magento\MediaGalleryRenditionsApi\Model\ConfigInterface" type="Magento\MediaGalleryRenditions\Model\Config"/>
     <preference for="Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface" type="Magento\MediaGalleryRenditions\Model\GenerateRenditions"/>
     <preference for="Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface" type="Magento\MediaGalleryRenditions\Model\GetRenditionPath"/>
-    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFileComposite">
+    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="2" xsi:type="object">Magento\MediaGalleryRenditions\Model\GenerateRenditionImages</item>
