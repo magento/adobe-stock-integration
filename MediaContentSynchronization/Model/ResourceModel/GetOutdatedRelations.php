@@ -10,6 +10,7 @@ namespace Magento\MediaContentSynchronization\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface;
 use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterfaceFactory;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
@@ -88,14 +89,14 @@ class GetOutdatedRelations
             $select->joinLeft(
                 ['et' => $entityData->getEntityTable()],
                 'et.' . $entityData->getIdentifierField() . ' =  mca.entity_id ',
-                [$entityData->getIdentifierField(). ' AS entity_identifier']
+                [$entityData->getIdentifierField() . ' AS entity_identifier']
             );
             $select->where('et.' . $entityData->getIdentifierField() . ' IS NULL');
             $select->where('mca.entity_type = ?', $entityData->getEavEntityType() ?? $entityData->getEntityTable());
             $assets = $connection->fetchAll($select);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            throw new CouldNotDeleteException(__('Could not fetch media content links data'), $exception);
+            throw new LocalizedException(__('Could not fetch media content links data'), $exception);
         }
 
         foreach ($assets as $asset) {

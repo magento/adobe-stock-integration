@@ -23,7 +23,6 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteAsset"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <deleteData createDataKey="block" stepKey="deleteBlock"/>
         </after>
@@ -33,10 +32,10 @@
         <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectContentImageInGrid">
-            <argument name="imageName" value="{{ImageUpload.file}}"/>
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="saveBlock"/>
@@ -48,7 +47,14 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
+         <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
+       
    </test>
 </tests>

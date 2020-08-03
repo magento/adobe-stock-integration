@@ -34,10 +34,10 @@
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadCategoryImage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
-            <argument name="imageName" value="{{ImageUpload.file}}"/>
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
@@ -45,11 +45,11 @@
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwygToAssertMessage"/>
         <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
-            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryAssertWarningMessageActionGroup" stepKey="assertMessageImageUsedIn">
-            <argument name="messageText" value="This image is used in 1 Category"/>
+            <argument name="messageText" value="The selected assets are used in the content of the following entities: Categories(1)"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImage"/>
     </test>

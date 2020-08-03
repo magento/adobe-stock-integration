@@ -58,7 +58,7 @@
             <argument name="image" value="ImageUpload_1"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
-            <argument name="imageName" value="{{ImageUpload3.file}}"/>
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>

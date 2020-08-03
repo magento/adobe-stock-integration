@@ -42,7 +42,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritdoc
+     * Get max width
+     *
+     * @return int
      */
     public function getWidth(): int
     {
@@ -50,7 +52,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritdoc
+     * Get max height
+     *
+     * @return int
      */
     public function getHeight(): int
     {

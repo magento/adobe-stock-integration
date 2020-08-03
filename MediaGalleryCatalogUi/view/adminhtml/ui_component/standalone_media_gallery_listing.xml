@@ -12,7 +12,7 @@
             <filterSelect
                     name="product_id"
                     provider="${ $.parentName }"
-                    sortOrder="100"
+                    sortOrder="110"
                     component="Magento_Catalog/js/components/product-ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
@@ -25,6 +25,7 @@
                         <item name="isDisplayMissingValuePlaceholder" xsi:type="boolean">true</item>
                         <item name="isDisplayEmptyPlaceholder" xsi:type="boolean">true</item>
                         <item name="isRemoveSelectedIcon" xsi:type="boolean">true</item>
+                        <item name="filterRateLimit" xsi:type="string" translate="true">1000</item>
                         <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
                         <item name="levelsVisibility" xsi:type="number">1</item>
                         <item name="searchUrl" xsi:type="url" path="catalog/product/search"/>
@@ -39,7 +40,7 @@
             <filterSelect
                     name="category_id"
                     provider="${ $.parentName }"
-                    sortOrder="110"
+                    sortOrder="100"
                     component="Magento_Catalog/js/components/new-category"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">

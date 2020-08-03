@@ -30,6 +30,9 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="editImage"/>
+        <actionGroup ref="AdminMediaGalleryEditAssetAddKeywordActionGroup" stepKey="setKeywords">
+            <argument name="keyword" value="UpdatedImageDetails.keyword"/>
+        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
             <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
@@ -41,6 +44,12 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
             <argument name="description" value="UpdatedImageDetails.description"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyAddedKeywords">
+            <argument name="keywords" value="UpdatedImageDetails.keyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyMetadataKeywords">
+            <argument name="keywords" value="ImageMetadata.keywords"/>
         </actionGroup>
     </test>
 </tests>

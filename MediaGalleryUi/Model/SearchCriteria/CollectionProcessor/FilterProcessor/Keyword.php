@@ -41,34 +41,40 @@ class Keyword implements CustomFilterInterface
 
         $collection->addFieldToFilter(
             [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
-            [['like' => sprintf('%%%s%%', $value)], ['in' => $this->getSelectByKeyword($value)]]
+            [
+                ['like' => sprintf('%%%s%%', $value)],
+                ['in' => $this->getAssetIdsByKeyword($value)]
+            ]
         );
 
         return true;
     }
 
     /**
-     * Return select asset ids by keyword
+     * Return  asset ids by keyword
      *
      * @param string $value
-     * @return Select
+     * @return array
      */
-    private function getSelectByKeyword(string $value): Select
+    private function getAssetIdsByKeyword(string $value): array
     {
-        return $this->connection->getConnection()->select()->from(
-            $this->connection->getConnection()->select()
-                ->from(
-                    ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
-                    ['id']
-                )->where(
-                    'keyword = ?',
-                    $value
-                )->joinInner(
-                    ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
-                    'keywords_table.keyword_id = asset_keywords_table.id',
-                    ['asset_id']
-                ),
-            ['asset_id']
+        $connection = $this->connection->getConnection();
+        return $connection->fetchAssoc(
+            $connection->select()->from(
+                $connection->select()
+                           ->from(
+                               ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
+                               ['id']
+                           )->where(
+                               'keyword = ?',
+                               $value
+                           )->joinInner(
+                               ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
+                               'keywords_table.keyword_id = asset_keywords_table.id',
+                               ['asset_id']
+                           ),
+                ['asset_id']
+            )
         );
     }
 }
