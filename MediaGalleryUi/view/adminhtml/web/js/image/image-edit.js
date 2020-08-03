@@ -36,7 +36,7 @@ define([
                     component: 'Magento_Ui/js/form/element/ui-select',
                     name: '${ $.name }_keywords',
                     template: 'ui/grid/filters/elements/ui-select',
-                    index: 'keywords'
+                    disableLabel: true
                 }
             ],
             exports: {
@@ -112,6 +112,7 @@ define([
          */
         getOptionForKeyword: function (keyword) {
             return {
+                'is_active': 1,
                 level: 1,
                 value: keyword,
                 label: keyword
