@@ -112,7 +112,7 @@ define([
          *
          * @param {String} tagText
          * @param {Number} tagIndex
-         * @return {String}
+*         * @return {String}
          */
         getTagText: function (tagText, tagIndex) {
             return tagText + (this.image().tags.length - 1 === tagIndex ? '' : ',');
@@ -132,7 +132,7 @@ define([
          * @returns {Boolean}
          */
         isArray: function (value) {
-            return _.isArray(value);
+            return _.isArray(value) && value.length === 0;
         },
 
         /**
@@ -151,7 +151,7 @@ define([
          * @param {String} link
          */
         getFilterUrl: function (link) {
-            return link + '?filters[asset_id]=' + this.image().id;
+            return link + '?filters[asset_id]=[' + this.image().id + ']';
         },
 
         /**
