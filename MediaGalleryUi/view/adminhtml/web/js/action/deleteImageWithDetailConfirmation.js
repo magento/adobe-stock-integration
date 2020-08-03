@@ -48,29 +48,28 @@ define([
         /**
          * Get information about image use
          *
-         * @param {Object|String} imageDetails
+         * @param {Object|String} images
          * @return {String}
          */
-        getRecordRelatedContentMessage: function (imageDetails) {
-            var usedInMessage = $t('The selected assets are used for the following entities content: '),
-                usedIn = {};
+        getRecordRelatedContentMessage: function (images) {
+            var usedInMessage = $t('The selected assets are used in the content of the following entities: '),
+                usedIn = [];
 
-            $.each(imageDetails, function (key, image) {
-                if (_.isObject(image.details[6]) && !_.isEmpty(image.details[6].value)) {
-                    $.each(image.details[6].value, function (entityName, count) {
-                        usedIn[entityName] =  usedIn[entityName] + count || count;
-                    });
-                }
+            $.each(images, function (key, image) {
+                $.each(image.details, function (sectionIndex, section) {
+                    if (section.title === 'Used In' && _.isObject(section) && !_.isEmpty(section.value)) {
+                        $.each(section.value, function (entityTypeIndex, entityTypeData) {
+                            usedIn.push(entityTypeData.name + '(' + entityTypeData.number + ')');
+                        });
+                    }
+                });
             });
 
             if (_.isEmpty(usedIn)) {
                 return '';
             }
-            $.each(usedIn, function (entityName, count) {
-                usedInMessage +=  entityName +  '(' + count + '), ';
-            });
 
-            return usedInMessage;
+            return usedInMessage + usedIn.join(', ') + '.';
         }
     };
 });

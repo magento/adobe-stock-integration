@@ -49,7 +49,7 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryAssertWarningMessageActionGroup" stepKey="assertMessageImageUsedIn">
-            <argument name="messageText" value="The selected assets are used for the following entities content: Categories(1)"/>
+            <argument name="messageText" value="The selected assets are used in the content of the following entities: Categories(1)"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImage"/>
     </test>

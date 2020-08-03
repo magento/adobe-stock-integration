@@ -126,23 +126,32 @@ define([
         },
 
         /**
-         * Get image details value
+         * Is value an object
          *
-         * @param {Object|String} value
-         * @return {String}
+         * @param {*} value
+         * @returns {Boolean}
          */
-        getValueUnsanitizedHtml: function (value) {
-            var usedIn = '';
+        isArray: function (value) {
+            return _.isArray(value);
+        },
 
-            if (_.isObject(value)) {
-                $.each(value, function (entityName, count) {
-                    usedIn += entityName +  '(' + count + ')  </br>';
-                });
+        /**
+         * Get name and number text for used in link
+         *
+         * @param {Object} item
+         * @returns {String}
+         */
+        getUsedInText: function (item) {
+            return item.name +  '(' + item.number + ')';
+        },
 
-                return usedIn;
-            }
-
-            return value;
+        /**
+         * Get filter url
+         *
+         * @param {String} link
+         */
+        getFilterUrl: function (link) {
+            return link + '?filters[asset_id]=' + this.image().id;
         },
 
         /**
