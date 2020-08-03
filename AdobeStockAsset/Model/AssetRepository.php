@@ -116,7 +116,6 @@ class AssetRepository implements AssetRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
         try {
-            /** @var AssetCollection $collection */
             $collection = $this->collectionFactory->create();
             $this->joinProcessor->process(
                 $collection,
@@ -125,7 +124,6 @@ class AssetRepository implements AssetRepositoryInterface
 
             $this->collectionProcessor->process($searchCriteria, $collection);
 
-            /** @var AssetSearchResultsInterface $searchResults */
             $searchResults = $this->searchResultFactory->create();
             $searchResults->setItems($collection->getItems());
             $searchResults->setSearchCriteria($searchCriteria);

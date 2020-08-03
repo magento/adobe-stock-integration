@@ -88,7 +88,7 @@ class TestConnection extends Action implements HttpGetActionInterface
             $message = __('An error occurred during test Adobe Stock API connection');
             $isConnectionEstablished = false;
         }
-        /** @var Json $resultJson */
+
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(
             [

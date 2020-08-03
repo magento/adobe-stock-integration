@@ -11,7 +11,6 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\DB\Select;
 
 /**
  * Custom filter to filter collection by entity type
@@ -44,16 +43,16 @@ class EntityType implements CustomFilterInterface
         $value = $filter->getValue();
         if (is_array($value)) {
             $conditions = [];
-            
+
             if (in_array(self::NOT_USED, $value)) {
                 unset($value[array_search(self::NOT_USED, $value)]);
                 $conditions[] = ['in' => $this->getNotUsedEntityIds()];
             }
 
             if (!empty($value)) {
-                $conditions[] = ['in' => $this->getSelectByEntityType($value)];
+                $conditions[] = ['in' => $this->getEntityTypesIds($value)];
             }
-            
+
             $collection->addFieldToFilter(
                 self::TABLE_ALIAS . '.id',
                 $conditions
@@ -63,35 +62,42 @@ class EntityType implements CustomFilterInterface
     }
 
     /**
-     * Return select asset ids by entity type
+     * Return  asset ids by entity type
      *
      * @param array $value
-     * @return Select
+     * @return array
      */
-    private function getSelectByEntityType(array $value): Select
+    private function getEntityTypesIds(array $value): array
     {
-        return $this->connection->getConnection()->select()->from(
-            ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
-            ['asset_id']
-        )->where(
-            'entity_type IN (?)',
-            $value
-        );
-    }
-    
-    /**
-     * Return select asset ids that not exists in asset_content_table
-     */
-    private function getNotUsedEntityIds(): Select
-    {
-        return $this->connection->getConnection()->select()->from(
-            ['media_gallery_asset' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
-            ['id']
-        )->where(
-            'media_gallery_asset.id  not in ?',
-            $this->connection->getConnection()->select()->from(
+        $connection = $this->connection->getConnection();
+        return $connection->fetchAssoc(
+            $connection->select()->from(
                 ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
                 ['asset_id']
+            )->where(
+                'entity_type IN (?)',
+                $value
+            )
+        );
+    }
+
+    /**
+     * Return  asset ids that not exists in asset_content_table
+     */
+    private function getNotUsedEntityIds(): array
+    {
+        $connection = $this->connection->getConnection();
+
+        return $connection->fetchAssoc(
+            $connection->select()->from(
+                ['media_gallery_asset' => $this->connection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)],
+                ['id']
+            )->where(
+                'media_gallery_asset.id  not in ?',
+                $this->connection->getConnection()->select()->from(
+                    ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
+                    ['asset_id']
+                )
             )
         );
     }

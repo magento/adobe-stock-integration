@@ -4,14 +4,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko  foreach: { data: actionsList, as: 'action' } -->
-    <button type="button"
-            data-bind="click: $parent[action.handler].bind($parent),
-                       attr: {
-                            class: action.classes,
-                            id: 'image-details-action-' + action.name,
-                            title: $t(action.title)
-                       }">
-        <span data-bind="i18n: action.title"></span>
+<each args="{ data: actionsList, as: 'action' }">
+    <button type="button" click="$parent[action.handler].bind($parent)"
+            attr="{class: action.classes, id: 'image-details-action-' + action.name, title: $t(action.title)}">
+        <span translate="action.title"></span>
     </button>
-<!-- /ko -->
+</each>

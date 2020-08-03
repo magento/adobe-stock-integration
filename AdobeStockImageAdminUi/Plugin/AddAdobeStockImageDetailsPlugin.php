@@ -12,9 +12,6 @@ use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -101,12 +98,11 @@ class AddAdobeStockImageDetailsPlugin
                  ->setValue(implode(",", $assetIds))
                  ->setConditionType('in')
                  ->create();
-            
+
             $searchCriteria = $this->searchCriteriaBuilder
                 ->addFilter($mediaGalleryIdFilter)
                 ->create();
 
-            /** @var AssetSearchResultsInterface $result */
             $result = $this->assetRepository->getList($searchCriteria);
             if ($result->getTotalCount() > 0) {
                 $item = $result->getItems();
@@ -132,9 +128,7 @@ class AddAdobeStockImageDetailsPlugin
      */
     private function loadAssetsInfo(AssetInterface $asset): array
     {
-        /** @var CategoryInterface $assetCategory */
         $assetCategory = $this->categoryRepository->getById($asset->getCategoryId());
-        /** @var CreatorInterface $assetCreator */
         $assetCreator = $this->creatorRepository->getById($asset->getCreatorId());
 
         return [

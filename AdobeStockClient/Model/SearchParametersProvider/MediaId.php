@@ -18,7 +18,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class MediaId implements SearchParameterProviderInterface
 {
     private const MEDIA_ID = 'media_id';
-    
+
     /**
      * @inheritdoc
      */

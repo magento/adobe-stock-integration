@@ -41,7 +41,9 @@ class Config
     }
 
     /**
-     * @inheritdoc
+     * Get max width
+     *
+     * @return int
      */
     public function getWidth(): int
     {
@@ -49,7 +51,9 @@ class Config
     }
 
     /**
-     * @inheritdoc
+     * Get max height
+     *
+     * @return int
      */
     public function getHeight(): int
     {

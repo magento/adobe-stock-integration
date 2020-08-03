@@ -12,8 +12,9 @@ define([
     'Magento_Ui/js/modal/prompt',
     'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'Magento_MediaGalleryUi/js/directory/actions/deleteDirectory',
+    'mage/translate',
     'validation'
-], function ($, Component, confirm, uiAlert, _, prompt, createDirectory, deleteDirectory) {
+], function ($, Component, confirm, uiAlert, _, prompt, createDirectory, deleteDirectory, $t) {
     'use strict';
 
     return Component.extend({
@@ -51,7 +52,7 @@ define([
 
             $(this.createFolderButtonSelector).on('create_folder', function () {
                 this.getPrompt({
-                    title: 'New Folder Name:',
+                    title: $t('New Folder Name:'),
                     content: '',
                     actions: {
                         /**
@@ -76,7 +77,7 @@ define([
                         }.bind(this)
                     },
                     buttons: [{
-                        text: $.mage.__('Cancel'),
+                        text: $t('Cancel'),
                         class: 'action-secondary action-dismiss',
 
                         /**
@@ -86,7 +87,7 @@ define([
                             this.closeModal();
                         }
                     }, {
-                        text: $.mage.__('Confirm'),
+                        text: $t('Confirm'),
                         class: 'action-primary action-accept'
                     }]
                 });
@@ -112,8 +113,8 @@ define([
           */
         getPrompt: function (data) {
                 prompt({
-                    title: $.mage.__(data.title),
-                    content:  $.mage.__(data.content),
+                    title: $t(data.title),
+                    content:  $t(data.content),
                     modalClass: 'media-gallery-folder-prompt',
                     validation: true,
                     validationRules: ['required-entry', 'validate-alphanum'],
@@ -137,9 +138,9 @@ define([
           */
         getConfirmationPopupDeleteFolder: function () {
             confirm({
-                title: $.mage.__('Are you sure you want to delete this folder?'),
+                title: $t('Are you sure you want to delete this folder?'),
                 modalClass: 'delete-folder-confirmation-popup',
-                content: $.mage.__('The following folder is going to be deleted: %1')
+                content: $t('The following folder is going to be deleted: %1')
                     .replace('%1', this.selectedFolder()),
                 actions: {
 

@@ -65,7 +65,6 @@ class SaveImageFileTest extends TestCase
      */
     public function testExecute(Document $document, string $url, string $destinationPath, bool $delete): void
     {
-        $path = 'catalog/test-image.jpeg';
         if ($delete) {
             $this->storageDelete->expects($this->once())
                 ->method('execute');
@@ -76,8 +75,7 @@ class SaveImageFileTest extends TestCase
 
         $this->storageSave->expects($this->once())
             ->method('execute')
-            ->with($url, $destinationPath)
-            ->willReturn($path);
+            ->with($url, $destinationPath);
 
         $this->saveImageFile->execute($document, $url, $destinationPath);
     }

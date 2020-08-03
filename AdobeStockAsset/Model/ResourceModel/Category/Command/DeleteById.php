@@ -57,7 +57,6 @@ class DeleteById implements DeleteByIdInterface
     public function execute(int $categoryId): void
     {
         try {
-            /** @var AdapterInterface $connection */
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_CATEGORY_TABLE_NAME);
             $connection->delete($tableName, [self::ADOBE_STOCK_ASSET_CATEGORY_ID . ' = ?' => $categoryId]);

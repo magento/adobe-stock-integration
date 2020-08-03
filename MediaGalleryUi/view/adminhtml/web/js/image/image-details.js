@@ -19,7 +19,6 @@ define([
             imageDetailsUrl: '/media_gallery/image/details',
             images: [],
             tagListLimit: 7,
-            categoryContentType: 'Category',
             showAllTags: false,
             image: null,
             modules: {
@@ -53,8 +52,8 @@ define([
                     this.images[imageId] = imageDetails[imageId];
                     this.image(this.images[imageId]);
                     this.openImageDetailsModal();
-                }.bind(this)).fail(function (message) {
-                    this.addMediaGridMessage('error', message);
+                }.bind(this)).fail(function (error) {
+                    this.addMediaGridMessage('error', error);
                 }.bind(this));
 
                 return;
@@ -127,47 +126,32 @@ define([
         },
 
         /**
-         * Get image details value
+         * Is value an object
          *
-         * @param {Object|String} value
-         * @return {String}
+         * @param {*} value
+         * @returns {Boolean}
          */
-        getValueUnsanitizedHtml: function (value) {
-            var usedIn = '';
-
-            if (_.isObject(value)) {
-                $.each(value, function (moduleName, count) {
-                    usedIn += count + ' ' +
-                        this.getEntityNameWithPrefix(moduleName, count) +
-                        '</br>';
-                }.bind(this));
-
-                return usedIn;
-            }
-
-            return value;
+        isArray: function (value) {
+            return _.isArray(value);
         },
 
         /**
-        * Return entity name based on used in count
-        *
-        * @param {String} entityName
-        * @param {String} count
-        */
-        getEntityNameWithPrefix: function (entityName, count) {
-            var name;
+         * Get name and number text for used in link
+         *
+         * @param {Object} item
+         * @returns {String}
+         */
+        getUsedInText: function (item) {
+            return item.name +  '(' + item.number + ')';
+        },
 
-            if (count > 1) {
-                if (entityName === this.categoryContentType) {
-                    name = entityName.slice(0, -1) + 'ies';
-                } else {
-                    name = entityName + 's';
-                }
-
-                return name;
-            }
-
-            return entityName;
+        /**
+         * Get filter url
+         *
+         * @param {String} link
+         */
+        getFilterUrl: function (link) {
+            return link + '?filters[asset_id]=' + this.image().id;
         },
 
         /**

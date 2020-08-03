@@ -13,9 +13,9 @@
             <description>Asserts that image exists in media gallery grid</description>
         </annotations>
         <arguments>
-            <argument name="image"/>
+            <argument name="title"/>
         </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(image.file)}}" stepKey="waitForImageToBeVisible"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
 
     </actionGroup>
 </actionGroups>
