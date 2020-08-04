@@ -287,8 +287,7 @@ define([
          * @param {String} currentFilterPath
          */
         isFiltersApplied: function (currentFilterPath) {
-            return !_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
-                currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category';
+            return !_.isUndefined(currentFilterPath) && currentFilterPath !== '';
         },
 
         /**
