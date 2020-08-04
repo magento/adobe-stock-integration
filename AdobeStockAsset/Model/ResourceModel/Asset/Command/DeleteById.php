@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Asset\Command;
 
+use Magento\AdobeStockAssetApi\Model\Asset\Command\DeleteByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\AdobeStockAssetApi\Model\Asset\Command\DeleteByIdInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -57,7 +57,6 @@ class DeleteById implements DeleteByIdInterface
     public function execute(int $adobeStockAssetId): void
     {
         try {
-            /** @var AdapterInterface $connection */
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::ADOBE_STOCK_ASSET_TABLE_NAME);
             $connection->delete($tableName, [self::ADOBE_STOCK_ASSET_ID . ' = ?' => $adobeStockAssetId]);

@@ -6,15 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryRenditions\Model;
+namespace Magento\MediaGalleryRenditionsApi\Model;
 
-use Magento\MediaGalleryRenditionsApi\Model\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Config for Media Gallery Renditions module
+ * Class responsible for providing access to Media Gallery Renditions system configuration.
  */
-class Config implements ConfigInterface
+class Config
 {
     /**
      * Config path for Media Gallery Renditions Width
@@ -42,7 +41,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritdoc
+     * Get max width
+     *
+     * @return int
      */
     public function getWidth(): int
     {
@@ -50,7 +51,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritdoc
+     * Get max height
+     *
+     * @return int
      */
     public function getHeight(): int
     {

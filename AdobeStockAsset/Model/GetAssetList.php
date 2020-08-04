@@ -10,8 +10,8 @@ namespace Magento\AdobeStockAsset\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
-use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
@@ -76,7 +76,13 @@ class GetAssetList implements GetAssetListInterface
                 __(
                     'Failed to authenticate to Adobe Stock API. <br> Please correct the API credentials in '
                     . '<a href="%1">Configuration → System → Adobe Stock Integration.</a>',
-                    $this->url->getUrl('adminhtml/system_config/edit/section/system')
+                    $this->url->getUrl(
+                        'adminhtml/system_config/edit',
+                        [
+                            'section' => 'system',
+                            '_fragment' => 'system_adobe_stock_integration-link'
+                        ]
+                    )
                 ),
                 $exception
             );

@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model\Extract;
 
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\Framework\Api\Search\Document;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 
 /**
@@ -49,14 +49,16 @@ class MediaGalleryAsset
         }
 
         return $this->assetFactory->create([
+            'id' => $assetData['id'],
             'path' => $assetData['path'],
             'title' => $assetData['title'],
+            'description' => $assetData['description'],
+            'source' => $assetData['source'],
+            'hash' => $assetData['hash'],
+            'contentType' => $assetData['content_type'],
             'width' => $assetData['width'],
             'height' => $assetData['height'],
-            'size' => $assetData['size'],
-            'contentType' => $assetData['content_type'],
-            'source' => $assetData['source'],
-            'hash' => $assetData['hash']
+            'size' => $assetData['size']
         ]);
     }
 }

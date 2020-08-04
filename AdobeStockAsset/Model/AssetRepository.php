@@ -20,7 +20,6 @@ use Magento\AdobeStockAssetApi\Model\Asset\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
@@ -117,7 +116,6 @@ class AssetRepository implements AssetRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): AssetSearchResultsInterface
     {
         try {
-            /** @var AssetCollection $collection */
             $collection = $this->collectionFactory->create();
             $this->joinProcessor->process(
                 $collection,
@@ -126,7 +124,6 @@ class AssetRepository implements AssetRepositoryInterface
 
             $this->collectionProcessor->process($searchCriteria, $collection);
 
-            /** @var AssetSearchResultsInterface $searchResults */
             $searchResults = $this->searchResultFactory->create();
             $searchResults->setItems($collection->getItems());
             $searchResults->setSearchCriteria($searchCriteria);

@@ -5,11 +5,11 @@
  */
 -->
 <div class="masonry-sorting">
-    <b><!-- ko i18n: 'Sort by' --><!-- /ko -->:</b>
-    <select class="admin__control-select" data-bind="
-        options: options,
-        optionsValue: 'value',
-        optionsText: 'label',
-        value: selectedOption
-    "></select>
+    <b><translate args="'Sort by'"/>:</b>
+    <select class="admin__control-select"
+            options="options"
+            optionsValue="'value'"
+            optionsText="'label'"
+            ko-value="selectedOption">
+    </select>
 </div>

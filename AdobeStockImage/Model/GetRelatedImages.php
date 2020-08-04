@@ -10,9 +10,9 @@ namespace Magento\AdobeStockImage\Model;
 
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
@@ -115,7 +115,6 @@ class GetRelatedImages implements GetRelatedImagesInterface
     private function serializeRelatedImages(array $images): array
     {
         $data = [];
-        /** @var Document $image */
         foreach ($images as $image) {
             $data[] = $this->serializeImage->execute($image);
         }

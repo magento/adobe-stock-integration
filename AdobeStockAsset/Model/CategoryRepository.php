@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model;
 
-use Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface;
-use Magento\AdobeStockAssetApi\Model\Category\Command\LoadByIdInterface;
-use Magento\AdobeStockAssetApi\Model\Category\Command\DeleteByIdInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\AdobeStockAsset\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\AdobeStockAssetApi\Api\CategoryRepositoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategorySearchResultsInterfaceFactory;
+use Magento\AdobeStockAssetApi\Model\Category\Command\DeleteByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Category\Command\LoadByIdInterface;
+use Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -116,7 +116,6 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria) : CategorySearchResultsInterface
     {
-        /** @var CategoryCollection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process(
             $collection,
@@ -125,7 +124,6 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var CategorySearchResultsInterface $searchResults */
         $searchResults = $this->searchResultFactory->create();
         $searchResults->setItems($collection->getItems());
         $searchResults->setSearchCriteria($searchCriteria);

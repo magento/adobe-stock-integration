@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Model\ResourceModel\Category\Command;
 
-use Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface;
-use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAsset\Model\ResourceModel\Command\InsertIgnore;
+use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
+use Magento\AdobeStockAssetApi\Model\Category\Command\SaveInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**

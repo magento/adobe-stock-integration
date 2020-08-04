@@ -497,23 +497,22 @@ define([
                                         title,
                                         data.message
                                     );
-
-                                    return;
+                                } else {
+                                    licenseAndSaveAction(
+                                        this.preview().licenseAndDownloadUrl,
+                                        id,
+                                        title,
+                                        path,
+                                        contentType,
+                                        isDownloaded,
+                                        data.message,
+                                        this.getDestinationDirectoryPath()
+                                    ).then(function (destinationPath) {
+                                        deferred.resolve(destinationPath);
+                                    }).fail(function (error) {
+                                        deferred.reject(error);
+                                    });
                                 }
-                                licenseAndSaveAction(
-                                    this.preview().licenseAndDownloadUrl,
-                                    id,
-                                    title,
-                                    path,
-                                    contentType,
-                                    isDownloaded,
-                                    data.message,
-                                    this.getDestinationDirectoryPath()
-                                ).then(function (destinationPath) {
-                                    deferred.resolve(destinationPath);
-                                }).fail(function (error) {
-                                    deferred.reject(error);
-                                });
                             }.bind(this)).fail(function (error) {
                                 deferred.reject(error);
                             });

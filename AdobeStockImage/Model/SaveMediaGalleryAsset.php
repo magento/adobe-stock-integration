@@ -7,109 +7,130 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Model;
 
-use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToMediaGalleryAsset;
+use Magento\AdobeStockImage\Model\Extract\MediaGalleryAsset as DocumentToAsset;
 use Magento\Framework\Api\Search\Document;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 
 /**
- * Process save action of the media gallery asset.
+ * Process save action of the media gallery asset and keywords.
  */
 class SaveMediaGalleryAsset
 {
+    private const SOURCE_ADOBE_STOCK = 'Adobe Stock';
+
+    /**
+     * @var DocumentToAsset
+     */
+    private $documentToAsset;
+
+    /**
+     * @var GetAssetsByPathsInterface
+     */
+    private $getAssetsByPaths;
+
+    /**
+     * @var SynchronizeFilesInterface
+     */
+    private $importFiles;
+
     /**
      * @var SaveAssetsInterface
      */
-    private $saveMediaAsset;
+    private $saveAssets;
 
     /**
-     * @var DocumentToMediaGalleryAsset
+     * @var SaveKeywords
      */
-    private $documentToMediaGalleryAsset;
+    private $saveKeywords;
 
     /**
-     * @var GetContentHashInterface
-     */
-    private $getContentHash;
-
-    /**
-     * @var Filesystem
-     */
-    private $fileSystem;
-
-    /**
-     * @param SaveAssetsInterface $saveMediaAsset
-     * @param DocumentToMediaGalleryAsset $documentToMediaGalleryAsset
-     * @param GetContentHashInterface $getContentHash
-     * @param Filesystem $fileSystem
+     * @param DocumentToAsset $documentToAsset
+     * @param GetAssetsByPathsInterface $getAssetsByPaths
+     * @param SynchronizeFilesInterface $importFiles
+     * @param SaveAssetsInterface $saveAssets
+     * @param SaveKeywords $saveKeywords
      */
     public function __construct(
-        SaveAssetsInterface $saveMediaAsset,
-        DocumentToMediaGalleryAsset $documentToMediaGalleryAsset,
-        GetContentHashInterface $getContentHash,
-        Filesystem $fileSystem
+        DocumentToAsset $documentToAsset,
+        GetAssetsByPathsInterface $getAssetsByPaths,
+        SynchronizeFilesInterface $importFiles,
+        SaveAssetsInterface $saveAssets,
+        SaveKeywords $saveKeywords
     ) {
-        $this->saveMediaAsset = $saveMediaAsset;
-        $this->documentToMediaGalleryAsset = $documentToMediaGalleryAsset;
-        $this->getContentHash = $getContentHash;
-        $this->fileSystem = $fileSystem;
+        $this->documentToAsset = $documentToAsset;
+        $this->getAssetsByPaths = $getAssetsByPaths;
+        $this->importFiles = $importFiles;
+        $this->saveAssets = $saveAssets;
+        $this->saveKeywords = $saveKeywords;
     }
 
     /**
      * Process saving MediaGalleryAsset based on the search document and destination path.
      *
      * @param Document $document
-     * @param string $destinationPath
-     * @return void
+     * @param string $path
+     * @return int
      * @throws CouldNotSaveException
+     * @throws LocalizedException
      */
-    public function execute(Document $document, string $destinationPath): void
+    public function execute(Document $document, string $path): int
     {
         try {
-            $fileSize = $this->calculateFileSize($destinationPath);
-            $additionalData = [
-                'id' => null,
-                'path' => $destinationPath,
-                'source' => 'Adobe Stock',
-                'size' => $fileSize,
-                'hash' => $this->hashImageContent($destinationPath)
-            ];
-
-            $mediaGalleryAsset = $this->documentToMediaGalleryAsset->convert($document, $additionalData);
-            $this->saveMediaAsset->execute([$mediaGalleryAsset]);
+            $this->importFiles->execute([$path]);
+            $asset = $this->getAssetsByPaths->execute([$path])[0];
+            $this->saveAsset($document, $asset);
+            $this->saveKeywords($document, $asset->getId());
+            return $asset->getId();
+        } catch (LocalizedException $exception) {
+            throw $exception;
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Could not save media gallery asset.'), $exception);
         }
     }
 
     /**
-     * Calculates saved image file size.
+     * Save media gallery asset
      *
-     * @param string $destinationPath
-     * @return int
+     * @param Document $document
+     * @param AssetInterface $asset
+     * @throws CouldNotSaveException
      */
-    private function calculateFileSize(string $destinationPath): int
+    private function saveAsset(Document $document, AssetInterface $asset): void
     {
-        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
-        return $mediaDirectory->stat($mediaDirectory->getAbsolutePath($destinationPath))['size'];
+        $this->saveAssets->execute(
+            [
+                $this->documentToAsset->convert(
+                    $document,
+                    [
+                        'id' => $asset->getId(),
+                        'path' => $asset->getPath(),
+                        'source' => self::SOURCE_ADOBE_STOCK,
+                        'description' => $asset->getDescription(),
+                        'hash' => $asset->getHash(),
+                        'width' => $asset->getWidth(),
+                        'height' => $asset->getHeight(),
+                        'size' => $asset->getSize()
+                    ]
+                )
+            ]
+        );
     }
 
     /**
-     * Hash image content.
+     * Save media gallery asset keywords
      *
-     * @param string $destinationPath
-     * @return string
-     * @throws FileSystemException
+     * @param Document $document
+     * @param int $id
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
      */
-    private function hashImageContent(string $destinationPath): string
+    private function saveKeywords(Document $document, int $id): void
     {
-        $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
-        $imageContent = $mediaDirectory->readFile($mediaDirectory->getAbsolutePath($destinationPath));
-        $hashedImageContent = $this->getContentHash->execute($imageContent);
-        return $hashedImageContent;
+        $this->saveKeywords->execute($id, $document);
     }
 }

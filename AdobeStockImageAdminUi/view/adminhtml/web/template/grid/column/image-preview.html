@@ -27,30 +27,30 @@
                 </div>
 
                 <div class="actions">
-                    <!-- ko scope: actions -->
-                        <!-- ko template: getTemplate() --><!-- /ko -->
-                    <!-- /ko -->
+                    <scope args="actions">
+                        <render args="getTemplate()" />
+                    </scope>
                 </div>
             </div>
         </div>
 
         <div class="attributes" data-role="image-attributes-value">
-            <!-- ko foreach: $col.getDisplayAttributes() -->
-            <div class="attribute">
-                <span class="title" translate="name"/>
-                <div class="value">
-                    <span text="value" />
+            <each args="$col.getDisplayAttributes()">
+                <div class="attribute">
+                    <span class="title" translate="name"/>
+                    <div class="value">
+                        <span text="value" />
+                    </div>
                 </div>
-            </div>
-            <!-- /ko -->
+            </each>
         </div>
 
-        <!-- ko scope: related -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        <scope args="related">
+            <render args="getTemplate()" />
+        </scope>
 
         <div class="keywords-container" ko-scope="keywords">
-            <!-- ko template: getTemplate() --><!-- /ko -->
+            <render args="getTemplate()" />
         </div>
     </div>
 </div>

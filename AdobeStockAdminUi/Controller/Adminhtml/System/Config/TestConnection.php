@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAdminUi\Controller\Adminhtml\System\Config;
 
-use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -88,7 +88,7 @@ class TestConnection extends Action implements HttpGetActionInterface
             $message = __('An error occurred during test Adobe Stock API connection');
             $isConnectionEstablished = false;
         }
-        /** @var Json $resultJson */
+
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(
             [

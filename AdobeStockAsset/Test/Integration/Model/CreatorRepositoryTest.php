@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Test\Integration\Model;
 
 use Magento\AdobeStockAssetApi\Api\CreatorRepositoryInterface;
-use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\AssetSearchResultsInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterfaceFactory;
@@ -94,7 +93,6 @@ class CreatorRepositoryTest extends TestCase
         /** @var SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
 
-        /** @var SortOrder $sortOrder */
         $sortOrder = $sortOrderBuilder->setField('id')
             ->setDirection(SortOrder::SORT_DESC)
             ->create();
