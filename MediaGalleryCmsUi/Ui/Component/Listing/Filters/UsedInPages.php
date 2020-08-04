@@ -19,7 +19,7 @@ use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 
 /**
- * Asset filter
+ * Used in pages filter
  */
 class UsedInPages extends Select
 {

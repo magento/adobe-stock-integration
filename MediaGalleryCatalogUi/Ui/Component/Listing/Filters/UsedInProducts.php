@@ -19,7 +19,7 @@ use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
- * Asset filter
+ * Used in products filter
  */
 class UsedInProducts extends Select
 {
