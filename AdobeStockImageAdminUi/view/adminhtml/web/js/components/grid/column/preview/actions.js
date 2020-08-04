@@ -243,7 +243,9 @@ define([
          * @param {Object} record
          */
         selectRecord: function (record) {
-            uiRegistry.get('name =' + this.mediaGallery).selected(record);
+            uiRegistry.get('name =' + this.mediaGallery)
+                .selected(record)
+                .toggleAddSelectedButton();
         },
 
         /**
