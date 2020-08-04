@@ -165,12 +165,19 @@ define([
          * @param {String} imageId
          */
         selectImageInNewMediaGalleryBySearch: function (imageId) {
-            var mediaGalleryId;
+            var mediaGalleryId,
+                path;
 
             this.mediaGalleryListingFilters().clear();
             this.getAssetDetails(imageId).then(function (imageDetails) {
                 mediaGalleryId = imageDetails['media_gallery_id'];
                 getDetails(this.imageEditDetailsUrl, [mediaGalleryId]).then(function (imageDetails) {
+                    path = imageDetails[mediaGalleryId].path;
+                    path = path.substring(0, path.lastIndexOf('/'));
+
+                    if (path !== '') {
+                        this.imageDirectory().locateNode(path);
+                    }
                     this.mediaGallerySearchInput().apply(imageDetails[mediaGalleryId].title);
                 }.bind(this));
             }.bind(this));
