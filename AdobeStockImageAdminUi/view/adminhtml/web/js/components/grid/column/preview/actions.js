@@ -15,7 +15,8 @@ define([
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_AdobeStockImageAdminUi/js/confirmation/buyCredits',
     'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus',
-    'Magento_Ui/js/modal/alert'
+    'Magento_Ui/js/modal/alert',
+    'Magento_MediaGalleryUi/js/action/getDetails'
 ], function (
     Component,
     uiRegistry,
@@ -29,7 +30,8 @@ define([
     mediaGallery,
     buyCreditsConfirmation,
     getLicenseStatus,
-    uiAlert
+    uiAlert,
+    getDetails
 ) {
     'use strict';
 
@@ -137,20 +139,42 @@ define([
             this.preview().getAdobeModal().trigger('closeModal');
 
             if (!this.isMediaBrowser()) {
-                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().title);
+                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().id);
             } else {
                 this.selectDisplayedImageForOldMediaGallery(this.preview().displayedRecord().path);
             }
         },
 
         /**
+         * Return adobe stock asset by adobe id
+         */
+        getAssetDetails: function (adobeId) {
+            return $.ajax({
+                url: this.getAssetDetailsUrl,
+                data: {
+                    'adobe_id': adobeId
+                },
+                context: this,
+                showLoader: true
+            });
+        },
+
+        /**
          * Select image in new media gallery via search input
          *
-         * @param {String} title
+         * @param {String} imageId
          */
-        selectImageInNewMediaGalleryBySearch: function (title) {
+        selectImageInNewMediaGalleryBySearch: function (imageId) {
+            var mediaGalleryId;
+
             this.mediaGalleryListingFilters().clear();
-            this.mediaGallerySearchInput().apply(title);
+            this.getAssetDetails(imageId).then(function (imageDetails) {
+                mediaGalleryId = imageDetails['media_gallery_id'];
+                getDetails(this.imageEditDetailsUrl, [mediaGalleryId]).then(function (imageDetails) {
+                    this.mediaGallerySearchInput().apply(imageDetails[mediaGalleryId].title);
+                }.bind(this));
+            }.bind(this));
+
         },
 
         /**
