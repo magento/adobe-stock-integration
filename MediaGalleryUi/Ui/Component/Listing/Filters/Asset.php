@@ -15,16 +15,46 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Select;
+use Magento\Ui\Api\BookmarkManagementInterface;
+use Magento\MediaGalleryUi\Ui\Component\Asset\OptionsFactory;
+use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
+use Magento\Cms\Helper\Wysiwyg\Images;
+use Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
- * Asset  filter
+ * Asset filter
  */
 class Asset extends Select
 {
     /**
+     * @var BookmarkManagementInterface
+     */
+    private $bookmarkManagement;
+
+    /**
      * @var GetContentByAssetIdsInterface
      */
     private $getContentIdentities;
+
+    /**
+     * @var OptionsFactory
+     */
+    private $optionsFactory;
+
+    /**
+     * @var GetAssetsByIdsInterface
+     */
+    private $getAssetsByIds;
+
+    /**
+     * @var Images
+     */
+    private $images;
+
+    /**
+     * @var Storage
+     */
+    private $storage;
 
     /**
      * @param ContextInterface $context
@@ -33,6 +63,11 @@ class Asset extends Select
      * @param FilterModifier $filterModifier
      * @param OptionSourceInterface $optionsProvider
      * @param GetContentByAssetIdsInterface $getContentIdentities
+     * @param BookmarkManagementInterface $bookmarkManagement
+     * @param OptionsFactory $optionsFactory
+     * @param GetAssetsByIdsInterface $getAssetsByIds
+     * @param Images $images
+     * @param Storage $storage
      * @param array $components
      * @param array $data
      */
@@ -43,6 +78,11 @@ class Asset extends Select
         FilterModifier $filterModifier,
         OptionSourceInterface $optionsProvider = null,
         GetContentByAssetIdsInterface $getContentIdentities,
+        BookmarkManagementInterface $bookmarkManagement,
+        OptionsFactory $optionsFactory,
+        GetAssetsByIdsInterface $getAssetsByIds,
+        Images $images,
+        Storage $storage,
         array $components = [],
         array $data = []
     ) {
@@ -58,6 +98,70 @@ class Asset extends Select
             $data
         );
         $this->getContentIdentities = $getContentIdentities;
+        $this->bookmarkManagement = $bookmarkManagement;
+        $this->optionsFactory = $optionsFactory;
+        $this->getAssetsByIds = $getAssetsByIds;
+        $this->images = $images;
+        $this->storage = $storage;
+    }
+
+    /*
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        $options = [];
+        $assetIds = [];
+        $bookmarks = $this->bookmarkManagement->loadByNamespace($this->context->getNameSpace())->getItems();
+        foreach ($bookmarks as $bookmark) {
+            if ($bookmark->getIdentifier() === 'current') {
+                $applied = $bookmark->getConfig()['current']['filters']['applied'];
+                if (isset($applied[$this->getName()])) {
+                    $assetIds[] = $applied[$this->getName()];
+                }
+            }
+        }
+
+        $assets = $this->getAssetsByIds->execute($assetIds);
+
+        foreach ($assets as $asset) {
+            $assetPath = $this->storage->getThumbnailUrl($this->images->getStorageRoot() . $asset->getPath());
+            $options[] = [
+                'value' => $asset->getId(),
+                'label' => $asset->getTitle(),
+                'path' => $assetPath
+            ];
+        }
+
+        $this->wrappedComponent = $this->uiComponentFactory->create(
+            $this->getName(),
+            parent::COMPONENT,
+            [
+                'context' => $this->getContext(),
+                'options' => $this->optionsFactory->create(['options' => $options])
+            ]
+        );
+
+        $this->wrappedComponent->prepare();
+        $jsConfig = array_replace_recursive(
+            $this->getJsConfig($this->wrappedComponent),
+            $this->getJsConfig($this)
+        );
+        $this->setData('js_config', $jsConfig);
+
+        $this->setData(
+            'config',
+            array_replace_recursive(
+                (array)$this->wrappedComponent->getData('config'),
+                (array)$this->getData('config')
+            )
+        );
+
+        $this->applyFilter();
+
+        parent::prepare();
     }
 
     /**
