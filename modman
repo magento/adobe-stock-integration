@@ -8,17 +8,3 @@
 @import AdobeStockImageApi
 @import MediaGalleryRenditions
 @import MediaGalleryRenditionsApi
-@import MediaGalleryUi
-@import MediaGalleryUiApi
-@import MediaGalleryIntegration
-@import MediaGallerySynchronization
-@import MediaGallerySynchronizationApi
-@import MediaContentSynchronization
-@import MediaContentSynchronizationApi
-@import MediaContentSynchronizationCatalog
-@import MediaContentSynchronizationCms
-@import MediaGalleryMetadata
-@import MediaGalleryMetadataApi
-@import MediaGalleryCatalogUi
-@import MediaGalleryCmsUi
-@import MediaGalleryCatalogIntegration
