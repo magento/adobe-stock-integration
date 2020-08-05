@@ -68,7 +68,7 @@ class GetDetails extends Action implements HttpPostActionInterface
             if (empty($adobeId)) {
                 $responseContent = [
                     'success' => false,
-                    'message' => __('Adobe id is required and.'),
+                    'message' => __('Adobe id is required.'),
                 ];
                 $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
                 $resultJson->setData($responseContent);
@@ -85,7 +85,7 @@ class GetDetails extends Action implements HttpPostActionInterface
             $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
-                'message' => __('An error occurred on attempt to retrieve user quota.'),
+                'message' => __('An error occurred on attempt to retrieve asset information.'),
             ];
         }
 

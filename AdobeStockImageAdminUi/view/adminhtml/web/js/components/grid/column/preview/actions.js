@@ -31,7 +31,7 @@ define([
     buyCreditsConfirmation,
     getLicenseStatus,
     uiAlert,
-    getDetails
+    getMediaGalleryImageDetails
 ) {
     'use strict';
 
@@ -147,6 +147,8 @@ define([
 
         /**
          * Return adobe stock asset by adobe id
+         *
+         * @param {String} adobeId
          */
         getAssetDetails: function (adobeId) {
             return $.ajax({
@@ -171,15 +173,16 @@ define([
             this.mediaGalleryListingFilters().clear();
             this.getAssetDetails(imageId).then(function (assetDetails) {
                 mediaGalleryId = assetDetails['media_gallery_id'];
-                getDetails(this.imageEditDetailsUrl, [mediaGalleryId]).then(function (imageDetails) {
-                    path = imageDetails[mediaGalleryId].path;
-                    path = path.substring(0, path.lastIndexOf('/'));
+                getMediaGalleryImageDetails(this.imageEditDetailsUrl, [mediaGalleryId])
+                    .then(function (imageDetails) {
+                        path = imageDetails[mediaGalleryId].path;
+                        path = path.substring(0, path.lastIndexOf('/'));
 
-                    if (path !== '') {
-                        this.imageDirectory().locateNode(path);
-                    }
-                    this.mediaGallerySearchInput().apply(imageDetails[mediaGalleryId].title);
-                }.bind(this));
+                        if (path !== '') {
+                            this.imageDirectory().locateNode(path);
+                        }
+                        this.mediaGallerySearchInput().apply(imageDetails[mediaGalleryId].title);
+                    }.bind(this));
             }.bind(this));
 
         },
