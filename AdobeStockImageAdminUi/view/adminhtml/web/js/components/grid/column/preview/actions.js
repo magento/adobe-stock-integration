@@ -169,8 +169,8 @@ define([
                 path;
 
             this.mediaGalleryListingFilters().clear();
-            this.getAssetDetails(imageId).then(function (imageDetails) {
-                mediaGalleryId = imageDetails['media_gallery_id'];
+            this.getAssetDetails(imageId).then(function (assetDetails) {
+                mediaGalleryId = assetDetails['media_gallery_id'];
                 getDetails(this.imageEditDetailsUrl, [mediaGalleryId]).then(function (imageDetails) {
                     path = imageDetails[mediaGalleryId].path;
                     path = path.substring(0, path.lastIndexOf('/'));
