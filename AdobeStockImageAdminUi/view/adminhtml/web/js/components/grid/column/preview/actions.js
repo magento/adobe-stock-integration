@@ -44,6 +44,7 @@ define([
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
             buyCreditsUrl: 'https://stock.adobe.com/',
             messageDelay: 5,
+            mediaGallery: '',
             imageItems: [],
             messages: [],
             listens: {
@@ -243,9 +244,7 @@ define([
          * @param {Object} record
          */
         selectRecord: function (record) {
-            uiRegistry.get('name =' + this.mediaGallery)
-                .selected(record)
-                .toggleAddSelectedButton();
+            uiRegistry.get('name =' + this.mediaGallery).select(record);
         },
 
         /**
