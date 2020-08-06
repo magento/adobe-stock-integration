@@ -15,8 +15,7 @@ define([
     'Magento_AdobeStockImageAdminUi/js/media-gallery',
     'Magento_AdobeStockImageAdminUi/js/confirmation/buyCredits',
     'Magento_AdobeStockImageAdminUi/js/action/getLicenseStatus',
-    'Magento_Ui/js/modal/alert',
-    'Magento_MediaGalleryUi/js/action/getDetails'
+    'Magento_Ui/js/modal/alert'
 ], function (
     Component,
     uiRegistry,
@@ -30,8 +29,7 @@ define([
     mediaGallery,
     buyCreditsConfirmation,
     getLicenseStatus,
-    uiAlert,
-    getMediaGalleryImageDetails
+    uiAlert
 ) {
     'use strict';
 
@@ -172,17 +170,13 @@ define([
 
             this.mediaGalleryListingFilters().clear();
             this.getAssetDetails(imageId).then(function (assetDetails) {
-                mediaGalleryId = assetDetails['media_gallery_id'];
-                getMediaGalleryImageDetails(this.imageEditDetailsUrl, [mediaGalleryId])
-                    .then(function (imageDetails) {
-                        path = imageDetails[mediaGalleryId].path;
-                        path = path.substring(0, path.lastIndexOf('/'));
+                path = assetDetails.path;
+                path = path.substring(0, path.lastIndexOf('/'));
 
-                        if (path !== '') {
-                            this.imageDirectory().locateNode(path);
-                        }
-                        this.mediaGallerySearchInput().apply(imageDetails[mediaGalleryId].title);
-                    }.bind(this));
+                if (path !== '') {
+                    this.imageDirectory().locateNode(path);
+                }
+                this.mediaGallerySearchInput().apply(assetDetails.title);
             }.bind(this));
 
         },
