@@ -64,7 +64,7 @@ class Save
      * @throws FileSystemException
      * @throws LocalizedException
      */
-    public function execute(string $imageUrl, string $destinationPath, bool $allowOverwrite =false): void
+    public function execute(string $imageUrl, string $destinationPath, bool $allowOverwrite = false): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
