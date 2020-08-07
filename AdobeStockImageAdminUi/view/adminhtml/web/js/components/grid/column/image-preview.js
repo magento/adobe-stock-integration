@@ -44,7 +44,7 @@ define([
                     mediaGallerySortBy: '${ $.mediaGallerySortBy }',
                     mediaGallerySearchInput: '${ $.mediaGallerySearchInput }',
                     mediaGalleryListingFilters: '${ $.mediaGalleryListingFilters }',
-                    getAssetDetailsUrl: '${ $.getAssetDetailsUrl }',
+                    getMediaGalleryAsset: '${ $.getMediaGalleryAsset }',
                     imageEditDetailsUrl: '${ $.imageEditDetailsUrl }',
                     listingPaging: '${ $.listingPaging }'
                 }

@@ -85,6 +85,7 @@ class GetMediaGalleryAsset extends Action implements HttpPostActionInterface
                 return $resultJson;
             }
 
+            $mediaGalleryAsset = $this->getMEdiaGalleryAssetVyAdobeId->execute($adobeId);
             $mediaGalleryId = $this->getAssetById->execute([$adobeId])[$adobeId]->getMediaGalleryId();
             $details = $this->getDetailsByAssetId->execute([$mediaGalleryId]);
 

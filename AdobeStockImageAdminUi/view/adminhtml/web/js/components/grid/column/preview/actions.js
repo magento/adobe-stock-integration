@@ -150,7 +150,7 @@ define([
          */
         getAssetDetails: function (adobeId) {
             return $.ajax({
-                url: this.getAssetDetailsUrl,
+                url: this.getMediaGalleryAsset,
                 data: {
                     'adobe_id': adobeId
                 },
