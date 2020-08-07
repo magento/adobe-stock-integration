@@ -165,8 +165,7 @@ define([
          * @param {String} imageId
          */
         selectImageInNewMediaGalleryBySearch: function (imageId) {
-            var mediaGalleryId,
-                path;
+            var path;
 
             this.mediaGalleryListingFilters().clear();
             this.getAssetDetails(imageId).then(function (assetDetails) {
