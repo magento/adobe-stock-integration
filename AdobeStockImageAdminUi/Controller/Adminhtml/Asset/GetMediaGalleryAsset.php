@@ -8,12 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Controller\Adminhtml\Asset;
 
-use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
-use Magento\MediaGalleryUi\Model\GetDetailsByAssetId;
+use Magento\AdobeStockImageAdminUi\Model\Asset\GetMediaGalleryAssetByAdobeId;
 
 /**
  * Backend controller for retrieving asset information by adobeId
@@ -30,14 +29,9 @@ class GetMediaGalleryAsset extends Action implements HttpPostActionInterface
     public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var LoadByIdsInterface
+     * @var GetMediaGalleryAssetByAdobeId
      */
-    private $getAssetById;
-
-    /**
-     * @var GetDetailsByAssetId
-     */
-    private $getDetailsByAssetId;
+    private $getAssetByAdobeId;
 
     /**
      * @var LoggerInterface
@@ -46,21 +40,18 @@ class GetMediaGalleryAsset extends Action implements HttpPostActionInterface
 
     /**
      * @param Action\Context $context
-     * @param GetAssetByIdInterface $getAssetById
      * @param LoggerInterface $logger
-     * @param GetDetailsByAssetId $getDetailsByAssetId
+     * @param GetMediaGalleryAssetByAdobeId $getAssetByAdobeId
      */
     public function __construct(
         Action\Context $context,
-        LoadByIdsInterface $getAssetById,
         LoggerInterface $logger,
-        GetDetailsByAssetId $getDetailsByAssetId
+        GetMediaGalleryAssetByAdobeId $getAssetByAdobeId
     ) {
         parent::__construct($context);
 
         $this->logger = $logger;
-        $this->getAssetById = $getAssetById;
-        $this->getDetailsByAssetId = $getDetailsByAssetId;
+        $this->getAssetByAdobeId = $getAssetByAdobeId;
     }
 
     /**
@@ -85,12 +76,8 @@ class GetMediaGalleryAsset extends Action implements HttpPostActionInterface
                 return $resultJson;
             }
 
-            $mediaGalleryAsset = $this->getMEdiaGalleryAssetVyAdobeId->execute($adobeId);
-            $mediaGalleryId = $this->getAssetById->execute([$adobeId])[$adobeId]->getMediaGalleryId();
-            $details = $this->getDetailsByAssetId->execute([$mediaGalleryId]);
-
             $responseCode = self::HTTP_OK;
-            $responseContent = $details[$mediaGalleryId];
+            $responseContent = $this->getAssetByAdobeId->execute((int) $adobeId);
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $this->logger->critical($exception);
