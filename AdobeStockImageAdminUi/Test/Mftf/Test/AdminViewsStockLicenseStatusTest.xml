@@ -49,7 +49,7 @@
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="savePreviewImage"/>
 
         <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
-            <argument name="enabled" value="1"/>
+            <argument name="enabled" value="0"/>
         </actionGroup>
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageForSeeStatusImage"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForSeeStatusImage"/>
