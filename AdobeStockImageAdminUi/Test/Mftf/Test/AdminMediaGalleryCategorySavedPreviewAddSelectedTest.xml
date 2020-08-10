@@ -30,6 +30,7 @@
         </after>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
-        <actionGroup ref="AdminMediaGalleryAddSelectedSavedPreviewActionGroup" stepKey="addSelectedSavedPreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="addSelectedSavedPreview"/>
     </test>
 </tests>
