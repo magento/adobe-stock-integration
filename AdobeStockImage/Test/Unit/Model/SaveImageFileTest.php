@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Test\Unit\Model;
 
 use Magento\AdobeStockImage\Model\SaveImageFile;
-use Magento\AdobeStockImage\Model\Storage\Delete as StorageDelete;
 use Magento\AdobeStockImage\Model\Storage\Save as StorageSave;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
@@ -28,11 +27,6 @@ class SaveImageFileTest extends TestCase
     private $storageSave;
 
     /**
-     * @var MockObject|StorageDelete
-     */
-    private $storageDelete;
-
-    /**
      * @var SaveImageFile
      */
     private $saveImageFile;
@@ -43,13 +37,11 @@ class SaveImageFileTest extends TestCase
     protected function setUp(): void
     {
         $this->storageSave = $this->createMock(StorageSave::class);
-        $this->storageDelete = $this->createMock(StorageDelete::class);
 
         $this->saveImageFile = (new ObjectManager($this))->getObject(
             SaveImageFile::class,
             [
-                'storageSave' => $this->storageSave,
-                'storageDelete' => $this->storageDelete
+                'storageSave' => $this->storageSave
             ]
         );
     }
@@ -60,18 +52,12 @@ class SaveImageFileTest extends TestCase
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
-     * @param bool $delete
      * @dataProvider assetProvider
      */
-    public function testExecute(Document $document, string $url, string $destinationPath, bool $delete): void
+    public function testExecute(Document $document, string $url, string $destinationPath): void
     {
-        if ($delete) {
-            $this->storageDelete->expects($this->once())
-                ->method('execute');
-        } else {
-            $this->storageSave->expects($this->once())
-                ->method('execute');
-        }
+        $this->storageSave->expects($this->once())
+            ->method('execute');
 
         $this->storageSave->expects($this->once())
             ->method('execute')
@@ -86,24 +72,16 @@ class SaveImageFileTest extends TestCase
      * @param Document $document
      * @param string $url
      * @param string $destinationPath
-     * @param bool $delete
      * @dataProvider assetProvider
      */
     public function testExecuteWithException(
         Document $document,
         string $url,
-        string $destinationPath,
-        bool $delete
+        string $destinationPath
     ): void {
-        if ($delete) {
-            $this->storageDelete->expects($this->once())
-                ->method('execute')
-                ->willThrowException(new \Exception('Some Exception'));
-        } else {
-            $this->storageSave->expects($this->once())
-                ->method('execute')
-                ->willThrowException(new \Exception('Some Exception'));
-        }
+        $this->storageSave->expects($this->once())
+            ->method('execute')
+            ->willThrowException(new \Exception('Some Exception'));
 
         $this->expectException(CouldNotSaveException::class);
 
@@ -121,14 +99,12 @@ class SaveImageFileTest extends TestCase
             [
                 'document' => $this->getDocument(),
                 'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
-                'destinationPath' => 'path',
-                'delete' => false
+                'destinationPath' => 'path'
             ],
             [
                 'document' => $this->getDocument('filepath.jpg'),
                 'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
                 'destinationPath' => 'path',
-                'delete' => true
             ],
         ];
     }
