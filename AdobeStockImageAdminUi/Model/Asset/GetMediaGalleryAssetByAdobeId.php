@@ -11,7 +11,6 @@ namespace Magento\AdobeStockImageAdminUi\Model\Asset;
 use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
@@ -56,17 +55,12 @@ class GetMediaGalleryAssetByAdobeId
      *
      * @param int $adobeId
      * @return array
-     * @throws LocalizedException
      */
     public function execute(int $adobeId): array
     {
-        try {
-            $mediaGalleryId = $this->getAssetByAdobeId->execute([$adobeId])[$adobeId]->getMediaGalleryId();
-            $asset = $this->getMediaGalleryAssetsById->execute([$mediaGalleryId]);
+        $mediaGalleryId = $this->getAssetByAdobeId->execute([$adobeId])[$adobeId]->getMediaGalleryId();
+        $asset = $this->getMediaGalleryAssetsById->execute([$mediaGalleryId]);
 
-            return $this->objectProcessor->buildOutputDataArray(current($asset), AssetInterface::class);
-        } catch (\Exception $e) {
-            throw new LocalizedException(__($e->getMessage()));
-        }
+        return $this->objectProcessor->buildOutputDataArray(current($asset), AssetInterface::class);
     }
 }
