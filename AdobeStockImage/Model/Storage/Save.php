@@ -59,11 +59,12 @@ class Save
      *
      * @param string $imageUrl
      * @param string $destinationPath
+     * @param bool $allowOverwrite
      * @throws AlreadyExistsException
      * @throws FileSystemException
      * @throws LocalizedException
      */
-    public function execute(string $imageUrl, string $destinationPath): void
+    public function execute(string $imageUrl, string $destinationPath, bool $allowOverwrite = false): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
@@ -75,7 +76,7 @@ class Save
             throw new LocalizedException(__('Could not save image: unsupported file type.'));
         }
 
-        if ($mediaDirectory->isExist($destinationPath)) {
+        if (!$allowOverwrite && $mediaDirectory->isExist($destinationPath)) {
             throw new AlreadyExistsException(__('Image with the same file name already exits.'));
         }
 
