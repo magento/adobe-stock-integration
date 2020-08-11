@@ -59,8 +59,8 @@ class GetMediaGalleryAsset extends Action implements HttpPostActionInterface
      */
     public function execute()
     {
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         try {
-            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
             $params = $this->getRequest()->getParams();
             $adobeId = isset($params['adobe_id']) ? $params['adobe_id'] : null;
