@@ -138,20 +138,47 @@ define([
             this.preview().getAdobeModal().trigger('closeModal');
 
             if (!this.isMediaBrowser()) {
-                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().title);
+                this.selectImageInNewMediaGalleryBySearch(this.preview().displayedRecord().id);
             } else {
                 this.selectDisplayedImageForOldMediaGallery(this.preview().displayedRecord().path);
             }
         },
 
         /**
+         * Return adobe stock asset by adobe id
+         *
+         * @param {String} adobeId
+         */
+        getAssetDetails: function (adobeId) {
+            return $.ajax({
+                url: this.getMediaGalleryAsset,
+                data: {
+                    'adobe_id': adobeId
+                },
+                context: this,
+                showLoader: true
+            });
+        },
+
+        /**
          * Select image in new media gallery via search input
          *
-         * @param {String} title
+         * @param {String} imageId
          */
-        selectImageInNewMediaGalleryBySearch: function (title) {
+        selectImageInNewMediaGalleryBySearch: function (imageId) {
+            var path;
+
             this.mediaGalleryListingFilters().clear();
-            this.mediaGallerySearchInput().apply(title);
+            this.getAssetDetails(imageId).then(function (assetDetails) {
+                path = assetDetails.path;
+                path = path.substring(0, path.lastIndexOf('/'));
+
+                if (path !== '') {
+                    this.imageDirectory().locateNode(path);
+                }
+                this.mediaGallerySearchInput().apply(assetDetails.title);
+            }.bind(this));
+
         },
 
         /**
