@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryRenditionsApi\Model;
+namespace Magento\MediaGalleryRenditions\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
@@ -31,7 +31,6 @@ class Config
     private $scopeConfig;
 
     /**
-     * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
@@ -47,7 +46,7 @@ class Config
      */
     public function getWidth(): int
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH);
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH);
     }
 
     /**
@@ -57,6 +56,6 @@ class Config
      */
     public function getHeight(): int
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH);
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH);
     }
 }
