@@ -12,6 +12,9 @@
     <type name="Magento\MediaGalleryUi\Model\GetDetailsByAssetId">
         <plugin name="add_adobe_stock_image_details_plugin" type="Magento\AdobeStockImageAdminUi\Plugin\AddAdobeStockImageDetailsPlugin"/>
     </type>
+    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Source\Options">
+        <plugin name="add_adobe_stock_source_option_plugin" type="Magento\AdobeStockImageAdminUi\Plugin\AddAdobeStockSourceOptionPlugin"/>
+    </type>
     <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
         <arguments>
             <argument name="sourceIcons" xsi:type="array">

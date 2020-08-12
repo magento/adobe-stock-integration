@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryCategorySavedPreviewAddSelectedTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="[Story #4] User selects saved image preview in Category"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1688"/>
+            <title value="User saves image preview and clicks add selection to content in Category"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/5068945"/>
+            <description value="Admin should be able to save image preview and clicks add selection button"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
+        </after>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="addSelectedSavedPreview"/>
+    </test>
+</tests>
