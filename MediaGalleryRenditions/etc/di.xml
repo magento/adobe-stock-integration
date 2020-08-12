@@ -6,14 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\MediaGalleryRenditionsApi\Model\ConfigInterface" type="Magento\MediaGalleryRenditions\Model\Config"/>
     <preference for="Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface" type="Magento\MediaGalleryRenditions\Model\GenerateRenditions"/>
     <preference for="Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface" type="Magento\MediaGalleryRenditions\Model\GetRenditionPath"/>
     <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
-        <arguments>
-            <argument name="importers" xsi:type="array">
-                <item name="2" xsi:type="object">Magento\MediaGalleryRenditions\Model\GenerateRenditionImages</item>
-            </argument>
-        </arguments>
+        <plugin name="generate_rendtions" type="Magento\MediaGalleryRenditions\Plugin\CreateRenditions"/>
     </type>
 </config>

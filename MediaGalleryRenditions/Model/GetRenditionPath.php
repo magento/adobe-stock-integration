@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryRenditions\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 
 class GetRenditionPath implements GetRenditionPathInterface
@@ -17,45 +18,55 @@ class GetRenditionPath implements GetRenditionPathInterface
     private const RENDITIONS_DIRECTORY_NAME = '.renditions';
 
     /**
-     * @var Filesystem\Directory\WriteInterface
+     * @var Filesystem
      */
-    private $directory;
+    private $filesystem;
 
     /**
-     * @var IsRenditionImageResizeable
+     * @var IsRenditionRequired
      */
-    private $isRenditionImageResizeable;
+    private $isRenditionRequired;
 
     /**
      * @param Filesystem $filesystem
-     * @param IsRenditionImageResizeable $isRenditionImageResizeable
+     * @param IsRenditionRequired $isRenditionRequired
      */
     public function __construct(
         Filesystem $filesystem,
-        IsRenditionImageResizeable $isRenditionImageResizeable
+        IsRenditionRequired $isRenditionRequired
     ) {
-        $this->directory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $this->isRenditionImageResizeable = $isRenditionImageResizeable;
+        $this->filesystem = $filesystem;
+        $this->isRenditionRequired = $isRenditionRequired;
     }
 
     /**
      * Returns Rendition image path
      *
-     * @param AssetInterface $asset
+     * @param string $path
      * @return string
      */
-    public function execute(AssetInterface $asset) :string
+    public function execute(string $path) :string
     {
-        if (!$this->directory->isFile($asset->getPath())) {
-            throw new \InvalidArgumentException(__('Incorrect asset path!'));
-        }
-        if (!$this->isRenditionImageResizeable->execute($asset)) {
-            return $asset->getPath();
+        $mediaDirectory = $this->getMediaDirectory();
+
+        if (!$mediaDirectory->isFile($path)) {
+            throw new LocalizedException(__('Media asset file %path does not exist!', ['path' => $path]));
         }
 
-        return $this->directory->getRelativePath(
-            self::RENDITIONS_DIRECTORY_NAME . '/' .
-            $this->directory->getRelativePath(ltrim($asset->getPath(), '/'))
-        );
+        if (!$this->isRenditionRequired->execute($mediaDirectory->getAbsolutePath($path))) {
+            return $path;
+        }
+
+        return self::RENDITIONS_DIRECTORY_NAME . '/' . ltrim($path, '/');
+    }
+
+    /**
+     * Retrieve media directory instance with read access
+     *
+     * @return ReadInterface
+     */
+    private function getMediaDirectory(): ReadInterface
+    {
+        return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 }

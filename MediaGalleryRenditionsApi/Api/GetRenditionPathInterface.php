@@ -8,16 +8,15 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryRenditionsApi\Api;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 interface GetRenditionPathInterface
 {
     /**
      * Get Renditions image path
      *
-     * @param AssetInterface $asset
+     * @param string $path
      * @return string
      * @throws LocalizedException
      */
-    public function execute(AssetInterface $asset): string;
+    public function execute(string $path): string;
 }

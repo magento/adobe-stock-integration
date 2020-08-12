@@ -12,10 +12,10 @@ use Magento\Framework\Exception\LocalizedException;
 interface GenerateRenditionsInterface
 {
     /**
-     * Generate Renditions image
+     * Generate image renditions
      *
-     * @param array $assets
+     * @param string[] $paths
      * @throws LocalizedException
      */
-    public function execute(array $assets): void;
+    public function execute(array $paths): void;
 }
