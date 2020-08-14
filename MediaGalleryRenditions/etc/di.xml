@@ -11,4 +11,10 @@
     <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <plugin name="generate_rendtions" type="Magento\MediaGalleryRenditions\Plugin\CreateRenditions"/>
     </type>
+    <type name="Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\OnInsert">
+        <plugin name="set_rendition_on_insert" type="Magento\MediaGalleryRenditions\Plugin\SetPathOnInsert"/>
+    </type>
+    <type name="Magento\MediaGallery\Model\Asset\Command\GetByPath">
+        <plugin name="remove_rendition_from_path" type="Magento\MediaGalleryRenditions\Plugin\RemoveOnGetByPath"/>
+    </type>
 </config>
