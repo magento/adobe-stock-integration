@@ -22,6 +22,7 @@ class RemovePathOnExtract
      * @param ExtractAssetsFromContent $subject
      * @param string $content
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(ExtractAssetsFromContent $subject, string $content): array
     {

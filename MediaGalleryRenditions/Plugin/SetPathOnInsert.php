@@ -85,6 +85,7 @@ class SetPathOnInsert
         $this->imagesHelper->setStoreId($storeId);
 
         if ($forceStaticPath) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $image = parse_url($this->imagesHelper->getCurrentUrl() . $filename, PHP_URL_PATH);
         } else {
             $image = $this->imagesHelper->getImageHtmlDeclaration($filename, $asIs);
