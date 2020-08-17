@@ -5,7 +5,9 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-media-gallery-renditions-api": "*",
-        "magento/module-media-gallery-synchronization-api": "*"
+        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-content": "*",
+        "magento/module-cms": "*"
     },
     "type": "magento2-module",
     "license": [
