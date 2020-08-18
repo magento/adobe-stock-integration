@@ -15,6 +15,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Set renditions path on content insert
@@ -42,22 +43,30 @@ class SetPathOnInsert
     private $imagesHelper;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * SetPathOnInsert constructor.
      * @param GetRenditionPathInterface $getRenditionPath
      * @param RawFactory $resultRawFactory
      * @param Filesystem $filesystem
      * @param Images $imagesHelper
+     * @param Config $config
      */
     public function __construct(
         GetRenditionPathInterface $getRenditionPath,
         RawFactory $resultRawFactory,
         Filesystem $filesystem,
-        Images $imagesHelper
+        Images $imagesHelper,
+        Config $config
     ) {
         $this->getRenditionPath = $getRenditionPath;
         $this->resultRawFactory = $resultRawFactory;
         $this->filesystem = $filesystem;
         $this->imagesHelper = $imagesHelper;
+        $this->config = $config;
     }
 
     /**
@@ -70,13 +79,19 @@ class SetPathOnInsert
      */
     public function aroundExecute(OnInsert $subject, callable $proceed): ResultInterface
     {
+        $result = $proceed();
+
+        if (!$this->config->isEnabled()) {
+            return $result;
+        }
+
         $request = $subject->getRequest();
 
         $filename = $request->getParam('filename');
         $filename = $this->getRenditionPath->execute($this->imagesHelper->idDecode($filename));
 
         if (!$this->getMediaDirectory()->isFile($filename)) {
-            return $proceed();
+            return $result;
         }
 
         $storeId = $request->getParam('store');
