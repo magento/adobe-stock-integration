@@ -6,6 +6,7 @@
         "magento/framework": "*",
         "magento/module-media-gallery-renditions-api": "*",
         "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-content-api": "*",
         "magento/module-media-content": "*",
         "magento/module-cms": "*"
     },
