@@ -20,10 +20,12 @@ define([
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '.adobe-search-images-modal',
             activeMediaGallerySelector: 'aside.modal-slide.adobe-stock-modal._show',
+            bookmarksProvider: 'componentType = bookmark, ns = ${ $.ns }',
             modules: {
                 keywords: '${ $.name }_keywords',
                 related: '${ $.name }_related',
-                actions: '${ $.name }_actions'
+                actions: '${ $.name }_actions',
+                bookmarks: '${ $.bookmarksProvider }'
             },
             viewConfig: [
                 {
@@ -50,8 +52,37 @@ define([
                 }
             ],
             listens: {
-                '${ $.sortByComponentName }:applied': 'hide'
+                '${ $.sortByComponentName }:applied': 'hide',
+                '${ $.bookmarksProvider }:activeIndex': 'onActiveIndexChange'
             }
+        },
+
+        /**
+         * Listener of the activeIndex property.
+         */
+        onActiveIndexChange: function () {
+            var subscription,
+                rowIndex,
+                record;
+
+            if (this.bookmarks().getActiveView().index === 'default') {
+                this.hide();
+
+                return;
+            }
+
+            subscription = this.masonry().rows.subscribe(function () {
+                subscription.dispose();
+                rowIndex = this.lastOpenedImage();
+
+                if (rowIndex === false) {
+                    return;
+                }
+
+                record = this.masonry().rows()[rowIndex];
+                this.hide();
+                this.show(record);
+            }.bind(this));
         },
 
         /**
