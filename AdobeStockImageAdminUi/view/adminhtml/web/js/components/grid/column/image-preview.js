@@ -53,7 +53,8 @@ define([
             ],
             listens: {
                 '${ $.sortByComponentName }:applied': 'hide',
-                '${ $.bookmarksProvider }:activeIndex': 'onActiveIndexChange'
+                '${ $.bookmarksProvider }:activeIndex': 'onActiveIndexChange',
+                '${ $.bookmarksProvider }:current': 'onStateChange'
             }
         },
 
@@ -61,15 +62,32 @@ define([
          * Listener of the activeIndex property.
          */
         onActiveIndexChange: function () {
-            var subscription,
-                rowIndex,
-                record;
-
             if (this.bookmarks().getActiveView().index === 'default') {
                 this.hide();
 
                 return;
             }
+            this.subscribeImagePreview();
+        },
+
+        /**
+         * Listener of the activeIndex property.
+         * To open image preview with the correct image when switching to a saved view
+         * from another page without reverting back to default view.
+         */
+        onStateChange: function () {
+            if (this.bookmarks().getActiveView().index !== 'default') {
+                this.subscribeImagePreview();
+            }
+        },
+
+        /**
+         * Subscribe image preview
+         */
+        subscribeImagePreview: function () {
+            var subscription,
+                rowIndex,
+                record;
 
             subscription = this.masonry().rows.subscribe(function () {
                 subscription.dispose();
