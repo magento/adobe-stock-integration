@@ -22,6 +22,10 @@ class RemovePathOnExtract
      */
     private $config;
 
+    /**
+     * RemovePathOnExtract constructor.
+     * @param Config $config
+     */
     public function __construct(Config $config)
     {
         $this->config = $config;
