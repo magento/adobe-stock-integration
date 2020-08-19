@@ -267,7 +267,6 @@ define([
             this.preview().displayedRecord(record);
         },
 
-
         /**
          * Update displayed record after licensing
          *
