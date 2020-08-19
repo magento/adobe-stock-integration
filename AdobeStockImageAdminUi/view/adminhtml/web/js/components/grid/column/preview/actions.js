@@ -241,6 +241,7 @@ define([
                 this.getDestinationDirectoryPath()
             ).then(function (destinationPath) {
                 this.updateDownloadedDisplayedRecord(destinationPath);
+                this.reloadGrid();
                 this.openInMediaGalleryClick();
             }.bind(this)).fail(function (error) {
                 if (error) {
@@ -265,6 +266,7 @@ define([
 
             this.preview().displayedRecord(record);
         },
+
 
         /**
          * Update displayed record after licensing
@@ -408,6 +410,7 @@ define([
             ).then(function (destinationPath) {
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
+                this.reloadGrid();
                 this.openInMediaGalleryClick();
             }.bind(this)).fail(function (error) {
                 if (error) {
@@ -514,6 +517,7 @@ define([
             ).then(function (destinationPath) {
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
+                this.reloadGrid();
                 this.openInMediaGalleryClick();
             }.bind(this)).fail(function (error) {
                 if (error) {
