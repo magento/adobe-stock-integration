@@ -6,11 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_MediaGalleryRenditions">
-        <sequence>
-            <module name="Magento_MediaContentApi"/>
-            <module name="Magento_MediaContent"/>
-            <module name="Magento_Cms"/>
-        </sequence>
-    </module>
+    <module name="Magento_MediaGalleryRenditions"/>
 </config>
