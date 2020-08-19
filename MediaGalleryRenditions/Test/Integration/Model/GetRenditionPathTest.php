@@ -72,13 +72,30 @@ class GetRenditionPathTest extends TestCase
     }
 
     /**
+     * @dataProvider getImageProvider
+     *
      * Test for getting a rendition path.
      */
-    public function testExecute(): void
+    public function testExecute(string $path, string $expectedRenditionPath): void
     {
-        $expectedOriginalImagePath = $this->getRenditionPath->execute(self::MEDIUM_SIZE_IMAGE);
-        $expectedRenditionImagePath = $this->getRenditionPath->execute(self::LARGE_SIZE_IMAGE);
-        $this->assertEquals(self::MEDIUM_SIZE_IMAGE, $expectedOriginalImagePath);
-        $this->assertEquals('.renditions' . self::LARGE_SIZE_IMAGE, $expectedRenditionImagePath);
+        $getRenditionPath = $this->getRenditionPath->execute($path);
+        $this->assertEquals($expectedRenditionPath, $getRenditionPath);
+    }
+
+    /**
+     * @return array
+     */
+    public function getImageProvider(): array
+    {
+        return [
+            'return_original_path' => [
+                'path' => '/magento_medium_image.jpg',
+                'expectedRenditionPath' => '/magento_medium_image.jpg'
+            ],
+            'return_rendition_path' => [
+                'path' => '/magento_large_image.jpg',
+                'expectedRenditionPath' => '.renditions/magento_large_image.jpg'
+            ]
+        ];
     }
 }

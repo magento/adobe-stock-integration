@@ -28,11 +28,9 @@ class GenerateRenditionsTest extends TestCase
     private $generateRenditions;
 
     /**
-     * @var GetRenditionPathInterface
+     * @var WriteInterface
      */
     private $mediaDirectory;
-
-    protected static $mediaDir;
 
     public static function setUpBeforeClass(): void
     {
@@ -43,12 +41,12 @@ class GenerateRenditionsTest extends TestCase
             DirectoryList::MEDIA
         );
 
-        self::$mediaDir = $mediaDirectory->getAbsolutePath();
+        $mediaDir = $mediaDirectory->getAbsolutePath();
 
         $fixtureDir = realpath(__DIR__ . '/../_files');
 
-        copy($fixtureDir . self::LARGE_SIZE_IMAGE, self::$mediaDir . self::LARGE_SIZE_IMAGE);
-        copy($fixtureDir . self::MEDIUM_SIZE_IMAGE, self::$mediaDir . self::MEDIUM_SIZE_IMAGE);
+        copy($fixtureDir . self::LARGE_SIZE_IMAGE, $mediaDir . self::LARGE_SIZE_IMAGE);
+        copy($fixtureDir . self::MEDIUM_SIZE_IMAGE, $mediaDir . self::MEDIUM_SIZE_IMAGE);
     }
 
     protected function setup(): void
@@ -66,25 +64,50 @@ class GenerateRenditionsTest extends TestCase
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
-
-        if ($mediaDirectory->isExist(self::$mediaDir . self::LARGE_SIZE_IMAGE)) {
-            $mediaDirectory->delete(self::$mediaDir . self::LARGE_SIZE_IMAGE);
+        $mediaDir = $mediaDirectory->getAbsolutePath();
+        if ($mediaDirectory->isExist($mediaDir . self::LARGE_SIZE_IMAGE)) {
+            $mediaDirectory->delete($mediaDir . self::LARGE_SIZE_IMAGE);
         }
-        if ($mediaDirectory->isExist(self::$mediaDir . self::MEDIUM_SIZE_IMAGE)) {
-            $mediaDirectory->delete(self::$mediaDir . self::MEDIUM_SIZE_IMAGE);
+        if ($mediaDirectory->isExist($mediaDir . self::MEDIUM_SIZE_IMAGE)) {
+            $mediaDirectory->delete($mediaDir . self::MEDIUM_SIZE_IMAGE);
         }
-        if ($mediaDirectory->isExist(self::$mediaDir . self::RENDITIONS_FOLDER_NAME)) {
-            $mediaDirectory->delete(self::$mediaDir . self::RENDITIONS_FOLDER_NAME);
+        if ($mediaDirectory->isExist($mediaDir . self::RENDITIONS_FOLDER_NAME)) {
+            $mediaDirectory->delete($mediaDir . self::RENDITIONS_FOLDER_NAME);
         }
     }
 
     /**
+     * @dataProvider renditionsImageProvider
+     *
      * Test for generation of rendition images.
      */
-    public function testExecute(): void
+    public function testExecute(string $path, string $renditionPath, bool $isRenditionsGenerated): void
     {
-        $this->generateRenditions->execute([self::LARGE_SIZE_IMAGE, self::MEDIUM_SIZE_IMAGE]);
-        $this->assertFileExists($this->mediaDirectory->getAbsolutePath(self::RENDITIONS_FOLDER_NAME . self::LARGE_SIZE_IMAGE));
-        $this->assertFileDoesNotExist($this->mediaDirectory->getAbsolutePath(self::RENDITIONS_FOLDER_NAME . self::MEDIUM_SIZE_IMAGE));
+        $this->generateRenditions->execute([$path]);
+        $expectedRenditionPath = $this->mediaDirectory->getAbsolutePath($renditionPath);
+        if ($isRenditionsGenerated) {
+            $this->assertFileExists($expectedRenditionPath);
+        } else {
+            $this->assertFileDoesNotExist($expectedRenditionPath);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function renditionsImageProvider(): array
+    {
+        return [
+            'rendition_image_not_generated' => [
+                'path' => '/magento_medium_image.jpg',
+                'renditionPath' => ".renditions/magento_medium_image.jpg",
+                'isRenditionsGenerated' => false
+            ],
+            'rendition_image_generated' => [
+                'path' => '/magento_large_image.jpg',
+                'renditionPath' => ".renditions/magento_large_image.jpg",
+                'isRenditionsGenerated' => true
+            ]
+        ];
     }
 }
