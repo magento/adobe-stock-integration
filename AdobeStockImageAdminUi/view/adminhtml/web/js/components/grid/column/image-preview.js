@@ -62,22 +62,29 @@ define([
         initialize: function () {
             this._super().initView();
             $(window).on('fileDeleted.enhancedMediaGallery', function () {
+                this.updateIsDownloadedField();
                 this.reloadAdobeGrid();
             }.bind(this));
             $(window).on('folderDeleted.enhancedMediaGallery', function () {
-                this.actions().getAssetDetails(this.displayedRecord().id).then(function (assetDetails) {
-                    var record = this.displayedRecord();
-
-                    if (assetDetails.length === 0) {
-                        record['is_downloaded'] = 0;
-                        this.displayedRecord(record);
-                    }
-                }.bind(this));
-
+                this.updateIsDownloadedField();
                 this.reloadAdobeGrid();
             }.bind(this));
 
             return this;
+        },
+
+        /**
+         * Update is_downloaded filed for displayed record
+         */
+        updateIsDownloadedField: function () {
+            var record = this.displayedRecord();
+
+            this.actions().getAssetDetails(this.displayedRecord().id).then(function (assetDetails) {
+                if (assetDetails.length === 0) {
+                    record['is_downloaded'] = 0;
+                    this.displayedRecord(record);
+                }
+            }.bind(this));
         },
 
         /**
