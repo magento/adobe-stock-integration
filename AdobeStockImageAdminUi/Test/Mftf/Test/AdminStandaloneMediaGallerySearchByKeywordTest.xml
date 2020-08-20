@@ -35,6 +35,7 @@
         <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="SearchStandaloneMediaGalleryAdminDataGridByKeywordActionGroup" stepKey="searchImage">
             <argument name="keyword" value="$grabImageName"/>
         </actionGroup>
