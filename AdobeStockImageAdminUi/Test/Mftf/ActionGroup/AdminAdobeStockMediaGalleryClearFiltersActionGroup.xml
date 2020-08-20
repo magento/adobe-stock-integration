@@ -13,6 +13,6 @@
             <description>Clicks on 'Clear Filters' on an media gallery Grid page.</description>
         </annotations>
 
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <conditionalClick selector="{{AdminEnhancedMediaGalleryActionsSection.clearFilters}}" dependentSelector="{{AdminEnhancedMediaGalleryActionsSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
     </actionGroup>
 </actionGroups>
