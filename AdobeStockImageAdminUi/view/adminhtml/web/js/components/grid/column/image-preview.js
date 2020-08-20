@@ -63,11 +63,18 @@ define([
             this._super().initView();
             $(window).on('fileDeleted.enhancedMediaGallery', function () {
                 this.reloadAdobeGrid();
-                this.hide();
             }.bind(this));
             $(window).on('folderDeleted.enhancedMediaGallery', function () {
+                this.actions().getAssetDetails(this.displayedRecord().id).then(function (assetDetails) {
+                    var record = this.displayedRecord();
+
+                    if (assetDetails.length === 0) {
+                        record['is_downloaded'] = 0;
+                        this.displayedRecord(record);
+                    }
+                }.bind(this));
+
                 this.reloadAdobeGrid();
-                this.hide();
             }.bind(this));
 
             return this;

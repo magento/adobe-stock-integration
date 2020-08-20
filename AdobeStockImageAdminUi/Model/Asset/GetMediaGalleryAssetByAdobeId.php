@@ -58,7 +58,13 @@ class GetMediaGalleryAssetByAdobeId
      */
     public function execute(int $adobeId): array
     {
-        $mediaGalleryId = $this->getAssetByAdobeId->execute([$adobeId])[$adobeId]->getMediaGalleryId();
+        $mediaGalleryAsset = $this->getAssetByAdobeId->execute([$adobeId]);
+
+        if (!isset($mediaGalleryAsset[$adobeId])) {
+            return [];
+        }
+
+        $mediaGalleryId = $mediaGalleryAsset[$adobeId]->getMediaGalleryId();
         $asset = $this->getMediaGalleryAssetsById->execute([$mediaGalleryId]);
 
         return $this->objectProcessor->buildOutputDataArray(current($asset), AssetInterface::class);
