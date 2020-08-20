@@ -170,13 +170,14 @@ define([
 
             this.mediaGalleryListingFilters().clear();
             this.getAssetDetails(imageId).then(function (assetDetails) {
+                this.mediaGallerySearchInput().apply(assetDetails.title);
                 path = assetDetails.path;
                 path = path.substring(0, path.lastIndexOf('/'));
 
                 if (path !== '') {
                     this.imageDirectory().locateNode(path);
                 }
-                this.mediaGallerySearchInput().apply(assetDetails.title);
+                this.selectRecord(this.getRecordFromMediaGalleryProvider(assetDetails.path));
             }.bind(this));
 
         },
