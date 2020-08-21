@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryRenditions\Plugin;
 
 use Magento\Cms\Helper\Wysiwyg\Images;
-use Magento\Cms\Model\Wysiwyg\Images\PrepareImage;
+use Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -60,30 +60,45 @@ class SetRenditionPath
     }
 
     /**
-     * Set's rendition path to filename parameter
+     * Set's image rendition's path to filename parameter
      *
-     * @param PrepareImage $subject
-     * @param array $data
+     * @param GetInsertImageContent $subject
+     * @param string $encodedFilename
+     * @param int $storeId
+     * @param bool $forceStaticPath
+     * @param bool $renderAsTag
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(PrepareImage $subject, array $data): array
-    {
+    public function beforeExecute(
+        GetInsertImageContent $subject,
+        string $encodedFilename,
+        int $storeId,
+        bool $forceStaticPath,
+        bool $renderAsTag
+    ): array {
+        $imageContent = [
+            $encodedFilename,
+            $storeId,
+            $forceStaticPath,
+            $renderAsTag
+        ];
+
         if (!$this->config->isEnabled()) {
-            return [$data];
+            return $imageContent;
         }
 
-        $renditionFilename = $this->getRenditionPath
-            ->execute($this->imagesHelper->idDecode($data['filename']));
+        $renditionFilePath = $this->getRenditionPath
+            ->execute($this->imagesHelper->idDecode($encodedFilename));
 
-        if (!$this->getMediaDirectory()->isFile($renditionFilename)) {
-            return [$data];
+        if (!$this->getMediaDirectory()->isFile($renditionFilePath)) {
+            return $imageContent;
         }
 
-        $data['filename'] = $this->imagesHelper->idEncode($renditionFilename);
+        $imageContent[0] = $this->imagesHelper->idEncode($renditionFilePath);
 
-        return [$data];
+        return $imageContent;
     }
 
     /**
