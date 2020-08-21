@@ -64,25 +64,24 @@ class SetRenditionPath
      *
      * @param GetInsertImageContent $subject
      * @param string $encodedFilename
-     * @param int $storeId
      * @param bool $forceStaticPath
      * @param bool $renderAsTag
+     * @param int|null $storeId
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(
         GetInsertImageContent $subject,
         string $encodedFilename,
-        int $storeId,
         bool $forceStaticPath,
-        bool $renderAsTag
+        bool $renderAsTag,
+        ?int $storeId = null
     ): array {
         $imageContent = [
             $encodedFilename,
-            $storeId,
             $forceStaticPath,
-            $renderAsTag
+            $renderAsTag,
+            $storeId
         ];
 
         if (!$this->config->isEnabled()) {
