@@ -13,7 +13,7 @@
             <description>Fills 'Search by keyword' on media galllery grid page page. Clicks on Submit Search.</description>
         </annotations>
         <arguments>
-            <argument name="keyword"/>
+            <argument name="keyword" type="string"/>
         </arguments>
 
         <conditionalClick selector="{{AdminEnhancedMediaGalleryActionsSection.clearFilters}}" dependentSelector="{{AdminEnhancedMediaGalleryActionsSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>

@@ -336,9 +336,8 @@ define([
             provider = uiRegistry.get('index = media_gallery_listing_data_source'),
                 dataStorage = provider.storage();
 
-            // this.subscriptionOnImageItems();
             dataStorage.clearRequests();
-            provider.reload();
+            return provider.reload();
         },
 
         /**
