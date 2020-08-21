@@ -337,6 +337,7 @@ define([
                 dataStorage = provider.storage();
 
             dataStorage.clearRequests();
+
             return provider.reload();
         },
 
