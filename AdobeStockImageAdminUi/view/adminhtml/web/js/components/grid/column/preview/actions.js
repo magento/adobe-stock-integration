@@ -242,8 +242,9 @@ define([
                 this.getDestinationDirectoryPath()
             ).then(function (destinationPath) {
                 this.updateDownloadedDisplayedRecord(destinationPath);
-                this.reloadGrid();
-                this.openInMediaGalleryClick();
+                this.reloadGrid().done(function () {
+                    this.openInMediaGalleryClick();
+                }.bind(this));
             }.bind(this)).fail(function (error) {
                 if (error) {
                     this.showErrorMessage(error);
@@ -410,8 +411,9 @@ define([
             ).then(function (destinationPath) {
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
-                this.reloadGrid();
-                this.openInMediaGalleryClick();
+                this.reloadGrid().done(function () {
+                    this.openInMediaGalleryClick();
+                }.bind(this));
             }.bind(this)).fail(function (error) {
                 if (error) {
                     uiAlert({
@@ -517,8 +519,9 @@ define([
             ).then(function (destinationPath) {
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
-                this.reloadGrid();
-                this.openInMediaGalleryClick();
+                this.reloadGrid().done(function () {
+                    this.openInMediaGalleryClick();
+                }.bind(this));
             }.bind(this)).fail(function (error) {
                 if (error) {
                     uiAlert({
