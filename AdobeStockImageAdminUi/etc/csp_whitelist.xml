@@ -11,6 +11,7 @@
         <policy id="img-src">
             <values>
                 <value id="adobe_stock_cdn" type="host">*.ftcdn.net</value>
+                <value id="adobe_stock_profile_image" type="host">*.behance.net</value>
                 <value id="jquery_image_load_placeholder" type="host">data:</value>
             </values>
         </policy>
