@@ -37,7 +37,7 @@
         <actionGroup ref="AssertAdminAdobeStockImageUnlicensedLabelActionGroup" stepKey="assertUnlicensedLabel"/>
         <actionGroup ref="AssertAdminAdobeStockImageAssertLicenseButtonMediaGalleryActionGroup" stepKey="assertLicenseButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
-
+        <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
