@@ -13,6 +13,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
@@ -73,6 +74,24 @@ class SaveLicensed extends Action implements HttpPostActionInterface
             $responseContent = [
                 'success' => true,
                 'message' => __('You have successfully downloaded the licensed image.'),
+            ];
+        } catch (AuthenticationException $exception) {
+            $responseCode = self::HTTP_BAD_REQUEST;
+            $responseContent = [
+                'success' => false,
+                'message' => __(
+                    'Failed to authenticate to Adobe Stock API. <br> Please correct the API credentials in '
+                    . '<a href="%url">Configuration → System → Adobe Stock Integration.</a>',
+                    [
+                        'url' => $this->getUrl(
+                            'adminhtml/system_config/edit',
+                            [
+                                'section' => 'system',
+                                '_fragment' => 'system_adobe_stock_integration-link'
+                            ]
+                        )
+                    ]
+                ),
             ];
         } catch (LocalizedException $exception) {
             $responseCode = self::HTTP_BAD_REQUEST;
