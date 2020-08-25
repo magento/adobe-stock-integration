@@ -62,11 +62,9 @@ define([
         initialize: function () {
             this._super().initView();
             $(window).on('fileDeleted.enhancedMediaGallery', function () {
-                this.updateIsDownloadedField();
                 this.reloadAdobeGrid();
             }.bind(this));
             $(window).on('folderDeleted.enhancedMediaGallery', function () {
-                this.updateIsDownloadedField();
                 this.reloadAdobeGrid();
             }.bind(this));
 
@@ -209,6 +207,7 @@ define([
          * Reload Adobe grid after deleting image
          */
         reloadAdobeGrid: function () {
+            this.updateIsDownloadedField();
             this.actions().source().reload({
                 refresh: true
             });
