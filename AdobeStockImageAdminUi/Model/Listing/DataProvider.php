@@ -34,7 +34,6 @@ class DataProvider extends UiComponentDataProvider
     private $url;
 
     /**
-     * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -43,6 +42,7 @@ class DataProvider extends UiComponentDataProvider
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param GetImageListInterface $getImageList
+     * @param UrlInterface $url
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
