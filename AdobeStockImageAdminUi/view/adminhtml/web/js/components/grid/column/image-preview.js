@@ -61,28 +61,10 @@ define([
          */
         initialize: function () {
             this._super().initView();
-            $(window).on('fileDeleted.enhancedMediaGallery', function () {
-                this.reloadAdobeGrid();
-            }.bind(this));
-            $(window).on('folderDeleted.enhancedMediaGallery', function () {
-                this.reloadAdobeGrid();
-            }.bind(this));
+            $(window).on('fileDeleted.enhancedMediaGallery', this.reloadAdobeGrid.bind(this));
+            $(window).on('folderDeleted.enhancedMediaGallery', this.reloadAdobeGrid.bind(this));
 
             return this;
-        },
-
-        /**
-         * Update is_downloaded filed for displayed record
-         */
-        updateIsDownloadedField: function () {
-            var record = this.displayedRecord();
-
-            this.actions().getAssetDetails(this.displayedRecord().id).then(function (assetDetails) {
-                if (assetDetails.length === 0) {
-                    record['is_downloaded'] = 0;
-                    this.displayedRecord(record);
-                }
-            }.bind(this));
         },
 
         /**
@@ -207,7 +189,6 @@ define([
          * Reload Adobe grid after deleting image
          */
         reloadAdobeGrid: function () {
-            this.updateIsDownloadedField();
             this.actions().source().reload({
                 refresh: true
             });

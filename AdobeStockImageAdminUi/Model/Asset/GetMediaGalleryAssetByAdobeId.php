@@ -12,6 +12,7 @@ use Magento\AdobeStockAssetApi\Model\Asset\Command\LoadByIdsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Return media gallery asset by adobe id
@@ -55,13 +56,19 @@ class GetMediaGalleryAssetByAdobeId
      *
      * @param int $adobeId
      * @return array
+     * @throws NoSuchEntityException
      */
     public function execute(int $adobeId): array
     {
         $mediaGalleryAsset = $this->getAssetByAdobeId->execute([$adobeId]);
 
         if (!isset($mediaGalleryAsset[$adobeId])) {
-            return [];
+            throw new NoSuchEntityException(
+                __(
+                    'Media Gallery asset with adobe id %id does not exist.',
+                    ['id' => $adobeId]
+                )
+            );
         }
 
         $mediaGalleryId = $mediaGalleryAsset[$adobeId]->getMediaGalleryId();
