@@ -11,16 +11,13 @@ namespace Magento\MediaGalleryRenditions\Test\Integration\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class GetRenditionPathTest extends TestCase
 {
-    private const MEDIUM_SIZE_IMAGE = '/magento_medium_image.jpg';
-
-    private const LARGE_SIZE_IMAGE = '/magento_large_image.jpg';
 
     /**
      * @var GetRenditionPathInterface
@@ -28,47 +25,21 @@ class GetRenditionPathTest extends TestCase
     private $getRenditionPath;
 
     /**
-     * @var ReadInterface
+     * @var WriteInterface
      */
-    protected static $mediaDir;
+    private $mediaDirectory;
 
-    public static function setUpBeforeClass(): void
-    {
-        /** @var WriteInterface $mediaDirectory */
-        $mediaDirectory = Bootstrap::getObjectManager()->get(
-            Filesystem::class
-        )->getDirectoryWrite(
-            DirectoryList::MEDIA
-        );
-
-        self::$mediaDir = $mediaDirectory->getAbsolutePath();
-
-        $fixtureDir = realpath(__DIR__ . '/../_files');
-
-        copy($fixtureDir . self::LARGE_SIZE_IMAGE, self::$mediaDir . self::LARGE_SIZE_IMAGE);
-        copy($fixtureDir . self::MEDIUM_SIZE_IMAGE, self::$mediaDir . self::MEDIUM_SIZE_IMAGE);
-    }
+    /**
+     * @var DriverInterface
+     */
+    private $driver;
 
     protected function setup(): void
     {
         $this->getRenditionPath = Bootstrap::getObjectManager()->get(GetRenditionPathInterface::class);
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        /** @var WriteInterface $mediaDirectory */
-        $mediaDirectory = Bootstrap::getObjectManager()->get(
-            Filesystem::class
-        )->getDirectoryWrite(
-            DirectoryList::MEDIA
-        );
-
-        if ($mediaDirectory->isExist(self::$mediaDir . self::LARGE_SIZE_IMAGE)) {
-            $mediaDirectory->delete(self::$mediaDir . self::LARGE_SIZE_IMAGE);
-        }
-        if ($mediaDirectory->isExist(self::$mediaDir . self::MEDIUM_SIZE_IMAGE)) {
-            $mediaDirectory->delete(self::$mediaDir . self::MEDIUM_SIZE_IMAGE);
-        }
+        $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
     }
 
     /**
@@ -78,6 +49,12 @@ class GetRenditionPathTest extends TestCase
      */
     public function testExecute(string $path, string $expectedRenditionPath): void
     {
+        $imagePath = realpath(__DIR__ . '/../../_files' . $path);
+        $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($path);
+        $this->driver->copy(
+            $imagePath,
+            $modifiableFilePath
+        );
         $getRenditionPath = $this->getRenditionPath->execute($path);
         $this->assertEquals($expectedRenditionPath, $getRenditionPath);
     }

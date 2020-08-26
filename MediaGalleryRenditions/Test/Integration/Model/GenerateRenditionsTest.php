@@ -7,21 +7,20 @@
 declare(strict_types=1);
 
 namespace Magento\MediaGalleryRenditions\Test\Integration\Model;
+
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\MediaGalleryRenditions\Model\Config;
 use PHPUnit\Framework\TestCase;
 
 class GenerateRenditionsTest extends TestCase
 {
-    private const MEDIUM_SIZE_IMAGE = '/magento_medium_image.jpg';
-
-    private const LARGE_SIZE_IMAGE = '/magento_large_image.jpg';
-
-    private const RENDITIONS_FOLDER_NAME = '.renditions';
-
     /**
      * @var GenerateRenditionsInterface
      */
@@ -32,28 +31,23 @@ class GenerateRenditionsTest extends TestCase
      */
     private $mediaDirectory;
 
-    public static function setUpBeforeClass(): void
-    {
-        /** @var WriteInterface $mediaDirectory */
-        $mediaDirectory = Bootstrap::getObjectManager()->get(
-            Filesystem::class
-        )->getDirectoryWrite(
-            DirectoryList::MEDIA
-        );
+    /**
+     * @var Config
+     */
+    private $renditionSizeConfig;
 
-        $mediaDir = $mediaDirectory->getAbsolutePath();
-
-        $fixtureDir = realpath(__DIR__ . '/../_files');
-
-        copy($fixtureDir . self::LARGE_SIZE_IMAGE, $mediaDir . self::LARGE_SIZE_IMAGE);
-        copy($fixtureDir . self::MEDIUM_SIZE_IMAGE, $mediaDir . self::MEDIUM_SIZE_IMAGE);
-    }
+    /**
+     * @var DriverInterface
+     */
+    private $driver;
 
     protected function setup(): void
     {
         $this->generateRenditions = Bootstrap::getObjectManager()->get(GenerateRenditionsInterface::class);
-        $this->filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
-        $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
+        $this->renditionSizeConfig = Bootstrap::getObjectManager()->get(Config::class);
     }
 
     public static function tearDownAfterClass(): void
@@ -64,15 +58,8 @@ class GenerateRenditionsTest extends TestCase
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
-        $mediaDir = $mediaDirectory->getAbsolutePath();
-        if ($mediaDirectory->isExist($mediaDir . self::LARGE_SIZE_IMAGE)) {
-            $mediaDirectory->delete($mediaDir . self::LARGE_SIZE_IMAGE);
-        }
-        if ($mediaDirectory->isExist($mediaDir . self::MEDIUM_SIZE_IMAGE)) {
-            $mediaDirectory->delete($mediaDir . self::MEDIUM_SIZE_IMAGE);
-        }
-        if ($mediaDirectory->isExist($mediaDir . self::RENDITIONS_FOLDER_NAME)) {
-            $mediaDirectory->delete($mediaDir . self::RENDITIONS_FOLDER_NAME);
+        if ($mediaDirectory->isExist($mediaDirectory->getAbsolutePath() . '/.renditions')) {
+            $mediaDirectory->delete($mediaDirectory->getAbsolutePath() . '/.renditions');
         }
     }
 
@@ -80,15 +67,48 @@ class GenerateRenditionsTest extends TestCase
      * @dataProvider renditionsImageProvider
      *
      * Test for generation of rendition images.
+     *
+     * @param array $paths
+     * @param string $renditionPath
+     * @param bool $isRenditionsGenerated
+     * @throws LocalizedException
      */
-    public function testExecute(string $path, string $renditionPath, bool $isRenditionsGenerated): void
+    public function testExecute(array $paths, string $renditionPath, bool $isRenditionsGenerated): void
     {
-        $this->generateRenditions->execute([$path]);
+        $this->copyImage($paths);
+        $this->generateRenditions->execute($paths);
         $expectedRenditionPath = $this->mediaDirectory->getAbsolutePath($renditionPath);
         if ($isRenditionsGenerated) {
+            list($imageWidth, $imageHeight) = getimagesize($expectedRenditionPath);
             $this->assertFileExists($expectedRenditionPath);
+            $this->assertLessThanOrEqual(
+                $this->renditionSizeConfig->getWidth(),
+                $imageWidth,
+                'Generated renditions image width should be less than or equal to original image'
+            );
+            $this->assertLessThanOrEqual(
+                $this->renditionSizeConfig->getHeight(),
+                $imageHeight,
+                'Generated renditions image height should be less than or equal to original image'
+            );
         } else {
             $this->assertFileDoesNotExist($expectedRenditionPath);
+        }
+    }
+
+    /**
+     * @param array $paths
+     * @throws FileSystemException
+     */
+    private function copyImage(array $paths): void
+    {
+        foreach ($paths as $path) {
+            $imagePath = realpath(__DIR__ . '/../../_files' . $path);
+            $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($path);
+            $this->driver->copy(
+                $imagePath,
+                $modifiableFilePath
+            );
         }
     }
 
@@ -99,12 +119,12 @@ class GenerateRenditionsTest extends TestCase
     {
         return [
             'rendition_image_not_generated' => [
-                'path' => '/magento_medium_image.jpg',
+                'paths' => ['/magento_medium_image.jpg'],
                 'renditionPath' => ".renditions/magento_medium_image.jpg",
                 'isRenditionsGenerated' => false
             ],
             'rendition_image_generated' => [
-                'path' => '/magento_large_image.jpg',
+                'paths' => ['/magento_large_image.jpg'],
                 'renditionPath' => ".renditions/magento_large_image.jpg",
                 'isRenditionsGenerated' => true
             ]
