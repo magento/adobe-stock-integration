@@ -68,48 +68,46 @@ class GenerateRenditionsTest extends TestCase
      *
      * Test for generation of rendition images.
      *
-     * @param array $paths
+     * @param string $path
      * @param string $renditionPath
      * @param bool $isRenditionsGenerated
      * @throws LocalizedException
      */
-    public function testExecute(array $paths, string $renditionPath, bool $isRenditionsGenerated): void
+    public function testExecute(string $path, string $renditionPath, bool $isRenditionsGenerated): void
     {
-        $this->copyImage($paths);
-        $this->generateRenditions->execute($paths);
+        $this->copyImage($path);
+        $this->generateRenditions->execute([$path]);
         $expectedRenditionPath = $this->mediaDirectory->getAbsolutePath($renditionPath);
-        if ($isRenditionsGenerated) {
-            list($imageWidth, $imageHeight) = getimagesize($expectedRenditionPath);
-            $this->assertFileExists($expectedRenditionPath);
-            $this->assertLessThanOrEqual(
-                $this->renditionSizeConfig->getWidth(),
-                $imageWidth,
-                'Generated renditions image width should be less than or equal to original image'
-            );
-            $this->assertLessThanOrEqual(
-                $this->renditionSizeConfig->getHeight(),
-                $imageHeight,
-                'Generated renditions image height should be less than or equal to original image'
-            );
-        } else {
+        if (!$isRenditionsGenerated) {
             $this->assertFileDoesNotExist($expectedRenditionPath);
+            return;
         }
+        list($imageWidth, $imageHeight) = getimagesize($expectedRenditionPath);
+        $this->assertFileExists($expectedRenditionPath);
+        $this->assertLessThanOrEqual(
+            $this->renditionSizeConfig->getWidth(),
+            $imageWidth,
+            'Generated renditions image width should be less than or equal to configured value'
+        );
+        $this->assertLessThanOrEqual(
+            $this->renditionSizeConfig->getHeight(),
+            $imageHeight,
+            'Generated renditions image height should be less than or equal to configured value'
+        );
     }
 
     /**
      * @param array $paths
      * @throws FileSystemException
      */
-    private function copyImage(array $paths): void
+    private function copyImage(string $path): void
     {
-        foreach ($paths as $path) {
-            $imagePath = realpath(__DIR__ . '/../../_files' . $path);
-            $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($path);
-            $this->driver->copy(
-                $imagePath,
-                $modifiableFilePath
-            );
-        }
+        $imagePath = realpath(__DIR__ . '/../../_files' . $path);
+        $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($path);
+        $this->driver->copy(
+            $imagePath,
+            $modifiableFilePath
+        );
     }
 
     /**
@@ -119,12 +117,12 @@ class GenerateRenditionsTest extends TestCase
     {
         return [
             'rendition_image_not_generated' => [
-                'paths' => ['/magento_medium_image.jpg'],
+                'paths' => '/magento_medium_image.jpg',
                 'renditionPath' => ".renditions/magento_medium_image.jpg",
                 'isRenditionsGenerated' => false
             ],
             'rendition_image_generated' => [
-                'paths' => ['/magento_large_image.jpg'],
+                'paths' => '/magento_large_image.jpg',
                 'renditionPath' => ".renditions/magento_large_image.jpg",
                 'isRenditionsGenerated' => true
             ]

@@ -55,8 +55,7 @@ class GetRenditionPathTest extends TestCase
             $imagePath,
             $modifiableFilePath
         );
-        $getRenditionPath = $this->getRenditionPath->execute($path);
-        $this->assertEquals($expectedRenditionPath, $getRenditionPath);
+        $this->assertEquals($expectedRenditionPath, $this->getRenditionPath->execute($path));
     }
 
     /**
