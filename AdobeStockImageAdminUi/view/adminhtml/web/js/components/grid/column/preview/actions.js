@@ -170,6 +170,9 @@ define([
 
             this.mediaGalleryListingFilters().clear();
             this.getAssetDetails(imageId).then(function (assetDetails) {
+                if (assetDetails.length === 0) {
+                    return;
+                }
                 this.mediaGallerySearchInput().apply(assetDetails.title);
                 path = assetDetails.path;
                 path = path.substring(0, path.lastIndexOf('/'));
