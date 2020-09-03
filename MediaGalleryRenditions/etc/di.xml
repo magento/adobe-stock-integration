@@ -11,4 +11,7 @@
     <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <plugin name="generate_rendtions" type="Magento\MediaGalleryRenditions\Plugin\CreateRenditions"/>
     </type>
+    <type name="Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent">
+        <plugin name="set_rendition_path" type="Magento\MediaGalleryRenditions\Plugin\SetRenditionPath"/>
+    </type>
 </config>
