@@ -13,6 +13,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
 use Magento\AdobeStockImageAdminUi\Model\Asset\GetMediaGalleryAssetByAdobeId;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Backend controller for retrieving asset information by adobeId
@@ -61,7 +62,6 @@ class GetMediaGalleryAsset extends Action implements HttpPostActionInterface
     {
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         try {
-
             $params = $this->getRequest()->getParams();
             $adobeId = isset($params['adobe_id']) ? $params['adobe_id'] : null;
 
@@ -78,6 +78,9 @@ class GetMediaGalleryAsset extends Action implements HttpPostActionInterface
 
             $responseCode = self::HTTP_OK;
             $responseContent = $this->getAssetByAdobeId->execute((int) $adobeId);
+        } catch (NoSuchEntityException $execption) {
+            $responseCode = self::HTTP_OK;
+            $responseContent = [];
         } catch (\Exception $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $this->logger->critical($exception);

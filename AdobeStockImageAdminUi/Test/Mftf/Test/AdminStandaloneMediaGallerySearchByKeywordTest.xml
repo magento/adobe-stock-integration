@@ -23,6 +23,7 @@
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryForPage"/>
         </before>
         <after>
+            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
         </after>
@@ -35,14 +36,14 @@
         <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
-        <actionGroup ref="SearchStandaloneMediaGalleryAdminDataGridByKeywordActionGroup" stepKey="searchImage">
+        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImage">
             <argument name="keyword" value="$grabImageName"/>
         </actionGroup>
         <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingImageName">
             <argument name="imageName" value="$grabImageFileName"/>
         </actionGroup>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-        <actionGroup ref="SearchStandaloneMediaGalleryAdminDataGridByKeywordActionGroup" stepKey="searchImageByKeyword">
+        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImageByKeyword">
             <argument name="keyword" value="$grabKeyword"/>
         </actionGroup>
         <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingKeyword">

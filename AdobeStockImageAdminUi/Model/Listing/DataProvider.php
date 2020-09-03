@@ -14,6 +14,8 @@ use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiComponentDataProvider;
 
 /**
@@ -27,7 +29,11 @@ class DataProvider extends UiComponentDataProvider
     private $getImageList;
 
     /**
-     * DataProvider constructor.
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -36,6 +42,7 @@ class DataProvider extends UiComponentDataProvider
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param GetImageListInterface $getImageList
+     * @param UrlInterface $url
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -49,6 +56,7 @@ class DataProvider extends UiComponentDataProvider
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
+        UrlInterface $url,
         array $meta = [],
         array $data = []
     ) {
@@ -64,6 +72,7 @@ class DataProvider extends UiComponentDataProvider
             $data
         );
         $this->getImageList = $getImageList;
+        $this->url = $url;
     }
 
     /**
@@ -73,6 +82,24 @@ class DataProvider extends UiComponentDataProvider
     {
         try {
             return $this->searchResultToOutput($this->getSearchResult());
+        } catch (AuthenticationException $exception) {
+            return [
+                'items' => [],
+                'totalRecords' => 0,
+                'errorMessage' => __(
+                    'Failed to authenticate to Adobe Stock API. <br> Please correct the API credentials in '
+                    . '<a href="%url">Configuration → System → Adobe Stock Integration.</a>',
+                    [
+                        'url' => $this->url->getUrl(
+                            'adminhtml/system_config/edit',
+                            [
+                                'section' => 'system',
+                                '_fragment' => 'system_adobe_stock_integration-link'
+                            ]
+                        )
+                    ]
+                )
+            ];
         } catch (\Exception $exception) {
             return [
                 'items' => [],
