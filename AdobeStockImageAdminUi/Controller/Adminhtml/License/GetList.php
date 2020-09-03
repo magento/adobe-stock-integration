@@ -12,6 +12,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -71,6 +72,12 @@ class GetList extends Action implements HttpGetActionInterface
             $responseContent = [
                 'success' => true,
                 'result' => $result
+            ];
+        } catch (LocalizedException $exception) {
+            $responseCode = self::HTTP_INTERNAL_ERROR;
+            $responseContent = [
+                'success' => false,
+                'message' => $exception->getMessage()
             ];
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

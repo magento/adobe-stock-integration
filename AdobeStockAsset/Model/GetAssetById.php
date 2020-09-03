@@ -63,8 +63,7 @@ class GetAssetById implements GetAssetByIdInterface
 
         $items = $this->getAssetList->execute($searchCriteria)->getItems();
         if (empty($items) || 1 < count($items)) {
-            $message = __('Requested image doesn\'t exists');
-            throw new NoSuchEntityException($message);
+            throw new NoSuchEntityException(__('Requested asset does not exist.'));
         }
 
         return reset($items);

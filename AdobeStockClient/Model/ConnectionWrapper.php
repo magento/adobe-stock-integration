@@ -132,6 +132,10 @@ class ConnectionWrapper
             $this->flushUserTokens->execute();
             return new AuthorizationException(__('Adobe API login has expired!'));
         }
+        if (strpos($exception->getMessage(), 'Could not validate the oauth token') !== false) {
+            $this->flushUserTokens->execute();
+            return new AuthorizationException(__('Adobe API login has expired!'));
+        }
         $phrase = __(
             $message . ': %error_message',
             ['error_message' => $exception->getMessage()]
