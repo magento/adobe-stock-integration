@@ -170,30 +170,19 @@ define([
 
             this.mediaGalleryListingFilters().clear();
             this.getAssetDetails(imageId).then(function (assetDetails) {
+                if (assetDetails.length === 0) {
+                    return;
+                }
+                this.mediaGallerySearchInput().apply(assetDetails.title);
                 path = assetDetails.path;
                 path = path.substring(0, path.lastIndexOf('/'));
 
                 if (path !== '') {
                     this.imageDirectory().locateNode(path);
                 }
-                this.mediaGallerySearchInput().apply(assetDetails.title);
+                this.selectRecord(this.getRecordFromMediaGalleryProvider(assetDetails.path));
             }.bind(this));
 
-        },
-
-        /**
-         * Selects displayed image in media gallery
-         *
-         * @param {String} path
-         * @param {Boolean|Undefined} openNewest
-         */
-        selectInMediaGallery: function (path, openNewest) {
-            if (!this.isMediaBrowser()) {
-                !openNewest || this.openNewestImage();
-                this.selectDisplayedImageForNewMediaGallery(path);
-            } else {
-                this.selectDisplayedImageForOldMediaGallery(path);
-            }
         },
 
         /**
@@ -211,38 +200,6 @@ define([
             var image = mediaGallery.locate(path);
 
             image ? image.click() : mediaGallery.notLocated();
-        },
-
-        /**
-         * Selects displayed image in media gallery for new gallery
-         */
-        selectDisplayedImageForNewMediaGallery: function (path) {
-            var imageFolders = path.substring(0, path.lastIndexOf('/')),
-                record = this.getRecordFromMediaGalleryProvider(path),
-                subscription; // eslint-disable-line no-unused-vars
-
-            if (!record) {
-                subscription = this.imageItems.subscribe(function () {
-                    subscription.dispose();
-                    record = this.getRecordFromMediaGalleryProvider(path);
-
-                    if (!record) {
-                        mediaGallery.notLocated();
-                    }
-
-                    this.selectRecord(record);
-                }.bind(this));
-            }
-
-            if (imageFolders) {
-                this.imageDirectory().selectFolder(imageFolders);
-            } else {
-                this.imageDirectory().selectStorageRoot();
-            }
-
-            if (record) {
-                this.selectRecord(record);
-            }
         },
 
         /**
@@ -288,7 +245,9 @@ define([
                 this.getDestinationDirectoryPath()
             ).then(function (destinationPath) {
                 this.updateDownloadedDisplayedRecord(destinationPath);
-                this.updateGridsAndSelectSavedAsset(destinationPath);
+                this.reloadGrid().done(function () {
+                    this.openInMediaGalleryClick();
+                }.bind(this));
             }.bind(this)).fail(function (error) {
                 if (error) {
                     this.showErrorMessage(error);
@@ -331,24 +290,6 @@ define([
             record['is_licensed_locally'] = 1;
 
             this.preview().displayedRecord(record);
-        },
-
-        /**
-         * Update view
-         */
-        updateGridsAndSelectSavedAsset: function (path) {
-            this.source().reload({
-                refresh: true
-            });
-            this.preview().getAdobeModal().trigger('closeModal');
-            $.ajaxSetup({
-                async: false
-            });
-            this.reloadGrid();
-            $.ajaxSetup({
-                async: true
-            });
-            this.selectInMediaGallery(path, true);
         },
 
         /**
@@ -398,9 +339,9 @@ define([
             provider = uiRegistry.get('index = media_gallery_listing_data_source'),
                 dataStorage = provider.storage();
 
-            // this.subscriptionOnImageItems();
             dataStorage.clearRequests();
-            provider.reload();
+
+            return provider.reload();
         },
 
         /**
@@ -473,7 +414,9 @@ define([
             ).then(function (destinationPath) {
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
-                this.updateGridsAndSelectSavedAsset(destinationPath);
+                this.reloadGrid().done(function () {
+                    this.openInMediaGalleryClick();
+                }.bind(this));
             }.bind(this)).fail(function (error) {
                 if (error) {
                     uiAlert({
@@ -579,7 +522,9 @@ define([
             ).then(function (destinationPath) {
                 this.updateLicensedDisplayedRecord(destinationPath);
                 this.login().getUserQuota();
-                this.updateGridsAndSelectSavedAsset(destinationPath);
+                this.reloadGrid().done(function () {
+                    this.openInMediaGalleryClick();
+                }.bind(this));
             }.bind(this)).fail(function (error) {
                 if (error) {
                     uiAlert({

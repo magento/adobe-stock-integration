@@ -24,6 +24,7 @@
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
         </after>
 
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>

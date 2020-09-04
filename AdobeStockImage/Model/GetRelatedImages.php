@@ -13,6 +13,7 @@ use Magento\AdobeStockImageApi\Api\GetRelatedImagesInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
@@ -92,6 +93,8 @@ class GetRelatedImages implements GetRelatedImagesInterface
                 );
             }
             return $relatedImageGroups;
+        } catch (AuthenticationException $exception) {
+            throw $exception;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new LocalizedException(
