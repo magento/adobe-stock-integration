@@ -10,7 +10,6 @@ namespace Magento\AdobeStockAsset\Test\Integration\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
 use Magento\AdobeStockClient\Model\ConnectionWrapper;
-use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -35,7 +34,6 @@ class GetAssetListTest extends TestCase
     {
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
-                ClientInterface::class => ClientMock::class,
                 ConnectionWrapper::class => ConnectionWrapperMock::class
             ]
         ]);
