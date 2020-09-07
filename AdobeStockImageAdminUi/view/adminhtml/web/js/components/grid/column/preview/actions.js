@@ -180,7 +180,7 @@ define([
                 if (path !== '') {
                     this.imageDirectory().locateNode(path);
                 }
-                this.selectRecord(this.getRecordFromMediaGalleryProvider(assetDetails.path));
+                this.selectRecordFromMediaGalleryProvider(assetDetails.path);
             }.bind(this));
 
         },
@@ -203,23 +203,28 @@ define([
         },
 
         /**
-         * Get image data by image file name
+         * Select record by image file name
          *
          * @param {String} path
          * @returns {null|Object}
          */
-        getRecordFromMediaGalleryProvider: function (path) {
-            var report = null;
+        selectRecordFromMediaGalleryProvider: function (path) {
+            var subscription;
 
-            this.imageItems.each(function (item) {
-                if (item.path === path) {
-                    report = item;
+            subscription = this.imageItems.subscribe(function (items) {
+                subscription.dispose();
+                items.each(function (item) {
+                    if (item.path === path) {
+                        this.selectRecord(item);
 
-                    return false;
-                }
-            });
+                        return false;
+                    }
+                }.bind(this));
+            }.bind(this));
 
-            return report;
+            setTimeout(function () {
+                subscription.dispose();
+            }, 1500);
         },
 
         /**
