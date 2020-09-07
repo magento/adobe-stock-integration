@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Test\Integration\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
+use Magento\AdobeStockClient\Model\ConnectionWrapper;
 use Magento\AdobeStockClientApi\Api\ClientInterface;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -33,7 +35,8 @@ class GetAssetListTest extends TestCase
     {
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
-                ClientInterface::class => ClientMock::class
+                ClientInterface::class => ClientMock::class,
+                ConnectionWrapper::class => ConnectionWrapperMock::class
             ]
         ]);
 
@@ -47,14 +50,22 @@ class GetAssetListTest extends TestCase
      */
     public function testExecute(): void
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
-        $searchCriteriaBuilder->setPageSize(1);
-        $searchCriteria = $searchCriteriaBuilder->create();
+        $words = 'test';
+
+        $filter = Bootstrap::getObjectManager()->get(FilterBuilder::class)
+            ->setConditionType('fulltext')
+            ->setField('words')
+            ->setValue($words)
+            ->create();
+        $searchCriteria = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class)
+            ->addFilter($filter)
+            ->create();
 
         /** @var SearchResultInterface $searchResults */
         $searchResults = $this->getAssetList->execute($searchCriteria);
 
-        $this->assertCount(1, array_values($searchResults->getItems()));
+        $this->assertInstanceOf(SearchResultInterface::class, $searchResults);
+        $this->assertEquals(3, $searchResults->getTotalCount());
+        $this->assertCount(3, array_values($searchResults->getItems()));
     }
 }
