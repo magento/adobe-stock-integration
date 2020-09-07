@@ -206,7 +206,6 @@ define([
          * Select record by image file name
          *
          * @param {String} path
-         * @returns {null|Object}
          */
         selectRecordFromMediaGalleryProvider: function (path) {
             var subscription;
