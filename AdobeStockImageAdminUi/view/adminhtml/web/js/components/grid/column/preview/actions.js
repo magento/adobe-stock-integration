@@ -39,6 +39,7 @@ define([
             loginProvider: 'name = adobe-login, ns = adobe-login',
             mediaGallerySelector: '.media-gallery-modal:has(#search_adobe_stock)',
             adobeStockModalSelector: '.adobe-search-images-modal',
+            errorMessageSelector: '.modal-slide.magento._show ul.messages',
             downloadImagePreviewUrl: 'adobe_stock/preview/download',
             licenseAndDownloadUrl: 'adobe_stock/license/license',
             saveLicensedAndDownloadUrl: 'adobe_stock/license/saveLicensed',
@@ -438,6 +439,7 @@ define([
          */
         licenseProcess: function (id, title, path, contentType, isDownloaded) {
             var deferred = $.Deferred();
+            var errorMessageSelector = '.modal-slide.magento._show ul.messages';
 
             this.login().login()
                 .then(function () {
@@ -493,6 +495,11 @@ define([
                     });
                 }.bind(this)).fail(function (error) {
                 deferred.reject(error);
+                $(errorMessageSelector).get(0).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'nearest'
+                });
             });
 
             return deferred.promise();
