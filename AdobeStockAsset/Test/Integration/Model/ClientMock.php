@@ -7,47 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Integration\Model;
 
-use AdobeStock\Api\Models\StockFile;
-use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
 use Magento\AdobeStockClient\Model\Client;
-use Magento\AdobeStockClient\Model\StockFileToDocument;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\Api\Search\SearchResult;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Exception\IntegrationException;
-use Psr\Log\LoggerInterface;
 
 class ClientMock extends Client
 {
-    /**
-     * @var SearchResultFactory
-     */
-    private $searchResultFactory;
-
-    /**
-     * @var StockFileToDocument
-     */
-    private $stockFileToDocument;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param SearchResultFactory $searchResultFactory
-     * @param LoggerInterface $logger
-     * @param StockFileToDocument $stockFileToDocument
-     */
-    public function __construct(
-        SearchResultFactory $searchResultFactory,
-        LoggerInterface $logger,
-        StockFileToDocument $stockFileToDocument
-    ) {
-        $this->searchResultFactory = $searchResultFactory;
-        $this->logger = $logger;
-        $this->stockFileToDocument = $stockFileToDocument;
-    }
+    private const ID = 'id';
+    private const CUSTOM_ATTRIBUTES = 'custom_attributes';
 
     /**
      * Search for assets
@@ -58,97 +28,101 @@ class ClientMock extends Client
     public function search(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
         $items = [];
-        $totalCount = 0;
-
-        try {
-            $response = $this->getNextResponse();
-            /** @var StockFile $file */
-            foreach ($response->getFiles() as $file) {
-                $items[] = $this->stockFileToDocument->convert($file);
-            }
-            $totalCount = $response->getNbResults();
-        } catch (IntegrationException $exception) {
-            $this->logger->critical($exception->getMessage());
+        foreach ($this->getStockFiles() as $file) {
+            $items[] = $this->getStockFileDocument($file);
         }
 
-        $searchResult = $this->searchResultFactory->create();
+        $searchResult = new SearchResult();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($items);
-        $searchResult->setTotalCount($totalCount);
+        $searchResult->setTotalCount(3);
 
         return $searchResult;
     }
 
     /**
-     * Get the next search files response page
+     * Get array of stock files data.
      *
-     * @return SearchFilesResponse
-     */
-    private function getNextResponse(): SearchFilesResponse
-    {
-        $response = new SearchFilesResponse();
-        $response->setFiles($this->getStockFiles());
-        $response->setNbResults(3);
-        return $response;
-    }
-
-    /**
-     * Result files.
-     *
-     * @return StockFile[]
+     * @return array
      */
     private function getStockFiles(): array
     {
         $stockFilesData = [
             [
                 'id' => 1,
-                'comp_url' => 'https://test.url/1',
-                'thumbnail_240_url' => 'https://test.url/1',
-                'width' => 110,
-                'height' => 210,
-                'some_bool_param' => false,
-                'some_nullable_param' => null,
-                'category' => [
+                'custom_attributes' => [
+                    'id_field_name' => 'id',
                     'id' => 1,
-                    'N
-                    name' => 'Test'
+                    'thumbnail_240_url' => 'https://test.url/1',
+                    'width' => 110,
+                    'height' => 210,
+                    'comp_url' => 'https://test.url/1',
+                    'category' => [
+                        'id' => 1,
+                        'name' => 'Test',
+                        'link' => null
+                    ],
+                    'category_id' => 1
                 ]
             ],
             [
                 'id' => 2,
-                'comp_url' => 'https://test.url/2',
-                'thumbnail_240_url' => 'https://test.url/2',
-                'width' => 120,
-                'height' => 220,
-                'some_bool_params' => false,
-                'some_nullable_param' => 1,
-                'category' => [
-                    'id' => 1,
-                    'N
-                    name' => 'Test'
+                'custom_attributes' => [
+                    'id_field_name' => 'id',
+                    'id' => 2,
+                    'thumbnail_240_url' => 'https://test.url/2',
+                    'width' => 120,
+                    'height' => 220,
+                    'comp_url' => 'https://test.url/2',
+                    'category' => [
+                        'id' => 1,
+                        'name' => 'Test',
+                        'link' => null
+                    ],
+                    'category_id' => 1
                 ]
             ],
             [
                 'id' => 3,
-                'comp_url' => 'https://test.url/3',
-                'thumbnail_240_url' => 'https://test.url/3',
-                'width' => 130,
-                'height' => 230,
-                'some_bool_params' => true,
-                'some_nullable_param' => 2,
-                'category' => [
-                    'id' => 1,
-                    'N
-                    name' => 'Test'
-                ]
-            ],
+                'custom_attributes' => [
+                    'id_field_name' => 'id',
+                    'id' => 3,
+                    'thumbnail_240_url' => 'https://test.url/3',
+                    'width' => 130,
+                    'height' => 230,
+                    'comp_url' => 'https://test.url/3',
+                    'category' => [
+                        'id' => 1,
+                        'name' => 'Test',
+                        'link' => null
+                    ],
+                    'category_id' => 1
+                ],
+            ]
         ];
 
-        $stockFiles = [];
-        foreach ($stockFilesData as $stockFileData) {
-            $stockFiles[] = new StockFile($stockFileData);
+        return $stockFilesData;
+    }
+
+    /**
+     * @param array $stockFiles
+     * @return Document
+     */
+    private function getStockFileDocument(array $stockFiles): Document
+    {
+        $item = new Document();
+        $item->setId($stockFiles[self::ID]);
+
+        $attributes = [];
+        foreach ($stockFiles[self::CUSTOM_ATTRIBUTES] as $attributeCode => $value) {
+            $attribute = new AttributeValue();
+            $attribute->setAttributeCode($attributeCode);
+            $attribute->setValue($value);
+            $attributes[$attributeCode] = $attribute;
         }
 
-        return $stockFiles;
+        $item->setCustomAttributes($attributes);
+
+        return $item;
     }
 }
