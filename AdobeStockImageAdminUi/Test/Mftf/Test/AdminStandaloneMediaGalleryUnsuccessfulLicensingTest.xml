@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStandaloneMediaGalleryUnsuccessfulLicensingTest">
+        <annotations>
+            <features value="AdobeStockMediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1802"/>
+            <stories value="[Story #40] User views stock license status in Media Gallery grid"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/3586914"/>
+            <title value="User views stock license status in Media Gallery grid"/>
+            <description value="User views stock license status in Media Gallery grid"/>
+            <severity value="CRITICAL"/>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
+            </skip>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setIncorrectAdobeSecret">
+                <argument name="privateKey" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
+                <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+            <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+            <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        </before>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.openContextMenu}}" stepKey="openContextMenu"/>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.license}}" stepKey="licenseImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+        <switchToWindow userInput="authorization_window" stepKey="switchToCloseWindow"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <seeElement selector="{{AdminAdobeStockSection.incorrectSecretModalText}}" stepKey="seeLoginFailed"/>
+        <closeTab stepKey="closeAuthorizationWindow"/>
+        <switchToPreviousTab stepKey="switchToImageGrid"/>
+    </test>
+</tests>
