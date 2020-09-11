@@ -10,12 +10,15 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminStandaloneMediaGalleryUnsuccessfulLicensingTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
+            </skip>
             <features value="AdobeStockMediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1802"/>
-            <stories value="User unsuccessful licensing of image in Media Gallery grid"/>
-            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/3586914"/>
-            <title value="User unsuccessful licensing of image in Media Gallery grid"/>
-            <description value="User unsuccessful licensing of image in Media Gallery grid"/>
+            <stories value="User checks if the context menu (three dots) is closed after unsuccessful licensing"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/5199875"/>
+            <title value="User checks if the context menu (three dots) is closed after unsuccessful licensing"/>
+            <description value="User checks if the context menu (three dots) is closed after unsuccessful licensing"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_media_gallery"/>
         </annotations>
@@ -43,6 +46,11 @@
             <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdobeStockGridToDefaultView"/>
+            <actionGroup ref="AdminAdobeStockCloseSearchModalActionGroup" stepKey="closeAdobeStockPanel"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGridToDefaultView"/>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectTestFolderToDelete">
                 <argument name="name" value="testFolder"/>
             </actionGroup>
@@ -50,6 +58,7 @@
             <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertTestFolderWasDeleted">
                 <argument name="name" value="testFolder"/>
             </actionGroup>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
@@ -63,6 +72,6 @@
         <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
         <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
         <waitForElementVisible selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitErrorMessage"/>
-        <dontSeeElement selector="{{AdminEnhancedMediaGalleryImageActionsSection.contextMenu}}" stepKey="verifyContextMenuIsClosed" />
+        <actionGroup ref="AssertAdminMediaGalleryContextMenuOpenedActionGroup" stepKey="assertContextMenuIsClosed"/>
     </test>
 </tests>
