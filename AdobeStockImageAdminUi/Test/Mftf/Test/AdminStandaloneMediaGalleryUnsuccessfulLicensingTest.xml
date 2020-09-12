@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStandaloneMediaGalleryUnsuccessfulLicensingTest">
+        <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
+            </skip>
+            <features value="AdobeStockMediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1802"/>
+            <stories value="User checks if the context menu (three dots) is closed after unsuccessful licensing"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/5199875"/>
+            <title value="User checks if the context menu (three dots) is closed after unsuccessful licensing"/>
+            <description value="User checks if the context menu (three dots) is closed after unsuccessful licensing"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setIncorrectAdobeSecret">
+                <argument name="privateKey" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+            <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createTestFolder">
+                <argument name="name" value="testFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertTestFolderCreated">
+                <argument name="name" value="testFolder"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForGridToLoadAfterTestFolderCreated"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
+                <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+            <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+            <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdobeStockGridToDefaultView"/>
+            <actionGroup ref="AdminAdobeStockCloseSearchModalActionGroup" stepKey="closeAdobeStockPanel"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGridToDefaultView"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectTestFolderToDelete">
+                <argument name="name" value="testFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteTestFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertTestFolderWasDeleted">
+                <argument name="name" value="testFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectTestFolderToOpen">
+            <argument name="name" value="testFolder"/>
+        </actionGroup>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.openContextMenu}}" stepKey="openContextMenu"/>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.license}}" stepKey="licenseImage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <actionGroup ref="AdminAdobeStockImsPopupSignInFillUserDataActionGroup" stepKey="fillUserCredentials"/>
+        <actionGroup ref="AdminAdobeStockImsPopupClickSignInActionGroup" stepKey="clickSignInImsPopup"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitErrorMessage"/>
+        <actionGroup ref="AssertAdminMediaGalleryContextMenuOpenedActionGroup" stepKey="assertContextMenuIsClosed"/>
+    </test>
+</tests>
