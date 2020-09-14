@@ -63,7 +63,7 @@ class GetAssetListTest extends TestCase
         $searchResults = $this->getAssetList->execute($searchCriteria);
 
         $this->assertInstanceOf(SearchResultInterface::class, $searchResults);
-        $this->assertEquals(3, $searchResults->getTotalCount());
-        $this->assertCount(3, array_values($searchResults->getItems()));
+        $this->assertEquals(1, $searchResults->getTotalCount());
+        $this->assertCount(1, array_values($searchResults->getItems()));
     }
 }
