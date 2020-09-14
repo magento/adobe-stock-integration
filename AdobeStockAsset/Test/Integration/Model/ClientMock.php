@@ -35,7 +35,7 @@ class ClientMock extends Client
         $searchResult = new SearchResult();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($items);
-        $searchResult->setTotalCount(3);
+        $searchResult->setTotalCount(1);
 
         return $searchResult;
     }
@@ -64,40 +64,6 @@ class ClientMock extends Client
                     ],
                     'category_id' => 1
                 ]
-            ],
-            [
-                'id' => 2,
-                'custom_attributes' => [
-                    'id_field_name' => 'id',
-                    'id' => 2,
-                    'thumbnail_240_url' => 'https://test.url/2',
-                    'width' => 120,
-                    'height' => 220,
-                    'comp_url' => 'https://test.url/2',
-                    'category' => [
-                        'id' => 1,
-                        'name' => 'Test',
-                        'link' => null
-                    ],
-                    'category_id' => 1
-                ]
-            ],
-            [
-                'id' => 3,
-                'custom_attributes' => [
-                    'id_field_name' => 'id',
-                    'id' => 3,
-                    'thumbnail_240_url' => 'https://test.url/3',
-                    'width' => 130,
-                    'height' => 230,
-                    'comp_url' => 'https://test.url/3',
-                    'category' => [
-                        'id' => 1,
-                        'name' => 'Test',
-                        'link' => null
-                    ],
-                    'category_id' => 1
-                ],
             ]
         ];
 

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeStockAsset\Test\Integration\Model;
 
 use Magento\AdobeStockAssetApi\Api\GetAssetByIdInterface;
-use Magento\AdobeStockAssetApi\Api\GetAssetListInterface;
+use Magento\AdobeStockClientApi\Api\ClientInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class GetAssetByIdTest extends TestCase
     {
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
-                GetAssetListInterface::class => GetAssetListMock::class
+                ClientInterface::class => ClientMock::class
             ]
         ]);
 
@@ -34,10 +34,10 @@ class GetAssetByIdTest extends TestCase
     public function testExecute(): void
     {
         /** @var DocumentInterface $searchResults */
-        $searchResults = $this->getAssetById->execute(123455678);
+        $searchResults = $this->getAssetById->execute(1);
 
         $this->assertInstanceOf(DocumentInterface::class, $searchResults);
         $this->assertNotEmpty($searchResults);
-        $this->assertEquals(123455678, $searchResults->getId());
+        $this->assertEquals(1, $searchResults->getId());
     }
 }
