@@ -56,7 +56,8 @@ class DocumentToAssetTest extends TestCase
     ): void {
         $document = $this->getDocument($data);
         $asset = $this->documentToAsset->convert($document, $additionalData);
-        $getCategory = $this->dataObjectProcessor->buildOutputDataArray($asset->getCategory(), CategoryInterface::class);
+        $getCategory = $this->dataObjectProcessor
+            ->buildOutputDataArray($asset->getCategory(), CategoryInterface::class);
         $this->assertEquals($data['creator_id'], $asset->getCreator()->getId());
         $this->assertEquals($data['creator_name'], $asset->getCreator()->getName());
         $this->assertEquals($data['category'], $getCategory);
