@@ -11,6 +11,7 @@ use Magento\AdobeStockAssetApi\Api\Data\AssetInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CategoryInterface;
 use Magento\AdobeStockAssetApi\Api\Data\CreatorInterface;
 use Magento\AdobeStockImage\Model\Extract\AdobeStockAsset;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -27,6 +28,11 @@ class DocumentToAssetTest extends TestCase
     private $documentToAsset;
 
     /**
+     * @var mixed
+     */
+    private $dataObjectProcessor;
+
+    /**
      * Prepare test objects.
      */
     protected function setUp(): void
@@ -34,35 +40,32 @@ class DocumentToAssetTest extends TestCase
         $this->documentToAsset = Bootstrap::getObjectManager()->get(
             AdobeStockAsset::class
         );
+        $this->dataObjectProcessor = Bootstrap::getObjectManager()->get(
+            DataObjectProcessor::class
+        );
     }
 
     /**
      * @dataProvider documentProvider
-     * @param array $assetData
-     * @param array $categoryData
-     * @param array $creatorData
-     * @param Document $document
+     * @param array $data
      * @param array $additionalData
      */
     public function testConvert(
-        array $assetData,
-        array $categoryData,
-        array $creatorData,
-        Document $document,
+        array $data,
         array $additionalData
     ): void {
-        $this->documentToAsset = Bootstrap::getObjectManager()->get(
-            AdobeStockAsset::class
-        );
-        $documentToAsset = $this->documentToAsset->convert($document, $additionalData);
-        $this->assertEquals($creatorData, $documentToAsset->getCreator()->getData());
-        $this->assertEquals($categoryData, $documentToAsset->getCategory()->getData());
-        $this->assertEquals($assetData['id'], $documentToAsset->getId());
-        $this->assertEquals($assetData['is_licensed'], $documentToAsset->getIsLicensed());
-        $this->assertEquals($assetData['media_gallery_id'], $documentToAsset->getMediaGalleryId());
-        $this->assertInstanceOf(CategoryInterface::class, $documentToAsset['category']);
-        $this->assertInstanceOf(CreatorInterface::class, $documentToAsset['creator']);
-        $this->assertInstanceOf(AssetInterface::class, $documentToAsset);
+        $document = $this->getDocument($data);
+        $asset = $this->documentToAsset->convert($document, $additionalData);
+        $getCategory = $this->dataObjectProcessor->buildOutputDataArray($asset->getCategory(), CategoryInterface::class);
+        $this->assertEquals($data['creator_id'], $asset->getCreator()->getId());
+        $this->assertEquals($data['creator_name'], $asset->getCreator()->getName());
+        $this->assertEquals($data['category'], $getCategory);
+        $this->assertEquals($data['id'], $asset->getId());
+        $this->assertEquals($data['is_licensed'], $asset->getIsLicensed());
+        $this->assertEquals($additionalData['media_gallery_id'], $asset->getMediaGalleryId());
+        $this->assertInstanceOf(CategoryInterface::class, $asset['category']);
+        $this->assertInstanceOf(CreatorInterface::class, $asset['creator']);
+        $this->assertInstanceOf(AssetInterface::class, $asset);
     }
 
     /**
@@ -72,32 +75,17 @@ class DocumentToAssetTest extends TestCase
     {
         return [
             'case1' => [
-                'assetData' => [
+                'data' => [
                     'id' => 1,
-                    'is_licensed' => 1,
-                    'media_gallery_id' => 5
+                    'category' => [
+                        'id' => 2,
+                        'name' => 'The Category'
+                    ],
+                    'creator_name' => 'Creator',
+                    'creator_id' => 3,
+                    'is_licensed' => 1
                 ],
-                'categoryData' => [
-                    'id' => 2,
-                    'name' => 'The Category'
-                ],
-                'creatorData' => [
-                    'name' => 'Creator',
-                    'id' => 3,
-                ],
-                'document' => $this->getDocument(
-                    [
-                        'id' => 1,
-                        'category' => [
-                            'id' => 2,
-                            'name' => 'The Category'
-                        ],
-                        'creator_name' => 'Creator',
-                        'creator_id' => 3,
-                        'is_licensed' => 1
-                    ]
-                ),
-                [
+                'additionaData' => [
                     'media_gallery_id' => 5
                 ]
             ]
