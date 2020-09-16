@@ -10,8 +10,8 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
-                    <resource id="Magento_AdobeStockAsset::adobe_stock_asset" title="Adobe Stock" translate="title" sortOrder="5">
-                        <resource id="Magento_AdobeStockAsset::actions" title="Actions" translate="title">
+                    <resource id="Magento_AdobeStockAsset::adobe_stock_asset" title="Adobe Stock WebAPI" translate="title" sortOrder="5">
+                        <resource id="Magento_AdobeStockAsset::actions" title="WebAPI Actions" translate="title">
                             <resource id="Magento_AdobeStockAsset::actions_delete" title="Delete" translate="title"/>
                             <resource id="Magento_AdobeStockAsset::actions_save" title="Save" translate="title"/>
                             <resource id="Magento_AdobeStockAsset::actions_view" title="View" translate="title"/>
