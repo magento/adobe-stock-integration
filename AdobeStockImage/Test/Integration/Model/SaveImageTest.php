@@ -19,13 +19,11 @@ use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-
 
 /**
  * Test client for communication to Adobe Stock API.
@@ -62,7 +60,7 @@ class SaveImageTest extends TestCase
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $criteriaBuilder;
 
     /**
      * @inheritdoc
@@ -72,7 +70,7 @@ class SaveImageTest extends TestCase
         $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->fileSystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         $this->assetRepository = Bootstrap::getObjectManager()->get(AssetRepositoryInterface::class);
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 
         $this->deleteImage();
         $https = $this->createMock(Https::class);
@@ -81,8 +79,8 @@ class SaveImageTest extends TestCase
             ->willReturnCallback(function ($filePath) {
                 return file_get_contents($filePath);
             });
-        $storageSave = Bootstrap::getObjectManager()->create(Save::class, ['driver' => $https,]);
-        $saveImageFile = Bootstrap::getObjectManager()->create(SaveImageFile::class, ['storageSave' => $storageSave,]);
+        $storageSave = Bootstrap::getObjectManager()->create(Save::class, ['driver' => $https]);
+        $saveImageFile = Bootstrap::getObjectManager()->create(SaveImageFile::class, ['storageSave' => $storageSave]);
         $this->saveImage = Bootstrap::getObjectManager()->create(
             SaveImageInterface::class,
             ['saveImageFile' => $saveImageFile]
@@ -115,7 +113,7 @@ class SaveImageTest extends TestCase
             $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA)->isExist($this->saveDestination),
             'File was not saved by destination'
         );
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $this->criteriaBuilder
             ->addFilter('creator_id', $document->getCustomAttribute('creator_id')->getValue(), 'eq')
             ->create();
         self::assertNotEmpty(
@@ -215,7 +213,6 @@ class SaveImageTest extends TestCase
     {
         $mediaDir = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         if ($mediaDir->isExist($this->saveDestination)) {
-
             $this->driver->deleteFile($mediaDir->getAbsolutePath($this->saveDestination));
         }
     }
