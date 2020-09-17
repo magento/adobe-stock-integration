@@ -8,11 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Integration\Model;
 
-use AdobeStock\Api\Models\StockFile;
 use Magento\AdobeStockAssetApi\Api\AssetRepositoryInterface;
-use Magento\AdobeStockClient\Model\StockFileToDocument;
-use Magento\AdobeStockImage\Model\SaveImageFile;
-use Magento\AdobeStockImage\Model\Storage\Save;
 use Magento\AdobeStockImageApi\Api\SaveImageInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;
@@ -38,11 +34,6 @@ class SaveImageTest extends TestCase
     private $saveImage;
 
     /**
-     * @var string
-     */
-    private $saveDestination = 'catalog/category/tmp.png';
-
-    /**
      * @var DriverInterface
      */
     private $driver;
@@ -63,6 +54,43 @@ class SaveImageTest extends TestCase
     private $criteriaBuilder;
 
     /**
+     * @return array
+     */
+    public function getSaveTestDataProvider(): array
+    {
+        return [
+            'image_save' => [
+                'documentData' => [
+                    'id' => 1,
+                    'comp_url' => 'https://test.url/magento-logo.png',
+                    'width' => 110,
+                    'title' => 'test',
+                    'content_type' => 'image/png',
+                    'height' => 210,
+                    'some_bool_param' => false,
+                    'some_nullable_param' => null,
+                    'extension_attributes' => [
+                        'title' => 'test',
+                        'is_downloaded' => 0,
+                        'is_licensed_locally' => 0,
+                        'thumbnail_240_url' => 'https://test.url/magento-logo.png',
+                        'creator_id' => 1122,
+                        'creator_name' => 'Test',
+                        'path' => 'catalog/category/tmp.png',
+                        'content_type' => 'image/png',
+                        'category' => [
+                            'id' => 1,
+                            'name' => 'Test'
+                        ],
+                    ]
+                ],
+                'sourcePath' => 'magento-logo.png',
+                'destinationPath' => 'catalog/category/tmp.png',
+            ]
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -71,46 +99,35 @@ class SaveImageTest extends TestCase
         $this->fileSystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         $this->assetRepository = Bootstrap::getObjectManager()->get(AssetRepositoryInterface::class);
         $this->criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-
-        $this->deleteImage();
-        $https = $this->createMock(Https::class);
-        $https->expects($this->once())
-            ->method('fileGetContents')
-            ->willReturnCallback(function ($filePath) {
-                return file_get_contents($filePath);
-            });
-        $storageSave = Bootstrap::getObjectManager()->create(Save::class, ['driver' => $https]);
-        $saveImageFile = Bootstrap::getObjectManager()->create(SaveImageFile::class, ['storageSave' => $storageSave]);
-        $this->saveImage = Bootstrap::getObjectManager()->create(
-            SaveImageInterface::class,
-            ['saveImageFile' => $saveImageFile]
-        );
-    }
-
-    /**
-     * @inheridoc
-     */
-    protected function tearDown(): void
-    {
-        $this->deleteImage();
-        parent::tearDown();
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                Https::class => HttpsDriverMock::class
+            ]
+        ]);
+        $this->saveImage = Bootstrap::getObjectManager()->create(SaveImageInterface::class);
     }
 
     /**
      * Test with image.
      *
+     * @param array $documentData
+     * @param string $sourceFile
+     * @param string $destinationPath
      * @return void
+     * @dataProvider getSaveTestDataProvider
      */
-    public function testSave(): void
+    public function testSave(array $documentData, string $sourceFile, string $destinationPath): void
     {
-        $document = $this->getDocument();
+        $this->deleteImage($destinationPath);
+        $document = $this->getDocument($documentData);
+        $mediaDir = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->saveImage->execute(
             $document,
-            $document->getCustomAttribute(self::URL_FIELD)->getValue(),
-            $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA)->getAbsolutePath($this->saveDestination)
+            $this->getImageFilePath($sourceFile),
+            $mediaDir->getAbsolutePath($destinationPath)
         );
         self::assertTrue(
-            $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA)->isExist($this->saveDestination),
+            $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA)->isExist($destinationPath),
             'File was not saved by destination'
         );
         $searchCriteria = $this->criteriaBuilder
@@ -120,43 +137,19 @@ class SaveImageTest extends TestCase
             $this->assetRepository->getList($searchCriteria),
             'Image asset was not saved'
         );
+        $this->deleteImage($destinationPath);
     }
 
     /**
      * Document for save.
      *
+     * @param array $documentData
      * @return Document
-     * @throws IntegrationException
      */
-    private function getDocument(): Document
+    private function getDocument(array $documentData): Document
     {
-        $stockFileData = [
-            'id' => 1,
-            'comp_url' => 'https://test.url/1.png',
-            'width' => 110,
-            'title' => 'test',
-            'content_type' => 'image/png',
-            'height' => 210,
-            'some_bool_param' => false,
-            'some_nullable_param' => null,
-            'category' => [
-                'id' => 1,
-                'name' => 'Test'
-            ],
-        ];
-
-        $stockFile = new StockFile($stockFileData);
-        /** @var StockFileToDocument $stockFileToDocument */
-        $stockFileToDocument = Bootstrap::getObjectManager()->create(StockFileToDocument::class);
-        $document = $stockFileToDocument->convert($stockFile);
-        $this->addAttributes($document, [
-            'is_downloaded' => 0,
-            'path' => '',
-            'is_licensed_locally' => 0,
-            self::URL_FIELD => $this->getImageFilePath('magento-logo.png'),
-            'creator_id' => 1122,
-            'creator_name' => 'Test'
-        ]);
+        $document = new Document($documentData);
+        $this->addAttributes($document, $documentData['extension_attributes']);
         return $document;
     }
 
@@ -207,13 +200,14 @@ class SaveImageTest extends TestCase
     /**
      * Delete test image if exists
      *
+     * @param string $destinationPath
      * @return void
      */
-    private function deleteImage(): void
+    private function deleteImage(string $destinationPath): void
     {
         $mediaDir = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-        if ($mediaDir->isExist($this->saveDestination)) {
-            $this->driver->deleteFile($mediaDir->getAbsolutePath($this->saveDestination));
+        if ($mediaDir->isExist($destinationPath)) {
+            $this->driver->deleteFile($mediaDir->getAbsolutePath($destinationPath));
         }
     }
 }
