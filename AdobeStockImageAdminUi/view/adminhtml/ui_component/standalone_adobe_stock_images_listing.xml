@@ -215,7 +215,6 @@
                     <item name="mediaGalleryListingFilters" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.listing_filters</item>
                     <item name="listingPaging" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.listing_paging</item>
                     <item name="sortByComponentName" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.listing_top.sorting</item>
-                    <item name="bookmarksProvider" xsi:type="string">standalone_adobe_stock_images_listing.standalone_adobe_stock_images_listing.listing_top.bookmarks</item>
                 </item>
             </argument>
             <settings>
