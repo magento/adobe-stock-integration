@@ -14,10 +14,9 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -26,85 +25,22 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveImageTest extends TestCase
 {
-    const URL_FIELD = 'thumbnail_240_url';
-
-    /**
-     * @var SaveImageInterface
-     */
-    private $saveImage;
-
-    /**
-     * @var DriverInterface
-     */
-    private $driver;
-
     /**
      * @var Filesystem
      */
     private $fileSystem;
 
     /**
-     * @var AssetRepositoryInterface
-     */
-    private $assetRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $criteriaBuilder;
-
-    /**
-     * @return array
-     */
-    public function getSaveTestDataProvider(): array
-    {
-        return [
-            'image_save' => [
-                'documentData' => [
-                    'id' => 1,
-                    'comp_url' => 'https://test.url/magento-logo.png',
-                    'width' => 110,
-                    'title' => 'test',
-                    'content_type' => 'image/png',
-                    'height' => 210,
-                    'some_bool_param' => false,
-                    'some_nullable_param' => null,
-                    'extension_attributes' => [
-                        'title' => 'test',
-                        'is_downloaded' => 0,
-                        'is_licensed_locally' => 0,
-                        'thumbnail_240_url' => 'https://test.url/magento-logo.png',
-                        'creator_id' => 1122,
-                        'creator_name' => 'Test',
-                        'path' => 'catalog/category/tmp.png',
-                        'content_type' => 'image/png',
-                        'category' => [
-                            'id' => 1,
-                            'name' => 'Test'
-                        ],
-                    ]
-                ],
-                'sourcePath' => 'magento-logo.png',
-                'destinationPath' => 'catalog/category/tmp.png',
-            ]
-        ];
-    }
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->fileSystem = Bootstrap::getObjectManager()->get(Filesystem::class);
-        $this->assetRepository = Bootstrap::getObjectManager()->get(AssetRepositoryInterface::class);
-        $this->criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
                 Https::class => HttpsDriverMock::class
             ]
         ]);
-        $this->saveImage = Bootstrap::getObjectManager()->create(SaveImageInterface::class);
     }
 
     /**
@@ -120,24 +56,52 @@ class SaveImageTest extends TestCase
     {
         $this->deleteImage($destinationPath);
         $document = $this->getDocument($documentData);
-        $mediaDir = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->saveImage->execute(
+        $saveImage = Bootstrap::getObjectManager()->create(SaveImageInterface::class);
+        $saveImage->execute(
             $document,
             $this->getImageFilePath($sourceFile),
-            $mediaDir->getAbsolutePath($destinationPath)
+            $destinationPath
         );
-        self::assertTrue(
-            $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA)->isExist($destinationPath),
-            'File was not saved by destination'
-        );
-        $searchCriteria = $this->criteriaBuilder
-            ->addFilter('creator_id', $document->getCustomAttribute('creator_id')->getValue(), 'eq')
-            ->create();
-        self::assertNotEmpty(
-            $this->assetRepository->getList($searchCriteria),
-            'Image asset was not saved'
-        );
+        $this->assertImageSavedToDirectory($destinationPath);
+        $this->assertAssets($destinationPath, $documentData);
         $this->deleteImage($destinationPath);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSaveTestDataProvider(): array
+    {
+        return [
+            'image_save' => [
+                'documentData' => [
+                    'id' => 1,
+                    'comp_url' => 'https://test.url/magento-logo.png',
+                    'width' => 110,
+                    'title' => 'test adobe image title',
+                    'content_type' => 'image/png',
+                    'height' => 210,
+                    'some_bool_param' => false,
+                    'some_nullable_param' => null,
+                    'extension_attributes' => [
+                        'title' => 'test adobe image title',
+                        'is_downloaded' => 0,
+                        'is_licensed_locally' => 0,
+                        'thumbnail_240_url' => 'https://test.url/magento-logo.png',
+                        'creator_id' => random_int(0, 2147483647),
+                        'creator_name' => 'Test',
+                        'path' => 'catalog/category/tmp.png',
+                        'content_type' => 'image/png',
+                        'category' => [
+                            'id' => random_int(0, 2147483647),
+                            'name' => 'Test'
+                        ],
+                    ]
+                ],
+                'sourcePath' => 'magento-logo.png',
+                'destinationPath' => 'catalog/category/adobe-stock-save-image-test.png',
+            ]
+        ];
     }
 
     /**
@@ -154,6 +118,61 @@ class SaveImageTest extends TestCase
     }
 
     /**
+     * Check if image saved by destination path
+     *
+     * @param string $destinationPath
+     * @return void
+     */
+    private function assertImageSavedToDirectory(string $destinationPath): void
+    {
+        self::assertTrue(
+            $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA)->isExist($destinationPath),
+            'File was not saved by destination'
+        );
+    }
+
+    /**
+     * Assert saved assets data
+     *
+     * @param string $destinationPath
+     * @param array $documentData
+     * @return void
+     */
+    private function assertAssets(string $destinationPath, array $documentData): void
+    {
+        $galleryAssets = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
+        $mediaAssets = $galleryAssets->execute([$destinationPath]);
+        self::assertCount(1, $mediaAssets, 'Wrong gallery assets count');
+        self::assertEquals(
+            $documentData['extension_attributes']['title'],
+            $mediaAssets[0]->getTitle(),
+            'Wrong gallery assets image title saved'
+        );
+        $criteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $criteriaBuilder
+            ->addFilter('media_gallery_id', $mediaAssets[0]->getId())
+            ->create();
+        /** @var AssetRepositoryInterface $stockAssets */
+        $stockAssets = Bootstrap::getObjectManager()->get(AssetRepositoryInterface::class);
+        $items = $stockAssets->getList($searchCriteria)->getItems();
+        self::assertNotEmpty(
+            $items,
+            'Image asset was not saved'
+        );
+        $item = reset($items);
+        self::assertEquals(
+            $documentData['extension_attributes']['creator_id'],
+            $item->getCreatorId(),
+            'Wrong stock asset creator id saved'
+        );
+        self::assertEquals(
+            $documentData['extension_attributes']['category']['id'],
+            $item->getCategoryId(),
+            'Wrong stock asset category id saved'
+        );
+    }
+
+    /**
      * Add attributes to document
      *
      * @param Document $document
@@ -163,11 +182,11 @@ class SaveImageTest extends TestCase
     private function addAttributes(Document $document, array $attributes): Document
     {
         $customAttributes = $document->getCustomAttributes();
-        $attributeValueFactory = Bootstrap::getObjectManager()->create(
+        $valueFactory = Bootstrap::getObjectManager()->create(
             AttributeValueFactory::class
         );
         foreach ($attributes as $code => $value) {
-            $attribute = $attributeValueFactory->create();
+            $attribute = $valueFactory->create();
             $attribute->setAttributeCode($code);
             $attribute->setValue($value);
             $customAttributes[$code] = $attribute;
@@ -186,15 +205,14 @@ class SaveImageTest extends TestCase
      */
     private function getImageFilePath(string $filename): string
     {
-        return dirname(__DIR__, 1)
-            . DIRECTORY_SEPARATOR
-            . implode(
-                DIRECTORY_SEPARATOR,
-                [
-                    '_files',
-                    $filename
-                ]
-            );
+        return implode(
+            DIRECTORY_SEPARATOR,
+            [
+                dirname(__DIR__, 1),
+                '_files',
+                $filename
+            ]
+        );
     }
 
     /**
@@ -205,9 +223,6 @@ class SaveImageTest extends TestCase
      */
     private function deleteImage(string $destinationPath): void
     {
-        $mediaDir = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-        if ($mediaDir->isExist($destinationPath)) {
-            $this->driver->deleteFile($mediaDir->getAbsolutePath($destinationPath));
-        }
+        $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA)->delete($destinationPath);
     }
 }
