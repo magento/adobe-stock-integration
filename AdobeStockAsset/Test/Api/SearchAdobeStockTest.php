@@ -86,11 +86,11 @@ class SearchAdobeStockTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'GetList',
+                'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertArrayHasKey('search_criteria', $response);
         $this->assertArrayHasKey('total_count', $response);
