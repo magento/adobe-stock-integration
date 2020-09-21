@@ -10,6 +10,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockSignInSignOutTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
+            </skip>
             <features value="AdobeStockImagePanel"/>
             <stories value="[Story #21] Adobe Sign-in"/>
             <stories value="[Story #36] User signs out from Stock"/>
