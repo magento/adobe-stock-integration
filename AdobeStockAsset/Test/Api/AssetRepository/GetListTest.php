@@ -22,7 +22,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class GetListTest extends WebapiAbstract
 {
     private const RESOURCE_PATH = '/V1/adobestock/asset/search';
-    private const SERVICE_NAME = 'adobeStockAssetApiGetAssetListV1';
+    private const SERVICE_NAME = 'adobeStockAssetApiAssetRepositoryV1';
 
     /**
      * Test getting the Adobe Stock image by search criteria.
@@ -74,7 +74,7 @@ class GetListTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertArrayHasKey('search_criteria', $response);
         $this->assertArrayHasKey('total_count', $response);
