@@ -112,7 +112,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): AssetExtensionInterface
+    public function getExtensionAttributes(): ?AssetExtensionInterface
     {
         return $this->_getExtensionAttributes();
     }
