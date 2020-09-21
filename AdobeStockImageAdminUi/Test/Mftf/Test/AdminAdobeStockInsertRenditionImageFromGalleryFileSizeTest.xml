@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockInsertRenditionImageFromGalleryFileSizeTest">
+        <annotations>
+            <features value="AdminAdobeStockInsertRenditionImageFromGalleryFileSizeTest"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1806"/>
+            <title value="Admin user should see correct image file size after rendition inserted from gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1507933/scenarios/5200023"/>
+            <stories value="User inserts image rendition to the content from media gallery"/>
+            <description value="Admin user should see correct image file size after rendition inserted from gallery"/>
+            <severity value="AVERAGE"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Prepare configuration -->
+            <actionGroup ref="AdminRenditionsSetImageSizeActionGroup" stepKey="prepareRenditionsConfig">
+                <argument name="height" value="50"/>
+                <argument name="width" value="50"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Restore configuration -->
+            <actionGroup ref="AdminRenditionsSetImageSizeActionGroup" stepKey="restoreRenditionsConfig"/>
+            <!-- Delete uploaded image -->
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
+            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Open category page -->
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem">
+            <argument name="categoryName" value="$category.name$"/>
+        </actionGroup>
+
+        <!-- Add image to category from gallery -->
+        <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
+        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
+            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="addSelectedSavedPreview"/>
+
+        <!-- Assert added image size -->
+        <actionGroup ref="AdminAssertImageUploadFileSizeThanActionGroup" stepKey="assertSize">
+            <argument name="fileSize" value="1 KB"/>
+        </actionGroup>
+    </test>
+</tests>
