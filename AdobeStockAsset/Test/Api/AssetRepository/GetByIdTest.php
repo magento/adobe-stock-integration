@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class GetByIdTest
+ * Class get by id asset webapi
  */
 class GetByIdTest extends WebapiAbstract
 {

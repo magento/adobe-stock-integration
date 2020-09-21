@@ -17,8 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class SearchExecuteTest
- * @package Magento\AdobeStockImage\Test\Api
+ * Class search execute test webapi
  */
 class SearchExecuteTest extends WebapiAbstract
 {
