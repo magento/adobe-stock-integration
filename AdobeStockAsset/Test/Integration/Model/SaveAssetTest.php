@@ -70,6 +70,7 @@ class SaveAssetTest extends TestCase
 
     /**
      * Test save an Adobe Stock asset.
+     *
      * @param array $caseData
      *
      * @dataProvider getAssetData
