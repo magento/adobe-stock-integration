@@ -28,6 +28,7 @@
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
         </after>
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.firstKeyword}}" stepKey="grabKeyword"/>
         <grabAttributeFrom selector="{{AdminAdobeStockImagePreviewSection.image}}" userInput="alt" stepKey="grabImageName"/>
