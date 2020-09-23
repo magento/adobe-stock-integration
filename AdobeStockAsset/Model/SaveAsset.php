@@ -79,12 +79,13 @@ class SaveAsset implements SaveAssetInterface
         $data = $this->objectProcessor->buildOutputDataArray($asset, AssetInterface::class);
 
         $category = $asset->getCategory();
-        if ($category->getId() !== null) {
-            $category = $this->categoryRepository->save($category);
+        if ($category !== null) {
+            if ($category->getId() !== null) {
+                $category = $this->categoryRepository->save($category);
+            }
+            $data[self::CATEGORY_ID] = $category->getId();
+            $data[self::CATEGORY] = $category;
         }
-        $data[self::CATEGORY_ID] = $category->getId();
-        $data[self::CATEGORY] = $category;
-
         $creator = $asset->getCreator();
         if ($creator !== null) {
             $creator = $this->creatorRepository->save($creator);

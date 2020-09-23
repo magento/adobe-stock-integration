@@ -128,7 +128,8 @@ class AddAdobeStockImageDetailsPlugin
      */
     private function loadAssetsInfo(AssetInterface $asset): array
     {
-        $assetCategory = $this->categoryRepository->getById($asset->getCategoryId());
+        $hasCategory = $asset->getCategoryId() !== null;
+        $assetCategory = $hasCategory ? $this->categoryRepository->getById($asset->getCategoryId()) : null;
         $assetCreator = $this->creatorRepository->getById($asset->getCreatorId());
 
         return [
@@ -142,7 +143,7 @@ class AddAdobeStockImageDetailsPlugin
             ],
             [
                 'title' => __('Category'),
-                'value' => $assetCategory->getName(),
+                'value' => $assetCategory !== null ? $assetCategory->getName() : __('None'),
             ],
             [
                 'title' => __('Author'),
