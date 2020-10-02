@@ -73,7 +73,7 @@ class DeleteByIdTest extends WebapiAbstract
                     $e,
                     $expectedMessage,
                     'env:Sender',
-                    [1 => self::FIXTURE_ASSET_ID]
+                    ['id' => self::FIXTURE_ASSET_ID]
                 );
             } else {
                 throw $e;

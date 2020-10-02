@@ -56,9 +56,11 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getCategoryId(): int
+    public function getCategoryId(): ?int
     {
-        return (int) $this->getData(self::CATEGORY_ID);
+        $categoryId = $this->getData(self::CATEGORY_ID);
+
+        return $categoryId !== null ? (int) $categoryId : null;
     }
 
     /**
@@ -112,7 +114,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): AssetExtensionInterface
+    public function getExtensionAttributes(): ?AssetExtensionInterface
     {
         return $this->_getExtensionAttributes();
     }

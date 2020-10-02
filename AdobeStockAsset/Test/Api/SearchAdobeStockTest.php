@@ -26,17 +26,25 @@ class SearchAdobeStockTest extends WebapiAbstract
     private const REQUEST_NAME = 'search_adobe_stock_content';
 
     /**
+     * @inheridoc
+     */
+    protected function setUp(): void
+    {
+        $this->markTestSkipped("The test requires adobe stock credentials and cannot be currently executed on CICD");
+    }
+
+    /**
      * Test get list WEB API method.
      *
      * @return void
      */
     public function testGetList(): void
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        /** @var SearchCriteriaBuilder $criteriaBuilder */
+        $criteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
 
-        $searchCriteriaBuilder->setPageSize(32);
-        $searchCriteriaBuilder->setCurrentPage(1);
+        $criteriaBuilder->setPageSize(32);
+        $criteriaBuilder->setCurrentPage(1);
 
         /** @var FilterBuilder $filterBuilder */
         $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
@@ -60,11 +68,11 @@ class SearchAdobeStockTest extends WebapiAbstract
             ->setConditionType('eq')
             ->create();
 
-        /** @var FilterGroupBuilder $filterGroupBuilder */
-        $filterGroupBuilder = Bootstrap::getObjectManager()->create(FilterGroupBuilder::class);
-        $wordsFilterGroup = $filterGroupBuilder->setFilters([$wordsFilter])->create();
-        $contentTypeFilterGroup = $filterGroupBuilder->setFilters([$illustrationFilter, $photoFilter])->create();
-        $premiumPriceFilterGroup = $filterGroupBuilder->setFilters([$premiumPriceFilter])->create();
+        /** @var FilterGroupBuilder $groupBuilder */
+        $groupBuilder = Bootstrap::getObjectManager()->create(FilterGroupBuilder::class);
+        $wordsFilterGroup = $groupBuilder->setFilters([$wordsFilter])->create();
+        $contentFilterGroup = $groupBuilder->setFilters([$illustrationFilter, $photoFilter])->create();
+        $priceFilterGroup = $groupBuilder->setFilters([$premiumPriceFilter])->create();
 
         /** @var SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
@@ -72,10 +80,10 @@ class SearchAdobeStockTest extends WebapiAbstract
             ->setDirection(SortOrder::SORT_DESC)
             ->create();
 
-        $searchCriteria = $searchCriteriaBuilder->create();
+        $searchCriteria = $criteriaBuilder->create();
         $searchCriteria->setSortOrders([$sortOrder]);
         $searchCriteria->setRequestName(self::REQUEST_NAME);
-        $searchCriteria->setFilterGroups([$wordsFilterGroup, $contentTypeFilterGroup, $premiumPriceFilterGroup]);
+        $searchCriteria->setFilterGroups([$wordsFilterGroup, $contentFilterGroup, $priceFilterGroup]);
 
         $requestData = ['search_criteria' => $searchCriteria->__toArray()];
 
@@ -86,11 +94,11 @@ class SearchAdobeStockTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'GetList',
+                'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertArrayHasKey('search_criteria', $response);
         $this->assertArrayHasKey('total_count', $response);
