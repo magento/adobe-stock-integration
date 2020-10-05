@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\AbstractFilter;
@@ -42,6 +44,8 @@ class Color extends AbstractFilter
      * @param ColorModesProvider $modesProvider
      * @param array $components
      * @param array $data
+     * @param BookmarkManagementInterface|null $bookmarkManagement
+     * @param RequestInterface|null $request
      */
     public function __construct(
         ContextInterface $context,
@@ -50,7 +54,9 @@ class Color extends AbstractFilter
         FilterModifier $filterModifier,
         ColorModesProvider $modesProvider,
         array $components = [],
-        array $data = []
+        array $data = [],
+        BookmarkManagementInterface $bookmarkManagement = null,
+        RequestInterface $request = null
     ) {
         $this->modesProvider = $modesProvider;
         parent::__construct(
@@ -59,7 +65,9 @@ class Color extends AbstractFilter
             $filterBuilder,
             $filterModifier,
             $components,
-            $data
+            $data,
+            $bookmarkManagement,
+            $request
         );
     }
 

@@ -10,12 +10,14 @@ namespace Magento\AdobeStockImageAdminUi\Test\Unit\Ui\Component\Listing\Filter;
 use Magento\AdobeStockImageAdminUi\Ui\Component\Listing\Filter\Color;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
@@ -83,6 +85,16 @@ class ColorTest extends TestCase
     private $colorModesProvider;
 
     /**
+     * @var BookmarkManagementInterface|MockObject
+     */
+    private $bookmarkManagementMock;
+
+    /**
+     * @var RequestInterface|MockObject
+     */
+    private $requestMock;
+
+    /**
      * Create Color filter object
      *
      * @param array $data
@@ -95,6 +107,17 @@ class ColorTest extends TestCase
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->filterModifier = $this->createMock(FilterModifier::class);
         $this->colorModesProvider = $this->createMock(ColorModesProvider::class);
+
+        $this->bookmarkManagementMock = $this->getMockForAbstractClass(
+            BookmarkManagementInterface::class
+        );
+        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
+
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->addMethods(['isAjax'])
+            ->getMockForAbstractClass();
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
+
         return new Color(
             $context,
             $this->uiComponentFactory,
@@ -102,7 +125,9 @@ class ColorTest extends TestCase
             $this->filterModifier,
             $this->colorModesProvider,
             [],
-            $data
+            $data,
+            $this->bookmarkManagementMock,
+            $this->requestMock
         );
     }
 
