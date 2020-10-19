@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAdobeStockImageVerifyLicenseActionOnMediaGallery">
+    <test name="AdminAdobeStockImageVerifyLicenseActionOnMediaGalleryTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
             <stories value="[Story #39] User license the preview image in Media Gallery"/>
@@ -43,6 +43,6 @@
         </actionGroup>
         <actionGroup ref="AdminAdobeStockImageAssertLicenseButtonNotAvailableInMediaGalleryActionGroup" stepKey="assertLicenseButtonNotAvailable"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+        <actionGroup ref="AdminAdobeStockImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
     </test>
 </tests>
