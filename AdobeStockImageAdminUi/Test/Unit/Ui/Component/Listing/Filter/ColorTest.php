@@ -114,9 +114,7 @@ class ColorTest extends TestCase
         $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['isAjax'])
             ->getMockForAbstractClass();
-        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
 
         return new Color(
             $context,
