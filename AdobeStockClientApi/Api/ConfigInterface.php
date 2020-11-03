@@ -22,13 +22,6 @@ interface ConfigInterface
     public function getTargetEnvironment() : ?string;
 
     /**
-     * Product name
-     *
-     * @return string|null
-     */
-    public function getProductName() : ?string;
-
-    /**
      * Get Adobe Stock API files url
      *
      * @return string
