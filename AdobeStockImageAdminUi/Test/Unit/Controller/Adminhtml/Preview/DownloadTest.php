@@ -115,7 +115,7 @@ class DownloadTest extends TestCase
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
-        $this->saveImage->expects($this->once())->method('execute')->willReturn(null);
+        $this->saveImage->expects($this->once())->method('execute');
         $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonObject);
 
