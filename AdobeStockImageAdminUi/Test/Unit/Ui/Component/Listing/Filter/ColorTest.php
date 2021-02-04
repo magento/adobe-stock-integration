@@ -114,7 +114,7 @@ class ColorTest extends TestCase
      */
     private function getContext(array $filterParams): ContextInterface
     {
-        $context = $this->createMock(ContextInterface::class);
+        $context = $this->getMockForAbstractClass(ContextInterface::class);
         $context->expects($this->once())
             ->method('getFiltersParams')
             ->willReturn($filterParams);
@@ -194,7 +194,7 @@ class ColorTest extends TestCase
             ->method('create')
             ->willReturn($filter);
 
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
         $context->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($dataProvider);
@@ -211,7 +211,7 @@ class ColorTest extends TestCase
      */
     private function getWrappedComponent(ContextInterface $context): MockObject
     {
-        $wrappedComponent = $this->createMock(UiComponentInterface::class);
+        $wrappedComponent = $this->getMockForAbstractClass(UiComponentInterface::class);
         $wrappedComponent->expects($this->once())
             ->method('prepare');
         $wrappedComponent->expects($this->once())

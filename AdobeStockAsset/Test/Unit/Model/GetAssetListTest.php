@@ -43,8 +43,8 @@ class GetAssetListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientMock = $this->createMock(ClientInterface::class);
-        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->clientMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             GetAssetList::class,
@@ -61,8 +61,8 @@ class GetAssetListTest extends TestCase
      */
     public function testExecute(): void
     {
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
-        $documentSearchResults = $this->createMock(SearchResultInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $documentSearchResults = $this->getMockForAbstractClass(SearchResultInterface::class);
 
         $this->clientMock->expects($this->once())
             ->method('search')

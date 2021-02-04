@@ -60,8 +60,8 @@ class GetImageTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->configInterface = $this->createMock(ConfigInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->configInterface = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->getImage = new GetImage(
             $this->logger,

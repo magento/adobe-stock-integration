@@ -73,14 +73,14 @@ class CreatorRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resourceModel = $this->createMock(ResourceModel::class);
         $this->commandSave = $this->createMock(Save::class);
         $this->creatorCollectionFactory = $this->createMock(CreatorCollectionFactory::class);
         $this->creatorFactory = $this->createMock(CreatorFactory::class);
-        $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);
-        $this->collectionProcessorInterface = $this->createMock(CollectionProcessorInterface::class);
+        $this->joinProcessorInterface = $this->getMockForAbstractClass(JoinProcessorInterface::class);
+        $this->collectionProcessorInterface = $this->getMockForAbstractClass(CollectionProcessorInterface::class);
         $this->creatorSearchResultInterfaceFactory = $this->createMock(CreatorSearchResultsInterfaceFactory::class);
 
         $this->creatorRepository = new CreatorRepository(

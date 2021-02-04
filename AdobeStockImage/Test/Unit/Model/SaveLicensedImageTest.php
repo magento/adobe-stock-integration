@@ -54,9 +54,9 @@ class SaveLicensedImageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
-        $this->saveImageMock = $this->createMock(SaveImageInterface::class);
-        $this->getAssetByIdMock = $this->createMock(GetAssetByIdInterface::class);
+        $this->clientInterfaceMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->saveImageMock = $this->getMockForAbstractClass(SaveImageInterface::class);
+        $this->getAssetByIdMock = $this->getMockForAbstractClass(GetAssetByIdInterface::class);
         $this->documentMock = $this->createMock(Document::class);
 
         $this->sut = (new ObjectManager($this))->getObject(

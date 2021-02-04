@@ -62,9 +62,9 @@ class GetRelatedImagesTest extends TestCase
     protected function setUp(): void
     {
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
-        $this->getImageListInterface = $this->createMock(GetImageListInterface::class);
+        $this->getImageListInterface = $this->getMockForAbstractClass(GetImageListInterface::class);
         $this->fields = ['same_series' => 'serie_id', 'same_model' => 'model_id'];
         $this->getRelatedSeries = new GetRelatedImages(
             $this->getImageListInterface,
@@ -107,7 +107,7 @@ class GetRelatedImagesTest extends TestCase
             ->willReturn(
                 $this->createMock(SearchCriteria::class)
             );
-        $searchCriteriaMock = $this->createMock(SearchResultInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchResultInterface::class);
         $this->getImageListInterface->expects($this->any())
             ->method('execute')
             ->willReturn($searchCriteriaMock);
@@ -145,7 +145,7 @@ class GetRelatedImagesTest extends TestCase
             ->willReturn(
                 $this->createMock(SearchCriteria::class)
             );
-        $searchCriteriaMock = $this->createMock(SearchResultInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchResultInterface::class);
         $this->getImageListInterface->expects($this->any())
             ->method('execute')
             ->willReturn($searchCriteriaMock);

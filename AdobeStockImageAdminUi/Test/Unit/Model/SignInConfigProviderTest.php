@@ -54,10 +54,10 @@ class SignInConfigProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
-        $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
-        $this->urlMock = $this->createMock(UrlInterface::class);
-        $this->userQuotaMock = $this->createMock(UserQuotaInterface::class);
+        $this->clientInterfaceMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->userAuthorizedMock = $this->getMockForAbstractClass(UserAuthorizedInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->userQuotaMock = $this->getMockForAbstractClass(UserQuotaInterface::class);
 
         $this->sut = new SignInConfigProvider(
             $this->clientInterfaceMock,
