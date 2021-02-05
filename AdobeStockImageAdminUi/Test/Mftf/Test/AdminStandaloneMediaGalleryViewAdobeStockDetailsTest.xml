@@ -18,13 +18,16 @@
             <severity value="CRITICAL"/>
             <group value="adobe_stock_media_gallery"/>
         </annotations>
+
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         </before>
+
         <after>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
-            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteImage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
         </after>
 
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>

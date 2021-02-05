@@ -20,6 +20,7 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
             <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
             <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockPanel"/>
@@ -27,7 +28,7 @@
         <after>
             <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
-            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
         </after>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>

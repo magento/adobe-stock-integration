@@ -34,7 +34,7 @@
             <!-- Delete uploaded image -->
             <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
-            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
             <!-- Delete category -->
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
