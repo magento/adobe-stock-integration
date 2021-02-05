@@ -102,7 +102,7 @@ class DownloadTest extends TestCase
                     'isAjax' => 'true',
                     'media_id' => 283415387,
                     'destination_path' => '',
-                    'form_key' => 'PyXOATf2fL9Y8iZf'
+                    'form_key' => 'PyXOATf2fL9Y8iZf',
                 ]
             );
         $this->getAssetById->expects($this->once())
