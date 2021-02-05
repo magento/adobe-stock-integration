@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class SaveLicensedTest
+ * Test for SaveLicensed class
  */
 class SaveLicensedTest extends TestCase
 {

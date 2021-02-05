@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * LogOut test.
+ * Test for Logout
  */
 class LogOutTest extends TestCase
 {
@@ -77,7 +78,8 @@ class LogOutTest extends TestCase
     {
         $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->userProfileInterfaceMock = $this->getMockForAbstractClass(UserProfileInterface::class);
-        $this->userProfileRepositoryInterfaceMock = $this->getMockForAbstractClass(UserProfileRepositoryInterface::class);
+        $this->userProfileRepositoryInterfaceMock = $this
+            ->getMockForAbstractClass(UserProfileRepositoryInterface::class);
         $this->userContextInterfaceMock = $this->getMockForAbstractClass(UserContextInterface::class);
         $this->configInterfaceMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->loggerInterfaceMock = $this->getMockForAbstractClass(LoggerInterface::class);

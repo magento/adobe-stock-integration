@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Category repository test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatorRepositoryTest extends TestCase
 {

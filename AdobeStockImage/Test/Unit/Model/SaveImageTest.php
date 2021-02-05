@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Test for Save image model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImageTest extends TestCase
 {

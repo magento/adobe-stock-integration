@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class SaveLicensedImageTest
+ * Test for SaveLicensedImage class
  */
 class SaveLicensedImageTest extends TestCase
 {

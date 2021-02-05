@@ -25,6 +25,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * DownloadTest
+ * Test for Download class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DownloadTest extends TestCase
 {

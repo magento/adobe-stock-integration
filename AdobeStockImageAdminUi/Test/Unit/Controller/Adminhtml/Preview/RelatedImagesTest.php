@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * RelatedImages test.
+ * Test for RelatedImages class
  */
 class RelatedImagesTest extends TestCase
 {

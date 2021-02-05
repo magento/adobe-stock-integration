@@ -24,6 +24,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * License test.
+ * Test for License class
  */
 class LicenseTest extends TestCase
 {

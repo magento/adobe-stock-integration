@@ -37,6 +37,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Config data test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ClientTest extends TestCase
 {

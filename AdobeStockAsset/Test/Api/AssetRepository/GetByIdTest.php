@@ -19,6 +19,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Class GetByIdTest
+ * Test for CollectionFactory
  */
 class GetByIdTest extends WebapiAbstract
 {

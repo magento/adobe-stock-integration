@@ -25,6 +25,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Connection wrapper test.
+ * Test for ConnectionWrapper class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConnectionWrapperTest extends TestCase
 {
@@ -85,7 +87,7 @@ class ConnectionWrapperTest extends TestCase
         $this->getAccessToken = $this->getMockForAbstractClass(GetAccessTokenInterface::class);
         $this->flushToken = $this->getMockForAbstractClass(FlushUserTokensInterface::class);
         $this->httpInterface = $this->getMockForAbstractClass(HttpInterface::class);
-        $this->adobeStockMock = $adobeStockMock = $this->createMock(AdobeStock::class);
+        $this->adobeStockMock = $this->createMock(AdobeStock::class);
         $this->connectionFactory->expects($this->once())->method('create')->willReturn($this->adobeStockMock);
         $this->configInterface->expects($this->once())->method('getProductName')->willReturn('name');
         $this->configInterface->expects($this->once())->method('getTargetEnvironment')->willReturn('target');

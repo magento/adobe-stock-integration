@@ -23,6 +23,7 @@ use Magento\Framework\Api\AttributeValue;
 
 /**
  * Test for GetRelatedImages Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetRelatedImagesTest extends TestCase
 {
@@ -163,7 +164,7 @@ class GetRelatedImagesTest extends TestCase
 
     /**
      * Series Data provider.
-     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function relatedImagesDataProvider(): array

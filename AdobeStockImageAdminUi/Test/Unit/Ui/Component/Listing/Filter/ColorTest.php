@@ -24,6 +24,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 
 /**
  * ColorTest test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ColorTest extends TestCase
 {

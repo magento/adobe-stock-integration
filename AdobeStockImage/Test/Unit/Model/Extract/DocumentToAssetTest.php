@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Document to asset test.
+ * Test for AdobeStockAsset
  */
 class DocumentToAssetTest extends TestCase
 {
