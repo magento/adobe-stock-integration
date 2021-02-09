@@ -58,9 +58,9 @@ class LogoutTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logoutInterfaceMock = $this->createMock(LogOutInterface::class);
+        $this->logoutInterfaceMock = $this->getMockForAbstractClass(LogOutInterface::class);
         $this->context = $this->createMock(ActionContext::class);
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')

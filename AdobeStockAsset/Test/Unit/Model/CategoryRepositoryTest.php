@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Category repository test.
+ * Test for Category repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryRepositoryTest extends TestCase
 {
@@ -78,8 +80,8 @@ class CategoryRepositoryTest extends TestCase
         $this->commandSave = $this->createMock(Save::class);
         $this->categoryCollectionFactory = $this->createMock(CategoryCollectionFactory::class);
         $this->categoryFactory = $this->createMock(CategoryFactory::class);
-        $this->joinProcessorInterface = $this->createMock(JoinProcessorInterface::class);
-        $this->collectionProcessorInterface = $this->createMock(CollectionProcessorInterface::class);
+        $this->joinProcessorInterface = $this->getMockForAbstractClass(JoinProcessorInterface::class);
+        $this->collectionProcessorInterface = $this->getMockForAbstractClass(CollectionProcessorInterface::class);
         $this->categorySearchResultsInterfaceFactory = $this->createMock(CategorySearchResultsInterfaceFactory::class);
 
         $this->categoryRepository = new CategoryRepository(
@@ -99,7 +101,7 @@ class CategoryRepositoryTest extends TestCase
     public function testGetList(): void
     {
         /** @var MockObject|SearchCriteriaInterface $searchCriteria */
-        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
 
         $collection = $this->createMock(Collection::class);
         $this->categoryCollectionFactory->expects($this->once())
@@ -114,7 +116,7 @@ class CategoryRepositoryTest extends TestCase
             ->method('process')
             ->with($searchCriteria, $collection)
             ->willReturn(null);
-        $searchResults = $this->createMock(CategorySearchResultsInterface::class);
+        $searchResults = $this->getMockForAbstractClass(CategorySearchResultsInterface::class);
         $this->categorySearchResultsInterfaceFactory->expects($this->once())
             ->method('create')
             ->willReturn($searchResults);

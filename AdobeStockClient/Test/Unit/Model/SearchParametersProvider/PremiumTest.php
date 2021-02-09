@@ -59,7 +59,7 @@ class PremiumTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $this->searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $this->searchParametersMock = $this->createMock(SearchParameters::class);
         $this->filterGroupItemMock = $this->createMock(FilterGroup::class);
         $this->filterItemMock = $this->createMock(Filter::class);

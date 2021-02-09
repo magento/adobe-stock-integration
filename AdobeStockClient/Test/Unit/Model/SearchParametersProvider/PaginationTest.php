@@ -44,7 +44,7 @@ class PaginationTest extends TestCase
     public function testApply(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $searchCriteriaMock->expects($this->exactly(2))
             ->method('getPageSize')
             ->willReturn(20);

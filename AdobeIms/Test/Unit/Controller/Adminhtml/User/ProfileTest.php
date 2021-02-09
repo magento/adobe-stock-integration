@@ -69,9 +69,9 @@ class ProfileTest extends TestCase
     {
         $this->action = $this->createMock(Context::class);
 
-        $this->userContext = $this->createMock(UserContextInterface::class);
-        $this->userProfileRepository = $this->createMock(UserProfileRepositoryInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->userContext = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userProfileRepository = $this->getMockForAbstractClass(UserProfileRepositoryInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->jsonObject = $this->createMock(Json::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->action->expects($this->once())
@@ -96,7 +96,7 @@ class ProfileTest extends TestCase
     public function testExecute(array $result): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(UserProfileInterface::class);
+        $userProfileMock = $this->getMockForAbstractClass(UserProfileInterface::class);
         $userProfileMock->expects($this->once())->method('getEmail')->willReturn('exaple@adobe.com');
         $userProfileMock->expects($this->once())->method('getName')->willReturn('Smith');
         $userProfileMock->expects($this->once())->method('getImage')->willReturn('https://adobe.com/sample-image.png');

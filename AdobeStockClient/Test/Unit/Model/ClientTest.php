@@ -37,6 +37,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Config data test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ClientTest extends TestCase
 {
@@ -112,13 +113,13 @@ class ClientTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->createMock(ConfigInterface::class);
+        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->connectionFactory = $this->createMock(ConnectionWrapperFactory::class);
         $this->searchResultFactory = $this->createMock(SearchResultFactory::class);
-        $this->searchParametrProvider = $this->createMock(SearchParameterProviderInterface::class);
+        $this->searchParametrProvider = $this->getMockForAbstractClass(SearchParameterProviderInterface::class);
         $this->localeResolver = $this->createMock(LocaleResolver::class);
         $this->licenseRequestFactory = $this->createMock(LicenseRequestFactory::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->userQuotaFactory = $this->createMock(UserQuotaInterfaceFactory::class);
         $this->stockFileToDocument = $this->createMock(StockFileToDocument::class);
         $this->licenseConfirmationFactory = $this->createMock(LicenseConfirmationInterfaceFactory::class);
@@ -163,7 +164,7 @@ class ClientTest extends TestCase
             );
 
         $response->expects($this->once())->method('getNbResults')->willReturn(12);
-        $searchResult = $this->createMock(SearchResultInterface::class);
+        $searchResult = $this->getMockForAbstractClass(SearchResultInterface::class);
         $this->searchResultFactory->expects($this->once())
             ->method('create')
             ->willReturn($searchResult);
@@ -172,8 +173,8 @@ class ClientTest extends TestCase
         $searchResult->expects($this->once())->method('setTotalCount')->willReturnSelf();
 
         $this->assertEquals(
-            $this->createMock(SearchResultInterface::class),
-            $this->client->search($this->createMock(SearchCriteriaInterface::class))
+            $this->getMockForAbstractClass(SearchResultInterface::class),
+            $this->client->search($this->getMockForAbstractClass(SearchCriteriaInterface::class))
         );
     }
 
@@ -194,14 +195,14 @@ class ClientTest extends TestCase
         $this->licenseRequestFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->getLicenseRequest());
-        $quota = $this->createMock(UserQuotaInterface::class);
+        $quota = $this->getMockForAbstractClass(UserQuotaInterface::class);
         $this->userQuotaFactory->expects($this->once())
             ->method('create')
             ->willReturn($quota);
         $quota->expects($this->once())->method('setImages')->willReturnSelf();
         $quota->expects($this->once())->method('setCredits')->willReturnSelf();
 
-        $this->assertEquals($this->createMock(UserQuotaInterface::class), $this->client->getQuota());
+        $this->assertEquals($this->getMockForAbstractClass(UserQuotaInterface::class), $this->client->getQuota());
     }
 
     /**
@@ -223,7 +224,7 @@ class ClientTest extends TestCase
         $LicensePurchaseOptions->expects($this->once())
             ->method('getPurchaseState')
             ->willReturn('possible');
-        $quota = $this->createMock(LicenseConfirmationInterface::class);
+        $quota = $this->getMockForAbstractClass(LicenseConfirmationInterface::class);
         $this->licenseConfirmationFactory->expects($this->once())
             ->method('create')
             ->willReturn($quota);
@@ -233,7 +234,7 @@ class ClientTest extends TestCase
         $quota->expects($this->once())->method('setMessage')->willReturnSelf();
         $quota->expects($this->once())->method('setCanLicense')->willReturnSelf();
         $this->assertEquals(
-            $this->createMock(LicenseConfirmationInterface::class),
+            $this->getMockForAbstractClass(LicenseConfirmationInterface::class),
             $this->client->getLicenseConfirmation(0)
         );
     }
@@ -276,7 +277,7 @@ class ClientTest extends TestCase
         $this->connectionWrapper->expects($this->once())
             ->method('testApiKey')
             ->willReturn(true);
-        $this->assertEquals(true, $this->client->testConnection('key'));
+        $this->assertTrue($this->client->testConnection('key'));
     }
 
     /**

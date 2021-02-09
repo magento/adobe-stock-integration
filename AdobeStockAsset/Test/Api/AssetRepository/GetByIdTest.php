@@ -19,6 +19,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Class GetByIdTest
+ * Test for CollectionFactory
  */
 class GetByIdTest extends WebapiAbstract
 {
@@ -41,7 +42,7 @@ class GetByIdTest extends WebapiAbstract
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->assetCollectionFactory = $this->objectManager->get(CollectionFactory::class);

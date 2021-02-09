@@ -39,7 +39,7 @@ class DeleteTest extends WebapiAbstract
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->assetCollectionFactory = $this->objectManager->get(CollectionFactory::class);

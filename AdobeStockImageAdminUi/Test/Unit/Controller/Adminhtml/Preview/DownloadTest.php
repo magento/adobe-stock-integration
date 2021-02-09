@@ -25,6 +25,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * DownloadTest
+ * Test for Download class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DownloadTest extends TestCase
 {
@@ -78,13 +80,13 @@ class DownloadTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->saveImage = $this->createMock(SaveImageInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->saveImage = $this->getMockForAbstractClass(SaveImageInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->context = $this->createMock(ActionContext::class);
-        $this->getAssetById = $this->createMock(GetAssetByIdInterface::class);
+        $this->getAssetById = $this->getMockForAbstractClass(GetAssetByIdInterface::class);
         $this->document = $this->createMock(Document::class);
 
-        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
         $attribute->expects($this->once())
             ->method('getValue')
             ->willReturn('https://url');
@@ -93,7 +95,7 @@ class DownloadTest extends TestCase
             ->method('getCustomAttribute')
             ->willReturn($attribute);
 
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(

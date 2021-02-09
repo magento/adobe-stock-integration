@@ -53,7 +53,7 @@ class TestConnectionTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->clientMock = $this->createMock(ClientInterface::class);
+        $this->clientMock = $this->getMockForAbstractClass(ClientInterface::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
         $this->stripTagsMock = $this->createMock(StripTags::class);
         $this->testConnection = $this->objectManager->getObject(
