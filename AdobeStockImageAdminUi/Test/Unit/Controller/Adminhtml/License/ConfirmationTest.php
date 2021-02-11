@@ -66,13 +66,13 @@ class ConfirmationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->clientInterfaceMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->context = $this->createMock(ActionContext::class);
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')
@@ -103,7 +103,7 @@ class ConfirmationTest extends TestCase
     public function testExecute(): void
     {
         /** @var LicenseConfirmationInterface|MockObject $confirmation */
-        $confirmation = $this->createMock(LicenseConfirmationInterface::class);
+        $confirmation = $this->getMockForAbstractClass(LicenseConfirmationInterface::class);
         $confirmation->expects($this->once())->method('getMessage')->willReturn('message');
         $confirmation->expects($this->once())->method('getCanLicense')->willReturn(true);
 

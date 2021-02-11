@@ -89,7 +89,7 @@ class SignInTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $urlBuilderMock = $this->createMock(UrlInterface::class);
+        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturn(self::PROFILE_URL);
@@ -97,12 +97,12 @@ class SignInTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($urlBuilderMock);
-        $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
-        $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
-        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->userAuthorizedMock = $this->getMockForAbstractClass(UserAuthorizedInterface::class);
+        $this->userProfileRepositoryMock = $this->getMockForAbstractClass(UserProfileRepositoryInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->jsonHexTag = $this->objectManager->getObject(JsonHexTag::class);
-        $this->configProviderMock = $this->createMock(ConfigProviderInterface::class);
+        $this->configProviderMock = $this->getMockForAbstractClass(ConfigProviderInterface::class);
         $this->configMock->expects($this->once())
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);

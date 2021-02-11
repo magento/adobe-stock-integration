@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * RelatedImages test.
+ * Test for RelatedImages class
  */
 class RelatedImagesTest extends TestCase
 {
@@ -65,13 +66,13 @@ class RelatedImagesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->getRelatedImages = $this->createMock(GetRelatedImagesInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->getRelatedImages = $this->getMockForAbstractClass(GetRelatedImagesInterface::class);
         $this->context = $this->createMock(ActionContext::class);
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->context->expects($this->once())
             ->method('getResultFactory')

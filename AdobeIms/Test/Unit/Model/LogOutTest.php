@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * LogOut test.
+ * Test for Logout
  */
 class LogOutTest extends TestCase
 {
@@ -76,11 +77,12 @@ class LogOutTest extends TestCase
     protected function setUp(): void
     {
         $this->curlFactoryMock = $this->createMock(CurlFactory::class);
-        $this->userProfileInterfaceMock = $this->createMock(UserProfileInterface::class);
-        $this->userProfileRepositoryInterfaceMock = $this->createMock(UserProfileRepositoryInterface::class);
-        $this->userContextInterfaceMock = $this->createMock(UserContextInterface::class);
-        $this->configInterfaceMock = $this->createMock(ConfigInterface::class);
-        $this->loggerInterfaceMock = $this->createMock(LoggerInterface::class);
+        $this->userProfileInterfaceMock = $this->getMockForAbstractClass(UserProfileInterface::class);
+        $this->userProfileRepositoryInterfaceMock = $this
+            ->getMockForAbstractClass(UserProfileRepositoryInterface::class);
+        $this->userContextInterfaceMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->configInterfaceMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->loggerInterfaceMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->model = new LogOut(
             $this->userContextInterfaceMock,
             $this->userProfileRepositoryInterfaceMock,
@@ -123,7 +125,7 @@ class LogOutTest extends TestCase
         $this->userProfileRepositoryInterfaceMock->expects($this->once())
             ->method('save')
             ->willReturn(null);
-        $this->assertEquals(true, $this->model->execute());
+        $this->assertTrue($this->model->execute());
     }
 
     /**
@@ -154,7 +156,7 @@ class LogOutTest extends TestCase
             ->willReturn(self::HTTP_ERROR);
         $this->loggerInterfaceMock->expects($this->once())
              ->method('critical');
-        $this->assertEquals(false, $this->model->execute());
+        $this->assertFalse($this->model->execute());
     }
 
     /**

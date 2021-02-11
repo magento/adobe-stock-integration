@@ -49,7 +49,7 @@ class StockFileToDocumentTest extends TestCase
 
         $this->documentFactory = $this->createMock(DocumentFactory::class);
         $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->stockFileToDocument = $this->objectManager->getObject(
             StockFileToDocument::class,

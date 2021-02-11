@@ -46,7 +46,7 @@ class OrientationTest extends TestCase
     public function testApplyWithPanoramicValue(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->createMock(SearchParameters::class);
         $filterGroupItemMock = $this->createMock(FilterGroup::class);
@@ -78,7 +78,7 @@ class OrientationTest extends TestCase
     public function testApplyWithoutPanoramicValue(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->createMock(SearchParameters::class);
         $filterGroupItemMock = $this->createMock(FilterGroup::class);

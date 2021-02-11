@@ -41,8 +41,8 @@ class GetAccessTokenTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->userContext = $this->createMock(UserContextInterface::class);
-        $this->userProfile = $this->createMock(UserProfileRepositoryInterface::class);
+        $this->userContext = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userProfile = $this->getMockForAbstractClass(UserProfileRepositoryInterface::class);
 
         $this->getAccessToken = new GetAccessToken(
             $this->userContext,
@@ -59,7 +59,7 @@ class GetAccessTokenTest extends TestCase
     public function testExecute(?string $token): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(UserProfileInterface::class);
+        $userProfileMock = $this->getMockForAbstractClass(UserProfileInterface::class);
         $this->userProfile->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($userProfileMock);

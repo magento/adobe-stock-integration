@@ -47,10 +47,10 @@ class GetAssetByIdTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
-        $this->getAssetList = $this->createMock(GetAssetListInterface::class);
+        $this->getAssetList = $this->getMockForAbstractClass(GetAssetListInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
 
         $this->getAssetById = new GetAssetById(
@@ -75,7 +75,7 @@ class GetAssetByIdTest extends TestCase
             ->willReturn(
                 $this->createMock(SearchCriteria::class)
             );
-        $searchResultMock = $this->createMock(SearchResultInterface::class);
+        $searchResultMock = $this->getMockForAbstractClass(SearchResultInterface::class);
         $this->getAssetList->expects($this->once())
             ->method('execute')
             ->willReturn($searchResultMock);

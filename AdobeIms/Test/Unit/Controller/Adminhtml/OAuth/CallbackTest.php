@@ -26,6 +26,7 @@ use Magento\AdobeIms\Model\GetImage;
 
 /**
  * User repository test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CallbackTest extends TestCase
 {
@@ -106,10 +107,10 @@ class CallbackTest extends TestCase
         );
         $this->userMock = $this->createMock(User::class);
         $this->request = $this->createMock(Http::class);
-        $this->userProfileRepositoryInterface = $this->createMock(UserProfileRepositoryInterface::class);
+        $this->userProfileRepositoryInterface = $this->getMockForAbstractClass(UserProfileRepositoryInterface::class);
         $this->userProfileInterfaceFactory = $this->createMock(UserProfileInterfaceFactory::class);
-        $this->getTokenInterface = $this->createMock(GetTokenInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->getTokenInterface = $this->getMockForAbstractClass(GetTokenInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->getImage = $this->createMock(GetImage::class);
         $this->callback = new Callback(
             $this->context,
@@ -127,10 +128,10 @@ class CallbackTest extends TestCase
     public function testExecute(): void
     {
         $this->authMock->method('getUser')
-            ->will($this->returnValue($this->userMock));
+            ->willReturn($this->userMock);
         $this->userMock->method('getId')
             ->willReturn(1);
-        $userProfileMock = $this->createMock(UserProfileInterface::class);
+        $userProfileMock = $this->getMockForAbstractClass(UserProfileInterface::class);
         $this->getImage->expects($this->once())->method('execute')->willReturn('https://image.url/image.png');
         $this->userProfileRepositoryInterface->expects($this->exactly(1))
             ->method('getByUserId')

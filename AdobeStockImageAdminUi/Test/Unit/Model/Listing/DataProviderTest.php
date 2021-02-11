@@ -45,7 +45,7 @@ class DataProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getImageListMock = $this->createMock(GetImageListInterface::class);
+        $this->getImageListMock = $this->getMockForAbstractClass(GetImageListInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
         $this->dataProvider = (new ObjectManager($this))->getObject(
             DataProvider::class,
@@ -74,7 +74,7 @@ class DataProviderTest extends TestCase
             ->willReturn($searchCriteria);
 
         /** @var SearchResultInterface|MockObject $searchResult */
-        $searchResult = $this->createMock(SearchResultInterface::class);
+        $searchResult = $this->getMockForAbstractClass(SearchResultInterface::class);
 
         $this->getImageListMock->expects($this->once())
             ->method('execute')
@@ -153,7 +153,7 @@ class DataProviderTest extends TestCase
             $item = $this->createMock(Document::class);
             $attributes = [];
             foreach ($itemData as $key => $value) {
-                $attribute = $this->createMock(AttributeInterface::class);
+                $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
                 $attribute->expects($this->once())
                     ->method('getAttributeCode')
                     ->willReturn($key);
@@ -168,7 +168,7 @@ class DataProviderTest extends TestCase
             $items[] = $item;
         }
         /** @var SearchResultInterface|MockObject $searchResult */
-        $searchResult = $this->createMock(SearchResultInterface::class);
+        $searchResult = $this->getMockForAbstractClass(SearchResultInterface::class);
         $searchResult->expects($this->once())
             ->method('getItems')
             ->willReturn($items);

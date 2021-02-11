@@ -25,6 +25,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Connection wrapper test.
+ * Test for ConnectionWrapper class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConnectionWrapperTest extends TestCase
 {
@@ -79,13 +81,13 @@ class ConnectionWrapperTest extends TestCase
     protected function setUp(): void
     {
         $this->connectionFactory = $this->createMock(ConnectionFactory::class);
-        $this->configInterface = $this->createMock(ConfigInterface::class);
+        $this->configInterface = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->imsConfig = $this->createMock(ImsConfig::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->getAccessToken = $this->createMock(GetAccessTokenInterface::class);
-        $this->flushToken = $this->createMock(FlushUserTokensInterface::class);
-        $this->httpInterface = $this->createMock(HttpInterface::class);
-        $this->adobeStockMock = $adobeStockMock = $this->createMock(AdobeStock::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->getAccessToken = $this->getMockForAbstractClass(GetAccessTokenInterface::class);
+        $this->flushToken = $this->getMockForAbstractClass(FlushUserTokensInterface::class);
+        $this->httpInterface = $this->getMockForAbstractClass(HttpInterface::class);
+        $this->adobeStockMock = $this->createMock(AdobeStock::class);
         $this->connectionFactory->expects($this->once())->method('create')->willReturn($this->adobeStockMock);
         $this->configInterface->expects($this->once())->method('getProductName')->willReturn('name');
         $this->configInterface->expects($this->once())->method('getTargetEnvironment')->willReturn('target');
@@ -112,7 +114,7 @@ class ConnectionWrapperTest extends TestCase
         $this->adobeStockMock->expects($this->exactly(1))
             ->method('getNextResponse')
             ->willReturn($nextResponse);
-        $this->assertEquals(true, $this->connectionWrapper->testApiKey('kjhafdaeriuyapikey'));
+        $this->assertTrue($this->connectionWrapper->testApiKey('kjhafdaeriuyapikey'));
     }
 
     /**

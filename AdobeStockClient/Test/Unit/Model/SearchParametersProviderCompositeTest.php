@@ -41,7 +41,7 @@ class SearchParametersProviderCompositeTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->searchParametersProviderMock =  $this->createMock(SearchParameterProviderInterface::class);
+        $this->searchParametersProviderMock =  $this->getMockForAbstractClass(SearchParameterProviderInterface::class);
         $this->searchParametersProviderComposite = $this->objectManager->getObject(
             SearchParametersProviderComposite::class,
             [
@@ -56,7 +56,7 @@ class SearchParametersProviderCompositeTest extends TestCase
     public function testApply(): void
     {
         /** @var SearchCriteriaInterface $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters $searchParamsMock */
         $searchParamsMock = $this->createMock(SearchParameters::class);
         $this->searchParametersProviderMock->expects($this->once())

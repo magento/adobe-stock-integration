@@ -46,7 +46,7 @@ class ContentTypeTest extends TestCase
     public function testApplyWithValuePhoto(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->createMock(SearchParameters::class);
         $filterGroupItemMock = $this->createMock(FilterGroup::class);
@@ -73,7 +73,7 @@ class ContentTypeTest extends TestCase
     public function testApplyWithValueIllustration(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->createMock(SearchParameters::class);
         $filterGroupItemMock = $this->createMock(FilterGroup::class);
