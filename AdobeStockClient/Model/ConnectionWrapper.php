@@ -128,6 +128,9 @@ class ConnectionWrapper
         if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
             return new AuthenticationException(__('Adobe API Key is invalid!'));
         }
+        if (strpos($exception->getMessage(), 'Api Key is required') !== false) {
+            return new AuthenticationException(__('Adobe Api Key is required!'));
+        }
         if (strpos($exception->getMessage(), 'Oauth token is not valid') !== false) {
             $this->flushUserTokens->execute();
             return new AuthorizationException(__('Adobe API login has expired!'));
