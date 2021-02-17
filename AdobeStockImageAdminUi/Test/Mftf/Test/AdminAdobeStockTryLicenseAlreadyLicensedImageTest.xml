@@ -28,8 +28,10 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="AdminAdobeStockImsConditionLogoutActionGroup" stepKey="ensureUserNotLogged"/>
         <actionGroup ref="AdminAdobeStockClickSignInActionGroup" stepKey="clickOnSignIn"/>
