@@ -40,8 +40,8 @@ class FlushUserTokensTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->userContext = $this->createMock(UserContextInterface::class);
-        $this->userProfileRepository = $this->createMock(UserProfileRepositoryInterface::class);
+        $this->userContext = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userProfileRepository = $this->getMockForAbstractClass(UserProfileRepositoryInterface::class);
 
         $this->flushTokens = new FlushUserTokens(
             $this->userContext,
@@ -55,7 +55,7 @@ class FlushUserTokensTest extends TestCase
     public function testExecute(): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);
-        $userProfileMock = $this->createMock(UserProfileInterface::class);
+        $userProfileMock = $this->getMockForAbstractClass(UserProfileInterface::class);
         $this->userProfileRepository->expects($this->exactly(1))
             ->method('getByUserId')
             ->willReturn($userProfileMock);

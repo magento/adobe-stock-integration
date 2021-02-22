@@ -58,8 +58,8 @@ class QuotaTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->clientInterfaceMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->context = $this->createMock(ActionContext::class);
         $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
         $this->context->expects($this->once())
@@ -82,7 +82,7 @@ class QuotaTest extends TestCase
     public function testExecute(): void
     {
         /** @var UserQuotaInterface|MockObject $quota */
-        $quota = $this->createMock(UserQuotaInterface::class);
+        $quota = $this->getMockForAbstractClass(UserQuotaInterface::class);
         $quota->expects($this->once())->method('getImages')->willReturn(2);
         $quota->expects($this->once())->method('getCredits')->willReturn(1);
 

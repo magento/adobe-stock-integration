@@ -65,7 +65,7 @@ class WordsTest extends TestCase
     public function testApplyWithRequestValue(string $requestValue, string $encodedValue): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->createMock(SearchParameters::class);
         $filterGroupMock = $this->createMock(FilterGroup::class);
@@ -101,7 +101,7 @@ class WordsTest extends TestCase
     public function testApplyWithoutWordsField(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->createMock(SearchParameters::class);
         $filterGroupMock = $this->createMock(FilterGroup::class);
@@ -134,7 +134,7 @@ class WordsTest extends TestCase
     public function testApplyWithEmptyWords(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->createMock(SearchParameters::class);
         $filterGroupMock = $this->createMock(FilterGroup::class);
@@ -168,7 +168,7 @@ class WordsTest extends TestCase
     public function testApplyWithOnlyQuotes(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParamsMock */
         $searchParamsMock = $this->createMock(SearchParameters::class);
         $filterGroupMock = $this->createMock(FilterGroup::class);

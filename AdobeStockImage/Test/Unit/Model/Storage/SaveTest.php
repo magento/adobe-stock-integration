@@ -84,7 +84,7 @@ class SaveTest extends TestCase
         $this->mediaDirectoryMock->expects($this->once())
             ->method('isExist')
             ->withAnyParameters()
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->httpsDriverMock->expects($this->once())
             ->method('fileGetContents')
             ->willReturn('content');
@@ -114,7 +114,7 @@ class SaveTest extends TestCase
         $this->mediaDirectoryMock->expects($this->once())
             ->method('isExist')
             ->withAnyParameters()
-            ->will($this->returnValue(['240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg']));
+            ->willReturn(['240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg']);
 
         $this->httpsDriverMock->expects($this->never())
              ->method('fileGetContents');

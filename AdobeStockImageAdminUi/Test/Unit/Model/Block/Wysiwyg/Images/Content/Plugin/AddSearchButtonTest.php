@@ -47,9 +47,9 @@ class AddSearchButtonTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layoutInterface = $this->createMock(LayoutInterface::class);
+        $this->layoutInterface = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->isAdobeStockIntegrationEnabledMock = $this->createMock(IsAdobeStockIntegrationEnabled::class);
-        $this->authorization = $this->createMock(AuthorizationInterface::class);
+        $this->authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
 
         $this->addSearchButton = (new ObjectManager($this))->getObject(
             AddSearchButton::class,

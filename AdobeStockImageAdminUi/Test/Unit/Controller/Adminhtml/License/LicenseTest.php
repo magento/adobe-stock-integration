@@ -24,6 +24,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * License test.
+ * Test for License class
  */
 class LicenseTest extends TestCase
 {
@@ -72,12 +73,12 @@ class LicenseTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientInterfaceMock = $this->createMock(ClientInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->clientInterfaceMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->contextMock = $this->createMock(ActionContext::class);
         $this->contextMock = $this->createPartialMock(ActionContext::class, ['getRequest', 'getResultFactory']);
-        $this->saveLicensedImageMock = $this->createMock(SaveLicensedImageInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->saveLicensedImageMock = $this->getMockForAbstractClass(SaveLicensedImageInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultFactoryMock = $this->createMock(ResultFactory::class);
         $this->jsonObject = $this->createMock(Json::class);
 

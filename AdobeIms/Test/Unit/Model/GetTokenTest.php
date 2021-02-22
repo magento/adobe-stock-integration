@@ -65,11 +65,11 @@ class GetTokenTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->tokenResponseFactoryMock = $this->createMock(TokenResponseInterfaceFactory::class);
-        $this->url = $this->createMock(UrlInterface::class);
+        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->getToken = new GetToken(
             $this->configMock,
             $this->curlFactoryMock,

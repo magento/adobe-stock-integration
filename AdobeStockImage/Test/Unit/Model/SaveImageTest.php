@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Test for Save image model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveImageTest extends TestCase
 {
@@ -86,13 +87,13 @@ class SaveImageTest extends TestCase
     {
         $this->storageSave = $this->createMock(StorageSave::class);
         $this->storageDelete = $this->createMock(StorageDelete::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->saveMediaAsset = $this->createMock(SaveInterface::class);
-        $this->saveAdobeStockAsset = $this->createMock(SaveAssetInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->saveMediaAsset = $this->getMockForAbstractClass(SaveInterface::class);
+        $this->saveAdobeStockAsset = $this->getMockForAbstractClass(SaveAssetInterface::class);
         $this->documentToMediaGalleryAsset = $this->createMock(DocumentToMediaGalleryAsset::class);
         $this->documentToAsset = $this->createMock(DocumentToAsset::class);
         $this->documentToKeywords = $this->createMock(DocumentToKeywords::class);
-        $this->saveAssetKeywords = $this->createMock(SaveAssetKeywordsInterface::class);
+        $this->saveAssetKeywords = $this->getMockForAbstractClass(SaveAssetKeywordsInterface::class);
 
         $this->saveImage = (new ObjectManager($this))->getObject(
             SaveImage::class,
@@ -186,7 +187,7 @@ class SaveImageTest extends TestCase
     private function getDocument(?string $path = null): MockObject
     {
         $document = $this->createMock(Document::class);
-        $pathAttribute = $this->createMock(AttributeInterface::class);
+        $pathAttribute = $this->getMockForAbstractClass(AttributeInterface::class);
         $pathAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn($path);

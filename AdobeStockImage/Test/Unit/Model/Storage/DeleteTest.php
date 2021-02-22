@@ -49,7 +49,7 @@ class DeleteTest extends TestCase
     protected function setUp(): void
     {
         $this->fileSystemMock = $this->createMock(Filesystem::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Write::class);
 
         $this->delete = (new ObjectManager($this))->getObject(

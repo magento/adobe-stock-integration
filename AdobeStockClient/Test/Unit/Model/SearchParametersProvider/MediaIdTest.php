@@ -46,7 +46,7 @@ class MediaIdTest extends TestCase
     public function testApply(): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         /** @var SearchParameters|MockObject $searchParameters */
         $searchParameters = $this->createMock(SearchParameters::class);
         $filterGroupItemMock = $this->createMock(FilterGroup::class);

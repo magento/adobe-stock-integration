@@ -56,7 +56,7 @@ class UserProfileRepositoryTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->resource = $this->createMock(ResourceUserProfile::class);
         $this->entityFactory =  $this->createMock(UserProfileInterfaceFactory::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->model = new UserProfileRepository(
             $this->resource,
             $this->entityFactory,

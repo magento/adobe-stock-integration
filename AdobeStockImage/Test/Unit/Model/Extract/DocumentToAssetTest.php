@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Document to asset test.
+ * Test for AdobeStockAsset
  */
 class DocumentToAssetTest extends TestCase
 {
@@ -79,9 +80,9 @@ class DocumentToAssetTest extends TestCase
         Document $document,
         array $additionalData
     ): void {
-        $asset = $this->createMock(AssetInterface::class);
-        $creator = $this->createMock(CreatorInterface::class);
-        $category = $this->createMock(CategoryInterface::class);
+        $asset = $this->getMockForAbstractClass(AssetInterface::class);
+        $creator = $this->getMockForAbstractClass(CreatorInterface::class);
+        $category = $this->getMockForAbstractClass(CategoryInterface::class);
 
         $assetData['category'] = $category;
         $assetData['creator'] = $creator;
@@ -152,7 +153,7 @@ class DocumentToAssetTest extends TestCase
         $attributeMocks = [];
 
         foreach ($attributes as $key => $value) {
-            $attribute = $this->createMock(AttributeInterface::class);
+            $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
             $attribute->expects($this->any())
                 ->method('getAttributeCode')
                 ->willReturn($key);

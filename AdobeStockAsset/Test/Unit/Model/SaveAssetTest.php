@@ -58,13 +58,13 @@ class SaveAssetTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $this->assetRepository = $this->createMock(AssetRepositoryInterface::class);
-        $this->creatorRepository = $this->createMock(CreatorRepositoryInterface::class);
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-        $this->dataExtractor = $this->createMock(DataExtractorInterface::class);
+        $this->assetRepository = $this->getMockForAbstractClass(AssetRepositoryInterface::class);
+        $this->creatorRepository = $this->getMockForAbstractClass(CreatorRepositoryInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->dataExtractor = $this->getMockForAbstractClass(DataExtractorInterface::class);
 
         $this->saveAsset = (new ObjectManager($this))->getObject(
             SaveAsset::class,
@@ -93,14 +93,14 @@ class SaveAssetTest extends TestCase
             'creator_id' => $creatorId
         ];
 
-        $asset = $this->createMock(AssetInterface::class);
+        $asset = $this->getMockForAbstractClass(AssetInterface::class);
 
         $this->dataExtractor->expects($this->once())
             ->method('extract')
             ->with($asset, AssetInterface::class)
             ->willReturn($data);
 
-        $categoryMock = $this->createMock(CategoryInterface::class);
+        $categoryMock = $this->getMockForAbstractClass(CategoryInterface::class);
         $categoryMock->expects($this->once())->method('getId')
             ->willReturn($categoryId);
         $asset->expects($this->once())
@@ -110,7 +110,7 @@ class SaveAssetTest extends TestCase
             ->with($categoryMock)
             ->willReturn($categoryMock);
 
-        $creatorInterface = $this->createMock(CreatorInterface::class);
+        $creatorInterface = $this->getMockForAbstractClass(CreatorInterface::class);
         $creatorInterface->expects($this->once())
             ->method('getId')
             ->willReturn($creatorId);
@@ -122,7 +122,7 @@ class SaveAssetTest extends TestCase
             ->with($creatorInterface)
             ->willReturn($creatorInterface);
 
-        $finalAsset = $this->createMock(AssetInterface::class);
+        $finalAsset = $this->getMockForAbstractClass(AssetInterface::class);
 
         $this->assetFactory->expects($this->once())
             ->method('create')
