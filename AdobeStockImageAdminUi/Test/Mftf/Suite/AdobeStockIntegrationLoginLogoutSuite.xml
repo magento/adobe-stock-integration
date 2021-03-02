@@ -18,13 +18,11 @@
             <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="AdminAdobeStockImsConditionLogoutActionGroup" stepKey="ensureUserNotLogged"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </before>
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <include>
             <group name="adobe_stock_integration_login_logout"/>
