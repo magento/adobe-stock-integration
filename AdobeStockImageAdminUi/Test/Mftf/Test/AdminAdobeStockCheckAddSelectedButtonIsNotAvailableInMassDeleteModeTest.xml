@@ -11,9 +11,9 @@
     <test name="AdminAdobeStockCheckAddSelectedButtonIsNotAvailableInMassDeleteModeTest">
         <annotations>
             <features value="AdobeStockImagePanel"/>
-            <stories value="User sees the option to add the image into the content is not active when several images selected"/>
+            <stories value="Add selected button is not visible in mass delete mode"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/461"/>
-            <title value="Check that add selected button is not"/>
+            <title value="User sees the option to add the image into the content is not active when several images selected"/>
             <description value="Check that several images can not be added in mass delete mode"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/3962866"/>
             <severity value="MAJOR"/>
@@ -21,26 +21,22 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4"/>
         </before>
         <after>
             <!-- Delete images -->
-            <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryAssertImagesDeletedInBulkActionGroup" stepKey="assertImagesDeleted">
-                <argument name="numberOfAssetsDeleted" value="2"/>
-            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
 
             <!-- Disable WYSIWYG -->
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
 
-            <!-- Logout admin -->
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Logout from admin panel -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <!-- Create a CMS page containing-->
-        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+        <!-- Create a new CMS page -->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewCmsPage"/>
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
 
         <!-- Clear filter-->
