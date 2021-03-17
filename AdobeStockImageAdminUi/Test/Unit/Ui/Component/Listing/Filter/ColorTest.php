@@ -88,10 +88,10 @@ class ColorTest extends TestCase
      *
      * @param array $data
      * @param ContextInterface $context
-     * @param array $filderData
+     * @param array $filterData
      * @return Color
      */
-    private function createObject(array $data, ContextInterface $context, array $filderData): Color
+    private function createObject(array $data, ContextInterface $context, array $filterData): Color
     {
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
@@ -103,7 +103,7 @@ class ColorTest extends TestCase
         );
         $bookmarkContextMock->expects($this->once())
             ->method('getFilterData')
-            ->willReturn($filderData);
+            ->willReturn($filterData);
 
         return new Color(
             $context,
