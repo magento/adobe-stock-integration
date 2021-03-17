@@ -9,7 +9,7 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdobeStockStandaloneMediaGalleryPaginationTest">
         <annotations>
-            <features value="AdobeStockImagePanel"/>
+            <features value="AdobeStockImageAdminUi"/>
             <stories value="User chooses the number of images to display on the page"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/832"/>
             <title value="User uses pagination to navigate through the images in Standalone Media Gallery"/>
@@ -21,8 +21,6 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
-            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
-            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstImage">
                 <argument name="image" value="ImageUpload"/>
             </actionGroup>
@@ -41,6 +39,7 @@
             <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImagesAfterTest"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
 
         <!-- Assert that Admin user sees 32 images per page -->
         <actionGroup ref="AdminAssertGridRecordsPerPageNumberActionGroup" stepKey="checkDefaultPerPageVelue"/>
@@ -48,7 +47,7 @@
 
         <!-- User change the per page to custom value and applies it  -->
         <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="selectCustomPerPage">
-            <argument name="perPage" value="GridCountPerPageData.countPerPage1"/>
+            <argument name="perPage" value="GridCountPerPageData.customCountPerPage"/>
         </actionGroup>
         <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="assertFirstPageNumber"/>
 
