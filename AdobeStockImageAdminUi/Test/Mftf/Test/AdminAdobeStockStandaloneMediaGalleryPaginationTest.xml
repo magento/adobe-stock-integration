@@ -35,6 +35,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryToResetGrid"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImagesAfterTest"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
