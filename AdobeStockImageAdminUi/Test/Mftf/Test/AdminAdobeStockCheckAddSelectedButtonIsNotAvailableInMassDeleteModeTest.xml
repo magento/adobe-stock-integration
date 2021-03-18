@@ -20,16 +20,16 @@
             <group value="adobe_stock_media_gallery"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <!-- Delete images -->
-            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
-
             <!-- Disable WYSIWYG -->
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+
+            <!-- Delete images -->
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
 
             <!-- Logout from admin panel -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
