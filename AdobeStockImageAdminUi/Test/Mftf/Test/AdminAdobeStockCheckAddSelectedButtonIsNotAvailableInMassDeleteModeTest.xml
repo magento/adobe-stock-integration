@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockCheckAddSelectedButtonIsNotAvailableInMassDeleteModeTest">
+        <annotations>
+            <features value="AdobeStockImageAdminUi"/>
+            <stories value="Add selected button is not visible in mass delete mode"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/461"/>
+            <title value="User sees the option to add the image into the content is not active when several images selected"/>
+            <description value="Check that several images can not be added in mass delete mode"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/3962866"/>
+            <severity value="MAJOR"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable WYSIWYG -->
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+
+            <!-- Delete images -->
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
+
+            <!-- Logout from admin panel -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Create a new CMS page -->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewCmsPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+
+        <!-- Clear filter-->
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+
+        <!-- Upload images -->
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+
+        <!-- Select images -->
+        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
+            <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
+        </actionGroup>
+
+        <!-- Assert that add selected button is not active -->
+        <dontSeeElement selector="{{AdminMediaGalleryHeaderButtonsSection.addSelected}}" stepKey="verifyAddSelectedButtonNotVisible"/>
+    </test>
+</tests>
