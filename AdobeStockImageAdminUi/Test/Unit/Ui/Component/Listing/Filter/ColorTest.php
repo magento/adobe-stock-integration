@@ -20,12 +20,13 @@ use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
 use Magento\Ui\View\Element\BookmarkContextInterface;
+use Magento\Ui\View\Element\BookmarkContextProviderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * ColorTest test.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)=
  */
 class ColorTest extends TestCase
 {
@@ -98,12 +99,18 @@ class ColorTest extends TestCase
         $this->filterModifier = $this->createMock(FilterModifier::class);
         $this->colorModesProvider = $this->createMock(ColorModesProvider::class);
 
+        $bookmarkContextProviderMock = $this->getMockForAbstractClass(
+            BookmarkContextProviderInterface::class
+        );
         $bookmarkContextMock = $this->getMockForAbstractClass(
             BookmarkContextInterface::class
         );
         $bookmarkContextMock->expects($this->once())
             ->method('getFilterData')
             ->willReturn($filterData);
+        $bookmarkContextProviderMock->expects($this->once())
+            ->method('getByUiContext')
+            ->willReturn($bookmarkContextMock);
 
         return new Color(
             $context,
@@ -113,7 +120,7 @@ class ColorTest extends TestCase
             $this->colorModesProvider,
             [],
             $data,
-            $bookmarkContextMock
+            $bookmarkContextProviderMock
         );
     }
 
