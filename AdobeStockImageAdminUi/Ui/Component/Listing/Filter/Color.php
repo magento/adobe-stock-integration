@@ -17,7 +17,7 @@ use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Ui\Component\Form\Element\ColorPicker;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
-use Magento\Ui\View\Element\BookmarkContextInterface;
+use Magento\Ui\View\Element\BookmarkContextProviderInterface;
 
 /**
  * Color grid filter
@@ -42,7 +42,7 @@ class Color extends AbstractFilter
      * @param ColorModesProvider $modesProvider
      * @param array $components
      * @param array $data
-     * @param BookmarkContextInterface|null $bookmarkContext
+     * @param BookmarkContextProviderInterface|null $bookmarkContextProvider
      */
     public function __construct(
         ContextInterface $context,
@@ -52,7 +52,7 @@ class Color extends AbstractFilter
         ColorModesProvider $modesProvider,
         array $components = [],
         array $data = [],
-        BookmarkContextInterface $bookmarkContext = null
+        BookmarkContextProviderInterface $bookmarkContextProvider = null
     ) {
         $this->modesProvider = $modesProvider;
         parent::__construct(
@@ -62,7 +62,7 @@ class Color extends AbstractFilter
             $filterModifier,
             $components,
             $data,
-            $bookmarkContext
+            $bookmarkContextProvider
         );
     }
 
