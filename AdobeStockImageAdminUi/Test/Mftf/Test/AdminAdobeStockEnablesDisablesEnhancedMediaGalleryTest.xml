@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Enable Old Media Gallery -->
-            <magentoCLI command="config:set {{AdobeStockDisableNewMediaGallery.path}} {{AdobeStockDisableNewMediaGallery.value}}" stepKey="enabledOldMediaGallery"/>
+            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enabledOldMediaGallery"/>
 
             <!-- Clean cache -->
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
@@ -30,7 +30,7 @@
         </before>
         <after>
             <!-- Enable Old Media Gallery -->
-            <magentoCLI command="config:set {{AdobeStockDisableNewMediaGallery.path}} {{AdobeStockDisableNewMediaGallery.value}}" stepKey="enableOldMediaGallery"/>
+            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
 
             <!-- Enable Adobe Stock Integration -->
             <magentoCLI command="config:set {{AdobeStockIntegrationEnable.path}} {{AdobeStockIntegrationEnable.value}}" stepKey="enableAdobeStockIntegration"/>
@@ -39,12 +39,12 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Check to dont see media gallery button -->
-        <actionGroup ref="AdminOpenContentTabActionGroup" stepKey="openContentTab"/>
+        <actionGroup ref="AdminOpenContentMenuTabActionGroup" stepKey="openContentTab"/>
         <dontSeeElement selector="{{AdminMenuSection.menuItem('magento-mediagalleryui-media-gallery')}}" stepKey="dontSeeMediaGalleryMenuItem"/>
-        <actionGroup ref="AdminCloseContentTabActionGroup" stepKey="closeContentTab"/>
+        <actionGroup ref="AdminCloseContentMenuTabActionGroup" stepKey="closeContentTab"/>
 
         <!-- Disabled Old Media Gallery -->
-        <magentoCLI command="config:set {{AdobeStockEnableNewMediaGallery.path}} {{AdobeStockEnableNewMediaGallery.value}}" stepKey="disabledOldMediaGallery"/>
+        <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
 
         <!-- Disabled Adobe Stock Integration -->
         <magentoCLI command="config:set {{AdobeStockIntegrationDisable.path}} {{AdobeStockIntegrationDisable.value}}" stepKey="disableAdobeStockIntegration"/>
@@ -56,7 +56,7 @@
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!-- Check that media gallery button is available-->
-        <actionGroup ref="AdminOpenContentTabActionGroup" stepKey="openContentTabToCheckViewMediaGallery"/>
-        <seeElement selector="{{AdminMenuSection.menuItem('magento-mediagalleryui-media')}}" stepKey="checkIsMediaGalleryButtonVisible"/>
+        <actionGroup ref="AdminOpenContentMenuTabActionGroup" stepKey="openContentTabToCheckViewMediaGallery"/>
+        <seeElement selector="{{AdminMenuSection.menuItem('magento-mediagalleryui-media')}}" stepKey="checkIsMediaGalleryMenuItemVisible"/>
     </test>
 </tests>
