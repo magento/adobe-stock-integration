@@ -17,7 +17,7 @@
         <column xsi:type="text" name="refresh_token" nullable="true" comment="Refresh Token"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
-        <column xsi:type="timestamp" name="access_token_expires_at" on_update="false" nullable="false" comment="Access Token Expires At"/>
+        <column xsi:type="timestamp" name="access_token_expires_at" on_update="false" nullable="false" default="0" comment="Access Token Expires At"/>
         <index referenceId="ADOBE_USER_PROFILE_ID" indexType="btree">
             <column name="id"/>
         </index>
