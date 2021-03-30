@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockStandaloneMediaGalleryPaginationTest">
+        <annotations>
+            <features value="AdobeStockImageAdminUi"/>
+            <stories value="User chooses the number of images to display on the page"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/832"/>
+            <title value="User uses pagination to navigate through the images in Standalone Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503657"/>
+            <description value="Admin should be able to chooses the number of images to display on the page"/>
+            <severity value="BLOCKER"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstImage">
+                <argument name="image" value="ImageUpload"/>
+            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+                <argument name="image" value="ImageUpload1"/>
+            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadThirdImage">
+                <argument name="image" value="ImageUpload_1"/>
+            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFourthImage">
+                <argument name="image" value="ImageUpload3"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryToResetGrid"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImagesAfterTest"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+
+        <!-- Assert that Admin user sees 32 images per page -->
+        <actionGroup ref="AdminAssertGridRecordsPerPageNumberActionGroup" stepKey="checkDefaultPerPageVelue"/>
+        <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="assertCurrentPageNumber"/>
+
+        <!-- User change the per page to custom value and applies it  -->
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="selectCustomPerPage">
+            <argument name="perPage" value="GridCountPerPageData.customCountPerPage"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="assertFirstPageNumber"/>
+
+        <!-- User clicks to the next page of results -->
+        <actionGroup ref="AdminGridGoToNextPageActionGroup" stepKey="goToNextGridPage"/>
+        <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="assertSecondPageNumber">
+            <argument name="expectedCurrentPageNumber" value="{{GridPageNumberData.page2}}"/>
+        </actionGroup>
+
+        <!-- User change the page number to custom value -->
+        <actionGroup ref="AdminGridGoToCustomPageNumberActionGroup" stepKey="goToFourthPage">
+            <argument name="pageNumber" value="{{GridPageNumberData.page4}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="assertFourthPageNumber">
+            <argument name="expectedCurrentPageNumber" value="{{GridPageNumberData.page4}}"/>
+        </actionGroup>
+    </test>
+</tests>
