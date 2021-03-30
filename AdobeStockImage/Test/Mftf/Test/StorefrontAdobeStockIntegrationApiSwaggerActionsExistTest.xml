@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdobeStockIntegrationApiSwaggerActionsExistTest">
+        <annotations>
+            <features value="AdobeStockImage"/>
+            <stories value="Adobe Stock API actions"/>
+            <title value="User sees Adobe Stock actions from API"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1051731/scenarios/4297030"/>
+            <description value="Adobe stock actions are available on the Swagger page"/>
+            <severity value="CRITICAL"/>
+        </annotations>
+        <before>
+            <getOTP stepKey="getOtpCode"/>
+            <createData entity="adminApiToken" stepKey="createAdminToken">
+                <field key="otp">{$getOtpCode}</field>
+            </createData>
+        </before>
+        <after></after>
+        <actionGroup ref="StorefrontGoToSwaggerPageActionGroup" stepKey="goToSwaggerPage"/>
+        <actionGroup ref="StorefrontApplyAdminTokenOnSwaggerPageActionGroup" stepKey="applyAdminToken">
+            <argument name="token" value="$createAdminToken.return$"/>
+        </actionGroup>
+        <seeElement selector="{{SwaggerApiListSection.swaggerActionTitle('adobeStockAssetApiAssetRepositoryV1')}}" stepKey="assertTitleOfFirtsAction"/>
+        <seeElement selector="{{SwaggerApiListSection.swaggerActionTitle('adobeStockImageApiGetImageListV1')}}" stepKey="assertTitleOfSecondAction"/>
+        <seeElement selector="{{SwaggerApiListSection.swaggerActionTitle('adobeStockAssetApiGetAssetListV1')}}" stepKey="assertTitleOfThirdAction"/>
+    </test>
+</tests>
