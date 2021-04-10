@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockEnablesDisablesEnhancedMediaGalleryTest">
+        <annotations>
+            <features value="AdobeStockImageAdminUi"/>
+            <stories value="Enables and disables Enhanced Media Gallery"/>
+            <title value="User enables and disables Enhanced Media Gallery and Adobe Stock Integration"/>
+            <description value="User enables and disables Enhanced Media Gallery and Adobe Stock Integration"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1326"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4847771"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_integration"/>
+        </annotations>
+        <before>
+            <!-- Enable Old Media Gallery -->
+            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enabledOldMediaGallery"/>
+
+            <!-- Clean cache -->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config block_html"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Enable Old Media Gallery -->
+            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
+
+            <!-- Enable Adobe Stock Integration -->
+            <magentoCLI command="config:set {{AdobeStockIntegrationEnable.path}} {{AdobeStockIntegrationEnable.value}}" stepKey="enableAdobeStockIntegration"/>
+
+            <!-- Logout From Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Check to dont see media gallery button -->
+        <actionGroup ref="AdminOpenContentMenuTabActionGroup" stepKey="openContentTab"/>
+        <dontSeeElement selector="{{AdminMenuSection.menuItem('magento-mediagalleryui-media-gallery')}}" stepKey="dontSeeMediaGalleryMenuItem"/>
+        <actionGroup ref="AdminCloseContentMenuTabActionGroup" stepKey="closeContentTab"/>
+
+        <!-- Disabled Old Media Gallery -->
+        <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
+
+        <!-- Disabled Adobe Stock Integration -->
+        <magentoCLI command="config:set {{AdobeStockIntegrationDisable.path}} {{AdobeStockIntegrationDisable.value}}" stepKey="disableAdobeStockIntegration"/>
+
+        <!-- Clean cache -->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanConfigCache">
+            <argument name="tags" value="config block_html"/>
+        </actionGroup>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+
+        <!-- Check that media gallery button is available-->
+        <actionGroup ref="AdminOpenContentMenuTabActionGroup" stepKey="openContentTabToCheckViewMediaGallery"/>
+        <seeElement selector="{{AdminMenuSection.menuItem('magento-mediagalleryui-media')}}" stepKey="checkIsMediaGalleryMenuItemVisible"/>
+    </test>
+</tests>

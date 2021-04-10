@@ -23,4 +23,14 @@
         <data key="path">adobe_ims/integration/private_key</data>
         <data key="value">{{_CREDS.magento/adobe_stock_private_key}}</data>
     </entity>
+    <entity name="AdobeStockIntegrationEnable">
+        <data key="path">system/adobe_stock_integration/enabled</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdobeStockIntegrationDisable">
+        <data key="path">system/adobe_stock_integration/enabled</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
 </entities>
