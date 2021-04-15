@@ -24,6 +24,7 @@
             <actionGroup ref="AdminAdobeStockSetConfigActionGroup" stepKey="setCorrectModuleConfig"/>
         </before>
         <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
             <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
             <waitForPageLoad stepKey="waitForRolesGridLoad" />
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
