@@ -13,6 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Used to load an Adobe Stock asset creator filtered by id
+ * @api
  */
 interface LoadByIdInterface
 {
