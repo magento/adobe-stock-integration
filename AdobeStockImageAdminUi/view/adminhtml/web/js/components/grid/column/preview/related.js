@@ -59,7 +59,7 @@ define([
                     this.disableTabsKeyDownEvent();
                 }.bind(this), 100);
             } else {
-                $(this.tabsContainerId + ' li[role=tab]').unbind('keydown');
+                $(this.tabsContainerId + ' li[role=tab]').off('keydown');
             }
         },
 
