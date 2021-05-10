@@ -8,22 +8,22 @@
     <div class="container">
         <div class="action-buttons preview-buttons">
             <button class="action-previous" type="button" disable="$col.cannotViewPrevious($row())" click="$col.prev.bind($col, $row())">
-                <span translate="'Previous'"/>
+                <span translate="'Previous'"></span>
             </button>
             <button class="action-next" type="button" disable="$col.cannotViewNext($row())" click="$col.next.bind($col, $row())">
-                <span translate="'Next'"/>
+                <span translate="'Next'"></span>
             </button>
             <button class="action-close" type="button" click="$col.hide.bind($col)">
-                <span translate="'Close'"/>
+                <span translate="'Close'"></span>
             </button>
         </div>
 
         <div class="preview-row-content">
             <img class="preview" attr="src: $col.displayedRecord().thumbnail_500_url, alt: $col.displayedRecord().title">
             <div class="info">
-                <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"/>
+                <h3 class="title" text="$col.displayedRecord().title" if="$col.displayedRecord().title"></h3>
                 <div class="author" if="$col.displayedRecord().creator_name">
-                    <span translate="'By'" /><span text="' ' + $col.displayedRecord().creator_name" />
+                    <span translate="'By'"></span><span text="' ' + $col.displayedRecord().creator_name" ></span>
                 </div>
 
                 <div class="actions">
@@ -37,20 +37,20 @@
         <div class="attributes" data-role="image-attributes-value">
             <each args="$col.getDisplayAttributes()">
                 <div class="attribute">
-                    <span class="title" translate="name"/>
+                    <span class="title" translate="name"></span>
                     <div class="value">
-                        <span text="value" />
+                        <span text="value"></span>
                     </div>
                 </div>
             </each>
         </div>
 
         <scope args="related">
-            <render args="getTemplate()" />
+            <render args="getTemplate()"></render>
         </scope>
 
         <div class="keywords-container" ko-scope="keywords">
-            <render args="getTemplate()" />
+            <render args="getTemplate()"></render>
         </div>
     </div>
 </div>
