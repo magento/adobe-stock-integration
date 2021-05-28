@@ -199,7 +199,7 @@ define([
         selectDisplayedImageForOldMediaGallery: function (path) {
             var image = mediaGallery.locate(path);
 
-            image ? image.click() : mediaGallery.notLocated();
+            image ? image.trigger('click') : mediaGallery.notLocated();
         },
 
         /**
