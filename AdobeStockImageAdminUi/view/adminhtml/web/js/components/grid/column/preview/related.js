@@ -59,7 +59,7 @@ define([
                     this.disableTabsKeyDownEvent();
                 }.bind(this), 100);
             } else {
-                $(this.tabsContainerId + ' li[role=tab]').unbind('keydown');
+                $(this.tabsContainerId + ' li[role=tab]').off('keydown');
             }
         },
 
@@ -127,6 +127,7 @@ define([
 
                 /* Switch to the model tab if the series tab is hidden */
                 if (relatedImages.series[record.id].length === 0 && relatedImages.model[record.id].length > 0) {
+                    // eslint-disable-next-line jquery-no-click-event-shorthand
                     $('#adobe-stock-tabs').data().mageTabs.select(1);
                 }
             }.bind(this));

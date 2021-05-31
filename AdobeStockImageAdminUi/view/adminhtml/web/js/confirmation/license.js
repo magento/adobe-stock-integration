@@ -74,7 +74,7 @@ define([
         });
 
         if (!data.visible) {
-            $('.adobe-stock-save-preview-prompt').focus();
+            $('.adobe-stock-save-preview-prompt').trigger('focus');
         }
 
         return deferred.promise();
