@@ -12,6 +12,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 
 /**
  * Used to delete an Adobe Stock asset creator filtered by id from data storage.
+ * @api
  */
 interface DeleteByIdInterface
 {
