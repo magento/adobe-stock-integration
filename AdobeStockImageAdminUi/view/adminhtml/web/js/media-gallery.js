@@ -63,7 +63,7 @@ define([
             }
 
             if (imageFolder.length) {
-                imageFolder[0].trigger('click');
+                imageFolder[0].click();
             }
 
             return imageFolder;
