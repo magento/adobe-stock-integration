@@ -19,12 +19,14 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
+use Magento\Ui\View\Element\BookmarkContextInterface;
+use Magento\Ui\View\Element\BookmarkContextProviderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * ColorTest test.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)=
  */
 class ColorTest extends TestCase
 {
@@ -87,14 +89,29 @@ class ColorTest extends TestCase
      *
      * @param array $data
      * @param ContextInterface $context
+     * @param array $filterData
      * @return Color
      */
-    private function createObject(array $data, ContextInterface $context): Color
+    private function createObject(array $data, ContextInterface $context, array $filterData): Color
     {
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->filterModifier = $this->createMock(FilterModifier::class);
         $this->colorModesProvider = $this->createMock(ColorModesProvider::class);
+
+        $bookmarkContextProviderMock = $this->getMockForAbstractClass(
+            BookmarkContextProviderInterface::class
+        );
+        $bookmarkContextMock = $this->getMockForAbstractClass(
+            BookmarkContextInterface::class
+        );
+        $bookmarkContextMock->expects($this->once())
+            ->method('getFilterData')
+            ->willReturn($filterData);
+        $bookmarkContextProviderMock->expects($this->once())
+            ->method('getByUiContext')
+            ->willReturn($bookmarkContextMock);
+
         return new Color(
             $context,
             $this->uiComponentFactory,
@@ -102,22 +119,19 @@ class ColorTest extends TestCase
             $this->filterModifier,
             $this->colorModesProvider,
             [],
-            $data
+            $data,
+            $bookmarkContextProviderMock
         );
     }
 
     /**
      * Get context
      *
-     * @param array $filterParams
-     * @return ContextInterface
+     * @return MockObject|ContextInterface
      */
-    private function getContext(array $filterParams): ContextInterface
+    private function getContext(): MockObject
     {
         $context = $this->createMock(ContextInterface::class);
-        $context->expects($this->once())
-            ->method('getFiltersParams')
-            ->willReturn($filterParams);
         $context->expects($this->any())
             ->method('getNamespace');
 
@@ -143,11 +157,7 @@ class ColorTest extends TestCase
     public function testPrepare(?string $colorPickerMode, string $appliedValue): void
     {
         $filter = $this->createMock(Filter::class);
-        $context = $this->getContext(
-            [
-                self::FILTER_NAME => $appliedValue
-            ]
-        );
+        $context = $this->getContext();
 
         $color = $this->createObject(
             [
@@ -156,7 +166,10 @@ class ColorTest extends TestCase
                 ],
                 'name' => self::FILTER_NAME
             ],
-            $context
+            $context,
+            [
+                self::FILTER_NAME => $appliedValue
+            ]
         );
 
         $this->uiComponentFactory->expects($this->once())
@@ -230,10 +243,12 @@ class ColorTest extends TestCase
     {
         return [
             [
-                'full', '#21ffff'
+                'full',
+                '#21ffff'
             ],
             [
-                null, '#ffffff'
+                null,
+                '#ffffff'
             ]
         ];
     }
