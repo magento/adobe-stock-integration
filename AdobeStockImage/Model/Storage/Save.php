@@ -51,7 +51,7 @@ class Save
      * @param string $imageUrl
      * @param string $destinationPath
      * @return string
-     * @throws AlreadyExistsException | InvalidArgumentException
+     * @throws AlreadyExistsException | LengthException
      * @throws FileSystemException
      */
     public function execute(string $imageUrl, string $destinationPath = '') : string
