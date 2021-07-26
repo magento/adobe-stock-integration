@@ -20,6 +20,8 @@ use Magento\Framework\Filesystem\DriverInterface;
  */
 class Save
 {
+    private const MAX_LENGTH = 255;
+
     /**
      * @var Filesystem
      */
@@ -49,12 +51,19 @@ class Save
      * @param string $imageUrl
      * @param string $destinationPath
      * @return string
-     * @throws AlreadyExistsException
+     * @throws AlreadyExistsException | InvalidArgumentException
      * @throws FileSystemException
      */
     public function execute(string $imageUrl, string $destinationPath = '') : string
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $maxFilenameLength = self::MAX_LENGTH;
+
+        if (strlen($destinationPath) > $maxFilenameLength) {
+            throw new \LengthException(
+                __('Destination path is too long; must be %1 characters or less', $maxFilenameLength)
+            );
+        }
 
         if ($mediaDirectory->isExist($destinationPath)) {
             throw new AlreadyExistsException(__('Image with the same file name already exits.'));
