@@ -51,7 +51,7 @@ class Save
      * @param string $imageUrl
      * @param string $destinationPath
      * @return string
-     * @throws AlreadyExistsException | LengthException
+     * @throws AlreadyExistsException
      * @throws FileSystemException
      */
     public function execute(string $imageUrl, string $destinationPath = '') : string
@@ -60,7 +60,7 @@ class Save
         $maxFilenameLength = self::MAX_LENGTH;
 
         if (strlen($destinationPath) > $maxFilenameLength) {
-            throw new \LengthException(
+            throw new AlreadyExistsException(
                 __('Destination path is too long; must be %1 characters or less', $maxFilenameLength)
             );
         }
