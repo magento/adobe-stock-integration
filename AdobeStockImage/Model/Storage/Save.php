@@ -11,6 +11,7 @@ namespace Magento\AdobeStockImage\Model\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -53,6 +54,7 @@ class Save
      * @return string
      * @throws AlreadyExistsException
      * @throws FileSystemException
+     * @throws InputException
      */
     public function execute(string $imageUrl, string $destinationPath = '') : string
     {
@@ -60,7 +62,7 @@ class Save
         $maxFilenameLength = self::MAX_LENGTH;
 
         if (strlen($destinationPath) > $maxFilenameLength) {
-            throw new AlreadyExistsException(
+            throw new InputException(
                 __('Destination path is too long; must be %1 characters or less', $maxFilenameLength)
             );
         }
