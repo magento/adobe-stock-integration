@@ -22,6 +22,7 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
  */
 class Save
 {
+    private const MAX_LENGTH = 255;
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
 
     /**
@@ -66,6 +67,13 @@ class Save
      */
     public function execute(string $imageUrl, string $destinationPath, bool $allowOverwrite = false): void
     {
+        $maxFilenameLength = self::MAX_LENGTH;
+        if (strlen($destinationPath) > $maxFilenameLength) {
+            throw new LocalizedException(
+                __('Destination path is too long; must be %1 characters or less', $maxFilenameLength)
+            );
+        }
+
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
         if ($this->isPathExcluded->execute($destinationPath)) {
