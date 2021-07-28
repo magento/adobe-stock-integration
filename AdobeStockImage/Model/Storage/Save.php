@@ -40,13 +40,16 @@ class Save
      */
     private $isPathExcluded;
 
+    /**
+     * @var Number
+     */
     private $maxFileLength;
 
     /**
      * @param Filesystem $filesystem
      * @param Https $driver
      * @param IsPathExcludedInterface $isPathExcluded
-     * @param $maxFileLength
+     * @param Number $maxFileLength
      */
     public function __construct(
         Filesystem $filesystem,
