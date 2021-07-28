@@ -32,7 +32,7 @@ class Save
     private $driver;
 
     /**
-     * @var Number
+     * @var Int
      */
     private $maxFileLength;
 
@@ -40,7 +40,7 @@ class Save
      * Storage constructor.
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param Number $maxFileLength
+     * @param Int $maxFileLength
      */
     public function __construct(
         Filesystem $filesystem,
