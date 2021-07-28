@@ -23,7 +23,6 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 class Save
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
-    private const MAX_LENGTH = 255;
 
     /**
      * @var Filesystem
@@ -39,6 +38,7 @@ class Save
      * @var IsPathExcludedInterface
      */
     private $isPathExcluded;
+    private $maxFileLength;
 
     /**
      * @param Filesystem $filesystem
@@ -48,11 +48,13 @@ class Save
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        IsPathExcludedInterface $isPathExcluded
+        IsPathExcludedInterface $isPathExcluded,
+        $maxFileLength
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->isPathExcluded = $isPathExcluded;
+        $this->maxFileLength = $maxFileLength;
     }
 
     /**
@@ -67,10 +69,10 @@ class Save
      */
     public function execute(string $imageUrl, string $destinationPath, bool $allowOverwrite = false): void
     {
-        $maxFilenameLength = self::MAX_LENGTH;
+        $maxFilenameLength = $this->maxFileLength;
 
         if (strlen($destinationPath) > $maxFilenameLength) {
-            throw new \LengthException(
+            throw new \InputException(
                 __('Destination Path is too long; must be %1 characters or less', $maxFilenameLength)
             );
         }
