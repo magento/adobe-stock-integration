@@ -21,8 +21,6 @@ use Magento\Framework\Filesystem\DriverInterface;
  */
 class Save
 {
-    private const MAX_LENGTH = 255;
-
     /**
      * @var Filesystem
      */
@@ -33,15 +31,20 @@ class Save
      */
     private $driver;
 
+    private $maxFileLength;
+
     /**
      * Storage constructor.
      * @param Filesystem $filesystem
      * @param Https $driver
+     * @param $maxFileLength
      */
     public function __construct(
         Filesystem $filesystem,
-        Https $driver
+        Https $driver,
+        $maxFileLength
     ) {
+        $this->maxFileLength = $maxFileLength;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
     }
@@ -59,11 +62,9 @@ class Save
     public function execute(string $imageUrl, string $destinationPath = '') : string
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $maxFilenameLength = self::MAX_LENGTH;
-
-        if (strlen($destinationPath) > $maxFilenameLength) {
+        if (strlen($destinationPath) > $this->maxFileLength) {
             throw new InputException(
-                __('Destination path is too long; must be %1 characters or less', $maxFilenameLength)
+                __('Destination path is too long; must be %1 characters or less', $this->maxFileLength)
             );
         }
 
