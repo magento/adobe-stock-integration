@@ -32,7 +32,7 @@ class Save
     private $driver;
 
     /**
-     * @var Int
+     * @var int|null
      */
     private $maxFileLength;
 
@@ -40,14 +40,14 @@ class Save
      * Storage constructor.
      * @param Filesystem $filesystem
      * @param Https $driver
-     * @param Int $maxFileLength
+     * @param int|null $maxFileLength
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
-        $maxFileLength
+        int $maxFileLength = null
     ) {
-        $this->maxFileLength = $maxFileLength;
+        $this->maxFileLength = $maxFileLength ?: 255;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
     }
