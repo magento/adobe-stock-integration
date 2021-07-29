@@ -16,7 +16,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Magento\Framework\Exception\InputException;
 
 /**
  * Save images to the file system
@@ -41,7 +40,7 @@ class Save
     private $isPathExcluded;
 
     /**
-     * @var Int
+     * @var int|null
      */
     private $maxFileLength;
 
@@ -49,15 +48,15 @@ class Save
      * @param Filesystem $filesystem
      * @param Https $driver
      * @param IsPathExcludedInterface $isPathExcluded
-     * @param Int $maxFileLength
+     * @param int|null $maxFileLength
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
         IsPathExcludedInterface $isPathExcluded,
-        $maxFileLength
+        int $maxFileLength = null
     ) {
-        $this->maxFileLength = $maxFileLength;
+        $this->maxFileLength = $maxFileLength ?: 255;
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->isPathExcluded = $isPathExcluded;
@@ -72,12 +71,11 @@ class Save
      * @throws AlreadyExistsException
      * @throws FileSystemException
      * @throws LocalizedException
-     * @throws InputException
      */
     public function execute(string $imageUrl, string $destinationPath, bool $allowOverwrite = false): void
     {
         if (strlen($destinationPath) > $this->maxFileLength) {
-            throw new InputException(
+            throw new LocalizedException(
                 __('Destination path is too long; must be %1 characters or less', $this->maxFileLength)
             );
         }
