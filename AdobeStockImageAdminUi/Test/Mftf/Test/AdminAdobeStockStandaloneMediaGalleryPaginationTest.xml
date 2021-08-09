@@ -49,7 +49,7 @@
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <comment userInput="BIC workaround" stepKey="deleteAllImagesAfterTest"/>
             <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
-                <argument name="name" value="wysiwyg"/>
+                <argument name="FolderName" value="wysiwyg"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
                 <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
