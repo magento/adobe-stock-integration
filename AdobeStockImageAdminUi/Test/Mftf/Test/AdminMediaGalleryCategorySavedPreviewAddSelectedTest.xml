@@ -44,7 +44,7 @@
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
             <comment userInput="BIC workaround" stepKey="removeSavedPreview"/>
-            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters2"/>
+            <comment userInput="BIC workaround" stepKey="clearFilters"/>
         </after>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>

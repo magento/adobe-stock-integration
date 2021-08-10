@@ -36,6 +36,7 @@
 
         <after>
             <comment userInput="BIC workaround" stepKey="removeSavedPreview"/>
+            <comment userInput="BIC workaround" stepKey="clearFilters"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">

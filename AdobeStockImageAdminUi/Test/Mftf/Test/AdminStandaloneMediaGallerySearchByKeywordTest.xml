@@ -34,6 +34,7 @@
 
         <after>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryForPage"/>
+            <comment userInput="BIC workaround" stepKey="clearFilters"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <comment userInput="BIC workaround" stepKey="deleteImage"/>
             <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
