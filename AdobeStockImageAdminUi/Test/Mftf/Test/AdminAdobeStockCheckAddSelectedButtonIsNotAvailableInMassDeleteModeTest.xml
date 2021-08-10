@@ -26,7 +26,7 @@
         </before>
         <after>
             <!-- Disable WYSIWYG -->
-            <comment userInput="BIC workaround" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
 
             <!-- Delete images -->
             <comment userInput="BIC workaround" stepKey="deleteAllImages"/>

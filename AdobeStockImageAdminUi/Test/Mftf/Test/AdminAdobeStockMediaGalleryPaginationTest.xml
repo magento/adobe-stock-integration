@@ -45,7 +45,7 @@
             </actionGroup>
         </before>
         <after>
-            <comment userInput="BIC workaround" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryToResetGrid"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <comment userInput="BIC workaround" stepKey="deleteAllImagesAfterTest"/>
