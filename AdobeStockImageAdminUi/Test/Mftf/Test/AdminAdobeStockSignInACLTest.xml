@@ -75,6 +75,7 @@
         <!-- Verify that user can see Adobe Stock sign in button -->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithIMSAccess"/>
         <seeElement stepKey="seeAdobeStockSigninButton" selector="{{AdminAdobeStockSection.adobeSignIn}}"/>
 
@@ -99,6 +100,7 @@
         <!-- Verify that user can't see to Adobe Stock sign in button -->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageWithoutIMSAccess"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutIMSAccess"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView2"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithoutIMSAccess"/>
         <dontSeeElement stepKey="doNotSeeAdobeStockSigninButton" selector="{{AdminAdobeStockSection.adobeSignIn}}"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromCreatedUser"/>

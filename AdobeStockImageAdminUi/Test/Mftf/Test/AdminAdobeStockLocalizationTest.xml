@@ -38,6 +38,7 @@
         <!-- verify that user can search adobe stock image in ru_RU locale -->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForPopular">
             <argument name="query" value="Автомобили"/>
