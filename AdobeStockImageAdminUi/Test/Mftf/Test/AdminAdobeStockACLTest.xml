@@ -68,7 +68,6 @@
         <!-- verify that user can access to adobe stock image -->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelWithAccess"/>
         <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageWithoutSearch"/>
@@ -93,7 +92,6 @@
         <!-- verify that user can't access to adobe stock image -->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageWithoutAccess"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageWithoutAccess"/>
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView2"/>
         <dontSeeElement selector="{{AdminAdobeStockSection.slideOutPanelButton}}" stepKey="dontSeeAdobeStockSearchButton" />
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromCreatedUser"/>
     </test>
