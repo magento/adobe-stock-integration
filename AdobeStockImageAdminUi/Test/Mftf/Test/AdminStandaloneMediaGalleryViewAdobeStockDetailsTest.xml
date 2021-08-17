@@ -34,7 +34,7 @@
         </before>
 
         <after>
-            <comment userInput="BIC workaround" stepKey="deleteImage"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteImage"/>
             <comment userInput="BIC workaround" stepKey="clearFilters"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>

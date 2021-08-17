@@ -25,24 +25,16 @@
 
         <after>
             <!-- Delete Uploaded Images -->
-            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGrid"/>
-            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
-                <argument name="name" value="wysiwyg"/>
-            </actionGroup>
-            <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewWysiwygImageDetails"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteWysiwygImage"/>
-            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
-                <argument name="name" value="category"/>
-            </actionGroup>
-            <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewCategoryImageDetails"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteCategoryImage"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Verify Cannot Save Adobe Stock Preview Under Storage Root -->
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGrid"/>
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+        <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters">
+            <argument name="index" value="2"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
@@ -55,6 +47,9 @@
             <argument name="name" value="wysiwyg"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid2"/>
+        <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters2">
+            <argument name="index" value="2"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview2"/>
         <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.imagePreviewTitle}}" stepKey="imageTitle"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview2"/>
@@ -68,6 +63,9 @@
             <argument name="name" value="category"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid3"/>
+        <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters3">
+            <argument name="index" value="2"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandSpecifiedImagePreviewActionGroup" stepKey="expandImagePreview3">
             <argument name="index" value="1"/>
         </actionGroup>
