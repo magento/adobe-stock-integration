@@ -16,6 +16,13 @@
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery">
                 <argument name="enabled" value="1"/>
             </actionGroup>
+
+            <!-- Create Media Gallery Directories for `catalog/category` and `wysiwyg` -->
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromCategoryImage"/>
+            <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </before>
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
