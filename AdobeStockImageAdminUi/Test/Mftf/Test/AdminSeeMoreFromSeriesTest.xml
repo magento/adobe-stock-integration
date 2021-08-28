@@ -32,15 +32,15 @@
             <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGrid"/>
-        <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
+        <waitForPageLoad stepKey="waitForRelatedImagesToLoad"/>
         <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnTabMoreForThisModel"/>
-        <wait stepKey="waitForScrollUp" time="5"/>
-        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
+        <waitForPageLoad stepKey="waitForScrollUp"/>
+        <waitForElementVisible selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInput"/>
 
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandsFirstImageInGridSecondTime"/>
-        <waitForAjaxLoad stepKey="waitForRelatedImagesToLoadSecondTime"/>
+        <waitForPageLoad stepKey="waitForRelatedImagesToLoadSecondTime"/>
         <click selector="{{AdobeStockImagePreviewSection.moreFromThisSeriesSeeMore}}" stepKey="clickOnTabMoreForThisModelSecondTime"/>
-        <wait stepKey="waitForScrollUpSecondTime" time="5"/>
-        <seeElement selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInputSecondTime"/>
+        <waitForPageLoad stepKey="waitForScrollUpSecondTime"/>
+        <waitForElementVisible selector="{{AdobeStockSection.searchInput}}" stepKey="seeSearchInputSecondTime"/>
     </test>
 </tests>
