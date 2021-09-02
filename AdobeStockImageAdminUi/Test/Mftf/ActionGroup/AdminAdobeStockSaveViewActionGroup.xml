@@ -8,12 +8,15 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockSaveViewActionGroup">
+        <arguments>
+            <argument name="viewName" type="string" defaultValue="{{NewGridView.name}}"/>
+        </arguments>
         <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="openViews"/>
         <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="saveView"/>
-        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="Test View" stepKey="inputViewName"/>
+        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{viewName}}" stepKey="inputViewName"/>
         <pressKey selector="{{AdminGridDefaultViewControls.viewName}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
-        <seeElement selector="{{AdminGridDefaultViewControls.viewByName('Test View')}}{{AdminAdobeStockSection.editViewButtonPartial}}" stepKey="seeEditButton"/>
-        <click selector="{{AdminGridDefaultViewControls.viewByName('Test View')}}{{AdminAdobeStockSection.editViewButtonPartial}}" stepKey="clickEditButton"/>
+        <seeElement selector="{{AdminGridDefaultViewControls.viewByName(viewName)}}{{AdminAdobeStockSection.editViewButtonPartial}}" stepKey="seeEditButton"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName(viewName)}}{{AdminAdobeStockSection.editViewButtonPartial}}" stepKey="clickEditButton"/>
         <seeElement selector="{{AdminAdobeStockSection.deleteViewButton}}" stepKey="seeDeleteButton"/>
         <click selector="{{AdminAdobeStockSection.deleteViewButton}}" stepKey="clickDeleteButton"/>
         <waitForPageLoad stepKey="waitForDeletion" time="10"/>
