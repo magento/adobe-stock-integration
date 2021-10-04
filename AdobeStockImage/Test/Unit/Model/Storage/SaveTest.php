@@ -10,6 +10,7 @@ namespace Magento\AdobeStockImage\Test\Unit\Model\Storage;
 use Magento\AdobeStockImage\Model\Storage\Save;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\Https;
@@ -122,5 +123,19 @@ class SaveTest extends TestCase
         $this->expectException(AlreadyExistsException::class);
 
         $this->save->execute($imageUrl, '/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg');
+    }
+
+    /**
+     * Assume that execute will thrown an Exception for mexFileLength (default: 255 chars)
+     */
+    public function testExceptionOnMaxFileLength(): void
+    {
+        $imageUrl = 'https://t4.ftcdn.net/jpg/02/72/29/99/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
+
+        $destinationPath = '/test-destination-path/this_destination_path_has_more_than_255_chars_to_check_exception_//jpg/02/72/29/99//jpg/02/72/29/99//jpg/02/72/29/99//240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg';
+
+        $this->expectException(LocalizedException::class);
+
+        $this->save->execute($imageUrl, $destinationPath);
     }
 }
