@@ -37,6 +37,7 @@
     <type name="Magento\AdobeStockImage\Model\Storage\Save">
         <arguments>
             <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\Https</argument>
+            <argument name="maxFileLength" xsi:type="number">255</argument>
         </arguments>
     </type>
     <type name="Magento\AdobeStockImage\Model\GetRelatedImages">
