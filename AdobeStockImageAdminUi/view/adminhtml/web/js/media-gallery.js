@@ -62,6 +62,7 @@ define([
                     .children('a');
             }
 
+
             if (imageFolder.length) {
                 imageFolder[0].click();
             }
@@ -109,7 +110,7 @@ define([
                     folderPath = folderPath + '/' + folderPathParts[i];
                 }
                 pathId = Base64.idEncode(folderPath);
-                openFolderButton = $('.jstree li[data-id="' + pathId + '"]').children('.jstree-icon');
+                openFolderButton = $('.jstree li[data-id="' + pathId + '"].jstree-closed').children('.jstree-icon');
 
                 if (openFolderButton.length) {
                     openFolderButton.click();
