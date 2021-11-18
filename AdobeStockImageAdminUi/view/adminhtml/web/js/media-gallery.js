@@ -62,7 +62,6 @@ define([
                     .children('a');
             }
 
-
             if (imageFolder.length) {
                 imageFolder[0].click();
             }
