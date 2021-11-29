@@ -319,7 +319,7 @@ define([
             if (this.isMediaBrowser()) {
                 activeNode = this.getMageMediaBrowserData().activeNode;
 
-                activeNodePath = _.isUndefined(activeNode.path) ? '' : activeNode.path;
+                activeNodePath = _.isUndefined(activeNode.original.path) ? '' : activeNode.original.path;
             } else {
                 activeNodePath = this.imageDirectory().activeNode() || '';
             }
