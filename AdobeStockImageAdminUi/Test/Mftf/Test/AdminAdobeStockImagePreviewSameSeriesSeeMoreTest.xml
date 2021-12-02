@@ -45,9 +45,9 @@
             <argument name="resultValue" value="$getFileAttributeValue"/>
         </actionGroup>
         <grabTextFrom selector="{{AdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
-        <assertNotContains stepKey="checkThatResultCountChangesAfterFilterApplied">
+        <assertNotEquals stepKey="checkThatResultCountChangesAfterFilterApplied">
             <actualResult type="variable">$countWithoutModelFilter</actualResult>
             <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
-        </assertNotContains>
+        </assertNotEquals>
     </test>
 </tests>
