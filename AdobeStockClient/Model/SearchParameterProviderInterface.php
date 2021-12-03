@@ -14,6 +14,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
  * Class able to apply search criteria to SearchParameters completely or partially
+ *
+ * @api
  */
 interface SearchParameterProviderInterface
 {
