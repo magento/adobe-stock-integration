@@ -20,6 +20,7 @@
                 <issueId value="https://github.com/magento/adobe-stock-integration/issues/1170"/>
             </skip>
             <group value="adobe_stock_integration_ims_signed"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

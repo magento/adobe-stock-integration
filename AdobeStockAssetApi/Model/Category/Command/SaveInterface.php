@@ -13,6 +13,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Used to save an Adobe Stock asset category data to data storage
+ *
+ * @api
  */
 interface SaveInterface
 {
