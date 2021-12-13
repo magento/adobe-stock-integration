@@ -18,6 +18,7 @@
             <description value="User can license Adobe Stock image"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration_ims_signed"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
