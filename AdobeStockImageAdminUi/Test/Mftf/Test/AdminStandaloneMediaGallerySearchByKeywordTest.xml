@@ -11,7 +11,7 @@
             <features value="MediaGallery"/>
             <stories value="User searches for an image using search by keyword from standalone media gallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1121"/>
-            <testCaseId value=" https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503803"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503803"/>
             <title value="User searches for an image using search by keyword from standalone media gallery"/>
             <description value="User searches for an image using search by keyword from standalone media gallery"/>
             <severity value="CRITICAL"/>
