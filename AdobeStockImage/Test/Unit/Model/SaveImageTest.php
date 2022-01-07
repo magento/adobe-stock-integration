@@ -120,4 +120,43 @@ class SaveImageTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getInvalidPathValues(): array
+    {
+        return [
+            [
+                $this->createMock(Document::class),
+                'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
+                '\\invalid chars\\'
+            ],
+            [
+                $this->createMock(Document::class),
+                'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
+                '{*invalid_path/\'chars}'
+            ],
+            [
+                $this->createMock(Document::class),
+                'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
+                '<img src=\"\" onerror=\"alert(0)\">'
+            ]
+        ];
+    }
+
+    /**
+     * Verify that path validation works if invalid characters are passed.
+     *
+     * @dataProvider getInvalidPathValues
+     * @param Document $document
+     * @param string $url
+     * @param string $destinationPath
+     * @throws LocalizedException
+     */
+    public function testExecuteInvalidPath(Document $document, string $url, string $destinationPath): void
+    {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->saveImage->execute($document, $url, $destinationPath);
+    }
 }

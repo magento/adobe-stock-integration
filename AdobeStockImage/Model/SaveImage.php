@@ -72,6 +72,9 @@ class SaveImage implements SaveImageInterface
     public function execute(Document $document, string $url, string $destinationPath): void
     {
         try {
+            if (!preg_match('/^[a-zA-Z0-9\.\-\_\/\s]+$/i', $destinationPath)) {
+                throw new LocalizedException(__('Image File has invalid characters.'));
+            }
             $this->saveFile->execute($document, $url, $destinationPath);
             $mediaAssetId = $this->saveMediaGalleryAsset->execute($document, $destinationPath);
 
