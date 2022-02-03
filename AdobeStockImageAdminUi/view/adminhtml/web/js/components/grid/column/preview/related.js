@@ -127,7 +127,7 @@ define([
 
                 /* Switch to the model tab if the series tab is hidden */
                 if (relatedImages.series[record.id].length === 0 && relatedImages.model[record.id].length > 0) {
-                    // eslint-disable-next-line jquery-no-click-event-shorthand
+                    // eslint-disable-next-line jquery-no-input-event-shorthand
                     $('#adobe-stock-tabs').data().mageTabs.select(1);
                 }
             }.bind(this));
