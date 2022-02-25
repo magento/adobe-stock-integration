@@ -28,7 +28,7 @@
         <actionGroup ref="StorefrontApplyAdminTokenOnSwaggerPageActionGroup" stepKey="applyAdminToken">
             <argument name="token" value="$createAdminToken.return$"/>
         </actionGroup>
-        <seeElement selector="{{SwaggerApiListSection.swaggerActionTitle('adobeStockAssetApiAssetRepositoryV1')}}" stepKey="assertTitleOfFirstAction"/>
+        <seeElement selector="{{SwaggerApiListSection.swaggerActionTitle('adobeStockAssetApiAssetRepositoryV1')}}" stepKey="assertTitleOfFirtsAction"/>
         <seeElement selector="{{SwaggerApiListSection.swaggerActionTitle('adobeStockImageApiGetImageListV1')}}" stepKey="assertTitleOfSecondAction"/>
         <seeElement selector="{{SwaggerApiListSection.swaggerActionTitle('adobeStockAssetApiGetAssetListV1')}}" stepKey="assertTitleOfThirdAction"/>
     </test>
