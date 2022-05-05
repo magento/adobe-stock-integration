@@ -43,7 +43,4 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\AdminAdobeIms\Block\Adminhtml\SignIn">
-        <plugin name="sign_out_button_visibility" type="Magento\AdobeStockImageAdminUi\Plugin\AdobeStockSignOutButtonPlugin"/>
-    </type>
 </config>

@@ -24,7 +24,7 @@ class TestConnection extends Field
     private const TEST_CONNECTION_PATH = 'adobe_stock/system_config/testconnection';
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $_template = 'Magento_AdobeStockAdminUi::system/config/connection.phtml';
 

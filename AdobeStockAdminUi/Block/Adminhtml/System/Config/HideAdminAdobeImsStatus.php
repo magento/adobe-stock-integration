@@ -17,29 +17,13 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class HideAdminAdobeImsStatus extends Field
 {
     /**
-     * @inheritdoc
-     */
-    public function render(AbstractElement $element): string
-    {
-        $html = '<td class="label"><label for="' .
-            $element->getHtmlId() . '"><span' .
-            $this->_renderScopeLabel($element) . '>' .
-            $element->getLabel() .
-            '</span></label></td>';
-        $html .= $this->_renderValue($element);
-        $html .= '<td class=""></td>';
-
-        return $this->_decorateRowHtml($element, $html);
-    }
-
-    /**
      * Hide Admin Adobe IMS enabled/disabled status
      *
      * @param AbstractElement $element
      * @param string $html
      * @return string
      */
-    protected function _decorateRowHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element, $html)
+    protected function _decorateRowHtml(AbstractElement $element, $html)
     {
         $style = ' style="display: none"';
 
