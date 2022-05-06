@@ -13,7 +13,7 @@
                 <argument name="masonry_component_path" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing.adobe_stock_images_columns</argument>
                 <argument name="data_source_path" xsi:type="string">adobe_stock_images_listing.adobe_stock_images_listing_data_source</argument>
             </arguments>
-            <block class="Magento\AdminAdobeIms\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdminAdobeIms::signIn.phtml" aclResource="Magento_AdminAdobeIms::adobe_ims">
+            <block class="Magento\AdobeIms\Block\Adminhtml\SignIn" name="adobe.signIn" template="Magento_AdobeIms::signIn.phtml" aclResource="Magento_AdobeIms::adobe_ims">
                 <arguments>
                     <argument name="configProviders" xsi:type="array">
                         <item name="adobe-stock" xsi:type="object">Magento\AdobeStockImageAdminUi\Model\SignInConfigProvider</item>

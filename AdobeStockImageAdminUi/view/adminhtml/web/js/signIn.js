@@ -4,8 +4,8 @@
  */
 define([
     'jquery',
-    'Magento_AdminAdobeIms/js/signIn',
-    'Magento_AdminAdobeIms/js/action/authorization',
+    'Magento_AdobeIms/js/signIn',
+    'Magento_AdobeIms/js/action/authorization',
     'Magento_Ui/js/modal/confirm'
 ], function ($, signIn, auth, confirm) {
     'use strict';
