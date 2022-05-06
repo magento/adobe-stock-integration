@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\ImsIntegrationNotice $block
+ */
+
+?>
+<div class="message message-warning">
+    <?= $block->escapeHtml(__('If you have Adobe IMS Organization, follow <a href="%1">these steps</a>'
+    . ' to setup integration.', 'https://devdocs.magento.com/'), ['a']) ?>
+</div>
