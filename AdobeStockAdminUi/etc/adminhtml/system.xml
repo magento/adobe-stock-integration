@@ -10,9 +10,6 @@
         <section id="system">
             <group id="adobe_stock_integration" translate="label" type="text" sortOrder="1100" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Adobe Stock Integration</label>
-                <field id="ims_integration_notice" translate="label" type="note" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <frontend_model>Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\ImsIntegrationNotice</frontend_model>
-                </field>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enabled Adobe Stock</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
