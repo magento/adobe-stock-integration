@@ -580,6 +580,7 @@ define([
             // eslint-disable-next-line no-unused-vars
             var timerId;
 
+            // eslint-disable-next-line no-unused-vars
             timerId = setTimeout(function () {
                 clearTimeout(timerId);
                 this.messages.removeAll();
