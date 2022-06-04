@@ -15,12 +15,19 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <config_path>adobe_stock/integration/enabled</config_path>
                 </field>
+                <field id="admin_adobe_ims_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enabled Admin Adobe Ims</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>adobe_ims/integration/admin_enabled</config_path>
+                    <frontend_model>Magento\AdobeStockAdminUi\Block\Adminhtml\System\Config\HideAdminAdobeImsStatus</frontend_model>
+                </field>
                 <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Key (Client ID)</label>
                     <config_path>adobe_ims/integration/api_key</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="enabled">1</field>
+                        <field id="admin_adobe_ims_enabled">0</field>
                     </depends>
                 </field>
                 <field id="private_key" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -29,6 +36,7 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="enabled">1</field>
+                        <field id="admin_adobe_ims_enabled">0</field>
                     </depends>
                     <comment><![CDATA[Configure an Adobe Stock account on <a href="https://console.adobe.io" target="_blank">adobe.io</a> to get the API Key (Client ID) and Client Secret. You will not be able to use the integration without both the API Key and Client Secret.]]></comment>
                 </field>
