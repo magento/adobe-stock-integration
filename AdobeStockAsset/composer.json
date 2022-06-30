@@ -1,20 +1,21 @@
 {
     "name": "magento/module-adobe-stock-asset",
     "description": "Magento module responsible for the Adobe Stock assets handling implementation on Magento side",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-adobe-stock-asset-api": "*",
-        "magento/module-adobe-stock-client-api": "*",
-        "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery": "*",
-        "magento/module-config": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "1.0.2",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/module-adobe-stock-asset-api": "1.0.*",
+        "magento/module-adobe-stock-client-api": "1.0.*",
+        "magento/module-media-gallery-api": "*",
+        "magento/module-media-gallery": "*",
+        "magento/module-config": "*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -24,3 +25,4 @@
         }
     }
 }
+
