@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeStockStandaloneMediaGallerySavePreviewTest">
+        <annotations>
+            <features value="AdobeStockImagePanel"/>
+            <stories value="Enhanced Media Gallery"/>
+            <title value="Verify User Can Save Image Preview in Enhanced Media Gallery"/>
+            <description value="Verify that an admin user cannot save an adobe stock preview image under the enhanced
+            media gallery storage root but they can save under the category and wysiwyg directory"/>
+            <severity value="CRITICAL"/>
+            <group value="adobe_stock_media_gallery"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        </before>
+
+        <after>
+            <!-- Delete Uploaded Images -->
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Verify Cannot Save Adobe Stock Preview Under Storage Root -->
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGrid"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid"/>
+        <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters">
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <waitForText userInput="Could not save image: destination directory is restricted." stepKey="waitForErrorMessage"/>
+
+        <!-- Verify Can Save Adobe Stock Preview Under Wysiwyg -->
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGrid2"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid2"/>
+        <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters2">
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview2"/>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.imagePreviewTitle}}" stepKey="imageTitle"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview2"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview2"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid({$imageTitle})}}" stepKey="waitForImageInMediaGallery"/>
+
+        <!-- Verify Can Save Adobe Stock Preview Under Category -->
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery2"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGrid3"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+            <argument name="name" value="category"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGrid3"/>
+        <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters3">
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockExpandSpecifiedImagePreviewActionGroup" stepKey="expandImagePreview3">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.imagePreviewTitle}}" stepKey="imageTitle2"/>
+        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview3"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview3"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid({$imageTitle2})}}" stepKey="waitForImageInMediaGallery2"/>
+    </test>
+</tests>
