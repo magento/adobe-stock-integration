@@ -16,9 +16,6 @@
             <description value="Adobe stock actions are available on the Swagger page"/>
             <severity value="CRITICAL"/>
             <group value="developer_mode_only"/>
-            <skip>
-                <issueId value="AC-1842"/>
-            </skip>
         </annotations>
         <before>
             <getOTP stepKey="getOtpCode"/>
