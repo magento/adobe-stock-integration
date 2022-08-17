@@ -47,6 +47,7 @@
                         class="adobe-sign-out-button"
                         id="adobeImsSignOut"
                         click="logout"
+                        data-bind="visible: !isGlobalSignInEnabled"
                         data-role="signOutBtn"
                         type="button">
                     <span>Sign Out</span>

@@ -9,11 +9,11 @@
     <each args="getKeywords($col.displayedRecord())">
         <div class="keyword" css="{ 'hide': $index() >= $parent.getKeywordsLimit()}">
             <a href="" class="value" click="function(){ $parent.searchByKeyWord(name) }">
-                <span text="name"/>
+                <span text="name"></span>
             </a>
         </div>
     </each>
     <button visible="canViewMoreKeywords" click="function(){ viewAllKeywords($col.displayedRecord()) }">
-        <span translate="'View all'"/>
+        <span translate="'View all'"></span>
     </button>
 </div>

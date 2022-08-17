@@ -199,7 +199,7 @@ define([
         selectDisplayedImageForOldMediaGallery: function (path) {
             var image = mediaGallery.locate(path);
 
-            image ? image.click() : mediaGallery.notLocated();
+            image ? image.trigger('click') : mediaGallery.notLocated();
         },
 
         /**
@@ -319,7 +319,7 @@ define([
             if (this.isMediaBrowser()) {
                 activeNode = this.getMageMediaBrowserData().activeNode;
 
-                activeNodePath = _.isUndefined(activeNode.path) ? '' : activeNode.path;
+                activeNodePath = _.isUndefined(activeNode.original.path) ? '' : activeNode.original.path;
             } else {
                 activeNodePath = this.imageDirectory().activeNode() || '';
             }
@@ -580,6 +580,7 @@ define([
             // eslint-disable-next-line no-unused-vars
             var timerId;
 
+            // eslint-disable-next-line no-unused-vars
             timerId = setTimeout(function () {
                 clearTimeout(timerId);
                 this.messages.removeAll();

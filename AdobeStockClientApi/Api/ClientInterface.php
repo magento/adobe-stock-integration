@@ -18,6 +18,8 @@ use Magento\Framework\Exception\IntegrationException;
 
 /**
  * Adobe Stock API Client
+ *
+ * @api
  */
 interface ClientInterface
 {

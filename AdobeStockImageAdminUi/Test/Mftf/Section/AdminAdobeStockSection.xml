@@ -15,6 +15,7 @@
         <element name="panelTitle" type="block" selector="[data-role=title]"/>
         <element name="searchInput" type="input" selector="//div[@class='adobe-stock-images-search-modal-content']//input[contains(@class, 'data-grid-search-control')]"/>
         <element name="firstImageInGrid" type="block" selector="[data-role=grid-wrapper] img[data-role=thumbnail]"/>
+        <element name="imageInGridByIndex" type="block" parameterized="true" selector="[data-role=grid-wrapper] [data-repeat-index='{{index}}'] img[data-role=thumbnail]"/>
         <element name="searchButton" type="button" selector="#words + button.action-submit"/>
         <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[@src='{{src}}']" parameterized="true"/>
         <element name="firstImageAfterSearch" type="text" selector="div[class='masonry-image-column'][data-repeat-index='0'] img"/>
