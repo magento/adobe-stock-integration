@@ -16,6 +16,9 @@
             <description value="User searches for an image using search by keyword from standalone media gallery"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_media_gallery"/>
+            <skip>
+              <issueId value="AC-5916">Skipped</issueId>
+            </skip>
         </annotations>
 
         <before>
