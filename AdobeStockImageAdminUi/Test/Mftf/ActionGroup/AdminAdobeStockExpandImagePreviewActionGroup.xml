@@ -14,7 +14,7 @@
         </annotations>
         <conditionalClick selector="{{AdminAdobeStockImagePreviewSection.close}}" dependentSelector="{{AdminAdobeStockImagePreviewSection.close}}" visible="true" stepKey="closeImagePreview"/>
         <waitForPageLoad stepKey="waitForImagePreviewToClose"/>
-        <click selector="{{AdminAdobeStockSection.modal}} {{AdminAdobeStockSection.firstImageInGrid}}" stepKey="clickOnThumbnail"/>
+        <click selector="{{AdminAdobeStockSection.selectAnImage('2')}}" stepKey="clickOnThumbnail"/>
         <waitForPageLoad stepKey="waitForImagePreviewToExpand"/>
     </actionGroup>
 </actionGroups>
