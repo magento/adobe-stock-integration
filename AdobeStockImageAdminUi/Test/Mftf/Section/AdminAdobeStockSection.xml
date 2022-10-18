@@ -44,5 +44,6 @@
         <element name="deleteViewButton" type="button" selector="//div[@data-bind='afterRender: \$data.setToolbarNode']//input/following-sibling::div/button[@class='action-delete']"/>
         <element name="incorrectSecretModalText" type="block" selector="//*[contains(@class, 'modal-popup')]//div[contains(text(), 'Login failed')]"/>
         <element name="incorrectSecretModalButton" type="button" selector="//*[contains(@class, 'modal-popup')]//*[@class='modal-footer']/button//span[text()='Ok']"/>
+        <element name="selectAnImage" type="block" selector="//div[@class='masonry-image-column' and @data-repeat-index='{{index}}']" parameterized="true"/>
     </section>
 </sections>
