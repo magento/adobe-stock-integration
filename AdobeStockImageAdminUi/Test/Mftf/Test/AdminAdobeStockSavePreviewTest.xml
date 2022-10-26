@@ -17,9 +17,6 @@
             <description value="Admin should be able to saves image preview "/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration"/>
-            <skip>
-              <issueId value="AC-5916">Skipped</issueId>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -31,7 +28,10 @@
         <after>
             <actionGroup ref="AdminDeleteSelectedAdobeStockImagePreviewActionGroup" stepKey="removeSavedPreview"/>
         </after>
-        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <conditionalClick selector="{{AdminAdobeStockImagePreviewSection.close}}" dependentSelector="{{AdminAdobeStockImagePreviewSection.close}}" visible="true" stepKey="expandImagePreview"/>
+        <waitForPageLoad stepKey="waitForImagePreviewToClose"/>
+        <click selector="{{AdminAdobeStockSection.selectAnImage('2')}}" stepKey="clickOnThumbnail"/>
+        <waitForPageLoad stepKey="waitForImagePreviewToExpand"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AssertAdminAdobeStockImageSavedActionGroup" stepKey="assertImageSaved"/>
     </test>
