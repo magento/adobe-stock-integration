@@ -16,9 +16,6 @@
             media gallery storage root but they can save under the category and wysiwyg directory"/>
             <severity value="CRITICAL"/>
             <group value="adobe_stock_media_gallery"/>
-            <skip>
-              <issueId value="AC-5916">Skipped</issueId>
-            </skip>
         </annotations>
 
         <before>
@@ -38,7 +35,10 @@
         <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters">
             <argument name="index" value="2"/>
         </actionGroup>
-        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
+        <conditionalClick selector="{{AdminAdobeStockImagePreviewSection.close}}" dependentSelector="{{AdminAdobeStockImagePreviewSection.close}}" visible="true" stepKey="expandImagePreview"/>
+        <waitForPageLoad stepKey="waitForImagePreviewToClose"/>
+        <click selector="{{AdminAdobeStockSection.selectAnImage('2')}}" stepKey="clickOnThumbnail"/>
+        <waitForPageLoad stepKey="waitForImagePreviewToExpand"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
         <waitForText userInput="Could not save image: destination directory is restricted." stepKey="waitForErrorMessage"/>
@@ -53,7 +53,10 @@
         <actionGroup ref="AdminResetDataGridToDefaultViewActionGroup" stepKey="clearAdobeStockFilters2">
             <argument name="index" value="2"/>
         </actionGroup>
-        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview2"/>
+        <conditionalClick selector="{{AdminAdobeStockImagePreviewSection.close}}" dependentSelector="{{AdminAdobeStockImagePreviewSection.close}}" visible="true" stepKey="expandImagePreview2"/>
+        <waitForPageLoad stepKey="waitForImagePreviewToClose1"/>
+        <click selector="{{AdminAdobeStockSection.selectAnImage('2')}}" stepKey="clickOnThumbnail1"/>
+        <waitForPageLoad stepKey="waitForImagePreviewToExpand1"/>
         <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.imagePreviewTitle}}" stepKey="imageTitle"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview2"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview2"/>
