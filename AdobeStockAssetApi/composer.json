@@ -2,7 +2,7 @@
     "name": "magento/module-adobe-stock-asset-api",
     "description": "Magento module responsible for Adobe Stock assets handling on Magento side",
     "require": {
-        "php": "~7.4.0||~8.1.0",
+        "php": "~8.1.0||~8.2.0",
         "magento/framework": "*"
     },
     "type": "magento2-module",
