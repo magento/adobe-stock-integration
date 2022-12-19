@@ -36,7 +36,7 @@ i.e.:
 
 More details about the configuration options available via `.env` can be found
 on the [MFTF Configuration
-documentation](https://devdocs.magento.com/mftf/docs/configuration.html).
+documentation](https://developer.adobe.com/commerce/testing/functional-testing-framework/configuration/).
 
 ### `.credentials`
 
@@ -57,4 +57,4 @@ i.e.:
     magento/adobe_stock_user_password=password
 
 More details about storing credentials in MFTF via `.credentials` can be found
-on the [MFTF Credentials documentation](https://devdocs.magento.com/mftf/docs/credentials.html).
+on the [MFTF Credentials documentation](https://developer.adobe.com/commerce/testing/functional-testing-framework/credentials/).
