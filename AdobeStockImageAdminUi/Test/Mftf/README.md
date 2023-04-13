@@ -29,10 +29,12 @@ against:
 
 i.e.:
 
-    MAGENTO_BASE_URL=https://magento2.local/
-    MAGENTO_BACKEND_NAME=admin_hgkq1l
-    MAGENTO_ADMIN_USERNAME=admin
-    MAGENTO_ADMIN_PASSWORD=admin123
+```env
+MAGENTO_BASE_URL=https://magento2.local/
+MAGENTO_BACKEND_NAME=admin_hgkq1l
+MAGENTO_ADMIN_USERNAME=admin
+MAGENTO_ADMIN_PASSWORD=admin123
+```
 
 More details about the configuration options available via `.env` can be found
 on the [MFTF Configuration
@@ -51,10 +53,12 @@ Stock accounts and keys and thus MFTF treats them differently:
 
 i.e.:
 
-    magento/adobe_stock_api_key=12345
-    magento/adobe_stock_private_key=67890
-    magento/adobe_stock_user_email=shantanu@adobe.com
-    magento/adobe_stock_user_password=password
+```env
+magento/adobe_stock_api_key=12345
+magento/adobe_stock_private_key=67890
+magento/adobe_stock_user_email=shantanu@adobe.com
+magento/adobe_stock_user_password=password
+```
 
 More details about storing credentials in MFTF via `.credentials` can be found
 on the [MFTF Credentials documentation](https://developer.adobe.com/commerce/testing/functional-testing-framework/credentials/).
