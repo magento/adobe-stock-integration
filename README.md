@@ -9,13 +9,13 @@ Adobe Stock Integration provides a searchable interface in the Magento Admin to 
 ## Documentation
 
 - Complete documentation located on the project [wiki pages](https://github.com/magento/adobe-stock-integration/wiki):
-  - Project [roadmap](https://github.com/magento/adobe-stock-integration/wiki/Adobe-Stock-Image-Integration-Roadmap) contains information about project phases and stories for each phase 
+  - Project [roadmap](https://github.com/magento/adobe-stock-integration/wiki/Adobe-Stock-Image-Integration-Roadmap) contains information about project phases and stories for each phase
   - How to start local development described in the [installation guide](https://github.com/magento/adobe-stock-integration/wiki/Installation)
   - How to [run the project tests](https://github.com/magento/adobe-stock-integration/wiki/Run-the-Tests)
 
 ## Community Engineering Slack
 
-To connect with Magento team and the Community, join us on the [Magento Community Engineering Slack](https://magentocommeng.slack.com). 
+To connect with Magento team and the Community, join us on the [Magento Community Engineering Slack](https://magentocommeng.slack.com).
 If you are interested in joining Slack, or a specific channel, use our [self signup](https://opensource.magento.com/slack) link.
 
 Adobe Stock Integration project slack channel: [#adobe-stock](https://magentocommeng.slack.com/messages/CJLSYEPFA)

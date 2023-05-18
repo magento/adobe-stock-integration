@@ -1,2 +1,1 @@
 # Magento_AdobeStock
-
