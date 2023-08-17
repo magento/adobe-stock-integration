@@ -35,6 +35,9 @@
             <!-- Enable Adobe Stock Integration -->
             <magentoCLI command="config:set {{AdobeStockIntegrationEnable.path}} {{AdobeStockIntegrationEnable.value}}" stepKey="enableAdobeStockIntegration"/>
 
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config block_html"/>
+            </actionGroup>
             <!-- Logout From Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

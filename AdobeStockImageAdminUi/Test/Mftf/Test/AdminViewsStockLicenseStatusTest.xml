@@ -31,7 +31,7 @@
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
         </before>
         <after>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
             <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageForSeeStatusImage"/>
             <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPageForSeeStatusImage"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
@@ -52,7 +52,7 @@
         <click selector="{{AdminAdobeStockImagePreviewSection.savePreview}}" stepKey="clickOnSavePreview"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="savePreviewImage"/>
 
-        <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
+        <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
             <argument name="enabled" value="1"/>
         </actionGroup>
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPageForSeeStatusImage"/>
