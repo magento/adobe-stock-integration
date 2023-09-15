@@ -1,0 +1,7 @@
+
+File "/var/www/html/app/code/Magento/AdobeStockImage/Test/Mftf/Test/StorefrontAdobeStockIntegrationApiSwaggerActionsExistTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SwaggerApiListSection from module(s): magento/module-swagger
+	 StorefrontGoToSwaggerPageActionGroup from module(s): magento/module-swagger
+	 StorefrontApplyAdminTokenOnSwaggerPageActionGroup from module(s): magento/module-swagger
