@@ -1,0 +1,24 @@
+
+File "/var/www/html/app/code/Magento/AdobeStockAdminUi/Test/Mftf/Test/AdminCannotAccessStockImagesWithWrongCredentialsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenMediaGalleryFromPageNoEditorActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminAdobeStockOpenPanelFromMediaGalleryActionGroup from module(s): magento/module-adobe-stock-image-admin-ui
+
+File "/var/www/html/app/code/Magento/AdobeStockAdminUi/Test/Mftf/ActionGroup/AdminAdobeStockSetConfigActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdobeStockConfigDataEnabled from module(s): magento/module-adobe-stock-image-admin-ui
+	 AdobeStockConfigDataApiKey from module(s): magento/module-adobe-stock-image-admin-ui
+	 AdobeStockConfigDataPrivateKey from module(s): magento/module-adobe-stock-image-admin-ui
+
+File "/var/www/html/app/code/Magento/AdobeStockAdminUi/Test/Mftf/ActionGroup/AssertAdminAdobeStockConnectionTestActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdobeStockConfigDataApiKey from module(s): magento/module-adobe-stock-image-admin-ui
+
+File "/var/www/html/app/code/Magento/AdobeStockAdminUi/Test/Mftf/ActionGroup/AssertAdminFailedAuthenticationMessageActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdobeStockModalData from module(s): magento/module-adobe-stock-image-admin-ui
+	 AdminAdobeStockSection from module(s): magento/module-adobe-stock-image-admin-ui
