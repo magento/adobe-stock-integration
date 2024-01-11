@@ -1,0 +1,27 @@
+
+File "/var/www/html/app/code/Magento/AdobeStockImageAdminUi/Test/Mftf/Test/AdminAdobeStockIncorrectSecretSignInTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAdobeStockSetConfigActionGroup from module(s): magento/module-adobe-stock-admin-ui
+
+File "/var/www/html/app/code/Magento/AdobeStockImageAdminUi/Test/Mftf/Test/AdminAdobeStockInsertRenditionImageFromGalleryFileSizeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminRenditionsSetImageSizeActionGroup from module(s): magento/module-media-gallery-renditions
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminEditCategoryInGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+
+File "/var/www/html/app/code/Magento/AdobeStockImageAdminUi/Test/Mftf/Test/AdminAdobeStockLicensedImageViewLabelTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAdobeStockSetConfigActionGroup from module(s): magento/module-adobe-stock-admin-ui
+
+File "/var/www/html/app/code/Magento/AdobeStockImageAdminUi/Test/Mftf/Test/AdminAdobeStockSignInACLTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAdobeStockSetConfigActionGroup from module(s): magento/module-adobe-stock-admin-ui
+
+File "/var/www/html/app/code/Magento/AdobeStockImageAdminUi/Test/Mftf/Test/AdminStandaloneMediaGalleryUnsuccessfulLicensingTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAdobeStockSetConfigActionGroup from module(s): magento/module-adobe-stock-admin-ui
