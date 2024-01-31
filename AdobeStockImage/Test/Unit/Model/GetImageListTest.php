@@ -149,31 +149,68 @@ class GetImageListTest extends TestCase
         ];
         $this->filterBuilderMock
             ->method('setField')
-            ->withConsecutive(...$filterBuilderMockSetFieldWith)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$args) use ($filterBuilderMockSetFieldWith) {
+                if (!empty($args)) {
+                    static $callCount = 0;
+                    $callCount++;
+                    if ($callCount <= count($filterBuilderMockSetFieldWith)) {
+                        return $this->filterBuilderMock;
+                    }
+                }
+            });
         $this->filterBuilderMock
             ->method('setConditionType')
-            ->withConsecutive(...$filterBuilderMockSetConditionTypeWith)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$args) use ($filterBuilderMockSetConditionTypeWith) {
+                if (!empty($args)) {
+                    static $callCount = 0;
+                    $callCount++;
+                    if ($callCount <= count($filterBuilderMockSetConditionTypeWith)) {
+                        return $this->filterBuilderMock;
+                    }
+                }
+            });
+
         $this->filterBuilderMock
             ->method('setValue')
-            ->withConsecutive(...$filterBuilderMockSetValueWith)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$args) use ($filterBuilderMockSetValueWith) {
+                if (!empty($args)) {
+                    static $callCount = 0;
+                    $callCount++;
+                    if ($callCount <= count($filterBuilderMockSetValueWith)) {
+                            return $this->filterBuilderMock;
+                    }
+                }
+            });
         $this->filterBuilderMock
             ->method('create')
             ->willReturnOnConsecutiveCalls(...$filterBuilderMockCreateReturn);
 
         $this->filterGroupBuilderMock
             ->method('setFilters')
-            ->withConsecutive(...$filterGroupBuilderMockSetFiltersWith)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$args) use ($filterGroupBuilderMockSetFiltersWith) {
+                if (!empty($args)) {
+                    static $callCount = 0;
+                    $callCount++;
+                    if ($callCount <= count($filterGroupBuilderMockSetFiltersWith)) {
+                            return $this->filterGroupBuilderMock;
+                    }
+                }
+            });
         $this->filterGroupBuilderMock
             ->method('create')
             ->willReturnOnConsecutiveCalls(...$filterGroupBuilderMockCreateReturn);
 
         $searchCriteria
             ->method('setFilterGroups')
-            ->withConsecutive(...$searchCriteriaSetFilterGroupsWith);
+            ->willReturnCallback(function (...$args) use ($searchCriteriaSetFilterGroupsWith) {
+                static $callCount = 0;
+                $callCount++;
+                if (!empty($args)) {
+                    if ($callCount <= count($searchCriteriaSetFilterGroupsWith)) {
+                            return null;
+                    }
+                }
+            });
 
         $searchResult = $this->createMock(SearchResultInterface::class);
 
@@ -190,7 +227,7 @@ class GetImageListTest extends TestCase
      *
      * @return array
      */
-    public function appliedFilterNamesProvider(): array
+    public static function appliedFilterNamesProvider(): array
     {
         return [
             [
