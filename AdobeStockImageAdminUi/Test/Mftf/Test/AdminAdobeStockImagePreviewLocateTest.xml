@@ -56,6 +56,7 @@
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="clickSavePreviewButton"/>
         <comment userInput="BIC workaround" stepKey="waitForPromptModal"/>
         <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabImageFileName"/>
+        <waitForElementClickable selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmButtonClickable"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
         <waitForElementVisible selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabImageFileName})}}" stepKey="assertSavedImage"/>

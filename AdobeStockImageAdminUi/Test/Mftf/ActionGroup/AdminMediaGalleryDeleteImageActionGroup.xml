@@ -21,7 +21,7 @@
             stepKey="clickImageToDeleteAgain"/>
         <waitForElementVisible selector="{{AdminAdobeStockSection.mediaGalleryDeleteButton}}" stepKey="waitForDeleteButton"/>
         <click selector="{{AdminAdobeStockSection.mediaGalleryDeleteButton}}" stepKey="clickDeleteButton"/>
-        <waitForElementVisible selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
+        <waitForElementClickable selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
         <waitForPageLoad stepKey="waitForMaskDisappeared"/>
         <dontSeeElement selector="{{AdminAdobeStockSection.mediaGalleryImage(name)}}" stepKey="assertImageIsDeleted"/>

@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="developer_mode_only"/>
             <skip>
-                <issueId value="ACQE-4803">To be converted to WebApi test</issueId>
+                <issueId value="ACQE-4803">To be converted to WebApi test. This test should not be in adobe-stock-integration. It contains references that originate in the security-package repository. The test should be moved out of this repository when it is replaced by an integration test</issueId>
             </skip>
         </annotations>
         <before>

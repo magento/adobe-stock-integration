@@ -14,6 +14,7 @@
         </arguments>
         <waitForElementVisible selector="{{AdminAdobeStockSaveImagePreviewSection.name}}" time="30" stepKey="waitForInputVisible"/>
         <fillField selector="{{AdminAdobeStockSaveImagePreviewSection.name}}" userInput="{{name}}" stepKey="setImageName"/>
+        <waitForElementClickable selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmButtonClickable"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="confirmSavingThePreview"/>
         <waitForPageLoad stepKey="waitForImagePreviewToSave"/>
     </actionGroup>
