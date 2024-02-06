@@ -99,6 +99,9 @@ class GetImageListTest extends TestCase
      * @param array $appliedFilterNames
      * @dataProvider appliedFilterNamesProvider
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testWithDefaultFilters(array $appliedFilterNames): void
     {
