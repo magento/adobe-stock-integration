@@ -17,5 +17,6 @@
         <waitForElementClickable selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmButtonClickable"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="confirmSavingThePreview"/>
         <waitForPageLoad stepKey="waitForImagePreviewToSave"/>
+        <dontSeeElementInDOM selector="{{AdminAdobeStockImagePreviewSection.errorMessage}}" stepKey="verifyNoErrorMessage"/>
     </actionGroup>
 </actionGroups>
