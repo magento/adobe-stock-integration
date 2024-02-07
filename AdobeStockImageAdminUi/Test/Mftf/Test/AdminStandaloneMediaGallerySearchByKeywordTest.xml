@@ -60,6 +60,7 @@
         <waitForElementClickable selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmButtonClickable"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
+        <dontSeeElementInDOM selector="{{AdminAdobeStockImagePreviewSection.errorMessage}}" stepKey="verifyNoErrorMessage"/>
         <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImage">
             <argument name="keyword" value="$grabImageName"/>
         </actionGroup>
