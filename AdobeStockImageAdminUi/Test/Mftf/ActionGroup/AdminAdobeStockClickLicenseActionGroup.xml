@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAdobeStockClickLicenseActionGroup">
         <click selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickOnSavePreview"/>
-        <waitForElementVisible selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
+        <waitForElementClickable selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmationModal"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickConfirmButton"/>
         <waitForPageLoad stepKey="waitForMaskDisappeared"/>
     </actionGroup>

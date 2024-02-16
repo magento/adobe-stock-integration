@@ -40,7 +40,7 @@
         <click selector="{{AdminAdobeStockSection.selectAnImage('2')}}" stepKey="clickOnThumbnail"/>
         <waitForPageLoad stepKey="waitForImagePreviewToExpand"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
-        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AdminSaveAdobeStockImagePreviewAndDontCheckForErrorActionGroup" stepKey="confirmSaveImagePreview"/>
         <waitForText userInput="Could not save image: destination directory is restricted." stepKey="waitForErrorMessage"/>
 
         <!-- Verify Can Save Adobe Stock Preview Under Wysiwyg -->

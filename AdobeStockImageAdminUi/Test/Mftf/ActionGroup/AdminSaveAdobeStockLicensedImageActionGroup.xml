@@ -9,8 +9,8 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSaveAdobeStockLicensedImageActionGroup">
-        <waitForElementVisible selector="{{AdminAdobeStockSaveImagePreviewSection.name}}" time="30" stepKey="waitForInputVisible"/>
+        <waitForElementClickable selector="{{AdminAdobeStockSaveImagePreviewSection.name}}" time="30" stepKey="waitForInputVisible"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="confirmSavingLicensed"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForImageToSave"/>
+        <waitForPageLoad stepKey="waitForImageToSave"/>
     </actionGroup>
 </actionGroups>

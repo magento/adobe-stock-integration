@@ -42,8 +42,10 @@
         <click selector="{{AdminAdobeStockImagePreviewSection.saveLicensedImage}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForPromptModal"/>
         <grabValueFrom selector="{{AdminAdobeStockImagePreviewSection.imageNameField}}" stepKey="grabSaveImageFileName"/>
+        <waitForElementClickable selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="waitForConfirmButtonClickable"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.confirm}}" stepKey="clickOnPopupConfirm"/>
         <waitForPageLoad stepKey="waitForMediaGalleryOpen"/>
+        <dontSeeElementInDOM selector="{{AdminAdobeStockImagePreviewSection.errorMessage}}" stepKey="verifyNoErrorMessage"/>
         <seeElement selector="{{AdminAdobeStockSection.mediaGalleryImage({$grabSaveImageFileName})}}" stepKey="imageSaved"/>
         <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanelAgain"/>
         <actionGroup ref="AdminAdobeStockImagePreviewLocateActionGroup" stepKey="locateImage"/>
