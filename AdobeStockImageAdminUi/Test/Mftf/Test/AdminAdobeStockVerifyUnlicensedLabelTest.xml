@@ -52,6 +52,8 @@
 
         <conditionalClick selector="{{AdminAdobeStockImagePreviewSection.close}}" dependentSelector="{{AdminAdobeStockImagePreviewSection.close}}" visible="true" stepKey="expandImagePreview"/>
         <waitForPageLoad stepKey="waitForImagePreviewToClose"/>
+        <actionGroup ref="AdminAdobeStockModalClearAllFiltersActionGroup" stepKey="clearAllAdobeStockFilters" />
+        <waitForElementVisible selector="{{AdminAdobeStockSection.selectAnImage('2')}}" stepKey="waitForClickOnThumbnail"/>
         <click selector="{{AdminAdobeStockSection.selectAnImage('2')}}" stepKey="clickOnThumbnail"/>
         <waitForPageLoad stepKey="waitForImagePreviewToExpand"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="openTheSaveImagePreviewPopup"/>
