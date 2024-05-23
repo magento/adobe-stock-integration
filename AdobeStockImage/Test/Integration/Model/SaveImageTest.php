@@ -70,7 +70,7 @@ class SaveImageTest extends TestCase
     /**
      * @return array
      */
-    public function getSaveTestDataProvider(): array
+    public static function getSaveTestDataProvider(): array
     {
         return [
             'image_save' => [

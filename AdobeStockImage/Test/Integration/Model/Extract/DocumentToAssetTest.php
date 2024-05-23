@@ -72,7 +72,7 @@ class DocumentToAssetTest extends TestCase
     /**
      * @return array
      */
-    public function documentProvider(): array
+    public static function documentProvider(): array
     {
         return [
             'case1' => [

@@ -39,7 +39,7 @@ class SaveAssetTest extends TestCase
     /**
      * @return array
      */
-    public function getAssetData(): array
+    public static function getAssetData(): array
     {
         return [
             'asset_save' => [
