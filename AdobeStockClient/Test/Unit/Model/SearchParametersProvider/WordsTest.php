@@ -199,7 +199,7 @@ class WordsTest extends TestCase
      *
      * @return array
      */
-    public function requestValuesDataProvider(): array
+    public static function requestValuesDataProvider(): array
     {
         return [
             [

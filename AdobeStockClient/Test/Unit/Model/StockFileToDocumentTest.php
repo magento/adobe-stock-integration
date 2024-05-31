@@ -106,7 +106,7 @@ class StockFileToDocumentTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider(): array
+    public static function convertDataProvider(): array
     {
         $stockFile = new StockFile([]);
 

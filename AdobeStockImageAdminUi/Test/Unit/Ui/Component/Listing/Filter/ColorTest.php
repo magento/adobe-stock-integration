@@ -226,7 +226,7 @@ class ColorTest extends TestCase
      *
      * @return array
      */
-    public function colorPickerModeProvider(): array
+    public static function colorPickerModeProvider(): array
     {
         return [
             [

@@ -179,7 +179,7 @@ class GetRelatedImagesTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function relatedImagesDataProvider(): array
+    public static function relatedImagesDataProvider(): array
     {
         return [
             [
