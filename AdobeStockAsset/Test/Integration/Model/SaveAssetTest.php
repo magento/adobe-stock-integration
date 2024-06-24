@@ -43,14 +43,14 @@ class SaveAssetTest extends TestCase
     {
         return [
             'asset_save' => [
-                'data' => [
+                'caseData' => [
                     'media_gallery_path' => ['some/path.jpg'],
                     'category_id' => 42,
                     'creator_id' => 42,
                 ]
             ],
             'without_category' => [
-                'data' => [
+                'caseData' => [
                     'media_gallery_path' => ['some/path.jpg'],
                     'category_id' => null,
                     'creator_id' => 42,

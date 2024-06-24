@@ -86,7 +86,7 @@ class DocumentToAssetTest extends TestCase
                     'creator_id' => 3,
                     'is_licensed' => 1
                 ],
-                'additionaData' => [
+                'additionalData' => [
                     'media_gallery_id' => 5
                 ]
             ]
