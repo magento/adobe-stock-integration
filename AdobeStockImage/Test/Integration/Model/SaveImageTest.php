@@ -98,7 +98,7 @@ class SaveImageTest extends TestCase
                         ],
                     ]
                 ],
-                'sourcePath' => 'magento-logo.png',
+                'sourceFile' => 'magento-logo.png',
                 'destinationPath' => 'catalog/category/adobe-stock-save-image-test.png',
             ]
         ];
