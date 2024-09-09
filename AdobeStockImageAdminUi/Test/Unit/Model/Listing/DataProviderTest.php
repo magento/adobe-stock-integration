@@ -182,7 +182,7 @@ class DataProviderTest extends TestCase
     /**
      * @return array
      */
-    public function itemsDataProvider(): array
+    public static function itemsDataProvider(): array
     {
         $itemsData = [
             [

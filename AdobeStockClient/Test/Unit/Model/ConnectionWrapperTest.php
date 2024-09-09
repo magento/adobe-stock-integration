@@ -289,7 +289,7 @@ class ConnectionWrapperTest extends TestCase
      *
      * @return array
      */
-    public function detailedExceptionsForGetNextResponseProvider(): array
+    public static function detailedExceptionsForGetNextResponseProvider(): array
     {
         return [
             [

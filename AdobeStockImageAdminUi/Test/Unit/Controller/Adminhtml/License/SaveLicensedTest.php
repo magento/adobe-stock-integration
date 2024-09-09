@@ -169,7 +169,7 @@ class SaveLicensedTest extends TestCase
      *
      * @return array
      */
-    public function exceptionsDataProvider(): array
+    public static function exceptionsDataProvider(): array
     {
         return [
             "Test the thrown exception if the asset couldn't be found" => [

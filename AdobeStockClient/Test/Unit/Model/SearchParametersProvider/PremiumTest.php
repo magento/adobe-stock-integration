@@ -103,7 +103,7 @@ class PremiumTest extends TestCase
      *
      * @return array
      */
-    public function filterTypesDataProvider(): array
+    public static function filterTypesDataProvider(): array
     {
         return [
             [
