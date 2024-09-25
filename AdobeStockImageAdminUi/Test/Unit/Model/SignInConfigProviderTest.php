@@ -132,7 +132,7 @@ class SignInConfigProviderTest extends TestCase
      *
      * @return array
      */
-    public function userQuotaProvider(): array
+    public static function userQuotaProvider(): array
     {
         return [
             [
@@ -156,7 +156,7 @@ class SignInConfigProviderTest extends TestCase
      *
      * @return array
      */
-    public function exceptionsDataProvider(): array
+    public static function exceptionsDataProvider(): array
     {
         $defaultQuota = [
             'images' => 0,

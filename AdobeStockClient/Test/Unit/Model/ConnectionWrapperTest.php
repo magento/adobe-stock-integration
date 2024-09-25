@@ -289,28 +289,28 @@ class ConnectionWrapperTest extends TestCase
      *
      * @return array
      */
-    public function detailedExceptionsForGetNextResponseProvider(): array
+    public static function detailedExceptionsForGetNextResponseProvider(): array
     {
         return [
             [
-                'connection_exception_message' => 'Api Key is invalid',
-                'thrown_exception_message' => 'Adobe API Key is invalid!',
-                'thrown_exception' => AuthenticationException::class,
+                'connectionException' => 'Api Key is invalid',
+                'thrownException' => 'Adobe API Key is invalid!',
+                'exception' => AuthenticationException::class,
             ],
             [
-                'connection_exception_message' => 'Api Key is required',
-                'thrown_exception_message' => 'Adobe Api Key is required!',
-                'thrown_exception' => AuthenticationException::class,
+                'connectionException' => 'Api Key is required',
+                'thrownException' => 'Adobe Api Key is required!',
+                'exception' => AuthenticationException::class,
             ],
             [
-                'connection_exception_message' => 'Oauth token is not valid',
-                'thrown_exception_message' => 'Adobe API login has expired!',
-                'thrown_exception' => AuthorizationException::class,
+                'connectionException' => 'Oauth token is not valid',
+                'thrownException' => 'Adobe API login has expired!',
+                'exception' => AuthorizationException::class,
             ],
             [
-                'connection_exception_message' => 'Could not validate the oauth token',
-                'thrown_exception_message' => 'Adobe API login has expired!',
-                'thrown_exception' => AuthorizationException::class,
+                'connectionException' => 'Could not validate the oauth token',
+                'thrownException' => 'Adobe API login has expired!',
+                'exception' => AuthorizationException::class,
             ],
         ];
     }

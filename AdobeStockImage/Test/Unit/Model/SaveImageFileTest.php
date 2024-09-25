@@ -49,13 +49,14 @@ class SaveImageFileTest extends TestCase
     /**
      * Test getting save image path.
      *
-     * @param Document $document
+     * @param \Closure $document
      * @param string $url
      * @param string $destinationPath
      * @dataProvider assetProvider
      */
-    public function testExecute(Document $document, string $url, string $destinationPath): void
+    public function testExecute(\Closure $document, string $url, string $destinationPath): void
     {
+        $document = $document($this);
         $this->storageSave->expects($this->once())
             ->method('execute');
 
@@ -69,16 +70,17 @@ class SaveImageFileTest extends TestCase
     /**
      * Test save image with exception.
      *
-     * @param Document $document
+     * @param \Closure $document
      * @param string $url
      * @param string $destinationPath
      * @dataProvider assetProvider
      */
     public function testExecuteWithException(
-        Document $document,
+        \Closure $document,
         string $url,
         string $destinationPath
     ): void {
+        $document = $document($this);
         $this->storageSave->expects($this->once())
             ->method('execute')
             ->willThrowException(new \Exception('Some Exception'));
@@ -93,16 +95,16 @@ class SaveImageFileTest extends TestCase
      *
      * @return array
      */
-    public function assetProvider(): array
+    public static function assetProvider(): array
     {
         return [
             [
-                'document' => $this->getDocument(),
+                'document' => static fn (self $testCase) => $testCase->getDocument(),
                 'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
                 'destinationPath' => 'path'
             ],
             [
-                'document' => $this->getDocument('filepath.jpg'),
+                'document' => static fn (self $testCase) => $testCase->getDocument('filepath.jpg'),
                 'url' => 'https://as2.ftcdn.net/jpg/500_FemVonDcttCeKiOXFk.jpg',
                 'destinationPath' => 'path',
             ],
@@ -115,7 +117,7 @@ class SaveImageFileTest extends TestCase
      * @param string|null $path
      * @return MockObject
      */
-    private function getDocument(?string $path = null): MockObject
+    protected function getDocument(?string $path = null): MockObject
     {
         $document = $this->createMock(Document::class);
         $pathAttribute = $this->createMock(AttributeInterface::class);

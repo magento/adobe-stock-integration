@@ -276,7 +276,7 @@ class FilesTest extends TestCase
      *
      * @return array
      */
-    public function curlRequestHeaders(): array
+    public static function curlRequestHeaders(): array
     {
         return
             [

@@ -103,15 +103,15 @@ class PremiumTest extends TestCase
      *
      * @return array
      */
-    public function filterTypesDataProvider(): array
+    public static function filterTypesDataProvider(): array
     {
         return [
             [
-                'name' => self::FILTER_TYPE,
-                'value' => '123'
+                'filterName' => self::FILTER_TYPE,
+                'filterValue' => '123'
             ], [
-                'name' => 'offensive_filter',
-                'value' => '456'
+                'filterName' => 'offensive_filter',
+                'filterValue' => '456'
             ]
         ];
     }
