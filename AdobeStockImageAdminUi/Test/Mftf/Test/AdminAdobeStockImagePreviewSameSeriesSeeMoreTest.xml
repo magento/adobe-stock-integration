@@ -34,7 +34,7 @@
         </actionGroup>
         <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithoutModelFilter"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
-            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+            <argument name="query" value="{{AdobeStockUnlicensedNewImage.id}}"/>
         </actionGroup>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>

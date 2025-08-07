@@ -22,6 +22,7 @@
         <element name="viewAllKeywords" type="button" selector="//*[@id='adobe-stock-images-search-modal']//span[text()='View all']"/>
         <element name="keywords" type="block" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='keyword']"/>
         <element name="firstKeyword" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='keyword'][1]"/>
+        <element name="firstKeywordNotAI" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@class='keyword' and not(contains(.,'nobody'))][1]"/>
         <element name="imagePreviewCategoryText" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[@data-role='image-attributes-value']//span[text()='Category']/following-sibling::div"/>
         <element name="keywordsTitle" type="text" selector="//*[@id='adobe-stock-images-search-modal']//div[text()='Similar Keywords']"/>
         <element name="keyword" type="block" selector="//div[@class='keyword']//span[text()='{{keyword}}']" parameterized="true"/>
