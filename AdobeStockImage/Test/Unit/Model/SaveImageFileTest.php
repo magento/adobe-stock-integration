@@ -14,6 +14,7 @@ use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,8 +54,8 @@ class SaveImageFileTest extends TestCase
      * @param \Closure $document
      * @param string $url
      * @param string $destinationPath
-     * @dataProvider assetProvider
      */
+    #[DataProvider('assetProvider')]
     public function testExecute(\Closure $document, string $url, string $destinationPath): void
     {
         $document = $document($this);
@@ -74,8 +75,8 @@ class SaveImageFileTest extends TestCase
      * @param \Closure $document
      * @param string $url
      * @param string $destinationPath
-     * @dataProvider assetProvider
      */
+    #[DataProvider('assetProvider')]
     public function testExecuteWithException(
         \Closure $document,
         string $url,

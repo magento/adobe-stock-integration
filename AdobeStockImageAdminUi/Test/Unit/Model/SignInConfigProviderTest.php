@@ -17,6 +17,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -70,11 +71,10 @@ class SignInConfigProviderTest extends TestCase
     /**
      * Testing the available quota for for authorized and not authorized users
      *
-     * @dataProvider userQuotaProvider
-     *
      * @param bool $userIsAuthorized
      * @param array $userQuota
      */
+    #[DataProvider('userQuotaProvider')]
     public function testGettingUserQuota(bool $userIsAuthorized, array $userQuota): void
     {
         $quotaUrl = 'http://site.com/adobe_stock/license/quota';
@@ -102,11 +102,10 @@ class SignInConfigProviderTest extends TestCase
     /**
      * Testing the available quota for for authorized and not authorized users
      *
-     * @dataProvider exceptionsDataProvider
-     *
      * @param \Exception $exception
      * @param array $userQuota
      */
+    #[DataProvider('exceptionsDataProvider')]
     public function testGettingUserQuotaOnExceptions(\Exception $exception, array $userQuota): void
     {
         $userIsAuthorized = true;

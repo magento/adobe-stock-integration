@@ -20,6 +20,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -91,12 +92,12 @@ class SaveMediaGalleryAssetTest extends TestCase
     /**
      * Verify successful save of a media gallery asset id.
      *
-     * @dataProvider imageDataProvider
      * @param \Closure $document
      * @param string $path
      * @throws CouldNotSaveException
      * @throws LocalizedException
      */
+    #[DataProvider('imageDataProvider')]
     public function testExecute(\Closure $document, string $path): void
     {
         $document = $document($this);

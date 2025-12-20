@@ -15,6 +15,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -65,9 +66,8 @@ class StockFileToDocumentTest extends TestCase
     /**
      * @param StockFile $stockFile
      * @param array $attributesData
-     *
-     * @dataProvider convertDataProvider
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert(StockFile $stockFile, array $attributesData): void
     {
         $item = $this->createMock(Document::class);

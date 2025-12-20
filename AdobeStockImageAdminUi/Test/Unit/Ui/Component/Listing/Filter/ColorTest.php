@@ -20,6 +20,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Ui\Model\ColorPicker\ColorModesProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -136,11 +137,11 @@ class ColorTest extends TestCase
     /**
      * Prepare test
      *
-     * @dataProvider colorPickerModeProvider
      * @param string|null $colorPickerMode
      * @param string $appliedValue
      * @throws LocalizedException
      */
+    #[DataProvider('colorPickerModeProvider')]
     public function testPrepare(?string $colorPickerMode, string $appliedValue): void
     {
         $filter = $this->createMock(Filter::class);
