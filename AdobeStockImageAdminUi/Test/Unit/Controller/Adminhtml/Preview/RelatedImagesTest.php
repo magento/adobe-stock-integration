@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,18 +19,12 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 /**
  * Test for controller providing Adobe Stock asset related images
  */
 class RelatedImagesTest extends TestCase
 {
-    /**
-     * @var MockObject|LoggerInterface
-     */
-    private $logger;
-
     /**
      * @var MockObject|ActionContext
      */
@@ -65,7 +60,6 @@ class RelatedImagesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
         $this->getRelatedImages = $this->createMock(GetRelatedImagesInterface::class);
         $this->context = $this->createMock(ActionContext::class);
         $this->request = $this->createMock(RequestInterface::class);
@@ -90,8 +84,7 @@ class RelatedImagesTest extends TestCase
             );
         $this->relatedImages = new RelatedImages(
             $this->context,
-            $this->getRelatedImages,
-            $this->logger
+            $this->getRelatedImages
         );
     }
 
