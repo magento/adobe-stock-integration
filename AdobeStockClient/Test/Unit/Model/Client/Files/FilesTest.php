@@ -279,17 +279,16 @@ class FilesTest extends TestCase
      */
     public static function curlRequestHeaders(): array
     {
-        return
-            [
-                [
-                    [1],
-                    'en',
-                    'Magento/dev-2.3-develop',
-                    'target-environment',
-                    '75y87d439eqweqw4f4asde64ae42060fc571c456sdfsdqwe',
-                    'Bearer ' . base64_encode('Magento/dev-2.3-develop'),
-                    []
-                ]
-            ];
+        return [
+            'default test case' => [
+                [1],
+                'en',
+                'Magento/dev-2.3-develop',
+                'target-environment',
+                '75y87d439eqweqw4f4asde64ae42060fc571c456sdfsdqwe',
+                'Bearer ' . base64_encode('Magento/dev-2.3-develop'),
+                []
+            ]
+        ];
     }
 }

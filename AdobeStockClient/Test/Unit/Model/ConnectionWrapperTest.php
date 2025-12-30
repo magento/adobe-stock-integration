@@ -293,25 +293,25 @@ class ConnectionWrapperTest extends TestCase
     public static function detailedExceptionsForGetNextResponseProvider(): array
     {
         return [
-            [
-                'connectionException' => 'Api Key is invalid',
-                'thrownException' => 'Adobe API Key is invalid!',
-                'exception' => AuthenticationException::class,
+            'Api Key is invalid' => [
+                'Api Key is invalid',
+                'Adobe API Key is invalid!',
+                AuthenticationException::class,
             ],
-            [
-                'connectionException' => 'Api Key is required',
-                'thrownException' => 'Adobe Api Key is required!',
-                'exception' => AuthenticationException::class,
+            'Api Key is required' => [
+                'Api Key is required',
+                'Adobe Api Key is required!',
+                AuthenticationException::class,
             ],
-            [
-                'connectionException' => 'Oauth token is not valid',
-                'thrownException' => 'Adobe API login has expired!',
-                'exception' => AuthorizationException::class,
+            'Oauth token is not valid' => [
+                'Oauth token is not valid',
+                'Adobe API login has expired!',
+                AuthorizationException::class,
             ],
-            [
-                'connectionException' => 'Could not validate the oauth token',
-                'thrownException' => 'Adobe API login has expired!',
-                'exception' => AuthorizationException::class,
+            'Could not validate the oauth token' => [
+                'Could not validate the oauth token',
+                'Adobe API login has expired!',
+                AuthorizationException::class,
             ],
         ];
     }
