@@ -175,8 +175,8 @@ class ConnectionWrapperTest extends TestCase
      * @param string $exception Exception class that will throws by the getNextResponse method
      *
      * @return void
+     * @dataProvider detailedExceptionsForGetNextResponseProvider
      */
-    #[DataProvider('detailedExceptionsForGetNextResponseProvider')]
     public function testGetNextResponseWithExceptionThatNeedMoreAttention(
         string $connectionException,
         string $thrownException,

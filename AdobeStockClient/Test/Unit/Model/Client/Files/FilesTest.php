@@ -21,6 +21,7 @@ use Magento\AdobeStockClient\Model\FilesRequestFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -121,9 +122,8 @@ class FilesTest extends TestCase
      * @param string $apiKey
      * @param string $accessToken
      * @param array $columns
-     *
-     * @dataProvider curlRequestHeaders
      */
+    #[DataProvider('curlRequestHeaders')]
     public function testResultContainsEmptyFiles(
         array $ids,
         string $locale,
@@ -193,9 +193,8 @@ class FilesTest extends TestCase
      * @param string $apiKey
      * @param string $accessToken
      * @param array $columns
-     *
-     * @dataProvider curlRequestHeaders
      */
+    #[DataProvider('curlRequestHeaders')]
     public function testResultContainsFiles(
         array $ids,
         string $locale,
