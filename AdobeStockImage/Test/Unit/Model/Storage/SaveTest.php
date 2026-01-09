@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,7 +84,7 @@ class SaveTest extends TestCase
         $this->mediaDirectoryMock->expects($this->once())
             ->method('isExist')
             ->withAnyParameters()
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->httpsDriverMock->expects($this->once())
             ->method('fileGetContents')
             ->willReturn('content');
@@ -92,7 +92,7 @@ class SaveTest extends TestCase
         $this->mediaDirectoryMock->expects($this->once())
             ->method('writeFile')
             ->withAnyParameters()
-            ->willReturn($this->isType('integer'));
+            ->willReturn(1);
 
         $this->save->execute($imageUrl, '/240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg');
     }
@@ -111,7 +111,7 @@ class SaveTest extends TestCase
         $this->mediaDirectoryMock->expects($this->once())
             ->method('isExist')
             ->withAnyParameters()
-            ->will($this->returnValue(['240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg']));
+            ->willReturn(['240_F_272299924_HjNOJkyyhzFVKRcSQ2TaArR7Ka6nTXRa.jpg']);
 
         $this->httpsDriverMock->expects($this->never())
              ->method('fileGetContents');

@@ -1,8 +1,7 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -18,6 +17,7 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -86,9 +86,9 @@ class DataProviderTest extends TestCase
     }
 
     /**
-     * @dataProvider itemsDataProvider
      * @param array $itemsData
      */
+    #[DataProviderAttribute('itemsDataProvider')]
     public function testGetData(array $itemsData): void
     {
         $searchCriteria = $this->createMock(SearchCriteria::class);
