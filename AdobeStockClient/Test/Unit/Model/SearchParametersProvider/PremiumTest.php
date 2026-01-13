@@ -74,9 +74,8 @@ class PremiumTest extends TestCase
      *
      * @param string $filterName
      * @param string $filterValue
-     *
-     * @dataProvider filterTypesDataProvider
      */
+    #[DataProvider('filterTypesDataProvider')]
     public function testApply(string $filterName, string $filterValue): void
     {
         $invokedTimes = (int) ($filterName === self::FILTER_TYPE);
