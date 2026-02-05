@@ -1,8 +1,7 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +22,7 @@ use Magento\AdobeStockClientApi\Api\ConfigInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -174,8 +174,8 @@ class ConnectionWrapperTest extends TestCase
      * @param string $exception Exception class that will throws by the getNextResponse method
      *
      * @return void
-     * @dataProvider detailedExceptionsForGetNextResponseProvider
      */
+    #[DataProvider('detailedExceptionsForGetNextResponseProvider')]
     public function testGetNextResponseWithExceptionThatNeedMoreAttention(
         string $connectionException,
         string $thrownException,
@@ -293,25 +293,25 @@ class ConnectionWrapperTest extends TestCase
     public static function detailedExceptionsForGetNextResponseProvider(): array
     {
         return [
-            [
-                'connectionException' => 'Api Key is invalid',
-                'thrownException' => 'Adobe API Key is invalid!',
-                'exception' => AuthenticationException::class,
+            'Api Key is invalid' => [
+                'Api Key is invalid',
+                'Adobe API Key is invalid!',
+                AuthenticationException::class,
             ],
-            [
-                'connectionException' => 'Api Key is required',
-                'thrownException' => 'Adobe Api Key is required!',
-                'exception' => AuthenticationException::class,
+            'Api Key is required' => [
+                'Api Key is required',
+                'Adobe Api Key is required!',
+                AuthenticationException::class,
             ],
-            [
-                'connectionException' => 'Oauth token is not valid',
-                'thrownException' => 'Adobe API login has expired!',
-                'exception' => AuthorizationException::class,
+            'Oauth token is not valid' => [
+                'Oauth token is not valid',
+                'Adobe API login has expired!',
+                AuthorizationException::class,
             ],
-            [
-                'connectionException' => 'Could not validate the oauth token',
-                'thrownException' => 'Adobe API login has expired!',
-                'exception' => AuthorizationException::class,
+            'Could not validate the oauth token' => [
+                'Could not validate the oauth token',
+                'Adobe API login has expired!',
+                AuthorizationException::class,
             ],
         ];
     }
