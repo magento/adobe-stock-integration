@@ -43,7 +43,7 @@ class AssetRepositoryTest extends TestCase
     /**
      * Test getting an Adobe Stock asset by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/asset.php
      */
     public function testGetById(): void
     {
@@ -56,7 +56,7 @@ class AssetRepositoryTest extends TestCase
     /**
      * Test delete an Adobe Stock asset by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/asset.php
      */
     public function testDeleteById(): void
     {
@@ -68,7 +68,7 @@ class AssetRepositoryTest extends TestCase
     /**
      * Test getting a list of Adobe Stock assets by search criteria.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/asset.php
      */
     public function testGetList(): void
     {

@@ -68,7 +68,7 @@ class GetByIdTest extends WebapiAbstract
     /**
      * Test get by ID
      *
-     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @magentoApiDataFixture Magento_AdobeStockAsset::Test/_files/asset.php
      *
      * @return void
      */

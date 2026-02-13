@@ -1,10 +1,8 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Integration\Model;
@@ -19,6 +17,7 @@ use Magento\AdobeStockAssetApi\Api\SaveAssetInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,14 +43,14 @@ class SaveAssetTest extends TestCase
     {
         return [
             'asset_save' => [
-                'caseData' => [
+                [
                     'media_gallery_path' => ['some/path.jpg'],
                     'category_id' => 42,
                     'creator_id' => 42,
                 ]
             ],
             'without_category' => [
-                'caseData' => [
+                [
                     'media_gallery_path' => ['some/path.jpg'],
                     'category_id' => null,
                     'creator_id' => 42,
@@ -72,13 +71,11 @@ class SaveAssetTest extends TestCase
     /**
      * Test save an Adobe Stock asset.
      *
-     * @param array $caseData
-     *
-     * @dataProvider getAssetData
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/media_asset.php
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/media_asset.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/category.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
      */
+    #[DataProvider('getAssetData')]
     public function testExecute(array $caseData): void
     {
         $asset = $this->prepareAsset($caseData);

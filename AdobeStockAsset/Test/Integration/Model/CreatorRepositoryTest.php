@@ -44,7 +44,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * Test getting an Adobe Stock creator by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
      */
     public function testGetById(): void
     {
@@ -57,7 +57,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * Test delete an Adobe Stock creator by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
      */
     public function testDeleteById(): void
     {
@@ -69,7 +69,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * Test getting a list of Adobe Stock creators by search criteria.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
      */
     public function testGetList(): void
     {

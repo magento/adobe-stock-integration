@@ -27,7 +27,7 @@ class GetListTest extends WebapiAbstract
     /**
      * Test getting the Adobe Stock image by search criteria.
      *
-     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @magentoApiDataFixture Magento_AdobeStockAsset::Test/_files/asset.php
      *
      * @return void
      */
