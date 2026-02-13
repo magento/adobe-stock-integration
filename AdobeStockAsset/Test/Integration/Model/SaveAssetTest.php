@@ -3,6 +3,7 @@
  * Copyright 2024 Adobe
  * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Integration\Model;
@@ -43,14 +44,14 @@ class SaveAssetTest extends TestCase
     {
         return [
             'asset_save' => [
-                [
+                'caseData' => [
                     'media_gallery_path' => ['some/path.jpg'],
                     'category_id' => 42,
                     'creator_id' => 42,
                 ]
             ],
             'without_category' => [
-                [
+                'caseData' => [
                     'media_gallery_path' => ['some/path.jpg'],
                     'category_id' => null,
                     'creator_id' => 42,
@@ -71,10 +72,12 @@ class SaveAssetTest extends TestCase
     /**
      * Test save an Adobe Stock asset.
      *
+     * @param array $caseData
+     *
      * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/media_asset.php
      * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/category.php
      * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
-     */
+    */
     #[DataProvider('getAssetData')]
     public function testExecute(array $caseData): void
     {
