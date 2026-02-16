@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class DeleteByIdTest extends WebapiAbstract
     private const SERVICE_OPERATION_GET_BY_ID = 'GetById';
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @magentoApiDataFixture Magento_AdobeStockAsset::Test/_files/asset.php
      */
     public function testDelete(): void
     {

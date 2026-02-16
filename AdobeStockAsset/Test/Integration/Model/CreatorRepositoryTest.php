@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -44,7 +44,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * Test getting an Adobe Stock creator by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
      */
     public function testGetById(): void
     {
@@ -57,7 +57,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * Test delete an Adobe Stock creator by id.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
      */
     public function testDeleteById(): void
     {
@@ -69,7 +69,7 @@ class CreatorRepositoryTest extends TestCase
     /**
      * Test getting a list of Adobe Stock creators by search criteria.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
      */
     public function testGetList(): void
     {
