@@ -3,6 +3,7 @@
  * Copyright 2024 Adobe
  * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\AdobeStockAsset\Test\Integration\Model;
@@ -71,10 +72,12 @@ class SaveAssetTest extends TestCase
     /**
      * Test save an Adobe Stock asset.
      *
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/media_asset.php
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/category.php
-     * @magentoDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/creator.php
-     */
+     * @param array $caseData
+     *
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/media_asset.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/category.php
+     * @magentoDataFixture Magento_AdobeStockAsset::Test/_files/creator.php
+    */
     #[DataProvider('getAssetData')]
     public function testExecute(array $caseData): void
     {
