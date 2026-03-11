@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -68,7 +68,7 @@ class GetByIdTest extends WebapiAbstract
     /**
      * Test get by ID
      *
-     * @magentoApiDataFixture ../../../../app/code/Magento/AdobeStockAsset/Test/_files/asset.php
+     * @magentoApiDataFixture Magento_AdobeStockAsset::Test/_files/asset.php
      *
      * @return void
      */
