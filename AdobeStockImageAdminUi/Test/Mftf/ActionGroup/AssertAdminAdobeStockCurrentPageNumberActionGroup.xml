@@ -11,6 +11,6 @@
         <arguments>
             <argument name="pageNumber" type="string" defaultValue="1"/>
         </arguments>
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="{{pageNumber}}" stepKey="seeCorrectCurrentPageNumber" />
+        <seeInField selector="{{AdminAdobeStockSection.currentPageInput}}" userInput="{{pageNumber}}" stepKey="seeCorrectCurrentPageNumber" />
     </actionGroup>
 </actionGroups>
