@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Model\Listing;
 
+use Magento\AdobeStockImageAdminUi\Model\IsAdobeStockIntegrationEnabled;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
@@ -43,6 +45,8 @@ class DataProvider extends UiComponentDataProvider
      * @param FilterBuilder $filterBuilder
      * @param GetImageListInterface $getImageList
      * @param UrlInterface $url
+     * @param IsAdobeStockIntegrationEnabled $isAdobeStockIntegrationEnabled
+     * @param SearchResultFactory $searchResultFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -57,6 +61,8 @@ class DataProvider extends UiComponentDataProvider
         FilterBuilder $filterBuilder,
         GetImageListInterface $getImageList,
         UrlInterface $url,
+        private readonly IsAdobeStockIntegrationEnabled $isAdobeStockIntegrationEnabled,
+        private readonly SearchResultFactory $searchResultFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -114,6 +120,14 @@ class DataProvider extends UiComponentDataProvider
      */
     public function getSearchResult(): SearchResultInterface
     {
-        return $this->getImageList->execute($this->getSearchCriteria());
+        if (!$this->isAdobeStockIntegrationEnabled->execute()) {
+            $searchResult = $this->searchResultFactory->create();
+            $searchResult->setSearchCriteria($this->getSearchCriteria());
+            $searchResult->setItems([]);
+            $searchResult->setTotalCount(0);
+        } else {
+            $searchResult = $this->getImageList->execute($this->getSearchCriteria());
+        }
+        return $searchResult;
     }
 }
