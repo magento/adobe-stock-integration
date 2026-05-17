@@ -45,7 +45,8 @@
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
             <comment userInput="BIC workaround" stepKey="removeSavedPreview"/>
-            <comment userInput="BIC workaround" stepKey="clearFilters"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGridAfter"/>
+            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearMediaGalleryAdobeStockFiltersAfter"/>
         </after>
         <conditionalClick selector="{{AdminAdobeStockImagePreviewSection.close}}" dependentSelector="{{AdminAdobeStockImagePreviewSection.close}}" visible="true" stepKey="expandImagePreview"/>
         <waitForPageLoad stepKey="waitForImagePreviewToClose"/>
