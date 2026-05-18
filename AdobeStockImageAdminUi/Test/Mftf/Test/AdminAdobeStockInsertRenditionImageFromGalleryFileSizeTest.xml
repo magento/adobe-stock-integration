@@ -41,6 +41,8 @@
                 <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
+            <comment userInput="BIC workaround" stepKey="removeSavedPreview"/>
+            <comment userInput="BIC workaround" stepKey="clearFilters"/>
             <actionGroup ref="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup" stepKey="openAdobeStockPanelAfter"/>
             <actionGroup ref="AdminAdobeStockModalClearAllFiltersActionGroup" stepKey="clearAllAdobeStockModalFiltersAfter"/>
             <actionGroup ref="AdminAdobeStockCloseSearchModalActionGroup" stepKey="closeAdobeStockPanelAfter"/>
