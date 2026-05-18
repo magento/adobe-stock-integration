@@ -24,12 +24,11 @@
         </before>
 
         <after>
-            <!-- Delete Uploaded Images -->
-            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryToClearFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGridAfter"/>
             <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearMediaGalleryAdobeStockFiltersAfter"/>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
