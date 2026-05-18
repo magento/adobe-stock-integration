@@ -24,6 +24,8 @@ use Magento\AdobeStockClientApi\Api\Data\UserQuotaInterfaceFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Psr\Log\LoggerInterface;
@@ -86,6 +88,11 @@ class Client implements ClientInterface
     private $searchResultFields;
 
     /**
+     * @var AuthenticationFailureDetector
+     */
+    private $authenticationFailureDetector;
+
+    /**
      * @param ConnectionWrapperFactory $connectionFactory
      * @param SearchResultFactory $searchResultFactory
      * @param SearchParameterProviderInterface $searchParametersProvider
@@ -95,6 +102,7 @@ class Client implements ClientInterface
      * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param StockFileToDocument $stockFileToDocument
      * @param LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
+     * @param AuthenticationFailureDetector $authenticationFailureDetector
      * @param array $searchResultFields
      */
     public function __construct(
@@ -107,6 +115,7 @@ class Client implements ClientInterface
         UserQuotaInterfaceFactory $userQuotaFactory,
         StockFileToDocument $stockFileToDocument,
         LicenseConfirmationInterfaceFactory $licenseConfirmationFactory,
+        AuthenticationFailureDetector $authenticationFailureDetector,
         array $searchResultFields
     ) {
         $this->connectionFactory = $connectionFactory;
@@ -118,6 +127,7 @@ class Client implements ClientInterface
         $this->userQuotaFactory = $userQuotaFactory;
         $this->stockFileToDocument = $stockFileToDocument;
         $this->licenseConfirmationFactory = $licenseConfirmationFactory;
+        $this->authenticationFailureDetector = $authenticationFailureDetector;
         $this->searchResultFields = $searchResultFields;
     }
 
@@ -138,7 +148,15 @@ class Client implements ClientInterface
                 $items[] = $this->stockFileToDocument->convert($file);
             }
             $totalCount = $response->getNbResults();
+        } catch (AuthenticationException $exception) {
+            throw $exception;
+        } catch (AuthorizationException $exception) {
+            throw $exception;
         } catch (IntegrationException $exception) {
+            $mapped = $this->authenticationFailureDetector->mapIntegrationException($exception);
+            if ($mapped !== null) {
+                throw $mapped;
+            }
             $this->logger->critical($exception->getMessage());
         }
 

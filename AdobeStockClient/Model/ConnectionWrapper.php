@@ -64,11 +64,17 @@ class ConnectionWrapper
     private $httpClient;
 
     /**
+     * @var AuthenticationFailureDetector
+     */
+    private $authenticationFailureDetector;
+
+    /**
      * @param ClientConfig $clientConfig
      * @param ConnectionFactory $connectionFactory
      * @param ImsConfig $imsConfig
      * @param GetAccessTokenInterface $getAccessToken
      * @param FlushUserTokensInterface $flushUserTokens
+     * @param AuthenticationFailureDetector $authenticationFailureDetector
      * @param HttpInterface|null $httpClient
      */
     public function __construct(
@@ -77,6 +83,7 @@ class ConnectionWrapper
         ImsConfig $imsConfig,
         GetAccessTokenInterface $getAccessToken,
         FlushUserTokensInterface $flushUserTokens,
+        AuthenticationFailureDetector $authenticationFailureDetector,
         ?HttpInterface $httpClient = null
     ) {
         $this->clientConfig = $clientConfig;
@@ -84,6 +91,7 @@ class ConnectionWrapper
         $this->imsConfig = $imsConfig;
         $this->getAccessToken = $getAccessToken;
         $this->flushUserTokens = $flushUserTokens;
+        $this->authenticationFailureDetector = $authenticationFailureDetector;
         $this->httpClient = $httpClient;
     }
 
@@ -125,11 +133,8 @@ class ConnectionWrapper
      */
     private function handleException(\Exception $exception, string $message): \Exception
     {
-        if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
-            return new AuthenticationException(__('Adobe API Key is invalid!'));
-        }
-        if (strpos($exception->getMessage(), 'Api Key is required') !== false) {
-            return new AuthenticationException(__('Adobe Api Key is required!'));
+        if ($this->authenticationFailureDetector->isAuthenticationFailure($exception)) {
+            return $this->authenticationFailureDetector->createAuthenticationException();
         }
         if (strpos($exception->getMessage(), 'Oauth token is not valid') !== false) {
             $this->flushUserTokens->execute();

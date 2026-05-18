@@ -15,6 +15,7 @@ use AdobeStock\Api\Request\License;
 use AdobeStock\Api\Request\LicenseFactory as LicenseRequestFactory;
 use AdobeStock\Api\Response\License as ResponseLicense;
 use AdobeStock\Api\Response\SearchFiles as SearchFilesResponse;
+use Magento\AdobeStockClient\Model\AuthenticationFailureDetector;
 use Magento\AdobeStockClient\Model\Client;
 use Magento\AdobeStockClient\Model\ConnectionWrapper;
 use Magento\AdobeStockClient\Model\ConnectionWrapperFactory;
@@ -142,6 +143,7 @@ class ClientTest extends TestCase
                 'userQuotaFactory' => $this->userQuotaFactory,
                 'stockFileToDocument' => $this->stockFileToDocument,
                 'licenseConfirmationFactory' => $this->licenseConfirmationFactory,
+                'authenticationFailureDetector' => new AuthenticationFailureDetector(),
                 'searchResultFields' => self::SEARCH_RESULT_FIELDS
             ]
         );
