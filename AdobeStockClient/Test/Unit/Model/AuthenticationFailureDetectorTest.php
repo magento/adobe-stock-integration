@@ -14,6 +14,9 @@ use PHPUnit\Framework\TestCase;
 
 class AuthenticationFailureDetectorTest extends TestCase
 {
+    /**
+     * @var AuthenticationFailureDetector
+     */
     private AuthenticationFailureDetector $detector;
 
     protected function setUp(): void

@@ -17,9 +17,6 @@ use Throwable;
  */
 class AuthenticationFailureDetector
 {
-    private const AUTHENTICATION_MESSAGE = 'Failed to authenticate to Adobe Stock API. '
-    . 'Please correct the API credentials.';
-
     /**
      * Substrings observed in Adobe Stock SDK / API responses (legacy and current).
      *
@@ -50,6 +47,8 @@ class AuthenticationFailureDetector
 
     /**
      * Whether the throwable chain represents invalid Adobe Stock API credentials.
+     * @param Throwable $exception
+     * @return bool
      */
     public function isAuthenticationFailure(Throwable $exception): bool
     {
@@ -77,11 +76,15 @@ class AuthenticationFailureDetector
      */
     public function createAuthenticationException(): AuthenticationException
     {
-        return new AuthenticationException(__(self::AUTHENTICATION_MESSAGE));
+        return new AuthenticationException(__(
+            'Failed to authenticate to Adobe Stock API. Please correct the API credentials.'
+        ));
     }
 
     /**
      * Map IntegrationException to AuthenticationException when credentials are invalid.
+     * @param IntegrationException $exception
+     * @return AuthenticationException|null
      */
     public function mapIntegrationException(IntegrationException $exception): ?AuthenticationException
     {

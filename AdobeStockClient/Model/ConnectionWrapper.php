@@ -21,6 +21,7 @@ use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Adapter for Adobe Stock SDK
@@ -74,8 +75,8 @@ class ConnectionWrapper
      * @param ImsConfig $imsConfig
      * @param GetAccessTokenInterface $getAccessToken
      * @param FlushUserTokensInterface $flushUserTokens
-     * @param AuthenticationFailureDetector $authenticationFailureDetector
      * @param HttpInterface|null $httpClient
+     * @param AuthenticationFailureDetector $authenticationFailureDetector
      */
     public function __construct(
         ClientConfig $clientConfig,
@@ -83,16 +84,17 @@ class ConnectionWrapper
         ImsConfig $imsConfig,
         GetAccessTokenInterface $getAccessToken,
         FlushUserTokensInterface $flushUserTokens,
-        AuthenticationFailureDetector $authenticationFailureDetector,
-        ?HttpInterface $httpClient = null
+        ?HttpInterface $httpClient = null,
+        ?AuthenticationFailureDetector $authenticationFailureDetector = null,
     ) {
         $this->clientConfig = $clientConfig;
         $this->connectionFactory = $connectionFactory;
         $this->imsConfig = $imsConfig;
         $this->getAccessToken = $getAccessToken;
         $this->flushUserTokens = $flushUserTokens;
-        $this->authenticationFailureDetector = $authenticationFailureDetector;
         $this->httpClient = $httpClient;
+        $this->authenticationFailureDetector = $authenticationFailureDetector ?: ObjectManager::getInstance()
+            ->get(AuthenticationFailureDetector::class);;
     }
 
     /**

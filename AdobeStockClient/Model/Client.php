@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -29,6 +29,7 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Client for communication to Adobe Stock API
@@ -102,8 +103,8 @@ class Client implements ClientInterface
      * @param UserQuotaInterfaceFactory $userQuotaFactory
      * @param StockFileToDocument $stockFileToDocument
      * @param LicenseConfirmationInterfaceFactory $licenseConfirmationFactory
-     * @param AuthenticationFailureDetector $authenticationFailureDetector
      * @param array $searchResultFields
+     * @param AuthenticationFailureDetector $authenticationFailureDetector
      */
     public function __construct(
         ConnectionWrapperFactory $connectionFactory,
@@ -115,8 +116,8 @@ class Client implements ClientInterface
         UserQuotaInterfaceFactory $userQuotaFactory,
         StockFileToDocument $stockFileToDocument,
         LicenseConfirmationInterfaceFactory $licenseConfirmationFactory,
-        AuthenticationFailureDetector $authenticationFailureDetector,
-        array $searchResultFields
+        array $searchResultFields,
+        ?AuthenticationFailureDetector $authenticationFailureDetector = null
     ) {
         $this->connectionFactory = $connectionFactory;
         $this->searchResultFactory = $searchResultFactory;
@@ -127,8 +128,9 @@ class Client implements ClientInterface
         $this->userQuotaFactory = $userQuotaFactory;
         $this->stockFileToDocument = $stockFileToDocument;
         $this->licenseConfirmationFactory = $licenseConfirmationFactory;
-        $this->authenticationFailureDetector = $authenticationFailureDetector;
         $this->searchResultFields = $searchResultFields;
+        $this->authenticationFailureDetector = $authenticationFailureDetector  ?: ObjectManager::getInstance()
+            ->get(AuthenticationFailureDetector::class);
     }
 
     /**
