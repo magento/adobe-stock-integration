@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2026 Adobe
  * All Rights Reserved.
@@ -47,6 +46,7 @@ class AuthenticationFailureDetector
 
     /**
      * Whether the throwable chain represents invalid Adobe Stock API credentials.
+     *
      * @param Throwable $exception
      * @return bool
      */
@@ -83,6 +83,7 @@ class AuthenticationFailureDetector
 
     /**
      * Map IntegrationException to AuthenticationException when credentials are invalid.
+     *
      * @param IntegrationException $exception
      * @return AuthenticationException|null
      */

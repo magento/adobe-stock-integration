@@ -94,8 +94,8 @@ class ConnectionWrapperTest extends TestCase
             $this->imsConfig,
             $this->getAccessToken,
             $this->flushToken,
-            new AuthenticationFailureDetector(),
-            $this->httpInterface
+            $this->httpInterface,
+            new AuthenticationFailureDetector()
         );
     }
 

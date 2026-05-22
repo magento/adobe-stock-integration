@@ -93,8 +93,8 @@ class ConnectionWrapper
         $this->getAccessToken = $getAccessToken;
         $this->flushUserTokens = $flushUserTokens;
         $this->httpClient = $httpClient;
-        $this->authenticationFailureDetector = $authenticationFailureDetector ?: ObjectManager::getInstance()
-            ->get(AuthenticationFailureDetector::class);;
+        $this->authenticationFailureDetector = $authenticationFailureDetector
+            ?? ObjectManager::getInstance()->get(AuthenticationFailureDetector::class);
     }
 
     /**
