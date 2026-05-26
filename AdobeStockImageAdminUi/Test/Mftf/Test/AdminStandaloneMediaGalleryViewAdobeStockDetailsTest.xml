@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -34,8 +34,6 @@
         </before>
 
         <after>
-            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteImage"/>
-            <comment userInput="BIC workaround" stepKey="clearFilters"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
@@ -45,6 +43,9 @@
                 <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteImage"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySearchAdobeStockActionGroup" stepKey="openAdobeStockGridAfter"/>
+            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearMediaGalleryAdobeStockFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -55,9 +56,11 @@
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
         <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
+        <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
         <actionGroup ref="AdminAdobeStockVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
             <argument name="image" value="AdobeStockUnlicensedImage"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
     </test>
 </tests>
