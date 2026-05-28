@@ -10,6 +10,7 @@ namespace Magento\AdobeStockClient\Test\Unit\Model;
 use Magento\AdobeStockClient\Model\AuthenticationFailureDetector;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationFailureDetectorTest extends TestCase
@@ -70,9 +71,7 @@ class AuthenticationFailureDetectorTest extends TestCase
         $this->assertNull($this->detector->mapIntegrationException($exception));
     }
 
-    /**
-     * @dataProvider authenticationMessageProvider
-     */
+    #[DataProvider('authenticationMessageProvider')]
     public function testRecognizesAuthenticationMessage(string $message): void
     {
         $this->assertTrue(
