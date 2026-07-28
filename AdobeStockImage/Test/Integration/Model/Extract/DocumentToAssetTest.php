@@ -1,8 +1,7 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +15,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,11 +46,7 @@ class DocumentToAssetTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider documentProvider
-     * @param array $data
-     * @param array $additionalData
-     */
+    #[DataProvider('documentProvider')]
     public function testConvert(
         array $data,
         array $additionalData

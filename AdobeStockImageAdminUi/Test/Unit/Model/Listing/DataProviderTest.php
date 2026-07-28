@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\AdobeStockImageAdminUi\Test\Unit\Model\Listing;
 
+use Magento\AdobeStockImageAdminUi\Model\IsAdobeStockIntegrationEnabled;
 use Magento\AdobeStockImageAdminUi\Model\Listing\DataProvider;
 use Magento\AdobeStockImageApi\Api\GetImageListInterface;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -23,6 +25,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test data image provider.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderTest extends TestCase
 {
@@ -42,12 +46,24 @@ class DataProviderTest extends TestCase
     private $searchCriteriaBuilder;
 
     /**
+     * @var IsAdobeStockIntegrationEnabled|MockObject
+     */
+    private $isAdobeStockIntegrationEnabled;
+
+    /**
+     * @var SearchResultFactory|MockObject
+     */
+    private $searchResultFactory;
+
+    /**
      * Prepare test objects.
      */
     protected function setUp(): void
     {
         $this->getImageListMock = $this->createMock(GetImageListInterface::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
+        $this->isAdobeStockIntegrationEnabled = $this->createMock(IsAdobeStockIntegrationEnabled::class);
+        $this->searchResultFactory = $this->createMock(SearchResultFactory::class);
         $this->dataProvider = (new ObjectManager($this))->getObject(
             DataProvider::class,
             [
@@ -56,6 +72,8 @@ class DataProviderTest extends TestCase
                 'requestFieldName' => 'id',
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
                 'getImageList' => $this->getImageListMock,
+                'isAdobeStockIntegrationEnabled' => $this->isAdobeStockIntegrationEnabled,
+                'searchResultFactory' => $this->searchResultFactory,
             ]
         );
     }
@@ -82,6 +100,10 @@ class DataProviderTest extends TestCase
             ->with($searchCriteria)
             ->willReturn($searchResult);
 
+        $this->isAdobeStockIntegrationEnabled->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
         $this->assertEquals($searchResult, $this->dataProvider->getSearchResult());
     }
 
@@ -106,6 +128,10 @@ class DataProviderTest extends TestCase
             ->method('execute')
             ->with($searchCriteria)
             ->willReturn($searchResult);
+
+        $this->isAdobeStockIntegrationEnabled->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
 
         $data = [
             'items' => $itemsData,
@@ -133,6 +159,10 @@ class DataProviderTest extends TestCase
             ->method('execute')
             ->willThrowException(new LocalizedException(__('Localized error')));
 
+        $this->isAdobeStockIntegrationEnabled->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
         $data = [
             'items' => [],
             'totalRecords' => 0,
@@ -140,6 +170,46 @@ class DataProviderTest extends TestCase
         ];
 
         $this->assertEquals($data, $this->dataProvider->getData());
+    }
+
+    /**
+     * Test that empty result is returned when the integration is disabled, and the API is not called.
+     */
+    public function testGetSearchResultWhenAdobeStockIntegrationDisabled(): void
+    {
+        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $searchCriteria->expects($this->once())
+            ->method('setRequestName')
+            ->with('adobe_stock_images_listing_data_source');
+
+        $this->searchCriteriaBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($searchCriteria);
+
+        /** @var SearchResultInterface|MockObject $searchResult */
+        $searchResult = $this->createMock(SearchResultInterface::class);
+
+        $this->getImageListMock->expects($this->never())
+            ->method('execute');
+
+        $this->isAdobeStockIntegrationEnabled->expects($this->once())
+            ->method('execute')
+            ->willReturn(false);
+        
+        $this->searchResultFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($searchResult);
+        $searchResult->expects($this->once())
+            ->method('setSearchCriteria')
+            ->with($searchCriteria);
+        $searchResult->expects($this->once())
+            ->method('setItems')
+            ->with([]);
+        $searchResult->expects($this->once())
+            ->method('setTotalCount')
+            ->with(0);
+
+        $this->assertEquals($searchResult, $this->dataProvider->getSearchResult());
     }
 
     /**

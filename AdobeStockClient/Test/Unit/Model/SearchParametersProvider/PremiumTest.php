@@ -1,8 +1,7 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +14,7 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,9 +73,8 @@ class PremiumTest extends TestCase
      *
      * @param string $filterName
      * @param string $filterValue
-     *
-     * @dataProvider filterTypesDataProvider
      */
+    #[DataProvider('filterTypesDataProvider')]
     public function testApply(string $filterName, string $filterValue): void
     {
         $invokedTimes = (int) ($filterName === self::FILTER_TYPE);
@@ -107,12 +106,13 @@ class PremiumTest extends TestCase
     public static function filterTypesDataProvider(): array
     {
         return [
-            [
-                'filterName' => self::FILTER_TYPE,
-                'filterValue' => '123'
-            ], [
-                'filterName' => 'offensive_filter',
-                'filterValue' => '456'
+            'premium price filter' => [
+                self::FILTER_TYPE,
+                '123'
+            ],
+            'offensive filter' => [
+                'offensive_filter',
+                '456'
             ]
         ];
     }

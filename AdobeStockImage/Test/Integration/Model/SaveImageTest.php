@@ -1,10 +1,8 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdobeStockImage\Test\Integration\Model;
@@ -19,6 +17,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,13 +45,8 @@ class SaveImageTest extends TestCase
 
     /**
      * Test with image.
-     *
-     * @param array $documentData
-     * @param string $sourceFile
-     * @param string $destinationPath
-     * @return void
-     * @dataProvider getSaveTestDataProvider
      */
+    #[DataProvider('getSaveTestDataProvider')]
     public function testSave(array $documentData, string $sourceFile, string $destinationPath): void
     {
         $this->deleteImage($destinationPath);
