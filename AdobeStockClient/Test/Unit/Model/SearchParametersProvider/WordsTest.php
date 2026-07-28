@@ -1,8 +1,7 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -17,6 +16,7 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -61,8 +61,8 @@ class WordsTest extends TestCase
      * @param string $requestValue
      * @param string $encodedValue
      * @throws StockApi
-     * @dataProvider requestValuesDataProvider
      */
+    #[DataProvider('requestValuesDataProvider')]
     public function testApplyWithRequestValue(string $requestValue, string $encodedValue): void
     {
         /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
