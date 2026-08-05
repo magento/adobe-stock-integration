@@ -16,6 +16,7 @@ use AdobeStock\Api\Response\SearchFiles;
 use Magento\AdobeImsApi\Api\ConfigInterface as ImsConfig;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
+use Magento\AdobeStockClient\Model\AuthenticationFailureDetector;
 use Magento\AdobeStockClient\Model\ConnectionFactory;
 use Magento\AdobeStockClient\Model\ConnectionWrapper;
 use Magento\AdobeStockClientApi\Api\ConfigInterface;
@@ -93,7 +94,8 @@ class ConnectionWrapperTest extends TestCase
             $this->imsConfig,
             $this->getAccessToken,
             $this->flushToken,
-            $this->httpInterface
+            $this->httpInterface,
+            new AuthenticationFailureDetector()
         );
     }
 
@@ -295,12 +297,12 @@ class ConnectionWrapperTest extends TestCase
         return [
             'Api Key is invalid' => [
                 'Api Key is invalid',
-                'Adobe API Key is invalid!',
+                'Failed to authenticate to Adobe Stock API. Please correct the API credentials.',
                 AuthenticationException::class,
             ],
             'Api Key is required' => [
                 'Api Key is required',
-                'Adobe Api Key is required!',
+                'Failed to authenticate to Adobe Stock API. Please correct the API credentials.',
                 AuthenticationException::class,
             ],
             'Oauth token is not valid' => [

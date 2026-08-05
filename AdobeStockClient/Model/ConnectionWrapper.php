@@ -21,6 +21,7 @@ use Magento\AdobeStockClientApi\Api\ConfigInterface as ClientConfig;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Adapter for Adobe Stock SDK
@@ -64,12 +65,18 @@ class ConnectionWrapper
     private $httpClient;
 
     /**
+     * @var AuthenticationFailureDetector
+     */
+    private $authenticationFailureDetector;
+
+    /**
      * @param ClientConfig $clientConfig
      * @param ConnectionFactory $connectionFactory
      * @param ImsConfig $imsConfig
      * @param GetAccessTokenInterface $getAccessToken
      * @param FlushUserTokensInterface $flushUserTokens
      * @param HttpInterface|null $httpClient
+     * @param AuthenticationFailureDetector $authenticationFailureDetector
      */
     public function __construct(
         ClientConfig $clientConfig,
@@ -77,7 +84,8 @@ class ConnectionWrapper
         ImsConfig $imsConfig,
         GetAccessTokenInterface $getAccessToken,
         FlushUserTokensInterface $flushUserTokens,
-        ?HttpInterface $httpClient = null
+        ?HttpInterface $httpClient = null,
+        ?AuthenticationFailureDetector $authenticationFailureDetector = null,
     ) {
         $this->clientConfig = $clientConfig;
         $this->connectionFactory = $connectionFactory;
@@ -85,6 +93,8 @@ class ConnectionWrapper
         $this->getAccessToken = $getAccessToken;
         $this->flushUserTokens = $flushUserTokens;
         $this->httpClient = $httpClient;
+        $this->authenticationFailureDetector = $authenticationFailureDetector
+            ?? ObjectManager::getInstance()->get(AuthenticationFailureDetector::class);
     }
 
     /**
@@ -125,11 +135,8 @@ class ConnectionWrapper
      */
     private function handleException(\Exception $exception, string $message): \Exception
     {
-        if (strpos($exception->getMessage(), 'Api Key is invalid') !== false) {
-            return new AuthenticationException(__('Adobe API Key is invalid!'));
-        }
-        if (strpos($exception->getMessage(), 'Api Key is required') !== false) {
-            return new AuthenticationException(__('Adobe Api Key is required!'));
+        if ($this->authenticationFailureDetector->isAuthenticationFailure($exception)) {
+            return $this->authenticationFailureDetector->createAuthenticationException();
         }
         if (strpos($exception->getMessage(), 'Oauth token is not valid') !== false) {
             $this->flushUserTokens->execute();
