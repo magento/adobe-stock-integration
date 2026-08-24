@@ -11,6 +11,7 @@
         <arguments>
             <argument name="thumbnailsNumber" type="string" defaultValue="{{AdobeStockModalData.thumbnailsNumber}}"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminAdobeStockSection.modal}} {{AdminAdobeStockSection.imageInGridByIndex('31')}}" stepKey="waitForLastThumbnail"/>
         <seeNumberOfElements selector="{{AdminAdobeStockSection.modal}} {{AdminAdobeStockSection.firstImageInGrid}}" userInput="{{thumbnailsNumber}}" stepKey="seeCorrectThumbnailsNumber"/>
     </actionGroup>
 </actionGroups>
