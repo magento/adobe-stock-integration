@@ -1,8 +1,7 @@
 <?php
 /**
  * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +16,7 @@ use Magento\AdobeStockImage\Model\SaveMediaGalleryAsset;
 use Magento\Framework\Api\Search\Document;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -74,12 +74,12 @@ class SaveImageTest extends TestCase
     /**
      * Verify that image from the Adobe Stock can be saved.
      *
-     * @dataProvider imageDataProvider
      * @param \Closure $document
      * @param string $url
      * @param string $destinationPath
      * @throws LocalizedException
      */
+    #[DataProvider('imageDataProvider')]
     public function testExecute(\Closure $document, string $url, string $destinationPath): void
     {
         $document = $document($this);
@@ -157,12 +157,12 @@ class SaveImageTest extends TestCase
     /**
      * Verify that path validation works if invalid characters are passed.
      *
-     * @dataProvider getInvalidPathValues
      * @param \Closure $document
      * @param string $url
      * @param string $destinationPath
      * @throws LocalizedException
      */
+    #[DataProvider('getInvalidPathValues')]
     public function testExecuteInvalidPath(\Closure $document, string $url, string $destinationPath): void
     {
         $document = $document($this);
