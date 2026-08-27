@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,7 +10,10 @@
     <actionGroup name="AssertAdminAdobeStockThumbnailsNumberActionGroup">
         <arguments>
             <argument name="thumbnailsNumber" type="string" defaultValue="{{AdobeStockModalData.thumbnailsNumber}}"/>
+            <!-- Zero-based index of the last expected thumbnail (data-repeat-index) — must equal thumbnailsNumber - 1 -->
+            <argument name="lastThumbnailIndex" type="string" defaultValue="31"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminAdobeStockSection.modal}} {{AdminAdobeStockSection.imageInGridByIndex(lastThumbnailIndex)}}" stepKey="waitForLastThumbnail"/>
         <seeNumberOfElements selector="{{AdminAdobeStockSection.modal}} {{AdminAdobeStockSection.firstImageInGrid}}" userInput="{{thumbnailsNumber}}" stepKey="seeCorrectThumbnailsNumber"/>
     </actionGroup>
 </actionGroups>
