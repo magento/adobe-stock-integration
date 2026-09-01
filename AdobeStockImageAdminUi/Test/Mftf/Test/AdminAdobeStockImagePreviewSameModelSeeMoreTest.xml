@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="adobe_stock_integration"/>
             <skip>
-                <issueId value="AC-18064">The related-images tabs container (#adobe-stock-tabs) is hidden entirely whenever the seeded image's "same series" results are empty, even if "same model" results exist, due to an AND-vs-OR bug in isVisible(). Data-dependent on live Adobe Stock API results, not fixable from the test side. Re-enable once fixed.</issueId>
+                <issueId value="AC-18064">The related-images tabs container (#adobe-stock-tabs) is hidden entirely whenever the seeded image's same-series results are empty, even if same-model results exist, due to an AND-vs-OR bug in isVisible(). Data-dependent on live Adobe Stock API results, not fixable from the test side. Re-enable once fixed.</issueId>
             </skip>
         </annotations>
         <before>
