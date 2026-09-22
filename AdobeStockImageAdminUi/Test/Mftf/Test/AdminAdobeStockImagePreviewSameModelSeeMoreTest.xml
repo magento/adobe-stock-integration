@@ -23,6 +23,15 @@
             <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <!--
+                The default, unfiltered search can surface any image, including ones with no
+                human subject (e.g. architecture/landscape), which never have "same model" matches.
+                Searching for a people-oriented keyword ensures the first result is a model-tagged
+                photo, since Adobe Stock only attaches model data to images with human subjects.
+            -->
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForImageWithModel">
+                <argument name="query" value="family portrait"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
