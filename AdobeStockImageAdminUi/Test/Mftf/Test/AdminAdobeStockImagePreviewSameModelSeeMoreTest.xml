@@ -23,6 +23,9 @@
             <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForImageWithModel">
+                <argument name="query" value="family portrait"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
@@ -34,19 +37,17 @@
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
         <executeJS function="document.querySelector('#adobe-stock-tabs')?.scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
         <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
-        <!--
-            The previewed image only has a "model_tab" when Adobe Stock returned same-model
-            matches for it (e.g. no human subject means no model tab at all). This helper
-            skips the verification instead of failing the test when that tab isn't present.
-        -->
-        <helper class="Magento\AdobeStockImageAdminUi\Test\Mftf\Helper\AdobeStockRelatedImagesHelper"
-                method="verifySameModelFilterIfAvailable" stepKey="verifySameModelFilterIfAvailable">
-            <argument name="modelTabSelector">{{AdminAdobeStockImagePreviewSection.moreFromThisModel}}</argument>
-            <argument name="modelSeeMoreSelector">{{AdminAdobeStockImagePreviewSection.moreFromThisModelSeeMore}}</argument>
-            <argument name="filtersToggleSelector">{{AdminAdobeStockFilterSection.filters}}</argument>
-            <argument name="recordsFoundSelector">{{AdminAdobeStockSection.recordsFound}}</argument>
-            <argument name="fileAttributeValue">$getFileAttributeValue</argument>
-            <argument name="countWithoutModelFilter">$countWithoutModelFilter</argument>
-        </helper>
+        <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisModel}}" stepKey="clickOnTabMoreForThisModel"/>
+        <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisModelSeeMore}}" stepKey="clickOnSeeMore"/>
+        <waitForPageLoad stepKey="waitForGridReload"/>
+        <executeJS function="document.querySelector('.admin__data-grid-filters-current').scrollIntoView()" stepKey="scrollToAppliedFilters"/>
+        <actionGroup ref="AssertAdminAdobeStockFilterResultsActionGroup" stepKey="verifyAppliedFilter">
+            <argument name="resultValue" value="$getFileAttributeValue"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithAppliedFilter"/>
+        <assertNotEquals stepKey="checkThatResultCountChangesAfterFilterApplied">
+            <actualResult type="variable">$countWithoutModelFilter</actualResult>
+            <expectedResult type="variable">$countWithAppliedFilter</expectedResult>
+        </assertNotEquals>
     </test>
 </tests>
