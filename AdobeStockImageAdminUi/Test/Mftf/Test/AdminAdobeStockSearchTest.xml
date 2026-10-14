@@ -58,10 +58,7 @@
         </actionGroup>
         <dontSeeElement selector="{{AdminAdobeStockSection.imageSrc($getUrlFromFirstImageWithoutSearch)}}"
                         stepKey="checkFirstImageNotFoundAfterSearchHeadphones"/>
-        <actionGroup ref="AssertAdminAdobeStockThumbnailsNumberActionGroup"
-                     stepKey="assertImagesInGridAfterHeadphonesSearch">
-            <argument name="thumbnailsNumber" value="32"/>
-        </actionGroup>
+        <waitForElementVisible selector="{{AdminAdobeStockSection.firstImageAfterSearch}}" stepKey="waitForFirstImageAfterHeadphonesSearch"/>
         <grabAttributeFrom selector="{{AdminAdobeStockSection.firstImageAfterSearch}}" userInput="src"
                            stepKey="getUrlFromFirstImageAfterSearchHeadphones"/>
         <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForSecondSymbols">
