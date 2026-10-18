@@ -9,12 +9,14 @@ declare(strict_types=1);
 namespace Magento\AdobeStockImage\Model\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
@@ -23,6 +25,11 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 class Save
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
+    private const DOWNLOAD_TIMEOUT = 0;
+    private const CONNECT_TIMEOUT = 10;
+    private const LOW_SPEED_LIMIT = 1;
+    private const LOW_SPEED_TIME = 60;
+    private const MAX_REDIRECTS = 5;
 
     /**
      * @var Filesystem
@@ -31,6 +38,8 @@ class Save
 
     /**
      * @var DriverInterface
+     * @deprecated Downloads use the HTTP client instead.
+     * @see \Magento\Framework\HTTP\LaminasClientFactory
      */
     private $driver;
 
@@ -45,21 +54,30 @@ class Save
     private $maxFileLength;
 
     /**
+     * @var LaminasClientFactory
+     */
+    private $laminasClientFactory;
+
+    /**
      * @param Filesystem $filesystem
-     * @param Https $driver
+     * @param Https $driver Deprecated. Downloads use the HTTP client instead.
      * @param IsPathExcludedInterface $isPathExcluded
      * @param int|null $maxFileLength
+     * @param LaminasClientFactory|null $laminasClientFactory
      */
     public function __construct(
         Filesystem $filesystem,
         Https $driver,
         IsPathExcludedInterface $isPathExcluded,
-        ?int $maxFileLength = null
+        ?int $maxFileLength = null,
+        ?LaminasClientFactory $laminasClientFactory = null
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->isPathExcluded = $isPathExcluded;
         $this->maxFileLength = $maxFileLength ?: 255;
+        $this->laminasClientFactory = $laminasClientFactory
+            ?: ObjectManager::getInstance()->get(LaminasClientFactory::class);
     }
 
     /**
@@ -97,18 +115,28 @@ class Save
             throw new AlreadyExistsException(__('Image with the same file name already exits.'));
         }
 
-        $fileContents = $this->driver->fileGetContents($this->getUrlWithoutProtocol($imageUrl));
-        $mediaDirectory->writeFile($destinationPath, $fileContents);
-    }
+        $client = $this->laminasClientFactory->create();
+        $client->setOptions([
+            'timeout' => self::DOWNLOAD_TIMEOUT,
+            'maxredirects' => self::MAX_REDIRECTS,
+            'storeresponse' => false,
+            CURLOPT_CONNECTTIMEOUT => self::CONNECT_TIMEOUT,
+            CURLOPT_LOW_SPEED_LIMIT => self::LOW_SPEED_LIMIT,
+            CURLOPT_LOW_SPEED_TIME => self::LOW_SPEED_TIME
+        ]);
+        try {
+            $client->setUri($imageUrl);
+            $client->setMethod('GET');
+            $response = $client->send();
+        } catch (\Exception $exception) {
+            throw new LocalizedException(__('Could not save image: download failed.'), $exception);
+        }
 
-    /**
-     * Remove the protocol from the url to use it for DriverInterface::fileGetContents
-     *
-     * @param string $imageUrl
-     * @return string
-     */
-    private function getUrlWithoutProtocol(string $imageUrl): string
-    {
-        return str_replace('https://', '', $imageUrl);
+        $status = $response->getStatusCode();
+        if ($status !== 200) {
+            throw new LocalizedException(__('Could not save image: HTTP status %1.', $status));
+        }
+
+        $mediaDirectory->writeFile($destinationPath, $response->getBody());
     }
 }
