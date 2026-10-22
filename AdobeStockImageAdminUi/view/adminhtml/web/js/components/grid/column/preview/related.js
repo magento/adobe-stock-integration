@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 define([
     'uiComponent',
@@ -87,7 +87,7 @@ define([
          * @returns boolean
          */
         isVisible: function (record) {
-            return this.showSeriesTab(record) && this.showModelTab(record);
+            return this.showSeriesTab(record) || this.showModelTab(record);
         },
 
         /**
@@ -127,8 +127,9 @@ define([
 
                 /* Switch to the model tab if the series tab is hidden */
                 if (relatedImages.series[record.id].length === 0 && relatedImages.model[record.id].length > 0) {
-                    // eslint-disable-next-line jquery-no-input-event-shorthand
-                    $('#adobe-stock-tabs').data().mageTabs.select(1);
+                    // series tab was removed from the DOM by knockout, so the widget must
+                    // re-scan the current tabs before activating the (now first) model tab
+                    $('#adobe-stock-tabs').tabs('refresh').tabs('option', 'active', 0);
                 }
             }.bind(this));
         },

@@ -26,6 +26,9 @@
             <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
             <actionGroup ref="AdminAdobeStockOpenPanelFromMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForImageWithModel">
+                <argument name="query" value="family portrait"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
@@ -35,7 +38,7 @@
         <grabTextFrom selector="{{AdminAdobeStockSection.recordsFound}}" stepKey="countWithoutModelFilter"/>
         <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
         <waitForAjaxLoad stepKey="waitForRelatedImagesToLoad"/>
-        <executeJS function="document.querySelector('#adobe-stock-tabs').scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
+        <executeJS function="document.querySelector('#adobe-stock-tabs')?.scrollIntoView()" stepKey="scrollToSeeMoreTabs"/>
         <grabTextFrom selector="{{AdminAdobeStockImagePreviewSection.attribute('File #')}}" stepKey="getFileAttributeValue"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisModel}}" stepKey="clickOnTabMoreForThisModel"/>
         <click selector="{{AdminAdobeStockImagePreviewSection.moreFromThisModelSeeMore}}" stepKey="clickOnSeeMore"/>
